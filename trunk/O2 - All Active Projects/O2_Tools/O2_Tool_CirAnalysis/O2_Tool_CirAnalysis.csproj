@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{05F4273B-A685-427F-A862-A20B6AF5578E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -18,8 +18,8 @@
     </UpgradeBackupLocation>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <NoWin32Manifest>true</NoWin32Manifest>
-    <ManifestCertificateThumbprint>033665828EE9C30DBA33CA1CEA2617FEA6A74602</ManifestCertificateThumbprint>
-    <ManifestKeyFile>CirAnalysis_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>A2F6A558C122556A3CF02AB48309E6C960ACFFD6</ManifestCertificateThumbprint>
+    <ManifestKeyFile>O2_Tool_CirAnalysis_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
     <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Administrator\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
@@ -124,6 +124,9 @@
     <Content Include="O2_Tool_CirAnalysis.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="O2_Tool_CirAnalysis_TemporaryKey.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

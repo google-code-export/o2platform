@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{36A647D5-99F0-490D-B31C-8AC2360A7486}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -15,8 +15,8 @@
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
     <IsWebBootstrapper>true</IsWebBootstrapper>
-    <ManifestCertificateThumbprint>6406E70BF34CD83D47A647EB8ABAFFF02E75A95E</ManifestCertificateThumbprint>
-    <ManifestKeyFile>CSharpScripts_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>0CBAB411074DDC189E1D38FB3019340AB9C120F4</ManifestCertificateThumbprint>
+    <ManifestKeyFile>O2_Tool_CSharpScripts_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -85,6 +85,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="O2_Tool_CSharpScripts_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
