@@ -1,3 +1,4 @@
+// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 //---------------------------------------------------------------------
 //  This file is part of the CLR Managed Debugger (mdbg) Sample.
 // 
@@ -100,7 +101,7 @@ namespace O2.Debugger.Mdbg.mdbg
             StreamReader sr = null;
             try
             {
-                // Encoding.Default doesn’t port between machines, but it's used just in case the source isn’t Unicode
+                // Encoding.Default doesnï¿½t port between machines, but it's used just in case the source isnï¿½t Unicode
                 sr = new StreamReader(m_path, Encoding.Default, true);
                 m_lines = new ArrayList();
 
