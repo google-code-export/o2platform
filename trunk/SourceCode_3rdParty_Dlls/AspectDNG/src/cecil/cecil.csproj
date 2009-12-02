@@ -1,0 +1,20 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <AssemblyName>cecil</AssemblyName>
+    <OutputPath>..\..\bin</OutputPath>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <Import Project="..\setup.targets" />
+  <ItemGroup>
+    <Compile Include="Mono.*\**\*.cs" Exclude="Mono.Cecil\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Target Name="Build" DependsOnTargets="Init">
+    <Delete Files="Mono.Cecil\AssemblyInfo.cs" />
+    <RemoveDir Directories="CodeGen" />
+    <Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)\cecil.dll" DebugType="Full" ToolPath="$(CscToolPath)" TargetType="Library" />
+  </Target>
+</Project>
