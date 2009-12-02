@@ -1,0 +1,65 @@
+﻿using System.Collections.Generic;
+using NUnit.Framework;
+using O2.core.O2Core.Debugging;
+using O2.Debugger.Mdbg.Debugging.CorPublish;
+using O2.Debugger.Mdbg.O2Debugger.Objects;
+using O2.UnitTests.O2Debugger;
+
+namespace O2.UnitTests.O2Debugger.O2DebuggerMdbg
+{
+    [TestFixture]
+    public class Test_GetInfoFromRunningProcesses
+    {
+        [Test]
+        public void findManagedProcessInCurrentComputer()
+        {
+            List<string> managedProcess = O2MDbgUtils.getListOfManagedProcess();
+            Assert.That(managedProcess.Count > 0, "There were no managed processes!");
+            foreach (string process in managedProcess)
+                DI.log.i(process);
+
+            DI.log.d("\n\nNow with more details\n\n");
+            foreach (string process in O2MDbgUtils.getListOfManagedProcess(true))
+                DI.log.i(process);
+        }
+
+
+        [Test]
+        public void ListAppDomainsAndModulesFromAllCurrentDotNetProcesses()
+        {
+            var onlyProcessReflector = true;
+            List<CorPublishProcess> managagedProcess = O2MDbgUtils.getManagedProcessButSelf();
+            Assert.That(managagedProcess.Count > 0, "no managed process (but self) discovered!");
+            DI.log.info(" Found {0} managed process in the current box (but self) : ", managagedProcess.Count);
+            foreach (CorPublishProcess process in managagedProcess)
+            {
+                DI.log.info("/n/nPROCESS: {0}", process.DisplayName, process.ProcessId);
+                if (!process.DisplayName.Contains("devenv")) // will make it very slow during developement :)
+                    if (onlyProcessReflector && process.DisplayName.Contains("Reflector"))
+                    {
+                        var o2DotNetDebugging = new O2MDbg_OLD(process.ProcessId);
+                        if (o2DotNetDebugging.isAttached)
+                        {
+                            foreach (string appDomain in o2DotNetDebugging.getAppDomains())
+                            {
+                                Assert.That(!string.IsNullOrEmpty(appDomain), "appDomain value was null or empty");
+                                DI.log.i("     AppDomain : " + appDomain);
+                            }
+                            foreach (string module in o2DotNetDebugging.getModules())
+                            {
+                                Assert.That(!string.IsNullOrEmpty(module), "module value was null or empty");
+                                DI.log.i("     AppDomain : " + module);
+                            }
+                        }
+                        o2DotNetDebugging.detach();
+                    }
+            }
+            if (onlyProcessReflector)
+                Assert.Ignore(
+                    "Success. This test is currently limited to only listing information about Reflector.exe processes (change the onlyProcessReflector value to false to deal with all managed processes ");
+            else
+                Assert.Ignore(
+                    "Success. You should had seen tons of data from all process, now set back onlyProcessReflector = true so that this doesn't happen all the time :) ");
+        }
+    }
+}

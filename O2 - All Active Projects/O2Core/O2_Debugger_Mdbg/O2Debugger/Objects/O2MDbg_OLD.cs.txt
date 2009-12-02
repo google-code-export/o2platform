@@ -1,0 +1,320 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using O2.Debugger.Mdbg.Debugging.MdbgEngine;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
+
+namespace O2.Debugger.Mdbg.O2Debugger.Objects
+{
+    public class O2MDbg_OLD
+    {
+        public O2Timer attachedTime;
+        public bool goAfterAttach = true;
+        public bool isAttached;
+
+        public MDbgEngine mDbgEngine = new MDbgEngine();
+        public MDbgProcess mdbgProcess;
+        public string pathToMainAssembly;
+
+        public O2MDbgBreakPoint O2BreakPoints { get; set; }
+
+        #region constructions and setup methods
+
+        public O2MDbg_OLD(object target)
+        {
+            if (target is String)
+                isAttached = createProcess((string) target);
+            else if (target is int)
+                isAttached = attachToProcess((int) target);
+            postAttachOrCreation();
+        }
+
+        public O2MDbg_OLD(string pathToExe)
+        {
+            isAttached = createProcess(pathToExe);
+            postAttachOrCreation();
+        }
+
+        public O2MDbg_OLD(int processIdToAttach) : this(processIdToAttach, true)
+        {
+        }
+
+        public O2MDbg_OLD(int processIdToAttach, bool _goAfterAttach)
+        {
+            goAfterAttach = _goAfterAttach;
+            isAttached = attachToProcess(processIdToAttach);
+            postAttachOrCreation();
+        }
+
+        private void configDebugEnvironment()
+        {
+            //mdbgProcess.CorProcess.OnBreakpoint += CorProcess_OnBreakpoint;
+            O2BreakPoints = new O2MDbgBreakPoint(this);
+        }
+
+
+        private void postAttachOrCreation()
+        {
+            attachedTime = new O2Timer("Attached to process ").start();
+            if (isAttached)
+            {
+                configDebugEnvironment();
+                DI.log.info("O2MDbg_OLD:Attached to process Id: {0} : {1}", mdbgProcess.CorProcess.Id,
+                            Processes.getProcessName(mdbgProcess.CorProcess.Id));
+
+                if (isAttached && goAfterAttach)
+                    Go();
+            }
+            else
+            {
+                mDbgEngine = null;
+                mdbgProcess = null;
+            }
+        }
+
+        private bool createProcess(string pathToExe)
+        {
+            try
+            {
+                pathToMainAssembly = pathToExe;
+                mdbgProcess = mDbgEngine.CreateProcess(pathToExe, "", DebugModeFlag.Debug, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex, "in attachToProcess");
+                return false;
+            }
+        }
+
+        private bool attachToProcess(int processIdToAttach)
+        {
+            try
+            {
+                mdbgProcess = mDbgEngine.Attach(processIdToAttach);
+                /*if (Processes.getProcess(processIdToAttach).MainModule != null)
+                    pathToMainAssembly = Processes.getProcess(processIdToAttach).MainModule.FileName;*/
+                // not sure we need this
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex, "in attachToProcess");
+                return false;
+            }
+        }
+
+
+        public void Go()
+        {
+            if (mdbgProcess != null)
+                mdbgProcess.Go().WaitOne();
+            // mDbgEngine.Processes.Active.Go().WaitOne();
+        }
+
+        public void Continue()
+        {
+            if (mdbgProcess != null)
+                mdbgProcess.CorProcess.Continue(false);
+        }
+
+        public void detach()
+        {
+            if (mdbgProcess != null)
+                if (false == mdbgProcess.Detach().WaitOne(1000)) // have a maximum of 1 sec to dettach            
+                    DI.log.e("WaitOne in detach timedout, this could cause problems on subsequent attach events");
+            attachedTime.stop();
+        }
+
+        #endregion
+
+        #region Internal Debugging settings
+
+        public static bool MDbgLoggingEnabled
+        {
+            set { OriginalMDbgMessages.mdbgLoggingEnabled = value; } // set to see internal MDbg trace and error messages
+
+            get { return OriginalMDbgMessages.mdbgLoggingEnabled; }
+        }
+
+        #endregion
+
+        #region Get Data Helpers
+
+        public List<MDbgAppDomain> AppDomains
+        {
+            get
+            {
+                var appDomains = new List<MDbgAppDomain>();
+                foreach (MDbgAppDomain appDomain in mdbgProcess.AppDomains)
+                    appDomains.Add(appDomain);
+                return appDomains;
+            }
+        }
+
+        public List<MDbgModule> Modules
+        {
+            get
+            {
+                var modules = new List<MDbgModule>();
+                foreach (MDbgModule module in mdbgProcess.Modules)
+                    modules.Add(module);
+                return modules;
+            }
+        }
+
+        public List<O2MDbgThread> getThreads()
+        {
+            var threads = new List<O2MDbgThread>();
+            foreach (MDbgThread thread in mdbgProcess.Threads)
+                threads.Add(new O2MDbgThread(thread));
+            return threads;
+        }
+
+        public List<String> getAppDomains()
+        {
+            var appDomains = new List<String>();
+            foreach (MDbgAppDomain appDomain in AppDomains)
+                appDomains.Add(appDomain.CorAppDomain.Name);
+            return appDomains;
+        }
+
+        public List<String> getModules()
+        {
+            var modules = new List<String>();
+            foreach (MDbgModule module in Modules)
+                modules.Add(module.CorModule.Name);
+            return modules;
+        }
+
+        #endregion
+
+        #region Static methods
+
+        /// <summary>
+        /// Async clean exection of code under debug mode
+        /// </summary>
+        /// <param name="proccessid"></param>
+        /// <param name="codeToExecute"></param>
+        public static void exec(int proccessid, O2Thread.FuncVoid<O2MDbg_OLD> codeToExecute)
+        {
+            exec(proccessid, null, codeToExecute);
+        }
+
+        public static void exec(object proccessid, Semaphore semaphore, O2Thread.FuncVoid<O2MDbg_OLD> codeToExecute)
+        {
+            exec(proccessid, semaphore, true, codeToExecute);
+        }
+
+        /// <summary>
+        /// Async clean exection of code under debug mode
+        ///  codeToExecute is a lambda function that receices O2MDbg_OLD as a parameter
+        /// (using a semaphore to control thread start
+        /// </summary>
+        /// <param name="proccessid"></param>
+        /// <param name="codeToExecute"></param>
+        /// /// <param name="semaphore"></param>
+        /// <param name="detach"></param>
+        public static void exec(object proccessid, Semaphore semaphore, bool detach,
+                                O2Thread.FuncVoid<O2MDbg_OLD> codeToExecute)
+        {
+            O2Thread.mtaThread(semaphore,
+                               () =>
+                                   {
+                                       try
+                                       {
+                                           var o2MDbg = new O2MDbg_OLD(proccessid);
+                                           if (o2MDbg.isAttached)
+                                           {
+                                               codeToExecute(o2MDbg); // executing the lambda code
+                                               if (detach)
+                                                   o2MDbg.detach(); // detatch from process             
+                                           }
+                                       }
+                                       catch (Exception ex)
+                                       {
+                                           DI.log.ex(ex, "in static exec");
+                                       }
+                                   });
+        }
+
+        public static bool execSync(int proccessid, Func<O2MDbg_OLD, bool> codeToExecute)
+        {
+            return execSync(proccessid, true, codeToExecute);
+        }
+
+        public static bool execSync(int proccessid, Semaphore semaphore, Func<O2MDbg_OLD, bool> codeToExecute)
+        {
+            return execSync(proccessid, semaphore, true, codeToExecute);
+        }
+
+        public static bool execSync(int proccessid, Semaphore semaphore, bool detach, Func<O2MDbg_OLD, bool> codeToExecute)
+        {
+            semaphore.WaitOne();
+            bool execSyncResult = execSync(proccessid, detach, codeToExecute);
+            semaphore.Release();
+            return execSyncResult;
+        }
+
+        public static bool execSync(int proccessid, bool detach, Func<O2MDbg_OLD, bool> codeToExecute)
+        {
+            try
+            {
+                // creating an O2MDbg_OLD object and attaching it to a process
+                var o2MDbg = new O2MDbg_OLD(proccessid);
+                if (o2MDbg.isAttached)
+                {
+                    // execting the provided which receives as a paramters the newly created o2MDbgOLD object 
+                    bool codeExecutionResult = codeToExecute(o2MDbg);
+                    // detatch from process
+                    if (detach)
+                        o2MDbg.detach();
+                    else
+                        o2MDbg.Go();
+                    //return excution result 
+                    return codeExecutionResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex, "in static exec");
+            }
+            return false;
+        }
+
+
+        public static O2MDbg_OLD execSync(string pathToExe, bool detach, O2Thread.FuncVoid<O2MDbg_OLD> codeToExecute)
+        {
+            try
+            {
+                // creating an O2MDbg_OLD object and attaching it to a process
+                var o2MDbg = new O2MDbg_OLD(pathToExe);
+                if (o2MDbg.isAttached)
+                {
+                    // execting the provided which receives as a paramters the newly created o2MDbgOLD object 
+                    codeToExecute(o2MDbg);
+                    // detatch from process
+                    if (detach)
+                        o2MDbg.detach();
+                    else
+                        o2MDbg.Go();
+                    //return excution result 
+                    return o2MDbg;
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex, "in static exec");
+            }
+            return null;
+        }
+
+        #endregion
+
+        public void WaitForExit()
+        {
+            Processes.getProcess(mdbgProcess.CorProcess.Id).WaitForExit();
+        }
+    }
+}

@@ -1,0 +1,71 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
+using O2.Core.FileViewers.Ascx.O2Rules;
+using O2.Core.FileViewers.JoinTraces;
+using O2.Core.FileViewers.XSD;
+using O2.DotNetWrappers.O2Findings;
+using O2.External.WinFormsUI.Forms;
+using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
+using O2.Kernel.Interfaces.O2Findings;
+using O2.Views.ASCX.O2Findings;
+
+namespace O2.Core.FileViewers._UnitTests
+{
+    [TestFixture]
+    public class _Test_O2Rules_StrutsMappings
+    {
+        const string localO2StrutsMappingFile = @"F:\Java_Apps\struts\xplanner-0.7b7-war\_OunceApplication\O2Data\XPlanner_DC.O2StrutsMapping";
+        const string localO2FindingsFile = @"F:\Java_Apps\struts\xplanner-0.7b7-war\_OunceApplication\O2Data\OSA - XPlanner  11-3-09 807PM.ozasmt";
+        private const string taintSources_SourceRegEx = @"getParameter\(java.lang.String\)";
+        private const string taintSources_SinkRegEx = @"setAttribute\(java.lang.String";
+
+        private const string finalSinks_SourceRegEx = @"getAttribute\(java.lang.String\)";
+        private const string finalSinks_SinkRegEx = @"print";
+        
+        ascx_O2Rules_Struts o2Rules_Struts = null;
+
+        [SetUp]
+        public void setup()
+        {
+            Assert.That(File.Exists(localO2StrutsMappingFile), "localO2StrutsMappingFile file didn't exist: " + localO2StrutsMappingFile);
+            
+            ascx_FindingsViewer.addO2AssessmentLoadEngine_static(new O2AssessmentLoad_OunceV6());           
+            O2AscxGUI.openAscxAsForm(typeof(ascx_O2Rules_Struts));
+            o2Rules_Struts = (ascx_O2Rules_Struts)O2AscxGUI.getAscx("ascx_O2Rules_Struts");
+
+
+
+            //O2AscxGUI.launch();
+            //o2Rules_Struts = (ascx_O2Rules_Struts)O2AscxGUI.openAscx(typeof(ascx_O2Rules_Struts));            
+            //var strusConfigControl = (ascx_Struts_config_xml)O2AscxGUI.openAscx(typeof(ascx_Struts_config_xml));            
+        }
+
+	        public void createAnalysisEnvironment()
+        {
+            o2Rules_Struts.loadO2MappingsFile(localO2StrutsMappingFile);
+            var loadThread = o2Rules_Struts.loadBaseO2Findings(localO2FindingsFile);
+            loadThread.Join();
+            var sourceO2Findings = o2Rules_Struts.getBaseO2Findings();
+
+            o2Rules_Struts.runFilterFor_TaintSources(taintSources_SourceRegEx, taintSources_SinkRegEx, sourceO2Findings, O2FindingsHelpers.mapJoinPoints_HashTagsOn_Sinks);
+            o2Rules_Struts.runFilterFor_FinalSinks(finalSinks_SourceRegEx, finalSinks_SinkRegEx, sourceO2Findings, O2FindingsHelpers.mapJoinPoints_HashTagsOn_Sources);
+
+            o2Rules_Struts.createFindingsFromStrutsMappings();            
+        }
+
+        [Test]
+        public void calculateFindings()
+        {
+            createAnalysisEnvironment();
+
+            DI.log.info("All done");
+            O2AscxGUI.waitForAscxGuiClose();
+            O2AscxGUI.close();
+        }
+        
+    }
+}

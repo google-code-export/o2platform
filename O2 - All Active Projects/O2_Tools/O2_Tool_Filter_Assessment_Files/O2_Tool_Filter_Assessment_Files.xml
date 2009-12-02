@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net" >
+
+  <object id="main"  factory-method="openO2DockContentInNewDockPanel" factory-object="mainObject"/>
+
+  <object id="mainObject" type="o2.core.O2Core.O2Environment.O2DockPanel, O2_CoreLib">
+
+    <property name="formName" value="O2 Tool - Filter Assessment Files"/>
+    <property name="formWidth" value="750"/>
+    <property name="formHeight" value="550"/>
+        
+    <property name ="o2DockContentObjects">
+      <list element-type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib">
+
+        <ref local="LogViewer"/>
+        <ref local="TempDirectory"/>
+
+        <ref local ="ascx_FilterWizard"/>
+        <ref local ="ascx_OzasmtQuery"/>
+        <ref local ="ascx_ViewAssessmentFile"/>
+        
+       <!-- <ref local ="ascx_Unzip"/> -->       
+
+      </list>
+    </property>
+
+  </object>
+
+  
+  <object id="ascx_FilterWizard" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib">
+    <constructor-arg name="controlToLoad" value="o2.tool.filterAssessmentfiles.Ascx.ascx_FilterWizard, O2_Tool_Filter_Assessment_Files"/>
+    <constructor-arg name="controlDockState" value="Document"/>
+  </object>
+
+  <object id="ascx_ViewAssessmentFile" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib">
+    <constructor-arg name="controlToLoad" value="o2.tool.filterAssessmentfiles.Ascx.ascx_ViewAssessmentFile, O2_Tool_Filter_Assessment_Files"/>
+    <constructor-arg name="controlDockState" value="Document"/>
+  </object>
+
+<!--
+  <object id="ascx_WebAutomation" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib">
+    <constructor-arg name="controlToLoad" value="o2.core.Ascx.WebAutomation.ascx_WebAutomation, O2_CoreLib"/>
+    <constructor-arg name="controlDockState" value="Document"/>
+  </object>
+  -->
+  <object id="ascx_OzasmtQuery" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib">
+    <constructor-arg name="controlToLoad" ref="ascx_OzasmtQueryControl"/>
+    <constructor-arg name="controlDockState" value="DockRight"/>
+  </object>
+  
+  <object id="ascx_OzasmtQueryControl" type="o2.core.Ascx.Ozasmt.ascx_OzasmtQuery, O2_CoreLib">
+   <!-- <property name="scriptLibrary">
+      <list element-type="string">
+        
+      </list>
+    </property> 
+    <property name="maxNumberOfNLinqQueryRecordsToShow" value ="500"/>-->
+  </object>
+
+  <object id="LogViewer" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib" >
+    <constructor-arg name="controlToLoad" value="o2.core.Ascx.CoreControls.ascx_LogViewer"/>
+    <constructor-arg name="controlDockState" value="DockBottomAutoHide"/>
+    <constructor-arg name="controlName" value="O2 Log"/>
+  </object>
+
+
+  <object id="TempDirectory" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib" >
+    <constructor-arg name="controlToLoad" ref="ascx_Directory"/>
+    <constructor-arg name="controlDockState" value="DockBottomAutoHide"/>
+    <constructor-arg name="controlName" value="O2 Temp Files"/>
+  </object>
+
+  <object id="ascx_Directory" type="o2.core.Ascx.DataViewers.ascx_Directory, O2_CoreLib">
+    <property name ="_ViewMode" value="Simple"/>
+  </object>
+
+
+
+
+  <object id="ascx_Unzip" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib" >
+    <constructor-arg name="controlToLoad" value="o2.core.Ascx.Utils.ascx_Unzip"/>
+    <!--<constructor-arg name="controlDockState" value="DockBottomAutoHide"/> -->
+    <constructor-arg name="controlDockState" value="Float"/>
+    <constructor-arg name="controlName" value="O2 Unzip tool"/>
+  </object>
+  
+</objects>

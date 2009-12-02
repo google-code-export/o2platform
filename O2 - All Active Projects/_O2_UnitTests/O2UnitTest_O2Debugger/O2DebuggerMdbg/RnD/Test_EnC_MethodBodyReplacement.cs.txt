@@ -1,0 +1,295 @@
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
+using NUnit.Framework;
+using O2.core._UnitTests.MockObjects;
+
+using O2.core.O2Core.Debugging;
+using O2.core.O2Core.O2Environment;
+using O2.core.O2Core.Resources;
+using O2.core.O2Core.DotNet;
+using System.IO;
+
+using O2.debugger.mdbg.Debugging.CorDebug;
+using O2.debugger.mdbg.Debugging.CorDebug.NativeApi;
+using O2.debugger.mdbg.Debugging.MdbgEngine;
+using O2.o2AppDomainProxy.Interfaces;
+using O2.o2AppDomainProxy;
+using System.Threading;
+
+namespace O2.core._UnitTests.Test_O2DebuggerMdbg
+{
+    /// <summary>
+    /// Test EnD (Edit n Continue) capabilties of O2MDbg :)
+    /// </summary>
+    [TestFixture]
+    public class Test_EnC_MethodBodyReplacement
+    {
+        public IO2Log log = new Log(); //("Test_RaceConditionsAndThreadInfo");
+
+        string pathToExe = @"C:\O2\_temp\JetBrains.ReSharper.TaskRunner\For_UnitTest_HotMethodPatch.exe";
+    private static readonly MockObjects_CompiledExe mockObjects_CompiledExe = new MockObjects_CompiledExe(MockObjects_CompiledExe._for_UnitTest_HotMethodPatch());
+        private static readonly System.Diagnostics.Process testProcess = mockObjects_CompiledExe.TestProcess;
+
+     /*   public void applyILPacthToMethod(O2MDbg o2MDbg, MethodInfo method)
+        {
+            log.info("Applying PATCH");
+            //var methodName = ;
+            var mdbgFunctionA = o2MDbg.mdbgProcess.ResolveFunctionNameFromScope("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch.messageForThreadA");
+
+            var mdbgFunctionB = o2MDbg.mdbgProcess.ResolveFunctionNameFromScope("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch.messageForThreadB");
+
+            CorCode corCode = mdbgFunctionB.CorFunction.ILCode;
+            
+            
+
+            var mdbgType = o2MDbg.mdbgProcess.ResolveType("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch");
+        }*/
+
+        void setBreakPointOnMethodToPatch(O2MDbg o2MDbg)
+        {
+            var targetMethod1 = Reflection.getMethod(mockObjects_CompiledExe.compiledAssemblySettings.pathToCreatedAssemblyFile, "messageForThreadB");
+            //var targetMethod1 = Reflection.getMethod(pathToExe, "newMessageForThreadB");
+
+            o2MDbg.O2BreakPoints.add(
+                                                         targetMethod1.Module.FullyQualifiedName,
+                                                         targetMethod1.ReflectedType.FullName,
+                                                         targetMethod1.Name,
+                                                         0 /* offset*/);
+
+         /*   var targetMethod2 = Reflection.getMethod(pathToExe, "messageForThreadB");
+
+            o2MDbg.setBreakingPoint(
+                                                         targetMethod2.Module.FullyQualifiedName,
+                                                         targetMethod2.ReflectedType.FullName,
+                                                         targetMethod2.Name,
+                                                         0 /* offset* /);*/
+
+            /*      mdbgFunctionA = o2MDbg.mdbgProcess.ResolveFunctionNameFromScope("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch.methodRunningInThreadA");
+
+                  mdbgFunctionB = o2MDbg.mdbgProcess.ResolveFunctionNameFromScope("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch.methodRunningInThreadB");
+
+                  var threads = o2MDbg.getThreads();
+                  foreach (var thread in threads)
+                  {
+                      try
+                      {
+                          var corFunction = thread.mdbgThread.CurrentFrame.Function;
+                          log.d(" - setBreakPointOnMethodToPatch :   " + corFunction.FullName);
+                      }
+                      catch (Exception ex)
+                      {
+                      }
+            
+
+
+                  }*/
+
+            //       CorFunction corFunction = e.Thread.ActiveFrame.Function;
+        }
+
+        private MDbgFunction mdbgFunctionA;
+        private MDbgFunction mdbgFunctionB;
+
+        private void showCurrentIP(CorFrame corFrame)
+        {
+            CorDebugMappingResult mappingResult;
+                    uint ip;
+                    corFrame.GetIP(out ip, out mappingResult);
+                    log.info(string.Concat(new object[] { "IP: ", ip, " @ ", "f.Function.FullName", " - ", mappingResult }));
+
+        }
+
+
+        private bool patchapplyed = false;
+        private int iOffset = 0;
+        void CorProcess_OnBreakpoint(object sender, CorBreakpointEventArgs e)
+        {
+            log.i("\n\n************* BREAKPOINT");
+            showCurrentIP(e.Thread.ActiveFrame);
+          //  if (patchapplyed)
+            {
+                mdbgFunctionA = o2MDbg.mdbgProcess.ResolveFunctionNameFromScope("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch.newMessageForThreadB");
+                var ILOffsetA = (int)mdbgFunctionA.CorFunction.ILCode.Address;
+                mdbgFunctionB = o2MDbg.mdbgProcess.ResolveFunctionNameFromScope("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch.newMessageForThreadB");
+                var ILOffsetB = (int)mdbgFunctionB.CorFunction.ILCode.Address;
+                e.Thread.ActiveFrame.SetIP(iOffset++);
+                log.i("****** After Set IP");
+                showCurrentIP(e.Thread.ActiveFrame);
+                o2MDbg.mDbgEngine.Processes.Active.Threads.RefreshStack();
+                log.i("****** After RefreshStack");
+                showCurrentIP(e.Thread.ActiveFrame);
+            }
+            
+            patchapplyed = !patchapplyed;
+            e.Continue = true;
+            return;
+
+            try
+            {
+                //log.i("Current IP {0}", e.Thread.ActiveFrame.CanSetIP();
+            
+
+            /*    mdbgFunctionA = o2MDbg.mdbgProcess.ResolveFunctionNameFromScope("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch.methodRunningInThreadA");
+
+                mdbgFunctionB = o2MDbg.mdbgProcess.ResolveFunctionNameFromScope("o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_HotMethodPatch.methodRunningInThreadB");
+
+                var threads = o2MDbg.getThreads();
+                foreach (var thread in threads)
+                {
+                    try
+                    {
+                        var corFunctionC = thread.mdbgThread.CurrentFrame.Function;
+                        log.d(" - setBreakPointOnMethodToPatch :   " + corFunctionC.FullName);
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+
+
+                }
+
+
+                CorFunction corFunction = e.Thread.ActiveFrame.Function;
+                */
+                //CorFunction corFunction = e.Thread..Function;
+                //corFunction.ILCode.
+
+         //       var newILOffsetA = (int)mdbgFunctionA.CorFunction.ILCode.Address;
+      //          var newILOffsetB = (int)mdbgFunctionB.CorFunction.ILCode.Address;
+
+              //  var currentFunctionIlOffset = corFunction.ILCode.Address;
+
+           //     e.Thread.ActiveFrame.SetIP(newILOffsetA);
+
+                //e.Thread.ActiveFrame.RemapFunction(newILOffsetA);
+                //o2MDbg.mDbgEngine.Processes.Active.Threads.RefreshStack();
+            }
+            catch (Exception ex)
+            { 
+            }
+
+
+
+            e.Continue = true;
+            return;
+            foreach (var thread in o2MDbg.getThreads())
+            {
+                try
+                {
+                    var corFunction = thread.mdbgThread.CurrentFrame.Function;
+                    log.d(" - CorProcess_OnBreakpoint :   " + corFunction.FullName);
+                }
+                catch (Exception ex)
+                {
+                }
+
+
+
+            }
+
+
+            if (patchapplyed )
+                log.e(" in BP: Patch already applied, skipping patch");
+            else
+            {
+                if (mdbgFunctionA != null && o2MDbg != null)
+                {
+                    try
+                    {
+                        CorFunction corFunction = e.Thread.ActiveFrame.Function;
+
+                        //CorFunction corFunction = e.Thread..Function;
+                        //corFunction.ILCode.
+
+                        var newILOffsetA = (int)mdbgFunctionA.CorFunction.ILCode.Address;
+                        var newILOffsetB = (int)mdbgFunctionB.CorFunction.ILCode.Address;
+
+                        var currentFunctionIlOffset = corFunction.ILCode.Address;
+
+                        e.Thread.ActiveFrame.RemapFunction(newILOffsetA);
+                        o2MDbg.mDbgEngine.Processes.Active.Threads.RefreshStack();
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+            }
+            //function = Debugger.Processes.Active.Threads.Active.CurrentFrame.Function;
+        }
+
+        void CorProcess_OnFunctionRemapComplete(object sender, CorFunctionRemapCompleteEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void CorProcess_OnFunctionRemapOpportunity(object sender, CorFunctionRemapOpportunityEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private O2MDbg o2MDbg;
+   //     private MDbgFunction mdbgFunctionA;
+
+        [Test]
+        public void testEditAndContinue()
+        {
+
+            //Assert.That(testProcess != null, "Problem getting process");
+
+            //var targetMethods = Reflection.getMethods(mockObjects_CompiledExe.compiledAssemblySettings.pathToCreatedAssemblyFile);
+            //var targetMethod = Reflection.getMethod(mockObjects_CompiledExe.compiledAssemblySettings.pathToCreatedAssemblyFile, "messageForThreadB");
+
+            
+            //Assert.That(targetMethod!= null, "there are no target methods");
+            //log.debug("Going to apply EnC IL Patch on method {0}", targetMethod.Name);
+            
+            O2MDbg.execSync(testProcess.Id,/*detach*/false, _o2MDbg =>
+
+            
+            //O2MDbg.execSync(pathToExe,/*detach*/false, _o2MDbg =>
+                                                {
+                                                    o2MDbg = _o2MDbg;                                                    
+                                                    
+                                                    setBreakPointOnMethodToPatch(o2MDbg);
+                                                    o2MDbg.mdbgProcess.CorProcess.OnBreakpoint += (CorProcess_OnBreakpoint);
+
+                                                    o2MDbg.mdbgProcess.CorProcess.OnFunctionRemapOpportunity += CorProcess_OnFunctionRemapOpportunity;
+                                                    o2MDbg.mdbgProcess.CorProcess.OnFunctionRemapComplete += CorProcess_OnFunctionRemapComplete;
+                                                    
+                                                    //applyILPacthToMethod(o2MDbg, targetMethod);
+
+                                                    log.info("inside debug");
+                                                    return true;
+                                                });
+
+            var process = Processes.getProcessCalled("For_UnitTest_HotMethodPatch");
+
+            process.WaitForExit();
+          //  mockObjects_CompiledExe.WaitForExit();
+            //Thread.Sleep(2000);
+
+
+            // add EnC with real time monitoring & manipulation of objects
+            // done: add a monitoring feature(breakpoints) (log entry on method hit use SQL Injection example)
+            // add a trace into monitoring mode (these should be calculated from CIrData dumps (created by O2)            
+            
+            // idea for EnC , if I add some replace some code on a function, that then calls it self at the end, IF another ENC is trigered then " + 
+            //     "I could just reintroduce the orignal code (and if the Managed stack is the same, all should be ok)";
+
+            // add c# vulns to o2 (Sql injection) to o2 Code base so that it triggers thoses findings when scanned (in fact I could put this eventually on a separate dll call Vulnerabilitity TestCases
+            //public void Test_BreakPoints()
+
+        }
+
+        
+
+
+        [TearDown]
+        public void closeCreatedProcess()
+        {
+    //        mockObjects_CompiledExe.killProcess();
+        }
+    }
+}

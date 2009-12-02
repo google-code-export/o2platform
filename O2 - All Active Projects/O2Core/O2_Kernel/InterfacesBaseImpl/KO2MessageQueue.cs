@@ -1,0 +1,52 @@
+using System.Threading;
+using O2.Kernel.CodeUtils;
+using O2.Kernel.Interfaces.Messages;
+
+namespace O2.Kernel.InterfacesBaseImpl
+{
+    public class KO2MessageQueue : IO2MessageQueue
+    {
+        private static readonly KO2MessageQueue o2MessageQueue = new KO2MessageQueue();
+
+        private KO2MessageQueue()
+        {
+            onMessages += o2Message => DI.log.i("in KO2MessageQueue: message Received:" + o2Message.messageText);
+        }
+
+        public static KO2MessageQueue getO2KernelQueue()
+        {
+            return o2MessageQueue;
+        }
+
+        public event Callbacks.callbackFor_O2Message onMessages;
+
+        public Thread sendMessage(string messageText)
+        {
+            var o2Message = new KO2GenericMessage(messageText);
+            return sendMessage(o2Message);
+        }
+
+        public Thread sendMessage(IO2Message messageToSend)
+        {
+            return Callbacks.raiseRegistedCallbacks(onMessages, new object[] { messageToSend });
+        }
+
+        public void sendMessageSync(IO2Message messageToSend)
+        {
+            var messageSent = new AutoResetEvent(false);
+            O2Kernel_O2Thread.mtaThread((() =>
+                                                        {
+                                                            var messageThread = sendMessage(messageToSend);
+                                                            messageThread.Join();
+                                                            messageSent.Set();
+                                                        }));
+            messageSent.WaitOne();
+        }
+
+        //public KO2MessageQueue()
+        //{
+        //    
+        //                  
+        //}
+    }
+}

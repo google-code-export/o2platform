@@ -1,0 +1,48 @@
+using NUnit.Framework;
+using O2.External.SharpDevelop.SourceCodeEdit;
+using O2.External.WinFormsUI.Forms;
+using O2.Views.ASCX.SourceCodeEdit;
+
+namespace O2.Tool.JoinTraces._UnitTests
+{
+    [TestFixture]
+    public class Test_ascx_NewJoinTraces
+    {
+        private const string joinTracesControl = "New Join Traces";
+        private const string cirDataViewerControl = "Cir Data Viewer Control";
+        private const string sourceCodeEditorControl = "Source Code Editor";
+        private const string findingsViewerControlName = "Findings Viewer";
+        private const string hardCodedFolderWithOzasmtFiles = @"E:\O2\Demodata\JoinTracesData\O2_Kernel";
+        private const string hardCodedFolderWithOzasmtFile = @"E:\O2\Demodata\JoinTracesData\O2_Tool_O2Reflector\O2_Tool_O2Reflector.exe.paf_CallBacksOnEdges_And_ExternalSinks.ozasmt";
+
+        private const string hardCodedScriptFile = @"E:\O2\_SourceCode_O2\O2Core\O2_Core_Ozasmt\_ScriptSamples\A_OzamtManipulation.cs";
+
+        [SetUp]
+        public  void launchGui()
+        {
+
+            //O2AscxGUI.openAscxAsForm(typeof(ascx_NewJoinTraces), joinTracesControl);
+            O2AscxGUI.openAscxAsForm(typeof(ascx_SourceCodeEditor),sourceCodeEditorControl);
+            //O2AscxGUI.openAscxAsForm(typeof(ascx_FindingsViewer), findingsViewerControlName);
+            //O2AscxGUI.openAscxAsForm(typeof(ascx_CirDataViewer), cirDataViewerControl);
+            //Assert.That(O2AscxGUI.isAscxLoaded(joinTracesControl), "joinTracesControl was not loaded");
+        }
+        [Test]
+        public void loadTestData()
+        {
+         //   findingsViewerControlName.invokeOnAscx("loadO2Assessment", new object[] { hardCodedFolderWithOzasmtFile });
+            sourceCodeEditorControl.invokeOnAscx("loadSourceCodeFile", new object[] { hardCodedScriptFile });
+            
+            //joinTracesControl.invokeOnAscx("loadOzasmtFilesIntoTabControl", new object[] {hardCodedFolderWithOzasmtFiles});
+            // cirDataViewerControl.invokeOnAscx("loadFile", new object[] {DI.config.ExecutingAssembly});
+
+        }
+
+        [TearDown]
+        public void closeGui()
+        {
+            O2AscxGUI.close();
+            //O2AscxGUI.waitForAscxGuiClose();
+        }
+    }
+}

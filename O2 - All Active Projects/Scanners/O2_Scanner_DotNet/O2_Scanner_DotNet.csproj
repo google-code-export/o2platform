@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C363CF04-59FF-48A2-90C0-908C57DE8B9E}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O2.Scanner.DotNet</RootNamespace>
+    <AssemblyName>_O2_Scanner_DotNet</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\_Bin_%28O2_Binaries%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Cecil, Version=0.6.9.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\O2\_Bin_(O2_Binaries)\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_External_O2Mono, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\O2\_Bin_(O2_Binaries)\O2_External_O2Mono.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_External_SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\O2\_Bin_(O2_Binaries)\O2_External_SharpDevelop.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Core, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL" />
+    <Reference Include="PostSharp.Core.XmlSerializers, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL" />
+    <Reference Include="PostSharp.Laos, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL" />
+    <Reference Include="PostSharp.Public, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ascx\ascx_DotNetGac.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_DotNetGac.Designer.cs">
+      <DependentUpon>ascx_DotNetGac.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\ascx_PatchAndMonitor.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_PatchAndMonitor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_PatchAndMonitor.Designer.cs">
+      <DependentUpon>ascx_PatchAndMonitor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DI.cs" />
+    <Compile Include="PostSharp\BackupRestoreFiles.cs" />
+    <Compile Include="PostSharp\Hacks.cs" />
+    <Compile Include="PostSharp\IISDeployment.cs" />
+    <Compile Include="PostSharp\PostSharpUtils.cs" />
+    <Compile Include="PostSharp\InjectAttributes.cs" />
+    <Compile Include="PostSharp\PostSharpExecution.cs" />
+    <Compile Include="PostSharp\ProcessAssemblies.cs" />
+    <Compile Include="PostSharp\SuportFiles.Designer.cs">
+      <DependentUpon>SuportFiles.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Ascx\ascx_DotNetGac.resx">
+      <DependentUpon>ascx_DotNetGac.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\ascx_PatchAndMonitor.resx">
+      <DependentUpon>ascx_PatchAndMonitor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PostSharp\SuportFiles.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SuportFiles.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_TestScripts\TestScripts.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TestScripts.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Ascx\ascx_DotNetGac.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Content Include="PostSharp-Library.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PostSharp-Platform.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="_TestScripts\TestScripts.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestScripts.resx</DependentUpon>
+    </Compile>
+    <Compile Include="_TestScripts\TestScript_MultipleCalls.cs" />
+    <Compile Include="_UnitTests\_Test_ascx_XRules_UnitTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="_ExternalDlls\PostSharp.Core.dll" />
+    <Content Include="_ExternalDlls\PostSharp.Core.XmlSerializers.dll" />
+    <Content Include="_ExternalDlls\PostSharp.Laos.dll" />
+    <Content Include="_ExternalDlls\PostSharp.Public.dll" />
+    <Compile Include="_UnitTests\_Test_PostSharpHooks.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
+      <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
+      <Name>O2_External_WinFormsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Core_CIR\O2_Core_CIR.csproj">
+      <Project>{F19ED2FE-8191-4534-8DAC-4C42DEE87B52}</Project>
+      <Name>O2_Core_CIR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Core_XRules\O2_Core_XRules.csproj">
+      <Project>{E5CB533C-DA98-408E-B021-171293AAAE3E}</Project>
+      <Name>O2_Core_XRules</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
+      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
+      <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_External_PostSharp\O2_External_PostSharp.csproj">
+      <Project>{EDA941A6-FA49-473E-8A67-6785ABA13C3F}</Project>
+      <Name>O2_External_PostSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

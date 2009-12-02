@@ -1,0 +1,105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Mono.Cecil;
+using Mono.Cecil.Cil;
+using O2.External.O2Mono.MonoCecil;
+
+namespace O2.External.O2Mono.MonoCecil
+{
+    public class CecilCodeSearch
+    {
+        public static bool findInAssembly_CustomAttribute(String sAssemblyToLoad, String sAttributeToLoad)
+        {
+            try
+            {
+                Debug.WriteLine("Processing assembly: " + sAssemblyToLoad);
+                AssemblyDefinition assemblyDefinition = AssemblyFactory.GetAssembly(sAssemblyToLoad);
+                foreach (ModuleDefinition moduleDefinition in assemblyDefinition.Modules)
+                    foreach (TypeDefinition typeDefinition in moduleDefinition.Types)
+                        foreach (MethodDefinition methodDefinition in typeDefinition.Methods)
+                            foreach (CustomAttribute customAttribute in methodDefinition.CustomAttributes)
+                                if (customAttribute.Constructor.DeclaringType.Name == sAttributeToLoad)
+                                    return true;
+                                //else
+                                //    DI.log.info(customAttribute.Constructor.DeclaringType.Name);
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in findInAssembly_CustomAttribute: ", ex.Message);
+            }
+            return false;
+        }
+
+        public static bool findInAssembly_Dependency(String sAssemblyToLoad, String dependencyToFind, bool recursiveSearch)
+        {
+            try
+            {
+                var dependencies = CecilAssemblyDependencies.getDictionaryOfDependenciesForAssembly_WithNoRecursiveSearch(sAssemblyToLoad);
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in findInAssembly_CustomAttribute: ", ex.Message);
+            }
+            return false;
+        }
+
+        public static List<string> findInAssemblyVariable(string assemblyToLoad)
+        {
+            string methodToFind = "System.Void System.Web.UI.WebControls.Button::add_Click(System.EventHandler)";
+            int parameterOffset = 2;
+            return findInAssembly_OnCallX_ParameterType(assemblyToLoad, methodToFind, parameterOffset);
+        }
+
+        public static List<string> findInAssembly_OnCallX_ParameterType(string assemblyToLoad, string methodToFind,
+                                                                        int parameterOffset)
+        {
+            var findings = new List<string>();
+            foreach (MethodDefinition methodDefinition in CecilUtils.getMethods(assemblyToLoad))
+                for (int i = 0; i < methodDefinition.Body.Instructions.Count; i++)
+                {
+                    Instruction instruction = methodDefinition.Body.Instructions[i];
+                    if (instruction.Operand != null)
+                    {
+                        if (instruction.Operand.ToString() == methodToFind)
+                        {
+                            var sourceMethod = (MethodDefinition) instruction.Operand;
+                            // DI.log.debug("[{0}] {1} ", instruction.OpCode.Name,
+
+                            var sinkMethod =
+                                (MethodDefinition) methodDefinition.Body.Instructions[i - parameterOffset].Operand;
+                            // DI.log.debug("-->[{0}] {1} ", instructionWithParameter.OpCode.Name,
+                            //               instructionWithParameter.Operand.ToString());
+                            // DI.log.debug("{0} -- > {1}", sourceMethod.Name, sinkMethod.Name);
+                            //MethodDefinition property = (MethodDefinition)method.Body.Instructions[i - parameterOffset].Operand;
+                            findings.Add(String.Format("{0} -- > {1}", sourceMethod.Name, sinkMethod.Name));
+                        }
+                    }
+                }
+
+            return findings;
+        }
+
+        public static List<TypeDefinition> getTypesWithAttribute(string assemblyToLoad, string attributeToFinding)
+        {
+            var typesWithAttribute = new List<TypeDefinition>();
+            foreach (TypeDefinition typeDefinition in CecilUtils.getTypes(assemblyToLoad))
+            {
+                foreach (CustomAttribute customAttribute in typeDefinition.CustomAttributes)
+                    if (customAttribute.Constructor.DeclaringType.Name == attributeToFinding)
+                        typesWithAttribute.Add(typeDefinition);
+            }
+            return typesWithAttribute;
+        }
+
+        public static List<MethodDefinition> getMethodsWithAttribute(TypeDefinition testFixture, string attributeToFinding)
+        {
+            var tests = new List<MethodDefinition>();            
+            foreach (MethodDefinition methodDefinition in CecilUtils.getMethods(testFixture))
+                foreach (CustomAttribute customAttribute in methodDefinition.CustomAttributes)
+                    if (customAttribute.Constructor.DeclaringType.Name == attributeToFinding)
+                        tests.Add(methodDefinition);
+            return tests;
+        }
+    }
+}

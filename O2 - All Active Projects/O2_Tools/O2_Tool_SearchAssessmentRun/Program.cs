@@ -1,0 +1,27 @@
+using System;
+using O2.External.WinFormsUI.Forms;
+using O2.External.WinFormsUI.O2Environment;
+using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
+using O2.ImportExport.OunceLabs.Ozasmt_OunceV6_1;
+using O2.Kernel.Interfaces.Views;
+using O2.Tool.SearchAssessmentRun.Ascx;
+using O2.Views.ASCX.O2Findings;
+
+namespace O2.Tool.SearchAssessmentRun
+{
+    internal static class Program
+    {        
+        private static void Main()
+        {
+            if (O2AscxGUI.launch("O2 Tool - SearchAssessmentRun"))
+            {
+                O2AscxGUI.openAscx(typeof (ascx_SearchAssessmentRun), O2DockState.Document,"Search Assessment Run");
+
+                // set-up load engines
+                ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssessmentLoad_OunceV6());
+                ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssessmentLoad_OunceV6_1());
+                O2AscxGUI.openAscx(typeof(ascx_FindingsViewer), O2DockState.DockBottomAutoHide, "Findings Viewer");
+            }
+        }
+    }
+}

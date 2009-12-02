@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{137F101D-D02C-47E2-8839-653B9C4AA683}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O2.UnitTests.Test_O2CoreCIR</RootNamespace>
+    <AssemblyName>_O2_UnitTests_TestO2CoreCIR</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\_Bin_%28O2_Binaries%29\_UnitTests\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Cecil, Version=0.6.9.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Test_Ascx\Rnd\Test_TestCirConsolidation.cs.txt" />
+    <Compile Include="DI.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test_Ascx\Test_Ascx_FindingsSplitter.cs" />
+    <Compile Include="Test_CirCreator\Test_CirCreatorAscxControl.cs" />
+    <Compile Include="Test_Ascx\Test_CirSearch.cs" />
+    <Compile Include="Test_Ascx\Test_SavingAndLoadingCirDataFiles.cs" />
+    <Compile Include="Test_CirCreator\Test_CirCreatorEngineDotNet.cs" />
+    <Compile Include="Test_Ascx\Test_ShowCirDataInGui.cs" />
+    <Compile Include="Test_CirCreator\Java\Test_MapCirDataToSourceCode.cs" />
+    <Compile Include="Test_CirTraces\Test_CirTraceCreation.cs" />
+    <Compile Include="Test_CirTraces\Test_LoadFindingsIntoCir.cs" />
+    <Compile Include="Test_Objects\Test_CirDataAnalysis.cs" />
+    <Compile Include="Test_RemoteLoad\Test_HostCirDataOnSepareteProcess.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_O2Mono\O2_External_O2Mono.csproj">
+      <Project>{F457A7EB-A573-41BB-BC12-61ABE5ACF702}</Project>
+      <Name>O2_External_O2Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
+      <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
+      <Name>O2_External_WinFormsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Core_CIR\O2_Core_CIR.csproj">
+      <Project>{F19ED2FE-8191-4534-8DAC-4C42DEE87B52}</Project>
+      <Name>O2_Core_CIR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
+      <Project>{D388D146-D728-412E-8097-5C6E4E53612E}</Project>
+      <Name>O2 ImportExport OunceLabs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Kernel_WCF\O2 Kernel WCF.csproj">
+      <Project>{A5CB8BED-722D-4A44-A00C-78A3791C7EB8}</Project>
+      <Name>O2 Kernel WCF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
+      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
+      <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

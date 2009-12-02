@@ -1,0 +1,172 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Xml.Serialization;
+using O2.Kernel.CodeUtils;
+using O2.Kernel.Interfaces.O2Core;
+
+namespace O2.Kernel.InterfacesBaseImpl
+{
+    public class KO2Config : IO2Config
+    {   
+        public KO2Config()
+        {            
+            hardCodedO2LocalTempFolder = @"C:\O2\_tempDir\";
+            O2TempDir = hardCodedO2LocalTempFolder;                 // default to this one since there are a couple cases where in Visual Studio the loading of o2.config files causes a problem
+            hardCodedO2LocalBuildDir = @"E:\O2\_Bin_(O2_Binaries)\";
+            hardCodedO2LocalSourceCodeDir = @"E:\O2\_SourceCode_O2";
+            O2FindingsFileExtension = ".O2Findings";
+            extraSettings = new List<Setting>();
+            dependenciesInjection = new List<DependencyInjection>();
+        }
+
+        public KO2Config(string o2ConfigFile) :this ()
+        {       
+            O2ConfigFile = o2ConfigFile;            
+        }
+
+        // non-interface property
+        public List<Setting> extraSettings { get; set; }
+        public List<DependencyInjection> dependenciesInjection { get; set; }
+
+        // non-interface properties
+        public string O2ConfigFile { get; set; }        
+        public string O2FindingsFileExtension { get; set; }        
+        public string hardCodedO2LocalTempFolder { get; set; }
+        public string hardCodedO2LocalBuildDir { get; set; }
+        public string hardCodedO2LocalSourceCodeDir { get; set; }
+        public static string dependencyInjectionTest { get; set; }
+
+        
+
+        public string O2TempDir
+        {
+            get
+            {
+                if (hardCodedO2LocalTempFolder == null)
+                    return null;
+                O2Kernel_Files.checkIfDirectoryExistsAndCreateIfNot(hardCodedO2LocalTempFolder);
+                return hardCodedO2LocalTempFolder;
+            }
+            set { hardCodedO2LocalTempFolder = value; }
+        }
+
+        
+
+        public string CurrentExecutableDirectory
+        {
+            get { return Environment.CurrentDirectory; }
+            set { }
+        }
+
+        public String CurrentExecutableFileName
+        {
+            get { return Path.GetFileName(Process.GetCurrentProcess().ProcessName); }
+            set { }
+        }
+
+        public string ExecutingAssembly
+        {
+            get { return Assembly.GetExecutingAssembly().Location; }
+            set { }
+        }
+
+        public string TempFileNameInTempDirectory
+        {
+            get { return Path.Combine(O2TempDir, O2Kernel_Files.getTempFileName()); }
+            set { }
+        }
+
+        public string TempFolderInTempDirectory
+        {
+            get
+            {
+                string tempFolder = Path.Combine(O2TempDir, O2Kernel_Files.getTempFolderName());
+                Directory.CreateDirectory(tempFolder);
+                return tempFolder;
+            }
+            set { }
+        }
+
+        public string O2KernelAssemblyName
+        {
+            get { return "O2_Kernel.dll"; }
+            set { }
+        }
+
+        /// <summary>
+        /// returns a tempfile in the temp directory with the provided extension 
+        ///(no need to include the dot in the extension)
+        /// </summary>
+        /// <param name="extension"></param>
+        /// <returns></returns>
+        public string getTempFileInTempDirectory(string extension)
+        {
+            return TempFileNameInTempDirectory + "." + extension;
+        }
+
+        public string getTempFolderInTempDirectory(string stringToAddToTempDirectoryName)
+        {
+            var tempFolder = TempFolderInTempDirectory;
+            var tempFolderWithExtraString = tempFolder + "_" + stringToAddToTempDirectoryName;
+            Directory.CreateDirectory(tempFolderWithExtraString);
+            Directory.Delete(tempFolder);
+            return tempFolderWithExtraString;
+
+        }
+
+        public bool setDI(Type typeToInjectDependency, string propertyToInject, Object dependencyObject)
+        {
+            //var diType = DI.reflection.getType(typeToInjectDependency, "DI");
+            if (typeToInjectDependency != null)
+                if (DI.reflection.setProperty(propertyToInject, typeToInjectDependency, dependencyObject))
+                    return true;
+            return false;
+        }
+
+        public bool setDI(string assemblyName, string typeToInjectDependency, string propertyToInject,
+                          Object dependencyObject)
+        {
+            Type diType = DI.reflection.getType(assemblyName, typeToInjectDependency);
+            if (diType != null)
+                if (DI.reflection.setProperty(propertyToInject, diType, dependencyObject))
+                {
+                    DI.log.info("setDI of object {0} into property {1} in Type {2} in Assembly {3}",
+                                dependencyObject.GetType().Name, propertyToInject, typeToInjectDependency, assemblyName);
+                    return true;
+                }
+            return false;
+        }
+
+        // Todo: NEED TO CHECK IF THIS IS NEEDED
+        public void addPathToCurrentExecutableEnvironmentPathVariable(String sPathToAdd)
+        {
+            string sCurrentEnvironmentPath = Environment.GetEnvironmentVariable("Path");
+            if (sCurrentEnvironmentPath != null && sCurrentEnvironmentPath.IndexOf(sPathToAdd) == -1)
+            {
+                String sUpdatedPathValue = String.Format("{0};{1}", sCurrentEnvironmentPath, sPathToAdd);
+                Environment.SetEnvironmentVariable("Path", sUpdatedPathValue);
+            }
+        }        
+    }
+
+    [Serializable]
+    public class Setting
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
+    [Serializable]
+    public class DependencyInjection
+    {
+        [XmlAttribute]
+        public string Type { get; set; }
+        [XmlAttribute]
+        public string Parameter { get; set; }
+        [XmlAttribute]
+        public string Value { get; set; }
+    }
+}

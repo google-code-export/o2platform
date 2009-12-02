@@ -1,0 +1,60 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
+using System.IO;
+using O2.Core.Ozasmt.Ascx;
+using O2.Core.Ozasmt.OzasmtAPI;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
+using O2.External.WinFormsUI.Forms;
+using O2.Kernel.Interfaces.O2Findings;
+
+namespace O2.UnitTests.Test_Ozasmt.Test_Serialization
+{
+    [TestFixture]
+    public class Test_ToAndFromO2Findings
+    {
+        //private string findingViewerControl = "Finding Viewer";
+        [SetUp]
+        public void setUpGui()
+        {
+            O2AscxGUI.isGuiLoaded();        // this will fire the static constructors which will handle the O2GuI messages
+        }
+        [Test]
+        public void test_loadTempAssessmentInFindingsViewer()
+        {
+            var o2Findings = OzasmtTestHelpers.createO2Assessment().o2Findings;
+            var controlName = ascx_FindingsViewer.openInFloatWindow(o2Findings);            
+            var o2FindingsInTreeView = (List<IO2Finding>) controlName.invokeOnAscx("getFindingsFromTreeView");
+            Assert.That(o2FindingsInTreeView != null && o2FindingsInTreeView.Count == o2Findings.Count, "probs with return o2FindingsInTreeView");
+            DI.log.info("There were {0} Findings in o2FindingsInTreeView", o2FindingsInTreeView.Count);
+            O2AscxGUI.closeAscxParent(controlName);
+        }
+
+        [Test]
+        public void test_SerializingO2Findings()
+        {
+            var o2Assessment = (IO2Assessment)OzasmtTestHelpers.createO2Assessment();
+            //Serialize.createSerializedXmlStringFromObject(o2Assessment, null);
+            foreach (var o2Finding in o2Assessment.o2Findings)
+            {
+                var serializedO2Finding = OzasmtUtils.createSerializedXmlStringFromO2Finding(o2Finding);
+                Assert.That(serializedO2Finding != "", "serializedO2Finding was empty");
+            }
+
+            // var o2AssessmentFile = OzasmtTestHelpers.createO2AssessmentFile();
+            //Assert.That(File.Exists(o2AssessmentFile), "o2AssessmentFile didn't exist");
+            //O2AscxGUI.openAscxAsForm(typeof(ascx_FindingsViewer), o2AssessmentFile);
+            
+            
+        }
+
+        [TearDown]
+        public void closeGUI()
+        {
+            O2AscxGUI.waitForAscxGuiClose();
+        }
+    }
+}

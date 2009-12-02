@@ -1,0 +1,69 @@
+﻿using System;
+using System.Windows.Forms;
+using NUnit.Framework;
+
+
+namespace O2.unitTests.O2Core.O2CoreLib.MonoCecil
+{
+    [TestFixture]
+    public class Test_CecilViewUtils_WindowsForms
+    {
+        [Test]
+        public void test_CecilViewUtils_WindowsForms()
+        {
+            string targetAssembly = DI.config.ExecutingAssembly;
+            var objectsToTest = new object[] {new ListBox(), new ComboBox(), new ListView(), new TreeView()};
+            foreach (object objectToTest in objectsToTest)
+            {
+                object targetObject = objectToTest;
+                // test populateControlWith_Modules
+                Assert.IsTrue(CecilViewUtils_WindowsForms.populateControlWith_Modules(targetObject, targetAssembly) > 0,
+                              "There were no modules populated in control {0}  - ", targetObject.GetType().Name);
+                // create new instance of targetObject
+                targetObject = Activator.CreateInstance(targetObject.GetType());
+                // test populateControlWith_Types
+                Assert.IsTrue(CecilViewUtils_WindowsForms.populateControlWith_Types(targetObject, targetAssembly) > 0,
+                              "There were no Types populated in control {0}  - ", targetObject.GetType().Name);
+                // create new instance of targetObject
+                targetObject = Activator.CreateInstance(targetObject.GetType());
+                // test populateControlWith_Methods
+                Assert.IsTrue(CecilViewUtils_WindowsForms.populateControlWith_Methods(targetObject, targetAssembly) > 0,
+                              "There were no Methods populated in control {0}  - ", targetObject.GetType().Name);
+
+                object items = null;
+                switch (targetObject.GetType().Name)
+                {
+                    case "ListBox":
+                    case "ComboBox":
+                    case "ListView":
+                        items = DI.reflection.invokeMethod_InstanceStaticPublicNonPublic(targetObject, "get_Items", null);
+                        break;
+                    case "TreeView":
+                        items = DI.reflection.invokeMethod_InstanceStaticPublicNonPublic(targetObject, "get_Nodes", null);
+                        break;
+                }
+                Assert.IsTrue(items != null, "Could not get the items object for {0}  - ", targetObject.GetType().Name);
+
+                // get the first item
+                object firstItem = DI.reflection.invokeMethod_InstanceStaticPublicNonPublic(items, "get_Item", new object[] {0});
+                Assert.IsTrue(firstItem != null, "Could not get the value for the 1st item in {0}  - ",
+                              targetObject.GetType().Name);
+
+                // check if the Tag object was correctly populated
+                switch (targetObject.GetType().Name)
+                {
+                    case "ListView":
+                        object listViewTag = DI.reflection.invokeMethod_InstanceStaticPublicNonPublic(firstItem, "get_Tag", null);
+                        Assert.IsTrue(listViewTag != null, "The tag value was null for the 1st item in {0}  - ",
+                                      targetObject.GetType().Name);
+                        break;
+                    case "TreeView":
+                        object treeViewTag = DI.reflection.invokeMethod_InstanceStaticPublicNonPublic(firstItem, "get_Tag", null);
+                        Assert.IsTrue(treeViewTag != null, "The tag value was null for the 1st item in {0}  - ",
+                                      targetObject.GetType().Name);
+                        break;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,83 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+
+namespace O2.core.O2Core.O2Environment
+{
+
+    public class Messages
+    {
+        public static List<Object> executeMacro(String sCommandLine)
+        {
+            String sMacroName = sCommandLine.Substring(1);
+            String sPathToMacro = Path.Combine(Config.getDefaultDir_O2Macros(), sMacroName);
+            return sendMessagesFromFile(sPathToMacro);
+        }
+
+        public static List<Object> sendMessagesFromFile(string sPathToFileWithMessages)
+        {
+            var loReturnData = new List<object>();
+            String sMessagesFromFile = Files.getFileContents(sPathToFileWithMessages);
+            String[] sSplitedLines = sMessagesFromFile.Split(new[] {Environment.NewLine},
+                                                             StringSplitOptions.RemoveEmptyEntries);
+            foreach (String sMessage in sSplitedLines)
+                if (sMessage != "" & sMessage[0] != '#')
+                    loReturnData.Add(sendMessage(sMessage, null));
+            return loReturnData;
+        }
+
+        public static Object sendMessage(string sMessageCommandText)
+        {
+            if (sMessageCommandText.Length > 0 && sMessageCommandText[0] == '>') // the message is a macro
+                return executeMacro(sMessageCommandText);
+
+            return sendMessage(sMessageCommandText, null);
+        }
+
+        public static Object sendMessage(string sMessageCommandText, List<Object> oMethodParameters)
+        {
+            DI.log.debug("Creating message with command Text: {0}", sMessageCommandText);
+            var fmMessage = new MessageBuilder.Message(sMessageCommandText, oMethodParameters);
+            // fmo2Message.resolveMessageCommandLine(sMessageCommandText);
+            Object oReturnData;
+
+            if (fmMessage.bReadyForExecution)
+                oReturnData = MessageBuilder.addMessageToQueueAndExecuteItNow(fmMessage);
+            else
+            {
+                if (fmMessage.sVarToStoreReturnData != null && fmMessage.oLiveObjectForMethodExecution != null)
+                    // there is a request to store the current result in a var
+                    vars.set_(fmMessage.sVarToStoreReturnData, fmMessage.oLiveObjectForMethodExecution);
+                if (fmMessage.sVarToStoreReturnData != null && fmMessage.sCommandLine != null)
+                    vars.set_(fmMessage.sVarToStoreReturnData, fmMessage.sCommandLine);
+                oReturnData = fmMessage.oLiveObjectForMethodExecution;
+                // if we can't execute a method, return of the live object we have calculated so far                       
+            }
+            //if (oReturnData == null)
+            //    DI.log.error("Could not created message {0}", sMessageCommandText);
+            return oReturnData;
+        }
+
+        // add caching to the Message method resolution (which will always be the same)
+        public static void sendMessage_DnDQueue_SendInfoMessage(String sMessageToSend)
+        {
+            string sDnDQueueCommand = "DndQueue.ascx_DndQueue.registerDnDMessage ";
+            sendMessage(sDnDQueueCommand + sMessageToSend);
+        }
+
+/*
+        public static void sendMessage_DnDQueue_AddAction(o2DnD.o2DnDAction ddActionToAdd)
+        {
+            String sDnDQueueCommand = "DndQueue.ascx_DndQueue.addActionToQueue ";
+            List<Object> oMethodParameters = new List<object>();
+            oMethodParameters.Add(ddActionToAdd);
+            o2Messages.sendMessage(sDnDQueueCommand,oMethodParameters);
+        }
+
+        public static void sendMessage_DnDQueue_ViewAssessementRun(o2DnD.o2DnDAction ddActionToAdd)
+        { 
+        }
+ */
+    }
+}

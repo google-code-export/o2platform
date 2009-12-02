@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using NUnit.Framework;
+using System.IO;
+using O2.core.O2Core.O2Environment;
+using O2.DotNetWrappers.Windows;
+using System.Xml;
+using O2.External.SpringNet;
+using O2.DotNetWrappers.DotNet;
+using O2.kernel.KernelServices;
+
+namespace O2Test_QuickTests
+{
+    [TestFixture]
+    public class Test_External_SpringNet
+    {
+		// this is not working at all (the only way to do this properly is to let it run and hook the function that fires up the O2 Form)   
+		// so come back when the O2Debugger has this capability :)
+		
+        // need to find a better way to do this since at the moment this will open and execute all Spring Config files
+        [Test]       
+        public void test_CheckIfAllSpringConfigFilesCanBeLoaded()
+        {
+            var directoryWithSpringFilesToCheck = DI.o2CorLibConfig.hardCodedO2LocalBuildDir;
+            Assert.That(Directory.Exists(directoryWithSpringFilesToCheck),
+                        "directoryWithSpringFilesToCheck doesn't exist : " + directoryWithSpringFilesToCheck);
+            var xmlFiles = Files.getFilesFromDir_returnFullPath(directoryWithSpringFilesToCheck, "*.xml");
+            Assert.That(xmlFiles.Count >0 ," There were no XML files!");
+            DI.log.info("There are {0} xml files to test", xmlFiles.Count);
+            var filesThatFailedToLoad = new List<String>();
+            var threadsCreated = new List<Thread>();
+            foreach(var xmlFile in xmlFiles)
+            {
+                DI.log.info("There are Testing Xml config file {0}", xmlFile);                
+                // for now all xml files in that directory are Spring Config files so we can just check them all
+                Processes.Sleep(2000);
+                var staThread = O2Thread.staThread(() => SpringExec.loadConfigAndStartGUI(xmlFile));
+                staThread.Abort();
+//                threadsCreated.Add(staThread);
+                // sleep for 1 second                   
+              /*  if (staThread.IsAlive) // check if the tread is still alive, and if not means it didn't load                                
+                {
+                    filesThatFailedToLoad.Add(xmlFile);
+                    DI.log.info(" *********   Spring file {0} failed to load" , xmlFile);
+                }                                */
+            }            
+  //          DebugMsg.showListContents(filesThatFailedToLoad);
+            // Abort all threads so that this text exits cleanly
+    //        foreach (var threadCreated in threadsCreated)            
+    //            if (threadCreated.IsAlive)
+    //                threadCreated.Abort();            
+            Assert.That(filesThatFailedToLoad.Count == 0, "There were String config files that failed to load");
+            
+        }
+
+        public class TestCustomLog : KO2Log
+        {
+            public override void reportCriticalErrorToO2Developers(object currentObject, Exception ex, string sourceMessage)
+            {
+                DI.log.e(" AT LOCAL ERROR HANDLER!!!! :) ");
+            }
+        }
+    }
+
+   
+}

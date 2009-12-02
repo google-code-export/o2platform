@@ -1,0 +1,105 @@
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using NUnit.Framework;
+using O2.Debugger.Mdbg.Debugging.MdbgEngine;
+using O2.DotNetWrappers.Windows;
+using O2.External.O2Mono.MonoCecil;
+
+//using System.Diagnostics;
+
+namespace O2.UnitTests.O2Debugger.O2DebuggerMdbg
+{
+    [TestFixture]
+    public class Test_O2DebuggerMdbg_ProcessStartAndAttach
+    {
+        #region Setup/Teardown
+
+        [SetUp]
+        public void setup()
+        {
+            List<Process> testProcesses = Processes.getProcessesCalled(CreateTestExe.exeName);
+            foreach (Process testProcess in testProcesses)
+                testProcess.Kill();
+        }
+
+        #endregion
+
+        private Process testExeProcess;
+
+        public MDbgProcess startTestExeUnderDebugger(string extraProcessNameTag)
+        {
+            string exeName = CreateTestExe.exeName + "_" + extraProcessNameTag;
+            Processes.killProcess(exeName);
+            string exeToStart = new CreateTestExe().createBasicHelloWorldExe(true).save(DI.config.O2TempDir, exeName);
+            return new MDbgEngine().CreateProcess(exeToStart, "", DebugModeFlag.Debug, null);
+        }
+
+
+        [Test]
+        public void Test_AttachDebuggerToRunningProcess()
+        {
+            string exeName = CreateTestExe.exeName + "_" + "ToAttach";
+            Processes.killProcess(exeName);
+            string exeToStart = new CreateTestExe().createBasicHelloWorldExe(true).save(DI.config.O2TempDir, exeName);
+            Process process = Processes.startProcess(exeToStart);
+            Assert.That(process != null && process.Id > 0 && !process.HasExited, "Something wrong with the process");
+
+            var mDbgEngine = new MDbgEngine();
+            MDbgProcess mdbgProcess = mDbgEngine.Attach(process.Id);
+
+            Assert.That(mdbgProcess != null, "mdbgProcess was null");
+            DI.log.info("We are isAttached to process:{0}", mdbgProcess.CorProcess.Id);
+            Assert.That(mdbgProcess.CorProcess.Id == process.Id, "Process IDs didn't match");
+
+            mdbgProcess.Go().WaitOne();
+            // NOTE: this little .WaitOne();  is VERY important since without it most data we want is not there and there are tons of threading problems
+
+            foreach (MDbgAppDomain appDomain in mdbgProcess.AppDomains)
+                DI.log.info("AppDomain: {0}", appDomain.CorAppDomain.Name);
+
+            foreach (MDbgModule module in mdbgProcess.Modules)
+                DI.log.info("Module: {0}", module.CorModule.Name);
+
+
+            mdbgProcess.Detach().WaitOne(); // have to detach or the process will hang on completion
+            process.Kill();
+            //process.WaitForExit();  // uncoment if you want the process not to terminate
+        }
+
+        [Test]
+        public void Test_launchTestDotNetProcess()
+        {
+            //var tempExe = DI.config.TempFileNameInTempDirectory + ".exe";
+
+            string testExe = new CreateTestExe().createBasicHelloWorldExe(true).save(DI.config.O2TempDir);
+            Assert.That(File.Exists(testExe), "testExe doesn't exists");
+            Assembly assembly = DI.reflection.getAssembly(testExe);
+            Assert.That(assembly != null, "testExe is not a managed app");
+            testExeProcess = Processes.startProcess(testExe);
+            Assert.That(testExeProcess.HasExited == false, "test process has ended");
+            Assert.That(testExeProcess.ProcessName == "BasicHelloWorld",
+                        "wrong process name:" + testExeProcess.ProcessName);
+            DI.log.info("Test process {0} created with ProgId {1}", testExeProcess.ProcessName, testExeProcess.Id);
+            testExeProcess.Kill();
+        }
+
+        [Test]
+        // need to find out a cleaner way to terminate these processes without gettting an internal mdbgProcess exception
+        public void Test_StartProcessUnderDebugger()
+        {
+            MDbgProcess mdbgProcess = startTestExeUnderDebugger("_2");
+            DI.log.i("Process created ok");
+            Assert.That(mdbgProcess != null);
+            Assert.That(mdbgProcess.IsAlive, "Process should be alive at this stage");
+            DI.log.i("New process ID= " + mdbgProcess.CorProcess.Id);
+            Process process = Process.GetProcessById(mdbgProcess.CorProcess.Id);
+            DI.log.i("Using Diag.Process object, process name = " + process.ProcessName);
+            mdbgProcess.Go().WaitOne(2000); // wait two seconds and then continue execution
+            //   DI.log.i("after go, wait 2s");
+            //  mdbgProcess.Kill();
+            //process.WaitForExit(); // if you want to debug the code
+        }
+    }
+}

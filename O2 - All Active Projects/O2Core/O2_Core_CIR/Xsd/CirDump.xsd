@@ -1,0 +1,908 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="CommonIRDump">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CommonIR">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="CompilationUnit">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="File">
+                      <xs:complexType>
+                        <xs:attribute name="Path" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element maxOccurs="unbounded" name="ClassMethods">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0">
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="ClassStaticFunction">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0">                          
+                          <!-- changed to use global Variable Element-->
+                          <xs:element maxOccurs="unbounded" ref="Variable"/>                            
+                          <!-- changed to use global ControlFlowGraph Element-->
+                          <xs:element ref ="ControlFlowGraph"/>                          
+                        </xs:sequence>
+                        <xs:attribute name="Name" type="xs:string" use="required" />
+                        <xs:attribute name="UniqueID" type="xs:string" use="required" />
+                        <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="ClassMemberFunction">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                          <!-- changed to use global Variable Element-->
+                          <xs:element maxOccurs="unbounded" ref="Variable"/>
+                          <!-- changed to use global ControlFlowGraph Element-->
+                          <xs:element ref ="ControlFlowGraph"/>                          
+                        </xs:sequence>
+                        <xs:attribute name="Name" type="xs:string" use="required" />
+                        <xs:attribute name="UniqueID" type="xs:string" use="required" />
+                        <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="ClassType" type="xs:string" use="required" />
+                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              
+              <!-- added NonClassFunction to cover C++ cases in the save format as the ClassXXXXXFunction above-->
+              <xs:element maxOccurs="unbounded" name="NonClassFunction">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0">
+                    <!-- changed to use global Variable Element-->
+                    <xs:element maxOccurs="unbounded" ref="Variable"/>
+                    <!-- changed to use global ControlFlowGraph Element-->
+                    <xs:element ref ="ControlFlowGraph"/>
+                  </xs:sequence>
+                  <xs:attribute name="Name" type="xs:string" use="required" />
+                  <xs:attribute name="UniqueID" type="xs:string" use="required" />
+                  <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                </xs:complexType>                
+              </xs:element>
+              <xs:element name="SignedInt8">
+                <xs:complexType>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SignedInt16">
+                <xs:complexType>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SignedInt32">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="PointerType">
+                      <xs:complexType>
+                        <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                        <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="SignedInt64">
+                <xs:complexType>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Float32">
+                <xs:complexType>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Float64">
+                <xs:complexType>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Char8">
+                <xs:complexType>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Char16">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="PointerType">
+                      <xs:complexType>
+                        <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                        <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Boolean">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="PointerType">
+                      <xs:complexType>
+                        <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                        <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Void">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="PointerType">
+                      <xs:complexType>
+                        <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                        <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element maxOccurs="unbounded" name="FunctionSigType">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ReturnType">
+                      <xs:complexType>
+                        <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="ArgumentTypes">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                          <xs:element maxOccurs="unbounded" name="Argument">
+                            <xs:complexType>
+                              <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                              <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="SymbolData">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="ClassSymbols">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Superclasses">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                          <xs:element maxOccurs="unbounded" name="Superclass">
+                            <xs:complexType>
+                              <xs:attribute name="ClassType" type="xs:string" use="required" />
+                              <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="ClassFields">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element maxOccurs="unbounded" name="ClassField">
+                            <xs:complexType>
+                              <xs:sequence minOccurs="0">
+                                <xs:element minOccurs="0" name="ConstFloat32">  <!-- need to make this a string since sometimes this value is -1.#INF -->
+                                  <xs:complexType>
+                                    <xs:attribute name="Value" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" name="UnaryOprCast">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="ConstNarrowString">
+                                        <xs:complexType>
+                                          <xs:attribute name="Value" type="xs:string" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                    <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" name="ConstSignedInt64">
+                                  <xs:complexType>
+                                    <xs:attribute name="Value" type="xs:long" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element minOccurs="0" name="ConstSignedInt32">
+                                  <xs:complexType>
+                                    <xs:attribute name="Value" type="xs:int" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute name="Name" type="xs:string" use="required" />
+                              <xs:attribute name="UniqueID" type="xs:string" use="required" />
+                              <xs:attribute name="GuaranteedInitBeforeUsed" type="xs:int" use="required" />
+                              <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                              <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="MemberFields">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element maxOccurs="unbounded" name="MemberField">
+                            <xs:complexType>
+                              <xs:attribute name="Name" type="xs:string" use="required" />
+                              <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                              <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                  <xs:attribute name="Name" type="xs:string" use="required" />
+                  <xs:attribute name="UniqueID" type="xs:string" use="required" />
+                  <xs:attribute name="Anonymous" type="xs:int" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="DumpDateTime" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- added in an  to use the same Variable element for both static and member elements -->
+  
+ <xs:element name="Variable">
+    <xs:complexType>
+      <xs:attribute name="Name" type="xs:string" use="required" />
+      <xs:attribute name="UniqueID" type="xs:string" use="required" />
+      <xs:attribute name="GuaranteedInitBeforeUsed" type="xs:int" use="required" />
+      <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+      <xs:attribute name="PrintableType" type="xs:string" use="required" />
+      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <!-- added in an  to use the same ControlFlowGraph element for both static and member elements -->
+  
+  <xs:element name="ControlFlowGraph">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="SsaVariable">
+          <xs:complexType>
+            <xs:attribute name="Name" type="xs:string" use="required" />
+            <xs:attribute name="BaseName" type="xs:string" use="required" />
+            <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+            <xs:attribute name="PrintableType" type="xs:string" use="required" />
+            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" name="BasicBlock">
+          <xs:complexType>
+            <xs:sequence minOccurs="0">
+              <xs:choice maxOccurs="unbounded">
+                <xs:element name="EvalExprStmt">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element minOccurs="0" name="NaryCallVirtual">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:choice maxOccurs="unbounded">
+                              <xs:element maxOccurs="unbounded" name="VarValue">
+                                <xs:complexType>
+                                  <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                  <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                                </xs:complexType>
+                              </xs:element>
+                              <xs:element minOccurs="0" name="UnaryOprCast">
+                                <xs:complexType>
+                                  <xs:sequence>
+                                    <xs:element name="ConstNarrowString">
+                                      <xs:complexType>
+                                        <xs:attribute name="Value" type="xs:string" use="required" />
+                                      </xs:complexType>
+                                    </xs:element>
+                                  </xs:sequence>
+                                  <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                </xs:complexType>
+                              </xs:element>
+                              <xs:element name="UnaryOprDereference">
+                                <xs:complexType>
+                                  <xs:sequence>
+                                    <xs:element name="UnaryOprField">
+                                      <xs:complexType>
+                                        <xs:sequence>
+                                          <xs:element name="VarValue">
+                                            <xs:complexType>
+                                              <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                              <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                            </xs:complexType>
+                                          </xs:element>
+                                        </xs:sequence>
+                                        <xs:attribute name="FieldName" type="xs:string" use="required" />
+                                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                      </xs:complexType>
+                                    </xs:element>
+                                  </xs:sequence>
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:choice>
+                          </xs:sequence>
+                          <xs:attribute name="FunctionName" type="xs:string" use="required" />
+                          <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element minOccurs="0" name="NaryCall">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element minOccurs="0" name="NaryOprNewObject">
+                              <xs:complexType>
+                                <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element maxOccurs="unbounded" name="VarValue">
+                              <xs:complexType>
+                                <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="UnaryOprCast">  <!-- DC  27 Jan 09, added maxOccurs="unbounded" -->
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element minOccurs="0" name="ConstNarrowString">
+                                    <xs:complexType>
+                                      <xs:attribute name="Value" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                  <xs:element minOccurs="0" name="VarValue">
+                                    <xs:complexType>
+                                      <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                  <xs:element minOccurs="0" name="ConstFunctionAddress"> <!-- DC  27 Jan 09, added ConstFunctionAddress element -->
+                                    <xs:complexType>
+                                      <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                      <xs:attribute name="FunctionName" type="xs:string" use="required" />                                      
+                                    </xs:complexType>
+                                  </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="UnaryOprDereference">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element name="UnaryOprField">
+                                    <xs:complexType>
+                                      <xs:sequence>
+                                        <xs:element name="VarValue">
+                                          <xs:complexType>
+                                            <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                          </xs:complexType>
+                                        </xs:element>
+                                      </xs:sequence>
+                                      <xs:attribute name="FieldName" type="xs:string" use="required" />
+                                      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                </xs:sequence>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:attribute name="FunctionName" type="xs:string" use="required" />
+                          <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="AssignmentStmt">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:choice maxOccurs="unbounded">
+                        <xs:element name="UnaryOprField">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="VarValue">
+                                <xs:complexType>
+                                  <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="FieldName" type="xs:string" use="required" />
+                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="UnaryOprCast">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element minOccurs="0" name="ConstNull" />
+                              <xs:element minOccurs="0" name="ConstSignedInt32">
+                                <xs:complexType>
+                                  <xs:attribute name="Value" type="xs:int" use="required" />
+                                </xs:complexType>
+                              </xs:element>
+                              <xs:element minOccurs="0" name="VarValue">
+                                <xs:complexType>
+                                  <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="ConstVarAddress">
+                          <xs:complexType>
+                            <xs:attribute name="VariableName" type="xs:string" use="required" />
+                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                            <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="NaryOprNewObject">
+                          <xs:complexType>
+                            <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="NaryCallVirtual">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:choice maxOccurs="unbounded">
+                                <xs:element name="UnaryOprDereference">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="UnaryOprField">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="VarValue">
+                                              <xs:complexType>
+                                                <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                          <xs:attribute name="FieldName" type="xs:string" use="required" />
+                                          <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element maxOccurs="unbounded" name="VarValue">
+                                  <xs:complexType>
+                                    <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                    <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                    <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="ConstSignedInt32">
+                                  <xs:complexType>
+                                    <xs:attribute name="Value" type="xs:int" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="BinaryOprAdd">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="VarValue">
+                                        <xs:complexType>
+                                          <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                          <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element name="ConstSignedInt32">
+                                        <xs:complexType>
+                                          <xs:attribute name="Value" type="xs:int" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="UnaryOprCast">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element minOccurs="0" name="VarValue">
+                                        <xs:complexType>
+                                          <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                          <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" name="ConstNarrowString">
+                                        <xs:complexType>
+                                          <xs:attribute name="Value" type="xs:string" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                    <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:choice>
+                            </xs:sequence>
+                            <xs:attribute name="FunctionName" type="xs:string" use="required" />
+                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="VarValue">
+                          <xs:complexType>
+                            <xs:attribute name="VariableName" type="xs:string" use="required" />
+                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                            <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="NaryCall">
+                          <xs:complexType>
+                            <xs:sequence minOccurs="0">
+                              <xs:element maxOccurs="unbounded" name="VarValue">
+                                <xs:complexType>
+                                  <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                  <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="FunctionName" type="xs:string" use="required" />
+                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="NaryOprNewArray">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="ConstSignedInt32">
+                                <xs:complexType>
+                                  <xs:attribute name="Value" type="xs:int" use="required" />
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                            <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="BinaryOprSubscript">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="VarValue">
+                                <xs:complexType>
+                                  <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                </xs:complexType>
+                              </xs:element>
+                              <xs:element name="ConstSignedInt32">
+                                <xs:complexType>
+                                  <xs:attribute name="Value" type="xs:int" use="required" />
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                        <xs:element name="UnaryOprDereference">
+                          <xs:complexType>
+                            <xs:sequence>
+                              <xs:element name="UnaryOprField">
+                                <xs:complexType>
+                                  <xs:sequence>
+                                    <xs:element name="VarValue">
+                                      <xs:complexType>
+                                        <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                        <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                      </xs:complexType>
+                                    </xs:element>
+                                  </xs:sequence>
+                                  <xs:attribute name="FieldName" type="xs:string" use="required" />
+                                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                </xs:complexType>
+                              </xs:element>
+                            </xs:sequence>
+                          </xs:complexType>
+                        </xs:element>
+                      </xs:choice>
+                    </xs:sequence>
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="GotoStmt">
+                  <xs:complexType>
+                    <xs:attribute name="SuccessorEdgeIndex" type="xs:int" use="required" />
+                    <xs:attribute name="SuccessorBasicBlock" type="xs:int" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="ReturnStmt">
+                  <xs:complexType>
+                    <xs:sequence minOccurs="0">
+                      <xs:element minOccurs="0" name="UnaryOprDereference">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element name="UnaryOprField">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element name="VarValue">
+                                    <xs:complexType>
+                                      <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="FieldName" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element minOccurs="0" name="UnaryOprCast">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element name="VarValue">
+                              <xs:complexType>
+                                <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                          <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element minOccurs="0" name="VarValue">
+                        <xs:complexType>
+                          <xs:attribute name="VariableName" type="xs:string" use="required" />
+                          <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                          <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="ReturnEdgeIndex" type="xs:int" use="required" />
+                    <xs:attribute name="ReturnBasicBlock" type="xs:int" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="CondBranchStmt">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element minOccurs="0" name="BinaryOprCompareNE">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element name="VarValue">
+                              <xs:complexType>
+                                <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="UnaryOprCast">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element name="ConstNull" />
+                                </xs:sequence>
+                                <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="ConstSignedInt32">
+                              <xs:complexType>
+                                <xs:attribute name="Value" type="xs:int" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element minOccurs="0" name="BinaryOprCompareEQ">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element minOccurs="0" name="UnaryOprDereference">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element name="UnaryOprField">
+                                    <xs:complexType>
+                                      <xs:sequence>
+                                        <xs:element name="VarValue">
+                                          <xs:complexType>
+                                            <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                          </xs:complexType>
+                                        </xs:element>
+                                      </xs:sequence>
+                                      <xs:attribute name="FieldName" type="xs:string" use="required" />
+                                      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                </xs:sequence>
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="VarValue">
+                              <xs:complexType>
+                                <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                <xs:attribute name="Renamed" type="xs:string" use="optional" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element name="UnaryOprCast">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element minOccurs="0" name="VarValue">
+                                    <xs:complexType>
+                                      <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                  <xs:element minOccurs="0" name="UnaryOprDereference">
+                                    <xs:complexType>
+                                      <xs:sequence>
+                                        <xs:element name="UnaryOprField">
+                                          <xs:complexType>
+                                            <xs:sequence>
+                                              <xs:element name="VarValue">
+                                                <xs:complexType>
+                                                  <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                                  <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                                </xs:complexType>
+                                              </xs:element>
+                                            </xs:sequence>
+                                            <xs:attribute name="FieldName" type="xs:string" use="required" />
+                                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                          </xs:complexType>
+                                        </xs:element>
+                                      </xs:sequence>
+                                    </xs:complexType>
+                                  </xs:element>
+                                  <xs:element minOccurs="0" name="ConstNull" />
+                                  <xs:element minOccurs="0" name="NaryCallVirtual">
+                                    <xs:complexType>
+                                      <xs:sequence>
+                                        <xs:element name="NaryCall">
+                                          <xs:complexType>
+                                            <xs:sequence>
+                                              <xs:element name="ConstNarrowString">
+                                                <xs:complexType>
+                                                  <xs:attribute name="Value" type="xs:string" use="required" />
+                                                </xs:complexType>
+                                              </xs:element>
+                                            </xs:sequence>
+                                            <xs:attribute name="FunctionName" type="xs:string" use="required" />
+                                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                          </xs:complexType>
+                                        </xs:element>
+                                        <xs:element name="VarValue">
+                                          <xs:complexType>
+                                            <xs:attribute name="VariableName" type="xs:string" use="required" />
+                                            <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                          </xs:complexType>
+                                        </xs:element>
+                                      </xs:sequence>
+                                      <xs:attribute name="FunctionName" type="xs:string" use="required" />
+                                      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                            <xs:element minOccurs="0" name="ConstSignedInt32">
+                              <xs:complexType>
+                                <xs:attribute name="Value" type="xs:int" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="TrueEdgeIndex" type="xs:int" use="required" />
+                    <xs:attribute name="TrueEdgeBasicBlock" type="xs:int" use="required" />
+                    <xs:attribute name="FalseEdgeIndex" type="xs:int" use="required" />
+                    <xs:attribute name="FalseEdgeBasicBlock" type="xs:int" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Edge">
+                  <xs:complexType>
+                    <xs:attribute name="ExceptionEdge" type="xs:int" use="required" />
+                    <xs:attribute name="SuccIndex" type="xs:int" use="required" />
+                    <xs:attribute name="SuccBasicBlock" type="xs:int" use="required" />
+                    <xs:attribute name="PredBasicBlock" type="xs:int" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="PhiFunction">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="PredecessorVariables">
+                        <xs:complexType>
+                          <xs:sequence>
+                            <xs:element maxOccurs="unbounded" name="Variable">
+                              <xs:complexType>
+                                <xs:attribute name="Name" type="xs:string" use="required" />
+                                <xs:attribute name="UniqueID" type="xs:string" use="required" />
+                                <xs:attribute name="GuaranteedInitBeforeUsed" type="xs:int" use="required" />
+                                <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                                <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                <xs:attribute name="DebugName" type="xs:string" use="optional" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="OriginalVariable" type="xs:string" use="required" />
+                    <xs:attribute name="TargetSsaVariable" type="xs:string" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="ThrowStmt">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="VarValue">
+                        <xs:complexType>
+                          <xs:attribute name="VariableName" type="xs:string" use="required" />
+                          <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                      <xs:element name="ThrowStmtCatchEdge">
+                        <xs:complexType>
+                          <xs:sequence minOccurs="0">
+                            <xs:element name="PointerType">
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element name="PointerType">
+                                    <xs:complexType>
+                                      <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                                      <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                      <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                                    </xs:complexType>
+                                  </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="SymbolDef" type="xs:string" use="required" />
+                                <xs:attribute name="PrintableType" type="xs:string" use="required" />
+                                <xs:attribute name="SymbolRef" type="xs:string" use="required" />
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:attribute name="CatchEdge" type="xs:int" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="IsRethrow" type="xs:boolean" use="required" />
+                  </xs:complexType>
+                </xs:element>
+              </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="UniqueID" type="xs:int" use="required" />
+            <xs:attribute name="Successors" type="xs:string" use="optional" />
+            <xs:attribute name="Predecessors" type="xs:string" use="optional" />
+            <xs:attribute name="DominanceFrontier" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>  
+</xs:schema>

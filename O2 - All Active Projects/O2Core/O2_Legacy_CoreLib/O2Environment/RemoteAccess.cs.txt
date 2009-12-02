@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+
+namespace O2.core.O2Core.O2Environment
+{
+
+    public class remoteAccess
+    {
+        public static Dictionary<String, String> dCachedO2Connections = new Dictionary<string, string>();
+        public static Int32 iRangePortNumber = 4000;
+        public static Int32 iStartPortNumber = 22222;
+        public static tcpServer tsTcpServer;
+
+        public static void testReceiveAndSend()
+        {
+            Int32 iPortNumber = startReceiver();
+            sendMessage(iPortNumber, "DI.log.debug Test message from remote O2 Client");
+        }
+
+        public static Int32 startReceiver()
+        {
+            Int32 iRandomPort = iStartPortNumber + new Random().Next(iRangePortNumber);
+            return startReceiver("127.0.0.1", iRandomPort);
+        }
+
+        public static Int32 startReceiver(String sIPAddress, Int32 iPortNumber)
+        {
+            IPAddress ipIPAddress = IPAddress.Parse(sIPAddress);
+            tsTcpServer = new tcpServer(ipIPAddress, iPortNumber);
+            var tsTcpServerThread = new Thread(tsTcpServer.Listen);
+            tsTcpServerThread.Start();
+            //System.Threading.ThreadPool.QueueUserWorkItem(new System.Threading.WaitCallback());
+            /*
+             * //TcpListener tcpListener = new TcpListener(ipIPAddress, iPortNumber);
+            tcpListener.Start();
+            tcpListener.BeginAcceptTcpClient(new AsyncCallback(onTcpClientConnection), tcpListener);
+            */
+            return iPortNumber;
+        }
+
+        public static void onTcpClientConnection(IAsyncResult arAyncResult)
+        {
+            DI.log.info("in onTcpClientConnection");
+
+            var tlTcpListener = (TcpListener) arAyncResult.AsyncState;
+            TcpClient tcTcpClient = tlTcpListener.AcceptTcpClient();
+            DI.log.info("Accepted TcpClient connection from: {0}", tcTcpClient.Client.ToString());
+            NetworkStream nsNetworkStream = tcTcpClient.GetStream();
+            var abBuffer = new byte[1024];
+            //     int i;
+            String sReceivedData = "";
+            while ((nsNetworkStream.Read(abBuffer, 0, abBuffer.Length)) != 0)
+            {
+                sReceivedData += Encoding.ASCII.GetString(abBuffer);
+                DI.log.debug(sReceivedData);
+            }
+        }
+
+        public static void sendMessage(Int32 iPortNumber, String sMessageToSend)
+        {
+            sendMessage("127.0.0.1", iPortNumber, sMessageToSend);
+        }
+
+        public static void sendMessage(String sIPAddress, Int32 iPortNumber, String sMessageToSend)
+        {
+            DI.log.info("Sending O2 Command message: [{0}:{1}] {2}", sIPAddress, iPortNumber, sMessageToSend);
+            //IPAddress ipIPAddress = IPAddress.Parse(sIPAddress);
+            var tcClient = new TcpClient(sIPAddress, iPortNumber);
+            NetworkStream nsNetworkStream = tcClient.GetStream();
+            byte[] abMessageToSend = Encoding.ASCII.GetBytes(sMessageToSend);
+            nsNetworkStream.Write(abMessageToSend, 0, abMessageToSend.Length);
+            nsNetworkStream.Close();
+            tcClient.Close();
+        }
+
+        public static void registerServer(String sName, String sIpAndPort)
+        {
+            if (false == dCachedO2Connections.ContainsKey(sName))
+            {
+                dCachedO2Connections.Add(sName, sIpAndPort);
+            }
+        }
+
+        public static void sendMessageToServer(String sServerName, String sMessage)
+        {
+            if (false == dCachedO2Connections.ContainsKey(sServerName))
+                DI.log.error("Server not registered:  {0}", sServerName);
+            else
+            {
+                String[] sIPAndPort = dCachedO2Connections[sServerName].Split(':');
+                if (sIPAndPort.Length == 2)
+                    sendMessage(sIPAndPort[0], Int32.Parse(sIPAndPort[1]), sMessage);
+            }
+        }
+    }
+}

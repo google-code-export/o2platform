@@ -1,0 +1,47 @@
+﻿using System;
+using System.Reflection;
+
+using NUnit.Framework;
+using O2.External.O2Mono.MonoCecil;
+
+
+namespace O2.RnD.AspectTests.UnitTests
+{
+    /// <summary>
+    /// Summary description for UnitTest1
+    /// </summary>
+    [TestFixture]
+    public class forO2MonoCecil
+    {             
+
+        [Test]
+        public void TryToFixInvalidPublicKey()
+        {
+            String sAssemblyWithInvalidKey = @"C:\O2\_temp\VSTestHost\BasicHelloWorld.exe";
+            Assembly aAssembly = null;
+            try
+            {
+                aAssembly = Assembly.Load(sAssemblyWithInvalidKey);
+            }
+            catch
+            {
+            }
+
+
+            if (aAssembly == null)
+                new CecilUtils().tryToFixPublicKey(sAssemblyWithInvalidKey);
+            try
+            {
+                aAssembly = Assembly.Load(sAssemblyWithInvalidKey);
+            }
+            catch
+            {
+            }
+
+            Assert.IsTrue(aAssembly != null, "could not load Assembly");
+            //
+            // TODO: Add test logic	here
+            //
+        }
+    }
+}

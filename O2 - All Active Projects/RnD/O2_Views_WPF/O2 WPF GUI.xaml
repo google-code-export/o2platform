@@ -1,0 +1,9 @@
+﻿<Application x:Class="o2.wpfGUI.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="xaml_windows\window_O2MDbg.xaml" >   
+    
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

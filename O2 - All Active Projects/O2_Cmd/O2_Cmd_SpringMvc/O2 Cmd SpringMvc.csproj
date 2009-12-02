@@ -1,0 +1,260 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2ACFB8BA-AFD1-41F1-BFCA-A2699DE8AD02}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O2.Cmd.SpringMvc</RootNamespace>
+    <AssemblyName>O2_Cmd_SpringMvc</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <ManifestCertificateThumbprint>59487DDF5D038C6654EEC05D4837744A4C0C93C2</ManifestCertificateThumbprint>
+    <ManifestKeyFile>O2 Cmd SpringMvc_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <SignManifests>true</SignManifests>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <PublishUrl>E:\O2\Releases\Deploy\O2_Cmd_SpringMvc\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://deploy.o2-ounceopen.com/O2_Cmd_SpringMvc/</InstallUrl>
+    <ProductName>O2 Cmd - Spring Mvc</ProductName>
+    <PublisherName>O2 - Ounce Open</PublisherName>
+    <WebPage>index.htm</WebPage>
+    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\_Bin_%28O2_Binaries%29\O2_Cmd_SpringMvc\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Skybound.Gecko, Version=1.9.0.0, Culture=neutral, PublicKeyToken=3209ac31600d1857, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\Skybound.Gecko.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ascx\ascx_ExploitSpringMvc.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_ExploitSpringMvc.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_ExploitSpringMvc.Designer.cs">
+      <DependentUpon>ascx_ExploitSpringMvc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\ascx_JoinControllersWithFindings.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_JoinControllersWithFindings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_JoinControllersWithFindings.Designer.cs">
+      <DependentUpon>ascx_JoinControllersWithFindings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\ascx_SpringMvcAutoBindClassesView.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_SpringMvcAutoBindClassesView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_SpringMvcAutoBindClassesView.Designer.cs">
+      <DependentUpon>ascx_SpringMvcAutoBindClassesView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\ascx_SpringMvcMappings.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_SpringMvcMappings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_SpringMvcMappings.Designer.cs">
+      <DependentUpon>ascx_SpringMvcMappings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\ascx_CreateSpringMvcMappings.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_CreateSpringMvcMappings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_CreateSpringMvcMappings.Designer.cs">
+      <DependentUpon>ascx_CreateSpringMvcMappings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Classes\CirViewingUtils.cs" />
+    <Compile Include="Classes\CreateFindingsFromMvcData.cs" />
+    <Compile Include="Classes\LoadSpringMvcData.cs" />
+    <Compile Include="Classes\SpringMvcUtils.cs" />
+    <Compile Include="DI.cs" />
+    <Compile Include="Gui.cs" />
+    <Content Include="JavaToCirCreation\CirCreationEngine_Java.cs.txt" />
+    <Content Include="JavaToCirCreation\CirCreationUtils.cs.txt" />
+    <Compile Include="J2eeHelpers\JarUtils.cs" />
+    <Compile Include="Objects\SpringMvcController.cs" />
+    <Compile Include="Objects\SpringMvcMappings.cs" />
+    <Compile Include="Objects\SpringMvcParameter.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PythonScripts\AnnotationsHelper.cs" />
+    <Compile Include="Scripts\CustomScripts.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CustomScripts.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Scripts\TraceCreator.cs" />
+    <Compile Include="_UnitTests\test_SDL_Workflow.cs" />
+    <Compile Include="_UnitTests\_Test_LoadingSerializedJavaAttributesXmlFile.cs" />
+    <Compile Include="_UnitTests\_test_LoadSpringMvcData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_Firefox\O2_External_Firefox.csproj">
+      <Project>{92B431A3-D875-4CB4-92E6-0FD422750D97}</Project>
+      <Name>O2_External_Firefox</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_Python\O2_External_Python.csproj">
+      <Project>{BE97BE11-8CBD-4EC7-812D-3024900A5AF1}</Project>
+      <Name>O2_External_Python</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
+      <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
+      <Name>O2_External_SharpDevelop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
+      <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
+      <Name>O2_External_WinFormsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Core_CIR\O2_Core_CIR.csproj">
+      <Project>{F19ED2FE-8191-4534-8DAC-4C42DEE87B52}</Project>
+      <Name>O2_Core_CIR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
+      <Project>{D388D146-D728-412E-8097-5C6E4E53612E}</Project>
+      <Name>O2 ImportExport OunceLabs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
+      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
+      <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ascx\ascx_ExploitSpringMvc.resx">
+      <DependentUpon>ascx_ExploitSpringMvc.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\ascx_JoinControllersWithFindings.resx">
+      <DependentUpon>ascx_JoinControllersWithFindings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\ascx_SpringMvcAutoBindClassesView.resx">
+      <DependentUpon>ascx_SpringMvcAutoBindClassesView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\ascx_CreateSpringMvcMappings.resx">
+      <DependentUpon>ascx_CreateSpringMvcMappings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\ascx_SpringMvcMappings.resx">
+      <DependentUpon>ascx_SpringMvcMappings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scripts\CustomScripts.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>CustomScripts.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PythonScripts\Annotations.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="_UnitTests\TestFiles\SpringMVCTestFiles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="O2 Cmd SpringMvc_TemporaryKey.pfx" />
+    <None Include="_UnitTests\TestFiles\EditOwnerForm.class">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

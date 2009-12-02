@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="JavaAttributeMappings">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="class"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- class -->
+  <xs:element name="class">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="superclass"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="interface"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribute"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="method"/>
+      </xs:sequence>
+      <xs:attribute name="name" type="xs:string" use="required" />
+      <xs:attribute name="sourceFile" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <!--  interface -->
+  <xs:element name="superclass">
+    <xs:complexType>      
+      <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <!--  superclass -->
+  <xs:element name="interface">
+    <xs:complexType>      
+      <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <!--  method -->
+  <xs:element name="method">
+    <xs:complexType>
+      <xs:sequence>        
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribute"/>        
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameterAnnotation"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="methodCalled"/>
+      </xs:sequence>
+      <xs:attribute name="descriptor" type="xs:string" use="required" />
+      <xs:attribute name="lineNumber" type="xs:int" use="required" />
+      <xs:attribute name="name" type="xs:string" use="required" />      
+    </xs:complexType>
+  </xs:element>
+
+  <!--   method -->
+  <xs:element name="methodCalled">
+    <xs:complexType>
+      <xs:attribute name="signature" type="xs:string" use="required" />
+      <xs:attribute name="descriptor" type="xs:string" use="required" />
+      <xs:attribute name="class" type="xs:string" use="required" />
+      <xs:attribute name="lineNumber" type="xs:int" use="required" />
+      <xs:attribute name="name" type="xs:string" use="required" />      
+    </xs:complexType>
+  </xs:element>
+
+  <!-- attribute -->
+  <xs:element name="attribute">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="annotation"/>
+      </xs:sequence>
+      <xs:attribute name="class" type="xs:string" use="required" />
+      <xs:attribute name="toString" type="xs:string" use="required" />
+      <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+  
+  <!-- annotation-->
+  <xs:element name="annotation">
+    <xs:complexType>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="member"/>
+      </xs:sequence>
+      <xs:attribute name="typeName" type="xs:string" use="required" />
+      <xs:attribute name="toString" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+
+  <!-- parameterAnnotation (the same as annotation (in a future version map this directly to the parameter name) -->
+  <xs:element name="parameterAnnotation">
+    <xs:complexType>
+      <xs:sequence minOccurs="0">
+        <xs:element ref="member"/>
+      </xs:sequence>
+      <xs:attribute name="typeName" type="xs:string" use="required" />
+      <xs:attribute name="toString" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+
+  <!--   member -->
+  <xs:element name="member">
+    <xs:complexType>
+      <xs:attribute name="memberValue" type="xs:string" use="required" />
+      <xs:attribute name="memberName" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

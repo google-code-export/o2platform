@@ -1,0 +1,88 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Emit;
+using Mono.Cecil;
+
+namespace O2.Core.CIR.CirCreator
+{
+    [Serializable]
+    public class methodCall
+    {
+        public int iToken;
+        public MethodDefinition mbMethodBase;
+        public string strName;
+        public List<String> strParameters = new List<string>();
+    }
+
+    public class methodResolver
+    {
+        public List<methodCall> lmcMethodsCalled = new List<methodCall>();
+        public List<OpCode> locOpCodes = new List<OpCode>();
+        public List<OperandType> lopOperandTypes = new List<OperandType>();
+
+        public MethodDefinition miMethodInfo;
+
+        public methodResolver(MethodDefinition _miMethodInfo)
+        {
+            miMethodInfo = _miMethodInfo;
+            // populate lists
+            getMethodsCalledByMethod();
+        }
+
+        public override string ToString()
+        {
+            return miMethodInfo.Name;
+        }
+
+        public bool getMethodsCalledByMethod() //, Module mModule)
+        {
+            try
+            {
+                //Console.WriteLine("-> {0}", miMethodToAnalyze.Name);
+                MethodBody mbMethodBody = miMethodInfo.GetMethodBody();
+                if (mbMethodBody != null)
+                {
+                    //byte[] byMethodBodyMSILCode = mbMethodBody.GetILAsByteArray();
+                    //  if (byMethodBodyMSILCode.Length > 16)  //          for now only search methods that have more than 16 Msil opcodes
+                    //   {
+                    var irMethod = new ILReader(miMethodInfo)
+                                       {
+                                           m_position = 0,
+                                           tTypeBeingAnalyzed = miMethodInfo.DeclaringType
+                                       };
+                    while (irMethod.m_position < irMethod.m_byteArray.Length)
+                    {
+                        // get next opcode and precalculate called method info
+                        irMethod.Next();
+                        // store values for later processing
+                        lopOperandTypes.Add(irMethod.csmCurrentMethod.ocOpcode.OperandType);
+                        locOpCodes.Add(irMethod.csmCurrentMethod.ocOpcode);
+                        // if InlineMethod, store it as a methodCall 
+                        if (irMethod.csmCurrentMethod.ocOpcode.OperandType == OperandType.InlineMethod)
+                            // check if current MSIL opcode is a method                       
+                            if (irMethod.csmCurrentMethod.mbMethodBase != null)
+                            {
+// check if we have a valid value in the Method name                
+                                var mcMethodCall = new methodCall
+                                                       {
+                                                           strName = irMethod.csmCurrentMethod.strResolvedToken,
+                                                           iToken = irMethod.csmCurrentMethod.iToken,
+                                                           strParameters = irMethod.csmCurrentMethod.strParameters,
+                                                           mbMethodBase = irMethod.csmCurrentMethod.mbMethodBase
+                                                       };
+                                lmcMethodsCalled.Add(mcMethodCall);
+                            }
+                    }
+                    //         }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\n\t Error in getMethodsCalledByMethod: {0} \n\t {1}\n", ex.Message, ex.StackTrace);
+                return false;
+            }
+            return true;
+        }
+    }
+}

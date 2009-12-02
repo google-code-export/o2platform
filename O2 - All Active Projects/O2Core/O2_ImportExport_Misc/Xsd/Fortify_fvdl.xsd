@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="xmlns://www.fortifysoftware.com/schema/fvdl1.3" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="FVDL">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="CreatedTS">
+          <xs:complexType>
+            <xs:attribute name="date" type="xs:date" use="required" />
+            <xs:attribute name="time" type="xs:time" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Build">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="NumberFiles" type="xs:unsignedByte" />
+              <xs:element name="LOC" type="xs:unsignedShort" />
+              <xs:element name="SourceBasePath" type="xs:string" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Vulnerabilities">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="Vulnerability">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ClassInfo">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="ClassID" type="xs:string" />
+                          <xs:element name="Type" type="xs:string" />
+                          <xs:element name="DefaultSeverity" type="xs:decimal" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="InstanceInfo">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="InstanceID" type="xs:string" />
+                          <xs:element name="InstanceSeverity" type="xs:decimal" />
+                          <xs:element name="Confidence" type="xs:decimal" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element name="AnalysisInfo">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" name="Stateful">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="Transition">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="FromState" type="xs:string" />
+                                      <xs:element name="ToState" type="xs:string" />
+                                      <xs:element name="Pattern" type="xs:string" />
+                                      <xs:element minOccurs="0" name="SourceLocation">
+                                        <xs:complexType>
+                                          <xs:attribute name="path" type="xs:string" use="required" />
+                                          <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                          <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                          <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                          <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                          <xs:attribute name="snippet" type="xs:string" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element minOccurs="0" name="SourceRef">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="Statement">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="SourceLocation">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="path" type="xs:string" use="required" />
+                                                      <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                                      <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                                      <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="snippet" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                  <xs:element name="Variable">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="name" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                                <xs:attribute name="type" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                              <xs:attribute name="primary" type="xs:unsignedByte" use="required" />
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" name="Dataflow">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="Source">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="SourceRef">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element minOccurs="0" name="FunctionEntry">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="SourceLocation">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="path" type="xs:string" use="required" />
+                                                      <xs:attribute name="line" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="lineEnd" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="snippet" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                  <xs:element name="Function">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="name" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                              </xs:complexType>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" name="FunctionCall">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="SourceLocation">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="path" type="xs:string" use="required" />
+                                                      <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                                      <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                                      <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="snippet" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                  <xs:element name="Function">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="name" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                          <xs:attribute name="sourceRefID" type="xs:string" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element name="Context">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="Function">
+                                              <xs:complexType>
+                                                <xs:attribute name="name" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="outArg" type="xs:string" use="optional" />
+                                    <xs:attribute name="ruleID" type="xs:string" use="required" />
+                                    <xs:attribute name="inArg" type="xs:unsignedByte" use="optional" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Sink">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="SourceRef">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element minOccurs="0" name="Statement">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="SourceLocation">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="path" type="xs:string" use="required" />
+                                                      <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                                      <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                                      <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="snippet" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                                <xs:attribute name="type" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                            <xs:element minOccurs="0" name="FunctionCall">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="SourceLocation">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="path" type="xs:string" use="required" />
+                                                      <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                                      <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                                      <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                                      <xs:attribute name="snippet" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                  <xs:element name="Function">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="name" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                          <xs:attribute name="sourceRefID" type="xs:string" use="optional" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                      <xs:element name="Context">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="Function">
+                                              <xs:complexType>
+                                                <xs:attribute name="name" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="inArg" type="xs:unsignedByte" use="optional" />
+                                    <xs:attribute name="ruleID" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Path">
+                                  <xs:complexType>
+                                    <xs:sequence minOccurs="0">
+                                      <xs:element maxOccurs="unbounded" name="Node">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="SourceRef">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element minOccurs="0" name="FunctionCall">
+                                                    <xs:complexType>
+                                                      <xs:sequence>
+                                                        <xs:element name="SourceLocation">
+                                                          <xs:complexType>
+                                                            <xs:attribute name="path" type="xs:string" use="required" />
+                                                            <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                                            <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                                            <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                                            <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                                            <xs:attribute name="snippet" type="xs:string" use="required" />
+                                                          </xs:complexType>
+                                                        </xs:element>
+                                                        <xs:element name="Function">
+                                                          <xs:complexType>
+                                                            <xs:attribute name="name" type="xs:string" use="required" />
+                                                          </xs:complexType>
+                                                        </xs:element>
+                                                      </xs:sequence>
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                  <xs:element minOccurs="0" name="Statement">
+                                                    <xs:complexType>
+                                                      <xs:sequence>
+                                                        <xs:element name="SourceLocation">
+                                                          <xs:complexType>
+                                                            <xs:attribute name="path" type="xs:string" use="required" />
+                                                            <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                                            <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                                            <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                                            <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                                            <xs:attribute name="snippet" type="xs:string" use="required" />
+                                                          </xs:complexType>
+                                                        </xs:element>
+                                                        <xs:element name="Variable">
+                                                          <xs:complexType>
+                                                            <xs:attribute name="name" type="xs:string" use="required" />
+                                                          </xs:complexType>
+                                                        </xs:element>
+                                                      </xs:sequence>
+                                                      <xs:attribute name="type" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                                <xs:attribute name="sourceRefID" type="xs:string" use="optional" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Context">
+                                              <xs:complexType>
+                                                <xs:sequence>
+                                                  <xs:element name="Function">
+                                                    <xs:complexType>
+                                                      <xs:attribute name="name" type="xs:string" use="required" />
+                                                    </xs:complexType>
+                                                  </xs:element>
+                                                </xs:sequence>
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                          <xs:attribute name="inArg" type="xs:unsignedByte" use="optional" />
+                                          <xs:attribute name="ruleID" type="xs:string" use="optional" />
+                                          <xs:attribute name="outArg" type="xs:string" use="optional" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="TaintFlags">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element maxOccurs="unbounded" name="TaintFlag">
+                                        <xs:complexType>
+                                          <xs:attribute name="name" type="xs:string" use="required" />
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" name="Local">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="SourceRef">
+                                  <xs:complexType>
+                                    <xs:sequence>
+                                      <xs:element name="FunctionCall">
+                                        <xs:complexType>
+                                          <xs:sequence>
+                                            <xs:element name="SourceLocation">
+                                              <xs:complexType>
+                                                <xs:attribute name="path" type="xs:string" use="required" />
+                                                <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                                <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                                <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                                <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                                <xs:attribute name="snippet" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                            <xs:element name="Function">
+                                              <xs:complexType>
+                                                <xs:attribute name="name" type="xs:string" use="required" />
+                                              </xs:complexType>
+                                            </xs:element>
+                                          </xs:sequence>
+                                        </xs:complexType>
+                                      </xs:element>
+                                    </xs:sequence>
+                                    <xs:attribute name="sourceRefID" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" name="Description">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Abstract" type="xs:string" />
+              <xs:element name="Explanation" type="xs:string" />
+              <xs:element name="Recommendations" type="xs:string" />
+              <xs:element minOccurs="0" name="Tips">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="Tip" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="References">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="Reference">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="Title" type="xs:string" />
+                          <xs:element minOccurs="0" name="Author" type="xs:string" />
+                          <xs:element minOccurs="0" name="Publisher" type="xs:string" />
+                          <xs:element minOccurs="0" name="PublishedDate" type="xs:unsignedShort" />
+                          <xs:element minOccurs="0" name="Source" type="xs:string" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="classID" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Snippets">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="Snippet">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="File" type="xs:string" />
+                    <xs:element name="StartLine" type="xs:unsignedShort" />
+                    <xs:element name="EndLine" type="xs:unsignedShort" />
+                    <xs:element name="Text" type="xs:string" />
+                  </xs:sequence>
+                  <xs:attribute name="id" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ProgramData">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Sources">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="SourceInstance">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" name="FunctionEntry">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="SourceLocation">
+                                  <xs:complexType>
+                                    <xs:attribute name="path" type="xs:string" use="required" />
+                                    <xs:attribute name="line" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="lineEnd" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="snippet" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Function">
+                                  <xs:complexType>
+                                    <xs:attribute name="name" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element minOccurs="0" name="FunctionCall">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="SourceLocation">
+                                  <xs:complexType>
+                                    <xs:attribute name="path" type="xs:string" use="required" />
+                                    <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                    <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                    <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="snippet" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Function">
+                                  <xs:complexType>
+                                    <xs:attribute name="name" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element name="TaintFlags">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="TaintFlag">
+                                  <xs:complexType>
+                                    <xs:attribute name="name" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="ruleID" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Sinks">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="SinkInstance">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="FunctionCall">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="SourceLocation">
+                                  <xs:complexType>
+                                    <xs:attribute name="path" type="xs:string" use="required" />
+                                    <xs:attribute name="line" type="xs:unsignedShort" use="required" />
+                                    <xs:attribute name="lineEnd" type="xs:unsignedShort" use="required" />
+                                    <xs:attribute name="colStart" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="colEnd" type="xs:unsignedByte" use="required" />
+                                    <xs:attribute name="snippet" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                                <xs:element name="Function">
+                                  <xs:complexType>
+                                    <xs:attribute name="name" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="ruleID" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="CalledWithNoDef">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="Function">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="EngineData">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="EngineVersion" type="xs:string" />
+              <xs:element name="InactiveResults" />
+              <xs:element name="RulePacks">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="RulePack" type="xs:string" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="ExpiredRulePacks" />
+              <xs:element name="UnlicensedRulePacks" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:decimal" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

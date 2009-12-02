@@ -1,0 +1,432 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3EDD49CB-F7F2-4CFE-AFAC-698B13B0C968}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O2.Debugger.Mdbg</RootNamespace>
+    <AssemblyName>O2_Debugger_Mdbg</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\_Bin_%28O2_Binaries%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="O2_ImportExport_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\O2_ImportExport_OunceLabs\bin\Debug\O2_ImportExport_OunceLabs.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="OriginalMdbgCode\corapi\AppDomain.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\AppDomainEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Assembly.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\AssemblyEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Breakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\BreakpointEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ChainEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Class.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Constants.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Controller.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\CorMetadata.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\CorPublish.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Debugger.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ErrorInfoEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Eval.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\FunctionBreakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\HResults.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymBinder2.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymConstant.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymEncMethod.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymENCUpdate.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymReader2.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymScope2.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymSearchInfo.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymWriter2.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\MetadataFieldInfo.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\MetadataParameterInfo.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\MetadataType.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Module.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ModuleBreakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ModuleEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ObjectEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Process.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ProcessEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\RegisterSet.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Stepper.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\StepperEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymAccess.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\symbinder.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymConstant.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymDocument.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymDocumentWriter.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\symmethod.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymNamespace.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymReader.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymScope.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymSearchInfo.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymSearchPolicyAttributes.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\symvariable.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymWriter.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Thread.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ThreadEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Type.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\TypeEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Value.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ValueBreakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\WrapperBase.cs" />
+    <Compile Include="OriginalMdbgCode\enc\enc.cs" />
+    <Compile Include="OriginalMdbgCode\gui\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\AttachProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\AttachProcess.Designer.cs">
+      <DependentUpon>AttachProcess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\AutoWatchWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\AutoWatchWindow.Designer.cs">
+      <DependentUpon>AutoWatchWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\Callstack.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\Callstack.Designer.cs">
+      <DependentUpon>Callstack.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\gui.cs" />
+    <Compile Include="OriginalMdbgCode\gui\GUIMainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\LaunchProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\LaunchProcess.Designer.cs">
+      <DependentUpon>LaunchProcess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ModuleWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ModuleWindow.Designer.cs">
+      <DependentUpon>ModuleWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\QuickViewWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\QuickViewWindow.Designer.cs">
+      <DependentUpon>QuickViewWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\SourceViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ThreadWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ThreadWindow.Designer.cs">
+      <DependentUpon>ThreadWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ToolWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\VirtualSourceViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\ildasm\ilcode.cs" />
+    <Compile Include="OriginalMdbgCode\ildasm\ildasm.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Appdomain.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Breakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\DebuggerVar.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Engine.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Exception.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\FrameFactory.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Function.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\InternalUtil.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\MdbgEngAssemblyAttributes.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Module.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Process.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\StopReason.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Thread.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Value.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\WrapperWrapperBase.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgext\ArgumentParser.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgext\AttributeDefinedCommand.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgext\MDbgExt.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgext\StopOptionPolicy.cs" />
+    <Content Include="OriginalMdbgCode\mdbg\Bootstrap.cs.txt" />
+    <Compile Include="OriginalMdbgCode\mdbg\Mdbg.cs" />
+    <Compile Include="OriginalMdbgCode\mdbg\mdbgCommands.cs" />
+    <Compile Include="OriginalMdbgCode\mdbg\SourceFile.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\context.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\NativeDbgModule.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\NativeDbgProcess.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\NativeDebugEvents.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\NativeImports.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\pipeline.cs" />
+    <Compile Include="OriginalMdbgCode\pdb2xml\pdb2xml.cs" />
+    <Compile Include="OriginalMdbgCode\pdb2xml\pefile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OriginalMdbgCode\raw\ICorDebugWrappers.cs" />
+    <Compile Include="OriginalMdbgCode\raw\ICorPublishWrappers.cs" />
+    <Compile Include="OriginalMdbgCode\raw\IMetadataImport.cs" />
+    <Compile Include="OriginalMdbgCode\raw\WindowsImports.cs" />
+    <Compile Include="OriginalMdbgCode\mdbg\mdbgCommands.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>mdbgCommands.resx</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\OriginalMDbgMessages.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OriginalMdbgCode\corapi\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OriginalMdbgCode\enc\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="OriginalMdbgCode\gui\Breakpoint.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="OriginalMdbgCode\gui\CurrentLineArrow.bmp" />
+    <EmbeddedResource Include="OriginalMdbgCode\gui\GUIMainForm.resx">
+      <DependentUpon>GUIMainForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="OriginalMdbgCode\gui\NotCurrentLineArrow.bmp" />
+    <EmbeddedResource Include="OriginalMdbgCode\gui\SourceViewerForm.resx">
+      <DependentUpon>SourceViewerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OriginalMdbgCode\gui\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="O2Debugger\Ascx\ascx_BreakpointCreator.resx">
+      <DependentUpon>ascx_BreakpointCreator.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="O2Debugger\Ascx\ascx_Breakpoints.resx">
+      <DependentUpon>ascx_Breakpoints.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="O2Debugger\Ascx\ascx_FindingsCreator.resx">
+      <DependentUpon>ascx_FindingsCreator.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="O2Debugger\Ascx\ascx_StackTraceAndThreads.resx">
+      <DependentUpon>ascx_StackTraceAndThreads.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="O2Debugger\Ascx\ascx_Variables.resx">
+      <DependentUpon>ascx_Variables.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="O2Debugger\Ascx\ascx_DebugggedProcessInfo.resx">
+      <DependentUpon>ascx_DebugggedProcessInfo.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="O2Debugger\Ascx\ascx_O2MdbgShell.resx">
+      <DependentUpon>ascx_O2MdbgShell.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="O2Debugger\Ascx\ascx_StartOrAttach.resx">
+      <DependentUpon>ascx_StartOrAttach.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OriginalMdbgCode\gui\UnboundBreakpoint.bmp" />
+    <EmbeddedResource Include="OriginalMdbgCode\mdbg\mdbgCommands.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>mdbgCommands.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OriginalMdbgCode\ildasm\readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OriginalMdbgCode\mdbgeng\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OriginalMdbgCode\mdbgext\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OriginalMdbgCode\mdbg\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CodeAdaptedFrom.txt" />
+    <Compile Include="HandleO2MessageOnMdbg.cs" />
+    <Compile Include="O2Debugger\Ascx\ascx_BreakpointCreator.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_BreakpointCreator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_BreakpointCreator.Designer.cs">
+      <DependentUpon>ascx_BreakpointCreator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_Breakpoints.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_Breakpoints.Designer.cs">
+      <DependentUpon>ascx_Breakpoints.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_FindingsCreator.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_FindingsCreator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_FindingsCreator.Designer.cs">
+      <DependentUpon>ascx_FindingsCreator.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_StackTraceAndThreads.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_StackTraceAndThreads.Designer.cs">
+      <DependentUpon>ascx_StackTraceAndThreads.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_Variables.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_Variables.Designer.cs">
+      <DependentUpon>ascx_Variables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_DebugggedProcessInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_DebugggedProcessInfo.Designer.cs">
+      <DependentUpon>ascx_DebugggedProcessInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_o2MdbgShell.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_StartOrAttach.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_StartOrAttach.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_StartOrAttach.Designer.cs">
+      <DependentUpon>ascx_StartOrAttach.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\Objects\O2MDbg.cs" />
+    <Compile Include="O2Debugger\Objects\O2MDbgCommands.cs" />
+    <Compile Include="O2Debugger\Objects\O2MDbgCurrentLocation.cs" />
+    <Compile Include="O2Debugger\Objects\O2MDbgSessionData.cs" />
+    <Content Include="ildasm.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="O2Debugger\Objects\O2MDbg_OLD.cs.txt" />
+    <Compile Include="O2Debugger\Objects\O2MDbgBreakPoint.cs" />
+    <Compile Include="O2Debugger\Objects\O2MDbgThread.cs" />
+    <Compile Include="O2Debugger\O2MDbgUtils.cs" />
+    <Compile Include="DI.cs" />
+    <Compile Include="O2Debugger\Ascx\ascx_O2MdbgShell.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_O2MdbgShell.Designer.cs">
+      <DependentUpon>ascx_O2MdbgShell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\ViaMscoree.cs" />
+    <Compile Include="O2Debugger\mdbgCommandsCustomizedForO2.cs" />
+    <Compile Include="startO2MdbgGui.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_Breakpoints.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="O2Debugger\Ascx\ascx_Variables.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <None Include="OriginalMdbgCode\raw\ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="mscoree">
+      <Guid>{5477469E-83B1-11D2-8B49-00A0C9B7C9C4}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_O2Mono\O2_External_O2Mono.csproj">
+      <Project>{F457A7EB-A573-41BB-BC12-61ABE5ACF702}</Project>
+      <Name>O2_External_O2Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
+      <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
+      <Name>O2_External_WinFormsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_Views_ASCX\O2_Views_ASCX.csproj">
+      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
+      <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+</Project>

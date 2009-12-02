@@ -1,0 +1,69 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Mono.Cecil;
+using O2.Kernel.Interfaces.CIR;
+
+namespace O2.Core.CIR.CirCreator.DotNet
+{
+    public class CirFactoryUtils
+    {
+
+        public static string getFunctionUniqueSignatureFromMethodReference(IMemberReference methodReference)
+        {
+            try
+            {
+                if (methodReference.DeclaringType.Module != null )
+                {                    
+                    if (methodReference.DeclaringType.Scope.Name == methodReference.DeclaringType.Module.Name)                    
+                        return String.Format("{0}!{1}", methodReference.DeclaringType.Module.Assembly.Name, methodReference);        // use the module name if the scope matches                                    
+                    return String.Format("{0}!{1}", methodReference.DeclaringType.Scope, methodReference);         // use the scope name for external methods (like mscorlib.dll)                                                        
+                }
+
+                return String.Format("{0}!{1}", "[NullModule]", methodReference);   // when there is no module info
+                //  methodReference.DeclaringType.Scope.MetadataToken.
+                /*return String.Format("{0}!{1}",
+                    ((methodReference.DeclaringType.Module != null) ? methodReference.DeclaringType.Module.Name : "[NullModule]")
+                    , methodReference);                */
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex, "in CirFactoryUtils.getFunctionUniqueSignatureFromMethodReference",true);                
+            }
+            return null;
+        }
+
+        public static string getTypeUniqueSignatureFromTypeReference(TypeReference typeDefinition)
+        {
+            try
+            {
+                if ((typeDefinition.Module != null))
+                {
+                    // using the assembly full name as a reference
+                    if ((typeDefinition.Scope.Name == typeDefinition.Module.Name))
+                        return String.Format("{0}!{1}", typeDefinition.Module.Assembly, typeDefinition);
+                    return String.Format("{0}!{1}", typeDefinition.Scope, typeDefinition);
+                    /*if ((typeDefinition.Scope.Name == typeDefinition.Module.Name))
+                        return String.Format("{0}!{1}", typeDefinition.Module.Name, typeDefinition);
+                    return String.Format("{0}!{1}", typeDefinition.Scope.Name, typeDefinition);*/
+                }
+                return String.Format("{0}",  "[NullModule]",typeDefinition);
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex, "in CirFactoryUtils.getTypeUniqueSignatureFromTypeReference", true);                
+            }
+            return null;
+        }
+
+
+        public static void showCirDataStats(ICirData cirData)
+        {
+            DI.log.debug("*** CirData stats ***");
+            DI.log.debug("   {0} Classes", cirData.dClasses_bySignature.Count);
+            DI.log.debug("   {0} Functions", cirData.dFunctions_bySignature.Count);
+        }
+    }
+}
+    

@@ -1,0 +1,78 @@
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Reflection;
+using System.Threading;
+using NUnit.Framework;
+using O2.Debugger.Mdbg.corapi;
+using O2.Debugger.Mdbg.Debugging.CorDebug;
+using O2.Debugger.Mdbg.O2Debugger.Objects;
+using O2.UnitTests.TestO2CoreLib.O2Core.O2CoreLib.MockObjects;
+
+namespace O2.UnitTests.O2Debugger.O2DebuggerMdbg
+{
+    [TestFixture]
+    public class Test_Breakpoints
+    {
+        #region Setup/Teardown
+
+        [TearDown]
+        public void closeCreatedProcess()
+        {
+            mockObjects_CompiledExe.killProcess();
+        }
+
+        #endregion
+
+        private static readonly MockObjects_CompiledExe mockObjects_CompiledExe =
+            new MockObjects_CompiledExe(MockObjects_CompiledExe.for_UnitTest_HotMethodPatch());
+
+        private static readonly Process testProcess = mockObjects_CompiledExe.TestProcess;
+
+        private static void CorProcess_OnBreakpoint(object sender, CorBreakpointEventArgs e)
+        {
+            DI.log.d("************ BREAKPOINT HIT");
+
+            var corFunctionBreakpoint = (CorFunctionBreakpoint) e.Breakpoint;
+            var corMetadataImport = new CorMetadataImport(corFunctionBreakpoint.Function.Class.Module);
+            MethodInfo methodInfo = corMetadataImport.GetMethodInfo(corFunctionBreakpoint.Function.Token);
+
+            DI.log.debug("  At method :{0}", methodInfo.Name);
+            DI.log.debug("  Offset: {0}", corFunctionBreakpoint.Offset);
+            DI.log.debug("  function Token {0}", corFunctionBreakpoint.Function.Token);
+
+            e.Continue = true;
+        }
+
+        [Test]
+        public void setBreakpointOnAssemblyDeclaredMethods()
+        {
+            Assert.That(testProcess != null, "Problem getting process");
+            List<MethodInfo> targetMethods =
+                DI.reflection.getMethods(mockObjects_CompiledExe.compiledAssemblySettings.pathToCreatedAssemblyFile);
+            Assert.That(targetMethods.Count > 0, "there are no target methods");
+
+
+            O2MDbg_OLD.execSync(testProcess.Id, false /*detachDebugSession */, o2MDbg =>
+                                                                               {
+                                                                                   o2MDbg.mdbgProcess.CorProcess.
+                                                                                       OnBreakpoint +=
+                                                                                       CorProcess_OnBreakpoint;
+                                                                                   DI.log.info("Adding breakpoints");
+                                                                                   foreach (
+                                                                                       MethodInfo method in
+                                                                                           targetMethods)
+                                                                                       o2MDbg.O2BreakPoints.add(
+                                                                                           method.Module.
+                                                                                               FullyQualifiedName,
+                                                                                           method.ReflectedType.FullName,
+                                                                                           method.Name,
+                                                                                           0 /* offset*/);
+
+
+                                                                                   return true;
+                                                                               });
+            DI.log.info("Giving them time to execute");
+            Thread.Sleep(1000);
+        }
+    }
+}

@@ -1,0 +1,52 @@
+﻿using System;
+using System.IO;
+using System.Threading;
+using System.Windows.Forms;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
+using O2.Views.ASCX.O2Findings;
+
+namespace O2.Tool.JoinTraces.ascx
+{
+    public partial class ascx_NewJoinTraces
+    {
+
+
+        /*  public Thread loadOzasmtFilesIntoTabControl(string directoryWithOzasmtFiles)
+         {
+             return O2Thread.staThread(() =>
+                                    {
+                                        foreach (
+                                            var file in
+                                                Files.getFilesFromDir_returnFullPath(directoryWithOzasmtFiles, "*.ozasmt")
+                                            )
+                                            addOzasmtFileToTabControl(file);
+                                    });
+         }
+
+        private void addOzasmtFileToTabControl(string ozasmtFileToLoad)
+         {
+             try
+             {
+                 tabControlWithSourceOzamstFiles.invokeOnThread(() =>
+                                                                    {
+                                                                        var tabName =
+                                                                            Path.GetFileNameWithoutExtension(ozasmtFileToLoad);
+                                                                        tabName = tabName.Substring(tabName.Length - 30);
+                                                                        var tabPage = new TabPage(tabName);
+                                                                        var ozasmtViewer = new ascx_FindingsViewer(ozasmtFileToLoad)
+                                                                                               {Dock = DockStyle.Fill};
+                                                                        tabPage.Controls.Add(ozasmtViewer);
+                                                                        tabControlWithSourceOzamstFiles.TabPages.Add(
+                                                                            tabPage);
+                                                                        return null;
+                                                                    });
+             }
+             catch (Exception ex)
+             {
+                 DI.log.ex(ex, "in addOzasmtFileToTabControl");                
+             }
+            
+         }*/
+    }
+}

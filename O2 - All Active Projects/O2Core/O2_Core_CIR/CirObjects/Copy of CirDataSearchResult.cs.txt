@@ -1,0 +1,103 @@
+using System;
+using System.Collections.Generic;
+using O2.Kernel.Interfaces.CIR;
+
+namespace O2.Core.CIR.CirObjects
+{
+    [Serializable]
+    public class CirDataSearchResult : ICirDataSearchResult
+    {
+        public ICirDataAnalysis fcdAnalysis { get; set; }
+        public List<ICirClass> lccTargetCirClasses { get; set; }
+        public List<string> lsResult_CallsMade { get; set; }
+        public List<string> lsResult_CallsMadeToExternalMethods { get; set; }
+        public List<string> lsResult_CallsMadeToExternalMethods_DontHaveDbMapping { get; set; }
+        public List<string> lsResult_CallsMadeToExternalMethods_HaveDbMapping { get; set; }
+
+        public List<string> lsResult_Classes { get; set; }
+        public List<string> lsResult_Classes_WithControlFlowGraphs { get; set; }
+        public List<string> lsResult_Functions { get; set; }
+        public List<string> lsResult_Functions_DontHaveDbMapping { get; set; }
+        public List<string> lsResult_Functions_HaveDbMapping { get; set; }
+        public List<string> lsResult_Functions_WithControlFlowGraphs { get; set; }
+
+
+        public CirDataSearchResult(ICirDataAnalysis fcdAnalysis)
+        {
+            this.fcdAnalysis = fcdAnalysis;
+        }
+
+        public void clearResultVars()
+        {
+            lsResult_Classes = new List<string>();
+            lsResult_Classes_WithControlFlowGraphs = new List<string>();
+            lsResult_Functions = new List<string>();
+            lsResult_Functions_WithControlFlowGraphs = new List<string>();
+            lsResult_Functions_HaveDbMapping = new List<string>();
+            lsResult_Functions_DontHaveDbMapping = new List<string>();
+            lsResult_CallsMade = new List<string>();
+            lsResult_CallsMadeToExternalMethods = new List<string>();
+            lsResult_CallsMadeToExternalMethods_HaveDbMapping = new List<string>();
+            lsResult_CallsMadeToExternalMethods_DontHaveDbMapping = new List<string>();
+        }
+
+        public void executeSearch()
+        {
+            executeSearch(new List<String>(fcdAnalysis.dCirClass_bySignature.Keys));
+        }
+
+
+        public void executeSearch(List<String> lsTargetCirClasses)
+        {
+            if (fcdAnalysis == null)
+                DI.log.error("in CirDataSearchResult.executeSearch , fcdAnalysis == null");
+            else
+            {
+                clearResultVars();
+                foreach (String sClass in lsTargetCirClasses)
+                {
+                    if (fcdAnalysis.dCirClass_bySignature.ContainsKey(sClass))
+                    {
+                        lsResult_Classes.Add(sClass);
+                        if (fcdAnalysis.dCirClass_bySignature[sClass].bClassHasMethodsWithControlFlowGraphs &&
+                            false == lsResult_Classes_WithControlFlowGraphs.Contains(sClass))
+                            lsResult_Classes_WithControlFlowGraphs.Add(sClass);
+                        foreach (
+                            CirFunction cfCirFunction in fcdAnalysis.dCirClass_bySignature[sClass].dFunctions.Values)
+                            // if (cfCirFunction.HasControlFlowGraph)
+                        {
+                            lsResult_Functions.Add(cfCirFunction.FunctionSignature);
+                            if (cfCirFunction.HasControlFlowGraph &&
+                                false == lsResult_Functions_WithControlFlowGraphs.Contains(cfCirFunction.FunctionSignature))
+                                lsResult_Functions_WithControlFlowGraphs.Add(cfCirFunction.FunctionSignature);
+                            foreach (ICirFunction functionCalled in cfCirFunction.FunctionsCalledUniqueList)
+                            {
+                                if (false == lsResult_CallsMade.Contains(functionCalled.FunctionSignature))
+                                    // add all functions to this one
+                                    lsResult_CallsMade.Add(functionCalled.FunctionSignature);
+                                if (false == fcdAnalysis.dCirFunction_bySignature.ContainsKey(functionCalled.FunctionSignature))
+                                    // only check for functions that we don't have the CIR for
+                                    if (false == lsResult_CallsMadeToExternalMethods.Contains(functionCalled.FunctionSignature))
+                                        lsResult_CallsMadeToExternalMethods.Add(functionCalled.FunctionSignature);
+                            }
+                        }
+                    }
+                }
+                //DI.log.error("for performance reasons the DB mappings check has been disabled");
+                /* (re implement using new Data API
+                if (false)
+                    // check which functions in lsResult_CallsMadeToExternalMethods have mappings on the db
+                    foreach (String sFunctionCalled in lsResult_CallsMadeToExternalMethods)
+                        if (0 !=  Lddb.action_getVulnIdThatMatchesSignature(fcdAnalysis.sDb_Id, sFunctionCalled, false))
+                        {
+                            if (false == lsResult_CallsMadeToExternalMethods_HaveDbMapping.Contains(sFunctionCalled))
+                                lsResult_CallsMadeToExternalMethods_HaveDbMapping.Add(sFunctionCalled);
+                        }
+                        else
+                            if (false == lsResult_CallsMadeToExternalMethods_DontHaveDbMapping.Contains(sFunctionCalled))
+                                lsResult_CallsMadeToExternalMethods_DontHaveDbMapping.Add(sFunctionCalled);
+                 */
+            }
+        }
+    }
+}

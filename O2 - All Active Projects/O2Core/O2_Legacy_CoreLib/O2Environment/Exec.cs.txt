@@ -1,0 +1,185 @@
+using System;
+using System.Collections.Generic;
+using System.Deployment.Application;
+using System.Reflection;
+using System.Windows.Forms;
+using Forms;
+using O2.core.O2Core.dotnet;
+
+
+namespace O2.core.O2Core.O2Environment
+{
+
+    public class Exec
+    {
+        private static bool bStartMaximized;
+        private static int iHeight;
+        private static int iWidth;
+
+        public static bool exec(params String[] sArgs)
+        {
+            //string sTitleText = "";
+            var lsAscxTypesToLoad = new List<Type>();
+            String sF3Name = "";
+            foreach (String sArg in sArgs)
+            {
+                String sParameter = sArg;
+                String sParameterArguments = "";
+
+                // sTitleText += sArg + " ";
+                int iIndexOfColon = sArg.IndexOf(':');
+                if (iIndexOfColon > -1)
+                {
+                    sParameterArguments = sArg.Substring(iIndexOfColon + 1);
+                    sParameter = sArg.Substring(0, iIndexOfColon);
+                }
+
+                switch (sParameter)
+                {
+                        /*case "-log":
+                        log4Jparser.analyzeLogFile();
+                        break;*/
+                    case "-max":
+                        bStartMaximized = true;
+                        break;
+                    case "-width":
+                        Int32.TryParse(sParameterArguments, out iWidth);
+                        break;
+                    case "-height":
+                        Int32.TryParse(sParameterArguments, out iHeight);
+                        break;
+                    case "-killO2":
+                        Processes.killO2s();
+                        break;
+                    default:
+                        if (GlobalStaticVars.dO2Controls.ContainsKey(sParameter))
+                            lsAscxTypesToLoad.Add(GlobalStaticVars.dO2Controls[sParameter]);
+                        else if (GlobalStaticVars.dO2Controls.ContainsKey(sParameter.ToUpper()))
+                            lsAscxTypesToLoad.Add(GlobalStaticVars.dO2Controls[sParameter.ToUpper()]);
+                        sF3Name += sParameter + " ";
+                        break;
+                }
+            }
+            execControl(sF3Name, lsAscxTypesToLoad);
+            return true;
+        }
+
+        // This will try to load a control resoved via String name (usually provided by a command line)
+        public static void execControl(String sControlToLoad, Assembly aAssembly)
+        {
+            SetupEnv.populateDictionaryWithO2Controls(aAssembly, true, false);
+            // load the controls from the provided assembly
+            SetupEnv.calculateStaticListOfO2Controls();
+            // add extra mappings (so that the control can be opened by just using the upper case letters or the name with out the ascx_ bit)
+            if (GlobalStaticVars.dO2Controls.ContainsKey(sControlToLoad))
+            {
+                execControl(sControlToLoad, new List<Type>(new[] {GlobalStaticVars.dO2Controls[sControlToLoad]}));
+            }
+        }
+
+        public static void execControl(String sTitleText, Type tType)
+        {
+            execControl(sTitleText, new List<Type>(new[] {tType}));
+        }
+
+        public static void execControl(String sTitleText, List<Type> lsAscxTypesToLoad)
+        {
+            var fForm = new O2GUI();
+            if (sTitleText.Length > 56)
+                sTitleText = sTitleText.Substring(0, 56);
+            fForm.Text += " - " + sTitleText;
+            fForm.niF3.Text += " - " + sTitleText;
+
+            Control cControlForF3Panel = createControlForForm(lsAscxTypesToLoad.ToArray());
+            fForm.loadAscxControlsOnF3(cControlForF3Panel);
+            // set up form window size
+            if (bStartMaximized)
+                fForm.WindowState = FormWindowState.Maximized;
+            if (iWidth != 0)
+                fForm.Width = iWidth;
+            if (iHeight != 0)
+                fForm.Height = iHeight;
+            if (Application.OpenForms.Count == 0) // it is the first time we hit this
+                Application.Run(fForm);
+            else
+                fForm.Show();
+        }
+
+        public static Control createControlForForm(Type[] tAscxTypes)
+        {
+            Orientation oNextOrientation = Orientation.Vertical;
+            Control cControl = null;
+            foreach (Type tType in tAscxTypes)
+            {
+                if (cControl == null) // there is only one control to add, or this is the first of several
+                {
+                    cControl = createControlFromType(tType);
+                    vars.set_(tType.Name, cControl);
+                }
+                else
+                {
+                    var scSplitContainer = new SplitContainer
+                                               {
+                                                   Dock = DockStyle.Fill,
+                                                   BorderStyle = BorderStyle.Fixed3D,
+                                                   Orientation = oNextOrientation
+                                               };
+                    scSplitContainer.Panel1.Controls.Add(cControl);
+                    scSplitContainer.Panel2.Controls.Add(createControlFromType(tType));
+                    cControl = scSplitContainer;
+
+                    oNextOrientation = oNextOrientation == Orientation.Horizontal
+                                           ? Orientation.Vertical
+                                           : Orientation.Horizontal;
+                }
+            }
+            return cControl;
+        }
+
+        public static Control createControlFromType(Type tType)
+        {
+            Object oControl = Reflection.createObjectUsingDefaultConstructor(tType);
+            if (oControl != null)
+            {
+                var cControl = (Control) oControl;
+                cControl.Dock = DockStyle.Fill;
+                return cControl;
+            }
+            return null;
+        }
+
+        public static Control openNewWindowWithControl(String sControl)
+        {
+            if (false == GlobalStaticVars.dO2Controls.ContainsKey(sControl))
+                if (GlobalStaticVars.dO2Controls.ContainsKey(sControl.ToUpper()))
+                    sControl = sControl.ToUpper();
+                else
+                {
+                    DI.log.error("Could not find control: {0}", sControl);
+                    return null;
+                }
+
+            Type tControlToLoad = GlobalStaticVars.dO2Controls[sControl];
+            return openNewWindowWithControl(tControlToLoad, sControl);
+        }
+
+        public static Control openNewWindowWithControl(Type tTypeOfControlToLoad, String sFormText)
+        {
+            var fForm = new Form {Text = sFormText};
+            Control cControl = createControlFromType(tTypeOfControlToLoad);
+            fForm.Width = cControl.Width;
+            fForm.Height = cControl.Height;
+            fForm.Controls.Add(cControl);
+            fForm.Show();
+            //exec_Control(sControl, tControlToLoad);
+            return cControl;
+        }
+
+        public static String getFormTitle_forClickOnce(String sFormName)
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
+                return String.Format("{0}  ({1})", sFormName, ApplicationDeployment.CurrentDeployment.CurrentVersion);
+            return sFormName;
+        }
+    }
+}

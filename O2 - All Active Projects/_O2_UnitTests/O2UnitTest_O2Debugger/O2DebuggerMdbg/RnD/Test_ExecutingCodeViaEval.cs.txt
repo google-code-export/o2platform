@@ -1,0 +1,252 @@
+﻿using System;
+using System.Collections;
+using System.IO;
+using System.Threading;
+using NUnit.Framework;
+using O2.core.O2Core.Debugging;
+using O2.core.O2Core.DotNet;
+using O2.core.O2Core.O2Environment;
+using O2.debugger.mdbg.Debugging.CorDebug;
+using O2.debugger.mdbg.Debugging.MdbgEngine;
+using O2.o2AppDomainProxy.Interfaces;
+using O2.unitTests.O2Core.O2CoreLib.MockObjects;
+
+namespace O2.unitTests.O2Core.O2DebuggerMdbg
+{
+    [TestFixture]
+    public class Test_ExecutingCodeViaEval
+    {        
+
+        private static readonly MockObjects_CompiledExe mockObjects_CompiledExe =
+            new MockObjects_CompiledExe(MockObjects_CompiledExe._For_UnitTest_SimpleCalls(), false /*startProcess*/);
+
+        //new MockObjects_CompiledExe(MockObjects_CompiledExe._for_UnitTest_HotMethodPatch(), false /*startProcess*/);
+
+
+        private O2MDbg o2MDbg;
+
+        // this is working and so is the trace (although a bit slow if just let the trace into automatically
+
+        public void tryEvalNow()
+        {
+            // breaking execution
+            o2MDbg.mDbgEngine.Processes.Active.AsyncStop().WaitOne();
+
+            CorModule currentModule =
+                o2MDbg.mDbgEngine.Processes.Active.Threads.Active.CorThread.ActiveFrame.Function.Module;
+            //  var type = "o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_SimpleCalls";
+            //  var method = "hookCall";
+            string type = "System.Diagnostics.Debug";
+            string method = "Flush";
+            log.i("************** before ex");
+            O2Thread.mtaThread(() =>
+                                   {
+                                       MDbgFunction functionn =
+                                           o2MDbg.mdbgProcess.ResolveFunctionName("mscorlib.dll",
+                                                                                  "System.Console",
+                                                                                  "WriteLine",
+                                                                                  o2MDbg.mDbgEngine
+                                                                                      .Processes.
+                                                                                      Active.
+                                                                                      Threads.
+                                                                                      Active.
+                                                                                      CorThread.
+                                                                                      AppDomain);
+                                       CorEval eval2 =
+                                           o2MDbg.mDbgEngine.Processes.Active.Threads.Active.CorThread.
+                                               CreateEval();
+                                       var vars2 = new ArrayList();
+                                       log.i("************** before call after exec");
+                                       eval2.CallFunction(functionn.CorFunction,
+                                                          (CorValue[]) vars2.ToArray(typeof (CorValue)));
+                                       o2MDbg.mDbgEngine.Processes.Active.Go().WaitOne(1000);
+                                       log.i("************** inside after exec");
+                                   });
+            log.i("************** after ex");
+            return;
+
+            MDbgFunction functionToCall = null;
+            foreach (MDbgModule module in o2MDbg.Modules)
+            {
+                functionToCall = o2MDbg.mdbgProcess.ResolveFunctionName(module, type, method);
+                if (functionToCall != null)
+                    break;
+            }
+            if (functionToCall != null)
+            {
+                log.info("about to call it");
+                CorEval eval = o2MDbg.mDbgEngine.Processes.Active.Threads.Active.CorThread.CreateEval();
+                var vars = new ArrayList();
+                eval.CallFunction(functionToCall.CorFunction, (CorValue[]) vars.ToArray(typeof (CorValue)));
+
+                log.info("Before eval call");
+                //o2MDbg.mDbgEngine.Processes.Active.CorProcess.Continue(false);   
+                o2MDbg.mDbgEngine.Processes.Active.Go().WaitOne();
+
+                log.info("after eval call");
+            }
+            //MDbgFunction func = o2MDbg.mDbgEngine.Processes.Active.ResolveFunctionName(currentModule, type, method);  // ResolveFunctionNameFromScope(ap.AsString(0), appDomain);
+
+
+            //  log.info("Trying Eval Now");
+            //    o2MDbg.mDbgEngine.Processes.Active.Threads.Active;
+
+
+            /*
+                      var currentModule = e.Thread.ActiveFrame.Function.Module;
+                            var type = "o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_SimpleCalls";
+                            var method = "hookCall";
+                            foreach (var module in o2MDbg.Modules)
+                            {
+                                var functionToCall = o2MDbg.mdbgProcess.ResolveFunctionName(module, type, method);
+                                if (functionToCall != null)
+                                {
+                                    foreach (var thread in o2MDbg.getThreads())
+                                    {
+                                        if (thread.mdbgThread.Id == e.Thread.Id)
+                                        {
+                                            CorEval eval = o2MDbg.getThreads()[0].mdbgThread.CorThread.CreateEval();
+
+                                            log.info("Before eval call");
+
+                                            eval.CallFunction(functionToCall.CorFunction, null);
+                                            //    thread.mdbgThread.CorThread.Process.Continue(false);
+
+                                            //eval.CallFunction(func.CorFunction, (CorValue[])vars.ToArray(typeof(CorValue)));
+                                            //Debugger.Processes.Active.Go().WaitOne();
+                                            log.info("After eval call");
+
+
+                                            //e.Continue = true;
+                                            //
+                                            o2MDbg.mdbgProcess.Go().WaitOne();
+                                            ;
+                                            log.info("After Go.WaitOne");*/
+        }
+
+
+        private void CorProcess_OnEvalException(object sender, CorEvalEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void CorProcess_OnEvalComplete(object sender, CorEvalEventArgs e)
+        {
+            //    throw new NotImplementedException();
+            log.d("CorProcess_OnEvalComplete");
+            e.Continue = true;
+        }
+
+        private int iApplyHook = 2;
+
+        private void CorProcess_OnBreakpoint(object sender, CorBreakpointEventArgs e)
+        {
+            log.d(iApplyHook + " ************ BREAKPOINT HIT @:" + O2MDbgBreakPoint.getActiveFrameFunctionName(e));
+
+            //    tryEvalNow();
+
+
+            if (false && e.Thread.ActiveFrame != null)
+            {
+                if (iApplyHook-- == 0)
+                {
+                    try
+                    {
+                        //var functionToExecute = o2MDbg.mdbgProcess.CorDebugger.
+                        CorModule currentModule = e.Thread.ActiveFrame.Function.Module;
+                        string type = "o2.core.O2Core.Resources.ScriptSamples.For_UnitTest_SimpleCalls";
+                        string method = "hookCall";
+                        foreach (MDbgModule module in o2MDbg.Modules)
+                        {
+                            MDbgFunction functionToCall = o2MDbg.mdbgProcess.ResolveFunctionName(module, type, method);
+                            if (functionToCall != null)
+                            {
+                                foreach (O2MDbgThread thread in o2MDbg.getThreads())
+                                {
+                                    if (thread.mdbgThread.Id == e.Thread.Id)
+                                    {
+                                        CorEval eval = o2MDbg.getThreads()[0].mdbgThread.CorThread.CreateEval();
+
+                                        log.info("Before eval call");
+
+                                        eval.CallFunction(functionToCall.CorFunction, null);
+                                        //    thread.mdbgThread.CorThread.Process.Continue(false);
+
+                                        //eval.CallFunction(func.CorFunction, (CorValue[])vars.ToArray(typeof(CorValue)));
+                                        //Debugger.Processes.Active.Go().WaitOne();
+                                        log.info("After eval call");
+
+
+                                        //e.Continue = true;
+                                        //
+                                        o2MDbg.mdbgProcess.Go().WaitOne();
+                                        ;
+                                        log.info("After Go.WaitOne");
+                                    }
+                                }
+                                //CorProcess corProcess = (CorProcess)sender;
+
+                                //CorEval eval = o2MDbg.mDbgEngine.Processes.Active.Threads.Active.CorThread.CreateEval();
+                                //   eval.NewString(value.Substring(1, value.Length - 2)); // strip surrounding quotation marks
+                                // eval.CallFunction(toStringFunc.CorFunction, new CorDebug.CorValue[] { thisValue });
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ex(ex, "while tying an eval");
+                    }
+                }
+            }
+            e.Continue = true;
+        }
+
+        [Test]
+        public void setBreakpointOnAssemblyDeclaredMethods()
+        {
+            string exeFile = mockObjects_CompiledExe.PathToCreatedAssemblyFile;
+            Assert.That(File.Exists(exeFile), "Problem getting compiled assembly file");
+
+            O2MDbg.MDbgLoggingEnabled = true;
+
+            O2MDbg.exec(exeFile, null, false /*detachDebugSession */, _o2MDbg =>
+                                                                          {
+                                                                              o2MDbg = _o2MDbg;
+
+                                                                              o2MDbg.mdbgProcess.CorProcess.OnBreakpoint
+                                                                                  += CorProcess_OnBreakpoint;
+                                                                              o2MDbg.mdbgProcess.CorProcess.
+                                                                                  OnEvalComplete +=
+                                                                                  CorProcess_OnEvalComplete;
+                                                                              o2MDbg.mdbgProcess.CorProcess.
+                                                                                  OnEvalException +=
+                                                                                  CorProcess_OnEvalException;
+                                                                              // o2MDbg.O2BreakPoints.setBreakPointOnAssemblyEntryPoint();
+//                o2MDbg.O2BreakPoints.addBreakPointsOnAllMethods();
+//                o2MDbg.O2BreakPoints.onBreakPointAction = O2MDbgBreakPoint.OnBreakPointAction.Continue;                
+                                                                              o2MDbg.O2BreakPoints.handleBreakpoints =
+                                                                                  false;
+                                                                          });
+            Thread.Sleep(2000);
+
+            tryEvalNow();
+            o2MDbg.WaitForExit();
+        }
+    }
+}
+
+/*
+ 
+                            MDbgFunction toStringFunc = 
+                                m_process.ResolveFunctionName(null,"System.Object","ToString"
+                                                              ,thisValue.ExactType.Class.Module.Assembly.AppDomain);
+                            Debug.Assert(toStringFunc!=null); // we should be always able to resolve ToString function.
+
+                            eval.CallFunction(toStringFunc.CorFunction,new CorDebug.CorValue[]{thisValue});
+                            m_process.Go();
+                            do
+                            {
+                                m_process.StopEvent.WaitOne();
+                                if(m_process.StopReason is EvalCompleteStopReason)
+                                {
+ * */
