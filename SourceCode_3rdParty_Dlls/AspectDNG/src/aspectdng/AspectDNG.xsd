@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<!-- 
+	Author 	: Thomas GIL (DotNetGuru.org)
+	Date 	: 17 september 2006
+	License : Public Domain
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+		
+    <xs:complexType name="VariableListType">
+		<xs:sequence minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="Variable">
+				<xs:complexType>
+					<xs:attribute name="name" type="xs:string" />
+					<xs:attribute name="value" type="xs:string" />
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+    <xs:complexType name="PointcutType">
+		<xs:attribute name="targetXPath" type="xs:string" />
+		<xs:attribute name="targetRegExp" type="xs:string" />
+	</xs:complexType>
+
+	<xs:complexType name="AdviceType">
+		<xs:attribute name="targetXPath" type="xs:string" />
+		<xs:attribute name="targetRegExp" type="xs:string" />
+		<xs:attribute name="aspectXPath" type="xs:string" />
+		<xs:attribute name="aspectRegExp" type="xs:string" />
+	</xs:complexType>
+	
+    <xs:element name="Advice">	
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="Delete" type="PointcutType"/>            
+                <xs:element name="Insert" type="AdviceType"/>
+                <xs:element name="Generic" type="AdviceType"/>            
+                <xs:element name="CecilGeneric" type="AdviceType"/>            
+                
+                <xs:element name="Warning" type="PointcutType"/>            
+                <xs:element name="Error" type="PointcutType"/>            
+
+                <xs:element name="MakeSerializable" type="PointcutType"/>            
+                <xs:element name="SetBaseType" type="AdviceType"/>            
+                <xs:element name="ImplementInterface" type="AdviceType"/>            
+
+                <xs:element name="AroundCall" type="AdviceType"/>
+                <xs:element name="AroundBody" type="AdviceType"/>
+                <xs:element name="AroundFieldWrite" type="AdviceType"/>
+                <xs:element name="AroundFieldRead" type="AdviceType"/>
+                
+                <xs:element name="Variables" type="VariableListType"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+	<xs:element name="AspectDngConfig">	
+		<xs:complexType>
+			<xs:sequence minOccurs="1" maxOccurs="1">				
+                <xs:element name="Variables" type="VariableListType" minOccurs="0" maxOccurs="1"/>
+                
+                <xs:element name="TargetAssembly" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="AspectsAssembly" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="WeavedAssembly" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+				<xs:element name="PrivateLocations" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="PrivatePath" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element ref="Advice" minOccurs="0" maxOccurs="1"/>
+				
+				<xs:element name="AdviceFiles" minOccurs="0" maxOccurs="1">
+					<xs:complexType>
+						<xs:sequence minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="AdviceFile" type="xs:string"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			
+			<xs:attribute name="debug" type="xs:boolean" use="required"/>
+			<xs:attribute name="weaving" type="xs:string" use="required"/>
+			<xs:attribute name="warnings" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+    
+</xs:schema>

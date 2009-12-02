@@ -1,0 +1,86 @@
+﻿<!-- 
+	Author 	: Thomas GIL (DotNetGuru.org)
+	Date 	: 17 september 2006
+	License : Public Domain
+-->
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <AssemblyName>aspectdng</AssemblyName>
+    <OutputPath>..\..\bin</OutputPath>
+    <ProjectGuid>{1F9F00EC-0968-4560-8EF7-0754B4CB7F0C}</ProjectGuid>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DefineConstants Condition=" '$(target)'=='1.1' or '$(target)' =='' ">TEST</DefineConstants>
+    <DefineConstants Condition=" '$(target)'=='2.0' ">TEST;DOTNETTWO</DefineConstants>
+  </PropertyGroup>
+  <Import Project="..\setup.targets" />
+  <ItemGroup>
+    <Reference Include="cecil, Version=0.0.0.0, Culture=neutral" />
+    <Reference Include="System.dll" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdviceException.cs" />
+    <Compile Include="config\AdviceSpec.cs" />
+    <Compile Include="config\AspectDngConfig.cs" />
+    <Compile Include="config\ConfigurationException.cs" />
+    <Compile Include="config\Decorator.cs" />
+    <Compile Include="AutoTest.cs" />
+    <Compile Include="EntryPoint.cs" />
+    <Compile Include="joinpoints\Attributes.cs" />
+    <Compile Include="joinpoints\ConstructorJoinPoint.cs" />
+    <Compile Include="joinpoints\StaticFieldSetterJoinPoint.cs" />
+    <Compile Include="joinpoints\StaticFieldJoinPoint.cs" />
+    <Compile Include="joinpoints\FieldJoinPoint.cs" />
+    <Compile Include="joinpoints\FieldSetterJoinPoint.cs" />
+    <Compile Include="joinpoints\InstanceMethodJoinPoint.cs" />
+    <Compile Include="joinpoints\JoinPoint.cs" />
+    <Compile Include="joinpoints\MethodJoinPoint.cs" />
+    <Compile Include="joinpoints\OperationJoinPoint.cs" />
+    <Compile Include="joinpoints\StaticMethodJoinPoint.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="metaaspects\AroundBody.cs" />
+    <Compile Include="metaaspects\AroundCall.cs" />
+    <Compile Include="metaaspects\AroundField.cs" />
+    <Compile Include="metaaspects\AspectTemplate.cs" />
+    <Compile Include="metaaspects\ErrorWarning.cs" />
+    <Compile Include="metaaspects\Generic.cs" />
+    <Compile Include="metaaspects\InsertDelete.cs" />
+    <Compile Include="metaaspects\MetaAspect.cs" />
+    <Compile Include="metaaspects\MetaAspectFacade.cs" />
+    <Compile Include="metaaspects\Narrow.cs" />
+    <Compile Include="metaaspects\TypeManagement.cs" />
+    <Compile Include="util\Cil.cs" />
+    <Compile Include="util\SimpleRegEx.cs" />
+    <Compile Include="xpath\Context.cs" />
+    <Compile Include="xpath\Names.cs" />
+    <Compile Include="xpath\Navigator.cs" />
+    <Compile Include="xpath\navigatorstate\Assembly.cs" />
+    <Compile Include="xpath\navigatorstate\Constructor.cs" />
+    <Compile Include="xpath\navigatorstate\Attribute.cs" />
+    <Compile Include="xpath\navigatorstate\Variable.cs" />
+    <Compile Include="xpath\navigatorstate\Instruction.cs" />
+    <Compile Include="xpath\navigatorstate\Method.cs" />
+    <Compile Include="xpath\navigatorstate\Property.cs" />
+    <Compile Include="xpath\navigatorstate\Field.cs" />
+    <Compile Include="xpath\navigatorstate\Type.cs" />
+    <Compile Include="xpath\navigatorstate\Root.cs" />
+    <Compile Include="xpath\navigatorstate\NavigatorState.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="IlmlDump.xsl" />
+    <EmbeddedResource Include="Log.xsl" />
+    <EmbeddedResource Include="AspectDNG.xsd" />
+  </ItemGroup>
+  <Target Name="Build" DependsOnTargets="Init">
+    <Csc Sources="@(Compile)" OutputAssembly="$(OutputPath)\aspectdng.exe" ToolPath="$(CscToolPath)" References="$(OutputPath)\cecil.dll" Resources="@(EmbeddedResource)" DebugType="Full" Optimize="True" DefineConstants="$(DefineConstants)" />
+    <Copy SourceFiles="$(OutputPath)\aspectdng.exe" DestinationFiles="$(OutputPath)\aspectdng.dll" />
+    <Copy SourceFiles="aspectdng.exe.config" DestinationFiles="$(OutputPath)\aspectdng.exe.config" />
+    <Copy SourceFiles="aspectdng.exe.config" DestinationFiles="$(OutputPath)\aspectdng.dll.config" />
+  </Target>
+</Project>
