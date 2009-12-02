@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{79B18F13-0FA4-4027-A9CA-908DB53C6987}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -12,8 +12,8 @@
     <AssemblyName>_FindingsQuery %28O2 Tool%29</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <ManifestCertificateThumbprint>E052237C8D07061E6B1275E04D215E5B7EACA5CD</ManifestCertificateThumbprint>
-    <ManifestKeyFile>O2_Tool_OzasmtQuery_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestCertificateThumbprint>156F961696E0F2561144FCD38D062892F8030D12</ManifestCertificateThumbprint>
+    <ManifestKeyFile>O2_Tool_FindingsQuery_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
     <IsWebBootstrapper>true</IsWebBootstrapper>
@@ -78,6 +78,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="O2_Tool_FindingsQuery_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

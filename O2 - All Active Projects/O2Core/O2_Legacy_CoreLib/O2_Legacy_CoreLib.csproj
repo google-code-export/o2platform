@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9D2748F5-74AD-43CB-AA92-87F6E3E371AE}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -158,6 +158,11 @@
     <Compile Include="O2Environment\Cmd.cs" />
     <Compile Include="O2Environment\O2CorLibConfig.cs" />
     <Compile Include="O2Environment\GlobalStaticVars.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Resources_Icons.cs" />
     <Compile Include="Resources\Resources_Icons.Designer.cs">
       <DependentUpon>Resources_Icons.resx</DependentUpon>
@@ -165,11 +170,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="xsd\CallTraces.cs">
       <DependentUpon>CallTraces.xsd</DependentUpon>
     </Compile>
