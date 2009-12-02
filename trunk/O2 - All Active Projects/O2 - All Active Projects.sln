@@ -122,6 +122,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_HostLocalWebsite", "O2_Tools\O2_Tool_HostLocalWebSite\O2_Tool_HostLocalWebsite.csproj", "{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Installers", "_Installers", "{6BF35DEF-31FA-4CB5-8081-94B5654A4DEA}"
+	ProjectSection(SolutionItems) = preProject
+		apache2.0 - License.txt = apache2.0 - License.txt
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "O2_Installer_Scanner_MsCatNet", "_Installers\O2_Installer_Scanner_MsCatNet\O2_Installer_Scanner_MsCatNet.vdproj", "{75B23121-5004-4149-AACF-58C7FA7F7676}"
 EndProject
@@ -190,6 +193,34 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "O2_Installer_Tool_XRules", "_Installers\O2_Installer_Tool_XRules\O2_Installer_Tool_XRules.vdproj", "{C68E8F84-F47B-435B-8B5F-FD4F1AD6B922}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_XRules_Database", "O2_XRules_Database\O2_XRules_Database.csproj", "{83957D55-86AB-4C26-9F82-6182999F09E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F84609EA-3796-4E19-A94C-78E912983352}"
+	ProjectSection(SolutionItems) = preProject
+		_3rdPartyDlls\antlr.runtime.dll = _3rdPartyDlls\antlr.runtime.dll
+		apache2.0 - License.txt = apache2.0 - License.txt
+		_3rdPartyDlls\Cecil.Decompiler.dll = _3rdPartyDlls\Cecil.Decompiler.dll
+		_3rdPartyDlls\Common.Logging.dll = _3rdPartyDlls\Common.Logging.dll
+		_3rdPartyDlls\Evaluant.Antlr.dll = _3rdPartyDlls\Evaluant.Antlr.dll
+		_3rdPartyDlls\Evaluant.NLinq.Memory.o2.1.x.dll = _3rdPartyDlls\Evaluant.NLinq.Memory.o2.1.x.dll
+		_3rdPartyDlls\Evaluant.NLinq.o2.1.x.dll = _3rdPartyDlls\Evaluant.NLinq.o2.1.x.dll
+		_3rdPartyDlls\ICSharpCode.TextEditor.dll = _3rdPartyDlls\ICSharpCode.TextEditor.dll
+		_3rdPartyDlls\Ionic.Zip.dll = _3rdPartyDlls\Ionic.Zip.dll
+		_3rdPartyDlls\Microsoft.GLEE.dll = _3rdPartyDlls\Microsoft.GLEE.dll
+		_3rdPartyDlls\Microsoft.GLEE.Drawing.dll = _3rdPartyDlls\Microsoft.GLEE.Drawing.dll
+		_3rdPartyDlls\Microsoft.GLEE.GraphViewerGDI.dll = _3rdPartyDlls\Microsoft.GLEE.GraphViewerGDI.dll
+		_3rdPartyDlls\Mono.Cecil.dll = _3rdPartyDlls\Mono.Cecil.dll
+		_3rdPartyDlls\Mono.Cecil.Pdb.dll = _3rdPartyDlls\Mono.Cecil.Pdb.dll
+		_3rdPartyDlls\Mono.Cecil.Pdb.pdb = _3rdPartyDlls\Mono.Cecil.Pdb.pdb
+		_3rdPartyDlls\MySql.Data.dll = _3rdPartyDlls\MySql.Data.dll
+		_3rdPartyDlls\nunit.framework.dll = _3rdPartyDlls\nunit.framework.dll
+		_3rdPartyDlls\QuickGraph.dll = _3rdPartyDlls\QuickGraph.dll
+		_3rdPartyDlls\QuickGraph.Glee.dll = _3rdPartyDlls\QuickGraph.Glee.dll
+		_3rdPartyDlls\QuickGraph.Graphviz.dll = _3rdPartyDlls\QuickGraph.Graphviz.dll
+		_3rdPartyDlls\Skybound.Gecko.dll = _3rdPartyDlls\Skybound.Gecko.dll
+		_3rdPartyDlls\Spring.Aop.dll = _3rdPartyDlls\Spring.Aop.dll
+		_3rdPartyDlls\Spring.Core.dll = _3rdPartyDlls\Spring.Core.dll
+		_3rdPartyDlls\WeifenLuo.WinFormsUI.Docking.dll = _3rdPartyDlls\WeifenLuo.WinFormsUI.Docking.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
