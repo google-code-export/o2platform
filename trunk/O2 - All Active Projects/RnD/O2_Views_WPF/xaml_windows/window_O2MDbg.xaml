@@ -1,0 +1,15 @@
+﻿<Window x:Class="O2.wpfGUI.xaml_windows.XAML_ControlHost"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"           
+    Title="XAML_ControlHost" Height="547" Width="804" Padding="5">
+    <Grid>
+        <TextBox Name="textBox1" TextWrapping="WrapWithOverflow" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" Height="99" VerticalAlignment="Bottom" />
+        <Button Height="23" HorizontalAlignment="Left" Margin="16,17,0,0" Name="btStartO2MDbg" VerticalAlignment="Top" Width="164">Start O2 DotNet Debuggger</Button>
+        <Label Height="28" HorizontalAlignment="Left" Margin="-202,129,0,0" Name="label1" VerticalAlignment="Top" Width="120">Label</Label>
+        <GroupBox Header="Available Processes" Margin="0,61,0,103" Name="groupBox1" HorizontalAlignment="Left" Width="201" />
+        <GroupBox Header="Available Assemblies" Margin="217,61,0,103" Name="groupBox2" HorizontalAlignment="Left" Width="201" />
+              
+    </Grid>
+
+
+</Window>

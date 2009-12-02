@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0F63204A-4922-4FC3-8F9B-E80F27233FA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O2.UnitTests.Test_O2CoreLib</RootNamespace>
+    <AssemblyName>_O2_UnitTests_TestO2CoreLib</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\_Bin_%28O2_Binaries%29\_UnitTests\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Cecil, Version=0.6.9.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\_Bin_(O2_Binaries)\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DI.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RnD\WebInspect\Test_WebInspectConverter_PoC1.cs" />
+    <Compile Include="RnD\WebInspect\Test_WebInspectConverter_PoC2.cs" />
+    <Compile Include="RnD\WebInspect\Test_WebInspectResults.cs" />
+    <Compile Include="RnD\WebInspect\Test_WebInspectToOzasmt.cs" />
+    <Compile Include="O2Core\O2CoreLib\Ascx\Test_ascx_FilterWizard.cs" />
+    <Compile Include="O2Core\O2CoreLib\Tasks\Test_Task_LoadAssessmentFile.cs" />
+    <Compile Include="O2Core\O2CoreLib\Tasks\Test_Task_UnzipFile.cs" />
+    <Compile Include="O2Core\O2CoreLib\Analysis\Test_FilteredUrl.cs" />
+    <Compile Include="O2Core\O2CoreLib\WebAutomation\Test_Mail.cs" />
+    <Compile Include="O2Core\O2CoreLib\O2Environment\Test_Config.cs" />
+    <Compile Include="O2Core\O2CoreLib\O2Environment\Test_DebugMsg.cs" />
+    <Compile Include="O2Core\O2CoreLib\Windows\Test_FileWatcher.cs" />
+    <Compile Include="RnD\Test_ScanThread.cs" />
+    <Compile Include="Scanners\Test_CatNetConversion.cs" />
+    <Compile Include="Scanners\Test_DotNet_AspNetAnalysis.cs" />
+    <Compile Include="Test_ascx_O2Reflector.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_O2Mono\O2_External_O2Mono.csproj">
+      <Project>{F457A7EB-A573-41BB-BC12-61ABE5ACF702}</Project>
+      <Name>O2_External_O2Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
+      <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
+      <Name>O2_External_WinFormsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Debugger_Mdbg\O2_Debugger_Mdbg.csproj">
+      <Project>{3EDD49CB-F7F2-4CFE-AFAC-698B13B0C968}</Project>
+      <Name>O2_Debugger_Mdbg</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
+      <Project>{D388D146-D728-412E-8097-5C6E4E53612E}</Project>
+      <Name>O2 ImportExport OunceLabs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Legacy_OunceV6\O2_Legacy_OunceV6.csproj">
+      <Project>{14F52AB9-7FC7-44F5-9A84-422ED47CFA1A}</Project>
+      <Name>O2_Legacy_OunceV6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
+      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
+      <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2_Tools\O2_Tool_WebInspectConverter\O2_Tool_WebInspectConverter.csproj">
+      <Project>{9C9DAC2F-577B-47C5-8637-49940A8A5272}</Project>
+      <Name>O2_Tool_WebInspectConverter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Scanners\O2_Scanner_MsCatNet\O2_Scanner_MsCatNet.csproj">
+      <Project>{D6C73FDF-CCD1-4633-A520-2027796241AD}</Project>
+      <Name>O2_Scanner_MsCatNet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Scanners\O2_External_OunceLabsCLI\O2_Scanner_OunceLabsCLI.csproj">
+      <Project>{46E58DB9-5ADB-4482-A366-73184B3C2011}</Project>
+      <Name>O2_Scanner_OunceLabsCLI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2UnitTest_O2Debugger\O2UnitTest_O2Debugger.csproj">
+      <Project>{DC9A7583-4D8A-4BFF-8FED-FDFD7CDBCA8E}</Project>
+      <Name>O2UnitTest_O2Debugger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

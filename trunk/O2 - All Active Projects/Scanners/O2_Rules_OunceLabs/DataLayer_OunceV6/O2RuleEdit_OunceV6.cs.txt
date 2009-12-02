@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using O2.Kernel.Interfaces.Rules;
+
+namespace O2.Rules.OunceLabs.DataLayer_OunceV6
+{
+    public class O2RuleEdit_OunceV6
+    {
+        public static void deleteRulesFromDatabase(IEnumerable<IO2Rule> rulesToDelete)
+        {
+            //var mySqlRules_OunceV6 = new MySqlRules_OunceV6();
+            foreach (IO2Rule o2RuleToDelete in rulesToDelete)
+
+                deleteRuleFromDatabase(o2RuleToDelete);
+        }
+
+        /*public static void deleteRuleFromDatabase(IO2Rule o2RuleToDelete)
+        {
+            switch (o2RuleToDelete.RuleType)
+            {
+                case O2RuleType.Callback:
+                    deleteCallback(o2RuleToDelete);
+                    break;
+                case O2RuleType.Source:
+                    deleteSource(o2RuleToDelete);
+                    break;
+
+                default:
+                    DI.log.error("In deleteRuleFromDatabase, NOT Suported rule type: {0}", o2RuleToDelete.RuleType);
+                    break;
+            }
+            //    throw new NotImplementedException();
+        }
+
+        private static void deleteSource(IO2Rule o2Rule)
+        {
+            var vulnIDSql = String.Format("Select vuln_id from rec where db_id ={0} and signature ='{1}'",
+                                     o2Rule.DbId, o2Rule.Signature);
+            var vulnId = OunceMySql.executeSqlQuery(vulnIDSql, true);
+            if (vulnId == null)
+                DI.log.error("in deleteSource, could not find entry for signature {0} in database {1}", o2Rule.Signature, o2Rule.DbId);
+            else
+            {
+                var actionobjectIdSql = String.Format("Select id from actionobjects where db_id ={0} and signature = '{1}' and vuln_id ='{2}'",
+                                     o2Rule.DbId, "InputAnyTainted", vulnId);
+                var actionObjectID = OunceMySql.executeSqlQuery(actionobjectIdSql, true);
+                if (actionObjectID == null)
+                    DI.log.error("in deleteSource, could not find actionobject entry for signature {0} in database {1}", o2Rule.Signature, o2Rule.DbId);
+                else
+                {
+                    var deleteActionObjectSql = String.Format("Delete from actionobjects where id ={0}", actionObjectID);
+                    OunceMySql.executeSqlQuery(deleteActionObjectSql, true);
+                    var deleteSourceSql = String.Format("Delete from source_info where ao_id ={0}", actionObjectID);
+                    OunceMySql.executeSqlQuery(deleteSourceSql, true);
+                    DI.log.info("Source deleted:{0}", o2Rule.Signature);
+                }
+            }
+         
+        }*/
+        /*
+         * //INSERT into actionobjects (id,signature,vuln_id,severity,type,db_id,vuln_type,trace,added) VALUES(10000000,'OutputAnyNotValidated',2000000,'Low','vulnerability',2,'Vulnerability.AccessControl',3,1)
+            String sActionObject =
+                String.Format(
+                    "INSERT into actionobjects (id,signature,vuln_id,severity,db_id,vuln_type,trace,added) VALUES ({0},'{1}',{2},'{3}',{4},'{5}',{6},{7})",
+                    sActionObjectId, sActionObjectSignature, sVuln_id, sSeverity, sDbId, sVuln_type, sTrace_type, sAdded);
+            OunceMySql.executeSqlQuery(sActionObject, true);
+
+            // Query #5            		      
+            OunceMySql.executeSqlQuery(String.Format("DELETE from source_info 		 WHERE ao_id={0}", sActionObjectId));
+
+            // Query #6                
+            String sInsertLddbSinkInfo =
+                String.Format("INSERT into source_info (ao_id, param,return) VALUES({0},'{1}',{2})", sActionObjectId,
+                              sSource_Param, sSource_Return);
+            OunceMySql.executeSqlQuery(sInsertLddbSinkInfo);
+
+            // Query #7
+            OunceMySql.executeSqlQuery(String.Format("DELETE from sink_info 		 WHERE ao_id={0}", sActionObjectId));
+
+            // Query #8
+
+            String sAdded_String = "true";
+            String sDeleteLddProperty =
+                String.Format(
+                    " DELETE from property_xref 		 WHERE db_ref={0} and object_ref={1} and object_type='{2}' and added={3}",
+         */
+        public static void deleteCallback(IO2Rule o2Rule)
+        {
+            var vulnIDSql = String.Format("Select vuln_id from rec where rec.callback=1 and db_id ={0} and signature ='{1}'",
+                                        o2Rule.DbId, o2Rule.Signature);
+            var vulnId = OunceMySql.executeSqlQuery(vulnIDSql, true);
+            if (vulnId == null)
+                DI.log.error("in deleteCallback, could not find callback for signature {0} in database {1}", o2Rule.Signature, o2Rule.DbId);
+            else
+            {
+                var updateSql = String.Format("Update rec set callback=0 where rec.vuln_id={0}",
+                                        vulnId);
+                OunceMySql.executeSqlQuery(updateSql, true);
+                DI.log.info("Callback deleted:{0}", o2Rule.Signature);
+            }            
+//            String sSql = String.Format("DELETE from rec where rec.callback=1 and db_id ={0} and signature ='{1}'",
+//                                        o2Rule.DbId, o2Rule.Signature);
+//           // object oResult = OunceMySql.executeSqlQuery(sSql, true);
+        }
+    }
+}

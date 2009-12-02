@@ -1,0 +1,122 @@
+﻿ using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using NUnit.Framework;
+using O2.Debugger.Mdbg.O2Debugger.Objects;
+using O2.DotNetWrappers.Windows;
+using O2.UnitTests.TestO2CoreLib.O2Core.O2CoreLib.MockObjects;
+
+namespace O2.UnitTests.O2Debugger.O2DebuggerMdbg.forOldMDbg
+{
+    [TestFixture]
+    public class Test_RaceConditionsAndThreadInfo
+    {
+        #region Setup/Teardown
+
+        [TearDown]
+        public void closeCreatedProcess()
+        {
+            mockObjects_CompiledExe.killProcess();
+        }
+
+        #endregion
+
+        private static readonly MockObjects_CompiledExe mockObjects_CompiledExe =
+            new MockObjects_CompiledExe(MockObjects_CompiledExe.for_UnitTest_HotMethodPatch());
+
+        private static readonly Process testProcess = mockObjects_CompiledExe.TestProcess;
+
+        [Test]
+        public void Test_GetStackTraceFromRunningThreads()
+        {
+            var numberOfItemsToFetch = 1;
+            // make 100 to see multiple fetches with no performance impact (at least for this small app)
+            var delayBetweenFetches = 1000;
+            // make 100 to see multiple fetches with no performance impact (at least for this small app)
+            Assert.That(testProcess != null, "Problem getting process");
+            var execSemaphore = new Semaphore(0, 1);
+            execSemaphore.Release();
+            for (int i = 0; i < numberOfItemsToFetch; i++)
+            {
+                O2MDbg_OLD.execSync(testProcess.Id, execSemaphore, o2MDbg =>
+                                                                       {
+                                                                           List<O2MDbgThread> o2DBbgThreads =
+                                                                               o2MDbg.getThreads();
+                                                                           DI.log.info("there are {0} Threads available",
+                                                                                       o2DBbgThreads.Count);
+                                                                           foreach (O2MDbgThread thread in o2DBbgThreads)
+                                                                               DI.log.info("\n {0} \n",
+                                                                                           thread.stackTraceString.
+                                                                                               ToString());
+
+
+                                                                           return true;
+                                                                       });
+                Thread.Sleep(delayBetweenFetches); // delay between fetches
+            }
+        }
+
+        /// <summary>
+        /// Test to see if we do multiple attach and detach into the target process (using Semaphone to trigger execution)
+        /// </summary>
+        [Test]
+        public void test_multipleAttachAndDetash_usingSemaphore()
+        {
+            Assert.That(testProcess != null, "Problem getting process");
+            var execSemaphore = new Semaphore(0, 1);
+            bool firstAttach = false;
+            bool secondAttach = false;
+            const bool thirdAttach = false;
+            bool fourthAttach = false;
+            O2MDbg_OLD.exec(testProcess.Id, execSemaphore, o2MDbg => firstAttach = true);
+            O2MDbg_OLD.exec(testProcess.Id, execSemaphore, o2MDbg => secondAttach = true);
+            O2MDbg_OLD.exec(testProcess.Id, execSemaphore, o2MDbg => Thread.Sleep(500)); //thirdAttach = true);
+            O2MDbg_OLD.exec(testProcess.Id, execSemaphore, o2MDbg => fourthAttach = true);
+            Assert.That(firstAttach == false, "firstAttach should be false here");
+
+            // tests on firstAttach            
+            execSemaphore.Release(); // release the first one which will triger all four executions
+            // execSemaphore.Release();
+            Thread.Sleep(1500);
+            Assert.That(firstAttach, "after semaphore firstAttach should be true");
+            Assert.That(secondAttach, "after semaphore secondAttach should be true");
+            Assert.That(thirdAttach == false, "after semaphore thirdAttach should be false");
+            Assert.That(fourthAttach, "after semaphore thirdAttach should be true");
+
+
+            return;
+        }
+
+        /// <summary>
+        /// Test to see if we do multiple attach and detach into the target process (using Thread.Sleep to wait for execution end)
+        /// </summary>
+        [Test]
+        public void test_multipleAttachAndDetash_usingThreadSleep()
+        {
+            Assert.That(testProcess != null, "Problem getting process");
+
+            bool firstAttach = false;
+            bool secondAttach = false;
+            O2MDbg_OLD.exec(testProcess.Id,
+                            o2MDbg =>
+                                {
+                                    DI.log.info("there are {0} appDomains in this process",
+                                                o2MDbg.getAppDomains().Count);
+                                    DI.log.debug("there are {0} modules in this process",
+                                                 o2MDbg.getModules().Count);
+                                    firstAttach = true;
+                                });
+            // since exec runs on a separate thread we need to wait a little bit before firstAttach is set
+            Processes.Sleep(500);
+            Assert.That(firstAttach, "Problem on the 1st code attach");
+
+
+            O2MDbg_OLD.exec(testProcess.Id, o2MDbg => secondAttach = true);
+            // if we do test secondAttach now it should be false
+            Assert.That(secondAttach == false, "secondAttach should be false here");
+            Processes.Sleep(500); // when run individually needs to be a value > 100
+            // and after a little bit, it should true
+            Assert.That(secondAttach, "secondAttach should be true here");
+        }
+    }
+}

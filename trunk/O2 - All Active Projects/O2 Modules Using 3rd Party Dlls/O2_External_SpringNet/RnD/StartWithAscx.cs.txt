@@ -1,0 +1,43 @@
+﻿using System;
+
+namespace O2.core.SpringNet
+{
+	public class test
+	{
+		public static void LoadConfigAndStartWithAscx(String sSpringConfigFileToLoad)
+        {
+            Application.EnableVisualStyles();                           // need to setup these here or we will have an error if we try to																			create windows objects via DI
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            var iacContext = new XmlApplicationContext(new[] { sSpringConfigFileToLoad });
+            var swaStartWithAscx = (StartWithAscx)iacContext.GetObject("myStartWithAscx");
+            swaStartWithAscx.exec();
+        }
+	}
+
+    public interface IStartWithAscx
+    {     
+        void exec();
+    }
+
+    public class StartWithAscx : IStartWithAscx
+    {
+        private String _sFormTitle;
+        private Type _tAscxType;
+
+        public String sFormTitle
+        {
+            set { _sFormTitle = value; }
+        }
+
+        public Type tAscxType { set { _tAscxType = value; } }
+        
+        public void exec()
+        {                        
+
+            var sProcessedFormTitle = Exec.getFormTitle_forClickOnce(_sFormTitle);
+
+            Exec.execControl(sProcessedFormTitle, _tAscxType);
+        }
+    }
+}

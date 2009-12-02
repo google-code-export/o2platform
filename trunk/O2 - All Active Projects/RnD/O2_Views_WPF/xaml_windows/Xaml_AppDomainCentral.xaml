@@ -1,0 +1,68 @@
+﻿<Window x:Class="O2.wpfGUI.xaml_windows.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="O2 AppDomain Central" Height="568" Width="920" Opacity="1" WindowStyle="ThreeDBorderWindow">   
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="810*" />
+            <ColumnDefinition Width="88*" />
+        </Grid.ColumnDefinitions>
+        <Border Background="LightSkyBlue" VerticalAlignment="Top" CornerRadius="10" Padding="3" BorderBrush="Black"                 
+                BorderThickness="4" Height="26" Margin="250,0,184,0">
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock FontSize="12" Height="18">Welcome to O2 (now in WPF)</TextBlock>
+            </StackPanel>
+        </Border>
+
+        <TabControl Margin="0,51,0,0" Name="TabControl" SelectedIndex="0" Background="Transparent" Grid.ColumnSpan="2">
+            <TabItem Header="AppDomain Manager" Background="LightSkyBlue" >
+                <Canvas Background="Transparent">
+                    <ListBox Margin="24,88,0,10" Name="lbCurrentAppDomains"  AllowDrop="True" DragDrop.DragEnter="lbCurrentAppDomains_DragEnter" DragDrop.Drop="currentAppDomains_Drop" HorizontalAlignment="Left" Width="151" Height="281.723" Canvas.Left="-15" Canvas.Top="60.277" SelectionChanged="lbCurrentAppDomains_SelectionChanged" />
+                    <Button Margin="137,61.638,0,0" Name="btRefreshAppDomainList" Click="btRefreshAppDomainList_Click" Height="23" VerticalAlignment="Top" HorizontalAlignment="Left" Width="151" Canvas.Left="-128" Canvas.Top="22">Refresh App Domain List</Button>
+
+                    
+                    <GroupBox Header="Create AppDomain" Margin="186,79.276,0,0" Name="groupBox1" HorizontalAlignment="Left" Width="695" Height="88" VerticalAlignment="Top" Canvas.Left="-6" Canvas.Top="-70">
+                        <Canvas >
+                            <Label Canvas.Left="6" Canvas.Top="7" Height="28" Name="label2" Width="133">New AppDomain Name</Label>
+                            <Label Canvas.Left="6" Canvas.Top="33" Height="28" Name="label3" Width="133">Base Directory</Label>                            
+                            <TextBox Canvas.Left="127" Canvas.Top="35" Height="23" Name="tbNewAppDomainBaseDirectory" Width="226" TextChanged="tbNewAppDomainBaseDirectory_TextChanged">....</TextBox>
+                            <Button Canvas.Left="367" Canvas.Top="7.639" Height="50.361" Name="btCreateAppDomain" Width="103" Click="btCreateAppDomain_Click">Create App Domain</Button>
+                            <Label TextElement.Foreground="Red" Canvas.Left="480" Canvas.Top="7" Height="54" Name="lbNewAppDomainErrorMessage" Width="203">Error message</Label>
+                            <TextBox Canvas.Left="127" Canvas.Top="9" Height="23" Name="tbNewAppDomainName" Width="226" TextChanged="tbNewAppDomainName_TextChanged">TestAppDomain</TextBox>
+                        </Canvas>
+                    </GroupBox>
+                    <GroupBox Header="Information on Selected AppDomain" Margin="180,188,5,5" Name="groupBox2" Height="337.724" Canvas.Top="-80" Width="708">
+                        <Canvas
+                            >
+                            
+                            <Label Name="label1" Background="Transparent" Height="28" Canvas.Left="6" Canvas.Top="0" Width="112">Assemblies</Label>
+                            <ListBox AllowDrop="True" Canvas.Left="12" Canvas.Top="27" Height="281" Name="lbAssemblies" Width="178" VerticalAlignment="Stretch" SelectionChanged="lbAssemblies_SelectionChanged" />
+                            <Label Canvas.Left="199" Canvas.Top="0" Height="28" Name="label4" Width="112">Types</Label>
+                            <ListBox AllowDrop="True" Canvas.Left="205" Canvas.Top="27" Height="281" Name="lbTypes" Width="185" SelectionChanged="lbTypes_SelectionChanged" />
+                            <Label Background="Transparent" Canvas.Left="404" Canvas.Top="0" Height="28" Name="label5" Width="112">Static Methods</Label>
+                            <ListBox AllowDrop="True" Canvas.Left="410" Canvas.Top="27" Height="108" Name="lbStaticMethods" Width="273" SelectionChanged="lbStaticMethods_SelectionChanged" />
+                            <Button Canvas.Left="410" Canvas.Top="176" Height="24" Name="btInvokeStaticMethod" Width="273" Click="btInvokeStaticMethod_Click">Invoke</Button>
+                            <CheckBox Canvas.Left="410" Canvas.Top="141" Height="14" Name="cbOnlyShowMethodsWithNoParameters" Width="209">Only Show methods with no parameters</CheckBox>
+                            <CheckBox Canvas.Left="410" Canvas.Top="157" Height="14" Name="cbOnlyShowStaticMethods" Width="209">Only show static methods</CheckBox>
+                            <Label Canvas.Left="406" Canvas.Top="201" Height="22" Name="label6" Width="145">Invocation Result:</Label>
+                            <TextBox Canvas.Left="411" Canvas.Top="224" Height="84" Name="tbInvocationResult" Width="272" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" />
+                        </Canvas>
+                    </GroupBox>
+
+                </Canvas>
+            </TabItem>
+            <TabItem Header="Tests" Background="LightSkyBlue" >
+                <Canvas>
+                    <Canvas Name="canvas1" Width="349.965" Height="204.525" Canvas.Left="39.087" Canvas.Top="39.087">
+                        <CheckBox Height="16" Name="checkBox1" Width="120" Canvas.Left="10" Canvas.Top="56">CheckBox</CheckBox>
+                        <Button Name="btOpenO2Gui" Click="btOpenO2Gui_Click" Width="75" Height="20.277" Canvas.Left="10" Canvas.Top="-0.457">open O2 Gui</Button>
+                    </Canvas>
+                </Canvas>
+            </TabItem>
+        </TabControl>
+        <!--
+            <Image Name="image1" Stretch="None" Source="/O2_WPF_GUI;component/Images/justlogo_transparent.gif" Opacity="0.05" Grid.ColumnSpan="2"  />
+        -->
+    </Grid>        
+</Window>

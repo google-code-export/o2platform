@@ -1,0 +1,727 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+using System.Xml;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.O2Misc;
+
+namespace O2.DotNetWrappers.Windows
+{
+    public class Files
+    {
+        // code to use binaryreader:
+        /*FileStream fileStream = File.Open(pathToProxyDll, FileMode.Open, FileAccess.Read);
+                 
+                BinaryReader  binaryReader = new BinaryReader(fileStream);
+                Files.WriteFileContent(file, binaryReader);
+                 */
+
+        public static String Copy(String sourceFile, String targetFileOrFolder)
+        {
+            return Copy(sourceFile, targetFileOrFolder, false);
+        }
+        public static String Copy(String sSourceFile, String sTargetFileOrFolder, bool overrideFile)
+        {
+            string sTargetFile = sTargetFileOrFolder;
+            if (Directory.Exists(sTargetFile))
+                sTargetFile = Path.Combine(sTargetFile, Path.GetFileName(sSourceFile));
+            try
+            {
+                if (sSourceFile != sTargetFile || overrideFile)
+                    File.Copy(sSourceFile, sTargetFile, true);
+                
+                return sTargetFile;
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex, "in Files.Copy");
+                return null;
+            }            
+        }
+
+        public static string CopyVerbose(string fileToCopy, string targetFolder, bool dontCopyIfTargetFileAlreadyExists)
+        {
+            var fileName = Path.GetFileName(fileToCopy);
+            var targetFileLocation = Path.Combine(targetFolder, Path.GetFileName(fileToCopy));
+            if (false == File.Exists(targetFileLocation))
+            {
+                DI.log.write("copying file {0} to folder {1}", fileName, targetFolder);
+                Copy(fileToCopy, targetFolder);
+            }
+            else
+                if (dontCopyIfTargetFileAlreadyExists)
+                    DI.log.write("skipping file: {0}", fileName);
+                else
+                {
+                    DI.log.write("over-writing file: {0}", fileName);
+                    Copy(fileToCopy, targetFolder);
+                }
+            return fileToCopy;
+        }
+
+        public static String MoveFile(String sSourceFile, String sTargetFileOrDirectory)
+        {
+            string copiedFile = null;
+            if (sSourceFile != sTargetFileOrDirectory)
+            {
+                copiedFile = Copy(sSourceFile, sTargetFileOrDirectory);
+                if (copiedFile!= null)
+                    deleteFile(sSourceFile);
+                //File.Move(sSourceFile, sTargetFile);
+            }
+            return copiedFile;
+        }
+
+        public static void copyDllAndPdb(String sSourceDll, String sTargetDll, bool bOveride)
+        {
+            try
+            {
+                if (File.Exists(sSourceDll))
+                {
+                    if (File.Exists(sTargetDll)) // copy the latest one
+                    {
+                    }
+                    File.Copy(sSourceDll, sTargetDll, bOveride);
+                    sSourceDll = Path.Combine(Path.GetDirectoryName(sSourceDll),
+                                              Path.GetFileNameWithoutExtension(sSourceDll) + ".pdb");
+                    if (File.Exists(sSourceDll))
+                    {
+                        sTargetDll = Path.Combine(Path.GetDirectoryName(sTargetDll),
+                                                  Path.GetFileNameWithoutExtension(sTargetDll) + ".pdb");
+                        File.Copy(sSourceDll, sTargetDll, bOveride);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in copyDllAndPdb:{0}", ex.Message);
+            }
+        }
+
+        public static bool copyFilesFromDirectoryToDirectory(String sSourceDirectory, String sTargetDirectory)
+        {
+            if (false == Directory.Exists(sSourceDirectory))
+            {
+                DI.log.error("Source Directory doesn't exist:{0}", sSourceDirectory);
+                return false;
+            }
+            if (false == Directory.Exists(sTargetDirectory))
+            {
+                Directory.CreateDirectory(sTargetDirectory);
+                if (false == Directory.Exists(sTargetDirectory))
+                {
+                    DI.log.error("Target Directory doesn't exist:{0}", sTargetDirectory);
+                    return false;
+                }
+            }
+            foreach (String sFile in Directory.GetFiles(sSourceDirectory))
+                Copy(sFile, Path.Combine(sTargetDirectory, Path.GetFileName(sFile)));
+            return true;
+        }
+
+        public static string getTempFolderName()
+        {
+            String sTempFileName = Path.GetTempFileName();
+            File.Delete(sTempFileName);
+            return Path.GetFileNameWithoutExtension(sTempFileName);
+        }
+
+        public static string getTempFileName()
+        {
+            String sTempFileName = Path.GetTempFileName();
+            File.Delete(sTempFileName);
+            return Path.GetFileName(sTempFileName);
+        }
+
+        public static bool deleteFile(String fileToDelete)
+        {
+            return deleteFile(fileToDelete, false);
+        }
+
+        public static bool deleteFile(String fileToDelete, bool logFileDeletion)
+        {
+            try
+            {
+                if (File.Exists(fileToDelete))
+                {
+                    File.Delete(fileToDelete);
+                    if (logFileDeletion)
+                        DI.log.error("Deleted File :{0}:", fileToDelete);                    
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("In deleteFile:{0}:", ex.Message);
+            }
+            return false;
+        }
+
+        public static void deleteFolder(String sFolderToDelete)
+        {
+            deleteFolder(sFolderToDelete, false);
+        }
+
+        public static void deleteFolder(String sFolderToDelete, bool bRecursive)
+        {
+            try
+            {
+                if (Directory.Exists(sFolderToDelete))
+                {
+                    deleteAllFilesFromDir(sFolderToDelete);
+                    Directory.Delete(sFolderToDelete, bRecursive);
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("In deleteFolder:{0}:", ex.Message);
+            }
+        }
+
+        public static void deleteAllFilesFromDir(String targetDir)
+        {
+            deleteFilesFromDirThatMatchPattern(targetDir, "*.*");
+        }
+
+        public static void deleteFilesFromDirThatMatchPattern(String targetDir, String searchPattern)
+        {
+            List<String> lsFiles = getFilesFromDir_returnFullPath(targetDir, searchPattern);
+            foreach (String sFile in lsFiles)
+                try
+                {
+                    File.Delete(sFile);
+                }
+                catch (Exception ex)
+                {
+                    DI.log.error("In deleteFilesFromDirThatMatchPattern:{0}:", ex.Message);
+                }
+        }
+
+        public static String getFirstFileFromDirThatMatchesPattern_returnFulPath(String sTargetDir,
+                                                                                 String sSearchPattern)
+        {
+            List<String> lsFiles = getFilesFromDir_returnFullPath(sTargetDir, sSearchPattern, true);
+            if (lsFiles.Count > 0)
+                return lsFiles[0];
+            return "";
+        }
+
+        public static List<String> getFilesFromDir(String sTargetDir)
+        {
+            return getFilesFromDir(sTargetDir, "*.*");
+        }
+
+        public static List<String> getFilesFromDir(String sTargetDir, String sSearchPattern)
+        {
+            var lsFiles = new List<string>();
+            if (Directory.Exists(sTargetDir))
+                foreach (String sFile in Directory.GetFiles(sTargetDir, sSearchPattern))
+                    lsFiles.Add(Path.GetFileName(sFile));
+            else
+                DI.log.error("in getFilesFromDir, sTargetDir doesn't exist: {0}", sTargetDir);
+            return lsFiles;
+        }
+
+        public static List<String> getFilesFromDir_returnFullPath(String sPath)
+        {
+            return getFilesFromDir_returnFullPath(sPath, "*.*", false);
+        }
+
+        public static List<String> getFilesFromDir_returnFullPath(String sPath, String sSearchPattern)
+        {
+            return getFilesFromDir_returnFullPath(sPath, sSearchPattern, false);
+        }
+
+        // returns full paths instead of just the file names
+        public static List<String> getFilesFromDir_returnFullPath(String sPath, String sSearchPattern,
+                                                                  bool bSearchRecursively)
+        {
+            var lsFiles = new List<String>();
+            getListOfAllFilesFromDirectory(lsFiles, sPath, bSearchRecursively, sSearchPattern, false);
+            ///  foreach (String sFile in lsFiles)
+            //      lsFiles.Add(Path.Combine(sPath, sFile));
+
+            return lsFiles;
+        }
+
+        public static List<String> getListOfAllFilesFromDirectory(String sStartDirectory, bool bSearchRecursively, O2Thread.FuncVoidT1<List<String>> onComplete)
+        {
+            var lsFiles = new List<string>();
+            O2Thread.mtaThread(
+                () =>
+                    {
+                        getListOfAllFilesFromDirectory(lsFiles, sStartDirectory, bSearchRecursively, "*.*", false);
+                        onComplete(lsFiles);
+                    });
+            return lsFiles;
+        }
+
+        public static List<String> getListOfAllFilesFromDirectory(String sStartDirectory, bool bSearchRecursively)
+        {
+            return getListOfAllFilesFromDirectory(sStartDirectory, bSearchRecursively, "*.*");
+        }
+
+        public static List<String> getListOfAllFilesFromDirectory(String sStartDirectory, bool bSearchRecursively,
+                                                                  String sSearchPattern)
+        {
+            var lsFiles = new List<string>();
+            //bool bVerbose = false;
+            getListOfAllFilesFromDirectory(lsFiles, sStartDirectory, bSearchRecursively, sSearchPattern, false
+                /*bVerbose*/);
+            return lsFiles;
+        }
+        
+        public static void getListOfAllFilesFromDirectory(List<String> lsFiles, String sStartDirectory,
+                                                          bool bSearchRecursively, String sSearchPattern, bool bVerbose)
+        {
+        try
+            {
+                sStartDirectory = sStartDirectory.Trim();
+                if (Directory.Exists(sStartDirectory))
+                {
+                    if (sSearchPattern == "")
+                        lsFiles.AddRange(Directory.GetFiles(sStartDirectory));
+                    else
+                    {
+                        String[] sFileMatches = Directory.GetFiles(sStartDirectory, sSearchPattern);
+                        if (bVerbose)
+                            foreach (String sFile in sFileMatches)
+                                DI.log.debug("File matched filter: {0}", sFile);
+                        lsFiles.AddRange(sFileMatches);
+                    }
+                    if (bSearchRecursively)
+                        foreach (String sDirectory in Directory.GetDirectories(sStartDirectory))
+                            getListOfAllFilesFromDirectory(lsFiles, sDirectory, true /*bSearchRecursively*/,
+                                                           sSearchPattern,
+                                                           bVerbose);
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.debug("Error in getListOfAllFilesFromDirectory {0}", ex.Message);
+            }
+        }
+
+        public static List<String> getListOfAllDirectoriesFromDirectory(String startDirectory, bool searchRecursively)
+        {
+            return getListOfAllDirectoriesFromDirectory(startDirectory, searchRecursively, "");
+        }
+
+        public static List<String> getListOfAllDirectoriesFromDirectory(String sStartDirectory, bool bSearchRecursively,
+                                                                        String sSearchPattern)
+        {
+            var lsDirectories = new List<string>();
+            getListOfAllDirectoriesFromDirectory(lsDirectories, sStartDirectory, bSearchRecursively, sSearchPattern,
+                                                 false /*verbose*/);
+            return lsDirectories;
+        }
+
+        public static void getListOfAllDirectoriesFromDirectory(List<String> lsDirectories, String sStartDirectory,
+                                                                bool bSearchRecursively, String sSearchPattern,
+                                                                bool bVerbose)
+        {
+            try
+            {
+                sStartDirectory = sStartDirectory.Trim();
+                if (Directory.Exists(sStartDirectory))
+                {
+                    if (sSearchPattern == "")
+                        lsDirectories.AddRange(Directory.GetDirectories(sStartDirectory));
+                    else
+                    {
+                        String[] asDirectoryMatches = Directory.GetDirectories(sStartDirectory, sSearchPattern);
+                        if (bVerbose)
+                            foreach (String sDirectory in asDirectoryMatches)
+                                DI.log.debug("File matched filter: {0}", sDirectory);
+                        lsDirectories.AddRange(asDirectoryMatches);
+                    }
+                    if (bSearchRecursively)
+                        foreach (String sDirectory in Directory.GetDirectories(sStartDirectory))
+                            getListOfAllDirectoriesFromDirectory(lsDirectories, sDirectory, true /*bSearchRecursively*/,
+                                                                 sSearchPattern, bVerbose);
+                }
+                else
+                    DI.log.debug("Directory does not exist: {0}", sStartDirectory);
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("Error in getListOfAllDirectoriesFromDirectory {0}", ex.Message);
+            }
+        }
+
+        public static List<String> findFiles(String sPathToFolder, String sFilter)
+        {
+            DI.log.debug("Discovering all files that match the pattern: {0} in the directory: {1}", sFilter,
+                         sPathToFolder);
+            List<String> lsFiles = getFiles(sPathToFolder, sFilter);
+            DI.log.debug("{0} Files Found", lsFiles.Count);
+            foreach (String sFile in lsFiles)
+                DI.log.info(sFile);
+            return lsFiles;
+        }
+
+        public static void saveAsFile_StringList(String sFileToSave, List<String> lsFileContents)
+        {
+            try
+            {
+                var swStreamWriter = new StreamWriter(sFileToSave);
+                foreach (String sLine in lsFileContents)
+                    swStreamWriter.WriteLine(sLine);
+                swStreamWriter.Close();
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("Error in saveAsFile_StringList {0}", ex.Message);
+            }
+        }
+
+        public static List<String> getFiles(String sPath, String sFilter)
+        {
+            var lsFiles = new List<String>();
+            getListOfAllFilesFromDirectory(lsFiles, sPath, true, sFilter, false);
+            return lsFiles;
+        }
+
+        public static List<String> getFileLines(String sFileToOpen)
+        {
+            FileStream fs = null;
+            StreamReader sr = null;
+            var lsFileLines = new List<string>();
+            //var sbFileContents = new StringBuilder();
+            try
+            {
+                fs = File.OpenRead(sFileToOpen);
+                sr = new StreamReader(fs);
+                while (false == sr.EndOfStream)
+                    lsFileLines.Add(sr.ReadLine());
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("Error in getFileLines {0}", ex.Message);
+            }
+            if (sr != null)
+                sr.Close();
+            if (fs != null)
+                fs.Close();
+            return lsFileLines;
+        }
+
+        public static byte[] getFileContentsAsByteArray(string sFileToOpen)
+        {
+            if (false == File.Exists(sFileToOpen))
+                return null;            
+            StreamReader sr = null;            
+            try
+            {
+                FileStream fs = File.OpenRead(sFileToOpen);
+                var fileContents = new byte[fs.Length];
+                fs.Read(fileContents, 0, fileContents.Length);
+                return fileContents;                
+            }
+            catch(Exception ex)
+            {
+                DI.log.ex(ex, "in getFileContentsAsByteArray");
+                return null;
+            }
+        }       
+
+        public static string getFileContents(string sFileToOpen)
+        {
+            if (false == File.Exists(sFileToOpen))
+                return "";
+            FileStream fs = null;
+            StreamReader sr = null;
+            string strContent = "";
+            try
+            {
+                fs = File.OpenRead(sFileToOpen);
+                sr = new StreamReader(fs);
+                strContent = sr.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("Error GetFileContent {0}", ex.Message);
+            }
+            if (sr != null)
+                sr.Close();
+            if (fs != null)
+                fs.Close();
+            return strContent;
+        }
+
+        public static bool WriteFileContent(string targetFile, string newFileContent)
+        {
+            return WriteFileContent(targetFile, newFileContent, false);
+        }
+
+        public static bool WriteFileContent(string targetFile, string newFileContent, bool dontWriteIfTargetFileIsTheSameAsString)
+        {
+            if (File.Exists(targetFile) && dontWriteIfTargetFileIsTheSameAsString)
+            {
+                var existingFileContents = getFileContents(targetFile);
+                if (existingFileContents == newFileContent)
+                    return true;
+            }
+            return WriteFileContent(targetFile, new UTF8Encoding(true).GetBytes(newFileContent));
+        }
+
+        public static bool WriteFileContent(string strFile, Byte[] abBytes)
+        {
+            try
+            {
+                if (File.Exists(strFile))
+                    deleteFile(strFile);
+
+                using (FileStream fs = File.Create(strFile))
+                {
+                    fs.Write(abBytes, 0, abBytes.Length);
+                    fs.Close();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("Error WriteFileContent {0}", ex.Message);
+            }
+            return false;
+        }
+
+
+        public static String checkIfDirectoryExistsAndCreateIfNot(String directory, bool deleteFiles)
+        {
+            checkIfDirectoryExistsAndCreateIfNot(directory);
+            if (deleteFiles)
+                deleteAllFilesFromDir(directory);
+            return directory;
+        }
+
+        public static String checkIfDirectoryExistsAndCreateIfNot(String directory)
+        {
+            try
+            {
+                if (Directory.Exists(directory))
+                    return directory;
+                Directory.CreateDirectory(directory);
+                if (Directory.Exists(directory))
+                    return directory;
+            }
+            catch (Exception e)
+            {
+                DI.log.error("Could not create directory: {0} ({1})", directory, e.Message);
+            }
+            return "";
+        }
+
+        /*   public static List<String> loadSourceFileIntoList(String sPathToSourceCodeFile)
+        {
+            var lsSourceCode = new List<string>();
+            String sFileContents = getFileContents(sPathToSourceCodeFile);
+            if (sFileContents != "")
+            {
+                sFileContents = sFileContents.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
+                // fix the files only use \n for line breaks
+                lsSourceCode.AddRange(sFileContents.Split(new[] {Environment.NewLine}, StringSplitOptions.None));
+            }
+            return lsSourceCode;
+        }*/
+
+        public static List<String> loadSourceFileIntoList(String pathToSourceCodeFile)
+        {
+            return loadSourceFileIntoList(pathToSourceCodeFile, true);
+        }
+
+        public static List<String> loadLargeSourceFileIntoList(String pathToSourceCodeFile, bool useFileCacheIfPossible)
+        {
+            if (DI.dFilesLines.ContainsKey(pathToSourceCodeFile))
+                return DI.dFilesLines[pathToSourceCodeFile];
+            var lsSourceCode = new List<string>();
+            
+            TextReader textReader = new StreamReader(pathToSourceCodeFile);
+            var itemsProcessed = 0;
+            while (textReader.Peek() > 0)
+            {                
+                lsSourceCode.Add(textReader.ReadLine());
+                if (itemsProcessed++ % 100000 == 0)
+                    DI.log.info("in loadLargeSourceFileIntoList, # lines loaded so far :{0}", itemsProcessed);
+            }
+            DI.log.info("in loadLargeSourceFileIntoList, total # lines loaded:{0}", itemsProcessed);
+            textReader.Close();
+            DI.dFilesLines.Add(pathToSourceCodeFile, lsSourceCode);
+            return lsSourceCode;
+        }
+
+        public static List<String> loadSourceFileIntoList(String pathToSourceCodeFile, bool useFileCacheIfPossible)
+        {
+            if (useFileCacheIfPossible && DI.dFilesLines.ContainsKey(pathToSourceCodeFile))
+                return DI.dFilesLines[pathToSourceCodeFile];
+            // in case the file is a reference, try to map it
+            string mappedSourceCodeFile = SourceCodeMappingsUtils.mapFile(pathToSourceCodeFile);
+            var lsSourceCode = new List<string>();
+            string sFileContents = getFileContents(mappedSourceCodeFile);
+            if (sFileContents != "")
+            {
+                sFileContents = sFileContents.Replace("\r\n", "\n").Replace("\n", Environment.NewLine);
+                // fix the files only use \n for line breaks
+                lsSourceCode.AddRange(sFileContents.Split(new[] {Environment.NewLine}, StringSplitOptions.None));
+                if (false == DI.dFilesLines.ContainsKey(pathToSourceCodeFile))
+                    DI.dFilesLines.Add(pathToSourceCodeFile, lsSourceCode);
+                else
+                    DI.dFilesLines[pathToSourceCodeFile] = lsSourceCode;
+            }            
+            return lsSourceCode;
+        }
+
+        public static String getLineFromSourceCode(string pathToSourceCodeFile, UInt32 uLineNumber)
+        {
+            return getLineFromSourceCode(pathToSourceCodeFile, uLineNumber, true);
+        }
+
+        public static String getLineFromSourceCode(string pathToSourceCodeFile, UInt32 uLineNumber, bool useFileCacheIfPossible)
+        {
+            return getLineFromSourceCode(uLineNumber, loadSourceFileIntoList(pathToSourceCodeFile, useFileCacheIfPossible));
+        }
+
+        public static String getLineFromSourceCode(UInt32 uLineNumber, List<String> lsSourceCode)
+        {
+            if (uLineNumber > 0 && uLineNumber < lsSourceCode.Count)
+                return lsSourceCode[(int) uLineNumber - 1];
+            if (lsSourceCode.Count >0)
+                DI.log.error("In getLineFromSourceCode uLineNumeber==0 || uLineNumber >= lsSourceCode.Count");
+            return "";
+        }
+
+
+        public static void copyFolder(string sourceFolder, string targetFolder)
+        {
+            copyFolder(sourceFolder, targetFolder, true /*copyRecursively*/);
+        }
+
+        public static void copyFolder(string sourceFolder, string targetFolder, bool copyRecursively)
+        {
+            if (false == Directory.Exists(sourceFolder))
+                DI.log.error("in copyFolder , sourceFolder doesn't exist: {0}", sourceFolder);
+            else if (false == Directory.Exists(targetFolder))
+                DI.log.error("in copyFolder , targetFolder doesn't exist: {0}", targetFolder);
+            else
+            {
+                List<string> foldersToCreate = getListOfAllDirectoriesFromDirectory(sourceFolder, copyRecursively);
+                foldersToCreate.Add(sourceFolder);
+                //var filesToCopy = getListOfAllFilesFromDirectory(sourceFolder, copyRecursively);
+                foreach (string folder in foldersToCreate)
+                {
+                    string folderToCopyFiles = targetFolder + folder.Replace(Path.GetDirectoryName(sourceFolder), "");
+                    if (false == Directory.Exists(folderToCopyFiles))
+                        Directory.CreateDirectory(folderToCopyFiles);
+
+                    List<string> filesToCopy = getListOfAllFilesFromDirectory(folder, false /*searchRecursively*/);
+                    foreach (string file in filesToCopy)
+                        Copy(file, folderToCopyFiles);
+                }
+            }
+        }
+
+        public static String getFileSaveDateTime_Now()
+        {
+            String sFileSafeNowDateTime = " (" + DateTime.Now.ToShortDateString() + "," +
+                                          DateTime.Now.ToShortTimeString() + ") ";
+            sFileSafeNowDateTime = sFileSafeNowDateTime.Replace("/", "_").Replace(":", "_");
+            return sFileSafeNowDateTime;
+        }
+
+        /*public static long getFileSize(string assessmentRunFileToImport)
+        {
+            if (!File.Exists(assessmentRunFileToImport))
+                return -1;
+            var fileInfo = new FileInfo(assessmentRunFileToImport);
+            return fileInfo.Length;
+        }*/
+
+        public static string getSafeFileNameString(string stringToParse)
+        {
+           var validCharsRegEx = @"[A-Z]|[a-z]|[0-9]|[\(\)\s]";
+
+            var safeSring = new StringBuilder(stringToParse);
+            for(int i=0; i<safeSring.Length;i++)
+            {
+                if (false == RegEx.findStringInString(safeSring[i].ToString(), validCharsRegEx))
+                {
+                    var cc = safeSring[i];
+                    safeSring[i] = '_';
+                }
+            }               
+            return safeSring.ToString();
+        }
+
+        public static bool deleteFiles(List<string> filesToDelete, bool askUserForConfirmation)
+        {            
+            if (DialogResult.Yes == MessageBox.Show(
+                                        String.Format("Are you sure you want to delete {0} file(s)", filesToDelete.Count),
+                                        "Delete Files", MessageBoxButtons.YesNo))
+            {
+                DI.log.debug("Deleting {0} files", filesToDelete.Count);
+                foreach (var fileToDelete in filesToDelete)
+                    deleteFile(fileToDelete);
+                return true;
+            }
+            return false;
+        }
+
+        public static long getFilesSize(List<string> filesToProcess)
+        {
+            long filesSize = 0;
+            foreach (var file in filesToProcess)
+            {
+                string mappedSourceCodeFile = SourceCodeMappingsUtils.mapFile(file);
+                if (File.Exists(mappedSourceCodeFile))
+                {
+                    var fileInfo = new FileInfo(mappedSourceCodeFile);
+                    filesSize += fileInfo.Length;
+                }
+            }
+            return (filesSize == 0) ? -1 : filesSize;
+        }
+
+        public static long getFileSize(string fileToProcess)
+        {
+            string mappedSourceCodeFile = SourceCodeMappingsUtils.mapFile(fileToProcess);
+            if (File.Exists(mappedSourceCodeFile))
+            {
+                var fileInfo = new FileInfo(mappedSourceCodeFile);
+                return fileInfo.Length;
+            }
+            return -1;
+        }
+
+        public static bool createFile_IfItDoesntExist(string pathToFileToCreate, object fileContents)
+        {
+            try
+            {
+                if (false == File.Exists(pathToFileToCreate))
+                {
+                    if (fileContents.GetType() == typeof(byte[]))
+                        WriteFileContent(pathToFileToCreate, (byte[])fileContents);
+                    else
+                        WriteFileContent(pathToFileToCreate, fileContents.ToString());                    
+                }
+                return File.Exists(pathToFileToCreate);
+
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex);
+                return false;
+            }            
+        }
+
+        public static bool IsExtension(string pathToFile, string extentionToCheck)
+        {
+            if (String.IsNullOrEmpty(extentionToCheck))
+                return false;
+            if (extentionToCheck[0] != '.')   // check if the first char is a dot (.)
+                extentionToCheck = "." + extentionToCheck;
+            return Path.GetExtension(pathToFile) == extentionToCheck;            
+        }
+    }
+}

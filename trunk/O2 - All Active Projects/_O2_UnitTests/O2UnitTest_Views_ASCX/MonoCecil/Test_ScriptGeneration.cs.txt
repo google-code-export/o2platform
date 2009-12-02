@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Microsoft.CSharp;
+using Mono.Cecil.Cil;
+using NUnit.Framework;
+
+using System.IO;
+using System.Reflection;
+
+namespace O2.core._UnitTests.Test_MonoCecil
+{
+    [TestFixture]
+    public class Test_ScriptGeneration
+    {
+        [Test]
+        public void testCSharpScriptCreation()
+        {
+            var testScript = new CreateTestExe().createBasicHelloWorldExe().save();
+            Assert.IsTrue(File.Exists(testScript), "Test script was not created");
+            var assembly = Assembly.LoadFile(testScript);
+            Assert.IsTrue(assembly != null, "could not load assembly file: {0}", assembly);
+            var types = StringsAndLists.getStringListFromList(CecilCecilUtils.getMethods(testScript));
+            Assert.IsTrue(types[0] == "System.Void BasicTest.Program::Main()", "Main Type");
+
+        }
+    }
+}

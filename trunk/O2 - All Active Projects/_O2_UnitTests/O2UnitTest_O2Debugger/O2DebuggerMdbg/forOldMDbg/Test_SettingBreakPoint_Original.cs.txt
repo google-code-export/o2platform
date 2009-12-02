@@ -1,0 +1,101 @@
+﻿using System.Reflection;
+using System.Threading;
+using NUnit.Framework;
+using O2.Debugger.Mdbg.corapi;
+using O2.Debugger.Mdbg.Debugging.CorDebug;
+using O2.Debugger.Mdbg.Debugging.MdbgEngine;
+using O2.External.O2Mono.MonoCecil;
+
+namespace O2.UnitTests.O2Debugger.O2DebuggerMdbg
+{
+    [TestFixture]
+    public class Test_SettingBreakPoint_Original
+    {
+        private static void CorProcess_OnBreakpoint(object sender, CorBreakpointEventArgs e)
+        {
+            var corFunctionBreakpoint = (CorFunctionBreakpoint) e.Breakpoint;
+
+            var corMetadataImport = new CorMetadataImport(corFunctionBreakpoint.Function.Class.Module);
+            // can also get from e.Thread.ActiveChain.ActiveFrame.Function.Class.Module);
+            MethodInfo methodInfo = corMetadataImport.GetMethodInfo(corFunctionBreakpoint.Function.Token);
+            // can also get from e.Thread.ActiveChain.ActiveFrame.Function.Token);
+
+            DI.log.debug("At Breakpoint!");
+            //DI.log.debug("  At Module :{0}", methodInfo.Module.Name);   // not implemented in the original mdbg code base
+            //DI.log.debug("  At Type :{0}", methodInfo.ReflectedType.Name); // not implemented in the original mdbg code base           
+            DI.log.debug("  At method :{0}", methodInfo.Name);
+            DI.log.debug("  Offset: {0}", corFunctionBreakpoint.Offset);
+            DI.log.debug("  function Token {0}", corFunctionBreakpoint.Function.Token);
+            DI.log.debug("Continuing execution");
+
+            e.Continue = true;
+        }
+
+
+        private static void CorProcess_OnAssemblyLoad(object sender, CorAssemblyEventArgs e)
+        {
+            DI.log.info("loading assembly {0}", e.Assembly.Name);
+            //e.Controller.
+        }
+
+
+        private static void CorProcess_OnClassLoad(object sender, CorClassEventArgs e)
+        {
+            DI.log.info("loading class {0} {1}", e.Class.Token, e.Class.GetType().Name);
+        }
+
+
+        private static void CorProcess_OnModuleLoad(object sender, CorModuleEventArgs e)
+        {
+            //var mdbgProcess = ((MDbgProcess) sender);
+            DI.log.info("loading module {0}", e.Module.Name);
+
+            // I used the code below to figure out how the breakpoints work, but we can set if as soon as we have an mdbgProcess object
+
+            /*if (e.Module.Name == @"C:\O2\_temp\JetBrains.ReSharper.TaskRunner\BasicHelloWorld");
+            {
+                DI.log.info("in the right module,let add the breakpoint");
+                var moduleName = e.Module.Name;
+
+                var mDbgBreakpoint = mdbgProcess.Breakpoints.CreateBreakpoint(@"C:\O2\_temp\JetBrains.ReSharper.TaskRunner\BasicHelloWorld", "BasicTest.Program", "Main", 0);
+                foreach(MDbgModule mDbgModule  in mdbgProcess.Modules)
+                {
+                    if (mDbgModule.CorModule == e.Module)
+                    {
+                        mDbgBreakpoint.BindToModule(mDbgModule);
+                    }
+                }            
+            } */
+        }
+
+        [Test]
+        public void Test_AddBreakPointAtMain()
+        {
+            string exeToStart = new CreateTestExe().createBasicHelloWorldExe(true).save(DI.config.O2TempDir,
+                                                                                        "withBreakpoint_" +
+                                                                                        CreateTestExe.exeName);
+            MethodInfo mainMethod = DI.reflection.getMethod(exeToStart, "Main", new object[0]);
+            Assert.That(mainMethod != null, "mainMethod was null");
+            DI.log.info("{0}", mainMethod);
+
+            MDbgProcess mdbgProcess = new MDbgEngine().CreateProcess(exeToStart, "", DebugModeFlag.Debug, null);
+
+            // we can add the break point here
+            mdbgProcess.Breakpoints.CreateBreakpoint(@"C:\O2\_temp\JetBrains.ReSharper.TaskRunner\BasicHelloWorld",
+                                                     "BasicTest.Program", "Main", 0);
+
+            mdbgProcess.CorProcess.OnModuleLoad += CorProcess_OnModuleLoad;
+            mdbgProcess.CorProcess.OnClassLoad += CorProcess_OnClassLoad;
+            mdbgProcess.CorProcess.OnAssemblyLoad += CorProcess_OnAssemblyLoad;
+            //mdbgProcess.CorProcess.OnBreak += new CorThreadEventHandler(CorProcess_OnBreak);
+            mdbgProcess.CorProcess.OnBreakpoint += CorProcess_OnBreakpoint;
+            //mdbgProcess.CorProcess.OnBreakpointSetError += new BreakpointEventHandler(CorProcess_OnBreakpointSetError);
+
+            mdbgProcess.Go();
+
+            Thread.Sleep(20000);
+            //var process = Process.GetProcessById(mdbgProcess.CorProcess.Id);
+            //process.WaitForExit();
+        }
+    }
+}

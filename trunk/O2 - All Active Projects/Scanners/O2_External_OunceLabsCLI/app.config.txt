@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key="DefaultPathToOunceInstallDir" value="C:\Program files\Ounce Labs"/>
+    <add key="OunceCoreLogin_UserName" value="admin"/>
+    <add key="OunceCoreLogin_Password" value=""/>
+    <add key="OunceCoreLogin_IPAddress" value="127.0.0.1"/>    
+  </appSettings>
+</configuration>

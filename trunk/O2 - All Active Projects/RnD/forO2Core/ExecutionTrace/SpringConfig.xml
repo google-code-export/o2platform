@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net" >
+  <object id="myStartWithAscx" type="o2.SpringNet.StartWithAscx, SpringNet">
+    <property name="sFormTitle" value="O2 DotNet Execution Trace"/>
+    <property name="tAscxType" value=" o2.ExecutionTrace.ascx_ExecutionTrace" />
+  </object>
+  
+  <object id="DemoDataConfig" type="o2.ExecutionTrace.ascx_ExecutionTrace">
+    <!--<property name="sDirectoryToMonitor" value ="C:\O2\_temp\VSTestHost\O2_CSharpScripts\o2.AspectDngHook.dll_CallLogs"/>    -->
+    <property name="sDirectoryToMonitor" value ="C:\O2\_temp\VSTestHost\o2.AspectDngHook.dll_CallLogs"/>
+    <property name="lsStackMethodsToFilter">    
+      <list element-type="String">                  
+        <value>   at o2.AspectDngHook.DngAspect.Log(OperationJoinPoint ojpOperationJoinPoint, Object oReturnData)</value>
+        <value>   at o2.AspectDngHook.DngAspect.AroundCallFilter(OperationJoinPoint ojpOperationJoinPoint)</value>                  
+        <value>   at o2.AspectDngHook.DngAspect.AroundBodyFilter(OperationJoinPoint ojpOperationJoinPoint)</value>        
+        <value>   at System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct&amp; sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)</value>
+        <value>   at System.RuntimeMethodHandle.InvokeMethodFast(Object target, Object[] arguments, Signature sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)</value>
+        <value>   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)</value>
+        <value>   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</value>
+        <value>   at DotNetGuru.AspectDNG.Joinpoints.MethodJoinPoint.ProceedImpl()</value>
+        <value>   at DotNetGuru.AspectDNG.Joinpoints.JoinPoint.Proceed()</value>
+      </list>
+      
+    </property>
+  </object>
+</objects>

@@ -1,0 +1,482 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Windows.Forms;
+
+using O2.o2AppDomainProxy;
+
+namespace O2.core.O2Core.O2Environment
+{
+    public class MessageBuilder
+    {
+        #region messagePriority enum
+
+        public enum messagePriority
+        {
+            High,
+            Normal,
+            Low
+        }
+
+        #endregion
+
+        public static List<BindingFlags> getSupportedActions()
+        {
+            var lbfActions = new List<BindingFlags>
+                                 {
+                                     BindingFlags.CreateInstance,
+                                     BindingFlags.GetProperty,
+                                     BindingFlags.GetField,
+                                     BindingFlags.CreateInstance
+                                 };
+            return lbfActions;
+        }
+
+        public static object addMessageToQueueAndExecuteItNow(Message fmMessageToAdd)
+        {
+            if (fmMessageToAdd.bReadyForExecution)
+                try
+                {
+                    DI.log.debug("executing Method: {0} with #{1} params", fmMessageToAdd.miTargetMethod,
+                                    fmMessageToAdd.oMethodParameters.Count);
+                    Object oReturnData =
+                        fmMessageToAdd.miTargetMethod.Invoke(fmMessageToAdd.oLiveObjectForMethodExecution,
+                                                             fmMessageToAdd.oMethodParameters.ToArray());
+                    if (fmMessageToAdd.sVarToStoreReturnData != null)
+                        vars.set_(fmMessageToAdd.sVarToStoreReturnData, oReturnData);
+                    return oReturnData;
+                }
+                catch (Exception ex)
+                {
+                    DI.log.error("In addMessageToQueueAndExecuteItNow: {0}", ex.Message);
+                    if (ex.InnerException != null)
+                    {
+                        DI.log.error("   InnerException(1): {0}", ex.InnerException.Message);
+                        if (ex.InnerException.InnerException != null)
+                            DI.log.error("      InnerException(2): {0}", ex.InnerException.InnerException.Message);
+                    }
+                    fmMessageToAdd.sMessageFormatErrors = ex.Message;
+                }
+            else
+                fmMessageToAdd.sMessageFormatErrors = "Message was not ready for execution";
+            return null;
+        }
+
+
+        // use a temp message to resolve an Object
+        public static Object getObject(String sObjectToGet)
+        {
+            var o2TempBrokerMessage = new Message {sCommandLine = sObjectToGet};
+            o2TempBrokerMessage.resolveMessageCommandLine();
+            return o2TempBrokerMessage.oLiveObjectForMethodExecution;
+        }
+
+        #region Nested type: Message
+
+        public class Message
+        {
+            public bool bCaseSensitiveSearch;
+            public bool bIsMacro;
+            public bool bIsVar;
+            public bool bReadyForExecution;
+            public List<String> lsCodeCompleteHelpers = new List<string>();
+            public MethodInfo miTargetMethod;
+            public messagePriority mpPriority = messagePriority.Normal;
+            public Object oLiveObjectForMethodExecution;
+            public List<Object> oMethodParameters = new List<object>();
+            public String sCommandLine = "";
+            public String sCurrentResolvedSnippet = "";
+            public String sMessageFormatErrors = "";
+
+            public String sMessageStringParameter = "";
+            // this contains text after discovery of a method info (used to allow the command shell to use space as a pararameter delimiter
+
+            public String sVarToStoreReturnData;
+            // used when we want to store the object's invocation data in the var's cache
+
+            public String sVarUsedAsMainObject;
+            // this will be set when the cmd lines uses an object from a var, for example $O2Form.{class}
+
+            // UInt32 uId = 0;
+            // Uint32 uExecutionOrder
+            //List<Object> oDependencies
+            //Callbacks to fire
+            //  start
+            //  info
+            //  end
+            public Message()
+            {
+            }
+
+            public Message(String sCommandToExecute)
+            {
+                sCommandLine = sCommandToExecute;
+                resolveMessageCommandLine();
+                if (sMessageStringParameter != "")
+                    oMethodParameters.Add(sMessageStringParameter);
+            }
+
+            public Message(String sCommandToExecute, IEnumerable<object> oMethodParameters)
+            {
+                sCommandLine = sCommandToExecute;
+                resolveMessageCommandLine();
+                // parameters were submited no need for further calculations
+                if (oMethodParameters != null)
+                    this.oMethodParameters.AddRange(oMethodParameters);
+                else if (sMessageStringParameter != "")
+                    // there were no objects submited as parameters, but the sCommandToExecute had extra content
+                    if (sMessageStringParameter.Length > 0 && sMessageStringParameter[0] == '!')
+                        // handle pointer to object created by using the keychar ! (basicaly the engine will treat what is in front as an object will try to resolve it)
+                    {
+                        Object oObject = getObject(sMessageStringParameter.Substring(1));
+                        if (oObject != null)
+                            // if a valid object was resolved then use that as the parameter, if oObject = null , then add sMessageStringParameter as parameter
+                        {
+                            this.oMethodParameters.Add(oObject);
+                            return;
+                        }
+                    }
+                    else
+                        // default case where the extra text is submited as a string parameter                        
+                        this.oMethodParameters.Add(sMessageStringParameter);
+            }
+
+            /*
+        *    
+           if (fmCmdMessage.sMessageStringParameter.Length > 0 && fmCmdMessage.sMessageStringParameter[0] == '!')
+           {
+               String sObjectName = fmCmdMessage.sMessageStringParameter.Substring(1);
+               oParam = 
+               sendCurrentMessageAndUpdateTextBox(new object[] { oParam });
+           }
+        */
+
+
+            public Dictionary<String, Object> getDictionaryWithPossibleObjects_activeMdiChildForms()
+            {
+                var dPossibleObjects = new Dictionary<string, object>();
+                foreach (String sLoadedForm in GlobalStaticVars.dO2LoadedForms.Keys)
+                    dPossibleObjects.Add(sLoadedForm, GlobalStaticVars.dO2LoadedForms[sLoadedForm]);
+
+                foreach (String sType in GlobalStaticVars.dO2ExposedMethodsForDynamicInvokation.Keys)
+                    dPossibleObjects.Add(sType, GlobalStaticVars.dO2ExposedMethodsForDynamicInvokation[sType]);
+
+                //getSearchDictionary_Methods(oSender, dPossibleObjects);
+
+                // add all methods in class O2Cmd
+                foreach (
+                    MethodInfo miMethod in
+                        typeof (Cmd).GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static))
+                    dPossibleObjects.Add(miMethod.Name, miMethod);
+
+                //getSearchDictionary_Methods(oSender, dPossibleObjects);
+
+
+                return dPossibleObjects;
+            }
+
+            public void getSearchDictionary_Methods(Object oObjectToAnalyze, Dictionary<String, Object> dSearchbjects)
+            {
+                if (oObjectToAnalyze != null)
+                {
+                    Type tObjectType = oObjectToAnalyze.GetType();
+                    if ("RuntimeType" == tObjectType.Name) // means we are not refleting a live object                
+                        tObjectType = (Type) oObjectToAnalyze;
+                    foreach (
+                        MethodInfo mMethodInfo in
+                            tObjectType.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public |
+                                                   BindingFlags.Instance | BindingFlags.Static))
+                        if (false == dSearchbjects.ContainsKey(mMethodInfo.Name))
+                            // need to addcheck for supported methods
+                            dSearchbjects.Add(mMethodInfo.Name, mMethodInfo);
+                }
+            }
+
+            // see if the current Object is a Form Control and if it is get is childs controls
+            public void getSearchDictionary_FormControls(Object oObjectToAnalyze,
+                                                         Dictionary<String, Object> dSearchbjects)
+            {
+                if (oObjectToAnalyze != null)
+                {
+                    Type tObjectType = oObjectToAnalyze.GetType(); // no need to search if this is not a live object
+                    //if ("RuntimeType" == tObjectType.Name || "RuntimeMethodInfo" == tObjectType.Name)
+                    //    return;          
+
+                    if ("formGenericAscxHost" == tObjectType.Name || "Form" == tObjectType.Name ||
+                        "UserControl" == tObjectType.Name || "Control" == tObjectType.Name)
+                    {
+                        Object oControls = Reflection.getProperty("Controls", oObjectToAnalyze);
+                        if (null != oControls)
+                        {
+                            var ccControls = (Control.ControlCollection) oControls;
+                            foreach (Control cControl in ccControls)
+                                if (cControl.Name != "")
+                                    dSearchbjects.Add(cControl.Name, cControl);
+                        }
+                    }
+                }
+            }
+
+            public Dictionary<String, Object> getCodeCompleteDictionary(Object oObjectToAnalyze)
+            {
+                var dPossibleObjects = new Dictionary<string, object>();
+                getSearchDictionary_FormControls(oObjectToAnalyze, dPossibleObjects);
+                getSearchDictionary_Methods(oObjectToAnalyze, dPossibleObjects);
+                return dPossibleObjects;
+
+                /*  Dictionary<String, Object> dPossibleObjects = new Dictionary<string, object>();
+                // see if the current Object is a Form Control and if it is get is childs controls
+                Object oControls = reflection.getProperty("Controls", oObjectToAnalyze);
+                if (null != oControls)
+                {
+                    Control.ControlCollection ccControls = (Control.ControlCollection)oControls;
+                    foreach (Control cControl in ccControls)
+                        if ("" != cControl.Name)
+                            dPossibleObjects.Add(cControl.Name, cControl);
+
+                }*/
+            }
+
+            //public List<String,Object> getListOfPossibleMethods_MdiObjects()
+            //public List<String,Object> getListOfPossibleMethods_forObject()
+
+            public void updateCodeCompleteHelpers(String sCommandSnippet,
+                                                  Dictionary<String, Object> dPossibleSnippetObjects,
+                                                  bool _baseSensitiveSearch)
+            {
+                lsCodeCompleteHelpers.Clear();
+                foreach (String sLoadedForm in dPossibleSnippetObjects.Keys)
+                    if (_baseSensitiveSearch)
+                    {
+                        if (sLoadedForm.IndexOf(sCommandSnippet) > -1) // perform search sensitve search
+                            lsCodeCompleteHelpers.Add(sLoadedForm);
+                    }
+                    else if (sLoadedForm.ToLower().IndexOf(sCommandSnippet.ToLower()) > -1)
+                        // perform search insensitve search
+                        lsCodeCompleteHelpers.Add(sLoadedForm);
+            }
+
+            public void resolveMessageSnippet_recursive(String sCommandSnippet, Object oCurrentLiveObject,
+                                                        Dictionary<String, Object> dPossibleObjects)
+            {
+                // see if we have already recognized the method to execute
+                if (oCurrentLiveObject != null && "RuntimeMethodInfo" == oCurrentLiveObject.GetType().Name)
+                {
+                    bReadyForExecution = true;
+                    //  oLiveObjectForMethodExecution = oCurrentLiveObject;
+                    miTargetMethod = (MethodInfo) oCurrentLiveObject;
+                    lsCodeCompleteHelpers.Clear();
+                    if (sCurrentResolvedSnippet != "")
+                        sMessageStringParameter = sCommandLine.Replace(sCurrentResolvedSnippet, "").Trim();
+                    // the parameters are the orignal line - the resolved snippet
+                    if (oMethodParameters.Count == 0 &&
+                        sMessageStringParameter.Length > 0 &&
+                        sMessageStringParameter[0] == '$' &&
+                        GlobalStaticVars.dO2Vars.ContainsKey(sMessageStringParameter.Substring(1)))
+                    {
+                        // this case means that we are trying to pass a var as a parameter,
+                        // so lets add it to the list of method params                             
+                        oMethodParameters.Add(GlobalStaticVars.dO2Vars[sMessageStringParameter.Substring(1)]);
+                        sMessageStringParameter = "";
+                        // and clean it so that we don't also add it later (which is what happens to default string parameters
+                    }
+//                    if (sCommandLine[sCommandLine.Length - 1] == '.')
+//                        sCommandLine = sCommandLine.Substring(0, sCommandLine.Length - 1);
+                    // sCommandLine += "()";
+                    return;
+                }
+
+                // this will keep the previous object store (from the point of view the of RuntimeMethodInfo match)
+                oLiveObjectForMethodExecution = oCurrentLiveObject;
+
+                String sMethodToResolve;
+                String sRestOfSnippet;
+                if (sCommandSnippet.IndexOf('.') == -1)
+                {
+                    sMethodToResolve = sCommandSnippet;
+                    sRestOfSnippet = "";
+                }
+                else
+                {
+                    // remove the current method trailing dot on  sMethodToResolve and sCommandLine
+                    int iIndexOfFirstDot = sCommandSnippet.IndexOf('.');
+                    sMethodToResolve = sCommandSnippet.Substring(0, iIndexOfFirstDot);
+                    sRestOfSnippet = sCommandSnippet.Substring(iIndexOfFirstDot + 1);
+                }
+                // 
+                if (sMethodToResolve != "")
+                {
+                    /*        if (oCurrentLiveObject == null)
+                            {
+                                if (dPossibleObjects.ContainsKey(sMethodToResolve))
+                                {
+                                    addItemToCurrentResolvedSnippet(sMethodToResolve);
+                                    Object oNewLiveObject = dPossibleObjects[sMethodToResolve];
+                                    resolveMessageSnippet_recursive(sRestOfSnippet, oNewLiveObject, getCodeCompleteDictionary(oNewLiveObject));                         
+                                    return;
+                                }                        
+                            }
+                            else*/
+                    {
+                        String sFindingParameterSpaces = sMethodToResolve;
+                        if (false == dPossibleObjects.ContainsKey(sMethodToResolve))
+                        {
+                            int iIndexOfSpace = sFindingParameterSpaces.IndexOf(' ');
+                            if (iIndexOfSpace > -1)
+                            {
+                                if (dPossibleObjects.ContainsKey(sFindingParameterSpaces.Substring(0, iIndexOfSpace)))
+                                {
+                                    sMessageStringParameter = sFindingParameterSpaces.Substring(iIndexOfSpace);
+                                    sFindingParameterSpaces = sFindingParameterSpaces.Substring(0, iIndexOfSpace);
+                                }
+                            }
+                        }
+
+                        if (dPossibleObjects.ContainsKey(sFindingParameterSpaces))
+                        {
+                            sMessageFormatErrors = dPossibleObjects[sFindingParameterSpaces].GetType().Name;
+                            addItemToCurrentResolvedSnippet(sFindingParameterSpaces);
+                            Object oNewLiveObject = dPossibleObjects[sFindingParameterSpaces];
+                            resolveMessageSnippet_recursive(sRestOfSnippet, oNewLiveObject,
+                                                            getCodeCompleteDictionary(oNewLiveObject));
+                            return;
+                        }
+                        //        break;
+                        //  }
+                    }
+                }
+                updateCodeCompleteHelpers(sMethodToResolve, dPossibleObjects, bCaseSensitiveSearch);
+            }
+
+            // method that triggers CommandLine resolution
+            public void resolveMessageCommandLine()
+            {
+                oMethodParameters = new List<object>();
+                bReadyForExecution = false;
+                bIsMacro = false;
+                bIsVar = false;
+                oLiveObjectForMethodExecution = null;
+                sVarToStoreReturnData = null;
+                sVarUsedAsMainObject = null;
+                oMethodParameters.Clear();
+                sCurrentResolvedSnippet = ""; // this variable will contain as been resolved so far
+
+                if (sCommandLine.Length > 0 && sCommandLine[0] == '>')
+                    // handle the case where we are making reference to a macro
+                    resolveMacros();
+                else if (sCommandLine.Length > 0 && sCommandLine[0] == '$')
+                    // handle the case where we are making reference to a macro
+                    resolveVars();
+                else
+                    resolveCommandLine();
+            }
+
+            public void addItemToCurrentResolvedSnippet(String sItemToAdd)
+            {
+                if (sCurrentResolvedSnippet == "")
+                    sCurrentResolvedSnippet = sItemToAdd;
+                else
+                    sCurrentResolvedSnippet += "." + sItemToAdd;
+            }
+
+            public void onTabEvent(String sSugestedtext)
+            {
+                if (lsCodeCompleteHelpers.Count > 0)
+                    if (sCommandLine.Length > 0 && (sCommandLine[0] == '>' || sCommandLine[0] == '$'))
+                        sCommandLine = sCommandLine[0] + sSugestedtext;
+                    else
+                    {
+                        addItemToCurrentResolvedSnippet(sSugestedtext);
+                        sCommandLine = sCurrentResolvedSnippet + ".";
+                    }
+            }
+
+            public void resolveCommandLine()
+            {
+                resolveMessageSnippet_recursive(sCommandLine, null,
+                                                getDictionaryWithPossibleObjects_activeMdiChildForms());
+            }
+
+            public void resolveVars()
+            {
+                String sVariableName = sCommandLine.Substring(1).ToUpper();
+                if (sVariableName.IndexOf('=') != -1)
+                    // when we have an = in this string it means that we are doing a var assignment                 
+                {
+                    String[] sSplittedCommand = sCommandLine.Substring(1).Split(new[] {'='}, StringSplitOptions.None);
+                    if (sSplittedCommand.Length == 2)
+                    {
+                        sVarToStoreReturnData = sSplittedCommand[0];
+                        sCommandLine = sSplittedCommand[1];
+                        resolveCommandLine();
+                    }
+                    else
+                        DI.log.error(
+                            "In Message.resolveVars, there are more than 1 equal sign (=) in this query: {0}",
+                            sCommandLine.Substring(1));
+                }
+                else if (sVariableName.IndexOf('.') != -1)
+                    // when we are trying to navigate the object stored inside a variable
+                {
+                    int iIndexOfDot = sCommandLine.IndexOf('.');
+                    String sTempVariableName = sCommandLine.Substring(0, iIndexOfDot).Replace("$", "");
+                    if (GlobalStaticVars.dO2Vars.ContainsKey(sTempVariableName))
+                    {
+                        Object oVarObject = GlobalStaticVars.dO2Vars[sTempVariableName];
+                        String sTempRestOfCommand = "";
+                        int iSizeOfRestOfComment = sCommandLine.Length - iIndexOfDot;
+                        if (iSizeOfRestOfComment > 1)
+                            sTempRestOfCommand = sCommandLine.Substring(iIndexOfDot + 1, iSizeOfRestOfComment - 1);
+                        sVarUsedAsMainObject = sTempVariableName;
+                        // store it here so that the Gui knows that the base object comes from a variable
+                        sCommandLine = sTempRestOfCommand;
+                        resolveMessageSnippet_recursive(sCommandLine, oVarObject,
+                                                        getCodeCompleteDictionary(oVarObject));
+                    }
+                    else
+                        DI.log.error("In Message.resolveVars, the variable up to the first . doesnt exist: {0}",
+                                        sCommandLine.Substring(1));
+                }
+                else // the user has just start typing a var name (so he might just want to get its value
+                {
+                    lsCodeCompleteHelpers.Clear();
+
+                    foreach (String sVars in GlobalStaticVars.dO2Vars.Keys)
+                    {
+                        if (sVars.ToUpper() == sVariableName)
+                        {
+                            bReadyForExecution = true;
+                            bIsVar = true;
+                            miTargetMethod = typeof (vars).GetMethod("get");
+                            // when the user just gives the variable name just return ist value
+                            oMethodParameters = new List<object>(new Object[] {sCommandLine.Substring(1)});
+                            return;
+                        }
+                        if (sVars.ToUpper().IndexOf(sVariableName) > -1)
+                            lsCodeCompleteHelpers.Add(sVars);
+                    }
+                }
+            }
+
+            public void resolveMacros()
+            {
+                String sMacroToExecute = sCommandLine.Substring(1).ToUpper();
+                lsCodeCompleteHelpers.Clear();
+
+                foreach (String sFileName in Files.getFilesFromDir(Config.getDefaultDir_O2Macros()))
+                {
+                    if (sFileName.ToUpper() == sMacroToExecute)
+                    {
+                        bReadyForExecution = true;
+                        bIsMacro = true;
+                        return;
+                    }
+                    if (sFileName.ToUpper().IndexOf(sMacroToExecute) > -1)
+                        lsCodeCompleteHelpers.Add(sFileName);
+                }
+            }
+        }
+
+        #endregion
+    }
+}

@@ -1,0 +1,292 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9D2748F5-74AD-43CB-AA92-87F6E3E371AE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O2.Legacy.CoreLib</RootNamespace>
+    <AssemblyName>O2_Legacy_CoreLib</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Administrator\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\_Bin_%28O2_Binaries%29\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Publish to Deploy|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Publish to Deploy\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <FileAlignment>4096</FileAlignment>
+    <DebugType>Full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Evaluant.Antlr, Version=0.3.0.37313, Culture=neutral, PublicKeyToken=973cde3f1cafed03, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\Evaluant.Antlr.dll</HintPath>
+    </Reference>
+    <Reference Include="Evaluant.NLinq.Memory.o2.1.x, Version=1.0.1.31291, Culture=neutral, PublicKeyToken=973cde3f1cafed03, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\Evaluant.NLinq.Memory.o2.1.x.dll</HintPath>
+    </Reference>
+    <Reference Include="Evaluant.NLinq.o2.1.x, Version=1.0.1.30836, Culture=neutral, PublicKeyToken=973cde3f1cafed03, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\Evaluant.NLinq.o2.1.x.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.TextEditor, Version=3.0.0.3683, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\ICSharpCode.TextEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Utils.Zip, Version=1.4.0.3, Culture=neutral, PublicKeyToken=c551e179877da246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\Ionic.Utils.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ascx\Utils\ascx_Unzip.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\Utils\ascx_Unzip.Designer.cs">
+      <DependentUpon>ascx_Unzip.cs</DependentUpon>
+    </Compile>
+    <Content Include="codeToReimplement.cs.txt" />
+    <Compile Include="DI.cs" />
+    <Compile Include="Ascx\DataViewers\ascx_Image.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_Image.Designer.cs">
+      <DependentUpon>ascx_Image.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_ObjectSerialize.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_ObjectSerialize.Designer.cs">
+      <DependentUpon>ascx_ObjectSerialize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_PropertyGrid.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_PropertyGrid.Designer.cs">
+      <DependentUpon>ascx_PropertyGrid.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_RichTextEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_RichTextEditor.Designer.cs">
+      <DependentUpon>ascx_RichTextEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_testsViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_testsViewer.Designer.cs">
+      <DependentUpon>ascx_testsViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_TextEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_TextEditor.Designer.cs">
+      <DependentUpon>ascx_TextEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_TreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_TreeView.Designer.cs">
+      <DependentUpon>ascx_TreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_WebBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\DataViewers\ascx_WebBrowser.Designer.cs">
+      <DependentUpon>ascx_WebBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="O2Environment\Cmd.cs" />
+    <Compile Include="O2Environment\O2CorLibConfig.cs" />
+    <Compile Include="O2Environment\GlobalStaticVars.cs" />
+    <Compile Include="Resources\Resources_Icons.cs" />
+    <Compile Include="Resources\Resources_Icons.Designer.cs">
+      <DependentUpon>Resources_Icons.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="xsd\CallTraces.cs">
+      <DependentUpon>CallTraces.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="xsd\mdiControls.cs">
+      <DependentUpon>mdiControls.xsd</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ascx\DataViewers\ascx_Image.resx">
+      <DependentUpon>ascx_Image.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\DataViewers\ascx_ObjectSerialize.resx">
+      <DependentUpon>ascx_ObjectSerialize.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\DataViewers\ascx_PropertyGrid.resx">
+      <DependentUpon>ascx_PropertyGrid.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\DataViewers\ascx_RichTextEditor.resx">
+      <DependentUpon>ascx_RichTextEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\DataViewers\ascx_testsViewer.resx">
+      <DependentUpon>ascx_testsViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\DataViewers\ascx_TextEditor.resx">
+      <DependentUpon>ascx_TextEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\DataViewers\ascx_TreeView.resx">
+      <DependentUpon>ascx_TreeView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\DataViewers\ascx_WebBrowser.resx">
+      <DependentUpon>ascx_WebBrowser.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\Utils\ascx_Unzip.resx">
+      <DependentUpon>ascx_Unzip.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resources_Icons.resx">
+      <DependentUpon>Resources_Icons.cs</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources_Icons.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="xsd\Assessment.xsd" />
+    <None Include="xsd\CallTraces.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="xsd\CallTraces.xsx">
+      <DependentUpon>CallTraces.xsd</DependentUpon>
+    </None>
+    <None Include="xsd\mdiControls.xsd">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="xsd\mdiControls.xsx">
+      <DependentUpon>mdiControls.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_O2Mono\O2_External_O2Mono.csproj">
+      <Project>{F457A7EB-A573-41BB-BC12-61ABE5ACF702}</Project>
+      <Name>O2_External_O2Mono</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
+      <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
+      <Name>O2_External_WinFormsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_Core_CIR\O2_Core_CIR.csproj">
+      <Project>{F19ED2FE-8191-4534-8DAC-4C42DEE87B52}</Project>
+      <Name>O2_Core_CIR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_Kernel\O2 Kernel.csproj">
+      <Project>{F84A06BA-48C8-42E5-A70A-1E737E7A735F}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_Views_ASCX\O2_Views_ASCX.csproj">
+      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
+      <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="O2Environment\Exec.cs.txt" />
+    <Content Include="O2Environment\MessageBroker.cs.txt" />
+    <Content Include="O2Environment\Messages.cs.txt" />
+    <Content Include="O2Environment\RemoteAccess.cs.txt" />
+    <Content Include="O2Environment\SetupEnv.cs.txt" />
+    <Content Include="O2Environment\TcpServer.cs.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IDefaultImplementation\" />
+    <Folder Include="OunceLabs\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

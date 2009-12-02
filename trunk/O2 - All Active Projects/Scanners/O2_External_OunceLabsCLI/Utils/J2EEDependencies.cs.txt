@@ -1,0 +1,34 @@
+//using System;
+//using O2.Views.ASCX.SourceCodeEdit;
+
+namespace O2.Scanner.OunceLabsCLI.Utils
+{
+    public class J2EE
+    {
+        /*public static void Resolve_PackageAndClass(ascx_SourceCodeEditor asceSourceCode, ref String sNamespace,
+                                                   ref String sClass)
+        {
+            // remove dependences from ICharpCode (or build a wrapper to the required funcionality on O2CoreLib)
+            /*for (int iLine = 0; iLine < asceSourceCode.getObject_TextEditorControl().Document.TotalNumberOfLines - 1; iLine++)
+            {
+                String sLine = ICSharpCode.TextEditor.Document.TextUtilities.GetLineAsString(asceSourceCode.getObject_TextEditorControl().Document, iLine);
+                ICSharpCode.TextEditor.Document.LineSegment lsLineSegment = asceSourceCode.getObject_TextEditorControl().Document.GetLineSegment(iLine);
+
+                int iWordIndex = 0;
+                foreach (ICSharpCode.TextEditor.Document.TextWord twTextWord in lsLineSegment.Words)
+                {
+                    if (sNamespace == "" && twTextWord.Word == "package")
+                        sNamespace = sLine.Replace("package", "").Replace(";", ""); ;
+                    //sNamespace = lsLineSegment.Words[iWordIndex++].Word;
+                    if (sClass == "" && twTextWord.Word == "class")
+                    {
+                        iWordIndex += 2;
+                        sClass = lsLineSegment.Words[iWordIndex].Word;
+                        break;
+                    }
+                    iWordIndex++;
+                }
+            }* /
+        }*/
+    }
+}

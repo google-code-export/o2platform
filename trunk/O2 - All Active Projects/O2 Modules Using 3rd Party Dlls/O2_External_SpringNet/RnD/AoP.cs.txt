@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using AopAlliance.Intercept;
+
+namespace O2.SpringNet
+{    
+   /* public class AoP
+    {
+        public class DebugInterceptor : IMethodInterceptor
+        {
+            public object Invoke(IMethodInvocation invocation)
+            {
+                Console.WriteLine("Before: " + invocation.Method.ToString());
+                object rval = invocation.Proceed();
+                Console.WriteLine("After:  " + invocation.Method.ToString());
+                return rval;
+            }
+
+        }
+    }*/
+}

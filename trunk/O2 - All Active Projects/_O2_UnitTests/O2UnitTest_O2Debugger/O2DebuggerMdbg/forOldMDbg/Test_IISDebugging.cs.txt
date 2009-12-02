@@ -1,0 +1,36 @@
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using NUnit.Framework;
+using O2.Debugger.Mdbg.O2Debugger.Objects;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
+
+namespace O2.UnitTests.O2Debugger.O2DebuggerMdbg
+{
+    [TestFixture]
+    public class Test_IISDebugging
+    {
+        [Test]
+        public void FindIISManagedProcessW3WPAndShowAppDomainAndModuleInfo()
+        {
+            List<Process> w3wpProcesses = Processes.getProcessesCalled("w3wp");
+            if (w3wpProcesses.Count == 0)
+                Assert.Ignore("No w3wp processes found");
+            O2MDbg_OLD.execSync((w3wpProcesses[0].Id), o2MDbg =>
+                                                       {
+                                                           DI.log.info("on IIS Debug");
+                                                           //DI.log.info("There are {0} threads here");//,
+                                                           //o2MDbgOLD.getThreads().Count);
+
+                                                           DI.log.info(
+                                                               "\n\n **** there are {0} appDomains in this process ****",
+                                                               o2MDbg.getAppDomains().Count);
+                                                           StringsAndLists.showListContents(o2MDbg.getAppDomains());
+                                                           DI.log.debug("\n\n****there are {0} modules in this process",
+                                                                        o2MDbg.getModules().Count);
+                                                           StringsAndLists.showListContents(o2MDbg.getModules());
+                                                           return true;
+                                                       });
+        }
+    }
+}

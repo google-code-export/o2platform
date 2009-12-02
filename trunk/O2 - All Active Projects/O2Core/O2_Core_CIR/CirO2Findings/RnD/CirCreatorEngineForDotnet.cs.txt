@@ -1,0 +1,408 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using Mono.Cecil;
+using O2.Core.CIR;
+using O2.Core.CIR.Xsd;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Filters;
+using O2.External.O2Mono.MonoCecil;
+
+namespace O2.Core.CIR.CirCreator
+{
+    public class CirCreatorEngineForDotnet
+    {
+        public Dictionary<String, Assembly> dLoadedAssemlies = new Dictionary<string, Assembly>();
+
+        public int iSymbolNumber;
+
+        public String getNextUniqueSymbolNumber()
+        {
+            return "0x" + Convert.ToString(iSymbolNumber++, 16);
+        }
+
+        public String createCirForAssembly(String sAssemblyToProcess)
+        {
+            return createCirForAssembly(sAssemblyToProcess, "");//, new List<String>());
+        }
+
+        public String createCirForAssembly(String sAssemblyToProcess, String sFilter) //List<String> lsReferencedDlls)
+        {
+            try
+            {
+                DI.log.info("Creating CirData file for assembly: {0}", sAssemblyToProcess);
+                var assembly = CecilUtils.getAssembly(sAssemblyToProcess);
+                CommonIRDump cirCommonCirDump = createCirForAssembly(assembly, sFilter);
+              //  Assembly aAssembly = new AssemblyLoader(sAssemblyToProcess, lsReferencedDlls).loadAssembly();
+              //  CommonIRDump cirCommonCirDump = createCirForAssembly(aAssembly, sFilter);
+              //  return saveCirDumpObject(cirCommonCirDump);
+                return null;
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in createCirForAssembly: {0}", ex.Message);
+                return "";
+            }
+        }
+
+        public void loadReferencedAssemblies(Assembly aAssembly, List<String> lsPathsToSearchReferencedAssemblies)
+        {
+            if (aAssembly != null)
+            {
+                AssemblyName[] aReferencedAssemblies = aAssembly.GetReferencedAssemblies();
+                foreach (AssemblyName aAssemblyName in aReferencedAssemblies)
+                {
+                    try
+                    {
+                        if (false == dLoadedAssemlies.ContainsKey(aAssemblyName.FullName))
+                        {
+                            Assembly aReferencedAssembly = Assembly.Load(aAssemblyName.FullName);
+                            if (false == dLoadedAssemlies.ContainsKey(aAssemblyName.FullName))
+                                dLoadedAssemlies.Add(aAssemblyName.FullName, aReferencedAssembly);
+                        }
+                        //new AssemblyLoader(aAssemblyName.Name + ".dll", lsPathsToSearchReferencedAssemblies).loadAssembly();
+                    }
+                    catch (ReflectionTypeLoadException rtleReflectionTypeLoadException)
+                    {
+                        DI.log.error("In loadReferencedAssemblies:{0}", rtleReflectionTypeLoadException.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        DI.log.error("In loadReferencedAssemblies:{0}", ex.Message);
+                    }
+                }
+            }
+        }
+
+
+        public CommonIRDump createCirForAssembly(AssemblyDefinition aAssemblyToProcess)
+        {
+            return createCirForAssembly(aAssemblyToProcess, "");
+        }
+
+        //public CommonIRDump createCirForAssembly(Assembly aAssemblyToProcess, String sFilter)
+        public CommonIRDump createCirForAssembly(AssemblyDefinition assemblyToProcess, String sFilter)
+        {
+            var lsTypes = new List<TypeDefinition>();
+            try
+            {
+                // add all classes based on filter
+                foreach (TypeDefinition tType in CecilUtils.getTypes(assemblyToProcess))
+                    if (sFilter == "" || tType.FullName.IndexOf(sFilter) > -1)
+                        lsTypes.Add(tType);
+                if (lsTypes.Count == 0)
+                {
+                    DI.log.debug("No types in class: {0}", assemblyToProcess.Name.FullName);
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in createCirForAssembly for {0}: {1}", assemblyToProcess.Name.FullName, ex.Message);
+                return null;
+            }
+            return createCirForTypes(lsTypes, assemblyToProcess.Name.FullName);
+        }
+
+        public CommonIRDump createCirForTypes(List<TypeDefinition> lsTypes, String assemblyFullName)
+        {
+            var cirCommonIrDump = new CommonIRDump();
+            try
+            {
+                cirCommonIrDump.CommonIR = new CommonIRDumpCommonIR();
+                addCompilationUnit(cirCommonIrDump, assemblyFullName);
+                var lcmClassMethods = new List<CommonIRDumpCommonIRClassMethods>();
+                foreach (TypeDefinition tType in lsTypes)
+                {
+                    CommonIRDumpCommonIRClassMethods cmClassMethod = createClassMethod(tType);
+
+                    cmClassMethod.ClassMemberFunction = getMemberFunctions(tType);
+
+                    lcmClassMethods.Add(cmClassMethod);
+                }
+
+                cirCommonIrDump.CommonIR.ClassMethods = lcmClassMethods.ToArray();
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in createCirForAssembly: {0}", ex.Message);
+            }
+            return cirCommonIrDump;
+        }
+
+        public CommonIRDumpCommonIRClassMethods createClassMethod(TypeDefinition tType)
+        {
+            var cmClassMethod = new CommonIRDumpCommonIRClassMethods
+                                    {
+                                        SymbolRef = getNextUniqueSymbolNumber(),
+                                        ClassType = tType.FullName
+                                    };
+            return cmClassMethod;
+        }
+
+        public CommonIRDumpCommonIRClassMethodsClassMemberFunction getMemberFunction(MethodDefinition methodDefinition)
+        {
+            return new CommonIRDumpCommonIRClassMethodsClassMemberFunction
+            {
+                Name = methodDefinition.Name,
+                UniqueID = getFixedSignature(methodDefinition),
+                ControlFlowGraph = getControlFlowGraph(methodDefinition),
+                SymbolRef = getNextUniqueSymbolNumber()
+            };
+        }
+
+
+        public CommonIRDumpCommonIRClassMethodsClassMemberFunction[] getMemberFunctions(TypeDefinition tType)
+        {
+            var lmfMemberFunctions = new List<CommonIRDumpCommonIRClassMethodsClassMemberFunction>();
+           /* const BindingFlags bfBindingFlags_PublicNonPublicDeclaredOnly =
+                BindingFlags.Public | BindingFlags.NonPublic |
+                BindingFlags.DeclaredOnly;*/
+
+            // for now put both static and instance methods in here
+            //const BindingFlags bfBindingFlags_StaticInstance = BindingFlags.Static | BindingFlags.Instance |
+             //                                                  bfBindingFlags_PublicNonPublicDeclaredOnly;
+
+            foreach (MethodDefinition methodDefinition in CecilUtils.getMethods(tType))
+            {
+
+                lmfMemberFunctions.Add(getMemberFunction(methodDefinition));
+            }
+
+            // and also the contstructors
+            foreach (MethodReference ciConstructorInfo in CecilUtils.getConstructors(tType))  // tType.GetConstructors())
+            {
+               /* var mfMemberFunction = new CommonIRDumpCommonIRClassMethodsClassMemberFunction
+                                           {
+                                               Name = ciConstructorInfo.Name,
+                                               UniqueID = getFixedSignature(ciConstructorInfo),
+                                               ControlFlowGraph = getControlFlowGraph(ciConstructorInfo),
+                                               SymbolRef = getNextUniqueSymbolNumber()
+                                           };
+                lmfMemberFunctions.Add(mfMemberFunction);*/
+            }
+
+            return lmfMemberFunctions.ToArray();
+        }
+
+        public ControlFlowGraph getControlFlowGraph(MethodDefinition miMethodInfo)
+        {
+            var cfgControlFlowGraph = new ControlFlowGraph();
+            //var miMethodResolver = new methodResolver(miMethodInfo);
+            var bbBasicBlock = new ControlFlowGraphBasicBlock();
+            var loBlockStatements = new List<object>();
+            foreach (MethodReference mcMethodCall in CecilUtils.getMethodsCalledInsideMethod(miMethodInfo))// miMethodResolver.lmcMethodsCalled)
+            {
+                var eesEvalExprStmt = new ControlFlowGraphBasicBlockEvalExprStmt
+                                          {
+                                              NaryCall = new ControlFlowGraphBasicBlockEvalExprStmtNaryCall
+                                                             {
+                                                                 FunctionName =
+                                                                     getFixedSignature(mcMethodCall),
+                                                                 SymbolRef = getNextUniqueSymbolNumber()
+                                                             }
+                                          };
+                loBlockStatements.Add(eesEvalExprStmt);
+            }
+            bbBasicBlock.Items = loBlockStatements.ToArray();
+            cfgControlFlowGraph.BasicBlock = new[] {bbBasicBlock};
+            return cfgControlFlowGraph;
+        }
+
+      /*  public String getFixedSignature(MethodReference miMethodBase)
+        {
+            //switch (miMethodBase.GetType().Name)
+            //{
+            //    case "MethodDefinition":
+                    return OunceLabsScannerHacks.fixDotNetSignature(miMethodBase);
+            //    default:
+            //        return FilteredSignature.dotNet.fixDotNetSignature(miMethodBase);
+            //}
+            //if (miMethodBase
+            //return FilteredSignature.dotNet.fixDotNetSignature(miMethodInfo);
+            //  return "";
+        }*/
+
+        /*
+        public static String getFixedSignature(MethodInfo miMethodInfo)
+        {
+            
+        }
+
+        public static String getFixedSignature(ConstructorInfo ciConstructorInfo)
+        {
+            return FilteredSignature.dotNet.fixDotNetSignature(ciConstructorInfo);
+        }
+        */
+
+        public void addCompilationUnit(CommonIRDump cirCommonIrDump, String sCompilationUnitPath)
+        {
+            var cuCompilationUnit = new CommonIRDumpCommonIRCompilationUnit
+                                        {
+                                            File = new CommonIRDumpCommonIRCompilationUnitFile
+                                                       {Path = sCompilationUnitPath}
+                                        };
+            if (cirCommonIrDump.CommonIR.CompilationUnit == null)
+                cirCommonIrDump.CommonIR.CompilationUnit = new[] {cuCompilationUnit};
+            else
+            {
+                var lcuCompilationUnit =
+                    new List<CommonIRDumpCommonIRCompilationUnit>(cirCommonIrDump.CommonIR.CompilationUnit)
+                        {cuCompilationUnit};
+                cirCommonIrDump.CommonIR.CompilationUnit = lcuCompilationUnit.ToArray();
+            }
+        }
+
+        public String saveCirDumpObject(CommonIRDump cirCommonIrDump)
+        {
+            string sTempFile = DI.config.TempFileNameInTempDirectory + ".xml";
+            return saveCirDumpObject(cirCommonIrDump, sTempFile);
+        }
+
+        public String saveCirDumpObject(CommonIRDump cirCommonIrDump, String sTargetFile)
+        {
+            Serialize.createSerializedXmlFileFromObject(cirCommonIrDump, sTargetFile);
+            DI.log.info("Serializded CirDump Object file saved to: {0}", sTargetFile);
+            return sTargetFile;
+        }
+
+        #region Nested type: AssemblyLoader
+
+   /*    public class AssemblyLoader
+        {
+            private readonly List<String> lsPathsToSearchReferencedAssemblies = new List<string>();
+            private readonly String sAssemblyToLoad;
+
+            public AssemblyLoader(String sAssemblyToLoad)
+            {
+                this.sAssemblyToLoad = sAssemblyToLoad;
+            }
+
+            public AssemblyLoader(String sAssemblyToLoad, String sPathsToSearchReferencedAssemblies)
+            {
+                this.sAssemblyToLoad = sAssemblyToLoad;
+                lsPathsToSearchReferencedAssemblies.Add(sPathsToSearchReferencedAssemblies);
+            }
+
+            public AssemblyLoader(String sAssemblyToLoad, List<String> lsPathsToSearchReferencedAssemblies)
+            {
+                this.sAssemblyToLoad = sAssemblyToLoad;
+                this.lsPathsToSearchReferencedAssemblies = lsPathsToSearchReferencedAssemblies;
+            }
+
+
+            public Assembly loadAssembly()
+            {
+                if (false == lsPathsToSearchReferencedAssemblies.Contains(Path.GetDirectoryName(sAssemblyToLoad)))
+                    lsPathsToSearchReferencedAssemblies.Add(Path.GetDirectoryName(sAssemblyToLoad));
+                // add local directory by default                
+                addCallback();
+                Assembly aAssembly;
+                try
+                {
+                    //      try
+                    //      {
+
+                    //    aAssembly = Assembly.Load(sAssemblyToLoad);
+                    //    aAssembly = Assembly.LoadWithPartialName(sAssemblyToLoad);
+                    //    aAssembly.GetTypes();
+                    //    }
+                    //    catch(Exception ex)
+                    //    {
+                    try
+                    {
+                        // this will force the proper loading for all dependencies                        
+                        aAssembly = Assembly.ReflectionOnlyLoadFrom(sAssemblyToLoad);
+                        loadReferencedAssemblies(aAssembly, lsPathsToSearchReferencedAssemblies);
+                        aAssembly.GetTypes(); // will throw an exception if we can't load all type
+
+                        // but we still need to do this
+                        aAssembly = Assembly.LoadFrom(sAssemblyToLoad);
+                        aAssembly.GetTypes();
+                    }
+                    catch //(Exception ex2)
+                    {
+                        aAssembly = Assembly.LoadFrom(sAssemblyToLoad);
+                        aAssembly.GetTypes(); // will throw an exception if we can't load all type
+
+                        // I have no idea why in some cases the first attempt (using ReflectionOnlyLoadFrom doesn't work and LoadFrom works)
+                    }
+                    //        }
+                }
+                catch (ReflectionTypeLoadException ex)
+                {
+                    DI.log.error("In AssemblyLoader:{0}", ex.Message);
+                    foreach (Exception leLoadedException in ex.LoaderExceptions)
+                        DI.log.error("\tLoaderException:{0}", leLoadedException.Message);
+                    removeCallback();
+                    return null;
+                }
+                removeCallback();
+                if (aAssembly.FullName != null)
+                    if (false == dLoadedAssemlies.ContainsKey(aAssembly.FullName))
+                        dLoadedAssemlies.Add(aAssembly.FullName, aAssembly);
+                return aAssembly;
+            }
+
+            public void addCallback()
+            {
+                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += CurrentDomain_ReflectionOnlyAssemblyResolve;
+            }
+
+            public void removeCallback()
+            {
+                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= CurrentDomain_ReflectionOnlyAssemblyResolve;
+            }
+
+
+            public Assembly CurrentDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
+            {
+                try
+                {
+                    Assembly aAssembly = Assembly.ReflectionOnlyLoad(args.Name);
+                    DI.log.info("in CurrentDomain_ReflectionOnlyAssemblyResolve: Loaded OK: {0}", aAssembly.GetName());
+                    return aAssembly;
+                }
+                    // ReSharper disable EmptyGeneralCatchClause
+                catch (Exception)
+                    // ReSharper restore EmptyGeneralCatchClause
+                {
+                }
+                if (dLoadedAssemlies.ContainsKey(args.Name))
+                    return dLoadedAssemlies[args.Name];
+
+                DI.log.info("CurrentDomain_ReflectionOnlyAssemblyResolve: {0}", args.Name);
+                string[] sSplitedName = args.Name.Split(',');
+                foreach (String sPathToSearchForReferencedAssemblies in lsPathsToSearchReferencedAssemblies)
+                {
+                    String sFileInLocalDirectory = Path.Combine(sPathToSearchForReferencedAssemblies,
+                                                                sSplitedName[0] + ".dll");
+                    if (File.Exists(sFileInLocalDirectory))
+                    {
+                        try
+                        {
+                            Assembly aAssembly = Assembly.ReflectionOnlyLoad(sFileInLocalDirectory);
+                            DI.log.info("in CurrentDomain_ReflectionOnlyAssemblyResolve: Loaded OK: {0}",
+                                        aAssembly.GetName());
+                            if (aAssembly.FullName != null) dLoadedAssemlies.Add(aAssembly.FullName, aAssembly);
+                            return aAssembly;
+                        }
+                        catch (ReflectionTypeLoadException ex)
+                        {
+                            DI.log.error(
+                                "in CurrentDomain_ReflectionOnlyAssemblyResolve: could not load assembly:{0}",
+                                ex.Message);
+                            throw (new Exception("Could not resolve Asssembly"));
+                        }
+                    }
+                }
+                DI.log.error("Could not find file for assembly:{0}", args.Name);
+                return null;
+                //     throw new Exception("The method or operation is not implemented.");
+            }
+        }
+        */
+        #endregion
+    }
+}

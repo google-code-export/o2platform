@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
+
+namespace O2.core._UnitTests.Test_O2DebuggerMdbg
+{
+    [TestFixture]
+    public class Test_DebugCodeSnippetExecution
+    {
+        [Test, Ignore("Not implemented yet")]
+        public void Test_runCode()
+        {
+
+        }
+    }
+}

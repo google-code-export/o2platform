@@ -1,0 +1,130 @@
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
+using O2.Legacy.CoreLib.Ascx;
+using O2.Core.CIR.CirObjects;
+using O2.Legacy.OunceV6.SavedAssessmentFile.classes;
+
+namespace O2.RnD.SpringMVCAnalyzer.classes
+{
+    public class Tests
+    {
+        private static CirData fadCirData = new CirData();
+        private static List<String> lsClassesToFindInBeanList_Bad;
+        private static List<String> lsClassesToFindInBeanList_Good;
+
+        private static List<String> lsSpringMvcClasses;
+
+        public static void createTestViewFromAssessmentFile(ascx_testsViewer atvTestsViewer,
+                                                            String sAssessmentFileToLoad)
+        {
+            O2AssessmentData_OunceV6 fadAssessmentData = null;
+            bool bDropDuplicateSmartTraces = true;
+            bool bIgnoreRootCallInvocation = true;
+            Analysis.FindingFilter ffFindingFilter = Analysis.FindingFilter.AllFindings;
+            Analysis.loadAssessmentFile(sAssessmentFileToLoad, false, ref fadAssessmentData);
+            Analysis.populateDictionariesWithXrefsToLoadedAssessment(ffFindingFilter, bDropDuplicateSmartTraces,
+                                                                     bIgnoreRootCallInvocation, fadAssessmentData);
+
+            foreach (AssessmentAssessmentFileFinding fFinding in fadAssessmentData.dFindings.Keys)
+                atvTestsViewer.addItemToTestList(fFinding.context, false);
+        }
+
+        public static void runAllTests()
+        {
+            Test_XSS(openTestViewerWindow("XSS"));
+            Test_NonEditableFieldsManipulation(openTestViewerWindow("Test_NonEditableFieldsManipulation"));
+        }
+
+        public static void runTestsIntoPanels(Control cPanel1, Control cPanel2, Control cPanel3, Control cPanel4)
+        {
+            DI.log.debug("Running tests and placing them into the provided host controls");
+
+            var atvTestsViewer_NonEditFields = new ascx_testsViewer("Non Editable Fields Manipulation");
+            atvTestsViewer_NonEditFields.Dock = DockStyle.Fill;
+            cPanel1.Controls.Clear();
+            cPanel1.Controls.Add(atvTestsViewer_NonEditFields);
+
+            var atvTestsViewer_XSRF = new ascx_testsViewer("XSRF");
+            atvTestsViewer_XSRF.Dock = DockStyle.Fill;
+            cPanel2.Controls.Clear();
+            cPanel2.Controls.Add(atvTestsViewer_XSRF);
+
+            var atvTestsViewer_XSS = new ascx_testsViewer("XSS");
+            atvTestsViewer_XSS.Dock = DockStyle.Fill;
+            cPanel3.Controls.Clear();
+            cPanel3.Controls.Add(atvTestsViewer_XSS);
+
+
+            Test_XSS(atvTestsViewer_XSS);
+            Test_NonEditableFieldsManipulation(atvTestsViewer_NonEditFields);
+            Exec_XSRF(atvTestsViewer_XSRF);
+        }
+
+
+        public static void Test_XSS(ascx_testsViewer atvTestsViewer)
+        {
+            String sAssessmentFileWithXssData = @"...\SavedAssessments\web - sink print.xml";
+
+            createTestViewFromAssessmentFile(atvTestsViewer, sAssessmentFileWithXssData);
+        }
+
+        public static void Test_NonEditableFieldsManipulation(ascx_testsViewer atvTestsViewer)
+        {
+            Exec_NonEditableFieldsManipulation(atvTestsViewer);
+        }
+
+
+        public static void Exec_XSRF(ascx_testsViewer atvTestsViewer)
+        {
+            foreach (String sClass in lsSpringMvcClasses)
+                atvTestsViewer.addItemToTestList(sClass, false);
+        }
+
+        public static void Exec_NonEditableFieldsManipulation(ascx_testsViewer atvTestsViewer)
+        {
+            runTests(false);
+            //O2Messages.sendMessage("close Test_NonEditableFieldsManipulation");
+
+            foreach (String sTestPassed in lsClassesToFindInBeanList_Good)
+                atvTestsViewer.addItemToTestList(sTestPassed, true);
+            foreach (String sTestPassed in lsClassesToFindInBeanList_Bad)
+                if (false == lsClassesToFindInBeanList_Good.Contains(sTestPassed))
+                    atvTestsViewer.addItemToTestList(sTestPassed, false);
+        }
+
+
+        public static ascx_testsViewer openTestViewerWindow(String sWindowName)
+        {
+            throw new Exception("openTestViewerWindow not implemnted (needs conversion to O2DockPanel)");
+            /*    Messages.sendMessage("open testsViewer," + sWindowName);
+            ascx_testsViewer atvTestsViewer = (ascx_testsViewer)Messages.sendMessage(sWindowName + ".ascx_testsViewer");
+            atvTestsViewer.clearItems();
+            return atvTestsViewer;*/
+            return null;
+        }
+
+        public static void runTests_()
+        {
+            runTests(true);
+        }
+
+        public static void runTests(bool bShowTreeView)
+        {
+/*            fadCirData = ounceAnalysis_CirDump.load.loadSerializedO2CirDataObject(sO2CirDataFile);
+
+            SpringBeans sbSpringBeans = new SpringBeans(getAllBeans_RecursiveSearch(sWebRoot, bLoadFromO2VarsIfAvailable));
+
+
+            lsSpringMvcClasses = findClassesThatImplementTheSpringMvc();
+            findSpringOnSubmitMethods(lsSpringMvcClasses);
+
+            if (bShowTreeView)
+                showMappingsInTreeView(sbSpringBeans);
+            */
+
+            DI.log.debug("Done");
+        }
+    }
+}

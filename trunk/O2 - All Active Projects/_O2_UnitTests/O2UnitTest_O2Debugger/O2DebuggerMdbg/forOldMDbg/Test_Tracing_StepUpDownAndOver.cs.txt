@@ -1,0 +1,50 @@
+﻿using System.IO;
+using System.Threading;
+using NUnit.Framework;
+using O2.Debugger.Mdbg.O2Debugger.Objects;
+using O2.UnitTests.TestO2CoreLib.O2Core.O2CoreLib.MockObjects;
+
+namespace O2.UnitTests.O2Debugger.O2DebuggerMdbg.forOldMDbg
+{
+    [TestFixture]
+    public class Test_Tracing_StepUpDownAndOver
+    {
+        private static readonly MockObjects_CompiledExe mockObjects_CompiledExe =
+            //new MockObjects_CompiledExe(MockObjects_CompiledExe.for_UnitTest_SimpleCalls(),false /*startProcess*/);
+            new MockObjects_CompiledExe(MockObjects_CompiledExe.for_UnitTest_HotMethodPatch(), false /*startProcess*/);
+
+
+        // this is working and so is the trace (although a bit slow if just let the trace into automatically
+        [Test]
+        public void setBreakpointOnAssemblyDeclaredMethods()
+        {
+            string exeFile = mockObjects_CompiledExe.PathToCreatedAssemblyFile;
+            Assert.That(File.Exists(exeFile), "Problem getting compiled assembly file");
+
+
+            O2MDbg_OLD o2MDbgOLD;
+
+            O2MDbg_OLD.MDbgLoggingEnabled = false;
+
+            O2MDbg_OLD.execSync(exeFile, false /*detachDebugSession */, _o2MDbg =>
+                                                                            {
+                                                                                o2MDbgOLD = _o2MDbg;
+
+                                                                                //o2MDbgOLD.O2BreakPoints.setBreakPointOnAssemblyEntryPoint();
+                                                                                o2MDbgOLD.O2BreakPoints.
+                                                                                    addBreakPointsOnAllMethods();
+                                                                                o2MDbgOLD.O2BreakPoints.onBreakPointAction =
+                                                                                    O2MDbgBreakPoint.OnBreakPointAction.
+                                                                                        Continue;
+                                                                            });
+            Thread.Sleep(1000);
+            //o2MDbgOLD.WaitForExit();
+        }
+
+        /*    void CorProcess_OnBreakpoint(object sender, CorBreakpointEventArgs e)
+        {
+            DI.log.d("************ BREAKPOINT HIT");
+            e.Continue = true;
+        }*/
+    }
+}

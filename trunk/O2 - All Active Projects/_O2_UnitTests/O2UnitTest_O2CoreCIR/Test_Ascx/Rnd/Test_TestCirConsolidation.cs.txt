@@ -1,0 +1,51 @@
+﻿using NUnit.Framework;
+
+namespace O2.UnitTests.Test_O2CoreCIR.Test_Cir
+{
+    [TestFixture]
+    public class Test_TestCirConsolidation
+    {
+        private const string cirDataFile_BigOne =
+            @"E:\O2\_UnitTestSupportFiles\complete HacmeBank_v2_Website (with extra ControlFlowGraph info for methods).sln.CirData";
+
+        private const string cirDataFile_Small =
+            @"E:\O2\_UnitTestSupportFiles\consolidated HacmeBank_v2_Website (with extra ControlFlowGraph info for methods).sln.CirData";
+
+        // this is very weird, since removeClassesWithNoControlFlowGraphs removes tons of data from the CirData object and the size in disk actually increases 
+        /*  [Test]
+        public void testCirConsolidation() 
+        {                        
+            if (File.Exists(cirDataFile_Small))
+                File.Delete(cirDataFile_Small);
+            Assert.IsFalse(File.Exists(cirDataFile_Small), "cirDataFile_Small still exists");
+            var bigCirData = CirLoad.loadSerializedO2CirDataObject(cirDataFile_BigOne,true);
+
+            Assert.IsNotNull(bigCirData, "cirDataFile_BigOne was not loaded");
+            bigCirData.removeClassesWithNoControlFlowGraphs();
+            bigCirData.saveSerializedO2CirDataObjectToFile(cirDataFile_Small);
+            Assert.IsTrue(File.Exists(cirDataFile_Small), "cirDataFile_Small was not created");
+            var smallCirData = CirLoad.loadSerializedO2CirDataObject(cirDataFile_Small, true);
+            Assert.IsNotNull(smallCirData, "cirDataFile_BigOne was not loaded");
+            var bigFileInfo = new FileInfo(cirDataFile_BigOne);
+            var smallFileInfo = new FileInfo(cirDataFile_Small);
+            Assert.IsTrue(bigFileInfo.Length > smallFileInfo.Length, "Original file is not smaller then the consolidated one!");   
+        }
+
+        [Test]
+        public void testLoadTimesOfCirFiles()
+        {
+            Assert.IsTrue(File.Exists(cirDataFile_BigOne), "cirDataFile_BigOne doesn't exists");
+            Assert.IsTrue(File.Exists(cirDataFile_Small), "cirDataFile_Small doesn't exists");
+
+            var bigLoadStart = DateTime.Now;
+            CirLoad.loadSerializedO2CirDataObject(cirDataFile_BigOne);
+            TimeSpan bigTimeSpan = bigLoadStart - DateTime.Now;
+
+            var SmallLoadStart = DateTime.Now;
+            CirLoad.loadSerializedO2CirDataObject(cirDataFile_Small);
+            TimeSpan smallTimeSpan = SmallLoadStart - DateTime.Now;
+            Assert.IsTrue(bigTimeSpan.TotalSeconds > smallTimeSpan.TotalSeconds, "Original file was loaded in more time!");   
+        }  
+       * */
+    }
+}

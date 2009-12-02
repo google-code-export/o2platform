@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net" >
+
+ <object id="main"  factory-method="openO2DockContentInNewDockPanel" factory-object="mainObject"/>
+    
+  <object id="mainObject" type="o2.core.O2Core.O2Environment.O2DockPanel, O2_CoreLib">            
+    
+    <property name="formName" value="CSharp Scripts Editor"/>
+    
+    <property name ="o2DockContentObjects">
+      <list element-type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib">
+        <object type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib">
+          <constructor-arg name="controlToLoad" ref="ascx_Scripts" />
+          <constructor-arg name="controlDockState" value="Document"/>
+        </object>
+        
+        <ref local="LogViewer"/>
+        <ref local="TempDirectory"/>
+        
+  <!--      <ref local="ascx_O2AssemblyInvoke"/> -->
+        
+      </list>
+    </property>
+    
+  </object>
+
+  
+ <object id ="ascx_Scripts" type="o2.core.Ascx.SourceCodeEdit.ascx_Scripts"> 
+   <property name="lsExtraReferenceAssembliesToAdd">
+     <list element-type="String">
+       <value>System.Windows.Forms.dll</value>
+       <value>System.Drawing.dll</value>
+       <value>System.Data.dll</value>
+       <value>System.Xml.dll</value>
+       <value>System.Web.dll</value>
+       <value>System.dll</value>
+     </list>
+   </property>
+  </object>
+
+  <object id="ascx_O2AssemblyInvoke" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib">
+    <constructor-arg name="controlToLoad" value="ascx_O2AssemblyInvoke, O2_CoreLib"/>
+    <constructor-arg name="controlDockState" value="DockLeft"/>
+  </object>
+
+  <object id="LogViewer" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib" >
+    <constructor-arg name="controlToLoad" value="o2.core.Ascx.CoreControls.ascx_LogViewer"/>
+    <constructor-arg name="controlDockState" value="DockBottomAutoHide"/>
+    <constructor-arg name="controlName" value="O2 Log"/>
+  </object>
+
+
+  <object id="TempDirectory" type="o2.core.O2Core.O2Environment.O2DockContent, O2_CoreLib" >
+    <constructor-arg name="controlToLoad" ref="ascx_Directory"/>
+    <constructor-arg name="controlDockState" value="DockBottomAutoHide"/>
+    <constructor-arg name="controlName" value="O2 Temp Files"/>
+  </object>
+
+  <object id="ascx_Directory" type="o2.core.Ascx.DataViewers.ascx_Directory, O2_CoreLib">
+    <property name ="_ViewMode" value="Simple"/>
+  </object>
+  
+</objects>

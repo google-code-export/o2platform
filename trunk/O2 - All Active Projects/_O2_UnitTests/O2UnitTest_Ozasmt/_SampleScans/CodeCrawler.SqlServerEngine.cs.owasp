@@ -1,0 +1,255 @@
+<?xml version="1.0" standalone="yes"?>
+<DocumentElement>
+  <ThreatList>
+    <Threat>System.Data.Sql</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>4</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>DES</Threat>
+    <Description>If cryptography is used then is a strong enough cipher used i.e. AES or 3DES. What size key is used, the larger the better. Where is hashing performed. Are password that are being persisted hashed, they should be. How are random numbers generated? is the PRNG "random enough"?</Description>
+    <Level>2</Level>
+    <Line>11</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>Public</Threat>
+    <Description>Public and Sealed relate to the design at class level. Classes which are not intended to be derived from should be sealed. Make sure all class fields are public for a reason. Don't expose anything you do not need to.</Description>
+    <Level>2</Level>
+    <Line>13</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>Public</Threat>
+    <Description>Public and Sealed relate to the design at class level. Classes which are not intended to be derived from should be sealed. Make sure all class fields are public for a reason. Don't expose anything you do not need to.</Description>
+    <Level>2</Level>
+    <Line>15</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>ToDo</Threat>
+    <Description>Developers say the darnedest thing in their source code. Look for the following keywords as pointers to possible software vulnerabilities.. ahhh those developers!</Description>
+    <Level>2</Level>
+    <Line>18</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>executeSQL</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>3</Level>
+    <Line>24</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>appSettings</Threat>
+    <Description>The .NET Framework relies on .config files to define configuration settings. The .config files are text-based XML files. Many .config files can, and typically do, exist on a single system. Web applications refer to a web.config file located in the application's root directory. For ASP.NET applications, web.config information about most aspects of the application's operation.</Description>
+    <Level>2</Level>
+    <Line>27</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>execute</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>28</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>SqlCommand</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>29</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>.Open</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>30</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>execute</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>31</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>execute</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>33</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>executeSQL</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>3</Level>
+    <Line>36</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>appSettings</Threat>
+    <Description>The .NET Framework relies on .config files to define configuration settings. The .config files are text-based XML files. Many .config files can, and typically do, exist on a single system. Web applications refer to a web.config file located in the application's root directory. For ASP.NET applications, web.config information about most aspects of the application's operation.</Description>
+    <Level>2</Level>
+    <Line>39</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>execute</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>40</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>SqlCommand</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>41</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>.Open</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>42</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>execute</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>43</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>execute</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>45</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>executeSQL</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>3</Level>
+    <Line>48</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>appSettings</Threat>
+    <Description>The .NET Framework relies on .config files to define configuration settings. The .config files are text-based XML files. Many .config files can, and typically do, exist on a single system. Web applications refer to a web.config file located in the application's root directory. For ASP.NET applications, web.config information about most aspects of the application's operation.</Description>
+    <Level>2</Level>
+    <Line>51</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>execute</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>52</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>SqlCommand</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>53</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>.Open</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>54</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>SqlDataReader</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>55</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>ExecuteReader</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>2</Level>
+    <Line>56</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>Public</Threat>
+    <Description>Public and Sealed relate to the design at class level. Classes which are not intended to be derived from should be sealed. Make sure all class fields are public for a reason. Don't expose anything you do not need to.</Description>
+    <Level>2</Level>
+    <Line>59</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>executeSQL</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>3</Level>
+    <Line>62</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>Public</Threat>
+    <Description>Public and Sealed relate to the design at class level. Classes which are not intended to be derived from should be sealed. Make sure all class fields are public for a reason. Don't expose anything you do not need to.</Description>
+    <Level>2</Level>
+    <Line>74</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>executeSQL</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>3</Level>
+    <Line>77</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>Public</Threat>
+    <Description>Public and Sealed relate to the design at class level. Classes which are not intended to be derived from should be sealed. Make sure all class fields are public for a reason. Don't expose anything you do not need to.</Description>
+    <Level>2</Level>
+    <Line>85</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>executeSQL</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>3</Level>
+    <Line>88</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>Public</Threat>
+    <Description>Public and Sealed relate to the design at class level. Classes which are not intended to be derived from should be sealed. Make sure all class fields are public for a reason. Don't expose anything you do not need to.</Description>
+    <Level>2</Level>
+    <Line>108</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>executeSQL</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>3</Level>
+    <Line>111</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>Public</Threat>
+    <Description>Public and Sealed relate to the design at class level. Classes which are not intended to be derived from should be sealed. Make sure all class fields are public for a reason. Don't expose anything you do not need to.</Description>
+    <Level>2</Level>
+    <Line>137</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+  <ThreatList>
+    <Threat>executeSQL</Threat>
+    <Description>Locating where a database may be involved in the code is an important aspect of the code review. Looking at the database code will help determinate if the application is vulnerable to SQL Injection. One aspect of this is to verify that the code uses either SqlParameter, OleDbParameter or OdbcParameter(System.Data.SqlClient). These are type and treats parameter as the literal value and not the executable code in the database.</Description>
+    <Level>3</Level>
+    <Line>139</Line>
+    <Owasp>This text has to change (awaiting owasp code review project hints)</Owasp>
+  </ThreatList>
+</DocumentElement>

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="api_info">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="classes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="class">
+                <xs:complexType>
+                  <xs:sequence minOccurs="0">
+                    <xs:element maxOccurs="unbounded" name="method">
+                      <xs:complexType>
+                        <xs:sequence minOccurs="0">
+                          <xs:element name="called_functions">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element maxOccurs="unbounded" name="called_function">
+                                  <xs:complexType>
+                                    <xs:attribute name="function_name" type="xs:string" use="required" />
+                                  </xs:complexType>
+                                </xs:element>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="method_name" type="xs:string" use="required" />
+                        <xs:attribute name="protected" type="xs:boolean" use="required" />
+                        <xs:attribute name="static" type="xs:boolean" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="class_name" type="xs:string" use="required" />
+                  <xs:attribute name="class_unique_id" type="xs:string" use="required" />
+                  <xs:attribute name="package" type="xs:string" use="required" />
+                  <xs:attribute name="final" type="xs:boolean" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="nonclassfunctions" />
+      </xs:sequence>
+      <xs:attribute name="language" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

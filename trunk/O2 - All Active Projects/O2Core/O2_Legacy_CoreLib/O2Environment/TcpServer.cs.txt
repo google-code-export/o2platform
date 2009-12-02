@@ -1,0 +1,165 @@
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+
+namespace O2.core.O2Core.O2Environment
+{
+    public class tcpServer
+    {
+        private readonly IPAddress _address;
+        private readonly int _port;
+        private readonly object _syncRoot = new object();
+        private TcpListener _listener;
+        private bool _listening;
+
+        #region CTORs
+
+        public tcpServer(IPAddress address, int port)
+        {
+            _port = port;
+            _address = address;
+        }
+
+        #endregion // CTORs
+
+        #region Properties
+
+        public IPAddress Address
+        {
+            get { return _address; }
+        }
+
+        public int Port
+        {
+            get { return _port; }
+        }
+
+        public bool Listening
+        {
+            get { return _listening; }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void Listen()
+        {
+            try
+            {
+                lock (_syncRoot)
+                {
+                    _listener = new TcpListener(_address, _port);
+
+                    // fire up the server
+                    _listener.Start();
+
+                    // set listening bit
+                    _listening = true;
+                }
+
+                // Enter the listening loop.
+                do
+                {
+                    DI.log.info("tcpServer: Starting tcpServer on: {0}:{1}", _port, _address);
+
+                    // Wait for connection
+                    TcpClient newClient = _listener.AcceptTcpClient();
+                    DI.log.info("tcpServer: Connected to new client");
+
+                    // queue a request to take care of the client
+                    ThreadPool.QueueUserWorkItem(ProcessClient, newClient);
+                } while (_listening);
+            }
+            catch (SocketException se)
+            {
+                DI.log.error("tcpServer: SocketException: " + se);
+            }
+            finally
+            {
+                // shut it down
+                StopListening();
+            }
+        }
+
+        public void StopListening()
+        {
+            if (_listening)
+            {
+                lock (_syncRoot)
+                {
+                    // set listening bit
+                    _listening = false;
+                    // shut it down
+                    _listener.Stop();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static void ProcessClient(object client)
+        {
+            var newClient = (TcpClient) client;
+            try
+            {
+                // Buffer for reading data
+                var bytes = new byte[1024];
+                var clientData = new StringBuilder();
+
+                // get the stream to talk to the client over
+                using (NetworkStream ns = newClient.GetStream())
+                {
+                    // set initial read timeout to 1 minute to allow for connection
+                    ns.ReadTimeout = 60000;
+                    // Loop to receive all the data sent by the client.
+                    int bytesRead;
+                    do
+                    {
+                        // read the data
+                        try
+                        {
+                            bytesRead = ns.Read(bytes, 0, bytes.Length);
+                            if (bytesRead > 0)
+                            {
+                                // Translate data bytes to an ASCII string and append
+                                clientData.Append(
+                                    Encoding.ASCII.GetString(bytes, 0, bytesRead));
+                                // decrease read timeout to 1 second now that data is coming in
+                                ns.ReadTimeout = 1000;
+                            }
+                        }
+                        catch (IOException ioe)
+                        {
+                            // read timed out, all data has been retrieved
+                            DI.log.info("tcpServer: Read timed out: {0}", ioe.ToString());
+                            bytesRead = 0;
+                        }
+                    } while (bytesRead > 0);
+
+                    DI.log.info("tcpServer: Message received: {0}", clientData.ToString());
+
+        //            Messages.sendMessage(clientData.ToString());
+                    //clientData = new StringBuilder();
+                    // Thank them for their input
+                    //bytes = Encoding.ASCII.GetBytes("tx");
+
+                    // Send back a response.
+                    //ns.Write(bytes, 0, bytes.Length);
+                }
+            }
+            finally
+            {
+                // stop talking to client
+                if (newClient != null)
+                    newClient.Close();
+            }
+        }
+
+        #endregion
+    }
+}

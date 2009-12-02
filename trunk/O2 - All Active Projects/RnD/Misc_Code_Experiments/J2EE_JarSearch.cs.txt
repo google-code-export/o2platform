@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using O2.core.O2Core.O2Environment;
+
+
+namespace O2.core.Zip
+{
+
+    internal class J2EE_JarSearch
+    {
+        public static String findMethodInJars(String sTargetDirectory, String sFileToFind)
+        {
+            var sbMatches = new StringBuilder();
+            var lsJarsToSearch = new List<string>();
+            Files.getListOfAllFilesFromDirectory(lsJarsToSearch, sTargetDirectory, true, "*.jar", false);
+             DI.log.debug("# Jars Found: {0}", lsJarsToSearch.Count);
+            int iFilesProcessed = 0;
+            foreach (String sJar in lsJarsToSearch)
+            {
+                 DI.log.debug("Searching in file: [{0}/{1}]{2}", iFilesProcessed++, lsJarsToSearch.Count, sJar);
+                var sbMatchesInCurrentFile = new StringBuilder();
+                List<String> lsFilesInJar = zipUtils.getListOfFilesInZip(sJar);
+                foreach (String sFile in lsFilesInJar)
+                    if (sFile.ToUpper().IndexOf(sFileToFind.ToUpper()) > -1)
+                    {
+                        //         DI.log.debug("Match on : {0}", sFile);
+                        sbMatchesInCurrentFile.AppendLine("  " + sFile);
+                    }
+                if (sbMatchesInCurrentFile.Length > 0)
+                {
+                    sbMatches.AppendLine(sJar);
+                    sbMatches.AppendLine(sbMatchesInCurrentFile.ToString());
+                }
+            }
+             DI.log.debug("Search completed");
+            return sbMatches.ToString();
+        }
+    }
+}

@@ -1,0 +1,279 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using O2.core.O2Core.dotnet;
+
+
+namespace O2.core.O2Core.O2Environment
+{
+
+    public class SetupEnv
+    {
+        public static void addToGlobalStaticVar_UserControls_FromAssembly(String sTargetAssembly,
+                                                                          bool bCopyAndLoadFromTempDir)
+        {
+            if (sTargetAssembly.IndexOf("vshost.exe") > -1) // don't handle these
+                return;
+            //  Module[] aLoadedModules = Assembly.GetExecutingAssembly().GetLoadedModules();
+            // this is not working, the objective here is to be able to dynamic load and display dlls with ascxs (so that one can debug these dynamically
+            if (bCopyAndLoadFromTempDir)
+            {
+                String sTempDll =
+                    Path.GetFullPath(Path.Combine(DI.o2CorLibConfig.O2TempDir, Path.GetFileName(sTargetAssembly)));
+                //config.getTempFileNameInO2TempDirectory() + "." + Path.GetFileName(sTargetAssembly));                  
+
+                if (false == GlobalStaticVars.dO2LoadedDlls.ContainsKey(Path.GetFileName(sTempDll)))
+                    Files.copyDllAndPdb(sTargetAssembly, sTempDll, true);
+
+                sTargetAssembly = sTempDll;
+            }
+
+            try
+            {
+                if (false == GlobalStaticVars.dO2LoadedDlls.ContainsKey(Path.GetFileName(sTargetAssembly)))
+                {
+                    Assembly aAssembly = Reflection.loadAssembly(sTargetAssembly); // was loadFile
+                    if (aAssembly != null)
+                        GlobalStaticVars.dO2LoadedDlls.Add(Path.GetFileName(sTargetAssembly), aAssembly);
+                }
+                addToGlobalStaticVar_UserControls_FromAssembly(
+                    GlobalStaticVars.dO2LoadedDlls[Path.GetFileName(sTargetAssembly)]);
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("In addToGlobalStaticVarUserControlsFromAssembly {0}", ex.Message);
+            }
+        }
+
+        public static void addToGlobalStaticVar_UserControls_FromAssembly(Assembly aTargetAssembly)
+        {
+            if (aTargetAssembly == null)
+                return;
+            try
+            {
+                foreach (Module mModule in aTargetAssembly.GetModules())
+                    foreach (Type tTypeInfo in mModule.GetTypes())
+                        if (tTypeInfo.BaseType != null && tTypeInfo.BaseType.Name == "UserControl")
+                        {
+                            // add to dO2Controls
+                            if (GlobalStaticVars.dO2Controls.ContainsKey(tTypeInfo.FullName))
+                                // remove if already there (happens when reloading dlls
+                                GlobalStaticVars.dO2Controls.Remove(tTypeInfo.FullName);
+                            GlobalStaticVars.dO2Controls.Add(tTypeInfo.FullName, tTypeInfo);
+                            // add to dO2LoadedAddOns
+                            if (false == GlobalStaticVars.dO2LoadedAddOns.ContainsKey(mModule.Name))
+                                GlobalStaticVars.dO2LoadedAddOns.Add(mModule.Name, new List<Type>());
+                            GlobalStaticVars.dO2LoadedAddOns[mModule.Name].Add(tTypeInfo);
+                        }
+            }
+            catch (ReflectionTypeLoadException rtleTypeLoadException)
+            {
+                DI.log.error("ReflectionTypeLoadException  In addToGlobalStaticVarUserControlsFromAssembly {0}:{1}",
+                                aTargetAssembly.FullName, rtleTypeLoadException.Message);
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("In addToGlobalStaticVarUserControlsFromAssembly {0}:{1}", aTargetAssembly.FullName,
+                                ex.Message);
+            }
+        }
+
+        public static void populateDictionaryWithO2Controls(Assembly aExtraAssemblyToLoad, bool bLoadCoreLib,
+                                                            bool bLoadAddOns)
+        {
+            GlobalStaticVars.dO2Controls.Clear();
+            // add extra assesmbly to load (usually the main main gui O2-GUI.exe
+            if (aExtraAssemblyToLoad != null)
+                addToGlobalStaticVar_UserControls_FromAssembly(aExtraAssemblyToLoad);
+
+            // Core lib (current assesmbly)
+            if (bLoadCoreLib)
+                addToGlobalStaticVar_UserControls_FromAssembly(Assembly.GetExecutingAssembly());
+            // add o2 plug ins
+            if (bLoadAddOns)
+                populateDictionaryWithO2AddOns();
+            // resolve names so that we can easily invoke them from O2CommandPrompt            
+        }
+
+        //     public static void populateDictionaryWithO2AddOns()
+        //     {
+        //         foreach (String sDllToLoad in Directory.GetFiles(config.getDefaultDir_O2AddOns(), config.getO2AddOnsFileFilter()))
+        //             addToGlobalStaticVar_UserControls_FromAssembly(sDllToLoad, true);
+        //     }
+
+        public static void calculateStaticListOfO2Controls()
+        {
+            // calculate a static list of the current keys in the dO2Controls dictionary since we are going to modify it
+            var lsStaticListOfKeys = new List<string>();
+            foreach (String sKeyName in GlobalStaticVars.dO2Controls.Keys)
+                lsStaticListOfKeys.Add(sKeyName);
+
+            string sShortCutKeyword = "ascx_";
+            foreach (String sKeyName in lsStaticListOfKeys)
+            {
+                int iIndexOfAscx = sKeyName.IndexOf(sShortCutKeyword);
+                if (iIndexOfAscx > -1)
+                {
+                    String sShortCutName = sKeyName.Substring(iIndexOfAscx + sShortCutKeyword.Length);
+                    if (GlobalStaticVars.dO2Controls.ContainsKey(sShortCutName))
+                        DI.log.error(
+                            "In calculateStaticListOfO2Controls: Duplicate Control (Control names should be unique)",
+                            sShortCutName);
+                    else
+                    {
+                        GlobalStaticVars.dO2Controls.Add(sShortCutName, GlobalStaticVars.dO2Controls[sKeyName]);
+                        // get the caps of this string
+                        String sCappsRepresentation = "";
+                        for (int i = 0; i < sShortCutName.Length; i++)
+                            if (sShortCutName[i] >= 'A' && sShortCutName[i] <= 'Z')
+                                sCappsRepresentation += sShortCutName[i].ToString();
+                        // and add it to the dO2Controls os that we can just invoke them directy using these shortcuts
+                        if (sCappsRepresentation != "" &&
+                            false == GlobalStaticVars.dO2Controls.ContainsKey(sCappsRepresentation))
+                            GlobalStaticVars.dO2Controls.Add(sCappsRepresentation,
+                                                             GlobalStaticVars.dO2Controls[sKeyName]);
+                    }
+                }
+            }
+        }
+
+        public static void populateDictionaryWithExposedMethods(Assembly aAssemblyToLoad,
+                                                                Dictionary<String, Object> dListOfSupportedMethods)
+            //, List<Type> lsSupportedTypes)
+        {
+            try
+            {
+                //Module mModule = oLiveObject.GetType().Module;
+                foreach (Module mModule in aAssemblyToLoad.GetModules())
+                    foreach (Type tTypeInfo in mModule.GetTypes())
+                    {
+                        Object[] oCustomAttributes = tTypeInfo.GetCustomAttributes(false);
+                        foreach (Object oCustomAttribute in oCustomAttributes)
+                            if (oCustomAttribute.GetType() == typeof (ExposedAndInvokable))
+                                if (false == dListOfSupportedMethods.ContainsKey(tTypeInfo.Name))
+                                    dListOfSupportedMethods.Add(tTypeInfo.Name, tTypeInfo);
+                                else
+                                {
+                                    String sNormalizedFullName = tTypeInfo.FullName.Replace('.', '_');
+                                    if (false == dListOfSupportedMethods.ContainsKey(sNormalizedFullName))
+                                        dListOfSupportedMethods.Add(sNormalizedFullName, tTypeInfo);
+                                    else
+                                        DI.log.error(
+                                            "in populateDictionaryWithExposedMethods: duplicate class fullname: {0}",
+                                            sNormalizedFullName);
+                                }
+
+                        //foreach (MethodInfo mMethod in tTypeInfo.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly))
+                        //{
+                        //       dListOfSupportedMethods
+                        //}
+                    }
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in populateDictionaryWithExposedMethods, for Assembly {0} got error:",
+                                aAssemblyToLoad.FullName, ex.Message);
+            }
+        }
+
+        public static void cleanUpTempDirectory()
+        {
+            foreach (String sFile in Directory.GetFiles(DI.o2CorLibConfig.O2TempDir))
+            {
+                try
+                {
+                    File.Delete(sFile);
+                }
+                catch (Exception)
+                {
+                    DI.log.error("in cleanUpTempDirectory, could not delete file :{0}", sFile);
+                }
+            }
+        }
+
+
+        public static void populateDictionaryWithO2AddOns()
+        {
+            String sPathToAddsOnDir = Path.GetDirectoryName(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+            populateDictionaryWithO2AddOns(sPathToAddsOnDir);
+        }
+
+        public static void populateDictionaryWithO2AddOns(String sPathToAddsOnDir)
+        {
+            Reflection.populateDictionaryWithDllsLoadedInCurrentProcess();
+            ensureO2CoreDllModulesAreLoaded();
+            //  loadCurrentExe();                       // fixes a blind stop that currently prevents the addons exposed by the running addon to show            
+            Config.addPathToCurrentExecutableEnvironmentPathVariable(DI.o2CorLibConfig.O2TempDir);
+            // add the temp folder since it will be needed to resolve the referenced dlls
+
+            DI.log.info("Loading O2 Add-ons from Directory:{0}", sPathToAddsOnDir);
+            List<String> lsAvailableAddOns = getListOfAvailableAddOns(sPathToAddsOnDir);
+
+            // (not implemented)
+            // if we are in debug mode use  DI.o2CorLibConfig.sDefaultO2InstallationDir if not use the parent of the current directory
+            //String sPathToAddsOnDir = (Environment.CurrentDirectory.IndexOf(@"bin\Debug") > -1) ?
+            //    DI.o2CorLibConfig.sDefaultO2InstallationDir : Path.GetDirectoryName(Environment.CurrentDirectory);
+
+
+            foreach (String sAvailableAddOn in lsAvailableAddOns)
+            {
+                if (sAvailableAddOn[0] != '_')
+                {
+                    DI.log.info("Loading O2 Add-On:{0}", sAvailableAddOn);
+                    // load dlls into memory
+                    // var bCopyToTempDirAndLoad = false; // true is not working in the new SD mode
+                    Reflection.loadAssemblyDllsIntoMemory(
+                        Files.getFilesFromDir_returnFullPath(sAvailableAddOn, "*.dll",
+                                                             true /* bSearchRecursively_forAssemblyFilesToLoad*/),
+                        false /*bCopyToTempDirAndLoad*/);
+                    List<String> lsAddOns = Files.getFilesFromDir_returnFullPath(sAvailableAddOn, "O2*.dll");
+                    // for now load all o2AddOns*.* on each AddOn folder
+                    lsAddOns.AddRange(Files.getFilesFromDir_returnFullPath(sAvailableAddOn, "O2*.exe"));
+                    // first load all dlls into memory so that the references can be resolved
+                    Reflection.loadAssemblyDllsIntoMemory(lsAddOns, true);
+                    foreach (String sAddOn in lsAddOns)
+                    {
+                        addToGlobalStaticVar_UserControls_FromAssembly(sAddOn, false /* bCopyToTempDirAndLoad */);
+                    }
+                }
+            }
+        }
+
+        public static List<String> getListOfAvailableAddOns(String sSourceDir)
+        {
+            // add sub folders
+            var lsAddOnsFolders = new List<String>(Directory.GetDirectories(sSourceDir)) {sSourceDir};
+            // and current folder 
+            return lsAddOnsFolders;
+        }
+
+        public static void loadCurrentExe()
+        {
+            Assembly aAssemblyEntryAssembly = Assembly.GetEntryAssembly();
+            //reflection.loadAssembly(aAssembly.Location);
+            if (false == GlobalStaticVars.dO2LoadedDlls.ContainsKey(Path.GetFileName(aAssemblyEntryAssembly.Location)))
+                GlobalStaticVars.dO2LoadedDlls.Add(Path.GetFileName(aAssemblyEntryAssembly.Location),
+                                                   aAssemblyEntryAssembly);
+        }
+
+        public static void ensureO2CoreDllModulesAreLoaded()
+        {
+            Assembly aAssembly = Assembly.GetExecutingAssembly();
+            foreach (Module mModule in aAssembly.GetLoadedModules())
+                if (false == GlobalStaticVars.dO2LoadedDlls.ContainsKey(mModule.Name))
+                    GlobalStaticVars.dO2LoadedDlls.Add(mModule.Name, aAssembly);
+        }
+
+        public static void loadO2AddOns(Assembly aExtraAssemblyToLoad)
+        {
+            populateDictionaryWithO2Controls(aExtraAssemblyToLoad, true, true);
+            calculateStaticListOfO2Controls();
+            //o2_setupEnv.populateDictionaryWithExposedMethods(this, globalStaticVars.dO2ExposedMethodsForDynamicInvokation);
+            GlobalStaticVars.dO2ExposedMethodsForDynamicInvokation.Clear();
+            foreach (Assembly aAssemblyToLoad in GlobalStaticVars.dO2LoadedDlls.Values)
+                populateDictionaryWithExposedMethods(aAssemblyToLoad,
+                                                     GlobalStaticVars.dO2ExposedMethodsForDynamicInvokation);
+        }
+    }
+}

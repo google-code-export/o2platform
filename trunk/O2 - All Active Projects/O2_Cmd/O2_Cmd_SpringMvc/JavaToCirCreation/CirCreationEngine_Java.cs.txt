@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using O2.Cmd.SpringMvc.Xsd;
+using O2.Core.CIR.CirObjects;
+using O2.DotNetWrappers.DotNet;
+using O2.Kernel.Interfaces.CIR;
+
+namespace O2.Cmd.SpringMvc.JavaToCirCreation
+{
+    public class CirCreationEngine_Java
+    {
+        public static ICirData createCirDataFromXmlFileWithJavaMetadata(string xmlFileWithJavaMetadata)
+        {
+            var cirData = new CirData();
+            try
+            {
+
+                DI.log.info("createCirDataFromXmlFileWithJavaMetadata for {0}", xmlFileWithJavaMetadata);
+                var javaMetadata =
+                    (JavaAttributeMappings)
+                    Serialize.getDeSerializedObjectFromXmlFile(xmlFileWithJavaMetadata, typeof (JavaAttributeMappings));
+                if (javaMetadata == null || javaMetadata.@class == null)
+                {
+                    DI.log.error(
+                        "in createCirDataFromXmlFileWithJavaMetadata, could not convert file into JavaMetadata XSD-drive .Net class: {0}",
+                        xmlFileWithJavaMetadata);
+                    return null;
+                }
+
+
+                foreach (var _class in javaMetadata.@class)
+                {
+
+                    var cirClass = (CirClass) cirData.addClass(_class.name);
+                    if (cirClass != null)
+                    {                        
+                        foreach (var _function in _class.method)
+                        {
+                            var cirFunction = (CirFunction) cirClass.addFunction(_function.name);
+                            //cirFunction.
+                        }
+                    }
+
+                }
+                cirData.remapXRefs();
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in createCirDataFromXmlFileWithJavaMetadata:{0}",ex.Message);
+            }
+            return cirData;
+        }
+        
+    }
+}

@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="addApplication" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\addApplication.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Assessment_close" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Assessment_close.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Assessment_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Assessment_delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Assessment_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Assessment_open.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Assessment_publish" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Assessment_publish.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Assessment_publishded" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Assessment_publishded.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Assessment_rename" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Assessment_rename.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Assessment_save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Assessment_save.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Assessment_saveAs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Assessment_saveAs.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AssessmentDiff" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\AssessmentDiff.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bundles" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Bundles.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bundles_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Bundles_add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bundles_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Bundles_delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Bundles_rename" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Bundles_rename.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CollapseAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\CollapseAll.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Console" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Console.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Console_scrollLock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Console_scrollLock.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CustomRules" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\CustomRules.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CustomRules_Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\CustomRules_Add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CustomRules_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\CustomRules_Delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DuplicateProject" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\DuplicateProject.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Edit_copy.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_cut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Edit_cut.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_find" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Edit_find.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_FindNext" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Edit_FindNext.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_paste" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Edit_paste.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_Preferences" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Edit_Preferences.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_remove" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Edit_remove.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Edit_SelectAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Edit_SelectAll.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Excluded_Findings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Excluded Findings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ExpandAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\ExpandAll.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Explorer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Explorer.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Explorer_allApplications" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Explorer_allApplications.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Explorer_Application" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Explorer_Application.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Explorer_File" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Explorer_File.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Explorer_Folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Explorer_Folder.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Explorer_Project" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Explorer_Project.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Filter.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Filter_Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Filter_Add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Filter_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Filter_delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Filter_Manage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Filter_Manage.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Filter_save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Filter_save.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Filter_Share" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Filter_Share.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FilterAssessment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\FilterAssessment.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FindingDetail" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\FindingDetail.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_API" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_API.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_applyFilter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_applyFilter.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_Bundle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_Bundle.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_Filter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_Filter.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_High" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_High.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_Info" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_Info.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_Medium" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_Medium.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_SmartAudit_Info" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_SmartAudit_Info.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_SmartAudit_NoResults" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_SmartAudit_NoResults.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_Table" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_Table.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_TypeI" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_TypeI.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_TypeII" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_TypeII.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_Vulnerability" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_Vulnerability.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_VulnType" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_VulnType.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_withoutScan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_withoutScan.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Findings_withScan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Findings_withScan.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FixedMissedFindings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\FixedMissedFindings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GenerateFindingsReport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\GenerateFindingsReport.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GenerateSmartAuditReport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\GenerateSmartAuditReport.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="help" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\help.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Log_clearConsole" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Log_clearConsole.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Log_OpenConsole" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Log_OpenConsole.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="log_pinConsole" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\log_pinConsole.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="log_properties" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\log_properties.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="log_SaveFindings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\log_SaveFindings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="log_Search" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\log_Search.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="log_Showall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\log_Showall.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="log_showErrors" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\log_showErrors.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Metrics" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Metrics.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ModifiedFindings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\ModifiedFindings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MySql" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\MySql.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MySql_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\MySql_2.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MySql_Administrator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\MySql_Administrator.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="NewApplication" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\NewApplication.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OpenAssessment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\OpenAssessment.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OpenInExternalEditor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\OpenInExternalEditor.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="OpenInInternalEditor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\OpenInInternalEditor.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PatternLibrary" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\PatternLibrary.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PatternLibrary_Add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\PatternLibrary_Add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PatternLibrary_Delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\PatternLibrary_Delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PatternLibrary_Edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\PatternLibrary_Edit.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Preferences" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Preferences.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Prespective_Analyzis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Prespective_Analyzis.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Prespective_Configuration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Prespective_Configuration.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Prespective_Triage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Prespective_Triage.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Project_excludedSourceRoot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Project_excludedSourceRoot.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Project_save" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Project_save.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Project_saveProperties" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Project_saveProperties.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="project_sourceRoot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\project_sourceRoot.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ProjectProperties" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\ProjectProperties.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh_active" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\refresh_active.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh_grayedout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\refresh_grayedout.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RemediationAssistance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\RemediationAssistance.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RemoveProject" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\RemoveProject.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ScanAgain" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\ScanAgain.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ScanAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\ScanAll.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ScanCancel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\ScanCancel.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ScanProject" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\ScanProject.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ScanSelection" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\ScanSelection.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Search" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\Search.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="setConfiguration" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\setConfiguration.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SmartAudit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\SmartAudit.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SmartTrace" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\SmartTrace.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sort_ascending" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\sort_ascending.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sort_descending" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\sort_descending.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="StartScan" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\StartScan.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="VulnerabilityMatrix" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\from OSA\VulnerabilityMatrix.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+</root>

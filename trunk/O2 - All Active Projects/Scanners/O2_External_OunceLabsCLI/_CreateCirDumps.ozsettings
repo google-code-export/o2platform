@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Settings description="A_Undocumented Settings" display_name="A_Undocumented Settings" hidden="false" require_core_restart="true">
+	<Setting
+		 name="before_ipva_cir_dump_file"
+		 value="{TargetPath}\CirDump.xml"
+		 default_value="C:\Program Files\Ounce Labs\logs"
+		 display_name="before_ipva_cir_dump_file"
+		 type="text"
+		 hidden="false"
+	/>
+	<Setting
+		 name="before_ipva_cir_dump_format"
+		 value="xml"
+		 default_value="xml"
+		 display_name="before_ipva_cir_dump_format"
+		 type="text"
+		 hidden="false"
+	/>
+	<Setting
+		 name="before_ipva_cir_dump_symbols"
+		 value="full"
+		 default_value="full"
+		 display_name="before_ipva_cir_dump_symbols"
+		 type="text"
+		 hidden="false"
+	/>
+	<Setting
+		 name="before_ipva_cir_dump_ssa"
+		 value="true"
+		 default_value="false"
+		 display_name="before_ipva_cir_dump_ssa"
+		 type="bool"
+		 hidden="false"
+	/>
+</Settings>
