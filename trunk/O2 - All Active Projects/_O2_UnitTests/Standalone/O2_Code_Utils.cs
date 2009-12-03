@@ -10,6 +10,7 @@ using O2.Views.ASCX.CoreControls;
 using O2.External.O2Mono.MonoCecil;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace O2.UnitTests.Standalone
 {
@@ -34,7 +35,9 @@ namespace O2.UnitTests.Standalone
         public void showAssemblyDependencies()
         {
             var assemblyToProcess =@"E:\O2\_Bin_(O2_Binaries)\_O2_Scanner_DotNet.exe";
-            var dependencies = CecilAssemblyDependencies.getListOfDependenciesForAssembly(assemblyToProcess);
+            var dependencies = CecilAssemblyDependencies.getListOfDependenciesForAssemblies(new List<string>() {assemblyToProcess});
+            // DC: weird but in one of my dev boxes the code below doesn't compile :(
+            //var dependencies2 = CecilAssemblyDependencies.getListOfDependenciesForAssembly(assemblyToProcess);
             foreach(var dependency in dependencies)
                 log.write(@"//O2Tag_AddReferenceFile:{0}", dependency);
         }

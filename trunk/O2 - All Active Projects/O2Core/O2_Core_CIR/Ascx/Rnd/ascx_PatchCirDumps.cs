@@ -5,8 +5,6 @@ using System.IO;
 using System.Windows.Forms;
 using O2.Core.CIR;
 using O2.Core.CIR.CirObjects;
-using O2.Core.CIR.CirObjects;
-using O2.Core.CIR.CirUtils;
 using O2.Core.CIR.CirUtils;
 
 namespace O2.Core.CIR.Ascx.Rnd

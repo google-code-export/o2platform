@@ -413,7 +413,7 @@ namespace O2.DotNetWrappers.Windows
         {
             if (false == File.Exists(sFileToOpen))
                 return null;            
-            StreamReader sr = null;            
+            //StreamReader sr = null;            
             try
             {
                 FileStream fs = File.OpenRead(sFileToOpen);

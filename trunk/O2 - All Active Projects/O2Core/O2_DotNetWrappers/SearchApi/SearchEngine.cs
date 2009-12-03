@@ -122,7 +122,7 @@ namespace O2.DotNetWrappers.SearchApi
             }
             catch (Exception ex)
             {
-                DI.log.error("In loadFile, error while processing file: {0} ", sFileToLoad);
+                DI.log.error("In loadFile, error while processing file: {0} : {1}", sFileToLoad, ex.Message);
             }
             return false;
 

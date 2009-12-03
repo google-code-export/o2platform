@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using O2.Core.CIR.CirUtils;
-using O2.Core.CIR.CirUtils;
-using O2.Core.CIR.CirUtils;
 using O2.DotNetWrappers.Filters;
 using O2.Kernel.Interfaces.CIR;
 

@@ -7,7 +7,6 @@ using System.Reflection.Emit;
 using System.Windows.Forms;
 using O2.Core.CIR;
 using O2.Core.CIR.CirCreator;
-using O2.Core.CIR.CirCreator;
 using O2.Core.CIR.Xsd;
 using O2.DotNetWrappers.Windows;
 
@@ -15,8 +14,8 @@ namespace O2.Core.CIR.Ascx
 {
     public partial class ascx_DotNet_CirCreator_OLD : UserControl
     {
-        private Assembly aLoadedAssesmbly;
-        private String sDllToProcess = "";
+        //private Assembly aLoadedAssesmbly;
+        //private String sDllToProcess = "";
 
         public ascx_DotNet_CirCreator_OLD()
         {

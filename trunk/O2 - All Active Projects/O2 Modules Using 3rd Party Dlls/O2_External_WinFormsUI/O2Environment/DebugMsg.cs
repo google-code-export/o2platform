@@ -26,7 +26,7 @@ namespace O2.External.WinFormsUI.O2Environment
 
         #endregion
 
-        internal static bool bAlsoSendMessageToDebugView;
+        //internal static bool bAlsoSendMessageToDebugView;
 
         public static bool bLogCache; // use when we want to keep a log of particular errors
 
@@ -155,8 +155,8 @@ namespace O2.External.WinFormsUI.O2Environment
                                 richTextBox.SelectionColor = cColour;
                                 Application.DoEvents();
                                 // System.Diagnostics.Debug.WriteLine(sText);                              
-                                if (bAlsoSendMessageToDebugView)
-                                    Debug.WriteLine(sText);
+                                //if (bAlsoSendMessageToDebugView)
+                                //    Debug.WriteLine(sText);
                             }
                         }
                     }

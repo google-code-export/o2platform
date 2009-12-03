@@ -18,7 +18,7 @@ namespace O2.DotNetWrappers.O2Findings
             return results;
             //var findingsInA = from O2Finding o2Finding in o2FindindsA where o2FindindsA.Source!="" and o2FindindsA.Sink != ""
             //    select new {o2Finding.Sou} 
-            return new List<IO2Finding>();
+            //return new List<IO2Finding>();
         }
     }
 }

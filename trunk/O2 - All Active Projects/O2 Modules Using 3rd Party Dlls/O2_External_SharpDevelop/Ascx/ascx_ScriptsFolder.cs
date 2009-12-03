@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.CodeUtils;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Views.ASCX;
 using O2.Views.ASCX.CoreControls;
