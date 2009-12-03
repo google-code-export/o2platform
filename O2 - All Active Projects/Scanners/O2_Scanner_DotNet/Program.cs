@@ -27,8 +27,8 @@ namespace O2.Scanner.DotNet
                 O2AscxGUI.addControlToMenu(typeof(ascx_XRules_Editor), O2DockState.Document, "XRules Editor");
                 O2AscxGUI.addControlToMenu(typeof(ascx_XRules_Execution), O2DockState.Document, "XRules Execution");
 
-                var unitTestExecution = "UnitTestExecution";
-                var patchandmonitor = "PatchAndMonitor";
+                //var unitTestExecution = "UnitTestExecution";
+                //var patchandmonitor = "PatchAndMonitor";
                 var xRulesEditor = "XRules Editor";
                 //O2AscxGUI.openAscx(typeof(ascx_XRules_UnitTestExecution_BigGUI), O2DockState.DockRight, unitTestExecution);
                 //O2AscxGUI.openAscx(typeof(ascx_PatchAndMonitor), O2DockState.Document, patchandmonitor);

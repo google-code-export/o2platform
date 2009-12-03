@@ -96,7 +96,7 @@ namespace O2.DotNetWrappers.O2CmdShell
                 default:
                     return arg0;
             }
-            return arg0;
+            //return arg0;
         }
     }
 }

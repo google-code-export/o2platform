@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using O2.Core.CIR.CirObjects;
-using O2.Core.CIR.CirObjects;
-using O2.Core.CIR.CirObjects;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.Interfaces.CIR;
 

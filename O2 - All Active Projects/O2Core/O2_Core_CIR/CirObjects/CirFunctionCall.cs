@@ -2,7 +2,6 @@
 using System;
 using Mono.Cecil.Cil;
 using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.CIR;
 
 namespace O2.Core.CIR.CirObjects
 {

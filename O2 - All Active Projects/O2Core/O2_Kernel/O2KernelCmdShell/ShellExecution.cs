@@ -8,7 +8,7 @@ namespace O2.Kernel.O2CmdShell
     public class ShellExecution
     {
         private readonly ShellIO shellIO;
-        private readonly ShellCommands shellCommands;
+        //private readonly ShellCommands shellCommands;
         public static bool cmdExecutionEnabled; 
 
         public ShellExecution(ShellIO _shellIO)

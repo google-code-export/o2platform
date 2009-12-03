@@ -12,7 +12,7 @@ namespace O2.External.SharpDevelop.Ascx
 {
     public partial class ascx_ScriptsFolder
     {
-        public event Callbacks.dMethod_String _onSampleScriptsSelect;
+        //public event Callbacks.dMethod_String _onSampleScriptsSelect;
         public Dictionary<string, string> sampleScripts;
 
         readonly O2SampleScripts o2SampleScripts = new O2SampleScripts();

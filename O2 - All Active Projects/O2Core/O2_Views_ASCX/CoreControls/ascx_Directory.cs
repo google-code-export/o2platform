@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.CodeUtils;
 using O2.Views.ASCX;
 
 namespace O2.Views.ASCX.CoreControls

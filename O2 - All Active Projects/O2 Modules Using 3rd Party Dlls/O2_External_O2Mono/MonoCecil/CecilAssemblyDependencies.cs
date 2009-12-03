@@ -200,7 +200,7 @@ namespace O2.External.O2Mono.MonoCecil
             }
             return results;
         }
-
+        
         public static List<string> getListOfDependenciesForAssembly(string assembly)
         {
             return getListOfDependenciesForAssemblies(new List<string> {assembly});

@@ -881,7 +881,7 @@ namespace O2.Legacy.OunceV6.GLEEGraphWiz.Ascx
             //        {
             return; // code is not working (we need to have full trace trees calculated  for each item dropped
 
-            try
+/*            try
             {
 
                 var droppedObject = Dnd.tryToGetObjectFromDroppedObject(e);
@@ -901,7 +901,7 @@ namespace O2.Legacy.OunceV6.GLEEGraphWiz.Ascx
                                                                itemToView));
                         tvGLEE_NodesToGraph.Nodes.AddRange(nodesToAdd.ToArray());
                         showLoadedTracesInGleeViewer();
-                        /*                 }
+                        / *                 }
                                                        if (droppedTreeNode.Nodes.Count == 0)
                                                             tvGLEE_NodesToGraph.Nodes.Add(droppedTreeNode);
                                                         else
@@ -912,7 +912,7 @@ namespace O2.Legacy.OunceV6.GLEEGraphWiz.Ascx
                                                             tvGLEE_NodesToGraph.Nodes.AddRange(nodesToAdd.ToArray());
                                                         }
                                                         showLoadedTracesInGleeViewer();
-                                                    }*/
+                                                    }* /
                     }
                 }
             }
@@ -921,7 +921,7 @@ namespace O2.Legacy.OunceV6.GLEEGraphWiz.Ascx
                 DI.log.ex(ex, "in tvGLEE_NodesToGraph_DragDrop");
             }
               //      });
-            
+            */
         }    
 
         /*
