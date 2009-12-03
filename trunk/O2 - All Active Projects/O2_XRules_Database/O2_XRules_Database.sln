@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_XRules_Database", "O2_XRules_Database.csproj", "{83957D55-86AB-4C26-9F82-6182999F09E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{83957D55-86AB-4C26-9F82-6182999F09E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83957D55-86AB-4C26-9F82-6182999F09E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83957D55-86AB-4C26-9F82-6182999F09E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83957D55-86AB-4C26-9F82-6182999F09E8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
