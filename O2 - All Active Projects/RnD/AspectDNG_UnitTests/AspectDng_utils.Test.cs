@@ -10,7 +10,7 @@ using O2.External.O2Mono.MonoCecil;
 using O2.Rnd.AspectDngHook;
 
 
-namespace O2.RnD.AspectTests.UnitTests
+namespace O2.RnD.AspectDNG_UnitTests
 {
     /// <summary>
     ///This is a test class for utilsTest and is intended
@@ -83,7 +83,7 @@ namespace O2.RnD.AspectTests.UnitTests
                 "Checking for persistance of changed data");
 
             var sTargetAssembly = new CreateTestExe().createBasicHelloWorldExe().save();
-                //SpringExec.createTypeAndInvokeMethod(typeof (CreateTestExesTest), "createBasicHelloWorldExe");
+            //SpringExec.createTypeAndInvokeMethod(typeof (CreateTestExesTest), "createBasicHelloWorldExe");
 
             String sHookInjectionResult = DngUtils.injectHooks(sTargetAssembly, "*", "*");
             String sProcessExecutionResult = Processes.startProcessAsConsoleApplicationAndReturnConsoleOutput(sTargetAssembly, "");

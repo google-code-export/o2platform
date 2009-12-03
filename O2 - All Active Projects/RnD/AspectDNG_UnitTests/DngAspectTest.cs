@@ -6,10 +6,9 @@ using DotNetGuru.AspectDNG.Joinpoints;
 using NUnit.Framework;
 using O2.DotNetWrappers.Windows;
 using O2.Rnd.AspectDngHook;
-using O2.RnD.AspectTests.UnitTests;
 
 
-namespace O2.RnD.AspectTests.UnitTests
+namespace O2.RnD.AspectDNG_UnitTests
 {
     /// <summary>
     ///This is a test class for DngAspectTest and is intended
