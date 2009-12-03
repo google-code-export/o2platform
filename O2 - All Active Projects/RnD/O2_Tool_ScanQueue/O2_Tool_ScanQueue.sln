@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_ScanQueue", "O2_Tool_ScanQueue.csproj", "{7809B498-9CA2-4BA9-B036-6B0F9D222420}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2CoreLib", "..\..\O2Core\O2CoreLib\O2CoreLib.csproj", "{33DF3843-3D97-418D-961F-DB15E247D249}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OunceScanner", "..\..\Scanners\OunceScanner\OunceScanner.csproj", "{46E58DB9-5ADB-4482-A366-73184B3C2011}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CirAnalysis", "..\..\Analysis\CirAnalysis\CirAnalysis.csproj", "{FA5A1A20-9B00-4040-9951-305B4DFE5CA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ozasmt", "..\..\O2Core\Ozasmt\Ozasmt.csproj", "{F8779106-4CEC-4272-B4E8-A5EC57347293}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OunceRules", "..\..\Scanners\OunceRules\OunceRules.csproj", "{17F0470C-DCCE-4EFB-9655-2B16D8FDA718}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7809B498-9CA2-4BA9-B036-6B0F9D222420}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7809B498-9CA2-4BA9-B036-6B0F9D222420}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7809B498-9CA2-4BA9-B036-6B0F9D222420}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7809B498-9CA2-4BA9-B036-6B0F9D222420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33DF3843-3D97-418D-961F-DB15E247D249}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33DF3843-3D97-418D-961F-DB15E247D249}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33DF3843-3D97-418D-961F-DB15E247D249}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33DF3843-3D97-418D-961F-DB15E247D249}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46E58DB9-5ADB-4482-A366-73184B3C2011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46E58DB9-5ADB-4482-A366-73184B3C2011}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46E58DB9-5ADB-4482-A366-73184B3C2011}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46E58DB9-5ADB-4482-A366-73184B3C2011}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA5A1A20-9B00-4040-9951-305B4DFE5CA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA5A1A20-9B00-4040-9951-305B4DFE5CA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA5A1A20-9B00-4040-9951-305B4DFE5CA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA5A1A20-9B00-4040-9951-305B4DFE5CA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8779106-4CEC-4272-B4E8-A5EC57347293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8779106-4CEC-4272-B4E8-A5EC57347293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8779106-4CEC-4272-B4E8-A5EC57347293}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8779106-4CEC-4272-B4E8-A5EC57347293}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F0470C-DCCE-4EFB-9655-2B16D8FDA718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F0470C-DCCE-4EFB-9655-2B16D8FDA718}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F0470C-DCCE-4EFB-9655-2B16D8FDA718}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F0470C-DCCE-4EFB-9655-2B16D8FDA718}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
