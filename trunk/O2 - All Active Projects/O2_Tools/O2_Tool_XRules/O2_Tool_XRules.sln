@@ -32,6 +32,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2UnitTest_O2Kernel", "..\..\_O2_UnitTests\O2UnitTest_O2Kernel\O2UnitTest_O2Kernel.csproj", "{21B23A86-90A9-4B6C-9477-161512F96132}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Publish to Deploy|Any CPU = Publish to Deploy|Any CPU
