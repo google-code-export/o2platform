@@ -65,7 +65,7 @@ namespace O2.Tool.XRules
                 O2AscxGUI.addControlToMenu(typeof(ascx_Variables), O2DockState.DockBottom, "O2 Mdbg - Variables");
                 O2AscxGUI.addControlToMenu(typeof(ascx_FindingsCreator), O2DockState.DockBottom, "O2 Mdbg - FindingsCreator");
                 O2AscxGUI.addControlToMenu(typeof(ascx_Breakpoints), O2DockState.DockBottom, "O2 Mdbg - Breakpoints");
-                O2AscxGUI.addControlToMenu(typeof(ascx_StackTraceAndThreads), O2DockState.DockBottom, "O2 Mdbg - StackTrace and Threads");
+                O2AscxGUI.addControlToMenu(typeof(ascx_StackTraceAndThreads), O2DockState.DockBottom, "O2 Mdbg - StackTrace and Threads..");
             }            
         }                
     }
