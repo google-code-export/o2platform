@@ -2,7 +2,7 @@
 using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;
 
-namespace O2.RnD.AspectTests.UnitTests
+namespace O2.RnD.AspectDNG_UnitTests
 {
     class DI
     {
