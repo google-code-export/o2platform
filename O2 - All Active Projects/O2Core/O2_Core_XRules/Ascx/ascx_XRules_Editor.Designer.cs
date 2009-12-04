@@ -35,6 +35,8 @@ namespace O2.Core.XRules.Ascx
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btLoadXRulesUnitTests = new System.Windows.Forms.ToolStripButton();
             this.btLoadUnitTestFromLocalO2Development = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.tbFileToOpen = new System.Windows.Forms.ToolStripTextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.llReloadLocalXRulesDatabase = new System.Windows.Forms.LinkLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -49,8 +51,6 @@ namespace O2.Core.XRules.Ascx
             this.label1 = new System.Windows.Forms.Label();
             this.directoryWithLocalXRules = new O2.Views.ASCX.CoreControls.ascx_Directory();
             this.directoryWithXRulesDatabase = new O2.Views.ASCX.CoreControls.ascx_Directory();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.tbFileToOpen = new System.Windows.Forms.ToolStripTextBox();
             this.scTopLevel.Panel1.SuspendLayout();
             this.scTopLevel.Panel2.SuspendLayout();
             this.scTopLevel.SuspendLayout();
@@ -137,6 +137,18 @@ namespace O2.Core.XRules.Ascx
             this.btLoadUnitTestFromLocalO2Development.Size = new System.Drawing.Size(23, 22);
             this.btLoadUnitTestFromLocalO2Development.Text = "Load Unit test (from O2 source code)";
             this.btLoadUnitTestFromLocalO2Development.Click += new System.EventHandler(this.btLoadUnitTestFromLocalO2Development_Click);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(56, 22);
+            this.toolStripLabel1.Text = "Open File:";
+            // 
+            // tbFileToOpen
+            // 
+            this.tbFileToOpen.Name = "tbFileToOpen";
+            this.tbFileToOpen.Size = new System.Drawing.Size(100, 25);
+            this.tbFileToOpen.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbFileToOpen_KeyUp);
             // 
             // groupBox3
             // 
@@ -296,6 +308,7 @@ namespace O2.Core.XRules.Ascx
             this.directoryWithLocalXRules.Size = new System.Drawing.Size(228, 151);
             this.directoryWithLocalXRules.TabIndex = 0;
             this.directoryWithLocalXRules._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithLocalXRules__onDirectoryClick);
+            this.directoryWithLocalXRules._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithLocalXRules__onDirectoryDoubleClick);
             // 
             // directoryWithXRulesDatabase
             // 
@@ -312,19 +325,8 @@ namespace O2.Core.XRules.Ascx
             this.directoryWithXRulesDatabase.Name = "directoryWithXRulesDatabase";
             this.directoryWithXRulesDatabase.Size = new System.Drawing.Size(228, 139);
             this.directoryWithXRulesDatabase.TabIndex = 0;
-            this.directoryWithXRulesDatabase._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryDoubleClick);
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(56, 22);
-            this.toolStripLabel1.Text = "Open File:";
-            // 
-            // tbFileToOpen
-            // 
-            this.tbFileToOpen.Name = "tbFileToOpen";
-            this.tbFileToOpen.Size = new System.Drawing.Size(100, 25);
-            this.tbFileToOpen.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbFileToOpen_KeyUp);
+            this.directoryWithXRulesDatabase._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryClick);
+            this.directoryWithXRulesDatabase._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryDoubleClick);
             // 
             // ascx_XRules_Editor
             // 

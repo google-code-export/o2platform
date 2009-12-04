@@ -39,23 +39,23 @@ namespace O2.Core.XRules.Ascx
 
         public void openXRule(string fileOrDir)
         {
-            loadFile(fileOrDir);
+            loadFile(fileOrDir,false);
         }
 
-        public void loadFile(string fileOrDir)
+        public string loadFile(string fileOrDir, bool compileLoadedFile)
         {
             var fileToOpen = "";
             if (File.Exists(fileOrDir))
                 fileToOpen = fileOrDir;
             else if (Directory.Exists(fileOrDir))
-                return; // no suport for dirs
+                return ""; // no suport for dirs
             else
             {
                 fileToOpen = Path.Combine(directoryWithXRulesDatabase.getCurrentDirectory(), fileOrDir);
                 if (false == File.Exists(fileToOpen))
-                    return;
+                    return "";
             }
-            ExtensionMethods.invokeOnThread((Control) this, () =>
+            this.invokeOnThread(() =>
                     {
 
                         var fileName = Path.GetFileName(fileToOpen);
@@ -66,8 +66,8 @@ namespace O2.Core.XRules.Ascx
                         {
                             var newTabPage = new TabPage(fileName);
                             tcTabControlWithRulesSource.TabPages.Add(newTabPage);
-                            loadSourceCodeFileIntoTab(fileToOpen, newTabPage);
-
+                            loadSourceCodeFileIntoTab(fileToOpen, newTabPage, compileLoadedFile);
+                            
                             if (tcTabControlWithRulesSource.TabPages.Contains(tpNoRulesLoaded))
                                 tcTabControlWithRulesSource.TabPages.Remove(tpNoRulesLoaded);
 
@@ -77,14 +77,17 @@ namespace O2.Core.XRules.Ascx
                             filesLoaded.Add(fileName, newTabPage);
                         }
                     });
+            return fileToOpen;
         }
         
 
-        private void loadSourceCodeFileIntoTab(string fileToOpen, TabPage tabPage)
+        private void loadSourceCodeFileIntoTab(string fileToOpen, TabPage tabPage, bool compileLoadedFile)
         {
             var sourceCodeEditor = new ascx_SourceCodeEditor {Dock = DockStyle.Fill};
             tabPage.Controls.Add(sourceCodeEditor);
             sourceCodeEditor.loadSourceCodeFile(fileToOpen);
+            if (compileLoadedFile)
+                sourceCodeEditor.compileSourceCode();
         }
 
         public void openSourceDirectory(string directoryToOpen)

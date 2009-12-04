@@ -514,7 +514,19 @@ namespace O2.Views.ASCX.DataViewers
                         {
                             PublicDI.log.error("in populateTreeViewUsingViewMode_byFunctionSignature: {0}", ex.Message);
                         }
-                        targetTreeView.invokeOnThread(() => targetTreeView.Visible = true);
+                        targetTreeView.invokeOnThread(
+                            () =>
+                            {
+                                targetTreeView.Visible = true;
+                                // the code below tries to solve a weird GUI problem that happens when there is only one child Node (which is invible until the user clicks on it))                                
+                                if (targetTreeView.Nodes.Count == 1)
+                                {
+                                    targetTreeView.ExpandAll();
+//                                    targetTreeView.SelectedNode = targetTreeView.Nodes[0];
+                                    //var dummyNode = targetTreeView.Nodes.Add("dUMMYN node");
+                                    //targetTreeView.Nodes.Remove(dummyNode);
+                                }
+                            });
                     });
         }
 

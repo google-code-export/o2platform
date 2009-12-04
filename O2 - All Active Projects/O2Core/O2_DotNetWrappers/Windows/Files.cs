@@ -230,21 +230,29 @@ namespace O2.DotNetWrappers.Windows
             return getFilesFromDir_returnFullPath(sPath, "*.*", false);
         }
 
-        public static List<String> getFilesFromDir_returnFullPath(String sPath, String sSearchPattern)
+        public static List<String> getFilesFromDir_returnFullPath(String path, String searchPattern)
         {
-            return getFilesFromDir_returnFullPath(sPath, sSearchPattern, false);
+            return getFilesFromDir_returnFullPath(path, searchPattern, false);
         }
 
-        // returns full paths instead of just the file names
-        public static List<String> getFilesFromDir_returnFullPath(String sPath, String sSearchPattern,
-                                                                  bool bSearchRecursively)
+        public static List<String> getFilesFromDir_returnFullPath(String path, List<String> searchPatterns,
+                                                                  bool searchRecursively)        
         {
-            var lsFiles = new List<String>();
-            getListOfAllFilesFromDirectory(lsFiles, sPath, bSearchRecursively, sSearchPattern, false);
+            var results = new List<String>();
+            foreach(var searchPattern in searchPatterns)
+                results.AddRange(getFilesFromDir_returnFullPath(path,searchPattern, searchRecursively));
+            return results;
+        }
+        // returns full paths instead of just the file names
+        public static List<String> getFilesFromDir_returnFullPath(String path, String searchPattern,
+                                                                  bool searchRecursively)
+        {
+            var results = new List<String>();
+            getListOfAllFilesFromDirectory(results, path, searchRecursively, searchPattern, false /*verbose*/);
             ///  foreach (String sFile in lsFiles)
             //      lsFiles.Add(Path.Combine(sPath, sFile));
 
-            return lsFiles;
+            return results;
         }
 
         public static List<String> getListOfAllFilesFromDirectory(String sStartDirectory, bool bSearchRecursively, O2Thread.FuncVoidT1<List<String>> onComplete)

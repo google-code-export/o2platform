@@ -19,6 +19,7 @@ using O2.Kernel.Interfaces.Rules;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Views.ASCX.DataViewers;
 using O2.Views.ASCX.O2Findings;
+using System.Reflection;
 
 namespace O2.Core.CIR.Ascx
 {
@@ -83,6 +84,19 @@ namespace O2.Core.CIR.Ascx
         public ICirDataAnalysis getCirDataAnalysisObject()
         {
             return cirDataAnalysis;
+        }
+
+
+        public void showSignatures(FilteredSignature filteredSignature)
+        { 
+        }
+
+        public void showSignatures(List<FilteredSignature> filteredSignatures)
+        {
+            var signaturesToShow = new List<String>();
+            foreach (var filteredSignature in filteredSignatures)
+                signaturesToShow.Add(filteredSignature.sOriginalSignature);
+            showSignatures(signaturesToShow);
         }
 
         public void showSignatures(List<string> signaturesToShow)
@@ -193,6 +207,19 @@ namespace O2.Core.CIR.Ascx
                 var functionSignature = filteredSignature.sOriginalSignature;
                 if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(functionSignature))
                     return cirDataAnalysis.dCirFunction_bySignature[functionSignature];
+                // if we could not find using the originalSignature, try the signature
+                foreach (var cirFunction in cirDataAnalysis.dCirFunction_bySignature.Values)
+                {
+                    var s = new FilteredSignature(cirFunction).sSignature;
+                    var d = filteredSignature.sSignature;
+                    if (new FilteredSignature(cirFunction).sSignature == filteredSignature.sSignature)
+                    {
+                        return cirFunction;
+                    }
+                    if (cirFunction.FunctionName == filteredSignature.sFunctionName)
+                    { 
+                    }
+                }
             }
             return null;
         }
@@ -292,7 +319,11 @@ namespace O2.Core.CIR.Ascx
             this.invokeOnThread(() => lbLoadingDroppedFile.Visible = true);
 
             var fileOrDirectoryToLoad = droppedObject.ToString();
-            if (File.Exists(fileOrDirectoryToLoad))
+            if (droppedObject is Assembly)
+                loadFile(((Assembly)droppedObject).Location);
+            else if (droppedObject is List<FilteredSignature>)
+                showSignatures(((List<FilteredSignature>)droppedObject));
+            else if (File.Exists(fileOrDirectoryToLoad))
                 loadFile(fileOrDirectoryToLoad);
             else if (Directory.Exists(fileOrDirectoryToLoad))
             {

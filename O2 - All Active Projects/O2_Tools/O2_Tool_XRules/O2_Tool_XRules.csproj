@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1F4DA91C-EF77-4552-AA2A-1159C7032FCD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -114,6 +114,10 @@
     <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
       <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
       <Name>O2_External_WinFormsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Core_CIR\O2_Core_CIR.csproj">
+      <Project>{F19ED2FE-8191-4534-8DAC-4C42DEE87B52}</Project>
+      <Name>O2_Core_CIR</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Core_FileViewers\O2_Core_FileViewers.csproj">
       <Project>{6CDF7A9F-31CC-4496-90B1-09A39C8EEE08}</Project>

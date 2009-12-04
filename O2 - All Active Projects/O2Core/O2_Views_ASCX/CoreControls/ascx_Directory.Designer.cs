@@ -85,6 +85,7 @@ namespace O2.Views.ASCX.CoreControls
             this.ilDirectoriesAndFiles.Images.SetKeyName(2, "project_sourceRoot.ico");
             this.ilDirectoriesAndFiles.Images.SetKeyName(3, "Edit_remove.ico");
             this.ilDirectoriesAndFiles.Images.SetKeyName(4, "refresh_active.ico");
+            this.ilDirectoriesAndFiles.Images.SetKeyName(5, "accessories-text-editor.png");
             // 
             // btSelectDirectory
             // 

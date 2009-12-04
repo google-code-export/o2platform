@@ -321,7 +321,7 @@ namespace O2.DotNetWrappers.DotNet
                 }
                 if (sourceCodeFiles.Count > 1)
                 {
-                    PublicDI.log.debug("There are {0} files to compile");
+                    PublicDI.log.debug("There are {0} files to compile", sourceCodeFiles.Count);
                     foreach (var file in sourceCodeFiles)
                         PublicDI.log.debug("   {0}", file);
                 }
@@ -465,6 +465,33 @@ namespace O2.DotNetWrappers.DotNet
                 PublicDI.log.error("In compileSourceCode_CSharp: {0}", ex.Message);
             }
             return false;
+        }
+
+        public static void addExtraFileReferencesToSelectedNode(TreeView treeView, string file)
+        {
+            if (treeView != null)
+                treeView.invokeOnThread(
+                    ()=>
+                    {
+                        addExtraFileReferencesToTreeNode(treeView.SelectedNode,file);
+                    });
+        }
+
+        public static void addExtraFileReferencesToTreeNode(TreeNode treeNode, string file)
+        {
+            if (treeNode != null && File.Exists(file))
+            {
+                treeNode.Nodes.Clear();
+                // this will get the list of files to compile (which includes the extra files referenced in the source code that we want to add to this treeview)
+                var filesToCompile = new List<string> {file};
+                addSourceFileOrFolderIncludedInSourceCode(filesToCompile);
+                filesToCompile.Remove(file);
+                foreach (var extraFile in filesToCompile)
+                {                    
+                    O2Forms.newTreeNode(treeNode, Path.GetFileName(extraFile), 5, extraFile);                    
+                }
+                treeNode.ExpandAll();
+            }
         }
     }
 }

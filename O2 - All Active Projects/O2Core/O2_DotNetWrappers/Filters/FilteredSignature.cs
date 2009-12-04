@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using O2.Kernel.Interfaces.CIR;
+using O2.Kernel;
 
 //using Mono.Cecil;
 //using O2.o2AppDomainProxy;
@@ -104,24 +105,33 @@ namespace O2.DotNetWrappers.Filters
 
         private void populateSignatureObjectsFromMethodInfo(MethodInfo methodInfo)
         {
-            //   DI.log.info(" --   :{0}", methodInfo.Name);
-            sFunctionName = methodInfo.Name;
-            foreach (ParameterInfo parameter in methodInfo.GetParameters())
+            try
             {
-                sParameters += (parameter.ParameterType.IsGenericType)
-                                   ? getGenericSignature(parameter.ParameterType)
-                                   : parameter.ParameterType.Name;
-                sParameters += ", ";
+                //   DI.log.info(" --   :{0}", methodInfo.Name);
+                sFunctionName = methodInfo.Name;
+                foreach (ParameterInfo parameter in methodInfo.GetParameters())
+                {
+                    var parameterValue = (parameter.ParameterType.IsGenericType)
+                                       ? getGenericSignature(parameter.ParameterType)
+                                       : parameter.ParameterType.FullName;
+                    sParameters += makeDotNetSignatureCompatibleWithOunceRules(parameterValue);
+                    sParameters += ", ";
+                }
+                if (sParameters != "")
+                    sParameters = sParameters.Substring(0, sParameters.Length - 2);
+
+                sReturnClass = makeDotNetSignatureCompatibleWithOunceRules(
+                                    getGenericSignature(methodInfo.ReturnType));
+
+                sFunctionClass = makeDotNetSignatureCompatibleWithOunceRules(methodInfo.ReflectedType.ToString());
+
+                sSignature = string.Format("{0}.{1}({2}):{3}",
+                        sFunctionClass, sFunctionName, sParameters, sReturnClass);
             }
-            if (sParameters != "")
-                sParameters = sParameters.Substring(0, sParameters.Length - 2);
-
-            sReturnClass = getGenericSignature(methodInfo.ReturnType);
-
-            sFunctionClass = methodInfo.ReflectedType.ToString();
-
-            sSignature = string.Format("{0}.{1}({2}):{3}",
-                    sFunctionClass, sFunctionName, sParameters, sReturnClass);
+            catch (Exception ex)
+            {
+                PublicDI.log.error("in populateSignatureObjectsFromMethodInfo, could not filter signature for method: {0}", methodInfo.Name);
+            }
         }
 
         public static string getGenericSignature(Type genericType)
@@ -129,10 +139,10 @@ namespace O2.DotNetWrappers.Filters
             if (genericType == null)
                 return "";
             if (!genericType.IsGenericType || genericType.Name != "List`1")
-                return genericType.Name;
+                return genericType.FullName;
             string genericArguments = "";
             foreach (Type type in genericType.GetGenericArguments())
-                genericArguments += type.Name + ",";
+                genericArguments += type.FullName + ",";
             if (genericArguments != "")
                 genericArguments = genericArguments.Substring(0, genericArguments.Length - 1);
             return string.Format("List<{0}>", genericArguments);
