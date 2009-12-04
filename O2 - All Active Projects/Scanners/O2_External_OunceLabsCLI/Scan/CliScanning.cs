@@ -80,7 +80,9 @@ namespace O2.Scanner.OunceLabsCLI.Scan
         {
             try
             {
-                string cliExe = OunceCore.getPathToOunceInstallDirectory() + @"\bin\cli.exe";
+                string cliExe = Path.Combine(OunceCore.getPathToOunceInstallDirectory(),
+                                             OunceCore.getCliExecutableName());
+                            // OunceCore.getPathToOunceInstallDirectory() + @"\bin\cli.exe";
 
                 DI.log.info("Scanning Ounce's CLI exe with parameters: {0}", parameters);
                 return Processes.startProcessAsConsoleApplication(cliExe, parameters,
