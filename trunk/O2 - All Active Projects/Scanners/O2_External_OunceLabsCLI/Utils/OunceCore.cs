@@ -12,6 +12,7 @@ namespace O2.Scanner.OunceLabsCLI.Utils
     public class OunceCore
     {
         public static string DefaultPathToOunceInstallDir { get; set;}
+        public static string CliExecutableName { get; set; }
         public static string OunceCoreLogin_UserName { get; set; }
         public static string OunceCoreLogin_Password { get; set; }
         public static string OunceCoreLogin_IPAddress { get; set; }        
@@ -25,10 +26,11 @@ namespace O2.Scanner.OunceLabsCLI.Utils
         {
 
             DefaultPathToOunceInstallDir = ConfigurationManager.AppSettings["DefaultPathToOunceInstallDir"];
+            CliExecutableName = ConfigurationManager.AppSettings["CliExecutableName"];
             OunceCoreLogin_UserName = ConfigurationManager.AppSettings["OunceCoreLogin_UserName"];
             OunceCoreLogin_Password = ConfigurationManager.AppSettings["OunceCoreLogin_Password"];
             OunceCoreLogin_IPAddress = ConfigurationManager.AppSettings["OunceCoreLogin_IPAddress"];
-
+            
             // can't use the code bellow since ClickOnce doesnt support multiple *.config files
     //O2_Scanner_OunceLabsCLI.dll.config
             //  var configFile = new XDocument()
@@ -101,6 +103,11 @@ namespace O2.Scanner.OunceLabsCLI.Utils
                 return sOunceConfigDir;
 
             return "";
+        }
+
+        public static string getCliExecutableName()
+        {
+            return CliExecutableName;
         }
     }
 }
