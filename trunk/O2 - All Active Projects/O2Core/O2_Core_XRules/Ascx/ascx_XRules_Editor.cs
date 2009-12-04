@@ -6,6 +6,7 @@ using O2.Core.XRules.XRulesEngine;
 using O2.External.SharpDevelop.Ascx;
 using O2.Kernel;
 using O2.Kernel.CodeUtils;
+using O2.DotNetWrappers.DotNet;
 
 namespace O2.Core.XRules.Ascx
 {
@@ -20,17 +21,8 @@ namespace O2.Core.XRules.Ascx
         {
             onLoad();
         }
-
-        private void directoryWithXRulesDatabase__onDirectoryDoubleClick(string fileOrDir)
-        {
-            loadFile(fileOrDir);
-        }
-
-        private void directoryWithLocalXRules__onDirectoryClick(string fileOrDir)
-        {
-            loadFile(fileOrDir);
-        }
-
+        
+        
         private void btCreateRuleFromTemplate_Click(object sender, EventArgs e)
         {
             if (lbCurrentXRulesTemplates.SelectedItem != null)
@@ -84,8 +76,29 @@ namespace O2.Core.XRules.Ascx
             {
                 var selectedFile = ((ToolStripTextBox)sender).Text;
                 PublicDI.log.info("Opening file: {0}", selectedFile);
-                loadFile(selectedFile);                
+                loadFile(selectedFile,false);                
             }
+        }
+
+        private void directoryWithLocalXRules__onDirectoryDoubleClick(string fileOrDir)
+        {
+            var fileOpened = loadFile(fileOrDir, true);                           
+        }
+
+        private void directoryWithXRulesDatabase__onDirectoryDoubleClick(string fileOrDir)
+        {
+            loadFile(fileOrDir, true);        
+        }
+
+        private void directoryWithLocalXRules__onDirectoryClick(string fileOrDir)
+        {   
+            CompileEngine.addExtraFileReferencesToSelectedNode(directoryWithLocalXRules.getTreeView(), fileOrDir);
+                
+        }
+
+        private void directoryWithXRulesDatabase__onDirectoryClick(string fileOrDir)
+        {
+            CompileEngine.addExtraFileReferencesToSelectedNode(directoryWithXRulesDatabase.getTreeView(), fileOrDir);            
         }                        
     }
 }

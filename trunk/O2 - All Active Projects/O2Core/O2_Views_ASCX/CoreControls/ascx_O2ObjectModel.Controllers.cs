@@ -11,6 +11,8 @@ using O2.DotNetWrappers.Windows;
 using O2.Kernel;
 using O2.Kernel.Interfaces.Views;
 using O2.Views.ASCX.DataViewers;
+using System.IO;
+using O2.Kernel.CodeUtils;
 
 namespace O2.Views.ASCX.CoreControls
 {
@@ -26,17 +28,15 @@ namespace O2.Views.ASCX.CoreControls
         {
             if (DesignMode == false && runOnLoad)
             {                
-                assembliesLoaded = getDefaultLoadedAssemblies();
+                assembliesLoaded = getDefaultLoadedAssemblies(cbAlsoLoadDotNetFrameworkAssemblies.Checked);
                 filteredFunctionsViewer.setNamespaceDepth(0);                
                 runOnLoad = false;
                 refreshViews();                
             }
-        }
-
-        private static List<Assembly> getDefaultLoadedAssemblies()
+        }        
+        private static List<Assembly> getDefaultLoadedAssemblies(bool loadDotNetFrameworkAssemblies)
         {
-            var assembliesPaths = CompileEngine.getListOfO2AssembliesInExecutionDir();
-            
+            var assembliesPaths = CompileEngine.getListOfO2AssembliesInExecutionDir();                       
             var assemblies = new List<Assembly>();
             foreach (var assemblyPath in assembliesPaths)
             {
@@ -49,7 +49,26 @@ namespace O2.Views.ASCX.CoreControls
                 {
                     PublicDI.log.debug("could not load assembly: {0}", assemblyPath);
                 }
-            }            
+
+            }
+
+            if (loadDotNetFrameworkAssemblies)
+            {
+                foreach (var assemblyInAppDomain in DI.reflection.getAssembliesInCurrentAppDomain())
+                {
+                    var alreadyLoaded = false;
+                    foreach (var assemblyLoaded in assemblies)
+                    {
+                        if (assemblyLoaded.FullName == assemblyInAppDomain.FullName)
+                        {
+                            alreadyLoaded = true;
+                            break;
+                        }
+                    }
+                    if (false == alreadyLoaded)
+                        assemblies.Add(assemblyInAppDomain);
+                }
+            }
             return assemblies;
         }
 
@@ -101,11 +120,12 @@ namespace O2.Views.ASCX.CoreControls
             foreach (var method in methods)
             {
                 var filteredSignature = new FilteredSignature(method);
-                if (hideCSharpGeneratedMethods == false || filteredSignature.sSignature.IndexOf("<>") == -1)
+                if (hideCSharpGeneratedMethods == false ||  (filteredSignature.sSignature.IndexOf("<>") == -1 && 
+                                                             false == filteredSignature.sFunctionName.StartsWith("b__")))
                     filteredSignatures.Add(filteredSignature);
                 else
                 {
-                    PublicDI.log.info("Skipping: {0}", method.Name);
+                    //PublicDI.log.info("Skipping: {0}", method.Name);
                 }
             }
             return filteredSignatures;
@@ -124,14 +144,14 @@ namespace O2.Views.ASCX.CoreControls
             if (e == null || e.KeyData == Keys.Enter)
                 O2Thread.mtaThread(
                     () =>
-                    showFilteredMethods(tbFilterBy_MethodType.Text, tbFilterBy_MethodName.Text,
+                    showFilteredMethods(cbPerformRegExSearch.Checked, tbFilterBy_MethodType.Text, tbFilterBy_MethodName.Text,
                                         tbFilterBy_ParameterType.Text,
                                         tbFilterBy_ReturnType.Text, filteredSignatures, filteredFunctionsViewer)
                     );
         }
 
-        // DC: need to find a more optimized way to do this
-        public static void showFilteredMethods(string methodType, string methodName, string parameterType, string returnType, List<FilteredSignature> filteredSignatures, ascx_FunctionsViewer functionsViewer)
+        // DC: need to find a more optimized way to do this (this is 4am code :)  )
+        public static void showFilteredMethods(bool useRegExSearch,string methodType, string methodName, string parameterType, string returnType, List<FilteredSignature> filteredSignatures, ascx_FunctionsViewer functionsViewer)
         {
             var typesFilter = new List<FilteredSignature>();
             var methodsFilter = new List<FilteredSignature>();
@@ -144,8 +164,14 @@ namespace O2.Views.ASCX.CoreControls
             else
                 foreach (var filteredSignature in filteredSignatures)
                 {
-                    if (filteredSignature.sFunctionClass.Contains(methodType))
-                        typesFilter.Add(filteredSignature);
+                    if (useRegExSearch)
+                    {
+                        if (RegEx.findStringInString(filteredSignature.sFunctionClass, methodType))
+                            typesFilter.Add(filteredSignature);
+                    }
+                    else
+                        if (filteredSignature.sFunctionClass.Contains(methodType))
+                            typesFilter.Add(filteredSignature);
                 }
 
             // methodName
@@ -154,8 +180,14 @@ namespace O2.Views.ASCX.CoreControls
             else
                 foreach (var filteredSignature in typesFilter)
                 {
-                    if (filteredSignature.sFunctionName.Contains(methodName))
-                        methodsFilter.Add(filteredSignature);
+                    if (useRegExSearch)
+                    {
+                        if (RegEx.findStringInString(filteredSignature.sFunctionName, methodName))
+                            methodsFilter.Add(filteredSignature);
+                    }
+                    else
+                        if (filteredSignature.sFunctionName.Contains(methodName))
+                            methodsFilter.Add(filteredSignature);
                 }
 
             // parameterType
@@ -164,17 +196,29 @@ namespace O2.Views.ASCX.CoreControls
             else
                 foreach (var filteredSignature in methodsFilter)
                 {
-                    if (filteredSignature.sParameters.Contains(parameterType))
-                        parametersFilter.Add(filteredSignature);
+                    if (useRegExSearch)
+                    {
+                        if (RegEx.findStringInString(filteredSignature.sParameters, parameterType))
+                            parametersFilter.Add(filteredSignature);
+                    }
+                    else
+                        if (filteredSignature.sParameters.Contains(parameterType))
+                            parametersFilter.Add(filteredSignature);
                 }
-
+            // returnType
             if (returnType == "")
                 returnTypeFilter = parametersFilter;
             else
                 foreach (var filteredSignature in parametersFilter)
                 {
-                    if (filteredSignature.sParameters.Contains(returnType))
-                        returnTypeFilter.Add(filteredSignature);
+                    if (useRegExSearch)
+                    {
+                        if (RegEx.findStringInString(filteredSignature.sReturnClass, returnType))
+                            returnTypeFilter.Add(filteredSignature);
+                    }
+                    else
+                        if (filteredSignature.sReturnClass.Contains(returnType))
+                            returnTypeFilter.Add(filteredSignature);
                 }
             // get list of signatures to show using the last filter result (returnTypeFilter)
             var signaturesToShow = new List<string>();
@@ -182,5 +226,56 @@ namespace O2.Views.ASCX.CoreControls
                 signaturesToShow.Add(filteredSignature.sSignature);
             functionsViewer.showSignatures(signaturesToShow);
         }
+
+        public void showSelectedMethodDetails(FilteredSignature filteredSignature)
+        {
+            if (filteredSignature != null)
+            {
+                tbMethodDetails_Name.invokeOnThread(
+                    () =>
+                    {
+                        tbMethodDetails_Name.Text = filteredSignature.sFunctionName;
+                        tbMethodDetails_OriginalSignature.Text = filteredSignature.sOriginalSignature;
+                        tbMethodDetails_Parameters.Text = filteredSignature.sParameters;
+                        tbMethodDetails_ReturnType.Text = filteredSignature.sReturnClass;
+                        tbMethodDetails_Signature.Text = filteredSignature.sSignature;
+                        tbMethodDetails_Type.Text = filteredSignature.sFunctionClass;
+                    });
+            }
+        }
+
+        public void handleDrop(DragEventArgs e)
+        {
+            var fileOrFolder = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
+            if (false == string.IsNullOrEmpty(fileOrFolder))
+            {
+                if (File.Exists(fileOrFolder))
+                {
+                    addAssemblyFile(fileOrFolder,true);
+                }
+                if (Directory.Exists(fileOrFolder))
+                {
+                    var assembliesToAdd =Files.getFilesFromDir_returnFullPath(fileOrFolder, new List<string> { "*.dll", "*.exe" }, true);
+                    if (assembliesToAdd.Count > 0)
+                    {
+                        foreach (var file in assembliesToAdd)
+                            addAssemblyFile(file, false);
+                        refreshViews();
+                    }
+                }
+            }
+        }
+
+        public void addAssemblyFile(string file, bool refreshGUI)
+        {
+            var assembly = DI.reflection.getAssembly(file);
+            if (assembly != null)
+            {
+                assembliesLoaded.Add(assembly);
+                if (refreshGUI)
+                    refreshViews();
+            }
+        }
+
     }
 }

@@ -7,6 +7,10 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using O2.DotNetWrappers.Filters;
+using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.DotNet;
+using System.Reflection;
 
 namespace O2.Views.ASCX.CoreControls
 {
@@ -51,7 +55,100 @@ namespace O2.Views.ASCX.CoreControls
         {
             showFilteredMethods(e);
         }
-        
-     
+
+        private void filteredFunctionsViewer__onAfterSelect(object oObject)
+        {
+            if (oObject is FilteredSignature)
+                showSelectedMethodDetails((FilteredSignature)oObject);
+            else if (oObject is List<FilteredSignature>)
+                showSelectedMethodDetails(((List<FilteredSignature>)oObject)[0]);
+        }
+
+        private void tbMethodDetails_Type_Enter(object sender, EventArgs e)
+        {
+            O2Forms.setClipboardText(tbMethodDetails_Type.Text);
+        }
+
+        private void tbMethodDetails_Name_Enter(object sender, EventArgs e)
+        {
+            O2Forms.setClipboardText(tbMethodDetails_Name.Text);
+        }
+
+        private void tbMethodDetails_Parameters_Enter(object sender, EventArgs e)
+        {
+            O2Forms.setClipboardText(tbMethodDetails_Parameters.Text);
+        }
+
+        private void tbMethodDetails_ReturnType_Enter(object sender, EventArgs e)
+        {
+            O2Forms.setClipboardText(tbMethodDetails_ReturnType.Text);
+        }
+
+        private void tbMethodDetails_Signature_Enter(object sender, EventArgs e)
+        {
+            O2Forms.setClipboardText(tbMethodDetails_Signature.Text);
+        }
+
+        private void tbMethodDetails_OriginalSignature_Enter(object sender, EventArgs e)
+        {
+            O2Forms.setClipboardText(tbMethodDetails_OriginalSignature.Text);
+        }
+
+        private void lbMethodDetails_Type_MouseDown(object sender, MouseEventArgs e)
+        {
+            DoDragDrop(tbMethodDetails_Type, DragDropEffects.Copy);
+        }
+
+        private void lbMethodDetails_Name_MouseDown(object sender, MouseEventArgs e)
+        {
+            DoDragDrop(tbMethodDetails_Name, DragDropEffects.Copy);
+        }
+
+        private void lbMethodDetails_Parameters_MouseDown(object sender, MouseEventArgs e)
+        {
+            DoDragDrop(tbMethodDetails_Parameters, DragDropEffects.Copy);
+        }
+
+        private void lbMethodDetails_ReturnType_MouseDown(object sender, MouseEventArgs e)
+        {
+            DoDragDrop(tbMethodDetails_ReturnType, DragDropEffects.Copy);
+        }
+
+        private void lbMethodDetails_Signature_MouseDown(object sender, MouseEventArgs e)
+        {
+            DoDragDrop(tbMethodDetails_Signature, DragDropEffects.Copy);
+        }
+
+        private void lbMethodDetails_OriginalSignature_MouseDown(object sender, MouseEventArgs e)
+        {
+            DoDragDrop(tbMethodDetails_OriginalSignature, DragDropEffects.Copy);
+        }
+
+        private void tvAssembliesLoaded_DragOver(object sender, DragEventArgs e)
+        {
+            Dnd.setEffect(e);
+        }
+
+        private void tvAssembliesLoaded_DragDrop(object sender, DragEventArgs e)
+        {
+            handleDrop(e);
+        }
+
+        private void cbAlsoLoadDotNetFrameworkAssemblies_CheckedChanged(object sender, EventArgs e)
+        {
+            assembliesLoaded = getDefaultLoadedAssemblies(cbAlsoLoadDotNetFrameworkAssemblies.Checked);
+            refreshViews();
+        }
+
+        private void tvAssembliesLoaded_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            if (e.Item is TreeNode)
+            {
+                var treeNode = (TreeNode)e.Item;
+                if (treeNode.Tag != null && treeNode.Tag is Assembly)
+                    DoDragDrop((Assembly)treeNode.Tag, DragDropEffects.Copy);
+            }
+        }        
+          
     }
 }

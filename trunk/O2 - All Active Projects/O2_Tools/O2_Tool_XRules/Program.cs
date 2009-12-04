@@ -18,6 +18,7 @@ using O2.Kernel.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Tool.XRules.classes;
 using O2.Views.ASCX.O2Findings;
+using O2.Core.CIR.Ascx;
 
 namespace O2.Tool.XRules
 {
@@ -46,6 +47,7 @@ namespace O2.Tool.XRules
                 O2AscxGUI.addControlToMenu(typeof(ascx_StrutsMappings_ManualMapping));
 
                 O2AscxGUI.addControlToMenu(typeof(ascx_FindingsViewer));
+                O2AscxGUI.addControlToMenu(typeof(ascx_CirDataViewer));
                 //O2AscxGUI.addControlToMenu(typeof(ascx_DotNet_Dependencies));
 
                 //O2AscxGUI.openAscx(typeof(ascx_XRules_Editor));
