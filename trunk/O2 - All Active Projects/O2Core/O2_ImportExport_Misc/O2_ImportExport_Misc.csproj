@@ -64,13 +64,11 @@
     <Compile Include="Xsd\FindBugs.cs">
       <DependentUpon>FindBugs.xsd</DependentUpon>
     </Compile>
-    <Compile Include="Xsd\Fortify_fvdl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Xsd\AppScanDE.xsd" />
     <None Include="Xsd\CodeCrawler.xsd" />
     <None Include="Xsd\FindBugs.xsd" />
-    <None Include="Xsd\Fortify_fvdl.xsd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
