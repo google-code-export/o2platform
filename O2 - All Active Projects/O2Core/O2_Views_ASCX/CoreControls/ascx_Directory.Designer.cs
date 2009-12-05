@@ -45,12 +45,16 @@ namespace O2.Views.ASCX.CoreControls
             this.cbMoveOnDrag = new System.Windows.Forms.CheckBox();
             this.scAddressAndRest = new System.Windows.Forms.SplitContainer();
             this.scViewerAndSettings = new System.Windows.Forms.SplitContainer();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.createDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.scAddressAndRest.Panel1.SuspendLayout();
             this.scAddressAndRest.Panel2.SuspendLayout();
             this.scAddressAndRest.SuspendLayout();
             this.scViewerAndSettings.Panel1.SuspendLayout();
             this.scViewerAndSettings.Panel2.SuspendLayout();
             this.scViewerAndSettings.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tvDirectory
@@ -244,6 +248,25 @@ namespace O2.Views.ASCX.CoreControls
             this.scViewerAndSettings.SplitterDistance = 227;
             this.scViewerAndSettings.TabIndex = 0;
             // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createDirectoryToolStripMenuItem,
+            this.toolStripTextBox1});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(161, 71);
+            // 
+            // createDirectoryToolStripMenuItem
+            // 
+            this.createDirectoryToolStripMenuItem.Name = "createDirectoryToolStripMenuItem";
+            this.createDirectoryToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.createDirectoryToolStripMenuItem.Text = "Create Directory";
+            // 
+            // toolStripTextBox1
+            // 
+            this.toolStripTextBox1.Name = "toolStripTextBox1";
+            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 21);
+            // 
             // ascx_Directory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -262,6 +285,8 @@ namespace O2.Views.ASCX.CoreControls
             this.scViewerAndSettings.Panel2.ResumeLayout(false);
             this.scViewerAndSettings.Panel2.PerformLayout();
             this.scViewerAndSettings.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
+            this.contextMenuStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -282,5 +307,8 @@ namespace O2.Views.ASCX.CoreControls
         private System.Windows.Forms.CheckBox cbMoveOnDrag;
         private System.Windows.Forms.SplitContainer scAddressAndRest;
         private System.Windows.Forms.SplitContainer scViewerAndSettings;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem createDirectoryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
     }
 }
