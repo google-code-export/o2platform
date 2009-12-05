@@ -483,5 +483,17 @@ namespace O2.Views.ASCX.CoreControls
         {
             this.invokeOnThread(() => this.Enabled = value);
         }
+
+        private void miCreateDirectory_Click(object sender, EventArgs e)
+        {
+            var targetDirectory = Path.Combine(getCurrentDirectory(), miNewDirectoryName.Text);
+            Directory.CreateDirectory(targetDirectory);
+        }
+
+        private void miNewDirectoryName_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                miCreateDirectory_Click(null, null);
+        }
     }
 }

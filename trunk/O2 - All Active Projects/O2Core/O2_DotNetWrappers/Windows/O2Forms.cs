@@ -319,6 +319,7 @@ namespace O2.DotNetWrappers.Windows
                         PublicDI.log.error(
                             "in loadTreeViewWithDirectoriesAndFiles, sDirectoryToProcess != \"\", this value must be provided");
                 }
+                tvTargetTreeView.ExpandAll();
             }
             catch (Exception ex)
             {
