@@ -89,11 +89,19 @@ namespace O2.External.SharpDevelop.Ascx
             this.gbO2ObjectMode = new System.Windows.Forms.GroupBox();
             this.scrollBarHorizontalSize_O2ObjectModel = new System.Windows.Forms.HScrollBar();
             this.scrollBarVerticalSize_O2ObjectModel = new System.Windows.Forms.VScrollBar();
+            this.menuStripForSourceEdition = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btOpenFile = new System.Windows.Forms.ToolStripButton();
             this.o2ObjectModel = new O2.Views.ASCX.CoreControls.ascx_O2ObjectModel();
             this.toolStrip1.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbO2ObjectMode.SuspendLayout();
+            this.menuStripForSourceEdition.SuspendLayout();
             this.SuspendLayout();
             // 
             // tecSourceCode
@@ -109,7 +117,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.ShowEOLMarkers = true;
             this.tecSourceCode.ShowSpaces = true;
             this.tecSourceCode.ShowTabs = true;
-            this.tecSourceCode.Size = new System.Drawing.Size(1022, 359);
+            this.tecSourceCode.Size = new System.Drawing.Size(1143, 409);
             this.tecSourceCode.TabIndex = 17;
             this.tecSourceCode.Load += new System.EventHandler(this.tecSourceCode_Load);
             this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
@@ -266,7 +274,7 @@ namespace O2.External.SharpDevelop.Ascx
             // tbTextSearch
             // 
             this.tbTextSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.tbTextSearch.Location = new System.Drawing.Point(153, 389);
+            this.tbTextSearch.Location = new System.Drawing.Point(153, 439);
             this.tbTextSearch.Name = "tbTextSearch";
             this.tbTextSearch.Size = new System.Drawing.Size(267, 20);
             this.tbTextSearch.TabIndex = 39;
@@ -277,7 +285,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 392);
+            this.label1.Location = new System.Drawing.Point(3, 442);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(141, 13);
             this.label1.TabIndex = 40;
@@ -289,7 +297,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbSearch_textNotFound.AutoSize = true;
             this.lbSearch_textNotFound.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbSearch_textNotFound.ForeColor = System.Drawing.Color.Red;
-            this.lbSearch_textNotFound.Location = new System.Drawing.Point(426, 390);
+            this.lbSearch_textNotFound.Location = new System.Drawing.Point(426, 440);
             this.lbSearch_textNotFound.Name = "lbSearch_textNotFound";
             this.lbSearch_textNotFound.Size = new System.Drawing.Size(98, 15);
             this.lbSearch_textNotFound.TabIndex = 41;
@@ -354,10 +362,11 @@ namespace O2.External.SharpDevelop.Ascx
             this.btShowLogs,
             this.lbSampleScripts,
             this.cBoxSampleScripts,
-            this.toolStripSeparator5});
+            this.toolStripSeparator5,
+            this.btOpenFile});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1028, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1149, 25);
             this.toolStrip1.TabIndex = 45;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -670,7 +679,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbPartialFileView.FormattingEnabled = true;
             this.lbPartialFileView.Location = new System.Drawing.Point(3, 30);
             this.lbPartialFileView.Name = "lbPartialFileView";
-            this.lbPartialFileView.Size = new System.Drawing.Size(1025, 342);
+            this.lbPartialFileView.Size = new System.Drawing.Size(1146, 381);
             this.lbPartialFileView.TabIndex = 47;
             this.lbPartialFileView.Visible = false;
             // 
@@ -678,11 +687,11 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.tbExecutionHistoryOrLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbExecutionHistoryOrLog.Location = new System.Drawing.Point(643, 28);
+            this.tbExecutionHistoryOrLog.Location = new System.Drawing.Point(764, 28);
             this.tbExecutionHistoryOrLog.Multiline = true;
             this.tbExecutionHistoryOrLog.Name = "tbExecutionHistoryOrLog";
             this.tbExecutionHistoryOrLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbExecutionHistoryOrLog.Size = new System.Drawing.Size(364, 234);
+            this.tbExecutionHistoryOrLog.Size = new System.Drawing.Size(364, 284);
             this.tbExecutionHistoryOrLog.TabIndex = 48;
             this.tbExecutionHistoryOrLog.Visible = false;
             // 
@@ -691,7 +700,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lboxCompilationErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lboxCompilationErrors.ForeColor = System.Drawing.Color.Red;
             this.lboxCompilationErrors.FormattingEnabled = true;
-            this.lboxCompilationErrors.Location = new System.Drawing.Point(643, 28);
+            this.lboxCompilationErrors.Location = new System.Drawing.Point(764, 28);
             this.lboxCompilationErrors.Name = "lboxCompilationErrors";
             this.lboxCompilationErrors.Size = new System.Drawing.Size(364, 173);
             this.lboxCompilationErrors.TabIndex = 49;
@@ -704,7 +713,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.gbO2ObjectMode.Controls.Add(this.scrollBarHorizontalSize_O2ObjectModel);
             this.gbO2ObjectMode.Controls.Add(this.scrollBarVerticalSize_O2ObjectModel);
             this.gbO2ObjectMode.Controls.Add(this.o2ObjectModel);
-            this.gbO2ObjectMode.Location = new System.Drawing.Point(575, 91);
+            this.gbO2ObjectMode.Location = new System.Drawing.Point(696, 141);
             this.gbO2ObjectMode.Name = "gbO2ObjectMode";
             this.gbO2ObjectMode.Size = new System.Drawing.Size(432, 281);
             this.gbO2ObjectMode.TabIndex = 51;
@@ -735,6 +744,62 @@ namespace O2.External.SharpDevelop.Ascx
             this.scrollBarVerticalSize_O2ObjectModel.Visible = false;
             this.scrollBarVerticalSize_O2ObjectModel.Scroll += new System.Windows.Forms.ScrollEventHandler(this.scrollBarVerticalSize_O2ObjectModel_Scroll);
             // 
+            // menuStripForSourceEdition
+            // 
+            this.menuStripForSourceEdition.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.compileToolStripMenuItem,
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.openFileToolStripMenuItem});
+            this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(120, 114);
+            // 
+            // compileToolStripMenuItem
+            // 
+            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.compileToolStripMenuItem.Text = "Compile";
+            this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // openFileToolStripMenuItem
+            // 
+            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.openFileToolStripMenuItem.Text = "Open File";
+            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            // 
+            // btOpenFile
+            // 
+            this.btOpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btOpenFile.Image")));
+            this.btOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btOpenFile.Name = "btOpenFile";
+            this.btOpenFile.Size = new System.Drawing.Size(23, 22);
+            this.btOpenFile.Text = "Open File";
+            this.btOpenFile.Click += new System.EventHandler(this.btOpenFile_Click);
+            // 
             // o2ObjectModel
             // 
             this.o2ObjectModel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -761,7 +826,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.Controls.Add(this.lbSearch_textNotFound);
             this.ForeColor = System.Drawing.Color.Black;
             this.Name = "ascx_SourceCodeEditor";
-            this.Size = new System.Drawing.Size(1028, 411);
+            this.Size = new System.Drawing.Size(1149, 461);
             this.Load += new System.EventHandler(this.ascx_SourceCodeEditor_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.ascx_SourceCodeEditor_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.ascx_SourceCodeEditor_DragEnter);
@@ -772,6 +837,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbO2ObjectMode.ResumeLayout(false);
+            this.menuStripForSourceEdition.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -838,5 +904,12 @@ namespace O2.External.SharpDevelop.Ascx
         private O2.Views.ASCX.CoreControls.ascx_O2ObjectModel o2ObjectModel;
         private System.Windows.Forms.HScrollBar scrollBarHorizontalSize_O2ObjectModel;
         private System.Windows.Forms.VScrollBar scrollBarVerticalSize_O2ObjectModel;
+        private System.Windows.Forms.ContextMenuStrip menuStripForSourceEdition;
+        private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pasteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton btOpenFile;
     }
 }

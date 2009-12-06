@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -40,8 +40,10 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ascx\ascx_AssemblyInvoke.Controllers.cs">
@@ -53,6 +55,7 @@
     <Compile Include="Ascx\ascx_AssemblyInvoke.Designer.cs">
       <DependentUpon>ascx_AssemblyInvoke.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ascx\Ascx_ExtensionMethods.cs" />
     <Compile Include="DI.cs" />
     <Compile Include="HandleO2MessageOnSD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,6 +150,7 @@
     <None Include="ScriptSamples\IronPython_HelloWorld_py.py" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ChangeLog.txt" />
     <Content Include="ScriptSamples\IronPython_CreateFindingManually_py.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

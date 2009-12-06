@@ -44,6 +44,7 @@ namespace O2.Views.ASCX.CoreControls
         private FolderWatcher folderWatcher;
         //public String fileFilter = "*.*";
         private ViewMode viewMode = ViewMode.Advanced;
+        public List<string> listOfExtensionsToShowToolTipContents = new List<string> { ".cs" };
 
         public ascx_Directory()
         {
@@ -89,6 +90,12 @@ namespace O2.Views.ASCX.CoreControls
             }
             get { return viewMode; }
         }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [Bindable(true)]
+        public bool _ShowFileContentsOnTopTip { get; set; }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [EditorBrowsable(EditorBrowsableState.Always)]
@@ -191,40 +198,56 @@ namespace O2.Views.ASCX.CoreControls
                 {
                     tbCurrentDirectoryName.Text = sSelectedNodeTag;
                     openDirectory(tbCurrentDirectoryName.Text);
-                    //refreshDirectoryView();
-                    /*O2Forms.loadTreeViewWithDirectoriesAndFiles(tvDirectory, sSelectedNodeTag, sFileFilter,
-                                                                tbCurrentDirectoryName);
-                    ;*/
+
+                    // Bug hack: fix the missing upper directory link problem
+                    if (tvDirectory.Nodes.Count == 1 && tvDirectory.Nodes[0].Text == "..")
+                    {
+                        tvDirectory.Nodes[0].Text = "..";
+                    }                                        
                 }
-            }
-            //loadSourceCodeFile(sSelectedNodeTag);    
+            }            
         }
 
         private void btDeleteFile_Click(object sender, EventArgs e)
         {
             try
             {
-                if (tvDirectory.SelectedNode != null && tvDirectory.SelectedNode.Tag != null &&
-                    tvDirectory.SelectedNode.Tag.GetType().Name == "String")
-                    if (File.Exists((String) tvDirectory.SelectedNode.Tag))
-                    {
-                        if (DialogResult.Yes ==
-                            MessageBox.Show("Do you want to delete the file " + (String) tvDirectory.SelectedNode.Tag,
-                                            "Confirm Delete", MessageBoxButtons.YesNo))
-                            File.Delete((String) tvDirectory.SelectedNode.Tag);
-                    }
-                    else if (Directory.Exists((String) tvDirectory.SelectedNode.Tag))
-                        if (DialogResult.Yes ==
-                            MessageBox.Show(
-                                "Do you want to delete this Directory (all files and folders will be recursively deleted): \n\n" +
-                                (String) tvDirectory.SelectedNode.Tag, "Confirm Delete", MessageBoxButtons.YesNo))
-                            Files.deleteFolder((String) tvDirectory.SelectedNode.Tag, true /* deleteRecursively*/);
-                refreshDirectoryView();
+                deleteSelectedFileOrFolder();
+                //refreshDirectoryView();
             }
             catch (Exception ex)
             {
                 DI.log.ex(ex, "in btDeleteFile_Click");
             }
+        }
+
+
+        private void deleteSelectedFileOrFolder()
+        {
+            if (tvDirectory.SelectedNode != null  && tvDirectory.SelectedNode.Text != ".." &&
+                tvDirectory.SelectedNode.Tag != null && tvDirectory.SelectedNode.Tag is string)            
+                deleteFileOrFolder((String)tvDirectory.SelectedNode.Tag);            
+        }
+
+        public bool deleteFileOrFolder(string fileOrFolderToDelete)
+        {
+            if (File.Exists(fileOrFolderToDelete))
+            {
+                if (DialogResult.Yes ==
+                    MessageBox.Show("Do you want to delete the file " + (String)tvDirectory.SelectedNode.Tag,
+                                    "Confirm Delete", MessageBoxButtons.YesNo))                
+                    return Files.deleteFile(fileOrFolderToDelete);
+            }
+            else if (Directory.Exists(fileOrFolderToDelete))
+                if (DialogResult.Yes ==
+                    MessageBox.Show(
+                        "Do you want to delete this Directory (all files and folders will be recursively deleted): \n\n" +
+                        fileOrFolderToDelete, "Confirm Delete", MessageBoxButtons.YesNo))
+                {
+                    Files.deleteFolder(fileOrFolderToDelete, true /* deleteRecursively*/);                        
+                    return true;
+                }
+            return false;
         }
 
         private void btRefresh_Click(object sender, EventArgs e)
@@ -292,8 +315,22 @@ namespace O2.Views.ASCX.CoreControls
             if (tvDirectory.SelectedNode.Tag != null)
             {
                 var sSelectedNodeTag = (String) tvDirectory.SelectedNode.Tag;
-                if (eDirectoryEvent_Click != null)
+                if (eDirectoryEvent_Click != null)                
                     eDirectoryEvent_Click(sSelectedNodeTag);
+                if (sSelectedNodeTag != null)
+                {
+                    renameFileToolStripMenuItem.Enabled = File.Exists(sSelectedNodeTag);
+                    deleteFileToolStripMenuItem.Enabled = File.Exists(sSelectedNodeTag);
+                    deleteFolderToolStripMenuItem.Enabled = (tvDirectory.SelectedNode.Text != ".." && Directory.Exists(sSelectedNodeTag));
+                    if (File.Exists(sSelectedNodeTag))
+                    {
+                 
+                        tbRenameSelectedItem.Text = sSelectedNodeTag;
+                        tbRenameSelectedItem.Tag = sSelectedNodeTag;
+                        tbRenameSelectedItem.TextBox.Width = sSelectedNodeTag.Length * 7;
+                        tbRenameSelectedItem.Width = sSelectedNodeTag.Length * 7;
+                    }                    
+                }
 
                 Callbacks.raiseRegistedCallbacks(_onDirectoryClick, new[] { sSelectedNodeTag });
 
@@ -486,14 +523,98 @@ namespace O2.Views.ASCX.CoreControls
 
         private void miCreateDirectory_Click(object sender, EventArgs e)
         {
-            var targetDirectory = Path.Combine(getCurrentDirectory(), miNewDirectoryName.Text);
-            Directory.CreateDirectory(targetDirectory);
+            if (miNewDirectoryName.Text != null)
+            {
+                var targetDirectory = Path.Combine(getCurrentDirectory(), miNewDirectoryName.Text);
+                Directory.CreateDirectory(targetDirectory);
+            }
         }
 
         private void miNewDirectoryName_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
-                miCreateDirectory_Click(null, null);
+            {
+                miCreateDirectory_Click(null, null);               
+                directoryMenu.Close();                
+            }
+        }
+
+        private void tbRenameSelectedItem_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (sender is ToolStripControlHost && ((ToolStripControlHost)sender).Tag!=null)
+                {
+                    string originalFile = (string)((ToolStripControlHost)sender).Tag;
+                    string targetfile = (string)((ToolStripControlHost)sender).Text;
+                    if (originalFile != targetfile && File.Exists(originalFile))
+                    {
+                        Files.MoveFile(originalFile, targetfile);
+                    }
+                }
+                directoryMenu.Close();
+            }
+        }
+
+        private void tvDirectory_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var currentNode = tvDirectory.GetNodeAt(e.Location);
+                if (currentNode != null)
+                    tvDirectory.SelectedNode = currentNode;
+            }
+        }
+
+        private void deleteFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            deleteSelectedFileOrFolder();
+        }
+
+        private void deleteFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            deleteSelectedFileOrFolder();
+        }
+
+        private void tvDirectory_MouseEnter(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void tvDirectory_MouseHover(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void tvDirectory_MouseMove(object sender, MouseEventArgs e)
+        {
+            var currentNode = tvDirectory.GetNodeAt(e.Location);
+            if (currentNode != null)
+            {
+                setNodeTagToFileContents(currentNode);
+                //DI.log.info(currentNode.Text);
+            }
+        }
+
+        private void setNodeTagToFileContents(TreeNode currentNode)
+        {
+            if (_ShowFileContentsOnTopTip &&  currentNode.Tag != null && currentNode.ToolTipText == "") 
+            {
+                var currentNodeFile = currentNode.Tag.ToString();
+                if (File.Exists(currentNodeFile.ToString()))
+                {
+                    var fileExtension = Path.GetExtension(currentNodeFile);
+                    if (listOfExtensionsToShowToolTipContents.Contains(fileExtension))
+                    {
+                        var fileContents = Files.getFileContents(currentNodeFile);
+                        currentNode.ToolTipText = fileContents;
+
+                        /*currentNode.ToolTipText = (fileContents.Length < 2000)
+                                ? fileContents
+                                : fileContents.Substring(0, 2000);*/
+                    }                    
+                }
+            }
         }
     }
 }

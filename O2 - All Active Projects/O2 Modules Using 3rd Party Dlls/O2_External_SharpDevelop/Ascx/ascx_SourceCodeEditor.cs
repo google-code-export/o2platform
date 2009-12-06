@@ -340,7 +340,35 @@ namespace O2.External.SharpDevelop.Ascx
             scrollBarHorizontalSize_O2ObjectModel.Maximum = gbO2ObjectMode.Width + 20;
             scrollBarHorizontalSize_O2ObjectModel.Value = gbO2ObjectMode.Width;
         }
-        
-                                              
+
+        private void compileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            compile_Click(null, null);
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tecSourceCode.ActiveTextAreaControl.TextArea.ClipboardHandler.Copy(null,null);   
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tecSourceCode.ActiveTextAreaControl.TextArea.ClipboardHandler.Paste(null, null);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveSourceCode();
+        }
+
+        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openFile();
+        }
+
+        private void btOpenFile_Click(object sender, EventArgs e)
+        {
+            openFile();
+        }                                      
     }
 }

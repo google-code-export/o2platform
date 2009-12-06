@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{83957D55-86AB-4C26-9F82-6182999F09E8}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HTMLparserLibDotNet20, Version=3.1.4.30523, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\HTMLparserLibDotNet20.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\nunit.framework.dll</HintPath>
@@ -52,10 +56,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_Bin_(O2_Binaries)\O2_ImportExport_OunceLabs.dll</HintPath>
     </Reference>
-    <Reference Include="O2_Kernel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Kernel.dll</HintPath>
-    </Reference>
     <Reference Include="O2_Views_ASCX, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_Bin_(O2_Binaries)\O2_Views_ASCX.dll</HintPath>
@@ -64,6 +64,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -95,6 +96,10 @@
     <Compile Include="_Rules\Analysis_WorkFlow_Phase_4.cs" />
     <Compile Include="_Rules\Analysis_WorkFlow_Phase_5.cs" />
     <Compile Include="Interfaces\IAnalysisArtifacts.cs" />
+    <Compile Include="_Rules\Ounce Analysis Workflow\ascx_SvnBrower.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Rules\Ounce Analysis Workflow\SvnTest.cs" />
     <Compile Include="_Rules\SampleScripts.cs" />
     <Compile Include="_Rules\SampleUnitTests.cs" />
     <Compile Include="_Rules\XRule_Findings_Filter.cs" />
@@ -105,6 +110,8 @@
     <Compile Include="_Rules\XUtils_Struts_Joins_V0_1.cs" />
     <Compile Include="_Rules\xUtils_Struts_v0_1.cs" />
     <Compile Include="_Rules\Sample_Analysis_Workflow_WebGoat.cs" />
+    <Compile Include="_Templates\Empty_XRule.cs" />
+    <Compile Include="_Templates\Empty_Class.cs" />
     <Compile Include="_Templates\Local_Findings_Files.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +125,16 @@
       <LastGenOutput>XRules_Templates.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
+      <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
+      <Name>O2_External_SharpDevelop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

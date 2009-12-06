@@ -105,7 +105,7 @@ namespace O2.Views.ASCX.O2Findings
             this.tvFindings.Location = new System.Drawing.Point(0, 28);
             this.tvFindings.Name = "tvFindings";
             this.tvFindings.SelectedImageIndex = 0;
-            this.tvFindings.Size = new System.Drawing.Size(801, 298);
+            this.tvFindings.Size = new System.Drawing.Size(916, 341);
             this.tvFindings.TabIndex = 2;
             this.tvFindings.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tvFindings_MouseDoubleClick);
             this.tvFindings.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvFindings_BeforeExpand);
@@ -129,14 +129,14 @@ namespace O2.Views.ASCX.O2Findings
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSavedFileName.Location = new System.Drawing.Point(61, 14);
             this.tbSavedFileName.Name = "tbSavedFileName";
-            this.tbSavedFileName.Size = new System.Drawing.Size(436, 20);
+            this.tbSavedFileName.Size = new System.Drawing.Size(551, 20);
             this.tbSavedFileName.TabIndex = 3;
             this.tbSavedFileName.TextChanged += new System.EventHandler(this.tbSavedFileName_TextChanged);
             // 
             // btSaveFindings
             // 
             this.btSaveFindings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btSaveFindings.Location = new System.Drawing.Point(347, 38);
+            this.btSaveFindings.Location = new System.Drawing.Point(462, 38);
             this.btSaveFindings.Name = "btSaveFindings";
             this.btSaveFindings.Size = new System.Drawing.Size(87, 23);
             this.btSaveFindings.TabIndex = 4;
@@ -203,7 +203,7 @@ namespace O2.Views.ASCX.O2Findings
             // 
             this.llDragAllFindings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.llDragAllFindings.AutoSize = true;
-            this.llDragAllFindings.Location = new System.Drawing.Point(707, 329);
+            this.llDragAllFindings.Location = new System.Drawing.Point(822, 372);
             this.llDragAllFindings.Name = "llDragAllFindings";
             this.llDragAllFindings.Size = new System.Drawing.Size(94, 13);
             this.llDragAllFindings.TabIndex = 14;
@@ -220,7 +220,7 @@ namespace O2.Views.ASCX.O2Findings
             this.tabControl1.Location = new System.Drawing.Point(3, 16);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(517, 102);
+            this.tabControl1.Size = new System.Drawing.Size(632, 102);
             this.tabControl1.TabIndex = 15;
             // 
             // SaveFindings
@@ -233,7 +233,7 @@ namespace O2.Views.ASCX.O2Findings
             this.SaveFindings.Controls.Add(this.tbSavedFileName);
             this.SaveFindings.Location = new System.Drawing.Point(4, 22);
             this.SaveFindings.Name = "SaveFindings";
-            this.SaveFindings.Size = new System.Drawing.Size(509, 76);
+            this.SaveFindings.Size = new System.Drawing.Size(624, 76);
             this.SaveFindings.TabIndex = 2;
             this.SaveFindings.Text = "Save Findings";
             this.SaveFindings.UseVisualStyleBackColor = true;
@@ -264,7 +264,7 @@ namespace O2.Views.ASCX.O2Findings
             // 
             this.lbFileSaved.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lbFileSaved.AutoSize = true;
-            this.lbFileSaved.Location = new System.Drawing.Point(440, 43);
+            this.lbFileSaved.Location = new System.Drawing.Point(555, 43);
             this.lbFileSaved.Name = "lbFileSaved";
             this.lbFileSaved.Size = new System.Drawing.Size(57, 13);
             this.lbFileSaved.TabIndex = 6;
@@ -350,7 +350,7 @@ namespace O2.Views.ASCX.O2Findings
             // 
             this.cbShowLineInSourceFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbShowLineInSourceFile.AutoSize = true;
-            this.cbShowLineInSourceFile.Location = new System.Drawing.Point(3, 328);
+            this.cbShowLineInSourceFile.Location = new System.Drawing.Point(3, 371);
             this.cbShowLineInSourceFile.Name = "cbShowLineInSourceFile";
             this.cbShowLineInSourceFile.Size = new System.Drawing.Size(190, 17);
             this.cbShowLineInSourceFile.TabIndex = 51;
@@ -383,7 +383,7 @@ namespace O2.Views.ASCX.O2Findings
             this.btOpenFile});
             this.tsFindingsViewer.Location = new System.Drawing.Point(0, 0);
             this.tsFindingsViewer.Name = "tsFindingsViewer";
-            this.tsFindingsViewer.Size = new System.Drawing.Size(804, 25);
+            this.tsFindingsViewer.Size = new System.Drawing.Size(919, 25);
             this.tsFindingsViewer.TabIndex = 18;
             this.tsFindingsViewer.Text = "toolStrip1";
             this.tsFindingsViewer.DragEnter += new System.Windows.Forms.DragEventHandler(this.tsFindingsViewer_DragEnter);
@@ -560,7 +560,7 @@ namespace O2.Views.ASCX.O2Findings
             this.groupBoxConfigSaveAndEdit.Controls.Add(this.tabControl1);
             this.groupBoxConfigSaveAndEdit.Location = new System.Drawing.Point(278, 28);
             this.groupBoxConfigSaveAndEdit.Name = "groupBoxConfigSaveAndEdit";
-            this.groupBoxConfigSaveAndEdit.Size = new System.Drawing.Size(523, 121);
+            this.groupBoxConfigSaveAndEdit.Size = new System.Drawing.Size(638, 121);
             this.groupBoxConfigSaveAndEdit.TabIndex = 16;
             this.groupBoxConfigSaveAndEdit.TabStop = false;
             this.groupBoxConfigSaveAndEdit.Text = "Config, Save && Edit";
@@ -573,7 +573,7 @@ namespace O2.Views.ASCX.O2Findings
             this.laLoadingDroppedFile.BackColor = System.Drawing.SystemColors.Window;
             this.laLoadingDroppedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.laLoadingDroppedFile.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.laLoadingDroppedFile.Location = new System.Drawing.Point(281, 161);
+            this.laLoadingDroppedFile.Location = new System.Drawing.Point(338, 183);
             this.laLoadingDroppedFile.Name = "laLoadingDroppedFile";
             this.laLoadingDroppedFile.Size = new System.Drawing.Size(296, 29);
             this.laLoadingDroppedFile.TabIndex = 21;
@@ -584,7 +584,7 @@ namespace O2.Views.ASCX.O2Findings
             // 
             this.lbNumberOfFindingsLoaded.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lbNumberOfFindingsLoaded.AutoSize = true;
-            this.lbNumberOfFindingsLoaded.Location = new System.Drawing.Point(211, 329);
+            this.lbNumberOfFindingsLoaded.Location = new System.Drawing.Point(211, 372);
             this.lbNumberOfFindingsLoaded.Name = "lbNumberOfFindingsLoaded";
             this.lbNumberOfFindingsLoaded.Size = new System.Drawing.Size(16, 13);
             this.lbNumberOfFindingsLoaded.TabIndex = 22;
@@ -596,7 +596,7 @@ namespace O2.Views.ASCX.O2Findings
             this.laNoAssessmentLoadEnginesLoaded.BackColor = System.Drawing.SystemColors.Window;
             this.laNoAssessmentLoadEnginesLoaded.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.laNoAssessmentLoadEnginesLoaded.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.laNoAssessmentLoadEnginesLoaded.Location = new System.Drawing.Point(281, 113);
+            this.laNoAssessmentLoadEnginesLoaded.Location = new System.Drawing.Point(338, 135);
             this.laNoAssessmentLoadEnginesLoaded.Name = "laNoAssessmentLoadEnginesLoaded";
             this.laNoAssessmentLoadEnginesLoaded.Size = new System.Drawing.Size(249, 106);
             this.laNoAssessmentLoadEnginesLoaded.TabIndex = 23;
@@ -607,7 +607,7 @@ namespace O2.Views.ASCX.O2Findings
             // 
             this.llDragFilteredFindings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.llDragFilteredFindings.AutoSize = true;
-            this.llDragFilteredFindings.Location = new System.Drawing.Point(592, 329);
+            this.llDragFilteredFindings.Location = new System.Drawing.Point(707, 372);
             this.llDragFilteredFindings.Name = "llDragFilteredFindings";
             this.llDragFilteredFindings.Size = new System.Drawing.Size(109, 13);
             this.llDragFilteredFindings.TabIndex = 24;
@@ -618,7 +618,7 @@ namespace O2.Views.ASCX.O2Findings
             // scrollBarHorizontalSize
             // 
             this.scrollBarHorizontalSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.scrollBarHorizontalSize.Location = new System.Drawing.Point(730, 312);
+            this.scrollBarHorizontalSize.Location = new System.Drawing.Point(845, 355);
             this.scrollBarHorizontalSize.Name = "scrollBarHorizontalSize";
             this.scrollBarHorizontalSize.Size = new System.Drawing.Size(38, 10);
             this.scrollBarHorizontalSize.SmallChange = 10;
@@ -629,7 +629,7 @@ namespace O2.Views.ASCX.O2Findings
             // scrollBarVerticalSize
             // 
             this.scrollBarVerticalSize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.scrollBarVerticalSize.Location = new System.Drawing.Point(769, 284);
+            this.scrollBarVerticalSize.Location = new System.Drawing.Point(884, 327);
             this.scrollBarVerticalSize.Name = "scrollBarVerticalSize";
             this.scrollBarVerticalSize.Size = new System.Drawing.Size(10, 38);
             this.scrollBarVerticalSize.SmallChange = 10;
@@ -643,18 +643,18 @@ namespace O2.Views.ASCX.O2Findings
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.ascxTraceTreeView.bMoveTraces = true;
             this.ascxTraceTreeView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.ascxTraceTreeView.Location = new System.Drawing.Point(390, 151);
+            this.ascxTraceTreeView.Location = new System.Drawing.Point(505, 151);
             this.ascxTraceTreeView.Name = "ascxTraceTreeView";
             this.ascxTraceTreeView.o2Finding = null;
             this.ascxTraceTreeView.o2Trace = null;
             this.ascxTraceTreeView.selectedNode = null;
             this.ascxTraceTreeView.selectedNodeTag = null;
-            this.ascxTraceTreeView.Size = new System.Drawing.Size(392, 175);
+            this.ascxTraceTreeView.Size = new System.Drawing.Size(392, 218);
             this.ascxTraceTreeView.TabIndex = 20;
             this.ascxTraceTreeView.Visible = false;
             this.ascxTraceTreeView.Load += new System.EventHandler(this.ascxTraceTreeView_Load);
             this.ascxTraceTreeView.SizeChanged += new System.EventHandler(this.ascxTraceTreeView_SizeChanged);
-            this.ascxTraceTreeView._onTraceSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<IO2Trace>(this.ascxTraceTreeView__onTraceSelected);
+            this.ascxTraceTreeView._onTraceSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<O2.Kernel.Interfaces.O2Findings.IO2Trace>(this.ascxTraceTreeView__onTraceSelected);
             // 
             // ascx_FindingsViewer
             // 
@@ -673,7 +673,7 @@ namespace O2.Views.ASCX.O2Findings
             this.Controls.Add(this.tsFindingsViewer);
             this.Controls.Add(this.tvFindings);
             this.Name = "ascx_FindingsViewer";
-            this.Size = new System.Drawing.Size(804, 345);
+            this.Size = new System.Drawing.Size(919, 388);
             this.Load += new System.EventHandler(this.ascx_FindingsViewer_Load);
             this.tabControl1.ResumeLayout(false);
             this.SaveFindings.ResumeLayout(false);
