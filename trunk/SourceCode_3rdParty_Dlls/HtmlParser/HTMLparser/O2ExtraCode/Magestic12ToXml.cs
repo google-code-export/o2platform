@@ -35,10 +35,8 @@ namespace HTMLparserLibDotNet20.O2ExtraCode
 
             while ((m12chunk = parser.ParseNext()) != null)
             {
-
                 try
                 {
-
                     Debug.Assert(!m12chunk.bHashMode);  // popular default for Majestic-12 setting
 
                     XNode newNode = null;
