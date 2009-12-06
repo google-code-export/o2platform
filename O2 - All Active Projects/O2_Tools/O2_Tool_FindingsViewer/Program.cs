@@ -5,7 +5,7 @@ using O2.External.WinFormsUI.Forms;
 using O2.ImportExport.Misc.AppScanDE;
 using O2.ImportExport.Misc.CodeCrawler;
 using O2.ImportExport.Misc.FindBugs;
-using O2.ImportExport.Misc.Fortify;
+//using O2.ImportExport.Misc.Fortify;
 using O2.ImportExport.Misc.WebScarab;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6_1;
@@ -32,7 +32,7 @@ namespace O2.Tool.FindingsViewer
             ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssessmentLoad_OunceV6_1());
             ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssesmentLoad_FindBugs());
             ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssesmentLoad_CodeCrawler());
-            ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssesmentLoad_Fortify());
+            //ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssesmentLoad_Fortify());
             ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssesmentLoad_AppScanDE());
             ascx_FindingsViewer.o2AssessmentLoadEngines.Add(new O2AssesmentLoad_WebScarab());
             
