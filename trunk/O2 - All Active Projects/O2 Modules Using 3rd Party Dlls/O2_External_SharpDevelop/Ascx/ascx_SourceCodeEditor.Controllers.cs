@@ -223,8 +223,14 @@ namespace O2.External.SharpDevelop.Ascx
         public void saveSourceCodeFile(String sTargetLocation)
         {
             try
-            {
+            {                
                 tecSourceCode.SaveFile(sTargetLocation);
+                if (sPathToFileLoaded != sTargetLocation)
+                {
+                    sPathToFileLoaded = sTargetLocation;
+                    
+                }
+                
                 DI.log.info("Source code saved to: {0}", sTargetLocation);
                 tbSourceCode_FileLoaded.Text = Path.GetFileName(sTargetLocation);                
                 lbSource_CodeFileSaved.Visible = true;
@@ -836,6 +842,44 @@ namespace O2.External.SharpDevelop.Ascx
                 sPathToFileLoaded = ""; // reset this value (since that would prevent this file from being opened again
                 loadSourceCodeFile(currentLoadedFile);
             }
-        }        
+        }
+
+        public void openFile()
+        {
+            DI.log.info("Select file to open");
+            var openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                DI.log.info("Loading file: {0}", openFileDialog.FileName);
+                loadSourceCodeFile(openFileDialog.FileName);
+            }
+        }
+
+        public void setDocumentContents(string documentContents)
+        {
+            this.invokeOnThread(
+                () =>
+                {
+                    setDocumentContents(documentContents, true);
+                });
+        }
+
+        public void setDocumentContents(string documentContents, bool clearFileLocationValues)
+        {
+            try
+            {
+                tecSourceCode.Document.TextContent = documentContents;
+                if (clearFileLocationValues)
+                {
+                    sPathToFileLoaded = "";
+                    tbSourceCode_DirectoryOfFileLoaded.Text = "";
+                    tbSourceCode_FileLoaded.Text = "";
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("In setDocumentContents: ", ex.Message);
+            }
+        }
     }
 }

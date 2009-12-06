@@ -231,7 +231,7 @@ namespace O2.External.WinFormsUI.O2Environment
         {
             if (DI.o2GuiWithDockPanel == null)
             {
-                DI.log.debug(" in addAscxControlToO2GuiWithDockPanelWithDockState o2GuiWithDockPanel was null, so aborting load of {0}", ascxControlToLoad.FullName);
+                DI.log.error(" in addAscxControlToO2GuiWithDockPanelWithDockState o2GuiWithDockPanel was null, so aborting load of {0}", ascxControlToLoad.FullName);
                 return null;
             }
             var o2DocContent = new O2DockContent(ascxControlToLoad, dockState, name);

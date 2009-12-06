@@ -11,6 +11,7 @@ using O2.Kernel.CodeUtils;
 using O2.Kernel.Interfaces.Messages;
 using O2.Kernel.Interfaces.Views;
 using WeifenLuo.WinFormsUI.Docking;
+using System.IO;
 
 namespace O2.External.WinFormsUI.Forms
 {
@@ -120,9 +121,9 @@ namespace O2.External.WinFormsUI.Forms
 
         private void tryToLoadFileInMainDocumentArea(DragEventArgs e) // todo:to implement tryToLoadFileInMainDocumentArea
         {
-            /*          string file = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
+            string file = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
             if (File.Exists(file))
-                ascx_SourceCodeEditor.loadFile(file);*/
+                O2Messages.fileOrFolderSelected(file);                
         }
 
         public static void CloseThisForm()

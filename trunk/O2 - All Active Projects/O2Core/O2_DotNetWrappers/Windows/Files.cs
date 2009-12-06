@@ -64,15 +64,23 @@ namespace O2.DotNetWrappers.Windows
 
         public static String MoveFile(String sSourceFile, String sTargetFileOrDirectory)
         {
-            string copiedFile = null;
-            if (sSourceFile != sTargetFileOrDirectory)
+            try
             {
-                copiedFile = Copy(sSourceFile, sTargetFileOrDirectory);
-                if (copiedFile!= null)
-                    deleteFile(sSourceFile);
-                //File.Move(sSourceFile, sTargetFile);
+                string copiedFile = null;
+                if (sSourceFile != sTargetFileOrDirectory)
+                {
+                    copiedFile = Copy(sSourceFile, sTargetFileOrDirectory);
+                    if (copiedFile != null)
+                        deleteFile(sSourceFile);
+                    //File.Move(sSourceFile, sTargetFile);
+                }
+                return copiedFile;
             }
-            return copiedFile;
+            catch (Exception ex)
+            {
+                DI.log.error("in MoveFile: {0}", ex.Message);
+            }
+            return "";
         }
 
         public static void copyDllAndPdb(String sSourceDll, String sTargetDll, bool bOveride)
@@ -165,7 +173,7 @@ namespace O2.DotNetWrappers.Windows
             deleteFolder(sFolderToDelete, false);
         }
 
-        public static void deleteFolder(String sFolderToDelete, bool bRecursive)
+        public static bool deleteFolder(String sFolderToDelete, bool bRecursive)
         {
             try
             {
@@ -173,12 +181,14 @@ namespace O2.DotNetWrappers.Windows
                 {
                     deleteAllFilesFromDir(sFolderToDelete);
                     Directory.Delete(sFolderToDelete, bRecursive);
+                    return true;
                 }
             }
             catch (Exception ex)
             {
-                DI.log.error("In deleteFolder:{0}:", ex.Message);
+                DI.log.error("In deleteFolder:{0}:", ex.Message);                
             }
+            return false;
         }
 
         public static void deleteAllFilesFromDir(String targetDir)

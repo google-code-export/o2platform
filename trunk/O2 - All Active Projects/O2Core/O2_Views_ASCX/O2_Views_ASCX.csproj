@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classes\CreateDataTable.cs" />
+    <Compile Include="classes\ImagesLists.cs" />
     <Compile Include="classes\O2CoreResources.Designer.cs">
       <DependentUpon>O2CoreResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -228,6 +229,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ChangeLog.txt" />
     <Content Include="classes\o2FindingsScriptLibrary.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

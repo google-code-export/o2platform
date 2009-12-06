@@ -32,6 +32,14 @@ namespace O2.Views.ASCX.CoreControls
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ascx_Directory));
             this.tvDirectory = new System.Windows.Forms.TreeView();
+            this.directoryMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.createDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.miNewDirectoryName = new System.Windows.Forms.ToolStripTextBox();
+            this.miCreateDirectory = new System.Windows.Forms.ToolStripMenuItem();
+            this.renameFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tbRenameSelectedItem = new System.Windows.Forms.ToolStripTextBox();
+            this.deleteFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ilDirectoriesAndFiles = new System.Windows.Forms.ImageList(this.components);
             this.btSelectDirectory = new System.Windows.Forms.Button();
             this.btCreateDirectory = new System.Windows.Forms.Button();
@@ -45,17 +53,13 @@ namespace O2.Views.ASCX.CoreControls
             this.cbMoveOnDrag = new System.Windows.Forms.CheckBox();
             this.scAddressAndRest = new System.Windows.Forms.SplitContainer();
             this.scViewerAndSettings = new System.Windows.Forms.SplitContainer();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.createDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.miNewDirectoryName = new System.Windows.Forms.ToolStripTextBox();
-            this.miCreateDirectory = new System.Windows.Forms.ToolStripMenuItem();
+            this.directoryMenu.SuspendLayout();
             this.scAddressAndRest.Panel1.SuspendLayout();
             this.scAddressAndRest.Panel2.SuspendLayout();
             this.scAddressAndRest.SuspendLayout();
             this.scViewerAndSettings.Panel1.SuspendLayout();
             this.scViewerAndSettings.Panel2.SuspendLayout();
             this.scViewerAndSettings.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tvDirectory
@@ -64,7 +68,7 @@ namespace O2.Views.ASCX.CoreControls
             this.tvDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvDirectory.ContextMenuStrip = this.contextMenuStrip1;
+            this.tvDirectory.ContextMenuStrip = this.directoryMenu;
             this.tvDirectory.FullRowSelect = true;
             this.tvDirectory.HideSelection = false;
             this.tvDirectory.ImageIndex = 0;
@@ -72,15 +76,80 @@ namespace O2.Views.ASCX.CoreControls
             this.tvDirectory.Location = new System.Drawing.Point(3, -1);
             this.tvDirectory.Name = "tvDirectory";
             this.tvDirectory.SelectedImageIndex = 0;
+            this.tvDirectory.ShowNodeToolTips = true;
             this.tvDirectory.Size = new System.Drawing.Size(179, 225);
             this.tvDirectory.TabIndex = 18;
             this.tvDirectory.DoubleClick += new System.EventHandler(this.tvDirectory_DoubleClick);
             this.tvDirectory.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvDirectory_DragDrop);
             this.tvDirectory.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvDirectory_AfterSelect);
+            this.tvDirectory.MouseEnter += new System.EventHandler(this.tvDirectory_MouseEnter);
+            this.tvDirectory.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tvDirectory_MouseMove);
+            this.tvDirectory.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvDirectory_MouseDown);
             this.tvDirectory.DragEnter += new System.Windows.Forms.DragEventHandler(this.tvDirectory_DragEnter);
             this.tvDirectory.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tvDirectory_KeyUp);
+            this.tvDirectory.MouseHover += new System.EventHandler(this.tvDirectory_MouseHover);
             this.tvDirectory.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvDirectory_ItemDrag);
             this.tvDirectory.Click += new System.EventHandler(this.tvDirectory_Click);
+            // 
+            // directoryMenu
+            // 
+            this.directoryMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createDirectoryToolStripMenuItem,
+            this.renameFileToolStripMenuItem,
+            this.deleteFileToolStripMenuItem,
+            this.deleteFolderToolStripMenuItem});
+            this.directoryMenu.Name = "contextMenuStrip1";
+            this.directoryMenu.Size = new System.Drawing.Size(155, 92);
+            // 
+            // createDirectoryToolStripMenuItem
+            // 
+            this.createDirectoryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.miNewDirectoryName,
+            this.miCreateDirectory});
+            this.createDirectoryToolStripMenuItem.Name = "createDirectoryToolStripMenuItem";
+            this.createDirectoryToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.createDirectoryToolStripMenuItem.Text = "Create Directory";
+            // 
+            // miNewDirectoryName
+            // 
+            this.miNewDirectoryName.Name = "miNewDirectoryName";
+            this.miNewDirectoryName.Size = new System.Drawing.Size(180, 21);
+            this.miNewDirectoryName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.miNewDirectoryName_KeyUp);
+            // 
+            // miCreateDirectory
+            // 
+            this.miCreateDirectory.Name = "miCreateDirectory";
+            this.miCreateDirectory.Size = new System.Drawing.Size(243, 22);
+            this.miCreateDirectory.Text = "Create Directory (put name above)";
+            this.miCreateDirectory.Click += new System.EventHandler(this.miCreateDirectory_Click);
+            // 
+            // renameFileToolStripMenuItem
+            // 
+            this.renameFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tbRenameSelectedItem});
+            this.renameFileToolStripMenuItem.Name = "renameFileToolStripMenuItem";
+            this.renameFileToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.renameFileToolStripMenuItem.Text = "Rename File";
+            // 
+            // tbRenameSelectedItem
+            // 
+            this.tbRenameSelectedItem.Name = "tbRenameSelectedItem";
+            this.tbRenameSelectedItem.Size = new System.Drawing.Size(100, 21);
+            this.tbRenameSelectedItem.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbRenameSelectedItem_KeyUp);
+            // 
+            // deleteFileToolStripMenuItem
+            // 
+            this.deleteFileToolStripMenuItem.Name = "deleteFileToolStripMenuItem";
+            this.deleteFileToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.deleteFileToolStripMenuItem.Text = "Delete File";
+            this.deleteFileToolStripMenuItem.Click += new System.EventHandler(this.deleteFileToolStripMenuItem_Click);
+            // 
+            // deleteFolderToolStripMenuItem
+            // 
+            this.deleteFolderToolStripMenuItem.Name = "deleteFolderToolStripMenuItem";
+            this.deleteFolderToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.deleteFolderToolStripMenuItem.Text = "Delete Folder";
+            this.deleteFolderToolStripMenuItem.Click += new System.EventHandler(this.deleteFolderToolStripMenuItem_Click);
             // 
             // ilDirectoriesAndFiles
             // 
@@ -250,35 +319,6 @@ namespace O2.Views.ASCX.CoreControls
             this.scViewerAndSettings.SplitterDistance = 227;
             this.scViewerAndSettings.TabIndex = 0;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createDirectoryToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(155, 48);
-            // 
-            // createDirectoryToolStripMenuItem
-            // 
-            this.createDirectoryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.miNewDirectoryName,
-            this.miCreateDirectory});
-            this.createDirectoryToolStripMenuItem.Name = "createDirectoryToolStripMenuItem";
-            this.createDirectoryToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.createDirectoryToolStripMenuItem.Text = "Create Directory";
-            // 
-            // miNewDirectoryName
-            // 
-            this.miNewDirectoryName.Name = "miNewDirectoryName";
-            this.miNewDirectoryName.Size = new System.Drawing.Size(180, 21);
-            this.miNewDirectoryName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.miNewDirectoryName_KeyUp);
-            // 
-            // miCreateDirectory
-            // 
-            this.miCreateDirectory.Name = "miCreateDirectory";
-            this.miCreateDirectory.Size = new System.Drawing.Size(243, 22);
-            this.miCreateDirectory.Text = "Create Directory (put name above)";
-            this.miCreateDirectory.Click += new System.EventHandler(this.miCreateDirectory_Click);
-            // 
             // ascx_Directory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -289,6 +329,7 @@ namespace O2.Views.ASCX.CoreControls
             this.Name = "ascx_Directory";
             this.Size = new System.Drawing.Size(186, 345);
             this.Load += new System.EventHandler(this.ascx_Directory_Load);
+            this.directoryMenu.ResumeLayout(false);
             this.scAddressAndRest.Panel1.ResumeLayout(false);
             this.scAddressAndRest.Panel1.PerformLayout();
             this.scAddressAndRest.Panel2.ResumeLayout(false);
@@ -297,7 +338,6 @@ namespace O2.Views.ASCX.CoreControls
             this.scViewerAndSettings.Panel2.ResumeLayout(false);
             this.scViewerAndSettings.Panel2.PerformLayout();
             this.scViewerAndSettings.ResumeLayout(false);
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -318,9 +358,13 @@ namespace O2.Views.ASCX.CoreControls
         private System.Windows.Forms.CheckBox cbMoveOnDrag;
         private System.Windows.Forms.SplitContainer scAddressAndRest;
         private System.Windows.Forms.SplitContainer scViewerAndSettings;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip directoryMenu;
         private System.Windows.Forms.ToolStripMenuItem createDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripTextBox miNewDirectoryName;
         private System.Windows.Forms.ToolStripMenuItem miCreateDirectory;
+        private System.Windows.Forms.ToolStripMenuItem renameFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripTextBox tbRenameSelectedItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteFolderToolStripMenuItem;
     }
 }

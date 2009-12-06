@@ -99,6 +99,12 @@ namespace O2.Core.XRules.Ascx
         private void directoryWithXRulesDatabase__onDirectoryClick(string fileOrDir)
         {
             CompileEngine.addExtraFileReferencesToSelectedNode(directoryWithXRulesDatabase.getTreeView(), fileOrDir);            
+        }
+
+        private void cbShowFileContentsOnMouseOver_CheckedChanged(object sender, EventArgs e)
+        {
+            directoryWithLocalXRules._ShowFileContentsOnTopTip = cbShowFileContentsOnMouseOver.Checked;
+            directoryWithXRulesDatabase._ShowFileContentsOnTopTip = cbShowFileContentsOnMouseOver.Checked;
         }                        
     }
 }

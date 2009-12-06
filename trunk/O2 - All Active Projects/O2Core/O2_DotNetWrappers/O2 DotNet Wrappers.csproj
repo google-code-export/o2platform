@@ -91,6 +91,7 @@
     <Compile Include="SearchApi\SearchEngine.cs" />
     <Compile Include="SearchApi\SearchUtils.cs" />
     <Compile Include="SearchApi\TextSearchResult.cs" />
+    <Compile Include="Windows\Ascx_ExtensionMethods.cs" />
     <Compile Include="Windows\Controls.cs" />
     <Compile Include="Windows\O2Forms_ThreadSafe_FlowLayoutPanel.cs" />
     <Compile Include="Windows\Files.cs" />

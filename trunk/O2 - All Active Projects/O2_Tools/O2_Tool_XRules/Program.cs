@@ -53,6 +53,7 @@ namespace O2.Tool.XRules
                 //O2AscxGUI.openAscx(typeof(ascx_XRules_Editor));
                 //O2AscxGUI.openAscx(typeof(ascx_XRules_Execution));
 
+                O2AscxGUI.addControlToMenu(typeof(ascx_SvnBrowser), O2DockState.Float, "SVN Browser - O2 Source Code");
 
                 O2AscxGUI.addControlToMenu(typeof(ascx_O2Rules_Struts), O2DockState.Document, "O2 Rules Struts");
 

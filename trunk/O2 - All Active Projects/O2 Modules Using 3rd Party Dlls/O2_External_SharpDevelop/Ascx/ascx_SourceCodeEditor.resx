@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="ilSourceCodeEdit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
+    <value>204, 17</value>
   </metadata>
   <data name="ilSourceCodeEdit.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
@@ -162,7 +162,7 @@
 </value>
   </data>
   <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>152, 17</value>
+    <value>339, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btSettings.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -265,13 +265,13 @@
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAcBJREFUOE9jYBhc
         QJ9hOYsf339OGdVFnBoaFgzGklxABzJCMRFulWOo118n/p8hTPg/k4bcYU459WAGGRlOoE4mKCZgiAhD
-        fdJVy//lTyz/sxUL/GfU4vvGzacVLayuzgvVCXINHgA0wHOP1v+K+/b/a7da/DNcKvGfKYLvP5ua3AFO
-        RXVfBmNjkJdAAOQiLECMod5tp9r/vKvm/1NnG/0rWmPwz6Be/B97Fs9/NhOxd9xiulE8KiqiDPb2LNgN
-        kGCot90o/z/7ktH/2GO6/333qf633iXzX22rwH/OCWz/Wf0E/nOrqxfz68oJ4jTAfqPs/9iTOv/depT/
-        mbbK/FPbKPRfuJ7zH2st639WD+4vnJqqefz68gI4DbBcK/Xf64Dyf/M2mX+63SL/eCZw/GeN5/zPbip9
+        fdJVy//lTyz/sxUL/GfU4vvGzacVLayuzgvVCXINHgA0wHOP1v+K+/b/azdb/DNcKvGfKYLvP5ua3AFO
+        RXVfBmNjkJdAAOQiLECMod5tp9r/vKvm/1NnGv0rWmXwz6Be/B97Fs9/NhOxd9xiulE8KiqiDPb2LNgN
+        kGCot90o/z/7ktH/2GO6/333qf633iXzX22rwH/OCWz/Wf0E/nOrqxfz68oJ4jTAfqPs/9iTOv/dupT/
+        mTbL/FPbKPRfuJ7zH2st639WD+4vnJqqefz68gI4DbBcK/Xf64Dyf/MWmX+6nSL/eCZw/GeN5/zPbip9
         nUtS211IRYUPqBmHF6QY6nVXiPy3PSDzX3OH8H/OLvb/LD48/znlVRdzKKtbAQORFaiZGXe6kGGol13B
         +192Od9/liTO/yzaMg+BAeeCFPoEolGJoZ5zCvN/Vm++/+yqSqs4VDTsGbS02IhPjUYMq1ldJP9zyWpV
-        sKnpaEA1g+KcgM1EpHKaKQEA8Ox8hnY8btMAAAAASUVORK5CYII=
+        sKnpaEA1g+KcgM1EpHKaKQEA03Z8eOgukjYAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="btDragAssemblyCreated.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -312,4 +312,24 @@
         RU5ErkJggg==
 </value>
   </data>
+  <data name="btOpenFile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAmRJREFUOE+1k11I
+        02EUxv9KF12ZZIUhFFleSCAERZZESB8UhmSUBUmZUGpRYRjm1LWp6dTpprXSZW3qmp+VZlRWSIUiYVrq
+        MDO/CopSmWao5dev/TdaWobddOC5Oe95nvOc876vg/AP8aa7g8KKGkH4Zil2dhZ8VrsK2zZ5O8xFtRcE
+        n1Pz4Ek9ImHA3ItMraehpRUxL+ZWlBlU/A4x/7cOLxpb2R2mtkIQie3NekYHS634bjYy3qejJC9dVJ9V
+        5CfZKlCan8GIuXAGefJTNuOmCAqvp1CQk4TuUjxatZQrSgkXFVFW2/Yo0qcx0qu3d56ykGmXgCl0Vvwh
+        cCNXwdePWqttkVxVlmbF/ZJUKo0KbhckUaJLwKiVk6c5z7XMWHIyJGjSom1uCrRJDL3LQrTdVSOjvDCD
+        yS459CTORLcl1xkDbZHQeoKm4kAMV1UIOk0CXzpS4L2SiqJ06h4qbUXTR3h1GBr2MlHrx+gjX97mexEZ
+        GiDuwlvIzZQx8FpOT20c5UYlU50yaAmzCTSFWIgHmKjzZ7R6O0P3fOgvW4M83MMyjsS2zOyMOPqbo7lp
+        SKPxmcVJW4RF4Cg0BjH1PICxpzsZrtqMuXwtn4s8abjgzEE/dxwdHaVWAU2qhJZqKbcMqdAhhZcWu/X7
+        GKvZxfBjXwYr19NX4sUH/SpMShdkoSs5GX7o11VmJUdRmpeC6c5xGlSCHXXKeVQr5nM3fgHFsYvRRblx
+        +cxygqZ3Fx2oEs+ikh0jOTqYmFP7OR3iz5HArezZsYEtG71Y5+WBp7sby5YuYslCJ1xdnGY+pLl+1H8/
+        /wFxteNr6n/4SAAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <metadata name="menuStripForSourceEdition.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>
