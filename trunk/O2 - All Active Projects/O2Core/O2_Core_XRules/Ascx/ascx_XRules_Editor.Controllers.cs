@@ -42,6 +42,10 @@ namespace O2.Core.XRules.Ascx
             loadFile(fileOrDir,false);
         }
 
+        public string loadFile(string fileOrDir)
+        {
+            return loadFile(fileOrDir, false);
+        }
         public string loadFile(string fileOrDir, bool compileLoadedFile)
         {
             var fileToOpen = "";
