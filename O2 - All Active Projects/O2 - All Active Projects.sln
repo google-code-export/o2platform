@@ -202,6 +202,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		_3rdPartyDlls\Evaluant.NLinq.Memory.o2.1.x.dll = _3rdPartyDlls\Evaluant.NLinq.Memory.o2.1.x.dll
 		_3rdPartyDlls\Evaluant.NLinq.o2.1.x.dll = _3rdPartyDlls\Evaluant.NLinq.o2.1.x.dll
 		RnD\forO2Core\ExecutionTrace\ExecutionTrace.sln = RnD\forO2Core\ExecutionTrace\ExecutionTrace.sln
+		_3rdPartyDlls\HTMLparserLibDotNet20.dll = _3rdPartyDlls\HTMLparserLibDotNet20.dll
 		_3rdPartyDlls\ICSharpCode.TextEditor.dll = _3rdPartyDlls\ICSharpCode.TextEditor.dll
 		_3rdPartyDlls\Ionic.Zip.dll = _3rdPartyDlls\Ionic.Zip.dll
 		RnD\JavaVelocityAnalyzer\JavaVelocityAnalyzer.sln = RnD\JavaVelocityAnalyzer\JavaVelocityAnalyzer.sln
