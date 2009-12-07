@@ -17,7 +17,7 @@
 ﻿using System.Drawing;
 namespace Merlin
 {
-    partial class WizardForm
+    public partial class WizardForm         // DC: made it public
     {
         /// <summary>
         /// Required designer variable.
@@ -45,6 +45,7 @@ namespace Merlin
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WizardForm));
             this.pnlHeader = new System.Windows.Forms.Panel();
             this.txtSubtitle = new System.Windows.Forms.TextBox();
             this.lblWizardTitle = new System.Windows.Forms.Label();
@@ -98,10 +99,11 @@ namespace Merlin
             // 
             // pbxLogo
             // 
-            this.pbxLogo.Location = new System.Drawing.Point(377, 0);
+            this.pbxLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbxLogo.BackgroundImage")));
+            this.pbxLogo.Location = new System.Drawing.Point(466, 0);
             this.pbxLogo.Margin = new System.Windows.Forms.Padding(0);
             this.pbxLogo.Name = "pbxLogo";
-            this.pbxLogo.Size = new System.Drawing.Size(157, 61);
+            this.pbxLogo.Size = new System.Drawing.Size(68, 61);
             this.pbxLogo.TabIndex = 0;
             this.pbxLogo.TabStop = false;
             // 

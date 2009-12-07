@@ -114,5 +114,12 @@ namespace Merlin
         public event EventHandler StepStateChanged;
 
         #endregion
+
+        /// <summary>
+        /// DC: used for execution actions when the component is loaded
+        public Action<IStep> OnComponentAction { get; set; }
+        public WizardController Controller { get; set; }
+        public Control FirstControl { get; set; }
+        public List<Control> Controls { get; set; } 
     }
 }
