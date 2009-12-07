@@ -106,6 +106,10 @@ namespace O2.Core.XRules.Ascx
         {
             loadXRuleDatabase();
             O2Messages.dotNetAssemblyAvailable("");  // simulate this event so that we trigger XRules recompilation (if XRules_Excution is open)
-        }                        
+        }
+        public void asd()
+        { 
+        
+        }
     }
 }
