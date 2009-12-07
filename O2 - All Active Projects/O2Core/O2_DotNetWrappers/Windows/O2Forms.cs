@@ -69,8 +69,11 @@ namespace O2.DotNetWrappers.Windows
 
         public static void setClipboardText(String text)
         {
-            PublicDI.log.info("Setting clipboard text to: {0}", text);
-            Clipboard.SetText(text);
+            if (text != null)
+            {
+                PublicDI.log.info("Setting clipboard text to: {0}", text);
+                Clipboard.SetText(text);
+            }
         }
 
         public static void copyListBoxItemsToClipboard(ListBox.ObjectCollection lbListBoxObjectCollection)
