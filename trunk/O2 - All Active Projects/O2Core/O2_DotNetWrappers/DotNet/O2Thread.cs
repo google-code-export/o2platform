@@ -32,7 +32,7 @@ namespace O2.DotNetWrappers.DotNet
             var stackTrace = getCurrentStackTrace();    // used for cross thread debugging purposes
             var staThread = new Thread(() => codeToExecute());
             staThread.SetApartmentState(ApartmentState.STA);
-            staThread.Start();
+            staThread.Start();            
             return staThread;
         }
 

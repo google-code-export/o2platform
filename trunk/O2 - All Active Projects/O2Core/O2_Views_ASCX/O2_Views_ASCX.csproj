@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Merlin, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\Merlin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -105,6 +109,9 @@
     <Compile Include="DataViewers\ascx_TableList.Designer.cs">
       <DependentUpon>ascx_TableList.cs</DependentUpon>
     </Compile>
+    <Compile Include="MerlinWizard\MerlinWizard_ExtensionMethods_2.cs" />
+    <Compile Include="MerlinWizard\MerlinUtils.cs" />
+    <Compile Include="MerlinWizard\MerlinWizard_ExtensionMethods.cs" />
     <Compile Include="O2Findings\ascx_FindingEditor.Controllers.cs">
       <SubType>UserControl</SubType>
     </Compile>

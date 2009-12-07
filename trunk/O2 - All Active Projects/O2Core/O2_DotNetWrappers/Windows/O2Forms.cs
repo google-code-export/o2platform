@@ -270,12 +270,12 @@ namespace O2.DotNetWrappers.Windows
                                                                String sFileFilter, TextBox tbCurrentLoadedDirectory)
         {
             loadTreeViewWithDirectoriesAndFiles(tvTargetTreeView, sDirectoryToProcess, sFileFilter,
-                                                tbCurrentLoadedDirectory, false);
+                                                tbCurrentLoadedDirectory, false,false /* hideFiles */);
         }
 
         public static void loadTreeViewWithDirectoriesAndFiles(TreeView tvTargetTreeView, String sDirectoryToProcess,
                                                                String sFileFilter, TextBox tbCurrentLoadedDirectory,
-                                                               bool bShowFileSize)
+                                                               bool bShowFileSize, bool hideFiles)
         {
             try
             {
@@ -286,7 +286,7 @@ namespace O2.DotNetWrappers.Windows
                                 {
                                     loadTreeViewWithDirectoriesAndFiles(tvTargetTreeView, sDirectoryToProcess,
                                                                         sFileFilter, tbCurrentLoadedDirectory,
-                                                                        bShowFileSize);
+                                                                        bShowFileSize, hideFiles);
                                 }));
                 else
                 {
@@ -302,15 +302,17 @@ namespace O2.DotNetWrappers.Windows
                             tvTargetTreeView.Nodes.Add(newTreeNode(Path.GetFileName(sDirectory), sDirectory, 0,
                                                                    sDirectory));
                         }
-                        foreach (String sFile in Directory.GetFiles(sDirectoryToProcess, sFileFilter))
-                            if (bShowFileSize)
-                                tvTargetTreeView.Nodes.Add(
-                                    newTreeNode(
-                                        String.Format("{0}     :     {1}k", Path.GetFileName(sFile),
-                                                      Files.getFileSize(Path.Combine(sDirectoryToProcess, sFile))/1024),
-                                        sFile, 1, sFile));
-                            else
-                                tvTargetTreeView.Nodes.Add(newTreeNode(Path.GetFileName(sFile), sFile, 1, sFile));
+                        if (false == hideFiles)
+
+                            foreach (String sFile in Directory.GetFiles(sDirectoryToProcess, sFileFilter))
+                                if (bShowFileSize)
+                                    tvTargetTreeView.Nodes.Add(
+                                        newTreeNode(
+                                            String.Format("{0}     :     {1}k", Path.GetFileName(sFile),
+                                                          Files.getFileSize(Path.Combine(sDirectoryToProcess, sFile)) / 1024),
+                                            sFile, 1, sFile));
+                                else
+                                    tvTargetTreeView.Nodes.Add(newTreeNode(Path.GetFileName(sFile), sFile, 1, sFile));
 
                         //   if (null != lCurrentLoadedDirectory)
                         //       lCurrentLoadedDirectory.Text = Path.GetFileName(sDirectoryToProcess);

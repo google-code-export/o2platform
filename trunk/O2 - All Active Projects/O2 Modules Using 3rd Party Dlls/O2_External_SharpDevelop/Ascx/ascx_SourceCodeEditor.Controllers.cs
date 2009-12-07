@@ -15,6 +15,8 @@ using O2.DotNetWrappers.Windows;
 using O2.External.SharpDevelop.ScriptSamples;
 using O2.Kernel.CodeUtils;
 using O2.Kernel.Interfaces.Views;
+using O2.Kernel;
+using O2.Views.ASCX.CoreControls;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -44,8 +46,7 @@ namespace O2.External.SharpDevelop.Ascx
         public void onLoad()
         {
             if (false == DesignMode && runOnLoad)
-            {
-                gbO2ObjectMode_SizeChanged(null, null);
+            {                
                 tbMaxLoadSize.Text = iMaxFileSize.ToString();
                 if (File.Exists(sFileToOpen))
                     loadSourceCodeFile(sFileToOpen);
@@ -650,53 +651,60 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void compileDotNetCode()
         {
-            compiledAssembly = null;
-            var compileEngine = new CompileEngine();
-            var previousExecutedMethod = cboxCompliledSourceCodeMethods.Text;
-            if (getSourceCode() != "")
+            try
             {
-                saveSourceCode();
-                // always save before compiling                                                
-                compileEngine.compileSourceFile(sPathToFileLoaded);
-                compiledAssembly = compileEngine.compiledAssembly;
-            }
-
-            // set gui options depending on compilation result
-            var assemblyCreated = compiledAssembly != null;
-
-            btShowHideCompilationErrors.Visible = lboxCompilationErrors.Visible = lbCompilationErrors.Visible = !assemblyCreated;
-            btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
-                                            lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible = assemblyCreated;
-            cboxCompliledSourceCodeMethods.Items.Clear();
-
-            // if there is compiledAssembly, show errors
-            if (!assemblyCreated)
-            {
-                compileEngine.addErrorsListToListBox(lboxCompilationErrors);
-                showErrorsInSourceCodeEditor(compileEngine.sbErrorMessage.ToString());                
-            }
-            else
-            {
-                // if not, populate the cbox for dynamic execution                
-                O2Messages.dotNetAssemblyAvailable(compiledAssembly.Location);
-                foreach (var method in DI.reflection.getMethods(compiledAssembly))
-                    cboxCompliledSourceCodeMethods.Items.Add(method);
-                // remap the previously executed method
-                if (cboxCompliledSourceCodeMethods.Items.Count > 0)
+                compiledAssembly = null;
+                var compileEngine = new CompileEngine();
+                var previousExecutedMethod = cboxCompliledSourceCodeMethods.Text;
+                if (getSourceCode() != "")
                 {
-                    foreach (var method in cboxCompliledSourceCodeMethods.Items)
-                        if (method.ToString() == previousExecutedMethod)
-                        {
-                            cboxCompliledSourceCodeMethods.SelectedItem = method;
-                        }
-                    cboxCompliledSourceCodeMethods.SelectedIndex = 0;
+                    saveSourceCode();
+                    // always save before compiling                                                
+                    compileEngine.compileSourceFile(sPathToFileLoaded);
+                    compiledAssembly = compileEngine.compiledAssembly;
                 }
-            }            
+
+                // set gui options depending on compilation result
+                var assemblyCreated = compiledAssembly != null;
+
+                btShowHideCompilationErrors.Visible = lboxCompilationErrors.Visible = lbCompilationErrors.Visible = !assemblyCreated;
+                btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
+                                                lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible = assemblyCreated;
+                cboxCompliledSourceCodeMethods.Items.Clear();
+
+                clearBookmarksAndMarkers();
+                // if there is compiledAssembly, show errors
+                if (!assemblyCreated)
+                {
+                    compileEngine.addErrorsListToListBox(lboxCompilationErrors);
+                    showErrorsInSourceCodeEditor(compileEngine.sbErrorMessage.ToString());
+                }
+                else
+                {
+                    // if not, populate the cbox for dynamic execution                
+                    O2Messages.dotNetAssemblyAvailable(compiledAssembly.Location);
+                    foreach (var method in DI.reflection.getMethods(compiledAssembly))
+                        cboxCompliledSourceCodeMethods.Items.Add(method);
+                    // remap the previously executed method
+                    if (cboxCompliledSourceCodeMethods.Items.Count > 0)
+                    {
+                        foreach (var method in cboxCompliledSourceCodeMethods.Items)
+                            if (method.ToString() == previousExecutedMethod)
+                            {
+                                cboxCompliledSourceCodeMethods.SelectedItem = method;
+                            }
+                        cboxCompliledSourceCodeMethods.SelectedIndex = 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                PublicDI.log.error("in compileDotNetCode:{0}", ex.Message);
+            }
         }
 
         private void showErrorsInSourceCodeEditor(string errorMessages)
-        {
-            clearBookmarksAndMarkers();
+        {            
             String[] sSplitedErrorMessage = errorMessages.Split(new[] { Environment.NewLine },StringSplitOptions.RemoveEmptyEntries);
             foreach (string sSplitMessage in sSplitedErrorMessage)
             {
@@ -951,6 +959,11 @@ namespace O2.External.SharpDevelop.Ascx
             var textMarkers = new List<TextMarker>(tecSourceCode.Document.MarkerStrategy.TextMarker);
             foreach (var textMarker in textMarkers)
                 tecSourceCode.Document.MarkerStrategy.RemoveMarker(textMarker);          
+        }
+
+        public void openO2ObjectModel()
+        {
+            O2Messages.openControlInGUI(typeof(ascx_O2ObjectModel),O2DockState.Float, "O2 Object Model");
         }
     }
 }
