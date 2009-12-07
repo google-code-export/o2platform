@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace Merlin
 {
-    internal partial class WizardForm : Form
+    public partial class WizardForm : Form    // DC: made it public
     {
         private const int titleOffsetWithSubtitle = 7;
         private int originalTitleTop = -20;

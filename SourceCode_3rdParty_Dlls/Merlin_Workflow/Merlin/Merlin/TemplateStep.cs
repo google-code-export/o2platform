@@ -24,8 +24,7 @@ namespace Merlin
     /// and by composition by providing handler and button enablement strategy
     /// delegates.
     /// </summary>
-    public class TemplateStep
-        : IStep
+    public class TemplateStep : IStep
     {
         /// <summary>
         /// A delegate for a void function with no arguments
@@ -276,5 +275,18 @@ namespace Merlin
                 : base("UI has not been specified for this step")
             { }
         }
+
+        /// <summary>
+        /// DC: used for executing actions when the component is loaded
+        /// /// </summary>
+        public Action<IStep> OnComponentAction { get; set; }
+
+        /// <summary>
+        /// DC: so that the IStep can access the controller object
+        /// </summary>
+        public WizardController Controller { get; set; }
+
+        public Control FirstControl { get; set; }
+        public List<Control> Controls { get; set; }    
     }
 }

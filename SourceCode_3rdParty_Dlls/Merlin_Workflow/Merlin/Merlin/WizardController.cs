@@ -30,11 +30,12 @@ namespace Merlin
     /// </summary>
     public class WizardController
     {
-        List<IStep> steps;
-        private WizardForm wizardForm;
-        private int currentStepIndex;
-        private Image logoImage;
-        private WizardResult result = WizardResult.Cancel;
+        public List<IStep> steps;                   // DC: made all these public
+        public WizardForm wizardForm;
+        public int currentStepIndex;
+        public Image logoImage;
+        public WizardResult result = WizardResult.Cancel;
+        public Action<Exception> onError;              // DC: so that we can catch exceptions from O2
 
         #region Constructors
 
@@ -177,6 +178,7 @@ namespace Merlin
 
         private void runComponent(IStep component)
         {
+            component.Controller = this;
             if (currentStepIndex > steps.Count)
             {
                 throw new Exception("Attempting to run past the end of the wizard");
@@ -198,6 +200,28 @@ namespace Merlin
                 {
                     wizardForm.HideSubtitle();
                 }
+
+                // DC: next code was added for O2
+                try
+                {
+
+                    if (component.OnComponentAction != null)
+                        component.OnComponentAction(component);
+                    if (component.UI.Controls.Count > 0)
+                    {
+                        component.FirstControl = component.UI.Controls[0];
+
+                        component.Controls = new List<Control>();
+                        foreach (Control control in component.UI.Controls)
+                            component.Controls.Add(control);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (onError != null)
+                        onError(ex);
+                }
+
             }
         }
 
@@ -211,7 +235,7 @@ namespace Merlin
         /// Enables/disables wizard buttons in accordance with 
         /// the component's state.
         /// </summary>
-        private void updateButtonState()
+        public void updateButtonState()         //   DC (was private)
         {
             wizardForm.btnBack.Enabled = currentStepIndex > 0
                 && steps[currentStepIndex].AllowPrevious();
@@ -319,12 +343,22 @@ namespace Merlin
         }
 
 
+
         #endregion
 
 
         public enum WizardResult {Finish, Error, Cancel};
-	
-	        
 
+        // DC
+        public void allowNext(bool state)
+        {
+            wizardForm.btnNext.Enabled = state;
+        }
+
+        public void allowBack(bool state)
+        {
+            wizardForm.btnBack.Enabled = state;
+        }
+		        
     }
 }
