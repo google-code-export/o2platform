@@ -1,0 +1,3 @@
+﻿7-Dec-2009
+	* Downloaded latest version from http://merlin.codeplex.com/ (source code version http://merlin.codeplex.com/SourceControl/changeset/view/35007)
+	* DC: moved to Merlin project the MerlinStepLibrary code (and placed each one on a separate folder)

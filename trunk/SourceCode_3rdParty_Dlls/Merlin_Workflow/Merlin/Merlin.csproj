@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5569E453-3A8E-425A-81CF-EB964117B7EC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Merlin</RootNamespace>
+    <AssemblyName>Merlin</AssemblyName>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <StartupObject>
+    </StartupObject>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PFiles Condition=" '$(PFiles)' == '' ">Program Files</PFiles>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\O2 - All Active Projects\_3rdPartyDlls\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Merlin.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MerlinStepLibrary\FileSelectionStep.cs" />
+    <Compile Include="MerlinStepLibrary\FileSelectionStepUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MerlinStepLibrary\FileSelectionStepUI.Designer.cs">
+      <DependentUpon>FileSelectionStepUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MerlinStepLibrary\Option.cs" />
+    <Compile Include="MerlinStepLibrary\Question.cs" />
+    <Compile Include="MerlinStepLibrary\SelectionStep.cs" />
+    <Compile Include="MerlinStepLibrary\SelectionStepUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MerlinStepLibrary\SelectionStepUI.Designer.cs">
+      <DependentUpon>SelectionStepUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MerlinStepLibrary\Strings.cs" />
+    <Compile Include="MerlinStepLibrary\TextFormStep.cs" />
+    <Compile Include="MerlinStepLibrary\TextFormStepUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MerlinStepLibrary\TextFormStepUI.Designer.cs">
+      <DependentUpon>TextFormStepUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MerlinStepLibrary\Validation.cs" />
+    <Compile Include="Merlin\ConditionalStep.cs" />
+    <Compile Include="Merlin\ConditionalStepAtEndException.cs" />
+    <Compile Include="Merlin\EmptyStepSequenceException.cs" />
+    <Compile Include="Merlin\IStep.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Merlin\TemplateStep.cs" />
+    <Compile Include="Merlin\WizardController.cs" />
+    <Compile Include="Merlin\WizardForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Merlin\WizardForm.Designer.cs">
+      <DependentUpon>WizardForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="MerlinStepLibrary\FileSelectionStepUI.resx">
+      <DependentUpon>FileSelectionStepUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MerlinStepLibrary\SelectionStepUI.resx">
+      <DependentUpon>SelectionStepUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MerlinStepLibrary\TextFormStepUI.resx">
+      <DependentUpon>TextFormStepUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Merlin\WizardForm.resx">
+      <DependentUpon>WizardForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ChangeLog.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

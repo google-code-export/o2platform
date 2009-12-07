@@ -1,0 +1,7 @@
+Welcome to the New User Wizard.
+
+On behalf of the Nerlim User Management Software Development team, we want to thank you from the bottom of our stacks...er... hearts for using our wizard. We hope you enjoy using this wizard as much as we enjoyed creating it for you. It may surprise you to learn that it took us longer to type this text file than to create this whole wizard, thanks to the glorious power and convenience of the Merlin Wizard Framework. In any case, please enjoy our wizard responsibly.
+
+Fondly,
+
+Nerlim IT.
