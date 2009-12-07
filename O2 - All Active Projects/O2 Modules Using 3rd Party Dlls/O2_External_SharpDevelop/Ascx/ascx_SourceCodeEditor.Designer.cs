@@ -57,10 +57,10 @@ namespace O2.External.SharpDevelop.Ascx
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tbShowO2ObjectModel = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.btSettings = new System.Windows.Forms.ToolStripButton();
             this.btSaveFile = new System.Windows.Forms.ToolStripButton();
-            this.tbShowO2ObjectModel = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.lbExecuteOnEngine = new System.Windows.Forms.ToolStripLabel();
             this.btCompileCode = new System.Windows.Forms.ToolStripButton();
@@ -93,15 +93,10 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbPartialFileView = new System.Windows.Forms.ListBox();
             this.tbExecutionHistoryOrLog = new System.Windows.Forms.TextBox();
             this.lboxCompilationErrors = new System.Windows.Forms.ListBox();
-            this.gbO2ObjectMode = new System.Windows.Forms.GroupBox();
-            this.scrollBarHorizontalSize_O2ObjectModel = new System.Windows.Forms.HScrollBar();
-            this.scrollBarVerticalSize_O2ObjectModel = new System.Windows.Forms.VScrollBar();
-            this.o2ObjectModel = new O2.Views.ASCX.CoreControls.ascx_O2ObjectModel();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.gbO2ObjectMode.SuspendLayout();
             this.SuspendLayout();
             // 
             // tecSourceCode
@@ -385,10 +380,10 @@ namespace O2.External.SharpDevelop.Ascx
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tbShowO2ObjectModel,
             this.toolStripLabel3,
             this.btSettings,
             this.btSaveFile,
-            this.tbShowO2ObjectModel,
             this.toolStripSeparator3,
             this.lbExecuteOnEngine,
             this.btCompileCode,
@@ -417,6 +412,16 @@ namespace O2.External.SharpDevelop.Ascx
             this.toolStrip1.TabIndex = 45;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // tbShowO2ObjectModel
+            // 
+            this.tbShowO2ObjectModel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tbShowO2ObjectModel.Image = ((System.Drawing.Image)(resources.GetObject("tbShowO2ObjectModel.Image")));
+            this.tbShowO2ObjectModel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbShowO2ObjectModel.Name = "tbShowO2ObjectModel";
+            this.tbShowO2ObjectModel.Size = new System.Drawing.Size(23, 22);
+            this.tbShowO2ObjectModel.Text = "Show O2 Object Model";
+            this.tbShowO2ObjectModel.Click += new System.EventHandler(this.tbShowO2ObjectModel_Click);
+            // 
             // toolStripLabel3
             // 
             this.toolStripLabel3.Name = "toolStripLabel3";
@@ -443,16 +448,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.btSaveFile.Size = new System.Drawing.Size(23, 22);
             this.btSaveFile.Text = "Save file";
             this.btSaveFile.Click += new System.EventHandler(this.btSaveFile_Click);
-            // 
-            // tbShowO2ObjectModel
-            // 
-            this.tbShowO2ObjectModel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tbShowO2ObjectModel.Image = ((System.Drawing.Image)(resources.GetObject("tbShowO2ObjectModel.Image")));
-            this.tbShowO2ObjectModel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbShowO2ObjectModel.Name = "tbShowO2ObjectModel";
-            this.tbShowO2ObjectModel.Size = new System.Drawing.Size(23, 22);
-            this.tbShowO2ObjectModel.Text = "Show O2 Object Model";
-            this.tbShowO2ObjectModel.Click += new System.EventHandler(this.tbShowO2ObjectModel_Click);
             // 
             // toolStripSeparator3
             // 
@@ -764,58 +759,12 @@ namespace O2.External.SharpDevelop.Ascx
             this.lboxCompilationErrors.Visible = false;
             this.lboxCompilationErrors.SelectedIndexChanged += new System.EventHandler(this.cbCompilationErrors_SelectedIndexChanged);
             // 
-            // gbO2ObjectMode
-            // 
-            this.gbO2ObjectMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbO2ObjectMode.Controls.Add(this.scrollBarHorizontalSize_O2ObjectModel);
-            this.gbO2ObjectMode.Controls.Add(this.scrollBarVerticalSize_O2ObjectModel);
-            this.gbO2ObjectMode.Controls.Add(this.o2ObjectModel);
-            this.gbO2ObjectMode.Location = new System.Drawing.Point(696, 141);
-            this.gbO2ObjectMode.Name = "gbO2ObjectMode";
-            this.gbO2ObjectMode.Size = new System.Drawing.Size(432, 281);
-            this.gbO2ObjectMode.TabIndex = 51;
-            this.gbO2ObjectMode.TabStop = false;
-            this.gbO2ObjectMode.Text = "O2 Object Model";
-            this.gbO2ObjectMode.Visible = false;
-            this.gbO2ObjectMode.SizeChanged += new System.EventHandler(this.gbO2ObjectMode_SizeChanged);
-            // 
-            // scrollBarHorizontalSize_O2ObjectModel
-            // 
-            this.scrollBarHorizontalSize_O2ObjectModel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.scrollBarHorizontalSize_O2ObjectModel.Location = new System.Drawing.Point(380, 268);
-            this.scrollBarHorizontalSize_O2ObjectModel.Name = "scrollBarHorizontalSize_O2ObjectModel";
-            this.scrollBarHorizontalSize_O2ObjectModel.Size = new System.Drawing.Size(38, 10);
-            this.scrollBarHorizontalSize_O2ObjectModel.SmallChange = 10;
-            this.scrollBarHorizontalSize_O2ObjectModel.TabIndex = 55;
-            this.scrollBarHorizontalSize_O2ObjectModel.Visible = false;
-            this.scrollBarHorizontalSize_O2ObjectModel.Scroll += new System.Windows.Forms.ScrollEventHandler(this.scrollBarHorizontalSize_O2ObjectModel_Scroll);
-            // 
-            // scrollBarVerticalSize_O2ObjectModel
-            // 
-            this.scrollBarVerticalSize_O2ObjectModel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.scrollBarVerticalSize_O2ObjectModel.Location = new System.Drawing.Point(419, 240);
-            this.scrollBarVerticalSize_O2ObjectModel.Name = "scrollBarVerticalSize_O2ObjectModel";
-            this.scrollBarVerticalSize_O2ObjectModel.Size = new System.Drawing.Size(10, 38);
-            this.scrollBarVerticalSize_O2ObjectModel.SmallChange = 10;
-            this.scrollBarVerticalSize_O2ObjectModel.TabIndex = 54;
-            this.scrollBarVerticalSize_O2ObjectModel.Visible = false;
-            this.scrollBarVerticalSize_O2ObjectModel.Scroll += new System.Windows.Forms.ScrollEventHandler(this.scrollBarVerticalSize_O2ObjectModel_Scroll);
-            // 
-            // o2ObjectModel
-            // 
-            this.o2ObjectModel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.o2ObjectModel.Location = new System.Drawing.Point(3, 16);
-            this.o2ObjectModel.Name = "o2ObjectModel";
-            this.o2ObjectModel.Size = new System.Drawing.Size(426, 262);
-            this.o2ObjectModel.TabIndex = 0;
-            // 
             // ascx_SourceCodeEditor
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.Controls.Add(this.gbO2ObjectMode);
             this.Controls.Add(this.groupBoxWithFileAndSaveSettings);
             this.Controls.Add(this.lboxCompilationErrors);
             this.Controls.Add(this.tbExecutionHistoryOrLog);
@@ -838,7 +787,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.groupBoxWithFileAndSaveSettings.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.gbO2ObjectMode.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -900,11 +848,7 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripComboBox cbExternalEngineToUse;
         private System.Windows.Forms.CheckBox cbAutoTryToFixSourceCodeFileReferences;
         private System.Windows.Forms.ToolStripButton btShowHideCompilationErrors;
-        private System.Windows.Forms.GroupBox gbO2ObjectMode;
         private System.Windows.Forms.ToolStripButton tbShowO2ObjectModel;
-        private O2.Views.ASCX.CoreControls.ascx_O2ObjectModel o2ObjectModel;
-        private System.Windows.Forms.HScrollBar scrollBarHorizontalSize_O2ObjectModel;
-        private System.Windows.Forms.VScrollBar scrollBarVerticalSize_O2ObjectModel;
         private System.Windows.Forms.ContextMenuStrip menuStripForSourceEdition;
         private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;

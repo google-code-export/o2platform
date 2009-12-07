@@ -310,37 +310,9 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void tbShowO2ObjectModel_Click(object sender, EventArgs e)
         {
-            scrollBarHorizontalSize_O2ObjectModel.Visible =
-                scrollBarVerticalSize_O2ObjectModel.Visible = 
-                gbO2ObjectMode.Visible = !gbO2ObjectMode.Visible;
-            
-        }
-
-        private void scrollBarHorizontalSize_O2ObjectModel_Scroll(object sender, ScrollEventArgs e)
-        {
-            var difference = gbO2ObjectMode.Width - scrollBarHorizontalSize_O2ObjectModel.Value;
-            gbO2ObjectMode.Left += difference;
-            gbO2ObjectMode.Width = scrollBarHorizontalSize_O2ObjectModel.Value;
-            
-        }
-
-        private void scrollBarVerticalSize_O2ObjectModel_Scroll(object sender, ScrollEventArgs e)
-        {
-            var difference = gbO2ObjectMode.Height - scrollBarVerticalSize_O2ObjectModel.Value;
-            gbO2ObjectMode.Top += difference;
-            gbO2ObjectMode.Height = scrollBarVerticalSize_O2ObjectModel.Value;
-            
-        }
-
-        private void gbO2ObjectMode_SizeChanged(object sender, EventArgs e)
-        {
-            scrollBarVerticalSize_O2ObjectModel.Maximum = gbO2ObjectMode.Height + 20;
-            scrollBarVerticalSize_O2ObjectModel.Value = gbO2ObjectMode.Height;
-
-            scrollBarHorizontalSize_O2ObjectModel.Maximum = gbO2ObjectMode.Width + 20;
-            scrollBarHorizontalSize_O2ObjectModel.Value = gbO2ObjectMode.Width;
-        }
-
+            openO2ObjectModel();            
+        }        
+        
         private void compileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             compile_Click(null, null);

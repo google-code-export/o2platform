@@ -131,6 +131,12 @@ namespace O2.Views.ASCX.CoreControls
         [EditorBrowsable(EditorBrowsableState.Always)]
         [Browsable(true)]
         [Bindable(true)]
+        public bool _HideFiles{ get; set; }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [Bindable(true)]
         public bool _WatchFolder
         {
             set
@@ -260,7 +266,7 @@ namespace O2.Views.ASCX.CoreControls
             if (tvDirectory.okThread(delegate { refreshDirectoryView(); }))
             {
                 O2Forms.loadTreeViewWithDirectoriesAndFiles(tvDirectory, tbCurrentDirectoryName.Text, _FileFilter,
-                                                            tbCurrentDirectoryName, _ShowFileSize);
+                                                            tbCurrentDirectoryName, _ShowFileSize, _HideFiles);
                 if (false == _ShowLinkToUpperFolder && tvDirectory.Nodes.Count > 0 && tvDirectory.Nodes[0].Text == "..")
                     tvDirectory.Nodes.RemoveAt(0);
 
