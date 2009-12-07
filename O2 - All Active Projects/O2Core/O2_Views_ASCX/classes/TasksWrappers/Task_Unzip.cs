@@ -5,6 +5,7 @@ using O2.DotNetWrappers.Zip;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes;
 using O2.Views.ASCX.classes.Tasks;
+using O2.DotNetWrappers.Network;
 
 namespace O2.Views.ASCX.classes.TasksWrappers
 {
@@ -29,7 +30,7 @@ namespace O2.Views.ASCX.classes.TasksWrappers
                 return false;
             var fileToUnzip = (string) sourceObject;
             if (fileToUnzip.IndexOf("http://") > -1)
-                fileToUnzip = WebRequests.downloadBinaryFile(fileToUnzip);
+                fileToUnzip = Web.downloadBinaryFile(fileToUnzip);
             if (!File.Exists(fileToUnzip))
                 return false;
             folderToUnzipFiles = folderToUnzipFiles ?? DI.config.TempFolderInTempDirectory;

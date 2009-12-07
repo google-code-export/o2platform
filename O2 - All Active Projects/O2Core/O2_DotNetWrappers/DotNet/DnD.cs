@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.Network;
 
 namespace O2.DotNetWrappers.DotNet
 {
@@ -88,6 +89,11 @@ namespace O2.DotNetWrappers.DotNet
 
         public static String tryToGetFileOrDirectoryFromDroppedObject(DragEventArgs dragEventArgs)
         {
+            return tryToGetFileOrDirectoryFromDroppedObject(dragEventArgs, true);
+        }
+
+        public static String tryToGetFileOrDirectoryFromDroppedObject(DragEventArgs dragEventArgs, bool downloadIfHttp)
+        {
             var dataReceived = new List<object>();
             String[] sFormats = dragEventArgs.Data.GetFormats();
             foreach (string sFormat in sFormats)
@@ -101,6 +107,15 @@ namespace O2.DotNetWrappers.DotNet
                         case "String":
                             if (File.Exists(item.ToString()) || Directory.Exists(item.ToString()))
                                 return item.ToString();
+                            if ( item.ToString().ToLower().StartsWith("http"))
+                            {
+                                if (downloadIfHttp)
+                                {
+                                    var savedUrlContents = Web.saveUrlContents(item.ToString());
+                                    if (savedUrlContents != "" && File.Exists(savedUrlContents))
+                                        return savedUrlContents;
+                                }
+                            }
                             break;
                         case "String[]":
                             foreach (string subItem in (string[]) item)

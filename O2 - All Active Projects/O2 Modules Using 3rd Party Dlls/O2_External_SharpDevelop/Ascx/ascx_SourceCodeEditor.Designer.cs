@@ -76,6 +76,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbSampleScripts = new System.Windows.Forms.ToolStripLabel();
             this.cBoxSampleScripts = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.btOpenFile = new System.Windows.Forms.ToolStripButton();
             this.groupBoxWithFileAndSaveSettings = new System.Windows.Forms.GroupBox();
             this.cbAutoTryToFixSourceCodeFileReferences = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -89,14 +90,13 @@ namespace O2.External.SharpDevelop.Ascx
             this.gbO2ObjectMode = new System.Windows.Forms.GroupBox();
             this.scrollBarHorizontalSize_O2ObjectModel = new System.Windows.Forms.HScrollBar();
             this.scrollBarVerticalSize_O2ObjectModel = new System.Windows.Forms.VScrollBar();
+            this.o2ObjectModel = new O2.Views.ASCX.CoreControls.ascx_O2ObjectModel();
             this.menuStripForSourceEdition = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btOpenFile = new System.Windows.Forms.ToolStripButton();
-            this.o2ObjectModel = new O2.Views.ASCX.CoreControls.ascx_O2ObjectModel();
             this.toolStrip1.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -110,6 +110,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.tecSourceCode.ContextMenuStrip = this.menuStripForSourceEdition;
             this.tecSourceCode.IsIconBarVisible = true;
             this.tecSourceCode.IsReadOnly = false;
             this.tecSourceCode.Location = new System.Drawing.Point(3, 28);
@@ -577,6 +578,16 @@ namespace O2.External.SharpDevelop.Ascx
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
             // 
+            // btOpenFile
+            // 
+            this.btOpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btOpenFile.Image")));
+            this.btOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btOpenFile.Name = "btOpenFile";
+            this.btOpenFile.Size = new System.Drawing.Size(23, 22);
+            this.btOpenFile.Text = "Open File";
+            this.btOpenFile.Click += new System.EventHandler(this.btOpenFile_Click);
+            // 
             // groupBoxWithFileAndSaveSettings
             // 
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.cbAutoTryToFixSourceCodeFileReferences);
@@ -744,6 +755,14 @@ namespace O2.External.SharpDevelop.Ascx
             this.scrollBarVerticalSize_O2ObjectModel.Visible = false;
             this.scrollBarVerticalSize_O2ObjectModel.Scroll += new System.Windows.Forms.ScrollEventHandler(this.scrollBarVerticalSize_O2ObjectModel_Scroll);
             // 
+            // o2ObjectModel
+            // 
+            this.o2ObjectModel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.o2ObjectModel.Location = new System.Drawing.Point(3, 16);
+            this.o2ObjectModel.Name = "o2ObjectModel";
+            this.o2ObjectModel.Size = new System.Drawing.Size(426, 262);
+            this.o2ObjectModel.TabIndex = 0;
+            // 
             // menuStripForSourceEdition
             // 
             this.menuStripForSourceEdition.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -789,24 +808,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.openFileToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
-            // 
-            // btOpenFile
-            // 
-            this.btOpenFile.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btOpenFile.Image")));
-            this.btOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btOpenFile.Name = "btOpenFile";
-            this.btOpenFile.Size = new System.Drawing.Size(23, 22);
-            this.btOpenFile.Text = "Open File";
-            this.btOpenFile.Click += new System.EventHandler(this.btOpenFile_Click);
-            // 
-            // o2ObjectModel
-            // 
-            this.o2ObjectModel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.o2ObjectModel.Location = new System.Drawing.Point(3, 16);
-            this.o2ObjectModel.Name = "o2ObjectModel";
-            this.o2ObjectModel.Size = new System.Drawing.Size(426, 262);
-            this.o2ObjectModel.TabIndex = 0;
             // 
             // ascx_SourceCodeEditor
             // 

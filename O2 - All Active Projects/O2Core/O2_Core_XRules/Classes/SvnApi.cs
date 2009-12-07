@@ -5,6 +5,8 @@ using System.Text;
 using O2.Views.ASCX.classes;
 using HTMLparserLibDotNet20.O2ExtraCode;
 using System.Xml.Linq;
+using System.IO;
+using O2.DotNetWrappers.Network;
 
 namespace O2.Core.XRules.Classes
 {
@@ -12,14 +14,14 @@ namespace O2.Core.XRules.Classes
     {
         public static string getHtmlCode(string urlToFetch)
         {
-            var urlContents = WebRequests.getUrlContents(urlToFetch);
+            var urlContents = Web.getUrlContents(urlToFetch);
             return urlContents;
         }
 
         public static List<SvnMappedUrl> getSvnMappedUrls(string urlToFetch)
         {
             var svnMappedUrls = new List<SvnMappedUrl>();
-            var codeToParse = WebRequests.getUrlContents(urlToFetch);
+            var codeToParse = Web.getUrlContents(urlToFetch);
             if (codeToParse != "")
             {
                 //			var link = Majestic12ToXml.ConvertNodesToXml(new byte[]{});
@@ -42,6 +44,7 @@ namespace O2.Core.XRules.Classes
         public string Text { get; set; }
         public string FullPath { get; set; }
         public bool IsFile { get; set; }
+        public string FileExtension { get; set; }
 
         public SvnMappedUrl(string basePath, string virtualPath, string text)
         {
@@ -56,12 +59,14 @@ namespace O2.Core.XRules.Classes
 
             if (virtualPath.Length > 0)
                 IsFile = virtualPath[virtualPath.Length - 1] != '/';
+            
+            FileExtension = (IsFile) ? Path.GetExtension(virtualPath) : "";
         }
 
         public string getFileContents()
         {
             if (IsFile)
-                return WebRequests.getUrlContents(FullPath);
+                return Web.getUrlContents(FullPath);
             return "";
         }
     }

@@ -252,11 +252,11 @@ namespace O2.External.SharpDevelop.Ascx
             pathToSourceCodeFileToLoad = HandleO2MessageOnSD.tryToResolveFileLocation(pathToSourceCodeFileToLoad, this);
 
             var fileExtension = Path.GetExtension(pathToSourceCodeFileToLoad).ToLower();
-            if (fileExtension == ".dll" || fileExtension == ".exe" || fileExtension == ".class")
+            if (fileExtension == ".dll" || fileExtension == ".exe" || fileExtension == ".class" || hasNonRendredChars(pathToSourceCodeFileToLoad))
             {
-                DI.log.debug("Skipping file load due to its extension: {0}", Path.GetFileName(pathToSourceCodeFileToLoad));
+                DI.log.error("Skipping file load due to its extension or contents: {0}", Path.GetFileName(pathToSourceCodeFileToLoad));
                 return false;
-            }
+            }            
             return (bool)(this.invokeOnThread(() =>
                                  {
                                      try
@@ -299,6 +299,14 @@ namespace O2.External.SharpDevelop.Ascx
                                      }
                                      return false;
                                  }));
+        }
+
+        private bool hasNonRendredChars(string pathToSourceCodeFileToLoad)
+        {
+            var fileContents = Files.getFileContents(pathToSourceCodeFileToLoad);
+            if (fileContents.Contains("\0"))
+                return true;
+            return false;
         }
 
         private void setCompileAndInvokeButtonsState(string pathToFileLoaded)
@@ -857,29 +865,35 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void setDocumentContents(string documentContents)
         {
-            this.invokeOnThread(
-                () =>
-                {
-                    setDocumentContents(documentContents, true);
-                });
+            setDocumentContents(documentContents, "", true);
         }
 
-        public void setDocumentContents(string documentContents, bool clearFileLocationValues)
+        public void setDocumentContents(string documentContents, string fileName)
         {
-            try
-            {
-                tecSourceCode.Document.TextContent = documentContents;
-                if (clearFileLocationValues)
-                {
-                    sPathToFileLoaded = "";
-                    tbSourceCode_DirectoryOfFileLoaded.Text = "";
-                    tbSourceCode_FileLoaded.Text = "";
-                }
-            }
-            catch (Exception ex)
-            {
-                DI.log.error("In setDocumentContents: ", ex.Message);
-            }
+            setDocumentContents(documentContents, fileName, true);
+        }
+
+        public void setDocumentContents(string documentContents, string fileName, bool clearFileLocationValues)
+        {
+            this.invokeOnThread(
+                    () =>
+                    {
+                        try
+                        {
+                            tecSourceCode.Document.TextContent = documentContents;
+                            tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(fileName);
+                            if (clearFileLocationValues)
+                            {
+                                sPathToFileLoaded = "";
+                                tbSourceCode_DirectoryOfFileLoaded.Text = "";
+                                tbSourceCode_FileLoaded.Text = "";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            DI.log.error("In setDocumentContents: ", ex.Message);
+                        }
+                    });
         }
     }
 }
