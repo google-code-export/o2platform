@@ -15,6 +15,7 @@ using O2.External.WinFormsUI.Forms;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework; 
 using O2.Views.ASCX.classes;
+using O2.DotNetWrappers.Network;
 //O2Tag_AddSourceFile:ascx_SvnBrower.cs
 namespace O2.Script
 {	
@@ -42,7 +43,7 @@ namespace O2.Script
     	[Test]
     	public bool checkIfSvnServerIsOnline()
     	{
-    		var urlContents = WebRequests.getUrlContents(svnServer);
+    		var urlContents = Web.getUrlContents(svnServer);
     		Assert.That(false == string.IsNullOrEmpty(urlContents), "urlContents was empty");    		
     		return true;
     	}
@@ -50,7 +51,7 @@ namespace O2.Script
     	[Test]
     	public bool checkIfRulesDatabaseIsAvailable()
     	{
-			var urlContents = WebRequests.getUrlContents(XRulesDatabase);
+            var urlContents = Web.getUrlContents(XRulesDatabase);
     		Assert.That(false == string.IsNullOrEmpty(urlContents), "urlContents was empty");    		
     		return true;
     	}    	

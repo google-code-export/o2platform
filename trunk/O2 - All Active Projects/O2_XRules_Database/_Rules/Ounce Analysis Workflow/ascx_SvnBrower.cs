@@ -26,6 +26,7 @@ using O2.Views.ASCX.classes;
 using HTMLparserLibDotNet20.O2ExtraCode;
 
 using O2.Views.ASCX.CoreControls;
+using O2.DotNetWrappers.Network;
 
 namespace O2.Script
 {	
@@ -145,14 +146,14 @@ namespace O2.Script
     {
         public static string getHtmlCode(string urlToFetch)
         {
-            var urlContents = WebRequests.getUrlContents(urlToFetch);
+            var urlContents = Web.getUrlContents(urlToFetch);
             return urlContents;
         }
 
         public static List<SvnMappedUrl> getSvnMappedUrls(string urlToFetch)
         {
             var svnMappedUrls = new List<SvnMappedUrl>();
-            var codeToParse = WebRequests.getUrlContents(urlToFetch);
+            var codeToParse = Web.getUrlContents(urlToFetch);
             Assert.That(codeToParse != "", "codeToParse was empty");
 
             //			var link = Majestic12ToXml.ConvertNodesToXml(new byte[]{});
@@ -194,7 +195,7 @@ namespace O2.Script
         public string getFileContents()
         {
             if (IsFile)
-                return WebRequests.getUrlContents(FullPath);
+                return Web.getUrlContents(FullPath);
             return "";
         }
     }

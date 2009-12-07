@@ -31,12 +31,7 @@ namespace O2.Core.XRules.Ascx
                 createNewRuleFromTemplate(templateFile, tbNewRuleName.Text);
             }
         }
-
-        private void llReloadLocalXRulesDatabase_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            loadXRuleDatabase();
-            O2Messages.dotNetAssemblyAvailable("");  // simulate this event so that we trigger XRules recompilation (if XRules_Excution is open)
-        }
+        
 
         private void llRemoveSelectedSourceCodeFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -105,6 +100,12 @@ namespace O2.Core.XRules.Ascx
         {
             directoryWithLocalXRules._ShowFileContentsOnTopTip = cbShowFileContentsOnMouseOver.Checked;
             directoryWithXRulesDatabase._ShowFileContentsOnTopTip = cbShowFileContentsOnMouseOver.Checked;
+        }
+
+        private void llReloadLocalXRulesDatabase_LinkClicked(object sender, EventArgs e)
+        {
+            loadXRuleDatabase();
+            O2Messages.dotNetAssemblyAvailable("");  // simulate this event so that we trigger XRules recompilation (if XRules_Excution is open)
         }                        
     }
 }
