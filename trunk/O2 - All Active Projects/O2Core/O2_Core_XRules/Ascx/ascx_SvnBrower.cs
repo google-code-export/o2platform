@@ -18,6 +18,7 @@ using O2.Views.ASCX.classes;
 using HTMLparserLibDotNet20.O2ExtraCode;
 using O2.Views.ASCX.CoreControls;
 using O2.Core.XRules.Classes;
+using System.IO;
 
 namespace O2.Core.XRules.Ascx
 {	    
@@ -52,11 +53,26 @@ namespace O2.Core.XRules.Ascx
             this.Height = 500;
             tvDirectoriesAndFiles = leftGroupBox.addTreeView();
             tvDirectoriesAndFiles.ImageList = ImagesLists.withFolderAndFile();
-            tvDirectoriesAndFiles.NodeMouseDoubleClick += tvCurrentFilters_DoubleClick;
-            sourceCodeEditor = rightGroupBox.addSourceCodeEditor();                                    
+            tvDirectoriesAndFiles.NodeMouseDoubleClick += tvDirectoriesAndFiles_DoubleClick;
+            tvDirectoriesAndFiles.ItemDrag += tvDirectoriesAndFiles_ItemDrag;
+            sourceCodeEditor = rightGroupBox.addSourceCodeEditor();                        
         }
 
-        private void tvCurrentFilters_DoubleClick(object sender, EventArgs e)
+        void tvDirectoriesAndFiles_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            if (e.Item is TreeNode)
+            {
+                var treeNode = (TreeNode)e.Item;
+                if (treeNode.Tag != null && treeNode.Tag is SvnMappedUrl)
+                {
+                    var svnMappedUrl = ((SvnMappedUrl)treeNode.Tag);
+                    if (svnMappedUrl.IsFile)
+                        DoDragDrop(svnMappedUrl.FullPath, DragDropEffects.Copy);
+                }
+            }
+        }
+
+        private void tvDirectoriesAndFiles_DoubleClick(object sender, EventArgs e)
         {        	
         	if (tvDirectoriesAndFiles.SelectedNode != null)
         	{
@@ -64,7 +80,7 @@ namespace O2.Core.XRules.Ascx
         		log.info("on after select for: {0}", svnMappedUrl.Text);
         		
         		if (svnMappedUrl.IsFile)
-	        		sourceCodeEditor.setDocumentContents(svnMappedUrl.getFileContents());
+	        		sourceCodeEditor.setDocumentContents(svnMappedUrl.getFileContents(), svnMappedUrl.VirtualPath);
     			else    		        		
         			openSvnUrl(svnMappedUrl.FullPath);
         		//log.info(svnMappedUrl.Text);

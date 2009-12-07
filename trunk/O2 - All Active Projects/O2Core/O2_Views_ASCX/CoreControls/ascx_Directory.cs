@@ -469,7 +469,7 @@ namespace O2.Views.ASCX.CoreControls
 
         private void tvDirectory_DragEnter(object sender, DragEventArgs e)
         {
-            string fileOrFolder = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
+            string fileOrFolder = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e, false /*downloadIfHttp */);
             if (File.Exists(fileOrFolder))
             {
                 if (Path.GetDirectoryName(fileOrFolder) == getCurrentDirectory())
@@ -488,7 +488,15 @@ namespace O2.Views.ASCX.CoreControls
             {
                 string fileOrFolder = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
                 if (File.Exists(fileOrFolder) && Path.GetDirectoryName(fileOrFolder) != getCurrentDirectory())
-                    Files.Copy(fileOrFolder, getCurrentDirectory());
+                {
+                    var fileName = "";
+                    if (Path.GetDirectoryName(fileOrFolder) + '\\' == DI.config.O2TempDir)
+                        fileName = Files.MoveFile(fileOrFolder, getCurrentDirectory());
+                    else
+                        fileName = Files.Copy(fileOrFolder, getCurrentDirectory());
+                    if (fileName != "")
+                        _onDirectoryDoubleClick(fileName);
+                }
                 else if (Directory.Exists(fileOrFolder) && fileOrFolder != getCurrentDirectory())
                     Files.copyFolder(fileOrFolder, getCurrentDirectory());
             }

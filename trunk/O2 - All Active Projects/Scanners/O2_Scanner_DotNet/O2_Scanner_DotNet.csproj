@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{C363CF04-59FF-48A2-90C0-908C57DE8B9E}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -48,10 +48,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\O2\_Bin_(O2_Binaries)\O2_External_SharpDevelop.dll</HintPath>
     </Reference>
-    <Reference Include="PostSharp.Core, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL" />
-    <Reference Include="PostSharp.Core.XmlSerializers, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL" />
-    <Reference Include="PostSharp.Laos, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL" />
-    <Reference Include="PostSharp.Public, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL" />
+    <Reference Include="PostSharp.Core, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\O2_External_PostSharp\_ExternalDlls\PostSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Core.XmlSerializers, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\O2_External_PostSharp\_ExternalDlls\PostSharp.Core.XmlSerializers.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Laos, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\O2_External_PostSharp\_ExternalDlls\PostSharp.Laos.dll</HintPath>
+    </Reference>
+    <Reference Include="PostSharp.Public, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b13fd38b8f9c99d7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\O2_External_PostSharp\_ExternalDlls\PostSharp.Public.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -154,10 +166,6 @@
     <Compile Include="_UnitTests\_Test_ascx_XRules_UnitTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="_ExternalDlls\PostSharp.Core.dll" />
-    <Content Include="_ExternalDlls\PostSharp.Core.XmlSerializers.dll" />
-    <Content Include="_ExternalDlls\PostSharp.Laos.dll" />
-    <Content Include="_ExternalDlls\PostSharp.Public.dll" />
     <Compile Include="_UnitTests\_Test_PostSharpHooks.cs" />
   </ItemGroup>
   <ItemGroup>

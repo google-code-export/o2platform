@@ -67,6 +67,7 @@
     <Compile Include="NetSDK\IL.cs" />
     <Compile Include="Network\Mail.cs" />
     <Compile Include="Network\Ping.cs" />
+    <Compile Include="Network\Web.cs" />
     <Compile Include="O2CmdShell\O2Cmd.cs" />
     <Compile Include="O2CmdShell\O2CmdApi.cs" />
     <Compile Include="O2CmdShell\O2CmdExec.cs" />
