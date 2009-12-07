@@ -32,22 +32,47 @@ namespace O2.External.SharpDevelop
                 fileOrFolderSelectedMessage.pathToFileOrFolder = tryToResolveFileLocation(fileOrFolderSelectedMessage.pathToFileOrFolder, O2AscxGUI.getGuiWithDockPanelAsControl());
                 if (File.Exists(fileOrFolderSelectedMessage.pathToFileOrFolder))
                 {
-                   // var filename = Path.GetFileName(fileOrFolderSelectedMessage.pathToFileOrFolder);
+                    // var filename = Path.GetFileName(fileOrFolderSelectedMessage.pathToFileOrFolder);
 
-                    var ascx_ScriptControl = getScriptEditor(fileOrFolderSelectedMessage.pathToFileOrFolder);                    
-                    O2Messages.getAscx(ascx_ScriptControl, guiControl =>
-                                                               {
-                                                                   if (guiControl != null && guiControl is ascx_SourceCodeEditor)
-                                                                   {
-                                                                       var sourceCodeEditor = (ascx_SourceCodeEditor) guiControl;
-                                                                       sourceCodeEditor.loadSourceCodeFile(fileOrFolderSelectedMessage.pathToFileOrFolder);
-                                                                       sourceCodeEditor.setSelectedLineNumber(fileOrFolderSelectedMessage.lineNumber);
-                                                                       if (parentControl !=null)
-                                                                            O2DockUtils.setDockContentState(parentControl, O2DockState.DockLeft);
-                                                                   }
-                                                               });
-                }                
+                    var ascx_ScriptControl = getScriptEditor(fileOrFolderSelectedMessage.pathToFileOrFolder);
+                    O2Messages.getAscx(ascx_ScriptControl,
+                                       guiControl =>
+                                           {
+                                               if (guiControl != null && guiControl is ascx_SourceCodeEditor)
+                                               {
+                                                   var sourceCodeEditor = (ascx_SourceCodeEditor)guiControl;
+                                                   switch (fileOrFolderSelectedMessage.messageText)
+                                                   {
+                                                       case "KM_Show_Selected_Text":
+                                                           loadFileAndSelectText(sourceCodeEditor, fileOrFolderSelectedMessage);   
+                                                           break;
+                                                       default:
+                                                           loadFileAndSelectLine(sourceCodeEditor, fileOrFolderSelectedMessage);   
+                                                           break;
+                                                   }
+
+                                                   if (parentControl != null)
+                                                       O2DockUtils.setDockContentState(parentControl,
+                                                                                       O2DockState.DockLeft);
+                                               }
+                                           });
+                }
             }
+        }
+
+        private static void loadFileAndSelectText(ascx_SourceCodeEditor sourceCodeEditor, IM_FileOrFolderSelected fileOrFolderSelectedMessage)
+        {
+            
+            sourceCodeEditor.loadSourceCodeFile(fileOrFolderSelectedMessage.pathToFileOrFolder);
+            sourceCodeEditor.setSelectedText(fileOrFolderSelectedMessage.lineNumber,
+                                             fileOrFolderSelectedMessage.columnNumber,
+                                             fileOrFolderSelectedMessage.showAsError);            
+        }
+
+        private static void loadFileAndSelectLine(ascx_SourceCodeEditor sourceCodeEditor, IM_FileOrFolderSelected fileOrFolderSelectedMessage)
+        {
+            sourceCodeEditor.loadSourceCodeFile(fileOrFolderSelectedMessage.pathToFileOrFolder);
+            sourceCodeEditor.setSelectedLineNumber(fileOrFolderSelectedMessage.lineNumber);
         }
 
         private static string getScriptEditor(string filename)

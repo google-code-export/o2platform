@@ -8,6 +8,8 @@ namespace O2.Kernel.InterfacesBaseImpl
     {        
         public string pathToFileOrFolder { get; set; }
         public int lineNumber { get; set; }
+        public int columnNumber { get; set; }
+        public bool showAsError { get; set; }
 
         public KM_FileOrFolderSelected(string _pathToFileOrFolder)
         {
@@ -20,6 +22,15 @@ namespace O2.Kernel.InterfacesBaseImpl
             messageText = "KM_OpenControlInGUI";
             pathToFileOrFolder = _pathToFileOrFolder;
             lineNumber = _lineNumber;
+        }
+
+        public KM_FileOrFolderSelected(string _pathToFileOrFolder, int _lineNumber, int _columnNumber, bool _showAsError)
+        {
+            messageText = "KM_Show_Selected_Text";
+            pathToFileOrFolder = _pathToFileOrFolder;
+            lineNumber = _lineNumber;
+            columnNumber = _columnNumber;
+            showAsError = _showAsError;
         }
 
     }

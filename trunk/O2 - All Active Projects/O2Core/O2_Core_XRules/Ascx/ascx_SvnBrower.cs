@@ -19,6 +19,8 @@ using HTMLparserLibDotNet20.O2ExtraCode;
 using O2.Views.ASCX.CoreControls;
 using O2.Core.XRules.Classes;
 using System.IO;
+using O2.Kernel.CodeUtils;
+using System.Threading;
 
 namespace O2.Core.XRules.Ascx
 {	    
@@ -87,29 +89,48 @@ namespace O2.Core.XRules.Ascx
         }
         
         public void openSvnUrl(string urlToOpen)
-        {        	
-        	tvDirectoriesAndFiles.clear();
-        	var svnMappedUrls = SvnApi.getSvnMappedUrls(urlToOpen);
-        	foreach(var svnMappedUrl in svnMappedUrls)
-        	{
-        		var newTreeNode = 
-        			tvDirectoriesAndFiles.addNode(
-        				svnMappedUrl.Text, 
-        				(svnMappedUrl.IsFile) ? 1 : 0,
-        				(svnMappedUrl.IsFile) ? Color.Blue : Color.Black,        				
-        				(object)svnMappedUrl);        		        	
-        	}
+        {
+            tvDirectoriesAndFiles.invokeOnThread(
+                () =>
+                {
+                    if (false == urlToOpen.StartsWith("http"))
+                        urlToOpen = svnBaseUrl + urlToOpen;
+                    tvDirectoriesAndFiles.clear();
+                    var svnMappedUrls = SvnApi.getSvnMappedUrls(urlToOpen);
+                    foreach (var svnMappedUrl in svnMappedUrls)
+                    {
+                        var newTreeNode =
+                            tvDirectoriesAndFiles.addNode(
+                                svnMappedUrl.Text,
+                                (svnMappedUrl.IsFile) ? 1 : 0,
+                                (svnMappedUrl.IsFile) ? Color.Blue : Color.Black,
+                                (object)svnMappedUrl);
+                    }
+                });
         	
         }
 
-        public static void openAsFloatWindow()
+        public static Thread openInFloatWindow()
         {
-            openAsFloatWindow(svnBaseUrl);
+            return openInFloatWindow(svnBaseUrl);
         }
 
-        public static void openAsFloatWindow(string svnPath)
-        { 
-            var svnBrowser = 
+        public static Thread openInFloatWindow(string svnPath)
+        {
+            return O2Thread.mtaThread(
+                () =>
+                {
+                    var windowTitle = "Svn Browser: " + svnPath;
+                    O2Messages.openControlInGUISync(typeof(ascx_SvnBrowser), O2DockState.Float, windowTitle);
+                    O2Messages.getAscx(windowTitle, guiControl =>
+                                                        {
+                                                            if (guiControl != null && guiControl is ascx_SvnBrowser)
+                                                            {
+                                                                var svnBrowser = (ascx_SvnBrowser)guiControl;
+                                                                svnBrowser.openSvnUrl(svnPath);
+                                                            }
+                                                        });
+                });
         }
 	}		
 }

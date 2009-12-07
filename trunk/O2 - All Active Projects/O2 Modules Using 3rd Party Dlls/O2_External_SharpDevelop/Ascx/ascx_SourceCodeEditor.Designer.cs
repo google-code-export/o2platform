@@ -32,6 +32,12 @@ namespace O2.External.SharpDevelop.Ascx
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ascx_SourceCodeEditor));
             this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
+            this.menuStripForSourceEdition = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cboxVRuler = new System.Windows.Forms.CheckBox();
             this.cboxInvalidLines = new System.Windows.Forms.CheckBox();
             this.cboxHRuler = new System.Windows.Forms.CheckBox();
@@ -91,17 +97,11 @@ namespace O2.External.SharpDevelop.Ascx
             this.scrollBarHorizontalSize_O2ObjectModel = new System.Windows.Forms.HScrollBar();
             this.scrollBarVerticalSize_O2ObjectModel = new System.Windows.Forms.VScrollBar();
             this.o2ObjectModel = new O2.Views.ASCX.CoreControls.ascx_O2ObjectModel();
-            this.menuStripForSourceEdition = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStripForSourceEdition.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.gbO2ObjectMode.SuspendLayout();
-            this.menuStripForSourceEdition.SuspendLayout();
             this.SuspendLayout();
             // 
             // tecSourceCode
@@ -124,6 +124,52 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
             this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
             this.tecSourceCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragEnter);
+            // 
+            // menuStripForSourceEdition
+            // 
+            this.menuStripForSourceEdition.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.compileToolStripMenuItem,
+            this.copyToolStripMenuItem,
+            this.pasteToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.openFileToolStripMenuItem});
+            this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(120, 114);
+            // 
+            // compileToolStripMenuItem
+            // 
+            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.compileToolStripMenuItem.Text = "Compile";
+            this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
+            // 
+            // copyToolStripMenuItem
+            // 
+            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.copyToolStripMenuItem.Text = "Copy";
+            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
+            // 
+            // pasteToolStripMenuItem
+            // 
+            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.pasteToolStripMenuItem.Text = "Paste";
+            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // openFileToolStripMenuItem
+            // 
+            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.openFileToolStripMenuItem.Text = "Open File";
+            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // cboxVRuler
             // 
@@ -763,52 +809,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.o2ObjectModel.Size = new System.Drawing.Size(426, 262);
             this.o2ObjectModel.TabIndex = 0;
             // 
-            // menuStripForSourceEdition
-            // 
-            this.menuStripForSourceEdition.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.compileToolStripMenuItem,
-            this.copyToolStripMenuItem,
-            this.pasteToolStripMenuItem,
-            this.saveToolStripMenuItem,
-            this.openFileToolStripMenuItem});
-            this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(120, 114);
-            // 
-            // compileToolStripMenuItem
-            // 
-            this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-            this.compileToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.compileToolStripMenuItem.Text = "Compile";
-            this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
-            // 
-            // copyToolStripMenuItem
-            // 
-            this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.copyToolStripMenuItem.Text = "Copy";
-            this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
-            // 
-            // pasteToolStripMenuItem
-            // 
-            this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.pasteToolStripMenuItem.Text = "Paste";
-            this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // openFileToolStripMenuItem
-            // 
-            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.openFileToolStripMenuItem.Text = "Open File";
-            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
-            // 
             // ascx_SourceCodeEditor
             // 
             this.AllowDrop = true;
@@ -831,6 +831,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.Load += new System.EventHandler(this.ascx_SourceCodeEditor_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.ascx_SourceCodeEditor_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.ascx_SourceCodeEditor_DragEnter);
+            this.menuStripForSourceEdition.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.groupBoxWithFileAndSaveSettings.ResumeLayout(false);
@@ -838,7 +839,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.gbO2ObjectMode.ResumeLayout(false);
-            this.menuStripForSourceEdition.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

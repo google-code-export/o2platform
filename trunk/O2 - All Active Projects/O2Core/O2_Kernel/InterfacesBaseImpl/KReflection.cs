@@ -86,6 +86,8 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             try
             {
+                if (oTargetObject == null)
+                    return null;
                 var targetType = (oTargetObject is Type)
                                      ? ((Type)oTargetObject)
                                      : oTargetObject.GetType();

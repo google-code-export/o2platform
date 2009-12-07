@@ -2,6 +2,7 @@
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -12,6 +13,7 @@ using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.O2Misc;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel;
+using O2.Kernel.CodeUtils;
 
 namespace O2.DotNetWrappers.DotNet
 {
@@ -120,34 +122,36 @@ namespace O2.DotNetWrappers.DotNet
 
         public void addErrorsListToListBox(ListBox lbSourceCode_CompilationResult)
         {
-            if (sbErrorMessage == null)
-                return;
-            lbSourceCode_CompilationResult.Items.Clear();
-            addErrorsListToListBox(sbErrorMessage.ToString(), lbSourceCode_CompilationResult);
+            lbSourceCode_CompilationResult.invokeOnThread(
+                () =>
+                    {
+                        if (sbErrorMessage == null)
+                            return;
+                        lbSourceCode_CompilationResult.Items.Clear();
+                        addErrorsListToListBox(sbErrorMessage.ToString(), lbSourceCode_CompilationResult);
+                    });
         }
 
         public void addErrorsListToListBox(string sErrorMessages, ListBox lbSourceCode_CompilationResult)
         {
-            lbSourceCode_CompilationResult.invokeOnThread(
-                () =>
-                    {
-                        if (sErrorMessages == null)
-                            return;
+            if (sErrorMessages == null)
+                return;
 
-                        String[] sSplitedErrorMessage = sErrorMessages.Split(new[] {Environment.NewLine},
-                                                                             StringSplitOptions.RemoveEmptyEntries);
-                        foreach (string sSplitMessage in sSplitedErrorMessage)
-                        {
-                            /* string[] sSplitedLine = sSplitMessage.Split(':');
-             if (sSplitedLine.Length == 4)
-             {
-                 int iLine = Int32.Parse(sSplitedLine[0]);
-                 int iColumn = Int32.Parse(sSplitedLine[1]);
-                 //asceSourceCodeEditor.highlightLineWithColor(iLine, Color.Red);
-             }*/
-                            lbSourceCode_CompilationResult.Items.Add(sSplitMessage);
-                        }
-                    });
+            String[] sSplitedErrorMessage = sErrorMessages.Split(new[] {Environment.NewLine},
+                                                                 StringSplitOptions.RemoveEmptyEntries);
+            foreach (string sSplitMessage in sSplitedErrorMessage)
+            {
+                // this doesn't really work from here due to multi-threading issues when loading up the page
+                /*string[] sSplitedLine = sSplitMessage.Split(new [] {"::"}, StringSplitOptions.None);
+                if (sSplitedLine.Length == 5)
+                {
+                    int iLine = Int32.Parse(sSplitedLine[0]);
+                    int iColumn = Int32.Parse(sSplitedLine[1]);
+                    O2Messages.fileErrorHighlight(sSplitedLine[4], iLine, iColumn);                    
+                }*/
+                if (false == sSplitMessage.Contains("conflicts with the imported type"))        // ignore these warning which mostlikely will be caused by adding extra files (via O2) to this script
+                    lbSourceCode_CompilationResult.Items.Add(sSplitMessage);
+            }
         }
 
         public Thread loadAssesmblyDataIntoTreeView(Assembly aAssemblyToLoad, TreeView tvTargetTreeView,
@@ -451,9 +455,9 @@ namespace O2.DotNetWrappers.DotNet
                 sbErrorMessage = new StringBuilder();
                 foreach (CompilerError ceCompilerError in crCompilerResults.Errors)
                 {
-                    sbErrorMessage.AppendLine(String.Format("{0}:{1}:{2}:{3}", ceCompilerError.Line,
+                    sbErrorMessage.AppendLine(String.Format("{0}::{1}::{2}::{3}::{4}", ceCompilerError.Line,
                                                             ceCompilerError.Column, ceCompilerError.ErrorNumber,
-                                                            ceCompilerError.ErrorText));
+                                                            ceCompilerError.ErrorText, ceCompilerError.FileName));
                     //sErrorMessages += ceCompilerError.ErrorText + Environment.NewLine;
                 }
                 sErrorMessages = sbErrorMessage.ToString();
