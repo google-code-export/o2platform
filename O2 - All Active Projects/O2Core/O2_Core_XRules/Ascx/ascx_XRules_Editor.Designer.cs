@@ -34,6 +34,12 @@ namespace O2.Core.XRules.Ascx
             this.cbShowFileContentsOnMouseOver = new System.Windows.Forms.CheckBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.btLoadXRulesUnitTests = new System.Windows.Forms.ToolStripButton();
+            this.btLoadUnitTestFromLocalO2Development = new System.Windows.Forms.ToolStripButton();
+            this.tbFileToOpen = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.llReloadXRules = new System.Windows.Forms.ToolStripLabel();
             this.directoryWithLocalXRules = new O2.Views.ASCX.CoreControls.ascx_Directory();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btCreateRuleFromTemplate = new System.Windows.Forms.Button();
@@ -41,19 +47,18 @@ namespace O2.Core.XRules.Ascx
             this.lbCurrentXRulesTemplates = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.directoryWithXRulesDatabase = new O2.Views.ASCX.CoreControls.ascx_Directory();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.llReloadSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
             this.llRemoveSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
             this.tcTabControlWithRulesSource = new System.Windows.Forms.TabControl();
             this.tpNoRulesLoaded = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
-            this.c = new System.Windows.Forms.LinkLabel();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.btLoadXRulesUnitTests = new System.Windows.Forms.ToolStripButton();
-            this.btLoadUnitTestFromLocalO2Development = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.tbFileToOpen = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.btBackupLocalFiles = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.btSyncViaSvn = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+            this.btBrowseSVN = new System.Windows.Forms.ToolStripButton();
             this.scTopLevel.Panel1.SuspendLayout();
             this.scTopLevel.Panel2.SuspendLayout();
             this.scTopLevel.SuspendLayout();
@@ -61,11 +66,12 @@ namespace O2.Core.XRules.Ascx
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.tcTabControlWithRulesSource.SuspendLayout();
             this.tpNoRulesLoaded.SuspendLayout();
-            this.toolStrip2.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // scTopLevel
@@ -125,7 +131,6 @@ namespace O2.Core.XRules.Ascx
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.toolStrip2);
-            this.groupBox3.Controls.Add(this.c);
             this.groupBox3.Controls.Add(this.directoryWithLocalXRules);
             this.groupBox3.Controls.Add(this.groupBox1);
             this.groupBox3.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -135,6 +140,57 @@ namespace O2.Core.XRules.Ascx
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "XRules (From LOCAL XRules database)";
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btLoadXRulesUnitTests,
+            this.btLoadUnitTestFromLocalO2Development,
+            this.tbFileToOpen,
+            this.toolStripLabel2,
+            this.llReloadXRules});
+            this.toolStrip2.Location = new System.Drawing.Point(3, 16);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(405, 25);
+            this.toolStrip2.TabIndex = 6;
+            this.toolStrip2.Text = "toolStrip2";
+            // 
+            // btLoadXRulesUnitTests
+            // 
+            this.btLoadXRulesUnitTests.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btLoadXRulesUnitTests.Image = ((System.Drawing.Image)(resources.GetObject("btLoadXRulesUnitTests.Image")));
+            this.btLoadXRulesUnitTests.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btLoadXRulesUnitTests.Name = "btLoadXRulesUnitTests";
+            this.btLoadXRulesUnitTests.Size = new System.Drawing.Size(23, 22);
+            this.btLoadXRulesUnitTests.Text = "Load XRules Units test (from O2 source code)";
+            // 
+            // btLoadUnitTestFromLocalO2Development
+            // 
+            this.btLoadUnitTestFromLocalO2Development.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btLoadUnitTestFromLocalO2Development.Image = ((System.Drawing.Image)(resources.GetObject("btLoadUnitTestFromLocalO2Development.Image")));
+            this.btLoadUnitTestFromLocalO2Development.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btLoadUnitTestFromLocalO2Development.Name = "btLoadUnitTestFromLocalO2Development";
+            this.btLoadUnitTestFromLocalO2Development.Size = new System.Drawing.Size(23, 22);
+            this.btLoadUnitTestFromLocalO2Development.Text = "Load Unit test (from O2 source code)";
+            // 
+            // tbFileToOpen
+            // 
+            this.tbFileToOpen.Name = "tbFileToOpen";
+            this.tbFileToOpen.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(56, 22);
+            this.toolStripLabel2.Text = "Open File:";
+            // 
+            // llReloadXRules
+            // 
+            this.llReloadXRules.IsLink = true;
+            this.llReloadXRules.Name = "llReloadXRules";
+            this.llReloadXRules.Size = new System.Drawing.Size(72, 22);
+            this.llReloadXRules.Text = "reload XRules";
+            this.llReloadXRules.Click += new System.EventHandler(this.llReloadXRules_Click);
             // 
             // directoryWithLocalXRules
             // 
@@ -150,9 +206,9 @@ namespace O2.Core.XRules.Ascx
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.directoryWithLocalXRules.BackColor = System.Drawing.SystemColors.Control;
             this.directoryWithLocalXRules.ForeColor = System.Drawing.Color.Black;
-            this.directoryWithLocalXRules.Location = new System.Drawing.Point(3, 97);
+            this.directoryWithLocalXRules.Location = new System.Drawing.Point(3, 44);
             this.directoryWithLocalXRules.Name = "directoryWithLocalXRules";
-            this.directoryWithLocalXRules.Size = new System.Drawing.Size(405, 104);
+            this.directoryWithLocalXRules.Size = new System.Drawing.Size(405, 157);
             this.directoryWithLocalXRules.TabIndex = 0;
             this.directoryWithLocalXRules._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithLocalXRules__onDirectoryClick);
             this.directoryWithLocalXRules._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithLocalXRules__onDirectoryDoubleClick);
@@ -203,8 +259,8 @@ namespace O2.Core.XRules.Ascx
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.toolStrip1);
             this.groupBox2.Controls.Add(this.directoryWithXRulesDatabase);
-            this.groupBox2.Controls.Add(this.menuStrip1);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
@@ -222,22 +278,17 @@ namespace O2.Core.XRules.Ascx
             this.directoryWithXRulesDatabase._ShowLinkToUpperFolder = true;
             this.directoryWithXRulesDatabase._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
             this.directoryWithXRulesDatabase._WatchFolder = true;
+            this.directoryWithXRulesDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.directoryWithXRulesDatabase.BackColor = System.Drawing.SystemColors.Control;
             this.directoryWithXRulesDatabase.ForeColor = System.Drawing.Color.Black;
-            this.directoryWithXRulesDatabase.Location = new System.Drawing.Point(3, 75);
+            this.directoryWithXRulesDatabase.Location = new System.Drawing.Point(3, 43);
             this.directoryWithXRulesDatabase.Name = "directoryWithXRulesDatabase";
-            this.directoryWithXRulesDatabase.Size = new System.Drawing.Size(319, 73);
+            this.directoryWithXRulesDatabase.Size = new System.Drawing.Size(400, 105);
             this.directoryWithXRulesDatabase.TabIndex = 0;
             this.directoryWithXRulesDatabase._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryClick);
             this.directoryWithXRulesDatabase._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryDoubleClick);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Location = new System.Drawing.Point(3, 16);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(405, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
             // 
             // llReloadSelectedSourceCodeFile
             // 
@@ -297,66 +348,68 @@ namespace O2.Core.XRules.Ascx
             this.label1.Text = "Choose rule to edit from XRules Database";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // c
+            // toolStrip1
             // 
-            this.c.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.c.AutoSize = true;
-            this.c.Location = new System.Drawing.Point(289, 81);
-            this.c.Name = "c";
-            this.c.Size = new System.Drawing.Size(98, 13);
-            this.c.TabIndex = 4;
-            this.c.TabStop = true;
-            this.c.Text = "reload local XRules";
-            // 
-            // toolStrip2
-            // 
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btLoadXRulesUnitTests,
-            this.btLoadUnitTestFromLocalO2Development,
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
-            this.tbFileToOpen,
-            this.toolStripLabel2});
-            this.toolStrip2.Location = new System.Drawing.Point(3, 16);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(405, 25);
-            this.toolStrip2.TabIndex = 6;
-            this.toolStrip2.Text = "toolStrip2";
-            // 
-            // btLoadXRulesUnitTests
-            // 
-            this.btLoadXRulesUnitTests.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btLoadXRulesUnitTests.Image = ((System.Drawing.Image)(resources.GetObject("btLoadXRulesUnitTests.Image")));
-            this.btLoadXRulesUnitTests.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btLoadXRulesUnitTests.Name = "btLoadXRulesUnitTests";
-            this.btLoadXRulesUnitTests.Size = new System.Drawing.Size(23, 22);
-            this.btLoadXRulesUnitTests.Text = "Load XRules Units test (from O2 source code)";
-            // 
-            // btLoadUnitTestFromLocalO2Development
-            // 
-            this.btLoadUnitTestFromLocalO2Development.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btLoadUnitTestFromLocalO2Development.Image = ((System.Drawing.Image)(resources.GetObject("btLoadUnitTestFromLocalO2Development.Image")));
-            this.btLoadUnitTestFromLocalO2Development.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btLoadUnitTestFromLocalO2Development.Name = "btLoadUnitTestFromLocalO2Development";
-            this.btLoadUnitTestFromLocalO2Development.Size = new System.Drawing.Size(23, 22);
-            this.btLoadUnitTestFromLocalO2Development.Text = "Load Unit test (from O2 source code)";
+            this.btBackupLocalFiles,
+            this.toolStripLabel3,
+            this.btSyncViaSvn,
+            this.toolStripLabel4,
+            this.btBrowseSVN});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 16);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(405, 25);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
-            this.toolStripLabel1.IsLink = true;
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(72, 22);
-            this.toolStripLabel1.Text = "reload XRules";
+            this.toolStripLabel1.Size = new System.Drawing.Size(45, 22);
+            this.toolStripLabel1.Text = "backup:";
             // 
-            // tbFileToOpen
+            // btBackupLocalFiles
             // 
-            this.tbFileToOpen.Name = "tbFileToOpen";
-            this.tbFileToOpen.Size = new System.Drawing.Size(100, 25);
+            this.btBackupLocalFiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btBackupLocalFiles.Image = ((System.Drawing.Image)(resources.GetObject("btBackupLocalFiles.Image")));
+            this.btBackupLocalFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btBackupLocalFiles.Name = "btBackupLocalFiles";
+            this.btBackupLocalFiles.Size = new System.Drawing.Size(23, 22);
+            this.btBackupLocalFiles.Text = "toolStripButton1";
+            this.btBackupLocalFiles.Click += new System.EventHandler(this.btBackupLocalFiles_Click);
             // 
-            // toolStripLabel2
+            // toolStripLabel3
             // 
-            this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(56, 22);
-            this.toolStripLabel2.Text = "Open File:";
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(69, 22);
+            this.toolStripLabel3.Text = "Sync via SVN";
+            // 
+            // btSyncViaSvn
+            // 
+            this.btSyncViaSvn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btSyncViaSvn.Image = ((System.Drawing.Image)(resources.GetObject("btSyncViaSvn.Image")));
+            this.btSyncViaSvn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btSyncViaSvn.Name = "btSyncViaSvn";
+            this.btSyncViaSvn.Size = new System.Drawing.Size(23, 22);
+            this.btSyncViaSvn.Text = "toolStripButton2";
+            this.btSyncViaSvn.Click += new System.EventHandler(this.btSyncViaSvn_Click);
+            // 
+            // toolStripLabel4
+            // 
+            this.toolStripLabel4.Name = "toolStripLabel4";
+            this.toolStripLabel4.Size = new System.Drawing.Size(64, 22);
+            this.toolStripLabel4.Text = "browse SVN";
+            // 
+            // btBrowseSVN
+            // 
+            this.btBrowseSVN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btBrowseSVN.Image = ((System.Drawing.Image)(resources.GetObject("btBrowseSVN.Image")));
+            this.btBrowseSVN.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btBrowseSVN.Name = "btBrowseSVN";
+            this.btBrowseSVN.Size = new System.Drawing.Size(23, 22);
+            this.btBrowseSVN.Text = "toolStripButton3";
+            this.btBrowseSVN.Click += new System.EventHandler(this.btBrowseSVN_Click);
             // 
             // ascx_XRules_Editor
             // 
@@ -376,14 +429,16 @@ namespace O2.Core.XRules.Ascx
             this.splitContainer1.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.tcTabControlWithRulesSource.ResumeLayout(false);
             this.tpNoRulesLoaded.ResumeLayout(false);
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -406,13 +461,18 @@ namespace O2.Core.XRules.Ascx
         private System.Windows.Forms.LinkLabel llRemoveSelectedSourceCodeFile;
         private System.Windows.Forms.LinkLabel llReloadSelectedSourceCodeFile;
         private System.Windows.Forms.CheckBox cbShowFileContentsOnMouseOver;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.LinkLabel c;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton btLoadXRulesUnitTests;
         private System.Windows.Forms.ToolStripButton btLoadUnitTestFromLocalO2Development;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripLabel llReloadXRules;
         private System.Windows.Forms.ToolStripTextBox tbFileToOpen;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripButton btBackupLocalFiles;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+        private System.Windows.Forms.ToolStripButton btSyncViaSvn;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel4;
+        private System.Windows.Forms.ToolStripButton btBrowseSVN;
     }
 }

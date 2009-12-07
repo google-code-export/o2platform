@@ -101,15 +101,27 @@ namespace O2.Core.XRules.Ascx
             directoryWithLocalXRules._ShowFileContentsOnTopTip = cbShowFileContentsOnMouseOver.Checked;
             directoryWithXRulesDatabase._ShowFileContentsOnTopTip = cbShowFileContentsOnMouseOver.Checked;
         }
-
-        private void llReloadLocalXRulesDatabase_LinkClicked(object sender, EventArgs e)
+       
+        private void llReloadXRules_Click(object sender, EventArgs e)
         {
             loadXRuleDatabase();
             O2Messages.dotNetAssemblyAvailable("");  // simulate this event so that we trigger XRules recompilation (if XRules_Excution is open)
         }
-        public void asd()
-        { 
-        
+
+        private void btBackupLocalFiles_Click(object sender, EventArgs e)
+        {
+
         }
+
+        private void btSyncViaSvn_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btBrowseSVN_Click(object sender, EventArgs e)
+        {
+            
+        }
+      
     }
 }

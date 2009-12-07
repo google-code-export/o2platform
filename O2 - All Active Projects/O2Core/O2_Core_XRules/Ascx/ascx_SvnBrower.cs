@@ -82,9 +82,7 @@ namespace O2.Core.XRules.Ascx
         		if (svnMappedUrl.IsFile)
 	        		sourceCodeEditor.setDocumentContents(svnMappedUrl.getFileContents(), svnMappedUrl.VirtualPath);
     			else    		        		
-        			openSvnUrl(svnMappedUrl.FullPath);
-        		//log.info(svnMappedUrl.Text);
-        		//log.debug();
+        			openSvnUrl(svnMappedUrl.FullPath);        		
         	}
         }
         
@@ -99,18 +97,19 @@ namespace O2.Core.XRules.Ascx
         				svnMappedUrl.Text, 
         				(svnMappedUrl.IsFile) ? 1 : 0,
         				(svnMappedUrl.IsFile) ? Color.Blue : Color.Black,        				
-        				(object)svnMappedUrl);
-        		
-        		/*if (svnMappedUrl.IsFile)   
-        		
-        			tvDirectoriesAndFiles.setTextColor(newTreeNode,Color.Blue);        			     			        		}
-        		else        	
-        			tvDirectoriesAndFiles.setTextColor(newTreeNode,Color.DarkOrange);        			     			
-        			*/
+        				(object)svnMappedUrl);        		        	
         	}
-        	//tvDirectoriesAndFiles.addNode(O2SvnApi.getHtmlCode(urlToOpen));
-        	//sourceCodeEditor.setDocumentContents(SvnApi.getHtmlCode(urlToOpen));
-			//tvDirectoriesAndFiles.Nodes.Add(urlToOpen);
-        }                
+        	
+        }
+
+        public static void openAsFloatWindow()
+        {
+            openAsFloatWindow(svnBaseUrl);
+        }
+
+        public static void openAsFloatWindow(string svnPath)
+        { 
+            var svnBrowser = 
+        }
 	}		
 }
