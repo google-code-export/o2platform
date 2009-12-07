@@ -56,22 +56,26 @@ namespace O2.External.SharpDevelop.Ascx
                 }
                 configureOnLoadMenuOptions();
                 configureDefaultSettingsForTextEditor(tecSourceCode);
+        //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseDown += new MarginMouseEventHandler(IconBarMargin_MouseDown);
+        //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseMove += new MarginMouseEventHandler(IconBarMargin_MouseMove);
+        //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseLeave += new EventHandler(IconBarMargin_MouseLeave);
                 //        tecSourceCode.ActiveTextAreaControl.TextArea.KeyPress += TextArea_KeyPress;
                 tecSourceCode.ActiveTextAreaControl.TextArea.KeyEventHandler += TextArea_KeyEventHandler;
-                tecSourceCode.ActiveTextAreaControl.SelectionManager.SelectionChanged +=
-                    SelectionManager_SelectionChanged;
+                tecSourceCode.ActiveTextAreaControl.SelectionManager.SelectionChanged += SelectionManager_SelectionChanged;
                 tecSourceCode.ActiveTextAreaControl.Caret.PositionChanged += SelectionManager_SelectionChanged;                
 
-                tecSourceCode.TextEditorProperties.Font = new Font("Courier New", 9, FontStyle.Regular);
+                tecSourceCode.TextEditorProperties.Font = new Font("Courier New", 9, FontStyle.Regular);                
 
                 mapExternalExecutionEngines();
                 runOnLoad = false;
             }
         }
 
+        
+
         public void mapExternalExecutionEngines()
         {
-            this.invokeOnThread(
+            this.invokeOnThread( 
                 () =>
                     {
                         cbExternalEngineToUse.Items.Clear();
@@ -268,7 +272,8 @@ namespace O2.External.SharpDevelop.Ascx
                                                  DI.log.debug("Loading File: {0}",
                                                               pathToSourceCodeFileToLoad);
                                                  if (pathToSourceCodeFileToLoad != "")
-                                                 {
+                                                 {                                                     
+
                                                      //tbSourceCode.Text = files.GetFileContent(config.getDefaultSourceCodeCompilationExampleFile());
 
                                                      //  tbSourceCode_PathToFileLoaded.Text = sPathToSourceCodeFileToLoad;
@@ -668,6 +673,7 @@ namespace O2.External.SharpDevelop.Ascx
             if (!assemblyCreated)
             {
                 compileEngine.addErrorsListToListBox(lboxCompilationErrors);
+                showErrorsInSourceCodeEditor(compileEngine.sbErrorMessage.ToString());                
             }
             else
             {
@@ -686,6 +692,26 @@ namespace O2.External.SharpDevelop.Ascx
                     cboxCompliledSourceCodeMethods.SelectedIndex = 0;
                 }
             }            
+        }
+
+        private void showErrorsInSourceCodeEditor(string errorMessages)
+        {
+            clearBookmarksAndMarkers();
+            String[] sSplitedErrorMessage = errorMessages.Split(new[] { Environment.NewLine },StringSplitOptions.RemoveEmptyEntries);
+            foreach (string sSplitMessage in sSplitedErrorMessage)
+            {
+                string[] sSplitedLine = sSplitMessage.Split(new [] {"::"}, StringSplitOptions.None);
+                    if (sSplitedLine.Length == 5)
+                    {
+                        if (sPathToFileLoaded.ToLower() == sSplitedLine[4].ToLower())            // only show errors for the loaded file
+                        {
+                            int iLine = Int32.Parse(sSplitedLine[0]);
+                            int iColumn = Int32.Parse(sSplitedLine[1]);
+                            setSelectedText(iLine, iColumn, true);
+                        }
+                        //O2Messages.fileErrorHighlight(sSplitedLine[4], iLine, iColumn);                    
+                    }
+            }
         }
 
 
@@ -817,9 +843,9 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void showSelectedErrorOnSourceCodeFile()
         {
-            DI.log.info(lbCompilationErrors.Text);
-            string[] sSplitedLine = lboxCompilationErrors.Text.Split(':');
-            if (sSplitedLine.Length == 4)
+            DI.log.info(lboxCompilationErrors.Text);
+            string[] sSplitedLine = lboxCompilationErrors.Text.Split(new [] {"::"}, StringSplitOptions.None);
+            if (sSplitedLine.Length == 5)
             {
                 int iLine = Int32.Parse(sSplitedLine[0]);
                 gotoLine(iLine);                
@@ -894,6 +920,37 @@ namespace O2.External.SharpDevelop.Ascx
                             DI.log.error("In setDocumentContents: ", ex.Message);
                         }
                     });
+        }
+
+        public void setSelectedText(int line, int column, bool color)
+        {
+            this.invokeOnThread(
+                ()=> setSelectedText2(line,column,color));                        
+        }
+
+        public void setSelectedText2(int line, int column, bool color)
+        {
+            line--; // since the first line is at 0
+            column--; // same for column
+            var text = tecSourceCode.ActiveTextAreaControl.TextArea.Text;
+            var location = new TextLocation(column, line);
+            var bookmark = new Bookmark(tecSourceCode.Document, location);                        
+            
+            tecSourceCode.Document.BookmarkManager.AddMark(bookmark);            
+            var offset = bookmark.Anchor.Offset;
+            var length = bookmark.Anchor.Line.Length - column;
+            var newMarker = new TextMarker(offset, length, TextMarkerType.WaveLine);
+            tecSourceCode.Document.MarkerStrategy.AddMarker(newMarker);
+            tecSourceCode.ActiveTextAreaControl.Refresh();
+        }
+
+        public void clearBookmarksAndMarkers()
+        {
+            tecSourceCode.Document.BookmarkManager.Clear();
+            // since there is easy way to remove markers, lets make the current ones invisible
+            var textMarkers = new List<TextMarker>(tecSourceCode.Document.MarkerStrategy.TextMarker);
+            foreach (var textMarker in textMarkers)
+                tecSourceCode.Document.MarkerStrategy.RemoveMarker(textMarker);          
         }
     }
 }

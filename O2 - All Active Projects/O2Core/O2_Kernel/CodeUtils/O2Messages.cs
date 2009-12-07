@@ -18,6 +18,11 @@ namespace O2.Kernel.CodeUtils
             return DI.o2MessageQueue.sendMessage(new KM_DotNetAssemblyAvailable(pathToAssembly));
         }
 
+        public static Thread fileErrorHighlight(string pathToFile, int line, int column)
+        {
+            return DI.o2MessageQueue.sendMessage(new KM_FileOrFolderSelected(pathToFile, line,column, true ));
+        }
+
         public static Thread fileOrFolderSelected(string pathToFileOrFolder)
         {
             return DI.o2MessageQueue.sendMessage(new KM_FileOrFolderSelected(pathToFileOrFolder));

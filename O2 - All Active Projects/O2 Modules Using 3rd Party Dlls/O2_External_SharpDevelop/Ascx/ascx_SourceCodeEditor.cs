@@ -369,6 +369,8 @@ namespace O2.External.SharpDevelop.Ascx
         private void btOpenFile_Click(object sender, EventArgs e)
         {
             openFile();
-        }                                      
+        }
+
+                                              
     }
 }

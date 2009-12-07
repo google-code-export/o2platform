@@ -120,7 +120,7 @@ namespace O2.Core.XRules.Ascx
 
         private void btBrowseSVN_Click(object sender, EventArgs e)
         {
-            
+            ascx_SvnBrowser.openInFloatWindow(DI.SvnXRulesDatabaseUrl);
         }
       
     }

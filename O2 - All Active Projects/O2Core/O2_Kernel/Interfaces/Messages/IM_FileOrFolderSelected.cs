@@ -5,5 +5,7 @@ namespace O2.Kernel.Interfaces.Messages
     {
         string pathToFileOrFolder { get; set; }
         int lineNumber { get; set; }
+        int columnNumber { get; set; }
+        bool showAsError { get; set; }
     }
 }

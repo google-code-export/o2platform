@@ -35,6 +35,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_3rdPartyDlls\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Merlin, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\Merlin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -64,6 +68,7 @@
     <Compile Include="DotNet\XmlHelpers.cs" />
     <Compile Include="Filters\FilteredSignature.cs" />
     <Compile Include="Filters\FilteredUrl.cs" />
+    <Compile Include="MerlinWizard\MerlinUtils.cs" />
     <Compile Include="NetSDK\IL.cs" />
     <Compile Include="Network\Mail.cs" />
     <Compile Include="Network\Ping.cs" />
