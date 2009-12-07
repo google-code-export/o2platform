@@ -109,7 +109,6 @@
     <Compile Include="DataViewers\ascx_TableList.Designer.cs">
       <DependentUpon>ascx_TableList.cs</DependentUpon>
     </Compile>
-    <Compile Include="MerlinWizard\MerlinWizard_ExtensionMethods_2.cs" />
     <Compile Include="MerlinWizard\MerlinUtils.cs" />
     <Compile Include="MerlinWizard\MerlinWizard_ExtensionMethods.cs" />
     <Compile Include="O2Findings\ascx_FindingEditor.Controllers.cs">
