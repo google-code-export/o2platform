@@ -77,10 +77,11 @@ namespace O2.Scanner.DotNet.PostSharp
             {
                 var postSharpLaosFile = Path.Combine(pathToFileOrfolder, "PostSharp.Laos.dll");
                 var postSharpPublicFile = Path.Combine(pathToFileOrfolder, "PostSharp.Public.dll");
-                if (false == File.Exists(postSharpLaosFile))
+/*                if (false == File.Exists(postSharpLaosFile))
                     Files.WriteFileContent(postSharpLaosFile, SuportFiles.PostSharp_Laos);
                 if (false == File.Exists(postSharpPublicFile))
                     Files.WriteFileContent(postSharpPublicFile, SuportFiles.PostSharp_Public);
+                */
 
                 if (false == File.Exists(sourceAssemblyWithO2PostSharpHooks))
                     DI.log.error("Could not find assemblyWithO2PostSharpHooks: {0}", sourceAssemblyWithO2PostSharpHooks);

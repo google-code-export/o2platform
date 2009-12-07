@@ -334,8 +334,7 @@ namespace O2.Core.XRules.Ascx
             this.toolStripLabel1.IsLink = true;
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(72, 20);
-            this.toolStripLabel1.Text = "reload XRules";
-            this.toolStripLabel1.Click += new System.EventHandler(this.llReloadLocalXRulesDatabase_LinkClicked);
+            this.toolStripLabel1.Text = "reload XRules";            
             // 
             // tbFileToOpen
             // 

@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="PostSharp_Laos" type="System.Resources.ResXFileRef, System.Windows.Forms">
+<!--  <data name="PostSharp_Laos" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_externaldlls\postsharp.laos.dll;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="PostSharp_Public" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\_externaldlls\postsharp.public.dll;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
+  </data>-->
 </root>
