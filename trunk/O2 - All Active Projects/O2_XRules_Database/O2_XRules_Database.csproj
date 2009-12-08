@@ -105,10 +105,6 @@
     <Compile Include="_Rules\_Samples %28eric Look in here%29\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples %28eric Look in here%29\SvnTest.cs" />
     <Compile Include="_Rules\_Samples %28eric Look in here%29\Wizards %28and there here%29\Wizard_BackupFolder.cs" />
-    <Compile Include="_Rules\_Samples\SvnTest.cs" />
-    <Compile Include="_Rules\_Samples\SampleScripts.cs" />
-    <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard_BackupFolder.cs" />
     <Compile Include="_Rules\Findings Filtering\XRule_Findings_Filter.cs" />
     <Compile Include="_Rules\J2EE\Struts\XRule_Struts.cs" />
     <Compile Include="_Rules\Analysis_Workflows\XUtils_Analysis.cs" />
@@ -117,7 +113,6 @@
     <Compile Include="_Rules\J2EE\Struts\XUtils_Struts_Joins_V0_1.cs" />
     <Compile Include="_Rules\J2EE\Struts\xUtils_Struts_v0_1.cs" />
     <Compile Include="_Rules\Analysis_Workflows\Sample_Analysis_Workflow_WebGoat.cs" />
-    <Compile Include="_Rules\_Samples\HelloWorld.cs" />
     <Compile Include="_Templates\Empty_XRule.cs" />
     <Compile Include="_Templates\Empty_Class.cs" />
     <Compile Include="_Templates\Local_Findings_Files.cs" />
