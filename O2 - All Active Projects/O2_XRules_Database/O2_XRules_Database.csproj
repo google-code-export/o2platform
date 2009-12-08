@@ -112,6 +112,7 @@
     <Compile Include="_Rules\XUtils_Struts_Joins_V0_1.cs" />
     <Compile Include="_Rules\xUtils_Struts_v0_1.cs" />
     <Compile Include="_Rules\Sample_Analysis_Workflow_WebGoat.cs" />
+    <Compile Include="_Rules\_Hi Brad %28from London%29\HelloWorld.cs" />
     <Compile Include="_Templates\Empty_XRule.cs" />
     <Compile Include="_Templates\Empty_Class.cs" />
     <Compile Include="_Templates\Local_Findings_Files.cs" />
