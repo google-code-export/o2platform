@@ -27,6 +27,7 @@ using NUnit.Framework;
 //O2Tag_AddReferenceFile:merlin.dll
 using Merlin;
 using MerlinStepLibrary;
+using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 
 namespace O2.Script
 {	
@@ -50,15 +51,16 @@ namespace O2.Script
 
         public string runWizard_BackupFolder(string startFolder, string targetFolder)
         {
-            var steps = new List<IStep>();
-            steps.add_Directory("Choose Directory To Backup", startFolder);
-            steps.add_Directory("Choose Directory To Store Zip file", targetFolder);
-            steps.add_Action("Confirm backup action", confirmBackupAction);
-            steps.add_Action("Backing up files", executeTask);
+            var o2Wizard = new O2Wizard("Backup folder: " + startFolder);
+            //var steps = new List<IStep>();
+            o2Wizard.Steps.add_Directory("Choose Directory To Backup", startFolder);
+            o2Wizard.Steps.add_Directory("Choose Directory To Store Zip file", targetFolder);
+            o2Wizard.Steps.add_Action("Confirm backup action", confirmBackupAction);
+            o2Wizard.Steps.add_Action("Backing up files", executeTask);
             //steps.add_Message("All OK", "This is a message and all is OK");
             //steps.add_Message("Problem", "Something went wrong");
-
-            steps.startWizard("Backup folder: " + startFolder);
+            o2Wizard.start();
+            //steps.startWizard("Backup folder: " + startFolder);
             return "ok";
         }
 		

@@ -19,6 +19,7 @@ using O2.Kernel.InterfacesBaseImpl;
 using O2.Tool.XRules.classes;
 using O2.Views.ASCX.O2Findings;
 using O2.Core.CIR.Ascx;
+using System;
 
 namespace O2.Tool.XRules
 {
@@ -28,6 +29,7 @@ namespace O2.Tool.XRules
         /// The main entry point for the application.
         /// </summary>
 
+        [STAThread]
         static void Main()
         {
             if (false) // to force linking to the O2_Cmd_XRules module

@@ -23,6 +23,7 @@ using Merlin;
 using MerlinStepLibrary;
 using System.Threading;
 using O2.Core.XRules.Classes;
+using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 
 namespace O2.Core.XRules._Wizards
 {		
@@ -39,15 +40,19 @@ namespace O2.Core.XRules._Wizards
 
         public Thread runWizard(string svnUrl, string targetFolder)
         {
-        	var steps = new List<IStep>();
+            var o2Wizard = new O2Wizard("Sync Rules Database via SVN");
+        	//var steps = new List<IStep>();
         	var message = string.Format("This workflow will Syncronize the local copy of O2's Rule Database with the lastest version at O2's SVN code repository" + 
         								"{0}{0}SVN Url = {1}" + 
         								"{0}{0}Local Folder = {2}" + 
         								"{0}{0}Note that the local O2 Rule Database will be deleted!", Environment.NewLine, svnUrl.Replace("%20"," ") , targetFolder);
-        	steps.add_Message("Confirm", message);
-        	steps.add_Action("Download Files", (step) => downloadFiles (step, svnUrl, targetFolder));
-        	steps.add_Directory("Downloaded Files", targetFolder);
-        	return steps.startWizard("Sync Rules Database via SVN");            
+            o2Wizard.Steps.add_Message("Confirm", message);
+            o2Wizard.Steps.add_Action("Download Files", (step) => downloadFiles(step, svnUrl, targetFolder));
+            o2Wizard.Steps.add_Directory("Downloaded Files", targetFolder);
+            return o2Wizard.start();
+            //return o2Wizard.start();
+
+        	//return steps.startWizard("Sync Rules Database via SVN");            
         }
         
         public void downloadFiles(IStep step, string svnUrl, string targetFolder)
