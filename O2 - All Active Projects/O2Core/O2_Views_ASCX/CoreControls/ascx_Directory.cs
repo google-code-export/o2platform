@@ -632,5 +632,10 @@ namespace O2.Views.ASCX.CoreControls
                 }
             }
         }
+
+        private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            refreshDirectoryView();
+        }
     }
 }

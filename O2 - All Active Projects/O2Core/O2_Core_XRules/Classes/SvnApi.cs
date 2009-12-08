@@ -1,39 +1,91 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using O2.Views.ASCX.classes;
-using HTMLparserLibDotNet20.O2ExtraCode;
 using System.Xml.Linq;
-using System.IO;
+using O2.Kernel;
+using O2.Kernel.Interfaces.O2Core;
+using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
+//O2Tag_AddReferenceFile:HTMLparserLibDotNet20.dll
+using HTMLparserLibDotNet20.O2ExtraCode;
+//O2Tag_AddReferenceFile:System.Web.dll
+using System.Web;
 
 namespace O2.Core.XRules.Classes
 {
     public class SvnApi
     {
+        public static string svnO2RootFolder = "http://o2platform.googlecode.com/svn/trunk/";		
+        public static string svnO2DatabaseRulesFolder = "http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules";		
+
+    	private static IO2Log log = PublicDI.log;
+    	
         public static string getHtmlCode(string urlToFetch)
         {
             var urlContents = Web.getUrlContents(urlToFetch);
             return urlContents;
         }
 
+		public static List<SvnMappedUrl> getSvnMappedUrls(string urlToFetch, bool recursive)
+		{			
+			log.debug("In getSvnMappedUrls: {0}", urlToFetch);
+			if (recursive)
+			{				
+				var svnMappedUrls = getSvnMappedUrls(urlToFetch);
+				var childUrls = new List<SvnMappedUrl>();
+				foreach(var svnMappedUrl in svnMappedUrls)
+					if (svnMappedUrl.IsFile == false && svnMappedUrl.VirtualPath != "../")
+						//log.error("fetching sub dir: {0}", svnMappedUrl.VirtualPath);
+						childUrls.AddRange(getSvnMappedUrls(svnMappedUrl.FullPath,recursive));
+				svnMappedUrls.AddRange(childUrls);
+				return svnMappedUrls;
+			}
+			//else
+				return getSvnMappedUrls(urlToFetch);			
+		}
+
         public static List<SvnMappedUrl> getSvnMappedUrls(string urlToFetch)
         {
             var svnMappedUrls = new List<SvnMappedUrl>();
             var codeToParse = Web.getUrlContents(urlToFetch);
             if (codeToParse != "")
-            {
-                //			var link = Majestic12ToXml.ConvertNodesToXml(new byte[]{});
+            {                
                 var nodes = Majestic12ToXml.ConvertNodesToXml(codeToParse);                
-                foreach (var element in nodes.OfType<XElement>().Descendants("li").Descendants("a"))
-                {
-                    //				log.info("element: {0}",element);
-                    //				log.debug("    href = {0} , name = {1}", element.Attribute("href"), element.Value);
-                    svnMappedUrls.Add(new SvnMappedUrl(urlToFetch, element.Attribute("href").Value, element.Value));
-                }
+                foreach (var element in nodes.OfType<XElement>().Descendants("li").Descendants("a"))                            
+                    svnMappedUrls.Add(new SvnMappedUrl(urlToFetch, element.Attribute("href").Value, element.Value));                
             }
             return svnMappedUrls;
+        }                
+        
+        public static void download(SvnMappedUrl svnMappedUrl, string baseUrl, string targetFolder)
+        {
+        	if (svnMappedUrl.VirtualPath == "../")
+        		return;        	
+        	var localVirtualPath = svnMappedUrl.FullPath.Replace(baseUrl,"");
+            localVirtualPath = WebEncoding.urlDecode(localVirtualPath);
+        	log.debug("svn download: {0}", svnMappedUrl.FullPath);
+        	Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);
+        	if (svnMappedUrl.IsFile)
+        	{
+        		var localfile = targetFolder +  localVirtualPath;
+        		var fileContents = Web.getUrlContents(svnMappedUrl.FullPath);
+        		Files.WriteFileContent(localfile,fileContents);
+        		if (File.Exists(localfile))
+        			log.info("contents saved to local file: {0}", localfile);        		
+        		else
+        			log.info("could not create file: {0}", localfile);        		
+        	}
+        	else
+        	{
+        		var localfolder = targetFolder +  localVirtualPath;
+        		log.debug("   ... remote target was a folder, so creating local folder: {0}", localfolder);
+        		Files.checkIfDirectoryExistsAndCreateIfNot(localfolder);        		
+        	}
+       
+        	//var codeToParse = Web.getUrlContents(urlToFetch);
         }
     }
 

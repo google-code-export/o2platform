@@ -7,6 +7,9 @@ using O2.External.SharpDevelop.Ascx;
 using O2.Kernel;
 using O2.Kernel.CodeUtils;
 using O2.DotNetWrappers.DotNet;
+using O2.Views.ASCX._Wizards;
+using O2.Core.XRules._Wizards;
+using O2.Core.XRules.Classes;
 
 namespace O2.Core.XRules.Ascx
 {
@@ -109,13 +112,13 @@ namespace O2.Core.XRules.Ascx
         }
 
         private void btBackupLocalFiles_Click(object sender, EventArgs e)
-        {
-            new O2.Script.testAscx().runWizard_BackupFolder(directoryWithXRulesDatabase.getCurrentDirectory());
+        {            
+            new Wizard_BackupFolder().runWizard(directoryWithXRulesDatabase.getCurrentDirectory());
         }
 
         private void btSyncViaSvn_Click(object sender, EventArgs e)
         {
-
+            new Wizard_SyncViaSvn().runWizard(SvnApi.svnO2DatabaseRulesFolder, XRules_Config.PathTo_XRulesDatabase_fromO2);
         }
 
         private void btBrowseSVN_Click(object sender, EventArgs e)

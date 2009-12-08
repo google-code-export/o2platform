@@ -163,7 +163,7 @@
     <Compile Include="classes\Tasks\TaskThread.cs" />
     <Compile Include="classes\Tasks\TaskUtils.cs" />
     <Compile Include="classes\WebRequests.cs" />
-    <Compile Include="_Wizards\Workflow_BackupFolder.cs" />
+    <Compile Include="_Wizards\Wizard_BackupFolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">

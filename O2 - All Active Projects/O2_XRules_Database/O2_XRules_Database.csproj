@@ -93,17 +93,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>XRules_Templates.resx</DependentUpon>
     </Compile>
-    <Compile Include="_Rules\Analysis_WorkFlow.cs" />
-    <Compile Include="_Rules\Analysis_WorkFlow_Phase_1.cs" />
-    <Compile Include="_Rules\Analysis_WorkFlow_Phase_2.cs" />
-    <Compile Include="_Rules\Analysis_WorkFlow_Phase_3.cs" />
-    <Compile Include="_Rules\Analysis_WorkFlow_Phase_4.cs" />
-    <Compile Include="_Rules\Analysis_WorkFlow_Phase_5.cs" />
+    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow.cs" />
+    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_1.cs" />
+    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_2.cs" />
+    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_3.cs" />
+    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_4.cs" />
+    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_5.cs" />
     <Compile Include="Interfaces\IAnalysisArtifacts.cs" />
     <Compile Include="_Rules\Ounce Analysis Workflow\SvnTest.cs" />
     <Compile Include="_Rules\SampleScripts.cs" />
     <Compile Include="_Rules\SampleUnitTests.cs" />
-    <Compile Include="_Rules\Workflows\Workflow_BackupFolder.cs" />
+    <Compile Include="_Rules\Wizards\Wizard_BackupFolder.cs" />
     <Compile Include="_Rules\XRule_Findings_Filter.cs" />
     <Compile Include="_Rules\XRule_Struts.cs" />
     <Compile Include="_Rules\XUtils_Analysis.cs" />

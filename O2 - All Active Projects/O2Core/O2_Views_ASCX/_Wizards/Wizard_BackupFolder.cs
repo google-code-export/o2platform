@@ -26,24 +26,24 @@ using Merlin;
 using MerlinStepLibrary;
 using System.Threading;
 
-namespace O2.Script
+namespace O2.Views.ASCX._Wizards
 {	
-	public class testAscx
+	public class Wizard_BackupFolder
 	{
 		private static IO2Log log = PublicDI.log;
 
-        public Thread runWizard_BackupFolder(string startFolder)
+        public Thread runWizard(string startFolder)
 			{
 			 	var targetFolder = Path.Combine(PublicDI.config.O2TempDir,"..\\_o2_Backups");
 			 	Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);
-                return runWizard_BackupFolder(startFolder, targetFolder);
+                return runWizard(startFolder, targetFolder);
 			}
 
-        public Thread runWizard_BackupFolder(string startFolder, string targetFolder)
+        public Thread runWizard(string startFolder, string targetFolder)
         {
             var steps = new List<IStep>();
-            steps.add_ChooseDirectory("Choose Directory To Backup", startFolder);
-            steps.add_ChooseDirectory("Choose Directory To Store Zip file", targetFolder);
+            steps.add_Directory("Choose Directory To Backup", startFolder);
+            steps.add_Directory("Choose Directory To Store Zip file", targetFolder);
             steps.add_Action("Confirm backup action", confirmBackupAction);
             steps.add_Action("Backing up files", executeTask);
             //steps.add_Message("All OK", "This is a message and all is OK");

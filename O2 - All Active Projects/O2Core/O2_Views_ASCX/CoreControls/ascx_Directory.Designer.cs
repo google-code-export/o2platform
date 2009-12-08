@@ -53,6 +53,7 @@ namespace O2.Views.ASCX.CoreControls
             this.cbMoveOnDrag = new System.Windows.Forms.CheckBox();
             this.scAddressAndRest = new System.Windows.Forms.SplitContainer();
             this.scViewerAndSettings = new System.Windows.Forms.SplitContainer();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryMenu.SuspendLayout();
             this.scAddressAndRest.Panel1.SuspendLayout();
             this.scAddressAndRest.Panel2.SuspendLayout();
@@ -97,9 +98,10 @@ namespace O2.Views.ASCX.CoreControls
             this.createDirectoryToolStripMenuItem,
             this.renameFileToolStripMenuItem,
             this.deleteFileToolStripMenuItem,
-            this.deleteFolderToolStripMenuItem});
+            this.deleteFolderToolStripMenuItem,
+            this.refreshToolStripMenuItem});
             this.directoryMenu.Name = "contextMenuStrip1";
-            this.directoryMenu.Size = new System.Drawing.Size(155, 92);
+            this.directoryMenu.Size = new System.Drawing.Size(155, 136);
             // 
             // createDirectoryToolStripMenuItem
             // 
@@ -319,6 +321,13 @@ namespace O2.Views.ASCX.CoreControls
             this.scViewerAndSettings.SplitterDistance = 227;
             this.scViewerAndSettings.TabIndex = 0;
             // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            // 
             // ascx_Directory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -366,5 +375,6 @@ namespace O2.Views.ASCX.CoreControls
         private System.Windows.Forms.ToolStripTextBox tbRenameSelectedItem;
         private System.Windows.Forms.ToolStripMenuItem deleteFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
     }
 }
