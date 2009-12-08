@@ -109,8 +109,15 @@
     <Compile Include="DataViewers\ascx_TableList.Designer.cs">
       <DependentUpon>ascx_TableList.cs</DependentUpon>
     </Compile>
+    <Compile Include="MerlinWizard\IO2Wizard.cs" />
     <Compile Include="MerlinWizard\MerlinUtils.cs" />
     <Compile Include="MerlinWizard\MerlinWizard_ExtensionMethods.cs" />
+    <Compile Include="MerlinWizard\O2Wizard.cs" />
+    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\Ex_Business_Logic.cs" />
+    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\Ex_Misc_Utils.cs" />
+    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\EX_O2_Ascx.cs" />
+    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\Ex_Windows_Forms.cs" />
+    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\Ex_Wizard_GUI.cs" />
     <Compile Include="O2Findings\ascx_FindingEditor.Controllers.cs">
       <SubType>UserControl</SubType>
     </Compile>

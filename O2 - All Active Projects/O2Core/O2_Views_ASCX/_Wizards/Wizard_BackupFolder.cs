@@ -21,7 +21,7 @@ using O2.Views.ASCX.MerlinWizard;
 using O2.DotNetWrappers.Zip;
 // extra references and the namespaces they import
 //O2Tag_AddReferenceFile:nunit.framework.dll
-
+using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 using Merlin;
 using MerlinStepLibrary;
 using System.Threading;
@@ -41,15 +41,19 @@ namespace O2.Views.ASCX._Wizards
 
         public Thread runWizard(string startFolder, string targetFolder)
         {
-            var steps = new List<IStep>();
-            steps.add_Directory("Choose Directory To Backup", startFolder);
-            steps.add_Directory("Choose Directory To Store Zip file", targetFolder);
-            steps.add_Action("Confirm backup action", confirmBackupAction);
-            steps.add_Action("Backing up files", executeTask);
+            var o2Wizard = new O2Wizard("Backup folder: " + startFolder);
+            
+            //var steps = new List<IStep>();
+            o2Wizard.Steps.add_Directory("Choose Directory To Backup", startFolder);
+            o2Wizard.Steps.add_Directory("Choose Directory To Store Zip file", targetFolder);
+            o2Wizard.Steps.add_Action("Confirm backup action", confirmBackupAction);
+            o2Wizard.Steps.add_Action("Backing up files", executeTask);
             //steps.add_Message("All OK", "This is a message and all is OK");
             //steps.add_Message("Problem", "Something went wrong");
 
-            return steps.startWizard("Backup folder: " + startFolder);            
+            //return steps.startWizard("Backup folder: " + startFolder);            
+            o2Wizard.start();
+            return null;
         }
 		
 		public void confirmBackupAction(IStep step)
