@@ -20,6 +20,7 @@ namespace O2.Views.ASCX.MerlinWizard
 		public static Thread runWizardWithSteps(List<IStep> steps, string wizardName, Action<WizardController, WizardController.WizardResult> onCompletion)
 		{			
 			// this needs to run on an STA thread because some controls might require Drag & Drop support
+
 			return O2Thread.staThread(
 				()=> {
 						WizardController wizardController = new WizardController(steps);

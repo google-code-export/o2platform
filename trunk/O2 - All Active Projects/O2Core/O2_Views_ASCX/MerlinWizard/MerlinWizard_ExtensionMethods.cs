@@ -25,6 +25,7 @@ namespace O2.Views.ASCX.MerlinWizard
         public static IStep add_Directory(this List<IStep> steps, string stepName, string startDirectory)
         {
             var directory = new ascx_Directory();
+            directory.AllowDrop = false;    // to deal with the "DragDrop registration did not succeed" problem
             directory._ViewMode = ascx_Directory.ViewMode.Simple_With_LocationBar;
             directory._HideFiles = true;
             directory.openDirectory(startDirectory);

@@ -57,7 +57,7 @@ namespace O2.Core.XRules._Wizards
         		step.allowNext(false);
 				step.allowBack(false);						
 				step.appendLine(" .... Deleting local database: {0}", targetFolder);
-				Files.deleteAllFilesFromDir(targetFolder);
+				Files.deleteFolder(targetFolder,true);
 				step.appendLine(" .... Calculating files to download");
 				var svnMappedUrls= SvnApi.getSvnMappedUrls(svnUrl,true);
 				step.appendLine(" .... There are {0} files & folders to download {1}" , svnMappedUrls.Count(), Environment.NewLine);
