@@ -305,9 +305,17 @@ namespace O2.DotNetWrappers.Windows
                             tvTargetTreeView.Nodes.Add(newTreeNode(Path.GetFileName(sDirectory), sDirectory, 0,
                                                                    sDirectory));
                         }
-                        if (false == hideFiles)
 
-                            foreach (String sFile in Directory.GetFiles(sDirectoryToProcess, sFileFilter))
+                        foreach (String sFile in Directory.GetFiles(sDirectoryToProcess, sFileFilter))
+                        {
+                            if (hideFiles)
+                            {
+                                var newNode = newTreeNode(Path.GetFileName(sFile), null, 1, null);
+                                newNode.ForeColor = Color.Gray;
+                                tvTargetTreeView.Nodes.Add(newNode);
+                            }
+                            else
+                            {
                                 if (bShowFileSize)
                                     tvTargetTreeView.Nodes.Add(
                                         newTreeNode(
@@ -316,6 +324,8 @@ namespace O2.DotNetWrappers.Windows
                                             sFile, 1, sFile));
                                 else
                                     tvTargetTreeView.Nodes.Add(newTreeNode(Path.GetFileName(sFile), sFile, 1, sFile));
+                            }
+                        }
 
                         //   if (null != lCurrentLoadedDirectory)
                         //       lCurrentLoadedDirectory.Text = Path.GetFileName(sDirectoryToProcess);
