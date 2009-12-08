@@ -12,11 +12,13 @@ using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
 using O2.Kernel.Interfaces.Views;
 using O2.External.WinFormsUI.Forms;
+//O2Tag_AddReferenceFile:HTMLparserLibDotNet20.dll
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework; 
 using O2.Views.ASCX.classes;
 using O2.DotNetWrappers.Network;
-//O2Tag_AddSourceFile:ascx_SvnBrower.cs
+using O2.Core.XRules.Ascx;
+
 namespace O2.Script
 {	
 	
@@ -36,7 +38,8 @@ namespace O2.Script
     	[Test] 
     	public bool browseSvnArchive()
     	{    		
-    		O2AscxGUI.openAscx(typeof(ascx_SvnBrowser),  O2DockState.Float, "Svn Browser");
+    		var svnBrowser = (ascx_SvnBrowser)O2AscxGUI.openAscx(typeof(ascx_SvnBrowser),  O2DockState.Float, "Svn Browser");
+    		//svnBrowser.openSvnUrl(svnServer);
     		return true;
     	}
     	

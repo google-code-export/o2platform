@@ -7,24 +7,27 @@ using Merlin;
 using MerlinStepLibrary;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using System.Threading;
 
 namespace O2.Views.ASCX.MerlinWizard
 {
     public class MerlinUtils
     {
-		public static string runWizardWithSteps(List<IStep> steps, string wizardName)
-		{
-			var result = "";
+        public static Thread runWizardWithSteps(List<IStep> steps, string wizardName)
+        {
+            return runWizardWithSteps(steps, wizardName, null);
+        }
+		public static Thread runWizardWithSteps(List<IStep> steps, string wizardName, Action<WizardController, WizardController.WizardResult> onCompletion)
+		{			
 			// this needs to run on an STA thread because some controls might require Drag & Drop support
-			var wizardThread = O2Thread.staThread(
+			return O2Thread.staThread(
 				()=> {
 						WizardController wizardController = new WizardController(steps);
 			            //wizardController.LogoImage = Resources.NerlimWizardHeader;
 			            var wizardResult = wizardController.StartWizard(wizardName);
-			            result = wizardResult.ToString();	//WizardController.WizardResult
-			         });
-			wizardThread.Join();
-			return result;
+                        if (onCompletion != null)
+                            onCompletion(wizardController, wizardResult);
+			         });						
 		}
     }
 }

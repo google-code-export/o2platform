@@ -36,6 +36,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\HTMLparserLibDotNet20.dll</HintPath>
     </Reference>
+    <Reference Include="Merlin, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Merlin.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\nunit.framework.dll</HintPath>
@@ -96,12 +100,10 @@
     <Compile Include="_Rules\Analysis_WorkFlow_Phase_4.cs" />
     <Compile Include="_Rules\Analysis_WorkFlow_Phase_5.cs" />
     <Compile Include="Interfaces\IAnalysisArtifacts.cs" />
-    <Compile Include="_Rules\Ounce Analysis Workflow\ascx_SvnBrower.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="_Rules\Ounce Analysis Workflow\SvnTest.cs" />
     <Compile Include="_Rules\SampleScripts.cs" />
     <Compile Include="_Rules\SampleUnitTests.cs" />
+    <Compile Include="_Rules\Workflows\Workflow_BackupFolder.cs" />
     <Compile Include="_Rules\XRule_Findings_Filter.cs" />
     <Compile Include="_Rules\XRule_Struts.cs" />
     <Compile Include="_Rules\XUtils_Analysis.cs" />
@@ -130,6 +132,10 @@
     <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
       <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
       <Name>O2_External_SharpDevelop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_Core_XRules\O2_Core_XRules.csproj">
+      <Project>{E5CB533C-DA98-408E-B021-171293AAAE3E}</Project>
+      <Name>O2_Core_XRules</Name>
     </ProjectReference>
     <ProjectReference Include="..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>

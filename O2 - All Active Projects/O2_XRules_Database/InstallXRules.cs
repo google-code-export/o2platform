@@ -9,18 +9,12 @@ namespace O2.XRules.Database
         
         public static void installXRulesDatabase(string pathToRulesDatabase, string pathToRulesTemplates)
         {
-            if (pathToRulesDatabase.IndexOf("_SourceCode_O2") == -1)
-                SampleScripts.copyResourceFilesIntoDirectory(new XRules_RulesSourceCode(), pathToRulesDatabase,true);            
-            SampleScripts.copyResourceFilesIntoDirectory(new XRules_Templates(), pathToRulesTemplates, true);
-            //SampleScripts.copyResourceFilesIntoDirectory(new Test(), pathToRulesTemplates);
-
-            /*var xRulesTemplates = SampleScripts.getDictionaryWithSampleScripts(new XRulesTemplates());
-            foreach (var xRulesTemplate in xRulesTemplates)
+            if (pathToRulesDatabase.IndexOf("O2_XRules_Database") == -1)
             {
-                var xRuleFile = Path.Combine(DI.config.XRulesTemplatesDirectory, xRulesTemplate.Key);
-                if (false == File.Exists(xRuleFile))
-                    Files.WriteFileContent(xRuleFile, xRulesTemplate.Value);
-            }*/
+               // SampleScripts.copyResourceFilesIntoDirectory(new XRules_RulesSourceCode(), pathToRulesDatabase, true);
+            }
+            SampleScripts.copyResourceFilesIntoDirectory(new XRules_Templates(), pathToRulesTemplates, true);
+            
         }
     }
 }

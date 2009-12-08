@@ -12,7 +12,7 @@ using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
 using O2.Kernel.Interfaces.O2Findings;
 using O2.Kernel.Interfaces.XRules;
 using O2.DotNetWrappers.Windows;
-using O2.XRules.Database;
+
 
 namespace O2.Tool.XRules.classes
 {
@@ -20,7 +20,7 @@ namespace O2.Tool.XRules.classes
 	{
         public void installXRulesDatabase(string pathTo_XRulesDatabase_fromO2, string pathTo_XRulesTemplates)
         {
-            InstallXRules.installXRulesDatabase(pathTo_XRulesDatabase_fromO2, pathTo_XRulesTemplates);
+//            InstallXRules.installXRulesDatabase(pathTo_XRulesDatabase_fromO2, pathTo_XRulesTemplates);
             //throw new System.NotImplementedException();
         }
 

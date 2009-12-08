@@ -110,7 +110,7 @@ namespace O2.Core.XRules.Ascx
 
         private void btBackupLocalFiles_Click(object sender, EventArgs e)
         {
-
+            new O2.Script.testAscx().runWizard_BackupFolder(directoryWithXRulesDatabase.getCurrentDirectory());
         }
 
         private void btSyncViaSvn_Click(object sender, EventArgs e)

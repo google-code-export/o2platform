@@ -318,7 +318,9 @@ namespace O2.Views.ASCX.CoreControls
 
         private void tvDirectory_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (tvDirectory.SelectedNode.Tag != null)
+            if (tvDirectory.SelectedNode.Tag == null)       // if the Tag is not set
+                tvDirectory.SelectedNode = null;            // don't let this node be selected
+            else   
             {
                 var sSelectedNodeTag = (String) tvDirectory.SelectedNode.Tag;
                 if (eDirectoryEvent_Click != null)                
