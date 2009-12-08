@@ -17,18 +17,19 @@ namespace O2.Views.ASCX.MerlinWizard
 {
     public static class Ascx_ExtensionMethods
     {
-        public static IStep add_ChooseDirectory(this List<IStep> steps, string stepName)
+        public static IStep add_Directory(this List<IStep> steps, string stepName)
         {
-            return steps.add_ChooseDirectory(stepName, PublicDI.config.O2TempDir);
+            return steps.add_Directory(stepName, PublicDI.config.O2TempDir);
         }
 
-        public static IStep add_ChooseDirectory(this List<IStep> steps, string stepName, string startDirectory)
+        public static IStep add_Directory(this List<IStep> steps, string stepName, string startDirectory)
         {
             var directory = new ascx_Directory();
             directory._ViewMode = ascx_Directory.ViewMode.Simple_With_LocationBar;
             directory._HideFiles = true;
             directory.openDirectory(startDirectory);
             directory.refreshDirectoryView();
+            directory._WatchFolder = true;
             var newStep = new TemplateStep(directory, 0, stepName);
             steps.Add(newStep);
             return newStep;
