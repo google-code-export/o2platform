@@ -62,14 +62,16 @@ namespace Merlin
             // 
             // pnlHeader
             // 
+            this.pnlHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlHeader.BackColor = System.Drawing.Color.White;
             this.pnlHeader.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlHeader.Controls.Add(this.pbxLogo);
             this.pnlHeader.Controls.Add(this.txtSubtitle);
             this.pnlHeader.Controls.Add(this.lblWizardTitle);
-            this.pnlHeader.Controls.Add(this.pbxLogo);
-            this.pnlHeader.Location = new System.Drawing.Point(-2, -2);
+            this.pnlHeader.Location = new System.Drawing.Point(-1, -2);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(540, 63);
+            this.pnlHeader.Size = new System.Drawing.Size(510, 63);
             this.pnlHeader.TabIndex = 9999999;
             // 
             // txtSubtitle
@@ -99,8 +101,9 @@ namespace Merlin
             // 
             // pbxLogo
             // 
+            this.pbxLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pbxLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbxLogo.BackgroundImage")));
-            this.pbxLogo.Location = new System.Drawing.Point(466, 0);
+            this.pbxLogo.Location = new System.Drawing.Point(438, 0);
             this.pbxLogo.Margin = new System.Windows.Forms.Padding(0);
             this.pbxLogo.Name = "pbxLogo";
             this.pbxLogo.Size = new System.Drawing.Size(68, 61);
@@ -109,50 +112,61 @@ namespace Merlin
             // 
             // pnlComponentArea
             // 
+            this.pnlComponentArea.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlComponentArea.Location = new System.Drawing.Point(0, 64);
             this.pnlComponentArea.Name = "pnlComponentArea";
-            this.pnlComponentArea.Size = new System.Drawing.Size(536, 300);
+            this.pnlComponentArea.Size = new System.Drawing.Size(509, 303);
             this.pnlComponentArea.TabIndex = 0;
             // 
             // grpButtons
             // 
+            this.grpButtons.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.grpButtons.Controls.Add(this.btnCancel);
             this.grpButtons.Controls.Add(this.btnNext);
             this.grpButtons.Controls.Add(this.btnBack);
             this.grpButtons.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.grpButtons.Location = new System.Drawing.Point(-14, 358);
+            this.grpButtons.Location = new System.Drawing.Point(-14, 353);
             this.grpButtons.Name = "grpButtons";
-            this.grpButtons.Size = new System.Drawing.Size(558, 72);
+            this.grpButtons.Size = new System.Drawing.Size(527, 71);
             this.grpButtons.TabIndex = 999999;
             this.grpButtons.TabStop = false;
             this.grpButtons.Text = " ";
             // 
             // btnCancel
             // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(430, 18);
+            this.btnCancel.Location = new System.Drawing.Point(415, 29);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(93, 28);
+            this.btnCancel.Size = new System.Drawing.Size(93, 22);
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Cancel";
+            this.btnCancel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // btnNext
             // 
-            this.btnNext.Location = new System.Drawing.Point(309, 18);
+            this.btnNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnNext.Location = new System.Drawing.Point(286, 29);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(93, 28);
+            this.btnNext.Size = new System.Drawing.Size(93, 22);
             this.btnNext.TabIndex = 2;
             this.btnNext.Text = "&Next >";
+            this.btnNext.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnNext.UseVisualStyleBackColor = true;
             // 
             // btnBack
             // 
-            this.btnBack.Location = new System.Drawing.Point(213, 18);
+            this.btnBack.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBack.Location = new System.Drawing.Point(187, 29);
             this.btnBack.Name = "btnBack";
-            this.btnBack.Size = new System.Drawing.Size(93, 28);
+            this.btnBack.Size = new System.Drawing.Size(93, 22);
             this.btnBack.TabIndex = 1;
             this.btnBack.Text = "< &Back";
+            this.btnBack.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnBack.UseVisualStyleBackColor = true;
             // 
             // WizardForm
@@ -161,12 +175,12 @@ namespace Merlin
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(532, 418);
+            this.ClientSize = new System.Drawing.Size(505, 414);
             this.ControlBox = false;
             this.Controls.Add(this.pnlComponentArea);
             this.Controls.Add(this.grpButtons);
             this.Controls.Add(this.pnlHeader);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "WizardForm";

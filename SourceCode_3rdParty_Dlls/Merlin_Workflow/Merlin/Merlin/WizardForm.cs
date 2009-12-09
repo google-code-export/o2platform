@@ -29,7 +29,7 @@ namespace Merlin
         private const int titleOffsetWithSubtitle = 7;
         private int originalTitleTop = -20;
 
-        public static int MaxWidth
+    /*    public static int MaxWidth
         {
             get { return 535; }
         }
@@ -37,7 +37,7 @@ namespace Merlin
         public static int MaxHeight
         {
             get { return 302; }
-        }
+        }*/
 
         public WizardForm(string name)
         {
@@ -53,15 +53,16 @@ namespace Merlin
         }
 
         public void ShowUserControl(Control userControl)
-        {
+        {            
             pnlComponentArea.Controls.Clear();
             pnlComponentArea.Margin = new Padding(0);
             pnlComponentArea.Controls.Add(userControl);
+            userControl.Dock = DockStyle.Fill;
             userControl.Parent = pnlComponentArea;
-            userControl.Left = 0;
+           /* userControl.Left = 0;
             userControl.Top = 0;
             userControl.Width = pnlComponentArea.Width;
-            userControl.Height = pnlComponentArea.Height;
+            userControl.Height = pnlComponentArea.Height;*/
         }
 
         internal string HeaderTitle
@@ -99,7 +100,7 @@ namespace Merlin
 
         private void WizardForm_Resize(object sender, EventArgs e)
         {
-            int correctClientRectangleHeight
+            /*int correctClientRectangleHeight
                 = btnNext.Bottom + grpButtons.Top + (int)(10f * this.AutoScaleFactor.Height);
             int formClientHeightDifference = this.Height - this.ClientRectangle.Height;
             this.Height = correctClientRectangleHeight + formClientHeightDifference;
@@ -109,7 +110,7 @@ namespace Merlin
             }
             pbxLogo.Left = this.ClientRectangle.Width - pbxLogo.Width + 1;
             pnlComponentArea.Left = 0;
-            pnlComponentArea.Width = ClientRectangle.Width;
+            pnlComponentArea.Width = ClientRectangle.Width;*/
         }
     }
 }

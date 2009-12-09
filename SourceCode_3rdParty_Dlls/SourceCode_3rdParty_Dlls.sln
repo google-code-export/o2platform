@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dbg", "Cecil.Decompiler\dbg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtraFiles", "Cecil.Decompiler\ExtraFiles.csproj", "{4F299D91-2A31-4DE8-99CC-38064E772A2D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mono.Cecil", "Mono.Cecil", "{1E9CD14B-6C8D-4AFF-9A75-ECCBF9B68D6D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mono.Cecil.Pdb", "Mono.Cecil.Pdb", "{1E9CD14B-6C8D-4AFF-9A75-ECCBF9B68D6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Cecil.Pdb", "Mono.Cecil.Pdb\Mono.Cecil.Pdb.csproj", "{4FEBBB25-D5C0-48F0-A822-2E0D6F3D777E}"
 EndProject
