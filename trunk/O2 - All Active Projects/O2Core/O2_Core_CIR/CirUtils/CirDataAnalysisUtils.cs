@@ -103,6 +103,11 @@ namespace O2.Core.CIR.CirUtils
                 remapXrefs(cirDataAnalysis);
                 showStatsOfLoadedData(cirDataAnalysis);
             }
+            else                            // if we are not remapping the XRefs then remove any FunctionIsCalledBy that are there (since some might be wrong)
+            {
+                foreach (var cirFunction in cirData.dFunctions_bySignature.Values)
+                    cirFunction.FunctionIsCalledBy = new List<ICirFunctionCall>();
+            }
             
             return cirData;
         }
@@ -579,7 +584,7 @@ namespace O2.Core.CIR.CirUtils
         public static List<ICirFunction> getListOfInheritedMethods(ICirClass targetClass, bool ignoreCoreObjectClass)
         {
             var inheritedMethods = new List<ICirFunction>();
-            if (targetClass!=null && targetClass.Signature != "java.lang.Object")
+            if (targetClass!=null) // && targetClass.Signature != "java.lang.Object")
             {
                 foreach (var cirFunction in targetClass.dFunctions.Values)
                     inheritedMethods.Add(cirFunction);

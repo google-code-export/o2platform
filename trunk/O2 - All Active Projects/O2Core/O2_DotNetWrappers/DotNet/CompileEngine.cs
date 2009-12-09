@@ -19,9 +19,9 @@ namespace O2.DotNetWrappers.DotNet
 {
     public class CompileEngine
     {
-        static string specialO2Tag_ExtraReferences = "//O2Tag_AddReferenceFile:";
-        static string specialO2Tag_ExtraSourceFile = "//O2Tag_AddSourceFile:";
-        static string specialO2Tag_ExtraFolder = "//O2Tag_AddSourceFolder:";
+        static List<string> specialO2Tag_ExtraReferences = new List<string>() {"//O2Tag_AddReferenceFile:", "//O2Ref:"};
+        static List<string> specialO2Tag_ExtraSourceFile = new List<string>() { "//O2Tag_AddSourceFile:", "//O2File:" };
+        static List<string> specialO2Tag_ExtraFolder = new List<string>() { "//O2Tag_AddSourceFolder:", "//O2Folder:", "//O2Dir:" };
 
         public Assembly compiledAssembly;
         public CompilerResults crCompilerResults;
@@ -277,27 +277,35 @@ namespace O2.DotNetWrappers.DotNet
             {
                 var fileLines = Files.getFileLines(sourceCodeFile);
                 foreach (var fileLine in fileLines)
-                    if (fileLine.StartsWith(specialO2Tag_ExtraSourceFile))
+                {
+                    var match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_ExtraSourceFile);
+                    if (match != "")
                     {
-                        var file = fileLine.Replace(specialO2Tag_ExtraSourceFile, "").Trim();
+                     //   var file = fileLine.Replace(specialO2Tag_ExtraSourceFile, "").Trim();
+                        var file = fileLine.Replace(match, "").Trim();
                         if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
                             filesToAdd.Add(file);
                     }
-                    else if (fileLine.StartsWith(specialO2Tag_ExtraFolder))
+                    //else if (fileLine.StartsWith(specialO2Tag_ExtraFolder))
+                    else 
                     {
-                        var folder = fileLine.Replace(specialO2Tag_ExtraFolder, "").Trim();
-                        if (false == Directory.Exists(folder))
-                            foreach(var path in currentSourceDirectories)
-                                if(Directory.Exists(Path.Combine(path,folder)))
-                                {
-                                    folder = Path.Combine(path,folder);
-                                    break;
-                                }
-                        foreach(var file in Files.getFilesFromDir_returnFullPath(folder,"*.cs",true))
-                            if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
-                                filesToAdd.Add(file);
+                        match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_ExtraFolder);
+                        if (match != "")
+                        {
+                            var folder = fileLine.Replace(match, "").Trim();
+                            if (false == Directory.Exists(folder))
+                                foreach(var path in currentSourceDirectories)
+                                    if(Directory.Exists(Path.Combine(path,folder)))
+                                    {
+                                        folder = Path.Combine(path,folder);
+                                        break;
+                                    }
+                            foreach(var file in Files.getFilesFromDir_returnFullPath(folder,"*.cs",true))
+                                if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
+                                    filesToAdd.Add(file);
+                        }
                     }
-
+                }
             }
 
             // add them to the list (checking if the file exist)
@@ -344,20 +352,25 @@ namespace O2.DotNetWrappers.DotNet
             foreach( var sourceCodeFile in sourceCodeFiles)
             {
                 var fileLines = Files.getFileLines(sourceCodeFile);
-                foreach(var fileLine in fileLines)
-                    if (fileLine.StartsWith(specialO2Tag_ExtraReferences))
+                foreach (var fileLine in fileLines)
+                {
+                    var match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_ExtraReferences);
+                    //if (fileLine.StartsWith(specialO2Tag_ExtraReferences))
+                    if (match!="")
                     {
-                        var extraReference = fileLine.Replace(specialO2Tag_ExtraReferences, "").Trim();
+                        var extraReference = fileLine.Replace(match, "").Trim();
                         if (File.Exists(extraReference) && false == referencedAssemblies.Contains(extraReference))
                         {
                             Files.Copy(extraReference, PublicDI.config.O2TempDir);
                             /*var assembly = PublicDI.reflection.getAssembly(extraReference);
                             if (assembly == null)
                                 DI.log.error("(this could be a problem for execution) in addReferencesIncludedInSourceCode could not load assembly :{0}", extraReference);
-                             */                             
+                             */
                             referencedAssemblies.Add(extraReference);
                         }
                     }
+                }
+
             }
         }
 

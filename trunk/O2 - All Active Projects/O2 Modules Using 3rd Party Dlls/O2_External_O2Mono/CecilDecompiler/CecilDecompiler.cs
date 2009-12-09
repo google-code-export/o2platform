@@ -16,7 +16,19 @@ namespace O2.External.O2Mono.CecilDecompiler
 
         public string getSourceCode(string testExe)
         {
-            return getSourceCode(AssemblyFactory.GetAssembly(testExe).EntryPoint);
+            var assembly = AssemblyFactory.GetAssembly(testExe);
+            if (assembly != null)
+            {
+                var sourceCode = new StringBuilder();
+                foreach(var methods in O2.External.O2Mono.MonoCecil.CecilUtils.getMethods(assembly))
+                {
+                    var methodCode = getSourceCode(methods);
+                    sourceCode.Append(methodCode);                    
+                }
+                return sourceCode.ToString();
+            }
+            return "";
+            
         }
 
         public string getSourceCode(MethodDefinition method)

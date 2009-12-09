@@ -205,7 +205,14 @@ namespace O2.Views.ASCX.DataViewers
         private void cbAdvancedViewMode_CheckedChanged(object sender, EventArgs e)
         {
             _AdvancedModeViews = cbAdvancedViewMode.Checked;
-        }                      
+        }
+
+        private void tvTreeView_MouseMove(object sender, MouseEventArgs e)
+        {
+            var currentNode = tvTreeView.GetNodeAt(e.Location);
+            if (currentNode != null)
+                Callbacks.raiseRegistedCallbacks(_onMouseMove, new[] { currentNode});
+        }                     
 
     }
 }

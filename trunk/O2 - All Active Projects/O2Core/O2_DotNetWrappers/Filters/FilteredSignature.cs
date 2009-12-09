@@ -103,6 +103,7 @@ namespace O2.DotNetWrappers.Filters
             }
         }        
 
+        // DC note: one thing that needs to be better defined is when the conversion into a standard naming convension is done
         private void populateSignatureObjectsFromMethodInfo(MethodInfo methodInfo)
         {
             try
@@ -114,16 +115,17 @@ namespace O2.DotNetWrappers.Filters
                     var parameterValue = (parameter.ParameterType.IsGenericType)
                                        ? getGenericSignature(parameter.ParameterType)
                                        : parameter.ParameterType.FullName;
-                    sParameters += makeDotNetSignatureCompatibleWithOunceRules(parameterValue);
+                    sParameters += parameterValue; //makeDotNetSignatureCompatibleWithOunceRules(parameterValue);
                     sParameters += ", ";
                 }
                 if (sParameters != "")
                     sParameters = sParameters.Substring(0, sParameters.Length - 2);
 
-                sReturnClass = makeDotNetSignatureCompatibleWithOunceRules(
-                                    getGenericSignature(methodInfo.ReturnType));
+                //sReturnClass = makeDotNetSignatureCompatibleWithOunceRules(getGenericSignature(methodInfo.ReturnType));
+                sReturnClass = getGenericSignature(methodInfo.ReturnType);
 
-                sFunctionClass = makeDotNetSignatureCompatibleWithOunceRules(methodInfo.ReflectedType.ToString());
+                //sFunctionClass = makeDotNetSignatureCompatibleWithOunceRules(methodInfo.ReflectedType.ToString());
+                sFunctionClass = methodInfo.ReflectedType.ToString();
 
                 sSignature = string.Format("{0}.{1}({2}):{3}",
                         sFunctionClass, sFunctionName, sParameters, sReturnClass);
@@ -162,10 +164,7 @@ namespace O2.DotNetWrappers.Filters
             {
                 var returnType = returnTypeFuncionAndParameters.Substring(0, indexOfFirstSpace);
                 var functionAndParameters = returnTypeFuncionAndParameters.Substring(indexOfFirstSpace);
-                
-                if (functionAndParameters.IndexOf(".ctor") > -1)
-                {
-                }
+                                
                 functionAndParameters = functionAndParameters.Replace("::", ".").Replace('/', '+').Replace(',', ';');
                 return string.Format("{0}:{1}", functionAndParameters, returnType);
             }
@@ -174,7 +173,7 @@ namespace O2.DotNetWrappers.Filters
         public void sParseSignature()
         {
             sOriginalSignature = sSignature;            
-            if ((sSignature.IndexOf("::") > -1) && (sSignature.IndexOf("!") > -1))
+            if ((sSignature.IndexOf("::") > -1))// && (sSignature.IndexOf("!") > -1))
                 sSignature = transformCecilSignature(sSignature).Trim();
             else
                 if (sSignature.IndexOf("!") > -1)

@@ -343,6 +343,20 @@ namespace O2.External.SharpDevelop.Ascx
             openFile();
         }
 
+        private void cboxCompliledSourceCodeMethods_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void autoCompileEvery10SecondsToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            setAutoCompileStatus(autoCompileEvery10SecondsToolStripMenuItem.Checked);
+        }
+        
+        private void executeSelectedMethodToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            O2Thread.mtaThread(executeMethod);
+        }      
                                               
     }
 }

@@ -19,8 +19,9 @@ namespace O2.Views.ASCX.DataViewers
         public event Callbacks.dMethod_Object _onDrop;
         public event Callbacks.dMethod_Object _onAfterSelect;
         public event Callbacks.dMethod_Object _onDoubleClick;
-        public event Callbacks.dMethod_Object _onItemDrag;  
-
+        public event Callbacks.dMethod_Object _onItemDrag;
+        public event Action<TreeNode> _onMouseMove;        
+        
         public Callbacks.dMethod_String eNodeEvent_AfterSelect;
         public Callbacks.dMethod_ListString eNodeEvent_CheckClickEvent;
         #endregion
@@ -521,7 +522,7 @@ namespace O2.Views.ASCX.DataViewers
                                 // the code below tries to solve a weird GUI problem that happens when there is only one child Node (which is invible until the user clicks on it))                                
                                 if (targetTreeView.Nodes.Count == 1)
                                 {
-                                    targetTreeView.ExpandAll();
+                                    targetTreeView.Nodes[0].Expand();
 //                                    targetTreeView.SelectedNode = targetTreeView.Nodes[0];
                                     //var dummyNode = targetTreeView.Nodes.Add("dUMMYN node");
                                     //targetTreeView.Nodes.Remove(dummyNode);
@@ -758,6 +759,6 @@ namespace O2.Views.ASCX.DataViewers
                     });
             
             
-        }
+        }        
     }
 }

@@ -270,6 +270,35 @@ namespace O2.DotNetWrappers.Windows
             }
         }
 
+        public static void loadTreeViewWith_AssembliesInCurrentAppDomain(TreeView treeview, List<Assembly> dontAddTheseAssemblies,bool showCheckBoxes)
+        {            
+            foreach (var assemblyInAppDomain in DI.reflection.getAssembliesInCurrentAppDomain())
+            {
+                var dontAdd = false;
+                foreach (var dontAddThisAssembly in dontAddTheseAssemblies)
+                {
+                    if (dontAddThisAssembly.FullName == assemblyInAppDomain.FullName)
+                    {
+                        dontAdd = true;
+                        break;
+                    }
+                }
+                if (false == dontAdd)
+                {
+                    var newNode = newTreeNode(treeview.Nodes, assemblyInAppDomain.GetName().Name, 0, assemblyInAppDomain);
+                    if (assemblyInAppDomain.Location != "")
+                    {
+                        var pdbFile = assemblyInAppDomain.Location.Replace(Path.GetExtension(assemblyInAppDomain.Location), ".pdb");
+                        if (File.Exists(pdbFile))
+                            newNode.ForeColor = Color.DarkGreen;
+                    }
+                }
+
+            }
+            if (showCheckBoxes)
+                treeview.CheckBoxes = true;
+        }
+
         public static void loadTreeViewWithDirectoriesAndFiles(TreeView tvTargetTreeView, String sDirectoryToProcess,
                                                                TextBox tbCurrentLoadedDirectory)
         {
@@ -1096,6 +1125,18 @@ namespace O2.DotNetWrappers.Windows
         	form.Width = (width > 0) ? width : form.Width;
         	form.Height = (height >0) ? height : form.Height;
         }
-        
+
+        public static void setToolTipText(TreeView treeView, TreeNode treeNode, string toolTipText)
+        {
+            treeView.invokeOnThread(
+                () => treeNode.ToolTipText = toolTipText);
+        }
+
+        public static void setTreeNodeColor(TreeView treeView, TreeNode treeNode, Color color)
+        {
+            if (treeNode != null)
+                treeView.invokeOnThread(
+                    () => treeNode.ForeColor = color);
+        }
     }
 }

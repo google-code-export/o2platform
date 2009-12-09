@@ -98,8 +98,8 @@ namespace O2.Core.CIR.CirUtils
                 return null;
             //if (cirFunction.FunctionSignature != "")
             //{
-            var treeNodeName = String.Format(" => {0}",
-                                             cirClass.Signature);
+            var filteredSignature = new O2.DotNetWrappers.Filters.FilteredSignature(cirClass.Signature);
+            var treeNodeName = String.Format(" => {0}", filteredSignature.sSignature);
             var newTreeNode = O2Forms.newTreeNode(treeNodeCollection, treeNodeName, cirClass.Signature, 0,
                                                       cirClass);
                 if (addDummyChildNode)

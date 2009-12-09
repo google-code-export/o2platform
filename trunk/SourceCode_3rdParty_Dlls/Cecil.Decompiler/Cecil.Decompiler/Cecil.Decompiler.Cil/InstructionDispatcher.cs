@@ -645,8 +645,13 @@ namespace Cecil.Decompiler.Cil {
 			case Code.Refanytype:
 				visitor.OnRefanytype (instruction);
 				return;
-			default:
-				throw new ArgumentException (Formatter.FormatInstruction (instruction), "instruction");
+            default:
+                {
+                    var errorMessage = "unrecognized IL instruction: " + Formatter.FormatInstruction(instruction);
+                    System.Diagnostics.Debug.WriteLine(errorMessage);                    
+                    break;
+                    //throw new ArgumentException(Formatter.FormatInstruction(instruction), "instruction");
+                }
 			}
 		}
 	}

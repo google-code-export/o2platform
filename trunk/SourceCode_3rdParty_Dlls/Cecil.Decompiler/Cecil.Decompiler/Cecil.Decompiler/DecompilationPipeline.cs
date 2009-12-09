@@ -30,7 +30,7 @@ using System.Collections.Generic;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
-using Cecil.Decompiler.Ast;
+using Cecil.Decompiler.Ast; 
 using Cecil.Decompiler.ControlFlow;
 using Cecil.Decompiler.Steps;
 
@@ -63,13 +63,16 @@ namespace Cecil.Decompiler {
 
 		public void Run (MethodBody body)
 		{
-			this.context = new DecompilationContext (body, ControlFlowGraph.Create (body.Method));
-			var block = new BlockStatement ();
+            if (body != null)   // DC
+            {
+                this.context = new DecompilationContext(body, ControlFlowGraph.Create(body.Method));
+                var block = new BlockStatement();
 
-			foreach (var step in steps)
-				block = step.Process (context, block);
+                foreach (var step in steps)
+                    block = step.Process(context, block);
 
-			body_block = block;
+                body_block = block;
+            }
 		}
 	}
 }

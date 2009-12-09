@@ -96,32 +96,32 @@ namespace O2.Views.ASCX.CoreControls
 
         private void lbMethodDetails_Type_MouseDown(object sender, MouseEventArgs e)
         {
-            DoDragDrop(tbMethodDetails_Type, DragDropEffects.Copy);
+            DoDragDrop(tbMethodDetails_Type.Text, DragDropEffects.Copy);
         }
 
         private void lbMethodDetails_Name_MouseDown(object sender, MouseEventArgs e)
         {
-            DoDragDrop(tbMethodDetails_Name, DragDropEffects.Copy);
+            DoDragDrop(tbMethodDetails_Name.Text, DragDropEffects.Copy);
         }
 
         private void lbMethodDetails_Parameters_MouseDown(object sender, MouseEventArgs e)
         {
-            DoDragDrop(tbMethodDetails_Parameters, DragDropEffects.Copy);
+            DoDragDrop(tbMethodDetails_Parameters.Text, DragDropEffects.Copy);
         }
 
         private void lbMethodDetails_ReturnType_MouseDown(object sender, MouseEventArgs e)
         {
-            DoDragDrop(tbMethodDetails_ReturnType, DragDropEffects.Copy);
+            DoDragDrop(tbMethodDetails_ReturnType.Text, DragDropEffects.Copy);
         }
 
         private void lbMethodDetails_Signature_MouseDown(object sender, MouseEventArgs e)
         {
-            DoDragDrop(tbMethodDetails_Signature, DragDropEffects.Copy);
+            DoDragDrop(tbMethodDetails_Signature.Text, DragDropEffects.Copy);
         }
 
         private void lbMethodDetails_OriginalSignature_MouseDown(object sender, MouseEventArgs e)
         {
-            DoDragDrop(tbMethodDetails_OriginalSignature, DragDropEffects.Copy);
+            DoDragDrop(tbMethodDetails_OriginalSignature.Text, DragDropEffects.Copy);
         }
 
         private void tvAssembliesLoaded_DragOver(object sender, DragEventArgs e)
@@ -133,18 +133,25 @@ namespace O2.Views.ASCX.CoreControls
         {
             handleDrop(e);
         }
-
-        private void cbAlsoLoadDotNetFrameworkAssemblies_CheckedChanged(object sender, EventArgs e)
-        {
-            assembliesLoaded = getDefaultLoadedAssemblies(cbAlsoLoadDotNetFrameworkAssemblies.Checked);
-            refreshViews();
-        }
+       
 
         private void tvAssembliesLoaded_ItemDrag(object sender, ItemDragEventArgs e)
         {
             if (e.Item is TreeNode)
             {
                 var treeNode = (TreeNode)e.Item;
+                tvAssembliesLoaded.SelectedNode = treeNode;
+                if (treeNode.Tag != null && treeNode.Tag is Assembly)
+                    DoDragDrop((Assembly)treeNode.Tag, DragDropEffects.Copy);
+            }
+        }
+
+        private void tvExtraAssembliesToLoad_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            if (e.Item is TreeNode)
+            {                
+                var treeNode = (TreeNode)e.Item;
+                tvExtraAssembliesToLoad.SelectedNode = treeNode;
                 if (treeNode.Tag != null && treeNode.Tag is Assembly)
                     DoDragDrop((Assembly)treeNode.Tag, DragDropEffects.Copy);
             }

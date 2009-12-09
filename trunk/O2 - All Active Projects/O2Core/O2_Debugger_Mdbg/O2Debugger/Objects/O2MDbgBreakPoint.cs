@@ -157,6 +157,11 @@ namespace O2.Debugger.Mdbg.O2Debugger.Objects
         }*/
 
 
+        public MDbgBreakpoint addBreakPoint(string filepath, string lineNumber)
+        {
+            string location = string.Format("{0}:{1}", filepath, lineNumber);
+            return o2MDbg.ActiveProcess.Breakpoints.CreateBreakpoint(location);                   
+        }
 
         public MDbgBreakpoint addBreakPoint(string module, string type, string method, int offset)
         {

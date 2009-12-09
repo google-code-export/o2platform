@@ -29,6 +29,11 @@ namespace O2.Views.ASCX.MerlinWizard
         {
             Title = title;
         }
+        
+        public O2Wizard(string title, object model) : this(title)
+        {
+        	Model = model;
+        }
 
         public void setModel(object model)
         {
@@ -39,13 +44,15 @@ namespace O2.Views.ASCX.MerlinWizard
             }
         }
 
-
         public Thread run()
         {
             return start();
         }
         public Thread start()
         {
+        	// make sure all steps have access to the Model
+        	foreach(var step in Steps)
+        		step.Model = Model;
             return MerlinUtils.runWizardWithSteps(Steps, Title);
         }
 

@@ -52,6 +52,7 @@ namespace O2.Views.ASCX.DataViewers
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.showConfigButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.configGroupBox = new System.Windows.Forms.GroupBox();
+            this.cbAdvancedViewMode = new System.Windows.Forms.CheckBox();
             this.llHideCheckboxes = new System.Windows.Forms.LinkLabel();
             this.llShowCheckboxes = new System.Windows.Forms.LinkLabel();
             this.llHideConfig = new System.Windows.Forms.LinkLabel();
@@ -62,7 +63,6 @@ namespace O2.Views.ASCX.DataViewers
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.collapseAll = new System.Windows.Forms.ToolStripButton();
             this.expandAll = new System.Windows.Forms.ToolStripButton();
-            this.cbAdvancedViewMode = new System.Windows.Forms.CheckBox();
             this.toolStrip1.SuspendLayout();
             this.configGroupBox.SuspendLayout();
             this.toolStrip2.SuspendLayout();
@@ -81,6 +81,7 @@ namespace O2.Views.ASCX.DataViewers
             this.tvTreeView.Location = new System.Drawing.Point(3, 28);
             this.tvTreeView.Name = "tvTreeView";
             this.tvTreeView.SelectedImageIndex = 0;
+            this.tvTreeView.ShowNodeToolTips = true;
             this.tvTreeView.Size = new System.Drawing.Size(692, 345);
             this.tvTreeView.TabIndex = 7;
             this.tvTreeView.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tvTreeView_AfterCheck);
@@ -88,8 +89,9 @@ namespace O2.Views.ASCX.DataViewers
             this.tvTreeView.DoubleClick += new System.EventHandler(this.tvTreeView_DoubleClick);
             this.tvTreeView.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvTreeView_DragDrop);
             this.tvTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvTreeView_AfterSelect);
+            this.tvTreeView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tvTreeView_MouseMove);
             this.tvTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.tvTreeView_DragEnter);
-            this.tvTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvTreeView_ItemDrag);
+            this.tvTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvTreeView_ItemDrag);            
             // 
             // ilClassesAndMethods
             // 
@@ -299,6 +301,19 @@ namespace O2.Views.ASCX.DataViewers
             this.configGroupBox.Text = "Config options";
             this.configGroupBox.Visible = false;
             // 
+            // cbAdvancedViewMode
+            // 
+            this.cbAdvancedViewMode.AutoSize = true;
+            this.cbAdvancedViewMode.Checked = true;
+            this.cbAdvancedViewMode.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbAdvancedViewMode.Location = new System.Drawing.Point(9, 83);
+            this.cbAdvancedViewMode.Name = "cbAdvancedViewMode";
+            this.cbAdvancedViewMode.Size = new System.Drawing.Size(131, 17);
+            this.cbAdvancedViewMode.TabIndex = 10;
+            this.cbAdvancedViewMode.Text = "Advanced View Mode";
+            this.cbAdvancedViewMode.UseVisualStyleBackColor = true;
+            this.cbAdvancedViewMode.CheckedChanged += new System.EventHandler(this.cbAdvancedViewMode_CheckedChanged);
+            // 
             // llHideCheckboxes
             // 
             this.llHideCheckboxes.AutoSize = true;
@@ -402,19 +417,6 @@ namespace O2.Views.ASCX.DataViewers
             this.expandAll.Size = new System.Drawing.Size(23, 22);
             this.expandAll.Text = "toolStripButton2";
             this.expandAll.Click += new System.EventHandler(this.expandAll_Click);
-            // 
-            // cbAdvancedViewMode
-            // 
-            this.cbAdvancedViewMode.AutoSize = true;
-            this.cbAdvancedViewMode.Checked = true;
-            this.cbAdvancedViewMode.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAdvancedViewMode.Location = new System.Drawing.Point(9, 83);
-            this.cbAdvancedViewMode.Name = "cbAdvancedViewMode";
-            this.cbAdvancedViewMode.Size = new System.Drawing.Size(131, 17);
-            this.cbAdvancedViewMode.TabIndex = 10;
-            this.cbAdvancedViewMode.Text = "Advanced View Mode";
-            this.cbAdvancedViewMode.UseVisualStyleBackColor = true;
-            this.cbAdvancedViewMode.CheckedChanged += new System.EventHandler(this.cbAdvancedViewMode_CheckedChanged);
             // 
             // ascx_FunctionsViewer
             // 
