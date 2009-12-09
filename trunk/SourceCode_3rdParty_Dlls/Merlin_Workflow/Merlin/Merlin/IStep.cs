@@ -103,10 +103,13 @@ namespace Merlin
             get;
         }
 
-        // DC
-        Action<IStep> OnComponentAction { get; set; }        
+        // DC        
+        Action<IStep> OnComponentAction { get; set; }
+        Action<IStep> OnComponentLoad { get; set; }
+        Object Model { get; set; }        
         WizardController Controller { get; set; }
         Control FirstControl { get; set; }
-        List<Control> Controls { get; set; }        
+        List<Control> Controls { get; set; }
+        
     }
 }

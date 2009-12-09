@@ -276,17 +276,14 @@ namespace Merlin
             { }
         }
 
-        /// <summary>
-        /// DC: used for executing actions when the component is loaded
-        /// /// </summary>
+        // DC
         public Action<IStep> OnComponentAction { get; set; }
-
-        /// <summary>
-        /// DC: so that the IStep can access the controller object
-        /// </summary>
+        public Action<IStep> OnComponentLoad { get; set; }
+        public Object Model { get; set; }        
         public WizardController Controller { get; set; }
-
         public Control FirstControl { get; set; }
-        public List<Control> Controls { get; set; }    
+        public List<Control> Controls { get; set; }
+
+        
     }
 }

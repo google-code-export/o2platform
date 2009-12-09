@@ -104,7 +104,7 @@ namespace MerlinStepLibrary
 
         #endregion
 
-        private System.Windows.Forms.OpenFileDialog dlgFileSelection;
+        private System.Windows.Forms.OpenFileDialog dlgFileSelection;        
         private System.Windows.Forms.TextBox txtFilePathSelected;
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.Label lblSelectFile;

@@ -115,9 +115,10 @@ namespace Merlin
 
         #endregion
 
-        /// <summary>
-        /// DC: used for execution actions when the component is loaded
+        // DC
         public Action<IStep> OnComponentAction { get; set; }
+        public Action<IStep> OnComponentLoad { get; set; }
+        public Object Model { get; set; }        
         public WizardController Controller { get; set; }
         public Control FirstControl { get; set; }
         public List<Control> Controls { get; set; } 

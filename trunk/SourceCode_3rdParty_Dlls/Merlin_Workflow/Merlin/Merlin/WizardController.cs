@@ -185,6 +185,7 @@ namespace Merlin
             }
             component.StepReached();
             Control ui = component.UI;
+
             if (ui != null)
             {
                 wizardForm.ShowUserControl(ui);
@@ -204,9 +205,6 @@ namespace Merlin
                 // DC: next code was added for O2
                 try
                 {
-
-                    if (component.OnComponentAction != null)
-                        component.OnComponentAction(component);
                     if (component.UI.Controls.Count > 0)
                     {
                         component.FirstControl = component.UI.Controls[0];
@@ -215,6 +213,9 @@ namespace Merlin
                         foreach (Control control in component.UI.Controls)
                             component.Controls.Add(control);
                     }
+                    if (component.OnComponentAction != null)
+                        component.OnComponentAction(component);
+                    
                 }
                 catch (Exception ex)
                 {
@@ -359,6 +360,10 @@ namespace Merlin
         {
             wizardForm.btnBack.Enabled = state;
         }
-		        
+
+        public void allowCancel(bool state)
+        {
+            wizardForm.btnCancel.Enabled = state;
+        }
     }
 }
