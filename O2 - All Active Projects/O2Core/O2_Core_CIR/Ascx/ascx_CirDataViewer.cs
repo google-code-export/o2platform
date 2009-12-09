@@ -9,6 +9,7 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.Interfaces.CIR;
+using System.Drawing;
 
 namespace O2.Core.CIR.Ascx
 {
@@ -39,7 +40,7 @@ namespace O2.Core.CIR.Ascx
 
         private void functionsViewer__onDrop(object droppedObject)
         {
-            handleDrop(droppedObject);
+            handleDrop(droppedObject, cbOnDropCalculateXRefs.Checked);
         }
         
 
@@ -68,6 +69,7 @@ namespace O2.Core.CIR.Ascx
 
         private void functionsViewer__onAfterSelect(object selectedItem)
         {
+            var type = selectedItem.GetType().FullName;
             showFunctionInformation(selectedItem);
             //this.invokeOnThread(
              //   ()=>
@@ -77,51 +79,93 @@ namespace O2.Core.CIR.Ascx
             if (selectedItem is List<FilteredSignature>) // it is a class
             {
                 var selectedItems = (List<FilteredSignature>)selectedItem;
-                if (selectedItems.Count > 0) 
+                if (selectedItems.Count > 0)
                 {
-                    var filteredSignature = (FilteredSignature) selectedItems[0];
+                    var filteredSignature = (FilteredSignature)selectedItems[0];
                     ICirFunction cirFunction = null;
                     //first check if we have a match on sSignature then on sOriginalSignature
-                     if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(filteredSignature.sSignature))
-                         cirFunction = cirDataAnalysis.dCirFunction_bySignature[filteredSignature.sSignature];
-                    else if(cirDataAnalysis.dCirFunction_bySignature.ContainsKey(filteredSignature.sOriginalSignature))
+                    if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(filteredSignature.sSignature))
+                        cirFunction = cirDataAnalysis.dCirFunction_bySignature[filteredSignature.sSignature];
+                    else if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(filteredSignature.sOriginalSignature))
                         cirFunction = cirDataAnalysis.dCirFunction_bySignature[filteredSignature.sOriginalSignature];
-                if (cirFunction!=null) 
-                    if (cirFunction.ParentClass != null)
-                        ViewHelpers.raiseSourceCodeReferenceEvent(cbShowLineInSourceFile.Checked,cirFunction.ParentClass, true /* remapLineNumber */);
-                    else
-                    {
-                    }                          
+                    if (cirFunction != null)
+                        if (cirFunction.ParentClass != null)
+                            ViewHelpers.raiseSourceCodeReferenceEvent(cbShowLineInSourceFile.Checked, cirFunction.ParentClass, true /* remapLineNumber */);
+                        else
+                        {
+                        }
+                }
             }
-            else if (selectedItem is FilteredSignature)  // it is  a function
+            else
             {
-                var filteredSignature = ((FilteredSignature) selectedItem);
-                var signatureToProcess = "";
-                //first check if we have a match on sSignature then on sOriginalSignature
-                if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(filteredSignature.sSignature))
-                    signatureToProcess = filteredSignature.sSignature;
-                else if(cirDataAnalysis.dCirFunction_bySignature.ContainsKey(filteredSignature.sOriginalSignature))
-                    signatureToProcess = filteredSignature.sOriginalSignature;
-                if (signatureToProcess != "")
-                    ViewHelpers.raiseSourceCodeReferenceEvent(cbShowLineInSourceFile.Checked,
-                                                              cirDataAnalysis.dCirFunction_bySignature[
-                                                                  signatureToProcess], true /* remapLineNumber */);
+                var cirFunctionToProcess = mapFilteredSignatureToCirFunction(selectedItem);
+                if (cirFunctionToProcess != null)
+                {
+                    ViewHelpers.raiseSourceCodeReferenceEvent(cbShowLineInSourceFile.Checked, cirFunctionToProcess, true /* remapLineNumber */);
+                }
             }
-
-                        
             
+
                 //O2Forms.SetFocusOnControl(functionsViewer, 200);
                 O2Forms.SetFocusOnControl(this, 400);
-                
-            }
-
-
+            
 
 
             //     })
             
             //ascx_FunctionCalls.
             //showSelectedItemDetails(selectedItem);
+        }
+
+        public ICirFunction mapFilteredSignatureToCirFunction(object itemToProcess)
+        {
+            if (itemToProcess is FilteredSignature)
+            {
+                var filteredSignature = ((FilteredSignature)itemToProcess);
+                var signatureToProcess = "";
+                //first check if we have a match on sSignature then on sOriginalSignature
+                if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(filteredSignature.sSignature))
+                    signatureToProcess = filteredSignature.sSignature;
+                else if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(filteredSignature.sOriginalSignature))
+                    signatureToProcess = filteredSignature.sOriginalSignature;
+                if (signatureToProcess != "")
+                    return cirDataAnalysis.dCirFunction_bySignature[signatureToProcess];
+            }
+            return null;
+        }
+
+        public static bool showCodeSnippetForSelectedFunction(ICirFunction cirFunctionToProcess, bool showCodeSnippet ,TreeView treeView, TreeNode currentTreeNode, TreeNode previousTreeNode)
+        {
+            if (cirFunctionToProcess.File != null && File.Exists(cirFunctionToProcess.File))
+            {
+                int fileStartLine;
+                if (Int32.TryParse(cirFunctionToProcess.FileLine, out fileStartLine))
+                {                    
+                    int mappedLineNumber = ViewHelpers.GetMappedLineNumber(cirFunctionToProcess.FunctionName, cirFunctionToProcess.File, cirFunctionToProcess.FileLine, false, true);
+                    if (mappedLineNumber > 0)
+                    {
+                        O2Forms.setTreeNodeColor(treeView, currentTreeNode, Color.DarkMagenta);
+                        O2Forms.setTreeNodeColor(treeView, previousTreeNode, Color.DarkGreen);
+                        if (showCodeSnippet)
+                        {
+                            mappedLineNumber--;
+                            var fileLines = Files.getFileLines(cirFunctionToProcess.File);
+                            var numberOfLinesAfter = fileLines.Count - mappedLineNumber;
+                            var numberOfLinesToShow = (numberOfLinesAfter > 10) ? 10 : numberOfLinesAfter;
+
+                            var linesToShow = fileLines.GetRange(mappedLineNumber, numberOfLinesToShow);
+                            var codeSnippet = StringsAndLists.fromStringList_getText(linesToShow);
+
+                            O2Forms.setToolTipText(treeView, currentTreeNode, codeSnippet);
+                        }
+                        else
+                            O2Forms.setToolTipText(treeView, currentTreeNode, "");
+                        return true;
+
+                    }
+                }
+            }
+            return false;
         }
 
         private void functionsViewer__onDoubleClick(object selectedItem)
@@ -266,8 +310,25 @@ namespace O2.Core.CIR.Ascx
 
         private void llLoadCurrentAssembly_Click(object sender, EventArgs e)
         {            
-            loadFile(DI.config.ExecutingAssembly);
-        }     
+            loadFile(DI.config.ExecutingAssembly, cbOnDropCalculateXRefs.Checked );
+        }
+
+        private void functionsViewer__onMouseMove(TreeNode treeNode)
+        {
+            var cirFunction = mapFilteredSignatureToCirFunction(treeNode.Tag);
+            if (cirFunction != null)
+            {
+                if (previousMouseOverNode != treeNode)
+                {
+                    if (showCodeSnippetForSelectedFunction(cirFunction, showCodeSnippetOnMouseOverToolStripMenuItem.Checked, functionsViewer.getObject_TreeView(), treeNode, previousMouseOverNode))
+                        previousMouseOverNode = treeNode;
+                    //else
+                    //    previousMouseOverNode = null;
+                }                
+            }
+        }
+        
+  
 
     }
 }

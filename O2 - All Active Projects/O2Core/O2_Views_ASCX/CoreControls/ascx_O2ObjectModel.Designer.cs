@@ -58,8 +58,9 @@ namespace O2.Views.ASCX.CoreControls
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tvAssembliesLoaded = new System.Windows.Forms.TreeView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.tvExtraAssembliesToLoad = new System.Windows.Forms.TreeView();
             this.cbPerformRegExSearch = new System.Windows.Forms.CheckBox();
-            this.cbAlsoLoadDotNetFrameworkAssemblies = new System.Windows.Forms.CheckBox();
             this.cbHideCSharpGeneratedMethods = new System.Windows.Forms.CheckBox();
             this.llRefreshFunctionsViewer = new System.Windows.Forms.LinkLabel();
             this.tcO2ObjectModel.SuspendLayout();
@@ -68,6 +69,7 @@ namespace O2.Views.ASCX.CoreControls
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tcO2ObjectModel
@@ -305,9 +307,9 @@ namespace O2.Views.ASCX.CoreControls
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(109, 4);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 13);
+            this.label2.Size = new System.Drawing.Size(43, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Method Name";
+            this.label2.Text = "Method";
             // 
             // tbFilterBy_MethodType
             // 
@@ -322,9 +324,9 @@ namespace O2.Views.ASCX.CoreControls
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 13);
+            this.label1.Size = new System.Drawing.Size(31, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Method Type";
+            this.label1.Text = "Type";
             // 
             // tabPage1
             // 
@@ -374,8 +376,8 @@ namespace O2.Views.ASCX.CoreControls
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.groupBox2);
             this.tabPage4.Controls.Add(this.cbPerformRegExSearch);
-            this.tabPage4.Controls.Add(this.cbAlsoLoadDotNetFrameworkAssemblies);
             this.tabPage4.Controls.Add(this.cbHideCSharpGeneratedMethods);
             this.tabPage4.Controls.Add(this.llRefreshFunctionsViewer);
             this.tabPage4.Location = new System.Drawing.Point(4, 4);
@@ -386,28 +388,39 @@ namespace O2.Views.ASCX.CoreControls
             this.tabPage4.Text = "config";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.tvExtraAssembliesToLoad);
+            this.groupBox2.Location = new System.Drawing.Point(6, 79);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(464, 214);
+            this.groupBox2.TabIndex = 6;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Also load the following .NET Assemblies ";
+            // 
+            // tvExtraAssembliesToLoad
+            // 
+            this.tvExtraAssembliesToLoad.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvExtraAssembliesToLoad.Location = new System.Drawing.Point(3, 16);
+            this.tvExtraAssembliesToLoad.Name = "tvExtraAssembliesToLoad";
+            this.tvExtraAssembliesToLoad.Size = new System.Drawing.Size(458, 195);
+            this.tvExtraAssembliesToLoad.TabIndex = 5;
+            this.tvExtraAssembliesToLoad.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvExtraAssembliesToLoad_ItemDrag);
+            // 
             // cbPerformRegExSearch
             // 
             this.cbPerformRegExSearch.AutoSize = true;
             this.cbPerformRegExSearch.Checked = true;
             this.cbPerformRegExSearch.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbPerformRegExSearch.Location = new System.Drawing.Point(6, 55);
+            this.cbPerformRegExSearch.Location = new System.Drawing.Point(6, 32);
             this.cbPerformRegExSearch.Name = "cbPerformRegExSearch";
             this.cbPerformRegExSearch.Size = new System.Drawing.Size(241, 17);
             this.cbPerformRegExSearch.TabIndex = 4;
             this.cbPerformRegExSearch.Text = "Perform RegEx search (vs direct string match)";
             this.cbPerformRegExSearch.UseVisualStyleBackColor = true;
-            // 
-            // cbAlsoLoadDotNetFrameworkAssemblies
-            // 
-            this.cbAlsoLoadDotNetFrameworkAssemblies.AutoSize = true;
-            this.cbAlsoLoadDotNetFrameworkAssemblies.Location = new System.Drawing.Point(6, 32);
-            this.cbAlsoLoadDotNetFrameworkAssemblies.Name = "cbAlsoLoadDotNetFrameworkAssemblies";
-            this.cbAlsoLoadDotNetFrameworkAssemblies.Size = new System.Drawing.Size(207, 17);
-            this.cbAlsoLoadDotNetFrameworkAssemblies.TabIndex = 3;
-            this.cbAlsoLoadDotNetFrameworkAssemblies.Text = "Also load .NET Framework Assemblies";
-            this.cbAlsoLoadDotNetFrameworkAssemblies.UseVisualStyleBackColor = true;
-            this.cbAlsoLoadDotNetFrameworkAssemblies.CheckedChanged += new System.EventHandler(this.cbAlsoLoadDotNetFrameworkAssemblies_CheckedChanged);
             // 
             // cbHideCSharpGeneratedMethods
             // 
@@ -426,12 +439,12 @@ namespace O2.Views.ASCX.CoreControls
             // 
             this.llRefreshFunctionsViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.llRefreshFunctionsViewer.AutoSize = true;
-            this.llRefreshFunctionsViewer.Location = new System.Drawing.Point(431, 13);
+            this.llRefreshFunctionsViewer.Location = new System.Drawing.Point(6, 59);
             this.llRefreshFunctionsViewer.Name = "llRefreshFunctionsViewer";
-            this.llRefreshFunctionsViewer.Size = new System.Drawing.Size(39, 13);
+            this.llRefreshFunctionsViewer.Size = new System.Drawing.Size(178, 13);
             this.llRefreshFunctionsViewer.TabIndex = 1;
             this.llRefreshFunctionsViewer.TabStop = true;
-            this.llRefreshFunctionsViewer.Text = "refresh";
+            this.llRefreshFunctionsViewer.Text = "refresh (i.e. rebuild O2 Object model)";
             this.llRefreshFunctionsViewer.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llRefreshFunctionsViewer_LinkClicked);
             // 
             // ascx_O2ObjectModel
@@ -451,6 +464,7 @@ namespace O2.Views.ASCX.CoreControls
             this.tabPage2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -488,7 +502,8 @@ namespace O2.Views.ASCX.CoreControls
         private System.Windows.Forms.Label lbMethodDetails_Parameters;
         private System.Windows.Forms.TextBox tbMethodDetails_Name;
         private System.Windows.Forms.Label lbMethodDetails_Name;
-        private System.Windows.Forms.CheckBox cbAlsoLoadDotNetFrameworkAssemblies;
         private System.Windows.Forms.CheckBox cbPerformRegExSearch;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.TreeView tvExtraAssembliesToLoad;
     }
 }

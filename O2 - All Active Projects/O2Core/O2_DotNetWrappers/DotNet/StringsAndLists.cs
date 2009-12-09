@@ -76,5 +76,13 @@ namespace O2.DotNetWrappers.DotNet
             modifiedString = modifiedString.Trim();
             return modifiedString;
         }
+
+        public static string TextStartsWithStringListItem(string text, List<string> list)
+        {
+            foreach (var item in list)
+                if (text.StartsWith(item))
+                    return item;
+            return ""; 
+        }
     }
 }

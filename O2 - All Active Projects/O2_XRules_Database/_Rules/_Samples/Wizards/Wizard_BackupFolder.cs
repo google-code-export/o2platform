@@ -51,16 +51,12 @@ namespace O2.Script
 
         public string runWizard_BackupFolder(string startFolder, string targetFolder)
         {
-            var o2Wizard = new O2Wizard("Backup folder: " + startFolder);
-            //var steps = new List<IStep>();
+            var o2Wizard = new O2Wizard("Backup folder: " + startFolder);            
             o2Wizard.Steps.add_Directory("Choose Directory To Backup", startFolder);
             o2Wizard.Steps.add_Directory("Choose Directory To Store Zip file", targetFolder);
             o2Wizard.Steps.add_Action("Confirm backup action", confirmBackupAction);
             o2Wizard.Steps.add_Action("Backing up files", executeTask);
-            //steps.add_Message("All OK", "This is a message and all is OK");
-            //steps.add_Message("Problem", "Something went wrong");
-            o2Wizard.start();
-            //steps.startWizard("Backup folder: " + startFolder);
+            o2Wizard.start();            
             return "ok";
         }
 		

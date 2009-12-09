@@ -10,7 +10,8 @@ namespace O2.Kernel.Interfaces.Messages
         breakEvent,
         debugProcessRequest,
         debugMethodInfoRequest,
-        commandExecutionMessage
+        commandExecutionMessage, 
+        setBreakpointOnFile
     }
     public interface IM_O2MdbgAction : IO2Message
     {

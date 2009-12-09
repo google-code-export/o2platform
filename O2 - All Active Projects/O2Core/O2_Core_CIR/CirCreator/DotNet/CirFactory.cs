@@ -159,7 +159,7 @@ namespace O2.Core.CIR.CirCreator.DotNet
                             if (customAttribute.Fields.Count > 0 || customAttribute.Properties.Count > 0)
                             {
                             }
-                            PublicDI.log.debug("Added attribute {0} to {1}", customAttribute.Constructor.Name, cirFunction.FunctionName);
+                           // PublicDI.log.debug("Added attribute {0} to {1}", customAttribute.Constructor.Name, cirFunction.FunctionName);
                             cirFunction.FunctionAttributes.Add(cirAttribute);
                         }
                     }
@@ -270,7 +270,12 @@ namespace O2.Core.CIR.CirCreator.DotNet
                 var classSignature = CirFactoryUtils.getTypeUniqueSignatureFromTypeReference(typeDefinition);
                 var cirClass = getCirClass(cirData, classSignature);
 
-                
+                foreach (TypeDefinition interfaceType in typeDefinition.Interfaces)
+                {
+                    var cirClassOfInterface = processTypeDefinition(cirData, interfaceType);
+                    cirClass.dSuperClasses.Add(cirClassOfInterface.Signature, cirClassOfInterface);
+                }
+                // map attributes for this classs
                 if (typeDefinition.CustomAttributes != null && typeDefinition.CustomAttributes.Count > 0)
                 {
                     foreach (CustomAttribute customAttribute in typeDefinition.CustomAttributes)

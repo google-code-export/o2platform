@@ -13,6 +13,7 @@ using O2.Kernel.Interfaces.Views;
 using O2.Views.ASCX.DataViewers;
 using System.IO;
 using O2.Kernel.CodeUtils;
+using System.Drawing;
 
 namespace O2.Views.ASCX.CoreControls
 {
@@ -27,14 +28,14 @@ namespace O2.Views.ASCX.CoreControls
         public void onLoad()
         {
             if (DesignMode == false && runOnLoad)
-            {                
-                assembliesLoaded = getDefaultLoadedAssemblies(cbAlsoLoadDotNetFrameworkAssemblies.Checked);
+            {                                
+                O2Forms.loadTreeViewWith_AssembliesInCurrentAppDomain(tvExtraAssembliesToLoad, assembliesLoaded,true);
                 filteredFunctionsViewer.setNamespaceDepth(0);                
                 runOnLoad = false;
                 refreshViews();                
             }
         }        
-        private static List<Assembly> getDefaultLoadedAssemblies(bool loadDotNetFrameworkAssemblies)
+        private static List<Assembly> getDefaultLoadedAssemblies()
         {
             var assembliesPaths = CompileEngine.getListOfO2AssembliesInExecutionDir();                       
             var assemblies = new List<Assembly>();
@@ -50,25 +51,7 @@ namespace O2.Views.ASCX.CoreControls
                     PublicDI.log.debug("could not load assembly: {0}", assemblyPath);
                 }
 
-            }
-
-            if (loadDotNetFrameworkAssemblies)
-            {
-                foreach (var assemblyInAppDomain in DI.reflection.getAssembliesInCurrentAppDomain())
-                {
-                    var alreadyLoaded = false;
-                    foreach (var assemblyLoaded in assemblies)
-                    {
-                        if (assemblyLoaded.FullName == assemblyInAppDomain.FullName)
-                        {
-                            alreadyLoaded = true;
-                            break;
-                        }
-                    }
-                    if (false == alreadyLoaded)
-                        assemblies.Add(assemblyInAppDomain);
-                }
-            }
+            }           
             return assemblies;
         }
 
@@ -84,15 +67,37 @@ namespace O2.Views.ASCX.CoreControls
         {
             tvAssembliesLoaded.invokeOnThread(
                 () =>
+                {
+                    assembliesLoaded = getDefaultLoadedAssemblies();
+                    foreach (TreeNode treeNode in tvExtraAssembliesToLoad.Nodes)
+                        if (treeNode.Checked && treeNode.Tag is Assembly)
+                            assembliesLoaded.Add((Assembly)treeNode.Tag);
+
+                        //        O2Forms.newTreeNode(tvAssembliesLoaded.Nodes, treeNode.Text, 0, treeNode.Tag);
+
+                    tvAssembliesLoaded.Nodes.Clear();
+                    // add from assembliesLoaded list
+                    foreach (var assembly in assembliesLoaded)
+                        O2Forms.newTreeNode(tvAssembliesLoaded.Nodes, assembly.GetName().Name, 0, assembly);
+
+                    // add the ones checked in the tvAssembliesLoaded
+                    //foreach (TreeNode treeNode in tvExtraAssembliesToLoad.Nodes)
+                    //    if (treeNode.Checked)
+                    //        O2Forms.newTreeNode(tvAssembliesLoaded.Nodes, treeNode.Text, 0, treeNode.Tag);
+
+                    // colorcode the ones with pdb symbols
+                    foreach (TreeNode treeNode in tvAssembliesLoaded.Nodes)
                     {
-                        tvAssembliesLoaded.Nodes.Clear();
-                        //var o2FormsReflectionASCX = new O2FormsReflectionASCX();
-                        foreach (var assembly in assembliesLoaded)                            
-                            O2Forms.newTreeNode(tvAssembliesLoaded.Nodes, assembly.GetName().Name, 0, assembly,false);
-                        //foreach (TreeNode treeNode in tvAssembliesLoaded.Nodes)
-                        //    o2FormsReflectionASCX.populateTreeNodeWithObjectChilds(treeNode, treeNode.Tag, true);
-                    });    
-        }
+                        var loadedAssembly = (Assembly)treeNode.Tag;
+                        if (loadedAssembly != null && loadedAssembly.Location != "")
+                        {
+                            var pdbFile = loadedAssembly.Location.Replace(Path.GetExtension(loadedAssembly.Location), ".pdb");
+                            if (File.Exists(pdbFile))
+                                treeNode.ForeColor = Color.DarkGreen;
+                        }
+                    }
+                });
+        }        
 
         public void refreshO2ObjectModelView(bool hideCSharpGeneratedMethods)
         {

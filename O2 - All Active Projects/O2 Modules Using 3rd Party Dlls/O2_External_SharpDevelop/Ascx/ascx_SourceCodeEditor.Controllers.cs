@@ -17,6 +17,7 @@ using O2.Kernel.CodeUtils;
 using O2.Kernel.Interfaces.Views;
 using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
+using System.Threading;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -41,7 +42,8 @@ namespace O2.External.SharpDevelop.Ascx
         public bool partialFileViewMode;        
         public int startLine;
         public int endLine;
-        public Assembly compiledAssembly;        
+        public Assembly compiledAssembly;
+        Thread autoCompileThread;
 
         public void onLoad()
         {
@@ -57,11 +59,14 @@ namespace O2.External.SharpDevelop.Ascx
                 }
                 configureOnLoadMenuOptions();
                 configureDefaultSettingsForTextEditor(tecSourceCode);
-        //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseDown += new MarginMouseEventHandler(IconBarMargin_MouseDown);
+                tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseDown += new MarginMouseEventHandler(IconBarMargin_MouseDown);
         //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseMove += new MarginMouseEventHandler(IconBarMargin_MouseMove);
         //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseLeave += new EventHandler(IconBarMargin_MouseLeave);
                 //        tecSourceCode.ActiveTextAreaControl.TextArea.KeyPress += TextArea_KeyPress;
                 tecSourceCode.ActiveTextAreaControl.TextArea.KeyEventHandler += TextArea_KeyEventHandler;
+                tecSourceCode.ActiveTextAreaControl.TextArea.DragEnter += new DragEventHandler(TextArea_DragEnter);
+                tecSourceCode.ActiveTextAreaControl.TextArea.DragOver += new DragEventHandler(TextArea_DragOver);
+                tecSourceCode.ActiveTextAreaControl.TextArea.DragDrop += new DragEventHandler(TextArea_DragDrop);
                 tecSourceCode.ActiveTextAreaControl.SelectionManager.SelectionChanged += SelectionManager_SelectionChanged;
                 tecSourceCode.ActiveTextAreaControl.Caret.PositionChanged += SelectionManager_SelectionChanged;                
 
@@ -70,6 +75,36 @@ namespace O2.External.SharpDevelop.Ascx
                 mapExternalExecutionEngines();
                 runOnLoad = false;
             }
+        }
+
+        void IconBarMargin_MouseDown(AbstractMargin sender, Point mousepos, MouseButtons mouseButtons)
+        {
+        /*    IconBarMargin margin = (IconBarMargin)sender;
+            Graphics g = margin.TextArea.CreateGraphics();
+            //g.Clear(Color.Red);
+            //g.DrawString("B", new Font("Arial", 16), new SolidBrush(Color.Black), 0, mousepos.Y);
+            //margin.DrawBookmark(g, mousepos.Y, true);
+            margin.DrawBreakpoint(g, mousepos.Y, true,true);
+*/                        
+            //tecSourceCode.Document.BookmarkManager.AddMark(bookmark);
+        }
+
+        void TextArea_DragOver(object sender, DragEventArgs e)
+        {
+            Dnd.setEffect(e);    
+        }
+
+        void TextArea_DragDrop(object sender, DragEventArgs e)
+        {
+            var data = Dnd.tryToGetObjectFromDroppedObject(e);
+            if (data != null)
+                tecSourceCode.ActiveTextAreaControl.TextArea.InsertString(data.ToString());
+        }
+
+        void TextArea_DragEnter(object sender, DragEventArgs e)
+        {
+            Dnd.setEffect(e);    
+        
         }
 
         
@@ -666,9 +701,10 @@ namespace O2.External.SharpDevelop.Ascx
 
                 // set gui options depending on compilation result
                 var assemblyCreated = compiledAssembly != null;
-
+                
                 btShowHideCompilationErrors.Visible = lboxCompilationErrors.Visible = lbCompilationErrors.Visible = !assemblyCreated;
-                btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
+
+                executeSelectedMethodToolStripMenuItem.Enabled = btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
                                                 lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible = assemblyCreated;
                 cboxCompliledSourceCodeMethods.Items.Clear();
 
@@ -696,6 +732,7 @@ namespace O2.External.SharpDevelop.Ascx
                         cboxCompliledSourceCodeMethods.SelectedIndex = 0;
                     }
                 }
+                tecSourceCode.Refresh();
             }
             catch (Exception ex)
             {
@@ -922,6 +959,7 @@ namespace O2.External.SharpDevelop.Ascx
                                 tbSourceCode_DirectoryOfFileLoaded.Text = "";
                                 tbSourceCode_FileLoaded.Text = "";
                             }
+                            tecSourceCode.ActiveTextAreaControl.Refresh();
                         }
                         catch (Exception ex)
                         {
@@ -949,7 +987,7 @@ namespace O2.External.SharpDevelop.Ascx
             var length = bookmark.Anchor.Line.Length - column;
             var newMarker = new TextMarker(offset, length, TextMarkerType.WaveLine);
             tecSourceCode.Document.MarkerStrategy.AddMarker(newMarker);
-            tecSourceCode.ActiveTextAreaControl.Refresh();
+           // tecSourceCode.ActiveTextAreaControl.Refresh();
         }
 
         public void clearBookmarksAndMarkers()
@@ -964,6 +1002,30 @@ namespace O2.External.SharpDevelop.Ascx
         public void openO2ObjectModel()
         {
             O2Messages.openControlInGUI(typeof(ascx_O2ObjectModel),O2DockState.Float, "O2 Object Model");
+        }
+
+        public void setAutoCompileStatus(bool state)
+        {
+            if (autoCompileThread != null && state == false)
+                autoCompileThread.Abort();
+            else
+                if (autoCompileThread == null && state)
+                {
+                    autoCompileThread = O2Thread.mtaThread(
+                        () =>
+                        {
+                            DI.log.debug("Starting auto compile loop");
+                            while (true)
+                            {
+                                compileSourceCode();
+                                Processes.Sleep(10000, true);
+                            }
+                            DI.log.debug("Exiting auto compile loop");
+                        });
+
+                    autoCompileThread.Priority = ThreadPriority.Lowest;
+                }
+            
         }
     }
 }

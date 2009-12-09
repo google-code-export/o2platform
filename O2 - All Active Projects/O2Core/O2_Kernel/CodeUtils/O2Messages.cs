@@ -138,6 +138,11 @@ namespace O2.Kernel.CodeUtils
         {
             return DI.o2MessageQueue.sendMessage(new KM_O2MdbgAction { o2MdbgAction = IM_O2MdbgActions.debugMethodInfoRequest, method = methodToDebug, loadDllsFrom = loadDllsFrom});
         }
+
+        public static Thread raiseO2MDbg_SetBreakPointOnFile(string fileName, int lineNumber)
+        {
+            return DI.o2MessageQueue.sendMessage(new KM_O2MdbgAction { o2MdbgAction = IM_O2MdbgActions.setBreakpointOnFile, filename = fileName, line = lineNumber });
+        }
         
         //O2Messages.raiseO2MDbgAction(IM_O2MdbgActions.startDebugSession);
 

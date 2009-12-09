@@ -8,11 +8,23 @@ using O2.Debugger.Mdbg.O2Debugger.Objects;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.Interfaces.Messages;
+using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Debugger.Mdbg.O2Debugger.Ascx
 {
     partial class ascx_Breakpoints
     {
+        private bool runOnLoad = true;
+
+        private void onLoad()
+        {
+            if (!DesignMode && runOnLoad)
+            {
+                KO2MessageQueue.getO2KernelQueue().onMessages += ascx_Breakpoints_onMessages; // Handle O2 messages   
+                runOnLoad = false;
+            }
+        }
+
         void ascx_Breakpoints_onMessages(IO2Message o2Message)
         {
             //switch (o2Message.GetType().Name)

@@ -31,6 +31,7 @@ namespace O2.Core.CIR.Ascx
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ascx_CirDataViewer));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btSaveAsCirDataFile = new System.Windows.Forms.ToolStripButton();
@@ -55,6 +56,7 @@ namespace O2.Core.CIR.Ascx
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.btDragFunctions = new System.Windows.Forms.ToolStripButton();
             this.llDragAllFunctions = new System.Windows.Forms.ToolStripLabel();
+            this.llLoadCurrentAssembly = new System.Windows.Forms.ToolStripLabel();
             this.gbSelectedItemInfo = new System.Windows.Forms.GroupBox();
             this.scrollBarHorizontalSize = new System.Windows.Forms.HScrollBar();
             this.scrollBarVerticalSize = new System.Windows.Forms.VScrollBar();
@@ -62,22 +64,29 @@ namespace O2.Core.CIR.Ascx
             this.gbCirTrace = new System.Windows.Forms.GroupBox();
             this.cirTraceForSelectedItem = new O2.Core.CIR.Ascx.ascx_CirTrace();
             this.gbRulesCreationTools = new System.Windows.Forms.GroupBox();
-            this.lbLoadingDroppedFile = new System.Windows.Forms.Label();
             this.llDrag_CurrentFilteredFunctions = new System.Windows.Forms.LinkLabel();
             this.llDrag_AllFunctions = new System.Windows.Forms.LinkLabel();
             this.llDrag_LostSinks = new System.Windows.Forms.LinkLabel();
             this.llDrag_LostSources = new System.Windows.Forms.LinkLabel();
+            this.lbLoadingDroppedFile = new System.Windows.Forms.Label();
             this.rbShowAll = new System.Windows.Forms.RadioButton();
             this.rbOnlyShowFunctionsWithControlFlowGraphs = new System.Windows.Forms.RadioButton();
             this.rbOnlyShowExternalFunctionsThatAreInvokedFromCFG = new System.Windows.Forms.RadioButton();
             this.rbShowOnlyFunctionsWithCallersOrCallees = new System.Windows.Forms.RadioButton();
-            this.functionsViewer = new O2.Views.ASCX.DataViewers.ascx_FunctionsViewer();
             this.cbShowLineInSourceFile = new System.Windows.Forms.CheckBox();
-            this.llLoadCurrentAssembly = new System.Windows.Forms.ToolStripLabel();
+            this.cbOnDropCalculateXRefs = new System.Windows.Forms.CheckBox();
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.whenSourceCodeReferencesAreAvailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showCodeSnippetOnMouseOverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openSourceCodeFileAndSelectLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.onFileDropOrLoadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.functionsViewer = new O2.Views.ASCX.DataViewers.ascx_FunctionsViewer();
             this.toolStrip1.SuspendLayout();
             this.gbSelectedItemInfo.SuspendLayout();
             this.gbCirTrace.SuspendLayout();
             this.gbRulesCreationTools.SuspendLayout();
+            this.contextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -277,6 +286,14 @@ namespace O2.Core.CIR.Ascx
             this.llDragAllFunctions.Text = "drag functions";
             this.llDragAllFunctions.MouseDown += new System.Windows.Forms.MouseEventHandler(this.llDrag_AllFunctions_MouseDown);
             // 
+            // llLoadCurrentAssembly
+            // 
+            this.llLoadCurrentAssembly.IsLink = true;
+            this.llLoadCurrentAssembly.Name = "llLoadCurrentAssembly";
+            this.llLoadCurrentAssembly.Size = new System.Drawing.Size(145, 22);
+            this.llLoadCurrentAssembly.Text = "demo: load current assembly";
+            this.llLoadCurrentAssembly.Click += new System.EventHandler(this.llLoadCurrentAssembly_Click);
+            // 
             // gbSelectedItemInfo
             // 
             this.gbSelectedItemInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -349,7 +366,6 @@ namespace O2.Core.CIR.Ascx
             // gbRulesCreationTools
             // 
             this.gbRulesCreationTools.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.gbRulesCreationTools.Controls.Add(this.lbLoadingDroppedFile);
             this.gbRulesCreationTools.Controls.Add(this.llDrag_CurrentFilteredFunctions);
             this.gbRulesCreationTools.Controls.Add(this.llDrag_AllFunctions);
             this.gbRulesCreationTools.Controls.Add(this.llDrag_LostSinks);
@@ -362,20 +378,6 @@ namespace O2.Core.CIR.Ascx
             this.gbRulesCreationTools.TabStop = false;
             this.gbRulesCreationTools.Text = "Functions Filters (Disabled since these are not working 100% )";
             this.gbRulesCreationTools.Visible = false;
-            // 
-            // lbLoadingDroppedFile
-            // 
-            this.lbLoadingDroppedFile.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.lbLoadingDroppedFile.AutoSize = true;
-            this.lbLoadingDroppedFile.BackColor = System.Drawing.SystemColors.Window;
-            this.lbLoadingDroppedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbLoadingDroppedFile.ForeColor = System.Drawing.SystemColors.AppWorkspace;
-            this.lbLoadingDroppedFile.Location = new System.Drawing.Point(64, 35);
-            this.lbLoadingDroppedFile.Name = "lbLoadingDroppedFile";
-            this.lbLoadingDroppedFile.Size = new System.Drawing.Size(190, 29);
-            this.lbLoadingDroppedFile.TabIndex = 22;
-            this.lbLoadingDroppedFile.Text = "Loading File(s)";
-            this.lbLoadingDroppedFile.Visible = false;
             // 
             // llDrag_CurrentFilteredFunctions
             // 
@@ -421,6 +423,20 @@ namespace O2.Core.CIR.Ascx
             this.llDrag_LostSources.TabStop = true;
             this.llDrag_LostSources.Text = "Drag Lost Sources (are not called by other functions)";
             this.llDrag_LostSources.MouseDown += new System.Windows.Forms.MouseEventHandler(this.llCreateRulesWith_LostSources_MouseDown);
+            // 
+            // lbLoadingDroppedFile
+            // 
+            this.lbLoadingDroppedFile.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbLoadingDroppedFile.AutoSize = true;
+            this.lbLoadingDroppedFile.BackColor = System.Drawing.SystemColors.Window;
+            this.lbLoadingDroppedFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbLoadingDroppedFile.ForeColor = System.Drawing.SystemColors.AppWorkspace;
+            this.lbLoadingDroppedFile.Location = new System.Drawing.Point(398, 237);
+            this.lbLoadingDroppedFile.Name = "lbLoadingDroppedFile";
+            this.lbLoadingDroppedFile.Size = new System.Drawing.Size(190, 29);
+            this.lbLoadingDroppedFile.TabIndex = 22;
+            this.lbLoadingDroppedFile.Text = "Loading File(s)";
+            this.lbLoadingDroppedFile.Visible = false;
             // 
             // rbShowAll
             // 
@@ -472,25 +488,6 @@ namespace O2.Core.CIR.Ascx
             this.rbShowOnlyFunctionsWithCallersOrCallees.UseVisualStyleBackColor = true;
             this.rbShowOnlyFunctionsWithCallersOrCallees.CheckedChanged += new System.EventHandler(this.rbShowOnlyFunctionsWithCallersOrCallees_CheckedChanged);
             // 
-            // functionsViewer
-            // 
-            this.functionsViewer._AdvancedModeViews = true;
-            this.functionsViewer.AllowDrop = true;
-            this.functionsViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.functionsViewer.BackColor = System.Drawing.SystemColors.Control;
-            this.functionsViewer.ForeColor = System.Drawing.Color.Black;
-            this.functionsViewer.Location = new System.Drawing.Point(3, 28);
-            this.functionsViewer.Name = "functionsViewer";
-            this.functionsViewer.NamespaceDepthValue = 2;
-            this.functionsViewer.Size = new System.Drawing.Size(977, 444);
-            this.functionsViewer.TabIndex = 2;
-            this.functionsViewer._onItemDrag += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onItemDrag);
-            this.functionsViewer._onDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onDoubleClick);
-            this.functionsViewer._onAfterSelect += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onAfterSelect);
-            this.functionsViewer._onDrop += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onDrop);
-            // 
             // cbShowLineInSourceFile
             // 
             this.cbShowLineInSourceFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -502,18 +499,96 @@ namespace O2.Core.CIR.Ascx
             this.cbShowLineInSourceFile.Text = "Open (in GUI) the Source Code of selected class or function";
             this.cbShowLineInSourceFile.UseVisualStyleBackColor = true;
             // 
-            // llLoadCurrentAssembly
+            // cbOnDropCalculateXRefs
             // 
-            this.llLoadCurrentAssembly.IsLink = true;
-            this.llLoadCurrentAssembly.Name = "llLoadCurrentAssembly";
-            this.llLoadCurrentAssembly.Size = new System.Drawing.Size(145, 22);
-            this.llLoadCurrentAssembly.Text = "demo: load current assembly";
-            this.llLoadCurrentAssembly.Click += new System.EventHandler(this.llLoadCurrentAssembly_Click);
+            this.cbOnDropCalculateXRefs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cbOnDropCalculateXRefs.AutoSize = true;
+            this.cbOnDropCalculateXRefs.Checked = true;
+            this.cbOnDropCalculateXRefs.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbOnDropCalculateXRefs.Location = new System.Drawing.Point(326, 496);
+            this.cbOnDropCalculateXRefs.Name = "cbOnDropCalculateXRefs";
+            this.cbOnDropCalculateXRefs.Size = new System.Drawing.Size(428, 17);
+            this.cbOnDropCalculateXRefs.TabIndex = 54;
+            this.cbOnDropCalculateXRefs.Text = "On Assembly load (or drop) calculate the Callers && Callees references (will load" +
+                " slower)";
+            this.cbOnDropCalculateXRefs.UseVisualStyleBackColor = true;
+            // 
+            // contextMenu
+            // 
+            this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.whenSourceCodeReferencesAreAvailableToolStripMenuItem,
+            this.onFileDropOrLoadToolStripMenuItem});
+            this.contextMenu.Name = "contextMenu";
+            this.contextMenu.Size = new System.Drawing.Size(290, 48);
+            // 
+            // whenSourceCodeReferencesAreAvailableToolStripMenuItem
+            // 
+            this.whenSourceCodeReferencesAreAvailableToolStripMenuItem.CheckOnClick = true;
+            this.whenSourceCodeReferencesAreAvailableToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showCodeSnippetOnMouseOverToolStripMenuItem,
+            this.openSourceCodeFileAndSelectLineToolStripMenuItem});
+            this.whenSourceCodeReferencesAreAvailableToolStripMenuItem.Name = "whenSourceCodeReferencesAreAvailableToolStripMenuItem";
+            this.whenSourceCodeReferencesAreAvailableToolStripMenuItem.Size = new System.Drawing.Size(289, 22);
+            this.whenSourceCodeReferencesAreAvailableToolStripMenuItem.Text = "When Source Code references are available:";
+            // 
+            // showCodeSnippetOnMouseOverToolStripMenuItem
+            // 
+            this.showCodeSnippetOnMouseOverToolStripMenuItem.CheckOnClick = true;
+            this.showCodeSnippetOnMouseOverToolStripMenuItem.Name = "showCodeSnippetOnMouseOverToolStripMenuItem";
+            this.showCodeSnippetOnMouseOverToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.showCodeSnippetOnMouseOverToolStripMenuItem.Text = "Show code snippet on Mouse over";
+            // 
+            // openSourceCodeFileAndSelectLineToolStripMenuItem
+            // 
+            this.openSourceCodeFileAndSelectLineToolStripMenuItem.CheckOnClick = true;
+            this.openSourceCodeFileAndSelectLineToolStripMenuItem.Name = "openSourceCodeFileAndSelectLineToolStripMenuItem";
+            this.openSourceCodeFileAndSelectLineToolStripMenuItem.Size = new System.Drawing.Size(249, 22);
+            this.openSourceCodeFileAndSelectLineToolStripMenuItem.Text = "Open source code file and select line";
+            // 
+            // onFileDropOrLoadToolStripMenuItem
+            // 
+            this.onFileDropOrLoadToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem});
+            this.onFileDropOrLoadToolStripMenuItem.Name = "onFileDropOrLoadToolStripMenuItem";
+            this.onFileDropOrLoadToolStripMenuItem.Size = new System.Drawing.Size(289, 22);
+            this.onFileDropOrLoadToolStripMenuItem.Text = "On file drop or load";
+            // 
+            // calculateTheCallersCalleswillLoadSlowerToolStripMenuItem
+            // 
+            this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Checked = true;
+            this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.CheckOnClick = true;
+            this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Name = "calculateTheCallersCalleswillLoadSlowerToolStripMenuItem";
+            this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
+            this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Text = "Calculate the Callers && Callees references (will load slower)";
+            // 
+            // functionsViewer
+            // 
+            this.functionsViewer._AdvancedModeViews = true;
+            this.functionsViewer.AllowDrop = true;
+            this.functionsViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.functionsViewer.BackColor = System.Drawing.SystemColors.Control;
+            this.functionsViewer.ContextMenuStrip = this.contextMenu;
+            this.functionsViewer.ForeColor = System.Drawing.Color.Black;
+            this.functionsViewer.Location = new System.Drawing.Point(3, 28);
+            this.functionsViewer.Name = "functionsViewer";
+            this.functionsViewer.NamespaceDepthValue = 2;
+            this.functionsViewer.Size = new System.Drawing.Size(977, 444);
+            this.functionsViewer.TabIndex = 2;
+            this.functionsViewer._onItemDrag += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onItemDrag);
+            this.functionsViewer._onMouseMove += new System.Action<System.Windows.Forms.TreeNode>(this.functionsViewer__onMouseMove);
+            this.functionsViewer._onDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onDoubleClick);
+            this.functionsViewer._onAfterSelect += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onAfterSelect);
+            this.functionsViewer._onDrop += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onDrop);
             // 
             // ascx_CirDataViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cbOnDropCalculateXRefs);
+            this.Controls.Add(this.lbLoadingDroppedFile);
             this.Controls.Add(this.cbShowLineInSourceFile);
             this.Controls.Add(this.gbSelectedItemInfo);
             this.Controls.Add(this.gbCirTrace);
@@ -533,6 +608,7 @@ namespace O2.Core.CIR.Ascx
             this.gbCirTrace.ResumeLayout(false);
             this.gbRulesCreationTools.ResumeLayout(false);
             this.gbRulesCreationTools.PerformLayout();
+            this.contextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -582,5 +658,12 @@ namespace O2.Core.CIR.Ascx
         private System.Windows.Forms.CheckBox cbShowLineInSourceFile;
         private System.Windows.Forms.ToolStripButton btSaveAsCirDataFile;
         private System.Windows.Forms.ToolStripLabel llLoadCurrentAssembly;
+        private System.Windows.Forms.CheckBox cbOnDropCalculateXRefs;
+        private System.Windows.Forms.ContextMenuStrip contextMenu;
+        private System.Windows.Forms.ToolStripMenuItem whenSourceCodeReferencesAreAvailableToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showCodeSnippetOnMouseOverToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openSourceCodeFileAndSelectLineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem onFileDropOrLoadToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem calculateTheCallersCalleswillLoadSlowerToolStripMenuItem;
     }
 }

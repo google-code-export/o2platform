@@ -36,10 +36,9 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
 
         private void ascx_Breakpoints_Load(object sender, EventArgs e)
         {
-            if (!DesignMode)
-                KO2MessageQueue.getO2KernelQueue().onMessages += ascx_Breakpoints_onMessages; // Handle O2 messages   
+            onLoad();            
         }
-
+        
 
         private void ascx_Breakpoints_Enter(object sender, EventArgs e)
         {

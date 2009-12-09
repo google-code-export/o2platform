@@ -25,7 +25,7 @@ namespace O2.Views.ASCX.MerlinWizard
 				()=> {
 						WizardController wizardController = new WizardController(steps);
 			            //wizardController.LogoImage = Resources.NerlimWizardHeader;
-			            var wizardResult = wizardController.StartWizard(wizardName);
+			            var wizardResult = wizardController.StartWizard(wizardName,true, null);
                         if (onCompletion != null)
                             onCompletion(wizardController, wizardResult);
 			         });						

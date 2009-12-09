@@ -95,6 +95,16 @@ namespace O2.Views.ASCX.CoreControls
         [EditorBrowsable(EditorBrowsableState.Always)]
         [Browsable(true)]
         [Bindable(true)]
+        public bool _HandleDrop 
+        {
+            get { return tvDirectory.AllowDrop; }
+            set { tvDirectory.AllowDrop = value; } 
+        }
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [Bindable(true)]
         public bool _ShowFileContentsOnTopTip { get; set; }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]

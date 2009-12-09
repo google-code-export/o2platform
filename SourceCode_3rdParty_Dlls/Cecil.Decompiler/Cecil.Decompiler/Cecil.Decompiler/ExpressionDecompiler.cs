@@ -977,7 +977,11 @@ namespace Cecil.Decompiler {
 				}
 				index -= 1; // the Parameters collection dos not contain the implict this argument
 			}
-			Push (new ArgumentReferenceExpression (method.Parameters [index]));
+
+            if (method.Parameters.Count > index)                                        // DC
+                Push(new ArgumentReferenceExpression(method.Parameters[index]));
+            else                                                                        // DC
+                System.Diagnostics.Debug.WriteLine("in PushArgumentReference (false == method.Parameters.Count > index)");			 // DC
 		}
 
 		void PushLiteral (object value)
@@ -993,17 +997,32 @@ namespace Cecil.Decompiler {
 			expression_stack.Push (expression);
 		}
 
-		public Expression Pop ()
+		public Expression Pop ()        // DC: Added Catch statement
 		{
-			return expression_stack.Pop ();
+            try
+            {
+                if (expression_stack.Count> 0)                                              // DC
+                    return expression_stack.Pop();
+                System.Diagnostics.Debug.WriteLine("in POP: expression_stack was empty");   // DC
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("in POP: " + ex.Message);               
+            }
+            return null;
 		}
 
 		ExpressionCollection PopRange (int count)
 		{
 			var range = new ExpressionCollection ();
-			for (int i = 0; i < count; ++i)
-				range.Insert (0, Pop ());
-
+            for (int i = 0; i < count; ++i)
+            {
+                var expression = Pop();     // DC
+                if (expression != null)     // DC
+                    range.Insert(0, expression);
+                else
+                    range.Insert(0, null);//new Expression());      // DC
+            }
 			return range;
 		}
 	}

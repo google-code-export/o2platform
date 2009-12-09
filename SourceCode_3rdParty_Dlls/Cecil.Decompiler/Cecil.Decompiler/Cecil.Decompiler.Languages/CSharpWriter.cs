@@ -146,11 +146,18 @@ namespace Cecil.Decompiler.Languages {
 
 		public override void VisitVariableDeclarationExpression (VariableDeclarationExpression node)
 		{
-			var variable = node.Variable;
+            try
+            {
+                var variable = node.Variable;
 
-			WriteReference (variable.VariableType);
-			WriteSpace ();
-			Write (variable.Name);
+                WriteReference(variable.VariableType);
+                WriteSpace();
+                Write(variable.Name);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("in VisitVariableDeclarationExpression: " + ex.Message);
+            }
 		}
 
 		public override void VisitAssignExpression (AssignExpression node)

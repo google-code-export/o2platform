@@ -56,22 +56,29 @@ namespace Cecil.Decompiler.Steps {
 			return (BlockStatement) VisitBlockStatement (body);
 		}
 
-		public override ICodeNode VisitMethodInvocationExpression (MethodInvocationExpression node)
-		{
-			var method_reference = node.Method as MethodReferenceExpression;
-			if (method_reference == null)
-				return base.VisitMethodInvocationExpression (node);
+        public override ICodeNode VisitMethodInvocationExpression(MethodInvocationExpression node)
+        {
+            try
+            {
+                var method_reference = node.Method as MethodReferenceExpression;
+                if (method_reference == null)
+                    return base.VisitMethodInvocationExpression(node);
 
-			BinaryOperator binary_operator;
-			if (binary_operators.TryGetValue (method_reference.Method.Name, out binary_operator))
-				return BuildBinaryExpression (binary_operator, node.Arguments [0], node.Arguments [1]);
+                BinaryOperator binary_operator;
+                if (binary_operators.TryGetValue(method_reference.Method.Name, out binary_operator))
+                    return BuildBinaryExpression(binary_operator, node.Arguments[0], node.Arguments[1]);
 
-			UnaryOperator unary_operator;
-			if (unary_operators.TryGetValue (method_reference.Method.Name, out unary_operator))
-				return BuildUnaryExpression (unary_operator, node.Arguments [0]);
+                UnaryOperator unary_operator;
+                if (unary_operators.TryGetValue(method_reference.Method.Name, out unary_operator))
+                    return BuildUnaryExpression(unary_operator, node.Arguments[0]);
 
-			return base.VisitMethodInvocationExpression (node);
-		}
+                return base.VisitMethodInvocationExpression(node);
+            }
+            catch (System.Exception ex)
+            {
+                return null;
+            }
+        }
 
 		ICodeNode BuildUnaryExpression (UnaryOperator unary_operator, Expression expression)
 		{

@@ -46,12 +46,12 @@ namespace O2.Core.XRules.Ascx
             this.lbCurrentXRulesTemplates = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.btBackupLocalFiles = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.btSyncViaSvn = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
             this.btBrowseSVN = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.btBackupLocalFiles = new System.Windows.Forms.ToolStripButton();
             this.llReloadSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
             this.llRemoveSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
             this.tcTabControlWithRulesSource = new System.Windows.Forms.TabControl();
@@ -263,22 +263,6 @@ namespace O2.Core.XRules.Ascx
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(45, 22);
-            this.toolStripLabel1.Text = "backup:";
-            // 
-            // btBackupLocalFiles
-            // 
-            this.btBackupLocalFiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btBackupLocalFiles.Image = ((System.Drawing.Image)(resources.GetObject("btBackupLocalFiles.Image")));
-            this.btBackupLocalFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btBackupLocalFiles.Name = "btBackupLocalFiles";
-            this.btBackupLocalFiles.Size = new System.Drawing.Size(23, 22);
-            this.btBackupLocalFiles.Text = "Backup current XRules (From O2)  Database ";
-            this.btBackupLocalFiles.Click += new System.EventHandler(this.btBackupLocalFiles_Click);
-            // 
             // toolStripLabel3
             // 
             this.toolStripLabel3.Name = "toolStripLabel3";
@@ -310,6 +294,22 @@ namespace O2.Core.XRules.Ascx
             this.btBrowseSVN.Size = new System.Drawing.Size(23, 22);
             this.btBrowseSVN.Text = "Browse XRules Dartabase on SVN Server";
             this.btBrowseSVN.Click += new System.EventHandler(this.btBrowseSVN_Click);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(45, 22);
+            this.toolStripLabel1.Text = "backup:";
+            // 
+            // btBackupLocalFiles
+            // 
+            this.btBackupLocalFiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btBackupLocalFiles.Image = ((System.Drawing.Image)(resources.GetObject("btBackupLocalFiles.Image")));
+            this.btBackupLocalFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btBackupLocalFiles.Name = "btBackupLocalFiles";
+            this.btBackupLocalFiles.Size = new System.Drawing.Size(23, 22);
+            this.btBackupLocalFiles.Text = "Backup current XRules (From O2)  Database ";
+            this.btBackupLocalFiles.Click += new System.EventHandler(this.btBackupLocalFiles_Click);
             // 
             // llReloadSelectedSourceCodeFile
             // 
@@ -372,6 +372,7 @@ namespace O2.Core.XRules.Ascx
             // directoryWithLocalXRules
             // 
             this.directoryWithLocalXRules._FileFilter = "*.*";
+            this.directoryWithLocalXRules._HandleDrop = true;
             this.directoryWithLocalXRules._HideFiles = false;
             this.directoryWithLocalXRules._ProcessDroppedObjects = true;
             this.directoryWithLocalXRules._ShowFileContentsOnTopTip = false;
@@ -394,6 +395,7 @@ namespace O2.Core.XRules.Ascx
             // directoryWithXRulesDatabase
             // 
             this.directoryWithXRulesDatabase._FileFilter = "*.*";
+            this.directoryWithXRulesDatabase._HandleDrop = false;
             this.directoryWithXRulesDatabase._HideFiles = false;
             this.directoryWithXRulesDatabase._ProcessDroppedObjects = true;
             this.directoryWithXRulesDatabase._ShowFileContentsOnTopTip = false;
