@@ -181,6 +181,11 @@ namespace O2.Core.CIR.Ascx
                 });
         }
 
+        public void loadFile(string fileToLoad)
+        {
+            loadFile(fileToLoad, true, false);
+        }
+
         public void loadFile(string sFileToLoad, bool remapXrefs, bool decompileCodeIfNoPdb)
         {
             DI.log.info("in CirDataViewer->LoadingFile :{0}", sFileToLoad);

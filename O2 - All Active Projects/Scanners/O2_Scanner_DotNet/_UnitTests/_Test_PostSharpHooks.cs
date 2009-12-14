@@ -52,14 +52,7 @@ namespace O2.Scanner.DotNet._UnitTests
     		functionsViewer.showSignatures(methodsSignature);
     		return true;
     	}
-    	 
-    	public static void _showO2ObjectModel_Deep()
-    	{
-    		var cirDataViewer = (ascx_CirDataViewer)O2AscxGUI.openAscx(typeof(ascx_CirDataViewer), O2DockState.Float, "O2 Object Model");
-    		cirDataViewer.loadO2ObjectModel();
-    	}
-   	
-    	
+    	     	   	    	
         public static string testStaticExecution(string filename)
         {            
             log.debug("File Exists: {0}", filename);
