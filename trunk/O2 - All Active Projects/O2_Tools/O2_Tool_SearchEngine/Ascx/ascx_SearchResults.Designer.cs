@@ -29,9 +29,9 @@ namespace O2.Tool.SearchEngine.Ascx
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.llClearAll = new System.Windows.Forms.LinkLabel();
             this.llClearSelected = new System.Windows.Forms.LinkLabel();
@@ -63,6 +63,7 @@ namespace O2.Tool.SearchEngine.Ascx
             this.tbSearchResults = new System.Windows.Forms.TextBox();
             this.lbSearchResultsStats = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
+            this.cbOpenSelectedItemInMainGUIWindow = new System.Windows.Forms.CheckBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -94,6 +95,7 @@ namespace O2.Tool.SearchEngine.Ascx
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.cbOpenSelectedItemInMainGUIWindow);
             this.splitContainer1.Panel2.Controls.Add(this.llRefreshSearchResultsView);
             this.splitContainer1.Panel2.Controls.Add(this.tcSearchResults);
             this.splitContainer1.Panel2.Controls.Add(this.lbSearchResultsStats);
@@ -236,7 +238,7 @@ namespace O2.Tool.SearchEngine.Ascx
             this.tcSearchResults.Location = new System.Drawing.Point(3, 20);
             this.tcSearchResults.Name = "tcSearchResults";
             this.tcSearchResults.SelectedIndex = 0;
-            this.tcSearchResults.Size = new System.Drawing.Size(534, 332);
+            this.tcSearchResults.Size = new System.Drawing.Size(534, 324);
             this.tcSearchResults.TabIndex = 69;
             this.tcSearchResults.SelectedIndexChanged += new System.EventHandler(this.tcSearchResults_SelectedIndexChanged);
             // 
@@ -246,7 +248,7 @@ namespace O2.Tool.SearchEngine.Ascx
             this.tpDataGridView.Location = new System.Drawing.Point(4, 22);
             this.tpDataGridView.Name = "tpDataGridView";
             this.tpDataGridView.Padding = new System.Windows.Forms.Padding(3);
-            this.tpDataGridView.Size = new System.Drawing.Size(526, 306);
+            this.tpDataGridView.Size = new System.Drawing.Size(526, 298);
             this.tpDataGridView.TabIndex = 0;
             this.tpDataGridView.Text = "Data Grid View";
             this.tpDataGridView.UseVisualStyleBackColor = true;
@@ -256,30 +258,30 @@ namespace O2.Tool.SearchEngine.Ascx
             this.dgvSearchResults.AllowUserToAddRows = false;
             this.dgvSearchResults.AllowUserToDeleteRows = false;
             this.dgvSearchResults.AllowUserToOrderColumns = true;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
-            this.dgvSearchResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.Gainsboro;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgvSearchResults.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.dgvSearchResults.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvSearchResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Gray;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvSearchResults.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.Gray;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvSearchResults.DefaultCellStyle = dataGridViewCellStyle5;
             this.dgvSearchResults.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvSearchResults.Location = new System.Drawing.Point(3, 3);
             this.dgvSearchResults.Name = "dgvSearchResults";
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
-            this.dgvSearchResults.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.Gainsboro;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.Color.Black;
+            this.dgvSearchResults.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.dgvSearchResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSearchResults.Size = new System.Drawing.Size(520, 300);
+            this.dgvSearchResults.Size = new System.Drawing.Size(520, 292);
             this.dgvSearchResults.TabIndex = 67;
             this.dgvSearchResults.SelectionChanged += new System.EventHandler(this.dgvSearchResults_SelectionChanged);
             this.dgvSearchResults.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSearchResults_CellContentClick);
@@ -300,9 +302,9 @@ namespace O2.Tool.SearchEngine.Ascx
             this.tpTreeView.Location = new System.Drawing.Point(4, 22);
             this.tpTreeView.Name = "tpTreeView";
             this.tpTreeView.Padding = new System.Windows.Forms.Padding(3);
-            this.tpTreeView.Size = new System.Drawing.Size(526, 306);
+            this.tpTreeView.Size = new System.Drawing.Size(526, 302);
             this.tpTreeView.TabIndex = 1;
-            this.tpTreeView.Text = "TreeView";
+            this.tpTreeView.Text = "TreeView (not fully implemented)";
             this.tpTreeView.UseVisualStyleBackColor = true;
             // 
             // tbTreeView_FilterText4
@@ -398,7 +400,7 @@ namespace O2.Tool.SearchEngine.Ascx
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.tvSearchResults.Location = new System.Drawing.Point(6, 50);
             this.tvSearchResults.Name = "tvSearchResults";
-            this.tvSearchResults.Size = new System.Drawing.Size(517, 248);
+            this.tvSearchResults.Size = new System.Drawing.Size(517, 244);
             this.tvSearchResults.TabIndex = 0;
             this.tvSearchResults.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvSearchResults_BeforeExpand);
             // 
@@ -408,9 +410,9 @@ namespace O2.Tool.SearchEngine.Ascx
             this.tpTextView.Location = new System.Drawing.Point(4, 22);
             this.tpTextView.Name = "tpTextView";
             this.tpTextView.Padding = new System.Windows.Forms.Padding(3);
-            this.tpTextView.Size = new System.Drawing.Size(526, 306);
+            this.tpTextView.Size = new System.Drawing.Size(526, 302);
             this.tpTextView.TabIndex = 2;
-            this.tpTextView.Text = "Text View (CVS)";
+            this.tpTextView.Text = "Text View (CVS)  (not fully implemented)";
             this.tpTextView.UseVisualStyleBackColor = true;
             // 
             // tbSearchResults
@@ -419,7 +421,7 @@ namespace O2.Tool.SearchEngine.Ascx
             this.tbSearchResults.Location = new System.Drawing.Point(3, 3);
             this.tbSearchResults.Multiline = true;
             this.tbSearchResults.Name = "tbSearchResults";
-            this.tbSearchResults.Size = new System.Drawing.Size(520, 300);
+            this.tbSearchResults.Size = new System.Drawing.Size(520, 296);
             this.tbSearchResults.TabIndex = 0;
             // 
             // lbSearchResultsStats
@@ -440,6 +442,19 @@ namespace O2.Tool.SearchEngine.Ascx
             this.label5.Size = new System.Drawing.Size(97, 13);
             this.label5.TabIndex = 66;
             this.label5.Text = "Search Results:";
+            // 
+            // cbOpenSelectedItemInMainGUIWindow
+            // 
+            this.cbOpenSelectedItemInMainGUIWindow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.cbOpenSelectedItemInMainGUIWindow.AutoSize = true;
+            this.cbOpenSelectedItemInMainGUIWindow.Checked = true;
+            this.cbOpenSelectedItemInMainGUIWindow.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbOpenSelectedItemInMainGUIWindow.Location = new System.Drawing.Point(3, 350);
+            this.cbOpenSelectedItemInMainGUIWindow.Name = "cbOpenSelectedItemInMainGUIWindow";
+            this.cbOpenSelectedItemInMainGUIWindow.Size = new System.Drawing.Size(214, 17);
+            this.cbOpenSelectedItemInMainGUIWindow.TabIndex = 76;
+            this.cbOpenSelectedItemInMainGUIWindow.Text = "Open selected item in main GUI window";
+            this.cbOpenSelectedItemInMainGUIWindow.UseVisualStyleBackColor = true;
             // 
             // ascx_SearchResults
             // 
@@ -499,6 +514,7 @@ namespace O2.Tool.SearchEngine.Ascx
         private System.Windows.Forms.TextBox tbTreeView_FilterText3;
         private System.Windows.Forms.TextBox tbTreeView_FilterText2;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox cbOpenSelectedItemInMainGUIWindow;
 
     }
 }

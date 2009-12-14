@@ -11,11 +11,13 @@ using O2.DotNetWrappers.Windows;
 using O2.External.O2Mono.MonoCecil;
 using O2.Kernel;
 using O2.Kernel.Interfaces.CIR;
+using System.Reflection;
+using O2.External.O2Mono.CecilDecompiler;
 
 namespace O2.Core.CIR.CirCreator.DotNet
 {
     public class CirFactory
-    {
+    {     
         /// <summary>
         /// this will return the current CirFunction object for the signature provided or create a new CirFunction
         /// object and return it
@@ -145,7 +147,6 @@ namespace O2.Core.CIR.CirCreator.DotNet
                 var cirFunction = getCirFunction(cirData, functionSignature, functionClass);
                 if (false == cirFunction.HasBeenProcessedByCirFactory)
                 {
-
                     if (methodDefinition.CustomAttributes != null && methodDefinition.CustomAttributes.Count > 0)
                     {
                         foreach (CustomAttribute customAttribute in methodDefinition.CustomAttributes)
@@ -243,8 +244,7 @@ namespace O2.Core.CIR.CirCreator.DotNet
                             //if (false == cirCalledFunction.FunctionIsCalledBy.Contains(cirFunction))
                             //    cirCalledFunction.FunctionIsCalledBy.Add(cirFunction);
                         }
-                    }
-                    
+                    }                                       
                 }
                 // to implement if needed
               /*  foreach (var methodOverride in methodDefinition.Overrides)
@@ -269,12 +269,7 @@ namespace O2.Core.CIR.CirCreator.DotNet
             {
                 var classSignature = CirFactoryUtils.getTypeUniqueSignatureFromTypeReference(typeDefinition);
                 var cirClass = getCirClass(cirData, classSignature);
-
-                foreach (TypeDefinition interfaceType in typeDefinition.Interfaces)
-                {
-                    var cirClassOfInterface = processTypeDefinition(cirData, interfaceType);
-                    cirClass.dSuperClasses.Add(cirClassOfInterface.Signature, cirClassOfInterface);
-                }
+                
                 // map attributes for this classs
                 if (typeDefinition.CustomAttributes != null && typeDefinition.CustomAttributes.Count > 0)
                 {
@@ -347,13 +342,14 @@ namespace O2.Core.CIR.CirCreator.DotNet
                 return null;
             }
         }
-        public void loadAndMapSymbols(AssemblyDefinition assemblyDefinition, string assemblyPath)
+
+        public void loadAndMapSymbols(AssemblyDefinition assemblyDefinition, string assemblyPath, bool decompileCodeIfNoPdb, string pathToSaveDecompiledSourceCode)
         {
             try
             {
                 if (assemblyPath != null)
                 {
-                    var pdbFile = assemblyPath.Replace(Path.GetExtension(assemblyPath), ".pdb");                    
+                    var pdbFile = assemblyPath.Replace(Path.GetExtension(assemblyPath), ".pdb");
                     if (File.Exists(pdbFile))
                     {
                         string unit = assemblyPath;
@@ -362,6 +358,11 @@ namespace O2.Core.CIR.CirCreator.DotNet
                         ISymbolReader reader = pdbFactory.CreateReader(modDef, unit);
                         modDef.LoadSymbols(reader);
                     }
+                    else
+                    {
+                        if (decompileCodeIfNoPdb)
+                            new CecilDecompiler().decompile(assemblyDefinition, pathToSaveDecompiledSourceCode);
+                    }
                 }
             }
             catch (Exception ex)
@@ -369,29 +370,90 @@ namespace O2.Core.CIR.CirCreator.DotNet
                 PublicDI.log.error("in loadAndMapSymbols: {0]", ex.Message);
             }            
         }
-        
-        public void processAssemblyDefinition(ICirData cirData, string assemblyPath)
+
+        public void processAssemblyDefinition(ICirData cirData, string assemblyPath, bool decompileCodeIfNoPdb)
         {
-            processAssemblyDefinition(cirData, CecilUtils.getAssembly(assemblyPath), assemblyPath);
+            processAssemblyDefinition(cirData, CecilUtils.getAssembly(assemblyPath), assemblyPath, decompileCodeIfNoPdb);
         }        
 
-        public void processAssemblyDefinition(ICirData cirData, AssemblyDefinition assemblyDefinition, string assemblyPath)
+        public void processAssemblyDefinition(ICirData cirData, AssemblyDefinition assemblyDefinition, string assemblyPath, bool decompileCodeIfNoPdb)
         {
+            var tempSourceCodeFolder = DI.config.getTempFolderInTempDirectory("_O2_DecompiledDotNet_" + assemblyDefinition.Name.Name);
             if (cirData != null && assemblyDefinition != null)
-            {
+            {                
                 var typesInAssembly = CecilUtils.getTypes(assemblyDefinition);
-                loadAndMapSymbols(assemblyDefinition, assemblyPath);
+                loadAndMapSymbols(assemblyDefinition, assemblyPath, decompileCodeIfNoPdb, tempSourceCodeFolder);
+                // first map all types
                 foreach (var typeInAssembly in typesInAssembly)
                     processTypeDefinition(cirData, typeInAssembly);
+
+                //then map their interfaces
+                foreach (var typeInAssembly in typesInAssembly)
+                {
+                    mapTypeInterfaces(cirData, typeInAssembly);                    
+                }
+
+                // finally decompile the code if needed
+                /*if (decompileCodeIfNoPdb)
+                {
+                    var sourceCodeFolder = DI.config.getTempFolderInTempDirectory("_O2_DecompiledDotNet_" +assemblyDefinition.Name.Name);
+                    foreach (var cirClass in cirData.dClasses_bySignature.Values)
+                        if(cirClass.
+                        new CecilDecompiler().decompile(typeInAssembly, sourceCodeFolder)
+                }*/
             }
             else
                 DI.log.error("in processAssemblyDefinition, either cirData or assemblyDefinition was null");
         }
+
+        private void mapTypeInterfaces(ICirData cirData, TypeDefinition typeToMap)
+        {
+            var classSignature = CirFactoryUtils.getTypeUniqueSignatureFromTypeReference(typeToMap);
+            var cirClass = getCirClass(cirData, classSignature);
+            foreach (object interfaceType in typeToMap.Interfaces)
+            {
+                var type = interfaceType.GetType().FullName;
+
+                TypeReference typeReference = null;
+
+                switch (interfaceType.GetType().FullName)
+                {
+                    case "Mono.Cecil.GenericInstanceType":
+                        {
+                            //var genericInstanceType = (GenericInstanceType)interfaceType;
+                            typeReference = (GenericInstanceType)interfaceType;
+                            break;
+                        }
+                    case "Mono.Cecil.TypeReference":
+                        {
+                            typeReference = (TypeReference)interfaceType;
+                            break;
+                        }
+                    case "Mono.Cecil.TypeDefinition":
+                        {
+                            typeReference = (TypeReference)interfaceType;
+                            break;
+                        }
+                    default:
+                        {
+                            DI.log.error("in mapTypeInterfaces, unsupported interface type: {0}", interfaceType.GetType().FullName);
+                            break;
+                        }
+                }
+                if (typeReference != null)
+                {
+                    // typeReference = (TypeReference)interfaceType;
+                    var typeReferenceSignature = CirFactoryUtils.getTypeUniqueSignatureFromTypeReference(typeReference);
+                    var typeReferenceCirClass = getCirClass(cirData, typeReferenceSignature);
+                    cirClass.dSuperClasses.Add(typeReferenceCirClass.Signature, typeReferenceCirClass);
+                }
+            }
+        }
         
 
-        internal string processAssemblyAndSaveAsCirDataFile(ICirData cirData, string fileToProcess, string directoryToSaveCirDataFile)
+        internal string processAssemblyAndSaveAsCirDataFile(ICirData cirData, string fileToProcess, string directoryToSaveCirDataFile, bool decompileCodeIfNoPdb)
         {
-            processAssemblyDefinition(cirData, fileToProcess);
+            processAssemblyDefinition(cirData, fileToProcess, decompileCodeIfNoPdb);
             if (cirData.dClasses_bySignature.Count == 0)
                 DI.log.error("There were no classes in created cirData file, so canceling save");
             else
@@ -403,31 +465,56 @@ namespace O2.Core.CIR.CirCreator.DotNet
             }
             return "";
         }
+        
 
-        public string convertAssemblyIntoCirDataFile(string assemblyToProcess)
+        public string convertAssemblyIntoCirDataFile(string assemblyToProcess, bool decompileCodeIfNoPdb)
         {
             string targetDirectory = DI.config.O2TempDir;
-            return convertAssemblyIntoCirDataFile(assemblyToProcess, targetDirectory);
+            return convertAssemblyIntoCirDataFile(assemblyToProcess, targetDirectory, decompileCodeIfNoPdb);
             
         }
 
-        public string convertAssemblyIntoCirDataFile(string assemblyToProcess, string targetDirectory)
+        public string convertAssemblyIntoCirDataFile(string assemblyToProcess, string targetDirectory, bool decompileCodeIfNoPdb)
         {
             ICirData cirData = new CirData();
-            return processAssemblyAndSaveAsCirDataFile(cirData, assemblyToProcess, targetDirectory);            
+            return processAssemblyAndSaveAsCirDataFile(cirData, assemblyToProcess, targetDirectory, decompileCodeIfNoPdb);            
         }
 
-        public CirDataAnalysis createCirDataAnalysisObject(List<string> assembliesToLoad)
+        public CirDataAnalysis createCirDataAnalysisObject(List<string> assembliesToLoad, bool decompileCodeIfNoPdb)
         {
             ICirData cirData = new CirData();            
             foreach(var assemblyToLoad in assembliesToLoad)
-                processAssemblyDefinition(cirData, assemblyToLoad);
+                processAssemblyDefinition(cirData, assemblyToLoad,decompileCodeIfNoPdb);
             if (cirData.dClasses_bySignature.Count >0)
             {
                 return new CirDataAnalysis(cirData);
             }
             DI.log.error("in createCirDataAnalysisObject there were no clases in CirData file");
             return null;            
+        }
+
+        public CirDataAnalysis createCirDataAnalysisObject(List<MethodInfo> methodInfos)
+        {
+            var assemblyDefinitions = new Dictionary<Assembly,AssemblyDefinition>();
+            ICirData cirData = new CirData();
+            //foreach(var assemblyToLoad in assembliesToLoad)
+            foreach (MethodInfo methodInfo in methodInfos)
+            {
+                var assembly = methodInfo.DeclaringType.Assembly;
+                if (false == assemblyDefinitions.ContainsKey(assembly))
+                {
+                    var assemblyDefinition = CecilUtils.getAssembly(assembly.Location);
+                    if (assemblyDefinition != null)
+                        assemblyDefinitions.Add(assembly, assemblyDefinition);
+                }
+                if (assemblyDefinitions.ContainsKey(assembly))
+                {
+                    var methodDefinition = CecilConvert.getMethodDefinitionFromMethodInfo(methodInfo, assemblyDefinitions[assembly]);
+                    if (methodDefinition != null)
+                        processMethodDefinition(cirData,methodDefinition,null);
+                } 
+            }
+            return new CirDataAnalysis(cirData);
         }
     }
 }

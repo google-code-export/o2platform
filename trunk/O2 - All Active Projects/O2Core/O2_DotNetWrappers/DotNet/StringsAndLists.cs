@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using O2.DotNetWrappers.Windows;
 
 namespace O2.DotNetWrappers.DotNet
 {
@@ -83,6 +84,18 @@ namespace O2.DotNetWrappers.DotNet
                 if (text.StartsWith(item))
                     return item;
             return ""; 
+        }
+
+        public static string InFileTextStartsWithStringListItem(string sourceCodeFile, List<string> list)
+        {
+            var fileLines = Files.getFileLines(sourceCodeFile);
+            foreach (var line in fileLines)
+            {
+                var result = TextStartsWithStringListItem(line, list);
+                if (result != "")
+                    return result;
+            }
+            return "";
         }
     }
 }

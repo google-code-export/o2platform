@@ -660,16 +660,24 @@ namespace Cecil.Decompiler {
 
 		bool IsBooleanExpression (Expression expression)
 		{
-			switch (expression.CodeNodeType) {
-			case CodeNodeType.BinaryExpression:
-				return IsComparisonOperator (((BinaryExpression) expression).Operator);
-			case CodeNodeType.MethodInvocationExpression:
-				var reference = ((MethodInvocationExpression) expression).Method as MethodReferenceExpression;
-				if (reference != null)
-					return reference.Method.ReturnType.ReturnType.FullName == Constants.Boolean;
+            try
+            {
+                switch (expression.CodeNodeType)
+                {
+                    case CodeNodeType.BinaryExpression:
+                        return IsComparisonOperator(((BinaryExpression)expression).Operator);
+                    case CodeNodeType.MethodInvocationExpression:
+                        var reference = ((MethodInvocationExpression)expression).Method as MethodReferenceExpression;
+                        if (reference != null)
+                            return reference.Method.ReturnType.ReturnType.FullName == Constants.Boolean;
 
-				break;
-			}
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("in IsBooleanExpression: {0}", ex.Message);
+            }
 			return false;
 		}
 

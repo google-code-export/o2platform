@@ -54,19 +54,19 @@ namespace O2.Core.CIR.Ascx
                                                // first copy the assembly file to CreatedCirFiles directory
                                                var fileToProcess = Files.MoveFile(fileInQueue, directory_CreatedCirFiles.getCurrentDirectory());
                                                // start CirCreation thread
-                                               createCirDataForFile(fileToProcess, true /*deleteFileOnCompletion*/);                                               
+                                               createCirDataForFile(fileToProcess, true /*deleteFileOnCompletion*/, false /*decompileCodeIfNoPdb*/);                                               
                                            }
                                            processCirCreationQueue(); // call it again just in case there was another file in there
                                        });
             }
         }
 
-        private void createCirDataForFile(string fileToProcess, bool deleteFileOnCompletion)
+        private void createCirDataForFile(string fileToProcess, bool deleteFileOnCompletion, bool decompileCodeIfNoPdb)
         {
             O2Thread.mtaThread(() =>
             {
                 ICirData assemblyCirData = new CirData();
-                new CirFactory().processAssemblyAndSaveAsCirDataFile(assemblyCirData, fileToProcess, directory_CreatedCirFiles.getCurrentDirectory());
+                new CirFactory().processAssemblyAndSaveAsCirDataFile(assemblyCirData, fileToProcess, directory_CreatedCirFiles.getCurrentDirectory(), decompileCodeIfNoPdb);
                 if (deleteFileOnCompletion)
                 {
                     File.Delete(fileToProcess);

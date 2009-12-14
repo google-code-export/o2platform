@@ -15,7 +15,9 @@ namespace O2.Debugger.Mdbg.O2Debugger.Objects
 {
     public class O2MDbgBreakPoint
     {
+        
         public O2MDbg o2MDbg;
+        public List<string> archivedBreakpoints_InSourceCode = new List<string>();
 
         /*     #region OnBreakPointAction enum
 
@@ -157,10 +159,22 @@ namespace O2.Debugger.Mdbg.O2Debugger.Objects
         }*/
 
 
+        public void addArchivedBreakpoints()
+        {
+            if (o2MDbg != null && o2MDbg.ActiveProcess != null)
+                foreach (var breakpointSignature in archivedBreakpoints_InSourceCode)                
+                    addBreakPoint(breakpointSignature);
+                    //o2MDbg.ActiveProcess.Breakpoints.CreateBreakpoint(archivedBreakpoint);                                   
+        }
+
         public MDbgBreakpoint addBreakPoint(string filepath, string lineNumber)
         {
-            string location = string.Format("{0}:{1}", filepath, lineNumber);
-            return o2MDbg.ActiveProcess.Breakpoints.CreateBreakpoint(location);                   
+            string breakpointSignature = string.Format("{0}:{1}", filepath, lineNumber);
+            archivedBreakpoints_InSourceCode.Add(breakpointSignature);
+            if (o2MDbg.ActiveProcess != null)
+                addBreakPoint(breakpointSignature);
+                //return o2MDbg.ActiveProcess.Breakpoints.CreateBreakpoint(location);                   
+            return null;
         }
 
         public MDbgBreakpoint addBreakPoint(string module, string type, string method, int offset)
@@ -290,6 +304,7 @@ namespace O2.Debugger.Mdbg.O2Debugger.Objects
             //CommandBase.Debugger.Processes.Active.Breakpoints
             try
             {
+                // delete active breakpoints
                 var timer = new O2Timer("Deleted active breakpoints in ").start();
                 var breakpointsToDelete = new List<MDbgBreakpoint>();
                 foreach(MDbgBreakpoint mdbgBreakpoint in o2MDbg.ActiveProcess.Breakpoints)
@@ -297,6 +312,9 @@ namespace O2.Debugger.Mdbg.O2Debugger.Objects
                 DI.log.info("There are {0} breakpoints to delete");
                 foreach(MDbgBreakpoint mdbgBreakpoint in breakpointsToDelete)
                     mdbgBreakpoint.Delete();
+
+                // delete archived breakpoints
+                archivedBreakpoints_InSourceCode = new List<string>();
                 timer.stop();
             }
             catch (Exception ex)
@@ -310,6 +328,6 @@ namespace O2.Debugger.Mdbg.O2Debugger.Objects
         internal void addBreakPoint(string breakpointSignature)
         {
             o2MDbg.executeMDbgCommand(O2MDbgCommands.addBreakPoint(breakpointSignature));
-        }
+        }        
     }
 }

@@ -247,13 +247,29 @@
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAb5JREFUOE9jYBhc
         QJ9hOYsf339OGdVFnBoaFgzGklxABzJCMRFulWOo118n/p8hTPg/k4bcYU459WAGGRlOoE4mKCZgiAhD
-        fdJVy//lTyz/sxUL/GfU4vvGzacVLayuzgvVCXINHgA0wHOP1v+K+/b/axdZ/DNcKvGfKYLvP5ua3AFO
-        RXVfBmNjkJdAAOQiLECMod5tp9r/vKvm/1M7jP4VzTT4Z1Av/o89i+c/m4nYO24x3SgeFRVRBnt7FuwG
+        fdJVy//lTyz/sxUL/GfU4vvGzacVLayuzgvVCXINHgA0wHOP1v+K+/b/a+dY/DNcKvGfKYLvP5ua3AFO
+        RXVfBmNjkJdAAOQiLECMod5tp9r/vKvm/1ObjP4VTTb4Z1Av/o89i+c/m4nYO24x3SgeFRVRBnt7FuwG
         SDDU226U/599yeh/7DHd/777VP9b75L5r7ZV4D/nBLb/rH4C/7nV1Yv5deUEcRpgv1H2f+xJnf9u9cr/
         TOtl/qltFPovXM/5j7WW9T+rB/cXTk3VPH59eQGcBliulfrvdUD5vzlQs269yD+eCRz/WeM5/7ObSl/n
         ktR2F1JR4QNqxuEFKYZ63RUi/20PyPzX3CH8n7OL/T+LD89/TnnVxRzK6lbAQGQFambGnS5kGOplV/D+
         l13O958lifM/i7bMQ2DAuSCFPoFoVGKo55zC/J/Vm+8/u6rSKg4VDXsGLS024lOjEcNqVhfJ/1yyWhVs
-        ajoaUM2gOCdgMxGpnGZKAB08fCdr5YwoAAAAAElFTkSuQmCC
+        ajoaUM2gOCdgMxGpnGZKAO/ffBU42dUxAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btDebugMethod.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAh1JREFUOE+tk11I
+        k2EYhr9K0ciyCDQIoqIDEWoD0xoRHdiJUBRLOovAIiEQMpaWmTSZGdmBxBJR0sSfdJCVDgmJsixaP6Lm
+        dG5N2WZrbmUUrb65zV19fqEwCLXogfvkfbmv+3143kcQ/kdVGHyUNU9SctvN+VoX+TcdnK4c42SFnWPl
+        Vo5qLRwuNpNV+I7Ms/3szesjI/c1yhwTcv41CaBr8nCp3k1BzQRnZMA4x3WDZB8soUipplChRrNdTVHK
+        AY6o8ti88xSKOUBjh4nZmpmJEAxFEKcj+MUw+ko93phVIMTPazI2Af2FUjp7RknPOvH7BX8CWGzjtOfk
+        EoxJmDc749dSVVKOc1LE+My2MKCzvQOblDaX7o5LpLqoFJdHxOUNLAwwj9ioP5RNKHa1DHDHJ1KrvYrn
+        8zQffMHFAa+emxhYt0E2e4Q4Lq5Pouq6nqbWB4sDrDY7V/I12FOVMiAsqXvjFpobDFjHfYsDvvtFXvS+
+        xLQjTQKsZDB5E3dqGvBOBZfWgvujl8v7MmXziNRGS3UdU99C+L6EFgZ89YfxfPLT1naft4rdWNYkUXfj
+        Fg5PgDF3gPcTIqNOkWHHT4bGftDcNRg9xqd9Ezx+4+Tcnv3YpZFpC8ow9tro6LFy74mFu4+GMXSbaX04
+        REvXAI3G/mjA7K/alqpCk7wVVcou+XIpitrFDGGZLl1YnicdrvinJU0QhOI0QYj9G/Mvni0zbHWlBZ8A
+        AAAASUVORK5CYII=
 </value>
   </data>
   <data name="btShowHideCompilationErrors.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

@@ -18,6 +18,7 @@ using O2.Kernel.Interfaces.Views;
 using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
 using System.Threading;
+using O2.DotNetWrappers.ViewObjects;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -652,8 +653,8 @@ namespace O2.External.SharpDevelop.Ascx
                                     {
                                         if (cboxCompliledSourceCodeMethods.SelectedItem != null)
                                         {
-                                            var method = (MethodInfo) cboxCompliledSourceCodeMethods.SelectedItem;
-                                            O2Thread.mtaThread(() => DI.reflection.invoke(method, new object[0]));
+                                            var method = (Reflection_MethodInfo) cboxCompliledSourceCodeMethods.SelectedItem;
+                                            method.invokeMTA(new object[0]);
                                         }
                                         return null;
                                     });
@@ -696,23 +697,26 @@ namespace O2.External.SharpDevelop.Ascx
                     saveSourceCode();
                     // always save before compiling                                                
                     compileEngine.compileSourceFile(sPathToFileLoaded);
-                    compiledAssembly = compileEngine.compiledAssembly;
+                    compiledAssembly = compileEngine.compiledAssembly ?? null;
                 }
 
                 // set gui options depending on compilation result
                 var assemblyCreated = compiledAssembly != null;
-                
-                btShowHideCompilationErrors.Visible = lboxCompilationErrors.Visible = lbCompilationErrors.Visible = !assemblyCreated;
 
-                executeSelectedMethodToolStripMenuItem.Enabled = btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
-                                                lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible = assemblyCreated;
+                btShowHideCompilationErrors.Visible = tvCompilationErrors.Visible = lbCompilationErrors.Visible =
+                    !assemblyCreated && compileEngine.sbErrorMessage != null;
+                
+                btDebugMethod.Visible = executeSelectedMethodToolStripMenuItem.Visible = 
+                    btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
+                    lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible 
+                    = assemblyCreated;
                 cboxCompliledSourceCodeMethods.Items.Clear();
 
                 clearBookmarksAndMarkers();
                 // if there is compiledAssembly, show errors
                 if (!assemblyCreated)
                 {
-                    compileEngine.addErrorsListToListBox(lboxCompilationErrors);
+                    compileEngine.addErrorsListToTreeView(tvCompilationErrors);
                     showErrorsInSourceCodeEditor(compileEngine.sbErrorMessage.ToString());
                 }
                 else
@@ -720,7 +724,8 @@ namespace O2.External.SharpDevelop.Ascx
                     // if not, populate the cbox for dynamic execution                
                     O2Messages.dotNetAssemblyAvailable(compiledAssembly.Location);
                     foreach (var method in DI.reflection.getMethods(compiledAssembly))
-                        cboxCompliledSourceCodeMethods.Items.Add(method);
+                    if (false == method.IsAbstract && false == method.IsSpecialName)
+                        cboxCompliledSourceCodeMethods.Items.Add(new Reflection_MethodInfo(method));
                     // remap the previously executed method
                     if (cboxCompliledSourceCodeMethods.Items.Count > 0)
                     {
@@ -888,13 +893,24 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void showSelectedErrorOnSourceCodeFile()
         {
-            DI.log.info(lboxCompilationErrors.Text);
-            string[] sSplitedLine = lboxCompilationErrors.Text.Split(new [] {"::"}, StringSplitOptions.None);
+            var selectedError = getSelectedError();
+            if (selectedError == "")
+                return;
+            DI.log.info(selectedError);
+
+            string[] sSplitedLine = selectedError.Split(new[] { "::" }, StringSplitOptions.None);
             if (sSplitedLine.Length == 5)
             {
                 int iLine = Int32.Parse(sSplitedLine[0]);
                 gotoLine(iLine);                
             }
+        }
+
+        public string getSelectedError()
+        {
+            if (tvCompilationErrors.SelectedNode != null)
+                return tvCompilationErrors.SelectedNode.Text;
+            return "";
         }
 
         private object GetCurrentCSharpObjectModel()
@@ -1027,5 +1043,56 @@ namespace O2.External.SharpDevelop.Ascx
                 }
             
         }
+
+        
+       public void addBreakpointOnCurrentLine()
+        {
+            var currentLine = tecSourceCode.ActiveTextAreaControl.Caret.Line;
+            var lineSegment = tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetLineSegment(currentLine);
+            O2Messages.raiseO2MDbg_SetBreakPointOnFile(sPathToFileLoaded, lineSegment.LineNumber +1);
+        }
+
+       public void createStandAloneExeAndDebugMethod(string loadDllsFrom)
+       {
+           this.invokeOnThread(
+               () =>
+               {
+                   if (cboxCompliledSourceCodeMethods.SelectedItem != null && cboxCompliledSourceCodeMethods.SelectedItem is Reflection_MethodInfo)
+                   {
+                       ((Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem).raiseO2MDbgDebugMethodInfoRequest(loadDllsFrom);                       
+                   }
+               });
+       }
+
+       private void setDebugButtonEnableState()
+       {
+           this.invokeOnThread(
+           () =>
+           {
+               if (O2Messages.isDebuggerAvailable())
+               {
+                   btDebugMethod.Visible = true;
+                   if (cboxCompliledSourceCodeMethods.SelectedItem != null && cboxCompliledSourceCodeMethods.SelectedItem is Reflection_MethodInfo)
+                   {
+                       var selectedMethod = ((Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem).Method;
+                       if (selectedMethod != null)
+                       {
+                           if (selectedMethod.IsStatic &&
+                                   selectedMethod.ReturnType.FullName == "System.Void" &&
+                                   selectedMethod.GetParameters().Length == 0)
+                           {
+                               btDebugMethod.Enabled = true;
+                               return;
+                           }
+                           else
+                               DI.log.debug("Debugging note: the only supported methods to start the debugging session are: static methods, with no parameters and returning void");
+                       }
+                       btDebugMethod.Enabled = false;
+                   }
+               }
+               else
+                   btDebugMethod.Visible = false;
+           });
+       }
     }
 }

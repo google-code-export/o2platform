@@ -101,6 +101,13 @@ namespace Merlin
         Control UI
         {
             get;
+            set;
+        }
+
+        Type UIType
+        {
+            get;
+            set;
         }
 
         // DC        

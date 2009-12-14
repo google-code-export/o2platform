@@ -94,6 +94,7 @@
     <Compile Include="SearchApi\SearchUtils.cs" />
     <Compile Include="SearchApi\TextSearchResult.cs" />
     <Compile Include="Network\WebEncoding.cs" />
+    <Compile Include="ViewObjects\Reflection_MethodInfo.cs" />
     <Compile Include="Windows\Ascx_ExtensionMethods.cs" />
     <Compile Include="Windows\Controls.cs" />
     <Compile Include="Windows\O2Forms_ThreadSafe_FlowLayoutPanel.cs" />

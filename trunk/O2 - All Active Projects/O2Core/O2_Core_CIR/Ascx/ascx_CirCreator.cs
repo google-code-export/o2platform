@@ -33,7 +33,7 @@ namespace O2.Core.CIR.Ascx
 
         public void btCreateCirForSelectedFile_Click(object sender, EventArgs e)
         {            
-            createCirDataForFile(directory_CirCreationQueue.getSelectedItem_FullPath(),false);
+            createCirDataForFile(directory_CirCreationQueue.getSelectedItem_FullPath(),false, false /*decompileCodeIfNoPdb*/);
         }
 
         public void directory_CirCreationQueue__onDirectoryClick(string sString)

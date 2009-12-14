@@ -28,8 +28,14 @@ namespace O2.Debugger.Mdbg.O2Debugger
             if (!DesignMode)
             {
                 OriginalMDbgMessages.commandExecutionMessage += logCallback;
-                DI.o2MDbg = new O2MDbg(onShellStartCallback);                                             
+                startIfNullO2Mdbg();                                            
             }
+        }
+
+        private void startIfNullO2Mdbg()
+        {
+            if (DI.o2MDbg == null)
+                DI.o2MDbg = new O2MDbg(onShellStartCallback); 
         }
 
 
@@ -168,7 +174,13 @@ namespace O2.Debugger.Mdbg.O2Debugger
         private void tbCommands_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Enter)
-                DI.o2MDbg.executeMDbgCommand(tbCommands.Text);
+                if (DI.o2MDbg != null)
+                    DI.o2MDbg.executeMDbgCommand(tbCommands.Text);
+                else
+                {
+                    DI.log.error("o2Mdbg object was null, so restarting O2 debugger");
+                    startIfNullO2Mdbg();
+                }
         }
 
         private void startOrAttachToProcess_Click(object sender, EventArgs e)

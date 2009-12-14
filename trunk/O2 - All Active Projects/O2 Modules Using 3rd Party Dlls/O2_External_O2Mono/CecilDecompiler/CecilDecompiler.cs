@@ -7,6 +7,7 @@ using Cecil.Decompiler.ControlFlow;
 using Cecil.Decompiler.Languages;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using O2.DotNetWrappers.Windows;
 
 namespace O2.External.O2Mono.CecilDecompiler
 {
@@ -181,6 +182,35 @@ namespace O2.External.O2Mono.CecilDecompiler
 
             //return getIL_usingRawIlParsing(methodDefinition);
             //return "this is cloned IL";
+        }
+
+
+        public void decompile(AssemblyDefinition assemblyDefinition, string pathToSaveDecompiledSourceCode)
+        {
+     //       Files.checkIfDirectoryExistsAndCreateIfNot(pathToSaveDecompiledSourceCode);
+            //var methodIndex =  
+            try
+            {
+                foreach (var typeDefinition in MonoCecil.CecilUtils.getTypes(assemblyDefinition))
+                {
+                    DI.log.alsoShowInConsole = true;
+                    var sourceCodeContents = new StringBuilder();
+                    foreach (var method in MonoCecil.CecilUtils.getMethods((typeDefinition)))
+                    {
+                        DI.log.info("[{0}]decompiling method: {1}",sourceCodeContents.Length, method.ToString());
+                        sourceCodeContents.AppendLine(getSourceCode(method));
+                    }
+                    if (sourceCodeContents.Length > 0)
+                    {
+                        var targetFile = Path.Combine(pathToSaveDecompiledSourceCode, Files.getSafeFileNameString(typeDefinition.Name) + ".cs");
+                        Files.WriteFileContent(targetFile, sourceCodeContents.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in decompile: {0}", ex.Message);
+            }
         }
     }
 }

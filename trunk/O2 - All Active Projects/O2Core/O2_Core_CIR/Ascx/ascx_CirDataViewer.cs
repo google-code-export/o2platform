@@ -10,6 +10,8 @@ using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.Interfaces.CIR;
 using System.Drawing;
+using O2.Kernel.CodeUtils;
+using O2.Core.CIR.CirUtils.DotNet;
 
 namespace O2.Core.CIR.Ascx
 {
@@ -40,7 +42,7 @@ namespace O2.Core.CIR.Ascx
 
         private void functionsViewer__onDrop(object droppedObject)
         {
-            handleDrop(droppedObject, cbOnDropCalculateXRefs.Checked);
+            handleDrop(droppedObject, onFileDropOrLoadToolStripMenuItem.Checked, decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Checked);
         }
         
 
@@ -69,6 +71,7 @@ namespace O2.Core.CIR.Ascx
 
         private void functionsViewer__onAfterSelect(object selectedItem)
         {
+            currentSelectedFunction = null;
             var type = selectedItem.GetType().FullName;
             showFunctionInformation(selectedItem);
             //this.invokeOnThread(
@@ -90,7 +93,7 @@ namespace O2.Core.CIR.Ascx
                         cirFunction = cirDataAnalysis.dCirFunction_bySignature[filteredSignature.sOriginalSignature];
                     if (cirFunction != null)
                         if (cirFunction.ParentClass != null)
-                            ViewHelpers.raiseSourceCodeReferenceEvent(cbShowLineInSourceFile.Checked, cirFunction.ParentClass, true /* remapLineNumber */);
+                            ViewHelpers.raiseSourceCodeReferenceEvent(openSourceCodeFileAndSelectLineToolStripMenuItem.Checked, cirFunction.ParentClass, true /* remapLineNumber */);
                         else
                         {
                         }
@@ -101,7 +104,10 @@ namespace O2.Core.CIR.Ascx
                 var cirFunctionToProcess = mapFilteredSignatureToCirFunction(selectedItem);
                 if (cirFunctionToProcess != null)
                 {
-                    ViewHelpers.raiseSourceCodeReferenceEvent(cbShowLineInSourceFile.Checked, cirFunctionToProcess, true /* remapLineNumber */);
+                    currentSelectedFunction = cirFunctionToProcess;
+                    ViewHelpers.raiseSourceCodeReferenceEvent(openSourceCodeFileAndSelectLineToolStripMenuItem.Checked, cirFunctionToProcess, true /* remapLineNumber */);
+                    if (showFunctionsDecompiledCodeInSourceCodeViewerToolStripMenuItem.Checked)
+                        DecompiledCode.showDecompiledFunctionInSourceCodeViewer(cirFunctionToProcess, "Decompiled .NET Function");
                 }
             }
             
@@ -115,7 +121,7 @@ namespace O2.Core.CIR.Ascx
             
             //ascx_FunctionCalls.
             //showSelectedItemDetails(selectedItem);
-        }
+        }        
 
         public ICirFunction mapFilteredSignatureToCirFunction(object itemToProcess)
         {
@@ -309,8 +315,8 @@ namespace O2.Core.CIR.Ascx
         }
 
         private void llLoadCurrentAssembly_Click(object sender, EventArgs e)
-        {            
-            loadFile(DI.config.ExecutingAssembly, cbOnDropCalculateXRefs.Checked );
+        {
+            loadFile(DI.config.ExecutingAssembly, onFileDropOrLoadToolStripMenuItem.Checked, false /*decompileCodeIfNoPdb*/);
         }
 
         private void functionsViewer__onMouseMove(TreeNode treeNode)
@@ -327,8 +333,25 @@ namespace O2.Core.CIR.Ascx
                 }                
             }
         }
-        
-  
+
+        private void addBreakpointOnSelectedMethodifBreakpointIsEnabledToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currentSelectedFunction != null &&
+                false == string.IsNullOrEmpty(currentSelectedFunction.File) &&
+                false == string.IsNullOrEmpty(currentSelectedFunction.FileLine))
+            { 
+                var file = currentSelectedFunction.File;
+                Int32 lineNumber;
+                if (Int32.TryParse(currentSelectedFunction.FileLine, out lineNumber))
+                    O2Messages.raiseO2MDbg_SetBreakPointOnFile( file,lineNumber);
+            }
+        }
+
+        private void contextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            setBreakPointFeatures(O2Messages.isDebuggerAvailable());
+        }
+                  
 
     }
 }

@@ -63,6 +63,7 @@ namespace O2.Debugger.Mdbg.O2Debugger
                 () =>
                     {
                         DI.o2MDbg.execSync(O2MDbgCommands.run(executableToStart));
+                        DI.o2MDbg.BreakPoints.addArchivedBreakpoints();
                         DI.o2MDbg.execSync(O2MDbgCommands.stepInto());
 
                     });
@@ -212,6 +213,10 @@ namespace O2.Debugger.Mdbg.O2Debugger
             DI.log.info("Going to try to attach to processID {0}", processItToAttach);
             return O2Thread.mtaThread(() => DI.o2MDbg.attachToProcess(processItToAttach));
         }
+        public static bool IsDebuggerAvailable()
+        {
+            return DI.o2MDbg != null;
+        }
 
         public static bool IsRunning()
         {
@@ -320,6 +325,16 @@ namespace O2.Debugger.Mdbg.O2Debugger
                 return variableValue.Substring(1, variableValue.Length - 2);
             }
             return variableValue;
-        }        
+        }
+
+        public static void setBreakPointOnFile(string filePath, int lineNumber)
+        {
+            O2Thread.mtaThread(
+                () =>
+                {
+                    if (DI.o2MDbg != null && DI.o2MDbg.BreakPoints != null)
+                        DI.o2MDbg.BreakPoints.addBreakPoint(filePath, lineNumber.ToString());
+                });
+        }
     }
 }

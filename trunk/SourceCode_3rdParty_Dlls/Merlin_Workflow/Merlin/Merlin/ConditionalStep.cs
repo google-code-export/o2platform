@@ -78,7 +78,8 @@ namespace Merlin
         public string Title { get { return "Conditional Step"; } }
         public string Subtitle { get { return null; } }
 
-        public Control UI { get { return null; } }
+        public Control UI { get; set; }
+        public Type UIType { get; set; }
 
         public bool AllowNext()
         {

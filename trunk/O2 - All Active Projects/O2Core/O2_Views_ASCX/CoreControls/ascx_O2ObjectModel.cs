@@ -155,7 +155,12 @@ namespace O2.Views.ASCX.CoreControls
                 if (treeNode.Tag != null && treeNode.Tag is Assembly)
                     DoDragDrop((Assembly)treeNode.Tag, DragDropEffects.Copy);
             }
-        }        
-          
+        }
+
+        private void filteredFunctionsViewer__onItemDrag(object oObject)
+        {
+            handleOnItemDrag(oObject);
+        }
+                  
     }
 }

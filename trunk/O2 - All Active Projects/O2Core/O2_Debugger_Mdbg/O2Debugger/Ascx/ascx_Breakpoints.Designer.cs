@@ -39,6 +39,15 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
             this.label1 = new System.Windows.Forms.Label();
             this.cbAutoContinueOnBreakPointEvent = new System.Windows.Forms.CheckBox();
             this.llDeleteAllBreakpoints = new System.Windows.Forms.LinkLabel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lbArchivedBreakpoints = new System.Windows.Forms.ListBox();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tbBreakPointSignature
@@ -110,13 +119,11 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
             // 
             // lbCurrentBreakpoints
             // 
-            this.lbCurrentBreakpoints.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbCurrentBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbCurrentBreakpoints.FormattingEnabled = true;
-            this.lbCurrentBreakpoints.Location = new System.Drawing.Point(3, 104);
+            this.lbCurrentBreakpoints.Location = new System.Drawing.Point(3, 16);
             this.lbCurrentBreakpoints.Name = "lbCurrentBreakpoints";
-            this.lbCurrentBreakpoints.Size = new System.Drawing.Size(556, 199);
+            this.lbCurrentBreakpoints.Size = new System.Drawing.Size(546, 69);
             this.lbCurrentBreakpoints.TabIndex = 31;
             // 
             // label1
@@ -151,10 +158,63 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
             this.llDeleteAllBreakpoints.Text = "Delete ALL Breakpoints";
             this.llDeleteAllBreakpoints.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llDeleteAllBreakpoints_LinkClicked);
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(7, 113);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.groupBox2);
+            this.splitContainer1.Size = new System.Drawing.Size(552, 194);
+            this.splitContainer1.SplitterDistance = 97;
+            this.splitContainer1.TabIndex = 40;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lbCurrentBreakpoints);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(552, 97);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Active Breakpoints";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.lbArchivedBreakpoints);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(0, 0);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(552, 93);
+            this.groupBox2.TabIndex = 0;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Archived Breakpoints (with File references)";
+            // 
+            // lbArchivedBreakpoints
+            // 
+            this.lbArchivedBreakpoints.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbArchivedBreakpoints.FormattingEnabled = true;
+            this.lbArchivedBreakpoints.Location = new System.Drawing.Point(3, 16);
+            this.lbArchivedBreakpoints.Name = "lbArchivedBreakpoints";
+            this.lbArchivedBreakpoints.Size = new System.Drawing.Size(546, 69);
+            this.lbArchivedBreakpoints.TabIndex = 32;
+            this.lbArchivedBreakpoints.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lbArchivedBreakpoints_MouseDoubleClick);
+            // 
             // ascx_Breakpoints
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.llDeleteAllBreakpoints);
             this.Controls.Add(this.cbAutoContinueOnBreakPointEvent);
             this.Controls.Add(this.tbBreakPointSignature);
@@ -163,12 +223,16 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cbAutoAddBreakPointsOnSignatureChange);
             this.Controls.Add(this.btCreateBreakPoint);
-            this.Controls.Add(this.lbCurrentBreakpoints);
             this.Controls.Add(this.label1);
             this.Name = "ascx_Breakpoints";
             this.Size = new System.Drawing.Size(562, 310);
             this.Load += new System.EventHandler(this.ascx_Breakpoints_Load);
             this.Enter += new System.EventHandler(this.ascx_Breakpoints_Enter);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -186,5 +250,9 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox cbAutoContinueOnBreakPointEvent;
         private System.Windows.Forms.LinkLabel llDeleteAllBreakpoints;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ListBox lbArchivedBreakpoints;
     }
 }

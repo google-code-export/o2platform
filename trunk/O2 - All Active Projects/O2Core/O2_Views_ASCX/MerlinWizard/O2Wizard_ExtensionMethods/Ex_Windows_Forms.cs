@@ -15,7 +15,8 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
         {
             var textBox = new TextBox();
             textBox.Multiline = true;
-            textBox.ScrollBars = ScrollBars.Vertical;
+            textBox.WordWrap = false;
+            textBox.ScrollBars = ScrollBars.Both;
             textBox.ReadOnly = true;
             textBox.Text = message;
             textBox.Select(0, 0);

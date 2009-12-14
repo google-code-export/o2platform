@@ -523,12 +523,12 @@ namespace O2.Core.CIR.CirUtils
             cirDataAnalysis.lCirClass_bySuperClass = new List<string>();
         }
 
-        public static void loadFileIntoCirDataAnalysisObject(string sFileToLoad, ICirDataAnalysis cirDataAnalysis)
+        public static void loadFileIntoCirDataAnalysisObject(string sFileToLoad, ICirDataAnalysis cirDataAnalysis, bool decompileCodeIfNoPdb)
         {
-            loadFileIntoCirDataAnalysisObject(sFileToLoad, cirDataAnalysis, true,true /*useCachedVersionIfAvailable*/ , true /*runRemapXrefs*/);
+            loadFileIntoCirDataAnalysisObject(sFileToLoad, cirDataAnalysis, true, true /*useCachedVersionIfAvailable*/ , true /*runRemapXrefs*/, decompileCodeIfNoPdb);
         }
 
-        public static void loadFileIntoCirDataAnalysisObject(string sFileToLoad, ICirDataAnalysis cirDataAnalysis, bool showNotSupportedExtensionError, bool useCachedVersionIfAvailable, bool runRemapXrefs)
+        public static void loadFileIntoCirDataAnalysisObject(string sFileToLoad, ICirDataAnalysis cirDataAnalysis, bool showNotSupportedExtensionError, bool useCachedVersionIfAvailable, bool runRemapXrefs, bool decompileCodeIfNoPdb)
         {
             try
             {
@@ -543,7 +543,7 @@ namespace O2.Core.CIR.CirUtils
                         {
                             ICirData assemblyCirData = new CirData();
                             new CirFactory().processAssemblyDefinition(assemblyCirData,
-                                                                       CecilUtils.getAssembly(sFileToLoad),sFileToLoad);
+                                                                       CecilUtils.getAssembly(sFileToLoad), sFileToLoad, decompileCodeIfNoPdb);
                             if (assemblyCirData.dClasses_bySignature.Count == 0)
                                 DI.log.error("There were no classes imporeted from the file: {0}", sFileToLoad);
                             else

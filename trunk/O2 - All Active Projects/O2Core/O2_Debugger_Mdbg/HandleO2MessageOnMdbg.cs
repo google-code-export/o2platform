@@ -36,6 +36,9 @@ namespace O2.Debugger.Mdbg
                     case IM_O2MdbgActions.debugMethodInfoRequest:
                         O2MDbgUtils.debugMethod(o2MDbgAction.method, o2MDbgAction.loadDllsFrom);
                         break;
+                    case IM_O2MdbgActions.setBreakpointOnFile:
+                        O2MDbgUtils.setBreakPointOnFile(o2MDbgAction.filename, o2MDbgAction.line);
+                        break;
                 }
 
             }

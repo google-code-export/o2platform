@@ -329,8 +329,9 @@ namespace O2.DotNetWrappers.Windows
 
             String sTargetDirectory = DI.config.TempFolderInTempDirectory + "_" + DI.config.CurrentExecutableFileName;
             Directory.CreateDirectory(sTargetDirectory);
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())                            
-                Files.Copy(assembly.Location, sTargetDirectory);                        
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                if (assembly.Location != "") 
+                    Files.Copy(assembly.Location, sTargetDirectory);                        
             //String sCurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
             //Files.copyFilesFromDirectoryToDirectory(sCurrentDirectory, sTargetDirectory);
             String sCommandLine = Environment.CommandLine.Replace("\"", "").Replace(".vshost", "");

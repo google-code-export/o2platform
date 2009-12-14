@@ -91,7 +91,8 @@ namespace O2.Views.ASCX.DataViewers
             this.tvTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvTreeView_AfterSelect);
             this.tvTreeView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tvTreeView_MouseMove);
             this.tvTreeView.DragEnter += new System.Windows.Forms.DragEventHandler(this.tvTreeView_DragEnter);
-            this.tvTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvTreeView_ItemDrag);            
+            this.tvTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvTreeView_NodeMouseClick);
+            this.tvTreeView.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvTreeView_ItemDrag);
             // 
             // ilClassesAndMethods
             // 

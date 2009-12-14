@@ -270,21 +270,22 @@ namespace O2.DotNetWrappers.Windows
             }
         }
 
-        public static void loadTreeViewWith_AssembliesInCurrentAppDomain(TreeView treeview, List<Assembly> dontAddTheseAssemblies,bool showCheckBoxes)
-        {            
+        public static void loadTreeViewWith_AssembliesInCurrentAppDomain(TreeView treeview, List<Assembly> assembliesAlreadyLoaded,bool showCheckBoxes)
+        {
+            treeview.Nodes.Clear();
             foreach (var assemblyInAppDomain in DI.reflection.getAssembliesInCurrentAppDomain())
             {
-                var dontAdd = false;
-                foreach (var dontAddThisAssembly in dontAddTheseAssemblies)
+                var assemblyLoaded = false;
+                foreach (var assemblyAlreadyLoaded in assembliesAlreadyLoaded)
                 {
-                    if (dontAddThisAssembly.FullName == assemblyInAppDomain.FullName)
+                    if (assemblyAlreadyLoaded.FullName == assemblyInAppDomain.FullName)
                     {
-                        dontAdd = true;
+                        assemblyLoaded = true;
                         break;
                     }
                 }
-                if (false == dontAdd)
-                {
+                //if (false == dontAdd)
+                //{
                     var newNode = newTreeNode(treeview.Nodes, assemblyInAppDomain.GetName().Name, 0, assemblyInAppDomain);
                     if (assemblyInAppDomain.Location != "")
                     {
@@ -292,7 +293,9 @@ namespace O2.DotNetWrappers.Windows
                         if (File.Exists(pdbFile))
                             newNode.ForeColor = Color.DarkGreen;
                     }
-                }
+                    if (assemblyLoaded)
+                        newNode.Checked = true;
+                //}
 
             }
             if (showCheckBoxes)
@@ -1041,13 +1044,16 @@ namespace O2.DotNetWrappers.Windows
         /// <summary>
         /// Async Thread safe way to add nodes to TreeViews
         /// </summary>       
-        public static void addNodeToTreeNodeCollection(Control controlInCorrectThread, TreeNodeCollection targetTreeNodeCollection, TreeNode newNode)
+        public static void addNodeToTreeNodeCollection(Control controlInCorrectThread, TreeNodeCollection targetTreeNodeCollection, TreeNode newNode, int maxNodesToAdd)
         {
-            if (controlInCorrectThread.okThread(delegate { addNodeToTreeNodeCollection(controlInCorrectThread,targetTreeNodeCollection, newNode); }))
-            {
-                if (Thread.CurrentThread.IsAlive)
-                    targetTreeNodeCollection.Add(newNode);               
-            }
+            //            if (controlInCorrectThread.okThread(delegate { addNodeToTreeNodeCollection(controlInCorrectThread,targetTreeNodeCollection, newNode); }))
+            controlInCorrectThread.invokeOnThread(
+                () =>
+                {
+                    if (targetTreeNodeCollection.Count < maxNodesToAdd)
+                        if (Thread.CurrentThread.IsAlive)
+                            targetTreeNodeCollection.Add(newNode);
+                });
         }
 
         public static void closeForm(Form formToClose)

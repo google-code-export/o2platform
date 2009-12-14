@@ -116,10 +116,12 @@ namespace O2.DotNetWrappers.Filters
                                        ? getGenericSignature(parameter.ParameterType)
                                        : parameter.ParameterType.FullName;
                     sParameters += parameterValue; //makeDotNetSignatureCompatibleWithOunceRules(parameterValue);
-                    sParameters += ", ";
+                    //sParameters += ", ";
+                    sParameters += ";";
                 }
                 if (sParameters != "")
-                    sParameters = sParameters.Substring(0, sParameters.Length - 2);
+                    //sParameters = sParameters.Substring(0, sParameters.Length - 2);
+                    sParameters = sParameters.Substring(0, sParameters.Length - 1);
 
                 //sReturnClass = makeDotNetSignatureCompatibleWithOunceRules(getGenericSignature(methodInfo.ReturnType));
                 sReturnClass = getGenericSignature(methodInfo.ReturnType);
@@ -147,7 +149,9 @@ namespace O2.DotNetWrappers.Filters
                 genericArguments += type.FullName + ",";
             if (genericArguments != "")
                 genericArguments = genericArguments.Substring(0, genericArguments.Length - 1);
-            return string.Format("List<{0}>", genericArguments);
+            //return string.Format("List<{0}>", genericArguments);
+            return string.Format("System.Collections.Generic.List`1<{0}>", genericArguments); // this will make it compatible with the signatures we get from Mono.Cecil
+            
         }
 
         public string getReflectorView()

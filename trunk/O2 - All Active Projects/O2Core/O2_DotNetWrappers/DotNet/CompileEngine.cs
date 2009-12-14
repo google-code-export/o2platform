@@ -22,6 +22,7 @@ namespace O2.DotNetWrappers.DotNet
         static List<string> specialO2Tag_ExtraReferences = new List<string>() {"//O2Tag_AddReferenceFile:", "//O2Ref:"};
         static List<string> specialO2Tag_ExtraSourceFile = new List<string>() { "//O2Tag_AddSourceFile:", "//O2File:" };
         static List<string> specialO2Tag_ExtraFolder = new List<string>() { "//O2Tag_AddSourceFolder:", "//O2Folder:", "//O2Dir:" };
+        static List<string> specialO2Tag_DontCompile= new List<string>() { "//O2NoCompile"};
 
         public Assembly compiledAssembly;
         public CompilerResults crCompilerResults;
@@ -131,12 +132,12 @@ namespace O2.DotNetWrappers.DotNet
                         addErrorsListToListBox(sbErrorMessage.ToString(), lbSourceCode_CompilationResult);
                     });
         }
-
+        // note that this functionality was moved into a TreeView (in the current version of SourceCodeEditor)        
         public void addErrorsListToListBox(string sErrorMessages, ListBox lbSourceCode_CompilationResult)
         {
             if (sErrorMessages == null)
                 return;
-
+            
             String[] sSplitedErrorMessage = sErrorMessages.Split(new[] {Environment.NewLine},
                                                                  StringSplitOptions.RemoveEmptyEntries);
             foreach (string sSplitMessage in sSplitedErrorMessage)
@@ -151,6 +152,37 @@ namespace O2.DotNetWrappers.DotNet
                 }*/
                 if (false == sSplitMessage.Contains("conflicts with the imported type"))        // ignore these warning which mostlikely will be caused by adding extra files (via O2) to this script
                     lbSourceCode_CompilationResult.Items.Add(sSplitMessage);
+            }
+        }
+
+        public void addErrorsListToTreeView(TreeView tvCompilationErrors)
+        {
+            tvCompilationErrors.invokeOnThread(
+             () =>
+             {
+                 if (sbErrorMessage == null)
+                     return;
+                 tvCompilationErrors.Nodes.Clear();
+                 addErrorsListToTreeView(sbErrorMessage.ToString(), tvCompilationErrors);
+             });
+        }
+
+        private void addErrorsListToTreeView(string errorMessages, TreeView tvCompilationErrors)
+        {
+            if (errorMessages == null)
+                return;
+
+            String[] sSplitedErrorMessage = errorMessages.Split(new[] { Environment.NewLine },
+                                                                 StringSplitOptions.RemoveEmptyEntries);
+            foreach (string sSplitMessage in sSplitedErrorMessage)
+            {
+                var newNode = O2Forms.newTreeNode(tvCompilationErrors.Nodes, sSplitMessage, 0, sSplitMessage);
+                newNode.ToolTipText = sSplitMessage;
+
+                if (sSplitMessage.Contains("conflicts with the imported type"))   
+                    newNode.ForeColor = Color.Gray;
+                else
+                    newNode.ForeColor = Color.Red;                     
             }
         }
 
@@ -246,6 +278,9 @@ namespace O2.DotNetWrappers.DotNet
         public Assembly compileSourceFiles(List<String> sourceCodeFiles, string mainClass,
                                                  string outputAssemblyName)
         {
+            sourceCodeFiles = checkForNoCompileFiles(sourceCodeFiles);
+            if (sourceCodeFiles.Count == 0)
+                return null;
             string errorMessages = "";
             compiledAssembly = null;
             var referencedAssemblies = getListOfReferencedAssembliesToUse();
@@ -259,6 +294,20 @@ namespace O2.DotNetWrappers.DotNet
                 return compiledAssembly;
             PublicDI.log.error("Compilation failed: {0}", errorMessages);
             return null;
+        }
+
+        public static List<string> checkForNoCompileFiles(List<string> sourceCodeFiles)
+        {
+            var filesToNotCompile = new List<string>();
+            foreach(var sourceCodeFile in sourceCodeFiles)
+                if ("" != StringsAndLists.InFileTextStartsWithStringListItem(sourceCodeFile, specialO2Tag_DontCompile))
+                    filesToNotCompile.Add(sourceCodeFile);
+            foreach (var fileToNotCompile in filesToNotCompile)
+            {
+                PublicDI.log.debug("Removing from list of files to compile the file: {0}", fileToNotCompile);
+                sourceCodeFiles.Remove(fileToNotCompile);
+            }
+            return sourceCodeFiles;                
         }
 
         public static void addSourceFileOrFolderIncludedInSourceCode(List<string> sourceCodeFiles)
@@ -361,7 +410,7 @@ namespace O2.DotNetWrappers.DotNet
                         var extraReference = fileLine.Replace(match, "").Trim();
                         if (File.Exists(extraReference) && false == referencedAssemblies.Contains(extraReference))
                         {
-                            Files.Copy(extraReference, PublicDI.config.O2TempDir);
+                            Files.Copy(extraReference, PublicDI.config.O2TempDir, true);
                             /*var assembly = PublicDI.reflection.getAssembly(extraReference);
                             if (assembly == null)
                                 DI.log.error("(this could be a problem for execution) in addReferencesIncludedInSourceCode could not load assembly :{0}", extraReference);
@@ -396,6 +445,7 @@ namespace O2.DotNetWrappers.DotNet
         {
             try
             {
+                showErrorMessageIfPathHasParentheses(sourceCodeFiles);
                 if (outputAssemblyName == "")
                     outputAssemblyName = PublicDI.config.TempFileNameInTempDirectory;
                 if (!Directory.Exists(Path.GetDirectoryName(outputAssemblyName)))
@@ -420,7 +470,12 @@ namespace O2.DotNetWrappers.DotNet
                     cpCompilerParameters.OutputAssembly += ".exe";
                     cpCompilerParameters.MainClass = exeMainClass;
                     cpCompilerParameters.GenerateExecutable = true;
-                }                
+                }
+
+
+                // need to add a solution to add LinkedResources to these dynamic compilation dlls
+                //                cpCompilerParameters.LinkedResources.Add();
+                
 
                 // I was doing this all in memory but with the Add-ons there were probs running some of the O2JavaScript d
                 //                cpCompilerParameters.GenerateInMemory = true;                
@@ -483,6 +538,13 @@ namespace O2.DotNetWrappers.DotNet
             }
             return false;
         }
+        
+        private void showErrorMessageIfPathHasParentheses(List<string> sourceCodeFiles)
+        {
+            foreach(var file in sourceCodeFiles)
+                if(file.Contains("(") || file.Contains(")"))
+                    PublicDI.log.error("File to compile had a parentheses so error messages will not have line numbers (see http://forums.asp.net/p/1009965/1556589.aspx): {0}", file);
+        }
 
         public static void addExtraFileReferencesToSelectedNode(TreeView treeView, string file)
         {
@@ -510,5 +572,7 @@ namespace O2.DotNetWrappers.DotNet
                 treeNode.ExpandAll();
             }
         }
+
+        
     }
 }

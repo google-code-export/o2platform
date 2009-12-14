@@ -212,6 +212,11 @@ namespace O2.Views.ASCX.DataViewers
             var currentNode = tvTreeView.GetNodeAt(e.Location);
             if (currentNode != null)
                 Callbacks.raiseRegistedCallbacks(_onMouseMove, new[] { currentNode});
+        }
+
+        private void tvTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            tvTreeView.SelectedNode = e.Node;
         }                     
 
     }

@@ -20,6 +20,8 @@ using O2.Kernel.InterfacesBaseImpl;
 using O2.Views.ASCX.DataViewers;
 using O2.Views.ASCX.O2Findings;
 using System.Reflection;
+using O2.Kernel.CodeUtils;
+using O2.Core.CIR.CirCreator.DotNet;
 
 namespace O2.Core.CIR.Ascx
 {
@@ -29,14 +31,21 @@ namespace O2.Core.CIR.Ascx
         public TreeNode previousMouseOverNode;
         public bool runOnLoad = true;
 
+        public ICirFunction currentSelectedFunction;
+
         private void onLoad()
         {
             if (runOnLoad && false == DesignMode)
             {
                 PublicDI.o2MessageQueue.onMessages += o2MessageQueue_onMessages;
                 cirDataAnalysis = new CirDataAnalysis();                                                
-                runOnLoad = false;
+                runOnLoad = false;                                
             }
+        }
+
+        private void setBreakPointFeatures(bool isDebuggerAvailable)
+        {
+            addBreakpointOnSelectedMethodifBreakpointIsEnabledToolStripMenuItem.Visible = isDebuggerAvailable;
         }
 
         
@@ -70,6 +79,10 @@ namespace O2.Core.CIR.Ascx
 
         public void updateCirDataStats()
         {
+            updateCirDataStats(true);
+        }
+        public void updateCirDataStats(bool refreshLoadedFunctions)
+        {
             this.invokeOnThread(
                 () =>
                 {
@@ -77,7 +90,8 @@ namespace O2.Core.CIR.Ascx
                     laNumberOfClasses.Text = cirDataAnalysis.dCirClass_bySignature.Count.ToString();
                     laNumberOfFunctions.Text = cirDataAnalysis.dCirFunction_bySignature.Count.ToString();
                     //showLoadedClasses(); // default to Class view
-                    showLoadedFunctions(); // default to Function view
+                    if (refreshLoadedFunctions)
+                        showLoadedFunctions(); // default to Function view
 
                 });
         }
@@ -139,7 +153,7 @@ namespace O2.Core.CIR.Ascx
 
         public void showSignatures(List<string> signaturesToShow)
         {
-            functionsViewer.showSignatures(signaturesToShow);
+            functionsViewer.showSignatures(signaturesToShow);            
         }
 
         public void showLoadedClasses()
@@ -167,26 +181,27 @@ namespace O2.Core.CIR.Ascx
                 });
         }
 
-        public void loadFile(string sFileToLoad, bool remapXrefs)
+        public void loadFile(string sFileToLoad, bool remapXrefs, bool decompileCodeIfNoPdb)
         {
-            loadFile(sFileToLoad, true, true, remapXrefs);
+            DI.log.info("in CirDataViewer->LoadingFile :{0}", sFileToLoad);
+            loadFile(sFileToLoad, true, true, remapXrefs, decompileCodeIfNoPdb);
         }
 
-        public void loadFile(string sFileToLoad, bool showNotSupportedExtensionError, bool useCachedVersionIfAvailable, bool remapXrefs)
+        public void loadFile(string sFileToLoad, bool showNotSupportedExtensionError, bool useCachedVersionIfAvailable, bool remapXrefs, bool decompileCodeIfNoPdb)
         {
-            CirDataAnalysisUtils.loadFileIntoCirDataAnalysisObject(sFileToLoad, cirDataAnalysis, showNotSupportedExtensionError, useCachedVersionIfAvailable, remapXrefs);   // load file           
+            CirDataAnalysisUtils.loadFileIntoCirDataAnalysisObject(sFileToLoad, cirDataAnalysis, showNotSupportedExtensionError, useCachedVersionIfAvailable, remapXrefs, decompileCodeIfNoPdb);   // load file           
             updateCirDataStats();
         }
 
-        public void loadFiles(IEnumerable<string> filesToLoad, bool remapXrefs)
+        public void loadFiles(IEnumerable<string> filesToLoad, bool remapXrefs, bool decompileCodeIfNoPdb)
         {
-            loadFiles(filesToLoad, true, true, remapXrefs);
+            loadFiles(filesToLoad, true, true, remapXrefs, decompileCodeIfNoPdb);
         }
 
-        public void loadFiles(IEnumerable<string> filesToLoad, bool showNotSupportedExtensionError, bool useCachedVersionIfAvailable, bool remapXrefs)
+        public void loadFiles(IEnumerable<string> filesToLoad, bool showNotSupportedExtensionError, bool useCachedVersionIfAvailable, bool remapXrefs, bool decompileCodeIfNoPdb)
         {
             foreach (var fileToLoad in filesToLoad)
-                CirDataAnalysisUtils.loadFileIntoCirDataAnalysisObject(fileToLoad, cirDataAnalysis, showNotSupportedExtensionError, useCachedVersionIfAvailable, false /*runRemapXrefs*/); // since we are loading multiple files never run the remap on file load
+                CirDataAnalysisUtils.loadFileIntoCirDataAnalysisObject(fileToLoad, cirDataAnalysis, showNotSupportedExtensionError, useCachedVersionIfAvailable, false /*runRemapXrefs*/, decompileCodeIfNoPdb); // since we are loading multiple files never run the remap on file load
 
             if (remapXrefs)
                 CirDataAnalysisUtils.remapXrefs(cirDataAnalysis);
@@ -354,7 +369,7 @@ namespace O2.Core.CIR.Ascx
             return allCirFunctions;
         }
 
-        private void handleDrop(object droppedObject, bool remapXRefs)
+        private void handleDrop(object droppedObject, bool remapXRefs, bool decompileCodeIfNoPdb)
         {
             this.invokeOnThread(() =>
                 {
@@ -363,24 +378,45 @@ namespace O2.Core.CIR.Ascx
 
             var fileOrDirectoryToLoad = droppedObject.ToString();
             if (droppedObject is Assembly)
-                loadFile(((Assembly)droppedObject).Location, remapXRefs);
+                loadFile(((Assembly)droppedObject).Location, remapXRefs, decompileCodeIfNoPdb);
             else if (droppedObject is List<FilteredSignature>)
                 showSignatures(((List<FilteredSignature>)droppedObject));
             else if (File.Exists(fileOrDirectoryToLoad))
-                loadFile(fileOrDirectoryToLoad, remapXRefs);
+                loadFile(fileOrDirectoryToLoad, remapXRefs, decompileCodeIfNoPdb);
             else if (Directory.Exists(fileOrDirectoryToLoad))
             {
-                loadFiles(Directory.GetFiles(fileOrDirectoryToLoad), remapXRefs);
+                loadFiles(Directory.GetFiles(fileOrDirectoryToLoad), remapXRefs, decompileCodeIfNoPdb);
             }
             else if (droppedObject is List<ICirFunction>)
             {
-                var droppedCirFunctions = (List<ICirFunction>)droppedObject;
-                foreach (var cirFunction in droppedCirFunctions)
-                    if (false == cirDataAnalysis.dCirFunction_bySignature.ContainsValue(cirFunction))
-                        cirDataAnalysis.dCirFunction_bySignature.Add(cirFunction.FunctionSignature, cirFunction);
-                updateCirDataStats();
-            }            
+                addCirFunctions((List<ICirFunction>)droppedObject);
+            }
+            else if (droppedObject is List<MethodInfo>)
+                addMethodInfos((List<MethodInfo>) droppedObject);
             this.invokeOnThread(() => lbLoadingDroppedFile.Visible = false);
+        }
+
+        private void addMethodInfos(List<MethodInfo> methodInfos)
+        {            
+            var cirFunctions = new List<ICirFunction>();
+            var cirDataAnalysis = new CirFactory().createCirDataAnalysisObject(methodInfos);
+            addCirFunctions(cirDataAnalysis.dCirFunction_bySignature.Values.ToList());
+                                         
+        }
+
+        private void addCirFunctions(List<ICirFunction> cirFunctionsToAdd)
+        {
+            foreach (var cirFunction in cirFunctionsToAdd)
+                //if (false == cirDataAnalysis.dCirFunction_bySignature.ContainsValue(cirFunction))
+                if (false == cirDataAnalysis.dCirFunction_bySignature.ContainsKey(cirFunction.FunctionSignature))
+                    //if (false == cirDataAnalysis.dCirFunction_bySignature.ContainsKey[cirFunction.FunctionSignature]);
+                        cirDataAnalysis.dCirFunction_bySignature.Add(cirFunction.FunctionSignature, cirFunction);
+            updateCirDataStats(false);
+
+            var signaturesToShow = new List<string>();
+            foreach (var cirFunctionToAdd in cirFunctionsToAdd)
+                signaturesToShow.Add(cirFunctionToAdd.FunctionSignature);
+            showSignatures(signaturesToShow);
         }
 
         /*public void loadO2ObjectModel()
@@ -404,10 +440,16 @@ namespace O2.Core.CIR.Ascx
                 var cirFunctions = new List<ICirFunction>();
                 foreach(var functionSignature in (List<FilteredSignature>)objectToDrag)
                 {
-                    if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(functionSignature.sSignature))
+                    var cirFunction = mapFilteredSignatureToCirFunction(functionSignature);
+                    if (cirFunction != null)
+                    {
+                        cirFunctions.Add(cirFunction);
+                    }
+                    /*if (cirDataAnalysis.dCirFunction_bySignature.ContainsKey(functionSignature.sSignature))
                         cirFunctions.Add(cirDataAnalysis.dCirFunction_bySignature[functionSignature.sSignature]);
                     else
                         DI.log.error("in handleOnItemDrag could not resolve into CirFunction the signature: {0}", functionSignature.sSignature);
+                     * */
                 }
 
                 objectToDrag = cirFunctions;

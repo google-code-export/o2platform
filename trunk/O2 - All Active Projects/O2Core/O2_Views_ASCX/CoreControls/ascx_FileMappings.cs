@@ -2,8 +2,10 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using O2.Kernel;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel.CodeUtils;
+
 
 namespace O2.Views.ASCX.CoreControls
 {
@@ -53,7 +55,7 @@ namespace O2.Views.ASCX.CoreControls
 
         private void tbExtensionsToShow_TextChanged(object sender, EventArgs e)
         {
-            setExtensionsToShow(tbExtensionsToShow.Text);
+            setExtensionsToShow_internal(tbExtensionsToShow.Text);
         }
 
         private void tvFileMappings_ItemDrag(object sender, ItemDragEventArgs e)
@@ -114,7 +116,7 @@ namespace O2.Views.ASCX.CoreControls
         private void btLoadFilesFromO2TempDir_Click(object sender, EventArgs e)
         {
             clearMappings();
-            loadFilesFromFolder(DI.config.O2TempDir, tbViewFilter.Text);
+            loadFilesFromFolder(PublicDI.config.O2TempDir, tbViewFilter.Text);
             lbDropHelpInfo.Visible = false;
         }
 

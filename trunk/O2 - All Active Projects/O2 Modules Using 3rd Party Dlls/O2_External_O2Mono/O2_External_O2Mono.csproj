@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F457A7EB-A573-41BB-BC12-61ABE5ACF702}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -62,6 +62,7 @@
       <DependentUpon>ascx_O2Reflector.cs</DependentUpon>
     </Compile>
     <Compile Include="AssemblyAnalysisImpl.cs" />
+    <Compile Include="CecilDecompiler\CecilDecompiler.cs" />
     <Compile Include="MonoCecil\CecilConvert.cs" />
     <Compile Include="MonoCecil\MethodCalled.cs" />
     <Compile Include="MonoCecil\StandAloneExe.cs" />
@@ -70,7 +71,6 @@
     <Compile Include="MonoCecil\CecilAssemblyBuilder.cs" />
     <Compile Include="MonoCecil\CecilAssemblyDependencies.cs" />
     <Compile Include="MonoCecil\CecilCodeSearch.cs" />
-    <Compile Include="CecilDecompiler\CecilDecompiler.cs" />
     <Compile Include="ViewHelpers\CecilFilteredSignature.cs" />
     <Compile Include="MonoCecil\CecilOpCodeUtils.cs" />
     <Compile Include="MonoCecil\CecilUtils.cs" />

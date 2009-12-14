@@ -69,19 +69,29 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
 
         private void refreshBreakPointList()
         {
-            if (this.okThread(delegate { refreshBreakPointList(); }))
-            {
-                lbCurrentBreakpoints.Items.Clear();
-                var activeBreakpoints = DI.o2MDbg.BreakPoints.getActiveBreakpoints();
-                foreach (var breakpoint in activeBreakpoints)
-                    if (lbCurrentBreakpoints.Items.Count < 2000)
-                        lbCurrentBreakpoints.Items.Add(breakpoint);
-                    else
+            this.invokeOnThread(
+                () =>
+                {
+                    if (DI.o2MDbg != null)
                     {
-                        DI.log.error("only the first 2000 (of {0}) breakpoints were displayed", activeBreakpoints.Count);
-                        break;
+                        // list current breakpoints
+                        lbCurrentBreakpoints.Items.Clear();
+                        var activeBreakpoints = DI.o2MDbg.BreakPoints.getActiveBreakpoints();
+                        foreach (var breakpoint in activeBreakpoints)
+                            if (lbCurrentBreakpoints.Items.Count < 2000)
+                                lbCurrentBreakpoints.Items.Add(breakpoint);
+                            else
+                            {
+                                DI.log.error("only the first 2000 (of {0}) breakpoints were displayed", activeBreakpoints.Count);
+                                break;
+                            }
+
+                        // list archived breakpoints
+                        lbArchivedBreakpoints.Items.Clear();
+                        foreach (var archivedBreakPoint in DI.o2MDbg.BreakPoints.archivedBreakpoints_InSourceCode)
+                            lbArchivedBreakpoints.Items.Add(archivedBreakPoint);
                     }
-            }
+                });
         }
         
 

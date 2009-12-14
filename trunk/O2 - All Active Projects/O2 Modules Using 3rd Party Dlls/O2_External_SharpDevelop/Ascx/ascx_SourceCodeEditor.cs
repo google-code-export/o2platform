@@ -3,6 +3,7 @@ using System;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor.Document;
 using O2.DotNetWrappers.DotNet;
+using O2.Kernel.CodeUtils;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -305,7 +306,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void btShowHideCompilationErrors_Click(object sender, EventArgs e)
         {
-            lboxCompilationErrors.Visible = !lboxCompilationErrors.Visible;
+            tvCompilationErrors.Visible = !tvCompilationErrors.Visible;
         }
 
         private void tbShowO2ObjectModel_Click(object sender, EventArgs e)
@@ -356,7 +357,38 @@ namespace O2.External.SharpDevelop.Ascx
         private void executeSelectedMethodToolStripMenuItem_Click(object sender, EventArgs e)
         {
             O2Thread.mtaThread(executeMethod);
-        }      
-                                              
+        }
+
+        private void addBreakpointOnCurrentLineToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            addBreakpointOnCurrentLine();
+        }
+
+        private void btDebugMethod_Click(object sender, EventArgs e)
+        {
+            createStandAloneExeAndDebugMethod("");
+        }
+
+        private void cboxCompliledSourceCodeMethods_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void cboxCompliledSourceCodeMethods_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            setDebugButtonEnableState();
+        }
+
+        private void menuStripForSourceEdition_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            addBreakpointOnCurrentLineToolStripMenuItem.Visible = O2Messages.isDebuggerAvailable();
+        }
+
+        private void tvCompilationErrors_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            showSelectedErrorOnSourceCodeFile();
+        }
+        
+                                                                          
     }
 }
