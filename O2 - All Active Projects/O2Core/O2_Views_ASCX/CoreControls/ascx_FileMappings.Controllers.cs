@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using O2.Kernel;
 using O2.Kernel.CodeUtils;
-using System.Drawing;
 
 namespace O2.Views.ASCX.CoreControls
 {
@@ -76,7 +77,7 @@ namespace O2.Views.ASCX.CoreControls
                                     filesInFolder =>
                                         {
                                             recursiveFileSearchCompleted = true;
-                                            DI.log.info("There where {0} files discovered in folder",
+                                            PublicDI.log.info("There where {0} files discovered in folder",
                                                         filesInFolder.Count);
                                             foreach (string file in filesInFolder)
                                                 addFile(file, false, viewFilter);
@@ -108,7 +109,7 @@ namespace O2.Views.ASCX.CoreControls
             }
             catch (Exception ex)
             {
-                DI.log.error("in addFolder:{0}", ex.Message);
+                PublicDI.log.error("in addFolder:{0}", ex.Message);
             }
         }
 
@@ -223,6 +224,8 @@ namespace O2.Views.ASCX.CoreControls
                                               lbSelectedFile.Text = string.Format("Size:  {0:#,###,###.0} Mb",
                                                                                   totalFilesSizeInMb);
                                               lbStatus.Text = "Load Complete";
+
+                                              setLbNumberOfFilesSelectedText();
                                           }));
                     });
         }
@@ -275,7 +278,7 @@ namespace O2.Views.ASCX.CoreControls
             cbRecursiveLoadForFolders.Checked = mode;
         }
 
-        public void setExtensionsToShow(string extentionsToShow)
+        private void setExtensionsToShow_internal(string extentionsToShow)
         {
             extentionsToShow = extentionsToShow.Replace(",", " ");      // remove * and , since we don't use them in the filter but they are obvious choises for users to enter as part of their filter
             extensionsFilter = new List<string>();
@@ -290,25 +293,31 @@ namespace O2.Views.ASCX.CoreControls
                         extensionsFilter[i] = "." + extensionsFilter[i];
                 }
             }
+            setLbNumberOfFilesSelectedText();
         }
-        public void setExtensionsToShow_viaGUIevents(string extentionsToShow)
+        public void setExtensionsToShow(string extentionsToShow)
         {
             this.invokeOnThread(
              () =>
              {
                  tbExtensionsToShow.Text = extentionsToShow;
-                 applyColorsToRootNodes();
+                 applyColorsToRootNodes();                 
              });
+        }
+
+        private void setLbNumberOfFilesSelectedText()
+        {
+            this.invokeOnThread(()=> lbNumberOfFilesSelected.Text = getFilesThatMatchCurrentExtensionFilter().Count().ToString());
         }
 
         public void setExtensionsToShow_DotNetFiles()
         {
-            setExtensionsToShow_viaGUIevents(extensionFilter_DotNetFiles);
+            setExtensionsToShow(extensionFilter_DotNetFiles);
         }
 
         public void setExtensionsToShow_JavaFiles()
         {
-            setExtensionsToShow_viaGUIevents(extensionFilter_JavaFiles);
+            setExtensionsToShow(extensionFilter_JavaFiles);
         }
         
         public List<String> getLoadedFiles()
@@ -316,7 +325,7 @@ namespace O2.Views.ASCX.CoreControls
             return loadedFiles;
         }
 
-        private List<string> getFilesThatMatchCurrentExtensionFilter()
+        public List<string> getFilesThatMatchCurrentExtensionFilter()
         {
             var files = new List<string>();
             foreach (string extension in mappingsOfLoadedFiles.Keys)

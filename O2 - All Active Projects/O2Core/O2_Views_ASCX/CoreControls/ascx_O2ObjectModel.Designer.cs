@@ -44,7 +44,6 @@ namespace O2.Views.ASCX.CoreControls
             this.lbMethodDetails_Name = new System.Windows.Forms.Label();
             this.tbMethodDetails_Type = new System.Windows.Forms.TextBox();
             this.lbMethodDetails_Type = new System.Windows.Forms.Label();
-            this.filteredFunctionsViewer = new O2.Views.ASCX.DataViewers.ascx_FunctionsViewer();
             this.tbFilterBy_ReturnType = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tbFilterBy_ParameterType = new System.Windows.Forms.TextBox();
@@ -54,7 +53,6 @@ namespace O2.Views.ASCX.CoreControls
             this.tbFilterBy_MethodType = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.functionsViewer = new O2.Views.ASCX.DataViewers.ascx_FunctionsViewer();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tvAssembliesLoaded = new System.Windows.Forms.TreeView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
@@ -63,6 +61,8 @@ namespace O2.Views.ASCX.CoreControls
             this.cbPerformRegExSearch = new System.Windows.Forms.CheckBox();
             this.cbHideCSharpGeneratedMethods = new System.Windows.Forms.CheckBox();
             this.llRefreshFunctionsViewer = new System.Windows.Forms.LinkLabel();
+            this.filteredFunctionsViewer = new O2.Views.ASCX.DataViewers.ascx_FunctionsViewer();
+            this.functionsViewer = new O2.Views.ASCX.DataViewers.ascx_FunctionsViewer();
             this.tcO2ObjectModel.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -241,21 +241,6 @@ namespace O2.Views.ASCX.CoreControls
             this.lbMethodDetails_Type.Text = "Type:";
             this.lbMethodDetails_Type.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lbMethodDetails_Type_MouseDown);
             // 
-            // filteredFunctionsViewer
-            // 
-            this.filteredFunctionsViewer._AdvancedModeViews = false;
-            this.filteredFunctionsViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.filteredFunctionsViewer.BackColor = System.Drawing.SystemColors.Control;
-            this.filteredFunctionsViewer.ForeColor = System.Drawing.Color.Black;
-            this.filteredFunctionsViewer.Location = new System.Drawing.Point(3, 48);
-            this.filteredFunctionsViewer.Name = "filteredFunctionsViewer";
-            this.filteredFunctionsViewer.NamespaceDepthValue = 2;
-            this.filteredFunctionsViewer.Size = new System.Drawing.Size(470, 189);
-            this.filteredFunctionsViewer.TabIndex = 8;
-            this.filteredFunctionsViewer._onAfterSelect += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.filteredFunctionsViewer__onAfterSelect);
-            // 
             // tbFilterBy_ReturnType
             // 
             this.tbFilterBy_ReturnType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
@@ -338,18 +323,6 @@ namespace O2.Views.ASCX.CoreControls
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "All Methods & Classes";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // functionsViewer
-            // 
-            this.functionsViewer._AdvancedModeViews = true;
-            this.functionsViewer.BackColor = System.Drawing.SystemColors.Control;
-            this.functionsViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.functionsViewer.ForeColor = System.Drawing.Color.Black;
-            this.functionsViewer.Location = new System.Drawing.Point(3, 3);
-            this.functionsViewer.Name = "functionsViewer";
-            this.functionsViewer.NamespaceDepthValue = 2;
-            this.functionsViewer.Size = new System.Drawing.Size(470, 293);
-            this.functionsViewer.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -437,7 +410,6 @@ namespace O2.Views.ASCX.CoreControls
             // 
             // llRefreshFunctionsViewer
             // 
-            this.llRefreshFunctionsViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.llRefreshFunctionsViewer.AutoSize = true;
             this.llRefreshFunctionsViewer.Location = new System.Drawing.Point(6, 59);
             this.llRefreshFunctionsViewer.Name = "llRefreshFunctionsViewer";
@@ -446,6 +418,34 @@ namespace O2.Views.ASCX.CoreControls
             this.llRefreshFunctionsViewer.TabStop = true;
             this.llRefreshFunctionsViewer.Text = "refresh (i.e. rebuild O2 Object model)";
             this.llRefreshFunctionsViewer.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llRefreshFunctionsViewer_LinkClicked);
+            // 
+            // filteredFunctionsViewer
+            // 
+            this.filteredFunctionsViewer._AdvancedModeViews = false;
+            this.filteredFunctionsViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.filteredFunctionsViewer.BackColor = System.Drawing.SystemColors.Control;
+            this.filteredFunctionsViewer.ForeColor = System.Drawing.Color.Black;
+            this.filteredFunctionsViewer.Location = new System.Drawing.Point(3, 48);
+            this.filteredFunctionsViewer.Name = "filteredFunctionsViewer";
+            this.filteredFunctionsViewer.NamespaceDepthValue = 2;
+            this.filteredFunctionsViewer.Size = new System.Drawing.Size(470, 189);
+            this.filteredFunctionsViewer.TabIndex = 8;
+            this.filteredFunctionsViewer._onItemDrag += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.filteredFunctionsViewer__onItemDrag);
+            this.filteredFunctionsViewer._onAfterSelect += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.filteredFunctionsViewer__onAfterSelect);
+            // 
+            // functionsViewer
+            // 
+            this.functionsViewer._AdvancedModeViews = true;
+            this.functionsViewer.BackColor = System.Drawing.SystemColors.Control;
+            this.functionsViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.functionsViewer.ForeColor = System.Drawing.Color.Black;
+            this.functionsViewer.Location = new System.Drawing.Point(3, 3);
+            this.functionsViewer.Name = "functionsViewer";
+            this.functionsViewer.NamespaceDepthValue = 2;
+            this.functionsViewer.Size = new System.Drawing.Size(470, 293);
+            this.functionsViewer.TabIndex = 0;
             // 
             // ascx_O2ObjectModel
             // 

@@ -36,7 +36,7 @@ namespace O2.Views.ASCX.DataViewers
         
 
 
-        public int iMaxItemsToShow = 4000;
+        public int iMaxItemsToShow = 25000;
         public IEnumerable<String> lsSignatures = new List<string>();
         public String sViewName = "";
 
@@ -426,64 +426,62 @@ namespace O2.Views.ASCX.DataViewers
 
         private static Thread populateTreeViewUsingViewMode_byFunctionSignature(IEnumerable<string> lsList,
                                                                        TreeView targetTreeView,
-                                                                       int namespaceDepthValue, string textFilter)
+                                                                       int namespaceDepthValue, string textFilter, int iMaxItemsToShow)
         {
             return O2Thread.mtaThread(
                 () =>
+                {
+                    targetTreeView.invokeOnThread(() => targetTreeView.Visible = false);
+                    try
                     {
-                        targetTreeView.invokeOnThread(() => targetTreeView.Visible = false);
-                        try
+                        var dItemsParsed = new Dictionary<String, FilteredSignature>();
+                        foreach (String sItem in lsList)
                         {
-                            var dItemsParsed = new Dictionary<String, FilteredSignature>();
-                            foreach (String sItem in lsList)
+                            //if (false == dItemsParsed.ContainsKey(sItem))
                             {
-                                //if (false == dItemsParsed.ContainsKey(sItem))
-                                {
-                                    if (textFilter == "" || RegEx.findStringInString(sItem, textFilter))
-                                        dItemsParsed.Add(sItem, new FilteredSignature(sItem));
-                                }
-                                //else
-                                //    PublicDI.log.error("Something's wrong in showListOnTreeView, lsList had repeated key:{0}", sItem);
+                                if (textFilter == "" || RegEx.findStringInString(sItem, textFilter))
+                                    dItemsParsed.Add(sItem, new FilteredSignature(sItem));
                             }
-                            var dItemsBrokenByClassDepth = new Dictionary<String, List<FilteredSignature>>();
+                            //else
+                            //    PublicDI.log.error("Something's wrong in showListOnTreeView, lsList had repeated key:{0}", sItem);
+                        }
+                        var dItemsBrokenByClassDepth = new Dictionary<String, List<FilteredSignature>>();
 
-                            foreach (String sItem in lsList)
+                        foreach (String sItem in lsList)
+                        {
+
+                            if (namespaceDepthValue == -1)
                             {
-
-                                if (namespaceDepthValue == -1)
-                                {
-                                    if (textFilter== "" || RegEx.findStringInString(sItem, textFilter))
-                                        if (dItemsParsed.ContainsKey(sItem))
-                                            // add node ASync and on the correct thread
-                                            O2Forms.addNodeToTreeNodeCollection(targetTreeView,targetTreeView.Nodes,
-                                                                      O2Forms.newTreeNode(
-                                                                          dItemsParsed[sItem].sSignature, sItem,
-                                                                          3, dItemsParsed[sItem]));
-                                }
-                                else
-                                {
+                                if (textFilter == "" || RegEx.findStringInString(sItem, textFilter))
                                     if (dItemsParsed.ContainsKey(sItem))
-                                    {
-                                        String sClassNameToShow =
-                                            dItemsParsed[sItem].getClassName_Rev(namespaceDepthValue);
-                                        if (sClassNameToShow == "")
-                                            sClassNameToShow = dItemsParsed[sItem].sFunctionClass;
-                                        /*  var sClassNameToConsolidate = (sClassNameToShow == "")
-                                                                     ? dItemsParsed[sItem].sFunctionClass
-                                                                     : dItemsParsed[sItem].sFunctionClass.Replace(
-                                                                           sClassNameToShow, "");*/
-                                        if (false == dItemsBrokenByClassDepth.ContainsKey(sClassNameToShow))
-                                            dItemsBrokenByClassDepth.Add(sClassNameToShow, new List<FilteredSignature>());
-                                        //String sSignatureToShow = sClassNameToConsolidate + "__" + dItemsParsed[sItem].sFunctionNameAndParams;
-                                        dItemsBrokenByClassDepth[sClassNameToShow].Add(dItemsParsed[sItem]);
-                                    }
+                                        // add node ASync and on the correct thread
+                                        O2Forms.addNodeToTreeNodeCollection(targetTreeView, targetTreeView.Nodes,
+                                                                  O2Forms.newTreeNode(
+                                                                      dItemsParsed[sItem].sSignature, sItem,
+                                                                      3, dItemsParsed[sItem]), iMaxItemsToShow);
+                            }
+                            else
+                            {
+                                if (dItemsParsed.ContainsKey(sItem))
+                                {
+                                    String sClassNameToShow =
+                                        dItemsParsed[sItem].getClassName_Rev(namespaceDepthValue);
+                                    if (sClassNameToShow == "")
+                                        sClassNameToShow = dItemsParsed[sItem].sFunctionClass;
+                                    /*  var sClassNameToConsolidate = (sClassNameToShow == "")
+                                                                 ? dItemsParsed[sItem].sFunctionClass
+                                                                 : dItemsParsed[sItem].sFunctionClass.Replace(
+                                                                       sClassNameToShow, "");*/
+                                    if (false == dItemsBrokenByClassDepth.ContainsKey(sClassNameToShow))
+                                        dItemsBrokenByClassDepth.Add(sClassNameToShow, new List<FilteredSignature>());
+                                    //String sSignatureToShow = sClassNameToConsolidate + "__" + dItemsParsed[sItem].sFunctionNameAndParams;
+                                    dItemsBrokenByClassDepth[sClassNameToShow].Add(dItemsParsed[sItem]);
                                 }
                             }
-
 
                             // add calculated results 
-                       //     TreeNodeCollection tncToAddFunction_ = targetTreeView.Nodes;
-
+                            //     TreeNodeCollection tncToAddFunction_ = targetTreeView.Nodes;
+                        }
                             foreach (String sClass in dItemsBrokenByClassDepth.Keys)
                             {
                                 var filteredSignatures = dItemsBrokenByClassDepth[sClass];
@@ -492,7 +490,7 @@ namespace O2.Views.ASCX.DataViewers
                                 if (filteredSignatures.Count > 0)
                                     tnNewTreeNode.Nodes.Add("DummyNode");
                                 // add node ASync and on the correct thread
-                                O2Forms.addNodeToTreeNodeCollection(targetTreeView, targetTreeView.Nodes, tnNewTreeNode);
+                                O2Forms.addNodeToTreeNodeCollection(targetTreeView, targetTreeView.Nodes, tnNewTreeNode, iMaxItemsToShow);
                                 //tncToAddFunction.Add(tnNewTreeNode);
 
 
@@ -510,25 +508,35 @@ namespace O2.Views.ASCX.DataViewers
                         foreach (TreeNode tnTreeNode in tnTreeNodesToRemove)
                             tvTempTreeView.Nodes.Remove(tnTreeNode);
                     }*/
-                        }
-                        catch (Exception ex)
+                        
+
+                        var numberOfUniqueStrings = lsList.Count();
+                        if (numberOfUniqueStrings > iMaxItemsToShow)
                         {
-                            PublicDI.log.error("in populateTreeViewUsingViewMode_byFunctionSignature: {0}", ex.Message);
+                            var message = string.Format("This view has more items that the current MaxToView. only showing the first {0} out of {1}", iMaxItemsToShow, numberOfUniqueStrings);
+                            PublicDI.log.error(message);
+                            targetTreeView.addNode(message);                            
                         }
-                        targetTreeView.invokeOnThread(
-                            () =>
+                    }
+                    catch (Exception ex)
+                    {
+                        PublicDI.log.error("in populateTreeViewUsingViewMode_byFunctionSignature: {0}", ex.Message);
+                    }
+
+                    targetTreeView.invokeOnThread(
+                        () =>
+                        {
+                            targetTreeView.Visible = true;
+                            // the code below tries to solve a weird GUI problem that happens when there is only one child Node (which is invible until the user clicks on it))                                
+                            if (targetTreeView.Nodes.Count == 1)
                             {
-                                targetTreeView.Visible = true;
-                                // the code below tries to solve a weird GUI problem that happens when there is only one child Node (which is invible until the user clicks on it))                                
-                                if (targetTreeView.Nodes.Count == 1)
-                                {
-                                    targetTreeView.Nodes[0].Expand();
-//                                    targetTreeView.SelectedNode = targetTreeView.Nodes[0];
-                                    //var dummyNode = targetTreeView.Nodes.Add("dUMMYN node");
-                                    //targetTreeView.Nodes.Remove(dummyNode);
-                                }
-                            });
-                    });
+                                targetTreeView.Nodes[0].Expand();
+                                //                                    targetTreeView.SelectedNode = targetTreeView.Nodes[0];
+                                //var dummyNode = targetTreeView.Nodes.Add("dUMMYN node");
+                                //targetTreeView.Nodes.Remove(dummyNode);
+                            }
+                        });
+                });
         }
 
         private void onTreeViewBeforeExpand(TreeNode currentTreeNode)
@@ -653,7 +661,7 @@ namespace O2.Views.ASCX.DataViewers
             switch (vmViewMode)
             {
                 case ViewMode.byFunctionSignature:
-                    return populateTreeViewUsingViewMode_byFunctionSignature(lsList, tvTreeView, namespaceDepthVaLue, textFilter);                    
+                    return populateTreeViewUsingViewMode_byFunctionSignature(lsList, tvTreeView, namespaceDepthVaLue, textFilter, iMaxItemsToShow);
 
                 case ViewMode.byProvidedSplitChar:
                     populateTreeViewUsingViewMode_byProvidedSplitChar(lsList, tvTreeView, NamespaceDepthValue);

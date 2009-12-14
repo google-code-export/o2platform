@@ -10,28 +10,30 @@ namespace O2.DotNetWrappers.Windows
 {
     public static class Ascx_ExtensionMethods
     {
-        public static Label addLabel_(this UserControl userControl, string labelText)
+        public static Label addLabel(this Control control, string labelText)
         {
             var label = new Label();
             label.Text = labelText; ;
-            userControl.Controls.Add(label);
+            control.Controls.Add(label);
             return label;
         }
 
-        public static SplitContainer addSplitContainer(this UserControl userControl)
+        public static SplitContainer addSplitContainer(this Control control)
         {
-            return addSplitContainer(userControl, false, false, false);
+            return addSplitContainer(control, false, false, false);
         }
 
-        public static SplitContainer addSplitContainer(this UserControl userControl, bool setOrientationToHorizontal, bool setDockStyleoFill, bool setBorderStyleTo3D)
+        public static SplitContainer addSplitContainer(this Control control, bool setOrientationToHorizontal, bool setDockStyleoFill, bool setBorderStyleTo3D)
         {
             return addSplitContainer(
-                        userControl,
+                        control,
                         (setOrientationToHorizontal) ? Orientation.Horizontal : Orientation.Vertical,
                         setDockStyleoFill,
                         setBorderStyleTo3D);
         }
-        public static SplitContainer addSplitContainer(this UserControl userControl, Orientation orientation, bool setDockStyleToFill, bool setBorderStyleTo3D)
+        
+        //public static SplitContainer addSplitContainer(this UserControl userControl, Orientation orientation, bool setDockStyleToFill, bool setBorderStyleTo3D)
+        public static SplitContainer addSplitContainer(this Control control, Orientation orientation, bool setDockStyleToFill, bool setBorderStyleTo3D)
         {
             var splitContainer = new SplitContainer();
             splitContainer.Orientation = orientation;
@@ -39,24 +41,24 @@ namespace O2.DotNetWrappers.Windows
                 splitContainer.Dock = DockStyle.Fill;
             if (setBorderStyleTo3D)
                 splitContainer.BorderStyle = BorderStyle.Fixed3D;
-            userControl.Controls.Add(splitContainer);
+            control.Controls.Add(splitContainer);
             return splitContainer;
         }
 
-        public static GroupBox addGroupBox(this SplitterPanel splitterPanel, string groupBoxText)
+        public static GroupBox addGroupBox(this Control control, string groupBoxText)
         {
             var groupBox = new GroupBox();
             groupBox.Text = groupBoxText;
             groupBox.Dock = DockStyle.Fill;
-            splitterPanel.Controls.Add(groupBox);
+            control.Controls.Add(groupBox);
             return groupBox;
         }
 
-        public static TreeView addTreeView(this GroupBox groupBox)
+        public static TreeView addTreeView(this Control control)
         {
             var treeView = new TreeView();
             treeView.Dock = DockStyle.Fill;
-            groupBox.Controls.Add(treeView);
+            control.Controls.Add(treeView);
             return treeView;
         }
 

@@ -40,6 +40,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\Merlin.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Cecil, Version=0.6.9.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Mono.Cecil.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\nunit.framework.dll</HintPath>
@@ -48,10 +52,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_Bin_(O2_Binaries)\O2_Core_FileViewers.dll</HintPath>
     </Reference>
-    <Reference Include="O2_DotNetWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_DotNetWrappers.dll</HintPath>
-    </Reference>
     <Reference Include="O2_External_WinFormsUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_Bin_(O2_Binaries)\O2_External_WinFormsUI.dll</HintPath>
@@ -59,10 +59,6 @@
     <Reference Include="O2_ImportExport_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_Bin_(O2_Binaries)\O2_ImportExport_OunceLabs.dll</HintPath>
-    </Reference>
-    <Reference Include="O2_Views_ASCX, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Views_ASCX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -112,6 +108,12 @@
     <Compile Include="_Rules\_Samples\SampleScripts.cs" />
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples\SvnTest.cs" />
+    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_MonoControlFlowGraph.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_MonoDecompiler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="_Rules\_Samples\Wizards\Wizard_BackupFolder.cs" />
     <Compile Include="_Templates\Empty_XRule.cs" />
     <Compile Include="_Templates\Empty_Class.cs" />
@@ -130,6 +132,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_O2Mono\O2_External_O2Mono.csproj">
+      <Project>{F457A7EB-A573-41BB-BC12-61ABE5ACF702}</Project>
+      <Name>O2_External_O2Mono</Name>
+    </ProjectReference>
     <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
       <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
       <Name>O2_External_SharpDevelop</Name>
@@ -138,14 +144,23 @@
       <Project>{E5CB533C-DA98-408E-B021-171293AAAE3E}</Project>
       <Name>O2_Core_XRules</Name>
     </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
       <Name>O2 Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
+      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
+      <Name>O2_Views_ASCX</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="_Rules\DotNet\" />
     <Folder Include="_Rules\OunceLabs Workflows\" />
+    <Folder Include="_Rules\_Samples\Custom Ascx Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

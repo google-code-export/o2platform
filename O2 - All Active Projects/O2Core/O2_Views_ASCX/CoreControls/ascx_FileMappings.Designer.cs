@@ -57,14 +57,16 @@ namespace O2.Views.ASCX.CoreControls
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btDragAllFileThatMatchExtensionFilter = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.label2 = new System.Windows.Forms.Label();
             this.tbViewFilter = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.lbNumberOfFilesLoaded = new System.Windows.Forms.Label();
             this.lbSelectedFile = new System.Windows.Forms.Label();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.llDragSelectedFiles = new System.Windows.Forms.LinkLabel();
+            this.lbNumberOfFilesSelected = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -81,11 +83,11 @@ namespace O2.Views.ASCX.CoreControls
             this.tvFileMappings.HideSelection = false;
             this.tvFileMappings.ImageIndex = 0;
             this.tvFileMappings.ImageList = this.imageList1;
-            this.tvFileMappings.Location = new System.Drawing.Point(3, 42);
+            this.tvFileMappings.Location = new System.Drawing.Point(3, 57);
             this.tvFileMappings.Name = "tvFileMappings";
             this.tvFileMappings.SelectedImageIndex = 0;
             this.tvFileMappings.ShowNodeToolTips = true;
-            this.tvFileMappings.Size = new System.Drawing.Size(316, 216);
+            this.tvFileMappings.Size = new System.Drawing.Size(316, 201);
             this.tvFileMappings.TabIndex = 0;
             this.tvFileMappings.DoubleClick += new System.EventHandler(this.tvProjectFiles_DoubleClick);
             this.tvFileMappings.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvProjectFiles_DragDrop);
@@ -361,6 +363,16 @@ namespace O2.Views.ASCX.CoreControls
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -402,21 +414,11 @@ namespace O2.Views.ASCX.CoreControls
             // lbSelectedFile
             // 
             this.lbSelectedFile.AutoSize = true;
-            this.lbSelectedFile.Location = new System.Drawing.Point(147, 26);
+            this.lbSelectedFile.Location = new System.Drawing.Point(156, 26);
             this.lbSelectedFile.Name = "lbSelectedFile";
             this.lbSelectedFile.Size = new System.Drawing.Size(10, 13);
             this.lbSelectedFile.TabIndex = 20;
             this.lbSelectedFile.Text = ".";
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // llDragSelectedFiles
             // 
@@ -430,12 +432,32 @@ namespace O2.Views.ASCX.CoreControls
             this.llDragSelectedFiles.Text = "drag selected files";
             this.llDragSelectedFiles.MouseDown += new System.Windows.Forms.MouseEventHandler(this.llDragSelectedFiles_MouseDown);
             // 
+            // lbNumberOfFilesSelected
+            // 
+            this.lbNumberOfFilesSelected.AutoSize = true;
+            this.lbNumberOfFilesSelected.Location = new System.Drawing.Point(95, 42);
+            this.lbNumberOfFilesSelected.Name = "lbNumberOfFilesSelected";
+            this.lbNumberOfFilesSelected.Size = new System.Drawing.Size(13, 13);
+            this.lbNumberOfFilesSelected.TabIndex = 22;
+            this.lbNumberOfFilesSelected.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(4, 41);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(93, 13);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "# of files selected:";
+            // 
             // ascx_FileMappings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lbDropHelpInfo);
             this.Controls.Add(this.tvFileMappings);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.lbNumberOfFilesSelected);
             this.Controls.Add(this.llDragSelectedFiles);
             this.Controls.Add(this.lbSelectedFile);
             this.Controls.Add(this.lbNumberOfFilesLoaded);
@@ -495,5 +517,7 @@ namespace O2.Views.ASCX.CoreControls
         private System.Windows.Forms.Label lbSelectedFile;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.LinkLabel llDragSelectedFiles;
+        private System.Windows.Forms.Label lbNumberOfFilesSelected;
+        private System.Windows.Forms.Label label5;
     }
 }

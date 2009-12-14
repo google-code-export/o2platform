@@ -40,7 +40,7 @@ namespace O2.Core.CIR.Ascx
 
 	    public void loadO2CirDataFile(String sFileToLoad)
         {
-            loadO2CirDataFile(sFileToLoad, true);
+            loadO2CirDataFile(sFileToLoad, true, false /*decompileCodeIfNoPdb*/);
         }
 
         public ICirDataAnalysis getCirDataAnalysisObject()
@@ -48,15 +48,15 @@ namespace O2.Core.CIR.Ascx
             return cirDataAnalysis;
         }
 
-	    public void loadO2CirDataFile(String sFileToLoad, bool raiseProcessNewDataLoad)
+        public void loadO2CirDataFile(String sFileToLoad, bool raiseProcessNewDataLoad, bool decompileCodeIfNoPdb)
         {
             try
             {
                 if (false == File.Exists(sFileToLoad))
                     DI.log.error("File to load doesnt exists: {0}", sFileToLoad);
                 else
-                {                   
-                    CirDataAnalysisUtils.loadFileIntoCirDataAnalysisObject(sFileToLoad, cirDataAnalysis);
+                {
+                    CirDataAnalysisUtils.loadFileIntoCirDataAnalysisObject(sFileToLoad, cirDataAnalysis, decompileCodeIfNoPdb);
                     
                     if (raiseProcessNewDataLoad)
                         raiseSetCirDataAnalysisO2Message();

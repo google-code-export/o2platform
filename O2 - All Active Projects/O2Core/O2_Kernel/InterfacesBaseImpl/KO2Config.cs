@@ -112,7 +112,7 @@ namespace O2.Kernel.InterfacesBaseImpl
         public string getTempFolderInTempDirectory(string stringToAddToTempDirectoryName)
         {
             var tempFolder = TempFolderInTempDirectory;
-            var tempFolderWithExtraString = tempFolder + "_" + stringToAddToTempDirectoryName;
+            var tempFolderWithExtraString = Path.Combine(Path.GetDirectoryName(tempFolder), stringToAddToTempDirectoryName+ "_" + Path.GetFileName(tempFolder));
             Directory.CreateDirectory(tempFolderWithExtraString);
             Directory.Delete(tempFolder);
             return tempFolderWithExtraString;

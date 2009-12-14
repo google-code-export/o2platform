@@ -71,7 +71,7 @@ namespace O2.Core.XRules.Classes
             //Text = 
             //  textBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 
-
+            
             flowLayoutPanel.ts_AddControl(textBox);
             // }
 

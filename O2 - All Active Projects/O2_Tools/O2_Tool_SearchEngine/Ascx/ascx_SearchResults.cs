@@ -36,7 +36,7 @@ namespace O2.Tool.SearchEngine.Ascx
 
         private void dgvSearchResults_SelectionChanged(object sender, EventArgs e)
         {
-            if (dgvSearchResults.SelectedRows.Count == 1)
+            if (cbOpenSelectedItemInMainGUIWindow.Checked && dgvSearchResults.SelectedRows.Count == 1)
             {
                 var tsrSearchResult = (TextSearchResult)dgvSearchResults.SelectedRows[0].Tag;
                 if (tsrSearchResult != null)

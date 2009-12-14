@@ -46,13 +46,13 @@ namespace O2.Core.CIR.Ascx
                                     {
                                         foreach (String sFile in Directory.GetFiles(fileOrFolder.ToString()))
                                         {
-                                            loadO2CirDataFile(sFile, false);
+                                            loadO2CirDataFile(sFile, false, false /*decompileCodeIfNoPdb*/);
                                             Application.DoEvents();
                                         }
                                         raiseSetCirDataAnalysisO2Message();
                                     }
                                     else
-                                        loadO2CirDataFile(fileOrFolder.ToString(), true);
+                                        loadO2CirDataFile(fileOrFolder.ToString(), true, false /*decompileCodeIfNoPdb*/);
                                 });
                     });
         }

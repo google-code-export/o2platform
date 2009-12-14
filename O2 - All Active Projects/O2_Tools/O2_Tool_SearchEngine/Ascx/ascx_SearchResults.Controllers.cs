@@ -157,5 +157,16 @@ namespace O2.Tool.SearchEngine.Ascx
         {
             return DI.searchEngineAPI.dLoadedFilesCache;
         }
+
+        public void setOpenSelectedItemInMainGUIWindowCheckedState(bool value)
+        {
+            this.invokeOnThread(()=>cbOpenSelectedItemInMainGUIWindow.Checked = value );
+        }
+
+        public void addSearchCriteria(string searchCriteria)
+        { 
+            this.invokeOnThread(
+                ()=> dgvSearchCriteria.Rows.Add(new object[] {searchCriteria}));
+        }
     }
 }

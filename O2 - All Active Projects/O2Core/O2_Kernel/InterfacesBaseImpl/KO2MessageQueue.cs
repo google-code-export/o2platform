@@ -11,7 +11,7 @@ namespace O2.Kernel.InterfacesBaseImpl
 
         private KO2MessageQueue()
         {
-            onMessages += o2Message => DI.log.i("in KO2MessageQueue: message Received:" + o2Message.messageText);
+          //  onMessages += o2Message => DI.log.i("in KO2MessageQueue: message Received:" + o2Message.messageText);
         }
 
         public static KO2MessageQueue getO2KernelQueue()

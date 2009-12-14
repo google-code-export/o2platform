@@ -2484,7 +2484,8 @@ namespace O2.Debugger.Mdbg.OriginalMdbgCode.mdbg
 
                 // maybe it's in the form:
                 // "b Mdbg.cs:34"
-                r = new Regex(@"^(\S+:)?(\d+)$");
+                //r = new Regex(@"^(\S+:)?(\d+)$");     // this regex doesn't support spaces in the filename
+                r = new Regex(@"^(.*:)?(\d+)$");
                 m = r.Match(arguments);
                 string fname = m.Groups[1].Value;
                 string lineNo = m.Groups[2].Value;

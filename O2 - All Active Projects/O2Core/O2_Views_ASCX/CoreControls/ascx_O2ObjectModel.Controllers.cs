@@ -20,7 +20,8 @@ namespace O2.Views.ASCX.CoreControls
     public partial class ascx_O2ObjectModel
     {
         public List<Assembly> assembliesLoaded = new List<Assembly>();
-        public List<MethodInfo> methods = new List<MethodInfo>();
+        public List<MethodInfo> methodsLoaded = new List<MethodInfo>();
+        public Dictionary<string, MethodInfo> methodsLoaded_bySignature = new Dictionary<string, MethodInfo>();
         public List<FilteredSignature> filteredSignatures = new List<FilteredSignature>();
 
         public bool runOnLoad = true;
@@ -28,8 +29,7 @@ namespace O2.Views.ASCX.CoreControls
         public void onLoad()
         {
             if (DesignMode == false && runOnLoad)
-            {                                
-                O2Forms.loadTreeViewWith_AssembliesInCurrentAppDomain(tvExtraAssembliesToLoad, assembliesLoaded,true);
+            {                
                 filteredFunctionsViewer.setNamespaceDepth(0);                
                 runOnLoad = false;
                 refreshViews();                
@@ -57,21 +57,45 @@ namespace O2.Views.ASCX.CoreControls
 
         public void refreshViews()
         {
-            PublicDI.log.info("Refreshing Views");
-            refreshLoadedAssembliesView();
+            PublicDI.log.info("Refreshing Views and remaping assemblies");
+            assembliesLoaded = getAssembliesToLoad(tvExtraAssembliesToLoad);
+            O2Forms.loadTreeViewWith_AssembliesInCurrentAppDomain(tvExtraAssembliesToLoad, assembliesLoaded, true);
+            refreshLoadedAssembliesView();            
             refreshO2ObjectModelView(cbHideCSharpGeneratedMethods.Checked);
             showFilteredMethods(null);
+        }
+
+        private static List<Assembly> getAssembliesToLoad(TreeView tvTreeView)
+        {
+            return (List<Assembly>)tvTreeView.invokeOnThread(
+                () =>
+                {
+                    if (tvTreeView.Nodes.Count ==0)
+                        return getDefaultLoadedAssemblies();
+                    
+                    var assembliesToLoad = new List<Assembly>();
+                    foreach(TreeNode treeNode in tvTreeView.Nodes)
+                        if (treeNode.Checked && treeNode.Tag !=null && treeNode.Tag is Assembly)
+                            assembliesToLoad.Add((Assembly)treeNode.Tag);
+                    return assembliesToLoad;                
+                });
         }
 
         public void refreshLoadedAssembliesView()
         {
             tvAssembliesLoaded.invokeOnThread(
                 () =>
-                {
-                    assembliesLoaded = getDefaultLoadedAssemblies();
+                {                    
                     foreach (TreeNode treeNode in tvExtraAssembliesToLoad.Nodes)
                         if (treeNode.Checked && treeNode.Tag is Assembly)
-                            assembliesLoaded.Add((Assembly)treeNode.Tag);
+                        {
+                            var assembly = (Assembly)treeNode.Tag;
+                            if (false == assembliesLoaded.Contains(assembly))
+                                assembliesLoaded.Add(assembly);
+                            else
+                            {
+                            }
+                        }
 
                         //        O2Forms.newTreeNode(tvAssembliesLoaded.Nodes, treeNode.Text, 0, treeNode.Tag);
 
@@ -96,44 +120,59 @@ namespace O2.Views.ASCX.CoreControls
                                 treeNode.ForeColor = Color.DarkGreen;
                         }
                     }
+
+                    tvAssembliesLoaded.Sort();
+                    tvExtraAssembliesToLoad.Sort();
                 });
         }        
 
         public void refreshO2ObjectModelView(bool hideCSharpGeneratedMethods)
         {
             PublicDI.log.debug("from loaded assemblies, calulating list of (reflection) method information");
-            methods = new List<MethodInfo>();
-            foreach (var assembly in assembliesLoaded)            
-                methods.AddRange(PublicDI.reflection.getMethods(assembly).ToArray());
+            methodsLoaded = new List<MethodInfo>();
+            foreach (var assembly in assembliesLoaded)
+                methodsLoaded.AddRange(PublicDI.reflection.getMethods(assembly).ToArray());
             PublicDI.log.debug("Convering method information into filtered signatures objects");
-            filteredSignatures = getMethodFilteredSignatures(methods, hideCSharpGeneratedMethods);
+            mapMethodsToFilteredSignatures(methodsLoaded, ref filteredSignatures, ref methodsLoaded_bySignature, hideCSharpGeneratedMethods);
             PublicDI.log.info("there are {0} O2 assemblies", assembliesLoaded.Count);
-            PublicDI.log.info("there are {0} methods", methods.Count);
+            PublicDI.log.info("there are {0} methods", methodsLoaded.Count);
             var methodsSignature = getMethodSignatures(filteredSignatures, hideCSharpGeneratedMethods);
             
             PublicDI.log.info("there are {0} methods sigantures", methodsSignature.Count);
 
             functionsViewer.showSignatures(methodsSignature);
+            
+
             //var functionsViewer = (ascx_FunctionsViewer)O2AscxGUI.openAscx(typeof(ascx_FunctionsViewer), O2DockState.Float, "O2 Object Model");
             //functionsViewer.showSignatures(methodsSignature);
             //return true;
         }
 
-        public static List<FilteredSignature> getMethodFilteredSignatures(List<MethodInfo> methods, bool hideCSharpGeneratedMethods)
+
+        public static void mapMethodsToFilteredSignatures(List<MethodInfo> methodsToMap, ref List<FilteredSignature> filteredSignatures, ref Dictionary<string, MethodInfo> methods_bySignature, bool hideCSharpGeneratedMethods)
         {
-            var filteredSignatures = new List<FilteredSignature>();
-            foreach (var method in methods)
+            filteredSignatures = new List<FilteredSignature>();
+            methods_bySignature = new Dictionary<string, MethodInfo>();
+            foreach (var method in methodsToMap)
             {
                 var filteredSignature = new FilteredSignature(method);
-                if (hideCSharpGeneratedMethods == false ||  (filteredSignature.sSignature.IndexOf("<>") == -1 && 
+                if (hideCSharpGeneratedMethods == false || (filteredSignature.sSignature.IndexOf("<>") == -1 &&
                                                              false == filteredSignature.sFunctionName.StartsWith("b__")))
+                {
                     filteredSignatures.Add(filteredSignature);
+                    // create methodsLoaded_bySignature                       
+                    if (methods_bySignature.ContainsKey(filteredSignature.sSignature))
+                    {
+                        PublicDI.log.error("in mapMethodsToFilteredSignatures, repeated signature: {0}", filteredSignature.sSignature);
+                    }
+                    else
+                        methods_bySignature.Add(filteredSignature.sSignature, method);
+                }
                 else
                 {
                     //PublicDI.log.info("Skipping: {0}", method.Name);
                 }
             }
-            return filteredSignatures;
         }
 
         public static List<String> getMethodSignatures(List<FilteredSignature> filteredSignatures, bool hideCSharpGeneratedMethods)
@@ -282,5 +321,28 @@ namespace O2.Views.ASCX.CoreControls
             }
         }
 
+        private void handleOnItemDrag(object oObject)
+        {
+            List<FilteredSignature> filteredSignatures = new List<FilteredSignature>();
+            if (oObject is List<FilteredSignature>)
+                filteredSignatures = (List<FilteredSignature>)oObject;
+            else if (oObject is FilteredSignature)
+                filteredSignatures.Add((FilteredSignature)oObject);
+            if (filteredSignatures.Count == 0)
+                PublicDI.log.error("in handleOnItemDrag there were no FilteredSignature to process");
+            else
+            {
+                var methodsToDrag = new List<MethodInfo>();
+                foreach (var filteredSignature in filteredSignatures)
+                    if (methodsLoaded_bySignature.ContainsKey(filteredSignature.sSignature))
+                        methodsToDrag.Add(methodsLoaded_bySignature[filteredSignature.sSignature]);
+                    else
+                        PublicDI.log.error("in handleOnItemDrag could not find loaded MethodInfo for :{0}", filteredSignature);
+                
+                // invoke the DragAndDrop on the functionsViewer thread
+                functionsViewer.invokeOnThread(()=> DoDragDrop(methodsToDrag, DragDropEffects.Copy));
+            }
+            
+        }        
     }
 }

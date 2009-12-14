@@ -46,6 +46,13 @@ namespace Merlin
             this.UI = ui;
         }
 
+        // DC add support for just defining the Type
+        public TemplateStep(Type uiType)
+            : this()
+        {
+            this.UIType = uiType;
+        }
+
         /// <summary>
         /// Empty constructor for use when the inheriting class will provide a UI
         /// at a later time (typically later in the constructor). If a UI has not
@@ -245,7 +252,8 @@ namespace Merlin
 
         public event EventHandler StepStateChanged;
 
-        public Control UI { get; protected set; }
+        public Control UI { get; set; }
+        public Type UIType { get; set; }
 
         #endregion
 

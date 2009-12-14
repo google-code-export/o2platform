@@ -178,51 +178,71 @@ namespace Merlin
 
         private void runComponent(IStep component)
         {
-            component.Controller = this;
-            if (currentStepIndex > steps.Count)
+            try
             {
-                throw new Exception("Attempting to run past the end of the wizard");
-            }
-            component.StepReached();
-            Control ui = component.UI;
-
-            if (ui != null)
-            {
-                wizardForm.ShowUserControl(ui);
-                updateButtonState();
-                component.StepStateChanged
-                    += new EventHandler(onComponentStateChanged);
-                wizardForm.HeaderTitle = component.Title;
-                if (!string.IsNullOrEmpty(component.Subtitle))
+                if (component.UI == null && component.UIType != null)   // DC case when we need to create an instance of UI
                 {
-                    wizardForm.ShowSubtitle(component.Subtitle);
+                    component.UI = (Control)Activator.CreateInstance(component.UIType);                    
                 }
-                else
-                {
-                    wizardForm.HideSubtitle();
-                }
+                if (component.UI == null)
+                    throw new Exception("in runComponent, was not able to create instance of type : " + component.UIType.FullName);
 
-                // DC: next code was added for O2
-                try
+                component.Controller = this;
+                if (component.OnComponentLoad != null)
+                    component.OnComponentLoad(component);
+                if (currentStepIndex > steps.Count)
                 {
-                    if (component.UI.Controls.Count > 0)
+                    throw new Exception("Attempting to run past the end of the wizard");
+                }
+                component.StepReached();
+                Control ui = component.UI;
+
+                if (ui != null)
+                {
+                    wizardForm.ShowUserControl(ui);
+                    updateButtonState();
+                    component.StepStateChanged
+                        += new EventHandler(onComponentStateChanged);
+                    wizardForm.HeaderTitle = component.Title;
+                    if (!string.IsNullOrEmpty(component.Subtitle))
                     {
-                        component.FirstControl = component.UI.Controls[0];
-
-                        component.Controls = new List<Control>();
-                        foreach (Control control in component.UI.Controls)
-                            component.Controls.Add(control);
+                        wizardForm.ShowSubtitle(component.Subtitle);
                     }
-                    if (component.OnComponentAction != null)
-                        component.OnComponentAction(component);
-                    
-                }
-                catch (Exception ex)
-                {
-                    if (onError != null)
-                        onError(ex);
-                }
+                    else
+                    {
+                        wizardForm.HideSubtitle();
+                    }
 
+                    // DC: next code was added for O2
+                    try
+                    {
+                        if (component.UI.Controls.Count > 0)
+                        {
+                            if (component.UIType == null)                           // the FirstControl value depends on when the control was created
+                                component.FirstControl = component.UI.Controls[0];
+                            else
+                                component.FirstControl = component.UI;
+
+                            component.Controls = new List<Control>();
+                            foreach (Control control in component.UI.Controls)
+                                component.Controls.Add(control);
+                        }
+                        if (component.OnComponentAction != null)
+                            component.OnComponentAction(component);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        if (onError != null)
+                            onError(ex);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                if (onError != null)
+                    onError(ex);
             }
         }
 

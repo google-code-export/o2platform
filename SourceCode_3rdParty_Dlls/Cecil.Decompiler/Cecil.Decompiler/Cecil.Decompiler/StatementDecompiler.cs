@@ -296,7 +296,7 @@ namespace Cecil.Decompiler {
 			case Annotation.PostTestedLoop:
 				AddPostTestedLoop (instruction);
 				break;
-			default:
+			default:                    
 				throw new NotSupportedException ();
 			}
 		}
@@ -666,7 +666,9 @@ namespace Cecil.Decompiler {
 			case Annotation.Skip:
 				break;
 			default:
-				throw new NotSupportedException ();
+                System.Diagnostics.Debug.WriteLine("OnBr: NotSupportedException");
+                break;
+				//throw new NotSupportedException ();
 			}
 		}
 

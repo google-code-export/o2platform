@@ -215,5 +215,21 @@ namespace O2.Kernel.CodeUtils
                 return false;
             }
         }
+
+        public static bool isDebuggerAvailable()
+        {
+            try
+            {
+                if (DI.reflection.getType("O2MDbgUtils") == null) // first see if the assembly O2_External_WinFormsUI is loaded 
+                    return false;
+                var o2AppDomainFactory = AppDomainUtils.getO2AppDomainFactoryForCurrentO2Kernel();
+                return (bool)o2AppDomainFactory.invoke("O2MDbgUtils O2_Debugger_Mdbg", "IsDebuggerAvailable");
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
     }
 }

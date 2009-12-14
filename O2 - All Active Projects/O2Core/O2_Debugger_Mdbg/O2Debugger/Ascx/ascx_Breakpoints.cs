@@ -3,6 +3,7 @@ using System;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel.InterfacesBaseImpl;
+using O2.Kernel.CodeUtils;
 
 namespace O2.Debugger.Mdbg.O2Debugger.Ascx
 {
@@ -64,6 +65,24 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
             DI.o2MDbg.AutoContinueOnBreakPointEvent = cbAutoContinueOnBreakPointEvent.Checked;
         }
 
+        private void lbArchivedBreakpoints_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (lbArchivedBreakpoints.SelectedItem is String)
+            {
+                var breakpointSignature = lbArchivedBreakpoints.SelectedItem.ToString();
+                var lastIndexOfColon = breakpointSignature.LastIndexOf(':');
+                if (lastIndexOfColon > -1)
+                {
+                    var fileName = breakpointSignature.Substring(0, lastIndexOfColon);
+                    var lineNumberAsString = breakpointSignature.Substring(lastIndexOfColon+1);
+                    int lineNumber;
+                    if (Int32.TryParse(lineNumberAsString, out lineNumber))
+                        O2Messages.fileOrFolderSelected(fileName, lineNumber);
+                }               
+            }
+        }
+
+       
           
 
     }

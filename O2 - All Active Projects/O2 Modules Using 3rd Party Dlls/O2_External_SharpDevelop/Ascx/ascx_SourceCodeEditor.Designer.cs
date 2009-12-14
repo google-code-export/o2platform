@@ -41,6 +41,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCompileEvery10SecondsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addBreakpointOnCurrentLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cboxVRuler = new System.Windows.Forms.CheckBox();
             this.cboxInvalidLines = new System.Windows.Forms.CheckBox();
             this.cboxHRuler = new System.Windows.Forms.CheckBox();
@@ -74,9 +75,10 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbCompileCode = new System.Windows.Forms.ToolStripLabel();
             this.btCompileCode = new System.Windows.Forms.ToolStripButton();
             this.tsCompileStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.btExecuteSelectedMethod = new System.Windows.Forms.ToolStripButton();
             this.lbExecuteCode = new System.Windows.Forms.ToolStripLabel();
             this.cboxCompliledSourceCodeMethods = new System.Windows.Forms.ToolStripComboBox();
+            this.btExecuteSelectedMethod = new System.Windows.Forms.ToolStripButton();
+            this.btDebugMethod = new System.Windows.Forms.ToolStripButton();
             this.lbCompilationErrors = new System.Windows.Forms.ToolStripLabel();
             this.btShowHideCompilationErrors = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -98,7 +100,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.label4 = new System.Windows.Forms.Label();
             this.lbPartialFileView = new System.Windows.Forms.ListBox();
             this.tbExecutionHistoryOrLog = new System.Windows.Forms.TextBox();
-            this.lboxCompilationErrors = new System.Windows.Forms.ListBox();
+            this.tvCompilationErrors = new System.Windows.Forms.TreeView();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -135,49 +137,51 @@ namespace O2.External.SharpDevelop.Ascx
             this.pasteToolStripMenuItem,
             this.saveToolStripMenuItem,
             this.openFileToolStripMenuItem,
-            this.settingsToolStripMenuItem});
+            this.settingsToolStripMenuItem,
+            this.addBreakpointOnCurrentLineToolStripMenuItem});
             this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(197, 158);
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(220, 180);
+            this.menuStripForSourceEdition.Opening += new System.ComponentModel.CancelEventHandler(this.menuStripForSourceEdition_Opening);
             // 
             // compileToolStripMenuItem
             // 
             this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-            this.compileToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.compileToolStripMenuItem.Text = "Compile";
             this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
             // 
             // executeSelectedMethodToolStripMenuItem
             // 
             this.executeSelectedMethodToolStripMenuItem.Name = "executeSelectedMethodToolStripMenuItem";
-            this.executeSelectedMethodToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.executeSelectedMethodToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.executeSelectedMethodToolStripMenuItem.Text = "Execute Selected Method";
             this.executeSelectedMethodToolStripMenuItem.Click += new System.EventHandler(this.executeSelectedMethodToolStripMenuItem_Click);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
@@ -186,7 +190,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autoCompileEvery10SecondsToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // autoCompileEvery10SecondsToolStripMenuItem
@@ -196,6 +200,13 @@ namespace O2.External.SharpDevelop.Ascx
             this.autoCompileEvery10SecondsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
             this.autoCompileEvery10SecondsToolStripMenuItem.Text = "Auto Compile every 10 seconds";
             this.autoCompileEvery10SecondsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.autoCompileEvery10SecondsToolStripMenuItem_CheckedChanged);
+            // 
+            // addBreakpointOnCurrentLineToolStripMenuItem
+            // 
+            this.addBreakpointOnCurrentLineToolStripMenuItem.Name = "addBreakpointOnCurrentLineToolStripMenuItem";
+            this.addBreakpointOnCurrentLineToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.addBreakpointOnCurrentLineToolStripMenuItem.Text = "Add Breakpoint on current line";
+            this.addBreakpointOnCurrentLineToolStripMenuItem.Click += new System.EventHandler(this.addBreakpointOnCurrentLineToolStripMenuItem_Click);
             // 
             // cboxVRuler
             // 
@@ -425,9 +436,10 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbCompileCode,
             this.btCompileCode,
             this.tsCompileStripSeparator,
-            this.btExecuteSelectedMethod,
             this.lbExecuteCode,
             this.cboxCompliledSourceCodeMethods,
+            this.btExecuteSelectedMethod,
+            this.btDebugMethod,
             this.lbCompilationErrors,
             this.btShowHideCompilationErrors,
             this.toolStripSeparator6,
@@ -557,17 +569,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.tsCompileStripSeparator.Name = "tsCompileStripSeparator";
             this.tsCompileStripSeparator.Size = new System.Drawing.Size(6, 25);
             // 
-            // btExecuteSelectedMethod
-            // 
-            this.btExecuteSelectedMethod.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btExecuteSelectedMethod.Image = ((System.Drawing.Image)(resources.GetObject("btExecuteSelectedMethod.Image")));
-            this.btExecuteSelectedMethod.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btExecuteSelectedMethod.Name = "btExecuteSelectedMethod";
-            this.btExecuteSelectedMethod.Size = new System.Drawing.Size(23, 22);
-            this.btExecuteSelectedMethod.Text = "Execute Selected Method";
-            this.btExecuteSelectedMethod.Visible = false;
-            this.btExecuteSelectedMethod.Click += new System.EventHandler(this.executeSelectedMethod_Click);
-            // 
             // lbExecuteCode
             // 
             this.lbExecuteCode.Name = "lbExecuteCode";
@@ -582,7 +583,30 @@ namespace O2.External.SharpDevelop.Ascx
             this.cboxCompliledSourceCodeMethods.Name = "cboxCompliledSourceCodeMethods";
             this.cboxCompliledSourceCodeMethods.Size = new System.Drawing.Size(150, 25);
             this.cboxCompliledSourceCodeMethods.Visible = false;
+            this.cboxCompliledSourceCodeMethods.SelectedIndexChanged += new System.EventHandler(this.cboxCompliledSourceCodeMethods_SelectedIndexChanged);
+            this.cboxCompliledSourceCodeMethods.TextChanged += new System.EventHandler(this.cboxCompliledSourceCodeMethods_TextChanged);
             this.cboxCompliledSourceCodeMethods.Click += new System.EventHandler(this.cboxCompliledSourceCodeMethods_Click);
+            // 
+            // btExecuteSelectedMethod
+            // 
+            this.btExecuteSelectedMethod.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btExecuteSelectedMethod.Image = ((System.Drawing.Image)(resources.GetObject("btExecuteSelectedMethod.Image")));
+            this.btExecuteSelectedMethod.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btExecuteSelectedMethod.Name = "btExecuteSelectedMethod";
+            this.btExecuteSelectedMethod.Size = new System.Drawing.Size(23, 22);
+            this.btExecuteSelectedMethod.Text = "Execute Selected Method";
+            this.btExecuteSelectedMethod.Visible = false;
+            this.btExecuteSelectedMethod.Click += new System.EventHandler(this.executeSelectedMethod_Click);
+            // 
+            // btDebugMethod
+            // 
+            this.btDebugMethod.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btDebugMethod.Image = ((System.Drawing.Image)(resources.GetObject("btDebugMethod.Image")));
+            this.btDebugMethod.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btDebugMethod.Name = "btDebugMethod";
+            this.btDebugMethod.Size = new System.Drawing.Size(23, 22);
+            this.btDebugMethod.Text = "Execute Selected Method under Debug Mode";
+            this.btDebugMethod.Click += new System.EventHandler(this.btDebugMethod_Click);
             // 
             // lbCompilationErrors
             // 
@@ -798,17 +822,16 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbExecutionHistoryOrLog.TabIndex = 48;
             this.tbExecutionHistoryOrLog.Visible = false;
             // 
-            // lboxCompilationErrors
+            // tvCompilationErrors
             // 
-            this.lboxCompilationErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lboxCompilationErrors.ForeColor = System.Drawing.Color.Red;
-            this.lboxCompilationErrors.FormattingEnabled = true;
-            this.lboxCompilationErrors.Location = new System.Drawing.Point(764, 28);
-            this.lboxCompilationErrors.Name = "lboxCompilationErrors";
-            this.lboxCompilationErrors.Size = new System.Drawing.Size(364, 173);
-            this.lboxCompilationErrors.TabIndex = 49;
-            this.lboxCompilationErrors.Visible = false;
-            this.lboxCompilationErrors.SelectedIndexChanged += new System.EventHandler(this.cbCompilationErrors_SelectedIndexChanged);
+            this.tvCompilationErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.tvCompilationErrors.Location = new System.Drawing.Point(764, 28);
+            this.tvCompilationErrors.Name = "tvCompilationErrors";
+            this.tvCompilationErrors.ShowNodeToolTips = true;
+            this.tvCompilationErrors.Size = new System.Drawing.Size(361, 209);
+            this.tvCompilationErrors.TabIndex = 50;
+            this.tvCompilationErrors.Visible = false;
+            this.tvCompilationErrors.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvCompilationErrors_AfterSelect);
             // 
             // ascx_SourceCodeEditor
             // 
@@ -816,8 +839,8 @@ namespace O2.External.SharpDevelop.Ascx
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.Controls.Add(this.tvCompilationErrors);
             this.Controls.Add(this.groupBoxWithFileAndSaveSettings);
-            this.Controls.Add(this.lboxCompilationErrors);
             this.Controls.Add(this.tbExecutionHistoryOrLog);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tecSourceCode);
@@ -886,7 +909,6 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripButton btSelectedLineHistory;
         private System.Windows.Forms.TextBox tbExecutionHistoryOrLog;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ListBox lboxCompilationErrors;
         private System.Windows.Forms.LinkLabel llCurrenlyLoadedObjectModel;
         private System.Windows.Forms.LinkLabel llReload;
         private System.Windows.Forms.ToolStripButton btSaveFile;
@@ -913,5 +935,8 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripMenuItem executeSelectedMethodToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autoCompileEvery10SecondsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addBreakpointOnCurrentLineToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton btDebugMethod;
+        private System.Windows.Forms.TreeView tvCompilationErrors;
     }
 }
