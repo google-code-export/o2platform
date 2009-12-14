@@ -206,6 +206,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		_3rdPartyDlls\ICSharpCode.TextEditor.dll = _3rdPartyDlls\ICSharpCode.TextEditor.dll
 		_3rdPartyDlls\Ionic.Zip.dll = _3rdPartyDlls\Ionic.Zip.dll
 		RnD\JavaVelocityAnalyzer\JavaVelocityAnalyzer.sln = RnD\JavaVelocityAnalyzer\JavaVelocityAnalyzer.sln
+		_3rdPartyDlls\Merlin.dll = _3rdPartyDlls\Merlin.dll
 		_3rdPartyDlls\Microsoft.GLEE.dll = _3rdPartyDlls\Microsoft.GLEE.dll
 		_3rdPartyDlls\Microsoft.GLEE.Drawing.dll = _3rdPartyDlls\Microsoft.GLEE.Drawing.dll
 		_3rdPartyDlls\Microsoft.GLEE.GraphViewerGDI.dll = _3rdPartyDlls\Microsoft.GLEE.GraphViewerGDI.dll
