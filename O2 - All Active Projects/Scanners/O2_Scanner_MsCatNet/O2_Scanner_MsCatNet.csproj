@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{D6C73FDF-CCD1-4633-A520-2027796241AD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -95,6 +95,10 @@
       <Project>{92B431A3-D875-4CB4-92E6-0FD422750D97}</Project>
       <Name>O2_External_Firefox</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
+      <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
+      <Name>O2_External_SharpDevelop</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
       <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
       <Name>O2_External_WinFormsUI</Name>
@@ -104,7 +108,7 @@
       <Name>O2 DotNet Wrappers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
-      <Project>{D388D146-D728-412E-8097-5C6E4E53612E}</Project>
+      <Project>{49F0878F-E643-4D19-BE27-BC4CF4D6A138}</Project>
       <Name>O2 ImportExport OunceLabs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
@@ -132,6 +136,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
@@ -147,6 +156,11 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
       <Visible>False</Visible>
       <ProductName>Windows Installer 3.1</ProductName>
@@ -161,6 +175,7 @@
       <TargetPath>
       </TargetPath>
       <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
   </ItemGroup>
