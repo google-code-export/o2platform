@@ -371,11 +371,20 @@ namespace O2.Core.CIR.CirCreator.DotNet
             }            
         }
 
+        public void processAssemblyDefinition(ICirData cirData, string assemblyPath)
+        {
+            processAssemblyDefinition(cirData, assemblyPath, false /*decompileCodeIfNoPdb*/);
+        }
+
         public void processAssemblyDefinition(ICirData cirData, string assemblyPath, bool decompileCodeIfNoPdb)
         {
             processAssemblyDefinition(cirData, CecilUtils.getAssembly(assemblyPath), assemblyPath, decompileCodeIfNoPdb);
-        }        
+        }
 
+        public void processAssemblyDefinition(ICirData cirData, AssemblyDefinition assemblyDefinition, string assemblyPath)
+        {
+            processAssemblyDefinition(cirData, assemblyDefinition, assemblyPath, false /*decompileCodeIfNoPdb*/);
+        }
         public void processAssemblyDefinition(ICirData cirData, AssemblyDefinition assemblyDefinition, string assemblyPath, bool decompileCodeIfNoPdb)
         {
             var tempSourceCodeFolder = DI.config.getTempFolderInTempDirectory("_O2_DecompiledDotNet_" + assemblyDefinition.Name.Name);
@@ -478,6 +487,11 @@ namespace O2.Core.CIR.CirCreator.DotNet
         {
             ICirData cirData = new CirData();
             return processAssemblyAndSaveAsCirDataFile(cirData, assemblyToProcess, targetDirectory, decompileCodeIfNoPdb);            
+        }
+
+        public CirDataAnalysis createCirDataAnalysisObject(List<string> assembliesToLoad)
+        {
+            return createCirDataAnalysisObject(assembliesToLoad,false /*decompileCodeIfNoPdb*/);
         }
 
         public CirDataAnalysis createCirDataAnalysisObject(List<string> assembliesToLoad, bool decompileCodeIfNoPdb)

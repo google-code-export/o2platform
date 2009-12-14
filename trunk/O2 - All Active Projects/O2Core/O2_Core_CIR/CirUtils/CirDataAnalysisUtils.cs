@@ -523,6 +523,11 @@ namespace O2.Core.CIR.CirUtils
             cirDataAnalysis.lCirClass_bySuperClass = new List<string>();
         }
 
+        public static void loadFileIntoCirDataAnalysisObject(string sFileToLoad, ICirDataAnalysis cirDataAnalysis)
+        {
+            loadFileIntoCirDataAnalysisObject(sFileToLoad, cirDataAnalysis, false /*decompileCodeIfNoPdb*/);
+        }
+
         public static void loadFileIntoCirDataAnalysisObject(string sFileToLoad, ICirDataAnalysis cirDataAnalysis, bool decompileCodeIfNoPdb)
         {
             loadFileIntoCirDataAnalysisObject(sFileToLoad, cirDataAnalysis, true, true /*useCachedVersionIfAvailable*/ , true /*runRemapXrefs*/, decompileCodeIfNoPdb);

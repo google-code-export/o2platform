@@ -25,7 +25,7 @@ namespace O2.External.IKVM.Ascx
         public void loadDefaultSetOfFilesToConvert()
         {
             dotNetAssembliesToConvert.clearMappings();
-            dotNetAssembliesToConvert.setExtensionsToShow_viaGUIevents(".dll .exe");
+            dotNetAssembliesToConvert.setExtensionsToShow(".dll .exe");
             dotNetAssembliesToConvert.addFiles(CompileEngine.getListOfO2AssembliesInExecutionDir());
             dotNetAssembliesToConvert.addFiles(AppDomainUtils.getDllsInCurrentAppDomain_FullPath());
             runOnLoad = false;
