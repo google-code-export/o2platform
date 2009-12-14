@@ -84,7 +84,15 @@ namespace O2.Scanner.MsCatNet.Ascx
             this.lbCantFindCatNetExecutable = new System.Windows.Forms.Label();
             this.tbPathToCatNetExecutable = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.webAutomation = new O2.External.Firefox.Ascx.WebAutomation.ascx_WebAutomation();
             this.tpConfig = new System.Windows.Forms.TabPage();
+            this.splitContainer5 = new System.Windows.Forms.SplitContainer();
+            this.label11 = new System.Windows.Forms.Label();
+            this.ascx_Directory3 = new O2.Views.ASCX.CoreControls.ascx_Directory();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.ascx_Directory4 = new O2.Views.ASCX.CoreControls.ascx_Directory();
+            this.label14 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tbDllToScan = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
@@ -93,14 +101,6 @@ namespace O2.Scanner.MsCatNet.Ascx
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.taskHostControl = new System.Windows.Forms.FlowLayoutPanel();
-            this.splitContainer5 = new System.Windows.Forms.SplitContainer();
-            this.label11 = new System.Windows.Forms.Label();
-            this.ascx_Directory3 = new O2.Views.ASCX.CoreControls.ascx_Directory();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.ascx_Directory4 = new O2.Views.ASCX.CoreControls.ascx_Directory();
-            this.label14 = new System.Windows.Forms.Label();
-            this.webAutomation = new O2.External.Firefox.Ascx.WebAutomation.ascx_WebAutomation();
             this.groupBox1.SuspendLayout();
             this.tcCatNetScanner.SuspendLayout();
             this.tbSplashPage.SuspendLayout();
@@ -117,10 +117,10 @@ namespace O2.Scanner.MsCatNet.Ascx
             this.tpConvertCatNetOzasmt.SuspendLayout();
             this.tpCatNetInstall.SuspendLayout();
             this.tpConfig.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.splitContainer5.Panel1.SuspendLayout();
             this.splitContainer5.Panel2.SuspendLayout();
             this.splitContainer5.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -483,7 +483,7 @@ namespace O2.Scanner.MsCatNet.Ascx
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(4, 4);
+            this.label10.Location = new System.Drawing.Point(4, 8);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(138, 13);
             this.label10.TabIndex = 20;
@@ -494,9 +494,9 @@ namespace O2.Scanner.MsCatNet.Ascx
             this.rtbLogFileForCurrentScan.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbLogFileForCurrentScan.Location = new System.Drawing.Point(3, 19);
+            this.rtbLogFileForCurrentScan.Location = new System.Drawing.Point(3, 31);
             this.rtbLogFileForCurrentScan.Name = "rtbLogFileForCurrentScan";
-            this.rtbLogFileForCurrentScan.Size = new System.Drawing.Size(568, 162);
+            this.rtbLogFileForCurrentScan.Size = new System.Drawing.Size(568, 150);
             this.rtbLogFileForCurrentScan.TabIndex = 19;
             this.rtbLogFileForCurrentScan.Text = "";
             this.rtbLogFileForCurrentScan.WordWrap = false;
@@ -526,7 +526,11 @@ namespace O2.Scanner.MsCatNet.Ascx
             // 
             // directoryWithScanCatNetResults
             // 
+            this.directoryWithScanCatNetResults._FileFilter = "*.*";
+            this.directoryWithScanCatNetResults._HandleDrop = true;
+            this.directoryWithScanCatNetResults._HideFiles = false;
             this.directoryWithScanCatNetResults._ProcessDroppedObjects = false;
+            this.directoryWithScanCatNetResults._ShowFileContentsOnTopTip = false;
             this.directoryWithScanCatNetResults._ShowFileSize = true;
             this.directoryWithScanCatNetResults._ShowLinkToUpperFolder = false;
             this.directoryWithScanCatNetResults._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
@@ -573,7 +577,11 @@ namespace O2.Scanner.MsCatNet.Ascx
             // 
             // directoryWithCreatedOzasmtFiles
             // 
+            this.directoryWithCreatedOzasmtFiles._FileFilter = "*.*";
+            this.directoryWithCreatedOzasmtFiles._HandleDrop = true;
+            this.directoryWithCreatedOzasmtFiles._HideFiles = false;
             this.directoryWithCreatedOzasmtFiles._ProcessDroppedObjects = false;
+            this.directoryWithCreatedOzasmtFiles._ShowFileContentsOnTopTip = false;
             this.directoryWithCreatedOzasmtFiles._ShowFileSize = true;
             this.directoryWithCreatedOzasmtFiles._ShowLinkToUpperFolder = false;
             this.directoryWithCreatedOzasmtFiles._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
@@ -644,7 +652,11 @@ namespace O2.Scanner.MsCatNet.Ascx
             // 
             // directoryToDropCatNetFilesForConversion
             // 
+            this.directoryToDropCatNetFilesForConversion._FileFilter = "*.*";
+            this.directoryToDropCatNetFilesForConversion._HandleDrop = true;
+            this.directoryToDropCatNetFilesForConversion._HideFiles = false;
             this.directoryToDropCatNetFilesForConversion._ProcessDroppedObjects = false;
+            this.directoryToDropCatNetFilesForConversion._ShowFileContentsOnTopTip = false;
             this.directoryToDropCatNetFilesForConversion._ShowFileSize = true;
             this.directoryToDropCatNetFilesForConversion._ShowLinkToUpperFolder = false;
             this.directoryToDropCatNetFilesForConversion._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Advanced;
@@ -720,6 +732,18 @@ namespace O2.Scanner.MsCatNet.Ascx
             this.label1.TabIndex = 48;
             this.label1.Text = "Path to MsCatNet executable";
             // 
+            // webAutomation
+            // 
+            this.webAutomation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.webAutomation.BackColor = System.Drawing.SystemColors.Control;
+            this.webAutomation.ForeColor = System.Drawing.Color.Black;
+            this.webAutomation.Location = new System.Drawing.Point(152, 68);
+            this.webAutomation.Name = "webAutomation";
+            this.webAutomation.Size = new System.Drawing.Size(733, 454);
+            this.webAutomation.TabIndex = 52;
+            // 
             // tpConfig
             // 
             this.tpConfig.Controls.Add(this.splitContainer5);
@@ -733,6 +757,110 @@ namespace O2.Scanner.MsCatNet.Ascx
             this.tpConfig.TabIndex = 1;
             this.tpConfig.Text = "Config";
             this.tpConfig.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer5
+            // 
+            this.splitContainer5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.splitContainer5.Location = new System.Drawing.Point(301, 303);
+            this.splitContainer5.Name = "splitContainer5";
+            // 
+            // splitContainer5.Panel1
+            // 
+            this.splitContainer5.Panel1.Controls.Add(this.label11);
+            this.splitContainer5.Panel1.Controls.Add(this.ascx_Directory3);
+            this.splitContainer5.Panel1.Controls.Add(this.label12);
+            // 
+            // splitContainer5.Panel2
+            // 
+            this.splitContainer5.Panel2.Controls.Add(this.label13);
+            this.splitContainer5.Panel2.Controls.Add(this.ascx_Directory4);
+            this.splitContainer5.Panel2.Controls.Add(this.label14);
+            this.splitContainer5.Size = new System.Drawing.Size(462, 144);
+            this.splitContainer5.SplitterDistance = 221;
+            this.splitContainer5.TabIndex = 52;
+            this.splitContainer5.Visible = false;
+            // 
+            // label11
+            // 
+            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(4, 119);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(243, 13);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "You can drop previously created CatNet scan files";
+            // 
+            // ascx_Directory3
+            // 
+            this.ascx_Directory3._FileFilter = "*.*";
+            this.ascx_Directory3._HandleDrop = true;
+            this.ascx_Directory3._HideFiles = false;
+            this.ascx_Directory3._ProcessDroppedObjects = true;
+            this.ascx_Directory3._ShowFileContentsOnTopTip = false;
+            this.ascx_Directory3._ShowFileSize = false;
+            this.ascx_Directory3._ShowLinkToUpperFolder = true;
+            this.ascx_Directory3._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
+            this.ascx_Directory3._WatchFolder = false;
+            this.ascx_Directory3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ascx_Directory3.BackColor = System.Drawing.SystemColors.Control;
+            this.ascx_Directory3.ForeColor = System.Drawing.Color.Black;
+            this.ascx_Directory3.Location = new System.Drawing.Point(1, 16);
+            this.ascx_Directory3.Name = "ascx_Directory3";
+            this.ascx_Directory3.Size = new System.Drawing.Size(212, 119);
+            this.ascx_Directory3.TabIndex = 22;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(5, 2);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(116, 13);
+            this.label12.TabIndex = 21;
+            this.label12.Text = "CatNet Results File";
+            // 
+            // label13
+            // 
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(10, 119);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(222, 13);
+            this.label13.TabIndex = 25;
+            this.label13.Text = "You can drag these files into a Finding Viewer";
+            // 
+            // ascx_Directory4
+            // 
+            this.ascx_Directory4._FileFilter = "*.*";
+            this.ascx_Directory4._HandleDrop = true;
+            this.ascx_Directory4._HideFiles = false;
+            this.ascx_Directory4._ProcessDroppedObjects = false;
+            this.ascx_Directory4._ShowFileContentsOnTopTip = false;
+            this.ascx_Directory4._ShowFileSize = false;
+            this.ascx_Directory4._ShowLinkToUpperFolder = true;
+            this.ascx_Directory4._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
+            this.ascx_Directory4._WatchFolder = false;
+            this.ascx_Directory4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.ascx_Directory4.BackColor = System.Drawing.SystemColors.Control;
+            this.ascx_Directory4.ForeColor = System.Drawing.Color.Black;
+            this.ascx_Directory4.Location = new System.Drawing.Point(7, 17);
+            this.ascx_Directory4.Name = "ascx_Directory4";
+            this.ascx_Directory4.Size = new System.Drawing.Size(223, 119);
+            this.ascx_Directory4.TabIndex = 24;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(10, 1);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(140, 13);
+            this.label14.TabIndex = 23;
+            this.label14.Text = "Converted Ozasmt Files";
             // 
             // groupBox3
             // 
@@ -819,114 +947,6 @@ namespace O2.Scanner.MsCatNet.Ascx
             this.taskHostControl.TabIndex = 46;
             this.taskHostControl.Visible = false;
             // 
-            // splitContainer5
-            // 
-            this.splitContainer5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer5.Location = new System.Drawing.Point(301, 303);
-            this.splitContainer5.Name = "splitContainer5";
-            // 
-            // splitContainer5.Panel1
-            // 
-            this.splitContainer5.Panel1.Controls.Add(this.label11);
-            this.splitContainer5.Panel1.Controls.Add(this.ascx_Directory3);
-            this.splitContainer5.Panel1.Controls.Add(this.label12);
-            // 
-            // splitContainer5.Panel2
-            // 
-            this.splitContainer5.Panel2.Controls.Add(this.label13);
-            this.splitContainer5.Panel2.Controls.Add(this.ascx_Directory4);
-            this.splitContainer5.Panel2.Controls.Add(this.label14);
-            this.splitContainer5.Size = new System.Drawing.Size(462, 144);
-            this.splitContainer5.SplitterDistance = 221;
-            this.splitContainer5.TabIndex = 52;
-            this.splitContainer5.Visible = false;
-            // 
-            // label11
-            // 
-            this.label11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(4, 119);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(243, 13);
-            this.label11.TabIndex = 23;
-            this.label11.Text = "You can drop previously created CatNet scan files";
-            // 
-            // ascx_Directory3
-            // 
-            this.ascx_Directory3._ProcessDroppedObjects = true;
-            this.ascx_Directory3._ShowFileSize = false;
-            this.ascx_Directory3._ShowLinkToUpperFolder = true;
-            this.ascx_Directory3._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
-            this.ascx_Directory3._WatchFolder = false;
-            this.ascx_Directory3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.ascx_Directory3.BackColor = System.Drawing.SystemColors.Control;
-            this.ascx_Directory3.ForeColor = System.Drawing.Color.Black;
-            this.ascx_Directory3.Location = new System.Drawing.Point(1, 16);
-            this.ascx_Directory3.Name = "ascx_Directory3";
-            this.ascx_Directory3.Size = new System.Drawing.Size(212, 119);
-            this.ascx_Directory3.TabIndex = 22;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(5, 2);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(116, 13);
-            this.label12.TabIndex = 21;
-            this.label12.Text = "CatNet Results File";
-            // 
-            // label13
-            // 
-            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(10, 119);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(222, 13);
-            this.label13.TabIndex = 25;
-            this.label13.Text = "You can drag these files into a Finding Viewer";
-            // 
-            // ascx_Directory4
-            // 
-            this.ascx_Directory4._ProcessDroppedObjects = false;
-            this.ascx_Directory4._ShowFileSize = false;
-            this.ascx_Directory4._ShowLinkToUpperFolder = true;
-            this.ascx_Directory4._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
-            this.ascx_Directory4._WatchFolder = false;
-            this.ascx_Directory4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.ascx_Directory4.BackColor = System.Drawing.SystemColors.Control;
-            this.ascx_Directory4.ForeColor = System.Drawing.Color.Black;
-            this.ascx_Directory4.Location = new System.Drawing.Point(7, 17);
-            this.ascx_Directory4.Name = "ascx_Directory4";
-            this.ascx_Directory4.Size = new System.Drawing.Size(223, 119);
-            this.ascx_Directory4.TabIndex = 24;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(10, 1);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(140, 13);
-            this.label14.TabIndex = 23;
-            this.label14.Text = "Converted Ozasmt Files";
-            // 
-            // webAutomation
-            // 
-            this.webAutomation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.webAutomation.BackColor = System.Drawing.SystemColors.Control;
-            this.webAutomation.ForeColor = System.Drawing.Color.Black;
-            this.webAutomation.Location = new System.Drawing.Point(152, 68);
-            this.webAutomation.Name = "webAutomation";
-            this.webAutomation.Size = new System.Drawing.Size(733, 454);
-            this.webAutomation.TabIndex = 52;
-            // 
             // ascx_MsCatNet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -959,13 +979,13 @@ namespace O2.Scanner.MsCatNet.Ascx
             this.tpCatNetInstall.PerformLayout();
             this.tpConfig.ResumeLayout(false);
             this.tpConfig.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.splitContainer5.Panel1.ResumeLayout(false);
             this.splitContainer5.Panel1.PerformLayout();
             this.splitContainer5.Panel2.ResumeLayout(false);
             this.splitContainer5.Panel2.PerformLayout();
             this.splitContainer5.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
         }
