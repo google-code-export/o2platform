@@ -12,6 +12,7 @@ namespace O2.Kernel.Interfaces.O2Core
         string hardCodedO2LocalSourceCodeDir { get; set; }
         
         string O2TempDir { get; set; }
+        string Version { get; }
         string O2ConfigFile { get; set; }
         string CurrentExecutableDirectory { get; }
         string CurrentExecutableFileName { get; }

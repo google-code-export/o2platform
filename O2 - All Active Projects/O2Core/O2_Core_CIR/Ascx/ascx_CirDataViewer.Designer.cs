@@ -60,7 +60,9 @@ namespace O2.Core.CIR.Ascx
             this.gbSelectedItemInfo = new System.Windows.Forms.GroupBox();
             this.scrollBarHorizontalSize = new System.Windows.Forms.HScrollBar();
             this.scrollBarVerticalSize = new System.Windows.Forms.VScrollBar();
+            this.functionCallsForSelectedItem = new O2.Core.CIR.Ascx.ascx_FunctionCalls();
             this.gbCirTrace = new System.Windows.Forms.GroupBox();
+            this.cirTraceForSelectedItem = new O2.Core.CIR.Ascx.ascx_CirTrace();
             this.gbRulesCreationTools = new System.Windows.Forms.GroupBox();
             this.llDrag_CurrentFilteredFunctions = new System.Windows.Forms.LinkLabel();
             this.llDrag_AllFunctions = new System.Windows.Forms.LinkLabel();
@@ -78,12 +80,10 @@ namespace O2.Core.CIR.Ascx
             this.openSourceCodeFileAndSelectLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.whenSourceCodeIsNOTAvailableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFunctionsDecompiledCodeInSourceCodeViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onFileDropOrLoadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.functionCallsForSelectedItem = new O2.Core.CIR.Ascx.ascx_FunctionCalls();
-            this.cirTraceForSelectedItem = new O2.Core.CIR.Ascx.ascx_CirTrace();
             this.functionsViewer = new O2.Views.ASCX.DataViewers.ascx_FunctionsViewer();
-            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.gbSelectedItemInfo.SuspendLayout();
             this.gbCirTrace.SuspendLayout();
@@ -304,7 +304,7 @@ namespace O2.Core.CIR.Ascx
             this.gbSelectedItemInfo.Controls.Add(this.scrollBarHorizontalSize);
             this.gbSelectedItemInfo.Controls.Add(this.scrollBarVerticalSize);
             this.gbSelectedItemInfo.Controls.Add(this.functionCallsForSelectedItem);
-            this.gbSelectedItemInfo.Location = new System.Drawing.Point(170, 218);
+            this.gbSelectedItemInfo.Location = new System.Drawing.Point(170, 242);
             this.gbSelectedItemInfo.Name = "gbSelectedItemInfo";
             this.gbSelectedItemInfo.Size = new System.Drawing.Size(810, 251);
             this.gbSelectedItemInfo.TabIndex = 9;
@@ -332,6 +332,16 @@ namespace O2.Core.CIR.Ascx
             this.scrollBarVerticalSize.TabIndex = 3;
             this.scrollBarVerticalSize.Scroll += new System.Windows.Forms.ScrollEventHandler(this.scrollBarVerticalSize_Scroll);
             // 
+            // functionCallsForSelectedItem
+            // 
+            this.functionCallsForSelectedItem.currentCirClass = null;
+            this.functionCallsForSelectedItem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.functionCallsForSelectedItem.Location = new System.Drawing.Point(3, 16);
+            this.functionCallsForSelectedItem.Name = "functionCallsForSelectedItem";
+            this.functionCallsForSelectedItem.rootCirFunction = null;
+            this.functionCallsForSelectedItem.Size = new System.Drawing.Size(804, 232);
+            this.functionCallsForSelectedItem.TabIndex = 0;
+            // 
             // gbCirTrace
             // 
             this.gbCirTrace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -345,6 +355,15 @@ namespace O2.Core.CIR.Ascx
             this.gbCirTrace.TabStop = false;
             this.gbCirTrace.Text = "Cir Trace";
             this.gbCirTrace.Visible = false;
+            // 
+            // cirTraceForSelectedItem
+            // 
+            this.cirTraceForSelectedItem.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cirTraceForSelectedItem.Location = new System.Drawing.Point(3, 16);
+            this.cirTraceForSelectedItem.Name = "cirTraceForSelectedItem";
+            this.cirTraceForSelectedItem.rootCirFunction = null;
+            this.cirTraceForSelectedItem.Size = new System.Drawing.Size(801, 294);
+            this.cirTraceForSelectedItem.TabIndex = 0;
             // 
             // gbRulesCreationTools
             // 
@@ -479,7 +498,7 @@ namespace O2.Core.CIR.Ascx
             this.whenSourceCodeIsNOTAvailableToolStripMenuItem,
             this.onFileDropOrLoadToolStripMenuItem});
             this.contextMenu.Name = "contextMenu";
-            this.contextMenu.Size = new System.Drawing.Size(367, 114);
+            this.contextMenu.Size = new System.Drawing.Size(367, 92);
             this.contextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
             // 
             // addBreakpointOnSelectedMethodifBreakpointIsEnabledToolStripMenuItem
@@ -529,6 +548,13 @@ namespace O2.Core.CIR.Ascx
             this.showFunctionsDecompiledCodeInSourceCodeViewerToolStripMenuItem.Text = "Show Function\'s Decompiled Code in  Source Code Viewer";
             this.showFunctionsDecompiledCodeInSourceCodeViewerToolStripMenuItem.Visible = false;
             // 
+            // decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem
+            // 
+            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.CheckOnClick = true;
+            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Name = "decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem";
+            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Size = new System.Drawing.Size(393, 22);
+            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Text = "(On file Drop) decompile Source Code and create temp Source files";
+            // 
             // onFileDropOrLoadToolStripMenuItem
             // 
             this.onFileDropOrLoadToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -545,25 +571,6 @@ namespace O2.Core.CIR.Ascx
             this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Name = "calculateTheCallersCalleswillLoadSlowerToolStripMenuItem";
             this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
             this.calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Text = "Calculate the Callers && Callees references (will load slower)";
-            // 
-            // functionCallsForSelectedItem
-            // 
-            this.functionCallsForSelectedItem.currentCirClass = null;
-            this.functionCallsForSelectedItem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.functionCallsForSelectedItem.Location = new System.Drawing.Point(3, 16);
-            this.functionCallsForSelectedItem.Name = "functionCallsForSelectedItem";
-            this.functionCallsForSelectedItem.rootCirFunction = null;
-            this.functionCallsForSelectedItem.Size = new System.Drawing.Size(804, 232);
-            this.functionCallsForSelectedItem.TabIndex = 0;
-            // 
-            // cirTraceForSelectedItem
-            // 
-            this.cirTraceForSelectedItem.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cirTraceForSelectedItem.Location = new System.Drawing.Point(3, 16);
-            this.cirTraceForSelectedItem.Name = "cirTraceForSelectedItem";
-            this.cirTraceForSelectedItem.rootCirFunction = null;
-            this.cirTraceForSelectedItem.Size = new System.Drawing.Size(801, 294);
-            this.cirTraceForSelectedItem.TabIndex = 0;
             // 
             // functionsViewer
             // 
@@ -585,13 +592,6 @@ namespace O2.Core.CIR.Ascx
             this.functionsViewer._onDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onDoubleClick);
             this.functionsViewer._onAfterSelect += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onAfterSelect);
             this.functionsViewer._onDrop += new O2.Kernel.CodeUtils.Callbacks.dMethod_Object(this.functionsViewer__onDrop);
-            // 
-            // decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem
-            // 
-            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.CheckOnClick = true;
-            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Name = "decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem";
-            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Size = new System.Drawing.Size(393, 22);
-            this.decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Text = "(On file Drop) decompile Source Code and create temp Source files";
             // 
             // ascx_CirDataViewer
             // 

@@ -438,7 +438,8 @@ namespace Cecil.Decompiler.ControlFlow {
 		void ComputeExceptionHandlerData (ExceptionHandlerData data, ExceptionHandler handler)
 		{
 			var range = ComputeRange (handler.HandlerStart, handler.HandlerEnd);
-
+            if (range == null)      // DC
+                return;             // DC
 			switch (handler.Type) {
 			case ExceptionHandlerType.Catch:
 				data.Catches.Add (new CatchHandlerData (handler.CatchType, range));
@@ -456,7 +457,11 @@ namespace Cecil.Decompiler.ControlFlow {
 
 		BlockRange ComputeRange (Instruction start, Instruction end)
 		{
-			return new BlockRange (blocks [start.Offset], blocks [end.Offset]);
+            if (blocks.ContainsKey(start.Offset) && blocks.ContainsKey(end.Offset)) // DC
+			    return new BlockRange (blocks [start.Offset], blocks [end.Offset]);
+
+            System.Diagnostics.Debug.WriteLine("in ControlFLowGraphBuileder.ComputeRange: blocks did not contain start.Offset or end.Offset keys, returning null"); // DC
+            return null; // DC
 		}
 	}
 }

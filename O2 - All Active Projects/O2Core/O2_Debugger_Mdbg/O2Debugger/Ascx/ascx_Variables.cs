@@ -18,10 +18,7 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
         public ascx_Variables()
         {
             InitializeComponent();
-            if(DesignMode== false)
-            {
-                PublicDI.o2MessageQueue.onMessages += ascx_CurrentFrameDetails_onMessages;
-            }
+            onLoad();            
         }
 
         private void tvVariables_BeforeExpand(object sender, TreeViewCancelEventArgs e)

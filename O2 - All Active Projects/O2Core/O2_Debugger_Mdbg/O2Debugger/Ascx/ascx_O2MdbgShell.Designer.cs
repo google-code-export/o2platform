@@ -35,6 +35,7 @@ namespace O2.Debugger.Mdbg.O2Debugger
             this.label9 = new System.Windows.Forms.Label();
             this.laActiveStatus = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.llResetOnCommandEvent = new System.Windows.Forms.LinkLabel();
             this.llRefreshButtonsState = new System.Windows.Forms.LinkLabel();
             this.label5 = new System.Windows.Forms.Label();
             this.laDebuggedProcessName = new System.Windows.Forms.Label();
@@ -52,6 +53,12 @@ namespace O2.Debugger.Mdbg.O2Debugger
             this.showCurrentLocation = new System.Windows.Forms.ToolStripButton();
             this.tsbDetach = new System.Windows.Forms.ToolStripButton();
             this.tspStopProcess = new System.Windows.Forms.ToolStripButton();
+            this.tbCommands = new System.Windows.Forms.TextBox();
+            this.tbMDbgOutput = new System.Windows.Forms.TextBox();
+            this.llClear = new System.Windows.Forms.LinkLabel();
+            this.llHelp = new System.Windows.Forms.LinkLabel();
+            this.btExecuteCommand = new System.Windows.Forms.Button();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.tsbStepInto = new System.Windows.Forms.ToolStripButton();
             this.tsbStepOver = new System.Windows.Forms.ToolStripButton();
@@ -62,14 +69,9 @@ namespace O2.Debugger.Mdbg.O2Debugger
             this.tsbStepOverAnimated = new System.Windows.Forms.ToolStripButton();
             this.tsbStepOutAnimated = new System.Windows.Forms.ToolStripButton();
             this.tsbStopAnimationAndContinue = new System.Windows.Forms.ToolStripButton();
-            this.tbCommands = new System.Windows.Forms.TextBox();
-            this.tbMDbgOutput = new System.Windows.Forms.TextBox();
-            this.llClear = new System.Windows.Forms.LinkLabel();
-            this.llHelp = new System.Windows.Forms.LinkLabel();
-            this.btExecuteCommand = new System.Windows.Forms.Button();
-            this.llResetOnCommandEvent = new System.Windows.Forms.LinkLabel();
             this.groupBox3.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbShowInternalMDbgErrors
@@ -128,12 +130,23 @@ namespace O2.Debugger.Mdbg.O2Debugger
             this.groupBox3.Controls.Add(this.laRunningStatus);
             this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.laActiveStatus);
-            this.groupBox3.Location = new System.Drawing.Point(4, 37);
+            this.groupBox3.Location = new System.Drawing.Point(4, 58);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(745, 66);
             this.groupBox3.TabIndex = 38;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Current Debugging Status";
+            // 
+            // llResetOnCommandEvent
+            // 
+            this.llResetOnCommandEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.llResetOnCommandEvent.Location = new System.Drawing.Point(545, 21);
+            this.llResetOnCommandEvent.Name = "llResetOnCommandEvent";
+            this.llResetOnCommandEvent.Size = new System.Drawing.Size(100, 33);
+            this.llResetOnCommandEvent.TabIndex = 33;
+            this.llResetOnCommandEvent.TabStop = true;
+            this.llResetOnCommandEvent.Text = "Reset OnCommand Event";
+            this.llResetOnCommandEvent.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llResetOnCommandEvent_LinkClicked);
             // 
             // llRefreshButtonsState
             // 
@@ -158,7 +171,7 @@ namespace O2.Debugger.Mdbg.O2Debugger
             // laDebuggedProcessName
             // 
             this.laDebuggedProcessName.AutoSize = true;
-            this.laDebuggedProcessName.Location = new System.Drawing.Point(125, 60);
+            this.laDebuggedProcessName.Location = new System.Drawing.Point(115, 21);
             this.laDebuggedProcessName.Name = "laDebuggedProcessName";
             this.laDebuggedProcessName.Size = new System.Drawing.Size(16, 13);
             this.laDebuggedProcessName.TabIndex = 1;
@@ -185,27 +198,17 @@ namespace O2.Debugger.Mdbg.O2Debugger
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel4,
-            this.startOrAttachToProcess,
-            this.debugggedProcessInfo,
-            this.breakpoints,
-            this.breakpointCreator,
             this.toolStripLabel1,
             this.tsbContinue,
             this.tsbBreak,
             this.showCurrentLocation,
             this.tsbDetach,
             this.tspStopProcess,
-            this.toolStripLabel3,
-            this.tsbStepInto,
-            this.tsbStepOver,
-            this.tsbStepOut,
-            this.toolStripSeparator1,
-            this.toolStripLabel2,
-            this.tsbStepIntoAnimated,
-            this.tsbStepOverAnimated,
-            this.tsbStepOutAnimated,
-            this.tsbStopAnimationAndContinue});
+            this.toolStripLabel4,
+            this.startOrAttachToProcess,
+            this.debugggedProcessInfo,
+            this.breakpoints,
+            this.breakpointCreator});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -315,6 +318,81 @@ namespace O2.Debugger.Mdbg.O2Debugger
             this.tspStopProcess.Text = "Stop Process";
             this.tspStopProcess.Click += new System.EventHandler(this.tspStopProcess_Click);
             // 
+            // tbCommands
+            // 
+            this.tbCommands.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbCommands.Location = new System.Drawing.Point(4, 129);
+            this.tbCommands.Name = "tbCommands";
+            this.tbCommands.Size = new System.Drawing.Size(679, 20);
+            this.tbCommands.TabIndex = 14;
+            this.tbCommands.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbCommands_KeyPress);
+            // 
+            // tbMDbgOutput
+            // 
+            this.tbMDbgOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbMDbgOutput.Location = new System.Drawing.Point(4, 168);
+            this.tbMDbgOutput.Multiline = true;
+            this.tbMDbgOutput.Name = "tbMDbgOutput";
+            this.tbMDbgOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbMDbgOutput.Size = new System.Drawing.Size(745, 268);
+            this.tbMDbgOutput.TabIndex = 13;
+            this.tbMDbgOutput.WordWrap = false;
+            // 
+            // llClear
+            // 
+            this.llClear.AutoSize = true;
+            this.llClear.Location = new System.Drawing.Point(2, 152);
+            this.llClear.Name = "llClear";
+            this.llClear.Size = new System.Drawing.Size(31, 13);
+            this.llClear.TabIndex = 16;
+            this.llClear.TabStop = true;
+            this.llClear.Text = "Clear";
+            this.llClear.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llClear_LinkClicked);
+            // 
+            // llHelp
+            // 
+            this.llHelp.AutoSize = true;
+            this.llHelp.Location = new System.Drawing.Point(39, 152);
+            this.llHelp.Name = "llHelp";
+            this.llHelp.Size = new System.Drawing.Size(29, 13);
+            this.llHelp.TabIndex = 18;
+            this.llHelp.TabStop = true;
+            this.llHelp.Text = "Help";
+            this.llHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llHelp_LinkClicked);
+            // 
+            // btExecuteCommand
+            // 
+            this.btExecuteCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btExecuteCommand.Location = new System.Drawing.Point(689, 127);
+            this.btExecuteCommand.Name = "btExecuteCommand";
+            this.btExecuteCommand.Size = new System.Drawing.Size(54, 23);
+            this.btExecuteCommand.TabIndex = 17;
+            this.btExecuteCommand.Text = "Exec";
+            this.btExecuteCommand.UseVisualStyleBackColor = true;
+            this.btExecuteCommand.Click += new System.EventHandler(this.btExecuteCommand_Click);
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel3,
+            this.tsbStepInto,
+            this.tsbStepOver,
+            this.tsbStepOut,
+            this.toolStripSeparator1,
+            this.toolStripLabel2,
+            this.tsbStepIntoAnimated,
+            this.tsbStepOverAnimated,
+            this.tsbStepOutAnimated,
+            this.tsbStopAnimationAndContinue});
+            this.toolStrip2.Location = new System.Drawing.Point(0, 25);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(752, 25);
+            this.toolStrip2.TabIndex = 40;
+            this.toolStrip2.Text = "toolStrip2";            
+            // 
             // toolStripLabel3
             // 
             this.toolStripLabel3.Name = "toolStripLabel3";
@@ -402,77 +480,11 @@ namespace O2.Debugger.Mdbg.O2Debugger
             this.tsbStopAnimationAndContinue.Text = "Stop Animation && continue";
             this.tsbStopAnimationAndContinue.Click += new System.EventHandler(this.tsbStopAnimationAndContinue_Click);
             // 
-            // tbCommands
-            // 
-            this.tbCommands.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbCommands.Location = new System.Drawing.Point(4, 113);
-            this.tbCommands.Name = "tbCommands";
-            this.tbCommands.Size = new System.Drawing.Size(679, 20);
-            this.tbCommands.TabIndex = 14;
-            this.tbCommands.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbCommands_KeyPress);
-            // 
-            // tbMDbgOutput
-            // 
-            this.tbMDbgOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbMDbgOutput.Location = new System.Drawing.Point(4, 152);
-            this.tbMDbgOutput.Multiline = true;
-            this.tbMDbgOutput.Name = "tbMDbgOutput";
-            this.tbMDbgOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbMDbgOutput.Size = new System.Drawing.Size(745, 284);
-            this.tbMDbgOutput.TabIndex = 13;
-            this.tbMDbgOutput.WordWrap = false;
-            // 
-            // llClear
-            // 
-            this.llClear.AutoSize = true;
-            this.llClear.Location = new System.Drawing.Point(2, 136);
-            this.llClear.Name = "llClear";
-            this.llClear.Size = new System.Drawing.Size(31, 13);
-            this.llClear.TabIndex = 16;
-            this.llClear.TabStop = true;
-            this.llClear.Text = "Clear";
-            this.llClear.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llClear_LinkClicked);
-            // 
-            // llHelp
-            // 
-            this.llHelp.AutoSize = true;
-            this.llHelp.Location = new System.Drawing.Point(39, 136);
-            this.llHelp.Name = "llHelp";
-            this.llHelp.Size = new System.Drawing.Size(29, 13);
-            this.llHelp.TabIndex = 18;
-            this.llHelp.TabStop = true;
-            this.llHelp.Text = "Help";
-            this.llHelp.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llHelp_LinkClicked);
-            // 
-            // btExecuteCommand
-            // 
-            this.btExecuteCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btExecuteCommand.Location = new System.Drawing.Point(689, 111);
-            this.btExecuteCommand.Name = "btExecuteCommand";
-            this.btExecuteCommand.Size = new System.Drawing.Size(54, 23);
-            this.btExecuteCommand.TabIndex = 17;
-            this.btExecuteCommand.Text = "Exec";
-            this.btExecuteCommand.UseVisualStyleBackColor = true;
-            this.btExecuteCommand.Click += new System.EventHandler(this.btExecuteCommand_Click);
-            // 
-            // llResetOnCommandEvent
-            // 
-            this.llResetOnCommandEvent.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.llResetOnCommandEvent.Location = new System.Drawing.Point(545, 21);
-            this.llResetOnCommandEvent.Name = "llResetOnCommandEvent";
-            this.llResetOnCommandEvent.Size = new System.Drawing.Size(100, 33);
-            this.llResetOnCommandEvent.TabIndex = 33;
-            this.llResetOnCommandEvent.TabStop = true;
-            this.llResetOnCommandEvent.Text = "Reset OnCommand Event";
-            this.llResetOnCommandEvent.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llResetOnCommandEvent_LinkClicked);
-            // 
             // ascx_O2MdbgShell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.toolStrip2);
             this.Controls.Add(this.tbCommands);
             this.Controls.Add(this.tbMDbgOutput);
             this.Controls.Add(this.llClear);
@@ -487,6 +499,8 @@ namespace O2.Debugger.Mdbg.O2Debugger
             this.groupBox3.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -509,22 +523,12 @@ namespace O2.Debugger.Mdbg.O2Debugger
         private System.Windows.Forms.ToolStripButton tsbBreak;
         private System.Windows.Forms.ToolStripButton tspStopProcess;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
-        private System.Windows.Forms.ToolStripButton tsbStepOverAnimated;
-        private System.Windows.Forms.ToolStripButton tsbStepOver;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
-        private System.Windows.Forms.ToolStripButton tsbStepInto;
-        private System.Windows.Forms.ToolStripButton tsbStepOut;
         private System.Windows.Forms.ToolStripButton tsbDetach;
-        private System.Windows.Forms.ToolStripButton tsbStepIntoAnimated;
-        private System.Windows.Forms.ToolStripButton tsbStepOutAnimated;
         private System.Windows.Forms.TextBox tbCommands;
         private System.Windows.Forms.TextBox tbMDbgOutput;
         private System.Windows.Forms.LinkLabel llClear;
         private System.Windows.Forms.LinkLabel llHelp;
         private System.Windows.Forms.Button btExecuteCommand;
-        private System.Windows.Forms.ToolStripButton tsbStopAnimationAndContinue;
         private System.Windows.Forms.ToolStripButton startOrAttachToProcess;
         private System.Windows.Forms.ToolStripButton breakpoints;
         private System.Windows.Forms.ToolStripButton debugggedProcessInfo;
@@ -532,6 +536,17 @@ namespace O2.Debugger.Mdbg.O2Debugger
         private System.Windows.Forms.ToolStripLabel toolStripLabel4;
         private System.Windows.Forms.ToolStripButton showCurrentLocation;
         private System.Windows.Forms.LinkLabel llResetOnCommandEvent;
+        private System.Windows.Forms.ToolStrip toolStrip2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+        private System.Windows.Forms.ToolStripButton tsbStepInto;
+        private System.Windows.Forms.ToolStripButton tsbStepOver;
+        private System.Windows.Forms.ToolStripButton tsbStepOut;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private System.Windows.Forms.ToolStripButton tsbStepIntoAnimated;
+        private System.Windows.Forms.ToolStripButton tsbStepOverAnimated;
+        private System.Windows.Forms.ToolStripButton tsbStepOutAnimated;
+        private System.Windows.Forms.ToolStripButton tsbStopAnimationAndContinue;
 
     }
 }

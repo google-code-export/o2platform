@@ -5,6 +5,8 @@ using System.Text;
 using Merlin;
 using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
+using System.Windows.Forms;
+using O2.DotNetWrappers.DotNet;
 
 namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
 {
@@ -30,9 +32,22 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             return newStep;
         }
 
+        public static IStep add_Message(this List<IStep> steps, string stepTitle, Func<string> messageToAdd)
+        {
+            //var message = messageToAdd();
+            var initialMessage = "initial message: ";
+            var newStep = Ex_Windows_Forms.createStepWithTextBox(stepTitle, initialMessage);
+            newStep.OnComponentAction =
+                (step) =>
+                {
+                    step.setText(messageToAdd());
+                };
+            steps.Add(newStep);
+            return newStep;
+        }
+
         public static IStep add_Message(this List<IStep> steps, string stepTitle, string message)
         {
-
             var newStep = Ex_Windows_Forms.createStepWithTextBox(stepTitle, message);
             steps.Add(newStep);
             return newStep;
@@ -49,6 +64,75 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             return newStep;
         }
 
+
+        public static IStep add_Control(this List<IStep> steps, Type controlType, string stepTitle, string stepSubTitle)
+        {
+            return add_Control(steps, controlType, stepTitle, stepSubTitle, null);
+        }
+
+        public static IStep add_Control(this List<IStep> steps, Type controlType, string stepTitle, string stepSubTitle, Action<IStep> onComponentLoad)
+        {
+            //control.AllowDrop = false;
+            var newStep = new TemplateStep(controlType);//, 10, stepTitle);
+            newStep.Subtitle = stepSubTitle;
+            newStep.OnComponentAction = onComponentLoad;
+            steps.Add(newStep);
+            return newStep;
+        }
+
+        public static IStep add_Control(this List<IStep> steps, Control control, string stepTitle, string stepSubTitle)
+        {
+            return add_Control(steps, control, stepTitle, stepSubTitle, null);
+        }
+
+        public static IStep add_Control(this List<IStep> steps, Control control, string stepTitle, string stepSubTitle, Action<IStep> onComponentLoad)
+        {
+            control.AllowDrop = false;
+            var newStep = new TemplateStep(control, 10, stepTitle);
+            newStep.Subtitle = stepSubTitle;
+            newStep.OnComponentAction = onComponentLoad;
+            steps.Add(newStep);
+            return newStep;
+        }
+
+        public static IStep add_SelectFolder(this List<IStep> steps, string stepTitle, string defaultFolder, Action<string> setResult)
+        {
+            // textbox
+            var textBox = new TextBox();
+            textBox.TextChanged += (sender, e) =>
+            {
+                setResult(textBox.Text);
+                PublicDI.log.info("in TextChanged");
+            };
+            textBox.Text = defaultFolder;
+            textBox.Width = 400;
+            textBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            textBox.AllowDrop = true;
+            textBox.DragDrop += (sender, e) => textBox.setText(Dnd.tryToGetFileOrDirectoryFromDroppedObject(e));
+            textBox.DragEnter += (sender, e) => e.Effect = DragDropEffects.Copy;
+
+            // button
+            var button = new Button();
+            button.Text = "Select Folder";
+            button.Click += (sender, e) =>
+            {
+                var folderBrowserDialog = new FolderBrowserDialog();
+                folderBrowserDialog.SelectedPath = defaultFolder;
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                    textBox.Text = folderBrowserDialog.SelectedPath;
+            };
+
+            // panel
+            var panel = new FlowLayoutPanel();
+            panel.Dock = DockStyle.Fill;// AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+
+            panel.Controls.Add(textBox);
+            panel.Controls.Add(button);
+
+            var newStep = new TemplateStep(panel, 10, stepTitle);
+            steps.Add(newStep);
+            return newStep;
+        }    	 
 
     }
 }

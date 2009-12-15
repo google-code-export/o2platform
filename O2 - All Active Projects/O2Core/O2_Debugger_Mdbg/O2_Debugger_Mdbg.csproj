@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3EDD49CB-F7F2-4CFE-AFAC-698B13B0C968}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -369,6 +369,7 @@
     <Compile Include="O2Debugger\Ascx\ascx_O2MdbgShell.Designer.cs">
       <DependentUpon>ascx_O2MdbgShell.cs</DependentUpon>
     </Compile>
+    <Compile Include="O2Debugger\Objects\O2MDbgVariable.cs" />
     <Compile Include="O2Debugger\ViaMscoree.cs" />
     <Compile Include="O2Debugger\mdbgCommandsCustomizedForO2.cs" />
     <Compile Include="startO2MdbgGui.cs" />

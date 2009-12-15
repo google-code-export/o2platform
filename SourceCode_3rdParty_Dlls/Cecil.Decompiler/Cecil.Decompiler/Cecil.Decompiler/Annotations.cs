@@ -261,13 +261,16 @@ namespace Cecil.Decompiler {
 			}
 		}
 
+        // DC there is an infinite Loop on this method so for now make it always return null
 		protected static InstructionBlock GetFirstCommonChild (InstructionBlock a, InstructionBlock b)
 		{
+            System.Diagnostics.Debug.WriteLine("Skipping execution of Annotations.GetFirstCommonChild to avoid 'Yield based' infinite loop");       
+            /*
 			var list = new List<InstructionBlock> (GetChildTree (a));
 			foreach (var child in GetChildTree (b))
 				if (list.Contains (child))
 					return child;
-
+            */
 			return null;
 		}
 
@@ -700,24 +703,41 @@ namespace Cecil.Decompiler {
 
 		void ProcessLoop (InstructionBlock block)
 		{
-			var start = block.Successors [0];
-			var before = cfg.Blocks [start.Index - 1];
+            try
+            {
+                var start = block.Successors[0];
+                if (start.Index == 0)
+                {
+                    System.Diagnostics.Debug.WriteLine("in detailedAnnotationBuilder.ProcessLoop: start.Index == 0 (so aborting function)");
+                    return;
+                }
+                var before = cfg.Blocks[start.Index - 1];
 
-			var annotation = IsPreTestedLoop (before, block) ?
-				Annotation.PreTestedLoop : Annotation.PostTestedLoop;
+                var annotation = IsPreTestedLoop(before, block) ?
+                    Annotation.PreTestedLoop : Annotation.PostTestedLoop;
 
-			var data = new LoopData (start, cfg.Blocks [block.Index + 1]);
+                var data = new LoopData(start, cfg.Blocks[block.Index + 1]);
 
-			Annotate (block.Last, annotation, data);
+                Annotate(block.Last, annotation, data);
 
-			PushLoopData (data);
+                PushLoopData(data);
 
-			Process (block.Successors [0]);
-			Process (block.Successors [1]);
+                Process(block.Successors[0]);
+                Process(block.Successors[1]);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("in detailedAnnotationBuilder.ProcessLoop: " + ex.Message);
+            }
 		}
 
 		static bool IsPreTestedLoop (InstructionBlock before, InstructionBlock block)
 		{
+            if (before.Successors.Length == 0)
+            {
+                System.Diagnostics.Debug.WriteLine("in detailedAnnotationBuilder.IsPreTestedLoop: before.Successors.Count == 0 (so returning false)");
+                return false;
+            }
 			return before.Successors [0] == block
 				&& before.Last.OpCode.FlowControl == FlowControl.Branch;
 		}

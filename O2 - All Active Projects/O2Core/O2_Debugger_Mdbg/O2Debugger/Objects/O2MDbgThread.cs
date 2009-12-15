@@ -2,20 +2,47 @@
 using System.Text;
 using O2.Debugger.Mdbg.Debugging.MdbgEngine;
 using O2.Debugger.Mdbg.Debugging.MdbgEngine;
+using System.Collections.Generic;
 
 namespace O2.Debugger.Mdbg.O2Debugger.Objects
 {
     public class O2MDbgThread
     {
-        public MDbgThread mdbgThread; // need to calculate if there is a performace impact in storing this pointer
+        public MDbgThread MdbgThread {get ; set;} // need to calculate if there is a performace impact in storing this pointer
 
-        // public List<String> stackTrace = new List<string>();
-        public StringBuilder stackTraceString = new StringBuilder();
+        public List<string> stackTrace = new List<string>();
+        public StringBuilder stackTraceString { get; set; }
+        public List<O2MDbgCurrentLocation> sourceCodeMappings { get; set; }
+        public O2MDbgCurrentLocation currentLocation { get; set; }
+        public List<O2MDbgVariable> o2MDbgvariables { get; set; }        
+        public bool Active { get; set; }
+        public int Number { get; set; }
+        public int Id { get; set; }
+        public bool HaveCurrentFrame { get; set; }
+        public string currentException { get; set; }
+        public string currentException_expandedView { get; set; }
 
-        public O2MDbgThread(MDbgThread _mDbgThread)
+        public O2MDbgThread()
         {
-            mdbgThread = _mDbgThread;
+            stackTraceString = new StringBuilder();
+            sourceCodeMappings = new List<O2MDbgCurrentLocation>();
+        }
+
+        public O2MDbgThread(MDbgThread mdbgThread) : this()
+        {
+            MdbgThread = mdbgThread;            
+            Id = mdbgThread.Id;
+            Number = mdbgThread.Number;
+            HaveCurrentFrame = mdbgThread.HaveCurrentFrame;            
+            currentLocation = new O2MDbgCurrentLocation(mdbgThread.CurrentSourcePosition);
+            if (mdbgThread.CurrentException != null && mdbgThread.CurrentException.IsNull == false)
+            {
+                currentException = mdbgThread.CurrentException.GetStringValue(false);
+                currentException_expandedView = mdbgThread.CurrentException.GetStringValue(true);
+            }
             calculateStackTrace();
+
+            o2MDbgvariables = DI.o2MDbg.sessionData.getCurrentFrameVariables(0 /*expandDepth*/, false /*canDoFunceval*/);
         }
 
         private void calculateStackTrace()
@@ -24,8 +51,15 @@ namespace O2.Debugger.Mdbg.O2Debugger.Objects
             foreach(MDbgILFrame mdbgILFrame in mdbgThread.Frames)
                 stackTrace.Add(mdbgILFrame.Function.FullName);
             */
-            foreach (MDbgILFrame mdbgILFrame in mdbgThread.Frames)
-                stackTraceString.AppendLine(mdbgILFrame.Function.FullName);
+            foreach (MDbgILFrame mdbgILFrame in MdbgThread.Frames)
+            {
+                var stackTraceFunction = mdbgILFrame.Function.FullName;
+                stackTraceString.AppendLine(stackTraceFunction);
+                stackTrace.Add(stackTraceFunction);
+                if (mdbgILFrame.SourcePosition != null)
+                    sourceCodeMappings.Add(new O2MDbgCurrentLocation(mdbgILFrame.SourcePosition));
+            }
+            
         }
     }
 }
