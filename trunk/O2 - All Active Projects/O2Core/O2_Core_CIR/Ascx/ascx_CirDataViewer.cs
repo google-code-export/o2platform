@@ -42,7 +42,7 @@ namespace O2.Core.CIR.Ascx
 
         private void functionsViewer__onDrop(object droppedObject)
         {
-            handleDrop(droppedObject, onFileDropOrLoadToolStripMenuItem.Checked, decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Checked);
+            handleDrop(droppedObject, calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Checked, decompiledSourceCodeAndCreateTempSourceFilesToolStripMenuItem.Checked);
         }
         
 
@@ -316,7 +316,7 @@ namespace O2.Core.CIR.Ascx
 
         private void llLoadCurrentAssembly_Click(object sender, EventArgs e)
         {
-            loadFile(DI.config.ExecutingAssembly, onFileDropOrLoadToolStripMenuItem.Checked, false /*decompileCodeIfNoPdb*/);
+            loadFile(DI.config.ExecutingAssembly, calculateTheCallersCalleswillLoadSlowerToolStripMenuItem.Checked, false /*decompileCodeIfNoPdb*/);
         }
 
         private void functionsViewer__onMouseMove(TreeNode treeNode)
