@@ -211,6 +211,7 @@ namespace O2.Debugger.Mdbg.O2Debugger
         private void llResetOnCommandEvent_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             resetOnCommandEvent();
-        }           
+        }        
+                 
     }
 }

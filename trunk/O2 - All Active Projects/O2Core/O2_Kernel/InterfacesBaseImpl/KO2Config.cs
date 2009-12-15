@@ -55,6 +55,14 @@ namespace O2.Kernel.InterfacesBaseImpl
             set { hardCodedO2LocalTempFolder = value; }
         }
 
+        public string Version 
+        {
+            get 
+            {
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+        }
+
         
 
         public string CurrentExecutableDirectory

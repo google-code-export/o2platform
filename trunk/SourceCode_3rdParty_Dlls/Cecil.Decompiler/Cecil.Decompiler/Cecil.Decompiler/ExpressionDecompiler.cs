@@ -881,6 +881,8 @@ namespace Cecil.Decompiler {
 
 		public void Negate (Expression expression)
 		{
+            if (expression == null)     // DC
+                return;
 			switch (expression.CodeNodeType) {
 			case CodeNodeType.BinaryExpression:
 				var binary = (BinaryExpression) expression;

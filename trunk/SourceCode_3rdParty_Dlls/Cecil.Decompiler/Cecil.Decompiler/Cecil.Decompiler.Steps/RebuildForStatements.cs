@@ -53,6 +53,12 @@ namespace Cecil.Decompiler.Steps {
 				return;
 
 			var index = node.Statements.IndexOf (matcher.Initializer);
+            if (index == -1)
+            {
+                System.Diagnostics.Debug.WriteLine("in BuildForStatements.ProcessBlock: index == -1 (so aborting function)");
+                return;
+            }
+            
 			node.Statements.RemoveAt (index); // initializer
 			node.Statements.RemoveAt (index); // while
 			node.Statements.Insert (index, matcher.For);

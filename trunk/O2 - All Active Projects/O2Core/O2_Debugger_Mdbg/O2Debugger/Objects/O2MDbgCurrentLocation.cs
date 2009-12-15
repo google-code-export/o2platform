@@ -21,31 +21,46 @@ namespace O2.Debugger.Mdbg.O2Debugger.Objects
         public int StartLine { get; set; }
         public int EndLine { get; set; }
 
-        public O2MDbgCurrentLocation(MDbgThread mdbgThread)
+        public O2MDbgCurrentLocation()
+        {
+            functionName = "";
+        }
+
+        public O2MDbgCurrentLocation(MDbgThread mdbgThread) : this()
         {
             loadCurrentLocationFromMDbgThread(mdbgThread);
             raiseOnBreakEvent();
         }
 
+        public O2MDbgCurrentLocation(MDbgSourcePosition mdbgsourcePosition) : this()
+        {
+            loadDataFromMDbgSourcePosition(mdbgsourcePosition);            
+        }
+
         public void loadCurrentLocationFromMDbgThread(MDbgThread mdbgThread)
         {
-            mdbgsourcePosition = mdbgThread.BottomFrame.SourcePosition;
-            hasSourceCodeDetails = (mdbgsourcePosition != null);
+             
             functionName = (mdbgThread.CurrentFrame != null && mdbgThread.CurrentFrame.Function != null)
                                ? mdbgThread.CurrentFrame.Function.FullName
                                : "";
-            if (mdbgsourcePosition != null)
+            //mdbgsourcePosition = mdbgThread.BottomFrame.SourcePosition;
+            loadDataFromMDbgSourcePosition(mdbgThread.BottomFrame.SourcePosition);            
+        }
+
+        private void loadDataFromMDbgSourcePosition(MDbgSourcePosition mDbgSourcePosition)
+        {
+            hasSourceCodeDetails = (mDbgSourcePosition != null);
+
+            if (mDbgSourcePosition != null)
             {
-                FileName = mdbgThread.BottomFrame.SourcePosition.Path;
-                Line = mdbgThread.BottomFrame.SourcePosition.Line;
-                IsSpecial = mdbgThread.BottomFrame.SourcePosition.IsSpecial;
-                StartColumn = mdbgThread.BottomFrame.SourcePosition.StartColumn;
-                EndColumn = mdbgThread.BottomFrame.SourcePosition.EndColumn;
-                StartLine = mdbgThread.BottomFrame.SourcePosition.StartLine;
-                EndLine = mdbgThread.BottomFrame.SourcePosition.EndLine;                
+                FileName = mDbgSourcePosition.Path;
+                Line = mDbgSourcePosition.Line;
+                IsSpecial = mDbgSourcePosition.IsSpecial;
+                StartColumn = mDbgSourcePosition.StartColumn;
+                EndColumn = mDbgSourcePosition.EndColumn;
+                StartLine = mDbgSourcePosition.StartLine;
+                EndLine = mDbgSourcePosition.EndLine;
             }
-          //  else
-          //      DI.log.info("at O2MDbgCurrentLocation, no source code for current function: {0}", functionName);
         }
 
         public void raiseOnBreakEvent()

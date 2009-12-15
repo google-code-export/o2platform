@@ -28,7 +28,13 @@ namespace O2.DotNetWrappers.ViewObjects
 
         public void invokeMTA(object[] parameters)
         {
-            O2Thread.mtaThread(() => DI.reflection.invoke(Method,parameters));
+            if (Method != null)
+                O2Thread.mtaThread(
+                () =>
+                {
+                    DI.log.info("executing method: {0}", filteredSignature.sSignature);
+                    DI.reflection.invoke(Method, parameters);
+                });
         }
 
         public void raiseO2MDbgDebugMethodInfoRequest(string loadDllsFrom)

@@ -64,27 +64,36 @@ namespace O2.DotNetWrappers.Windows
 
         public static TreeNode addNode(this TreeView treeView, string nodeText, int imageId, Color color, object nodeTag)
         {
-            var treeNode = treeView.addNode(nodeText, nodeTag);
-            treeNode.ForeColor = color;
-            treeNode.ImageIndex = imageId;
-            treeNode.SelectedImageIndex = imageId;
-            return treeNode;
+            return (TreeNode)treeView.invokeOnThread((()
+                => {
+			            var treeNode = treeView.addNode(nodeText, nodeTag);
+			            treeNode.ForeColor = color;
+			            treeNode.ImageIndex = imageId;
+			            treeNode.SelectedImageIndex = imageId;
+			            return treeNode;
+			      }));
         }
 
         public static TreeNode addNode(this TreeView treeView, string nodeText, object nodeTag)
         {
             return (TreeNode)treeView.invokeOnThread((()
-                =>
-            {
-                var treeNode = new TreeNode();
-                treeNode.Name = nodeText;
-                treeNode.Text = nodeText;
-                treeNode.Tag = nodeTag;
-                treeView.Nodes.Add(treeNode);
-                return treeNode;
-            }));
+                =>  {
+		                var treeNode = new TreeNode();
+		                treeNode.Name = nodeText;
+		                treeNode.Text = nodeText;
+		                treeNode.Tag = nodeTag;
+		                treeView.Nodes.Add(treeNode);
+		                return treeNode;
+		            }));
         }
 
+        public static int addNode(this TreeView treeView, TreeNode treeNode)
+        {
+            return (int)treeView.invokeOnThread((()
+                =>  {
+		                return treeView.Nodes.Add(treeNode);
+		            }));
+        }
 
         public static TreeNode addNode(this TreeView treeView, string nodeText)
         {
@@ -93,6 +102,53 @@ namespace O2.DotNetWrappers.Windows
                 {
                     return treeView.Nodes.Add(nodeText);
                 }));
+        }
+
+        public static TreeNode addNode(this TreeView treeView, TreeNode treeNode, string nodeText)
+        {
+            return (TreeNode)treeView.invokeOnThread((()
+                =>
+                {
+                    return O2Forms.newTreeNode(treeNode.Nodes, nodeText, 0, null, false); ;
+                }));
+        }
+        public static TreeNode addNode(this TreeView treeView, TreeNode treeNode, string nodeText, object nodeTag, bool addDummyNode)
+        {
+            return (TreeNode)treeView.invokeOnThread((()
+                =>
+                {
+                    var newNode = O2Forms.newTreeNode(treeNode.Nodes, nodeText, 0, nodeTag);
+                    if (addDummyNode)
+                        newNode.Nodes.Add("DummyNode_1");
+                    return newNode;
+                }));
+        }
+
+        public static TreeNode addNode(this TreeView treeView, string nodeText, object nodeTag, bool addDummyNode)
+        {
+            return (TreeNode)treeView.invokeOnThread((()
+                =>
+                {
+                    var treeNode = treeView.addNode(nodeText, nodeTag);
+                    if (addDummyNode)
+                        treeNode.Nodes.Add("DummyNode_2");
+                    return treeNode;
+                }));
+        }
+
+        public static void selectNode(this TreeView treeView, int nodeToSelect)
+        {
+            treeView.invokeOnThread(
+                () =>
+                {
+                    if (treeView.Nodes.Count > 0)
+                        treeView.SelectedNode = treeView.Nodes[0];
+                });
+        }
+
+        public static void clear(this TreeView treeView, TreeNode treeNode)
+        {
+            treeView.invokeOnThread(() => treeNode.Nodes.Clear());
         }
 
         public static void clear(this TreeView treeView)
@@ -104,7 +160,12 @@ namespace O2.DotNetWrappers.Windows
                     return; // makes this Sync call
                 });
         }
-        
+
+        public static void expandAll(this TreeView treeView)
+        {
+            treeView.invokeOnThread(() => treeView.ExpandAll());
+        }
+
         public static void setTextColor(this TreeView treeView, TreeNode treeNode, Color color)
         {
             treeView.invokeOnThread(()

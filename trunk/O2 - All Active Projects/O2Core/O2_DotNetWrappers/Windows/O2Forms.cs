@@ -1040,7 +1040,10 @@ namespace O2.DotNetWrappers.Windows
 
         #endregion
 
-
+        public static void addNodeToTreeNodeCollection(Control controlInCorrectThread, TreeNodeCollection targetTreeNodeCollection, TreeNode newNode)
+        {
+            addNodeToTreeNodeCollection(controlInCorrectThread, targetTreeNodeCollection, newNode, -1);
+        }
         /// <summary>
         /// Async Thread safe way to add nodes to TreeViews
         /// </summary>       
@@ -1050,7 +1053,7 @@ namespace O2.DotNetWrappers.Windows
             controlInCorrectThread.invokeOnThread(
                 () =>
                 {
-                    if (targetTreeNodeCollection.Count < maxNodesToAdd)
+                    if (maxNodesToAdd == -1 || targetTreeNodeCollection.Count < maxNodesToAdd)
                         if (Thread.CurrentThread.IsAlive)
                             targetTreeNodeCollection.Add(newNode);
                 });

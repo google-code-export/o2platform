@@ -10,11 +10,23 @@ using O2.Debugger.Mdbg.O2Debugger.Objects;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.Interfaces.Messages;
+using O2.Kernel;
 
 namespace O2.Debugger.Mdbg.O2Debugger.Ascx
 {
     public partial class ascx_Variables
     {
+        bool runOnLoad = true;
+
+        void onLoad()
+        {
+            if (runOnLoad && DesignMode == false)
+            {
+                PublicDI.o2MessageQueue.onMessages += ascx_CurrentFrameDetails_onMessages;
+                runOnLoad = false;
+            }
+        }
+
         void ascx_CurrentFrameDetails_onMessages(IO2Message o2Message)
         {
             if (o2Message is IM_O2MdbgAction)
@@ -24,10 +36,6 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
                 {
                     case IM_O2MdbgActions.breakEvent:
                         showFrameVariables();
-                        showFrameThreads();
-                        showFrameStackTrace();
-                        //DI.o2MDbg.executeMDbgCommand(O2MDbgCommands.printLocalVariables());
-                        //DI.o2MDbg.executeMDbgCommand("w");
                         break;                    
                 }
             }
@@ -80,15 +88,7 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
         /*lvVariables.invokeOnThread(
                 () =>
                     {
-        */
-
-        public void showFrameStackTrace()
-        {
-        }
-
-        public void showFrameThreads()
-        {
-        }
+        */        
 
         private void showVariablesDetails(O2MDbgVariable o2MDbgVariable)
         {
