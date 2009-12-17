@@ -171,7 +171,7 @@ namespace Merlin
             // 
             // WizardForm
             // 
-            this.AcceptButton = this.btnNext;
+         //   this.AcceptButton = this.btnNext; // was capturing the enter key
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;

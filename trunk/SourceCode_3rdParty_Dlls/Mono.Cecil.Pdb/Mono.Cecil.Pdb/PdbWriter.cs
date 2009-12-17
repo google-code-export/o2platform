@@ -181,21 +181,27 @@ namespace Mono.Cecil.Pdb {
 		void Patch ()
 		{
 			// patch debug info in PE file to match PDB
+            //try
+            //{
+                byte[] DebugInfo = m_writer.GetDebugInfo();
+                m_writer.Close();
 
-			byte[] DebugInfo = m_writer.GetDebugInfo ();
-			m_writer.Close();
+                RVA debugHeaderRVA = m_module.Image.PEOptionalHeader.DataDirectories.Debug.VirtualAddress;
+                long debugHeaderPos = m_module.Image.ResolveVirtualAddress(debugHeaderRVA);
+                uint sizeUntilData = 0x1c; // copied from ImageWriter
+                long debugDataPos = debugHeaderPos + sizeUntilData;
 
-			RVA debugHeaderRVA = m_module.Image.PEOptionalHeader.DataDirectories.Debug.VirtualAddress;
-			long debugHeaderPos = m_module.Image.ResolveVirtualAddress (debugHeaderRVA);
-			uint sizeUntilData = 0x1c; // copied from ImageWriter
-			long debugDataPos = debugHeaderPos + sizeUntilData;
-
-			using (FileStream fs = new FileStream(m_assembly, FileMode.Open, FileAccess.Write))
-			{
-				BinaryWriter writer = new BinaryWriter(fs);
-				writer.BaseStream.Position = debugDataPos;
-				writer.Write(DebugInfo);
-			}
+                using (FileStream fs = new FileStream(m_assembly, FileMode.Open, FileAccess.Write))
+                {
+                    BinaryWriter writer = new BinaryWriter(fs);
+                    writer.BaseStream.Position = debugDataPos;
+                    writer.Write(DebugInfo);
+                }
+          //  }
+          //  catch (Exception ex)
+          //  {
+          //      System.Diagnostics.Debug.WriteLine("in PdbWriter.Patch: " + ex.Message);
+          //  }
 		}
 	}
 }
