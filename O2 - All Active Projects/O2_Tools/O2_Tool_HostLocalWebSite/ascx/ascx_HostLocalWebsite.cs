@@ -2,18 +2,22 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using O2.Kernel;
 using O2.Tool.HostLocalWebsite;
 using O2.Tool.HostLocalWebsite.classes;
-using O2.Tool.HostLocalWebsite.classes;
+using O2.DotNetWrappers.DotNet;
 
 namespace O2.Tool.HostLocalWebsite.ascx
 {
     public partial class ascx_HostLocalWebsite : UserControl
     {
+    	public WebServices webservices;
+    	
         public ascx_HostLocalWebsite()
         {
             InitializeComponent();
             ascx_DropObject1.Text = "Drop Folder To Run";
+            webservices = new WebServices();
         }
 
         private void onDispose()
@@ -25,7 +29,7 @@ namespace O2.Tool.HostLocalWebsite.ascx
         {
             if (DesignMode == false)
             {
-                DI.log.error("THIS WAS NOT BEING FIRED IN DEVELOPMENT!!!");
+                PublicDI.log.error("THIS WAS NOT BEING FIRED IN DEVELOPMENT!!!");
                 setupGui();
             }
         }
@@ -40,15 +44,23 @@ namespace O2.Tool.HostLocalWebsite.ascx
 
         private void btStartWebService_Click(object sender, EventArgs e)
         {
-            if (tbSettings_Path.Text == "")
-                setupGui();
-
-            if (tbSettings_Path.Text[tbSettings_Path.Text.Length - 1] == '\\')
-                tbSettings_Path.Text = tbSettings_Path.Text.Substring(0, tbSettings_Path.Text.Length - 1);
-
-            webservices.StopWebService();
-            webservices.StartWebService();
-            tbUrlToLoad.Text = webservices.GetWebServiceURL();
+        	try
+        	{
+	            if (tbSettings_Path.Text == "")
+	                setupGui();
+	
+	            if (tbSettings_Path.Text[tbSettings_Path.Text.Length - 1] == '\\')
+	                tbSettings_Path.Text = tbSettings_Path.Text.Substring(0, tbSettings_Path.Text.Length - 1);
+	
+	            webservices.StopWebService();
+	            webservices.StartWebService();
+	        }
+	        catch (Exception ex)
+	        {
+	        	PublicDI.log.error("in btStartWebService_Click: {0}", ex);
+	        }
+	        var webServiceUrl = webservices.GetWebServiceURL();
+            tbUrlToLoad.Text = webServiceUrl;
         }
 
         private void btSetTestEnvironment_Click(object sender, EventArgs e)
@@ -80,17 +92,28 @@ namespace O2.Tool.HostLocalWebsite.ascx
             if (Directory.Exists(sItemToLoad))
                 startWebServerOnDirectory(sItemToLoad);
             else
-                DI.log.error("Item dropped must be a folder");
+                PublicDI.log.error("Item dropped must be a folder");
         }
 
-        public void startWebServerOnDirectory(string sDirectoryToProcess)
+		public string startWebServerOnDirectory(string sDirectoryToProcess)	
+		{
+			var randomPort = (50000 + new Random().Next(10000)).ToString();
+			return startWebServerOnDirectory(sDirectoryToProcess,randomPort);
+			
+		}
+		
+        public string startWebServerOnDirectory(string sDirectoryToProcess, string port)
         {
-            if (tbSettings_Exe.Text == "")
-                tbSettings_Exe.Text = webservices.sExe;
-            tbSettings_Port.Text = (50000 + new Random().Next(10000)).ToString();
-            tbSettings_Path.Text = sDirectoryToProcess;
-            tbSettings_VPath.Text = "/" + Path.GetFileName(sDirectoryToProcess);
-            btStartWebService_Click(null, null);
+        	return (string)this.invokeOnThread(
+        			()=> {        				
+				            if (tbSettings_Exe.Text == "")
+				                tbSettings_Exe.Text = webservices.sExe;
+				            tbSettings_Port.Text = port;
+				            tbSettings_Path.Text = sDirectoryToProcess;
+				            tbSettings_VPath.Text = "/" + Path.GetFileName(sDirectoryToProcess);
+				            btStartWebService_Click(null, null);
+				            return tbUrlToLoad.Text;
+				         });
         }
     }
 }
