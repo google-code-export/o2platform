@@ -37,11 +37,7 @@ namespace O2.Script
 		[Test]
         public string runWizard()
         {               
-        	var o2Wizard = new O2Wizard("Start Hacmebank");			
-        	
-        	o2Wizard.Steps.add_Control(typeof(ascx_HostLocalWebsite),"ascx_HostLocalWebsite","");        	
-        	
-        	
+        	var o2Wizard = new O2Wizard("Start Hacmebank");			        	
 			o2Wizard.Steps.add_SelectFolder("Config HacmeBank folder dir", hacmeBankRootFolder, (newValue) => hacmeBankRootFolder = newValue);			
         	o2Wizard.Steps.add_WebBrowser("Browser","Viewing Hacmebank folder in a WebBrowser", hacmeBankRootFolder);
         	o2Wizard.Steps.add_Control(typeof(ascx_HostLocalWebsite), "HacmeBank - WebServices","HacmeBank - WebServices", startWebServices);
