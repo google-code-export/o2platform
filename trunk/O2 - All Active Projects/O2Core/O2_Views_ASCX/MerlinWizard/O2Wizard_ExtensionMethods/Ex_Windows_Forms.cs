@@ -82,5 +82,33 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
                     step.UI.Controls[0].Controls.Add(checkBox);
                 });
         }
+
+        public static IStep add_WebBrowser(this List<IStep> steps, string stepTitle, string stepSubTitle)
+        {
+            return steps.add_WebBrowser(stepTitle, stepSubTitle, null, null);
+        }
+        public static IStep add_WebBrowser(this List<IStep> steps, string stepTitle, string stepSubTitle, string defaultUrl)
+        {
+            return steps.add_WebBrowser(stepTitle, stepSubTitle, defaultUrl, null);
+        }
+
+        public static IStep add_WebBrowser(this List<IStep> steps, string stepTitle, string stepSubTitle, string defaultUrl, Action<IStep> OnComponentAction)
+        {
+
+            //control.AllowDrop = false;
+            var newStep = new TemplateStep(new Panel(), 10, stepTitle);
+            newStep.Subtitle = stepSubTitle;
+            newStep.OnComponentLoad =
+                (step) =>
+                {
+                    var webBrowser = new WebBrowser();
+                    step.UI = webBrowser;
+                    if (false == string.IsNullOrEmpty(defaultUrl))
+                        webBrowser.Navigate(defaultUrl);
+                };
+            newStep.OnComponentAction = OnComponentAction;
+            steps.Add(newStep);
+            return newStep;
+        }
     }
 }

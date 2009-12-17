@@ -122,7 +122,9 @@
     <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_MonoDecompiler.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="_Rules\_Samples\Wizards\Wizard - Start HacmeBank.cs" />
     <Compile Include="_Rules\_Samples\Wizards\Wizard_BackupFolder.cs" />
+    <Compile Include="_Rules\_Samples\Wizards\Wizard_CopyGacDlls.cs" />
     <Compile Include="_Rules\_Samples\Wizards\Wizard_SearchEngine_Use_Case_1 - under dev.cs" />
     <Compile Include="_Templates\Empty_XRule.cs" />
     <Compile Include="_Templates\Empty_Class.cs" />
@@ -149,6 +151,10 @@
       <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
       <Name>O2_External_SharpDevelop</Name>
     </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_Core_CIR\O2_Core_CIR.csproj">
+      <Project>{F19ED2FE-8191-4534-8DAC-4C42DEE87B52}</Project>
+      <Name>O2_Core_CIR</Name>
+    </ProjectReference>
     <ProjectReference Include="..\O2Core\O2_Core_XRules\O2_Core_XRules.csproj">
       <Project>{E5CB533C-DA98-408E-B021-171293AAAE3E}</Project>
       <Name>O2_Core_XRules</Name>
@@ -164,6 +170,10 @@
     <ProjectReference Include="..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
       <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
       <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_Tools\O2_Tool_HostLocalWebSite\O2_Tool_HostLocalWebsite.csproj">
+      <Project>{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}</Project>
+      <Name>O2_Tool_HostLocalWebsite</Name>
     </ProjectReference>
     <ProjectReference Include="..\O2_Tools\O2_Tool_SearchEngine\O2_Tool_SearchEngine.csproj">
       <Project>{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}</Project>

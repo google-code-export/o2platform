@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_SearchEngine", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merlin", "..\..\..\SourceCode_3rdParty_Dlls\Merlin_Workflow\Merlin\Merlin.csproj", "{5569E453-3A8E-425A-81CF-EB964117B7EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_HostLocalWebsite", "..\O2_Tool_HostLocalWebSite\O2_Tool_HostLocalWebsite.csproj", "{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -163,6 +165,12 @@ Global
 		{5569E453-3A8E-425A-81CF-EB964117B7EC}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
 		{5569E453-3A8E-425A-81CF-EB964117B7EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5569E453-3A8E-425A-81CF-EB964117B7EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
+		{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
+		{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

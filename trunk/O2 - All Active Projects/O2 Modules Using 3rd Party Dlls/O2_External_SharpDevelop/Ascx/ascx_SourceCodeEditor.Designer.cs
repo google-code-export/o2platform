@@ -41,6 +41,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCompileEvery10SecondsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBreakpointOnCurrentLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cboxVRuler = new System.Windows.Forms.CheckBox();
             this.cboxInvalidLines = new System.Windows.Forms.CheckBox();
             this.cboxHRuler = new System.Windows.Forms.CheckBox();
@@ -101,7 +102,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbExecutionHistoryOrLog = new System.Windows.Forms.TextBox();
             this.tvCompilationErrors = new System.Windows.Forms.TreeView();
             this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
-            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -121,7 +121,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.addBreakpointOnCurrentLineToolStripMenuItem,
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem});
             this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(343, 224);
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(343, 202);
             this.menuStripForSourceEdition.Opening += new System.ComponentModel.CancelEventHandler(this.menuStripForSourceEdition_Opening);
             // 
             // compileToolStripMenuItem
@@ -188,6 +188,13 @@ namespace O2.External.SharpDevelop.Ascx
             this.addBreakpointOnCurrentLineToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.addBreakpointOnCurrentLineToolStripMenuItem.Text = "Add Breakpoint on current line";
             this.addBreakpointOnCurrentLineToolStripMenuItem.Click += new System.EventHandler(this.addBreakpointOnCurrentLineToolStripMenuItem_Click);
+            // 
+            // openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem
+            // 
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Name = "openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem";
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Text = "Open Current file in editor with \'Code Complete\' support";
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Click += new System.EventHandler(this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem_Click);
             // 
             // cboxVRuler
             // 
@@ -834,13 +841,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
             this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
             this.tecSourceCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragEnter);
-            // 
-            // openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem
-            // 
-            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Name = "openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem";
-            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
-            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Text = "Open Current file in editor with \'Code Complete\' support";
-            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Click += new System.EventHandler(this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem_Click);
             // 
             // ascx_SourceCodeEditor
             // 
