@@ -172,6 +172,7 @@ namespace O2.Tool.HostLocalWebsite.ascx
             this.btSetTestEnvironment.TabIndex = 4;
             this.btSetTestEnvironment.Text = "Load Test Environment";
             this.btSetTestEnvironment.UseVisualStyleBackColor = true;
+            this.btSetTestEnvironment.Visible = false;
             this.btSetTestEnvironment.Click += new System.EventHandler(this.btSetTestEnvironment_Click);
             // 
             // tbUrlToLoad
