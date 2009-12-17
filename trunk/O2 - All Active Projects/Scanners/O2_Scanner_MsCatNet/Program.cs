@@ -7,6 +7,7 @@ using O2.Kernel.Interfaces.Views;
 using O2.Scanner.MsCatNet.Ascx;
 using O2.Views.ASCX.O2Findings;
 using O2.External.SharpDevelop;
+using O2.Core.XRules.Ascx;
 
 namespace O2.Scanner.MsCatNet
 {
@@ -24,8 +25,11 @@ namespace O2.Scanner.MsCatNet
 
             if (O2AscxGUI.launch("O2 Scanner - MsCatNet"))
             {
+                O2AscxGUI.addDefaultControlsToMenu();                
                 O2AscxGUI.openAscx(typeof (ascx_MsCatNet), O2DockState.Document, "O2 Scanner - MsCatNet");
-                //O2AscxGUI.openAscx(typeof(ascx_FindingsViewer), O2DockState.DockBottomAutoHide, "O2 Findings Viewer");
+                O2AscxGUI.openAscx(typeof(ascx_XRules_Editor), O2DockState.Document, "XRules - Editor");
+                O2AscxGUI.addControlToMenu(typeof(ascx_FindingsViewer), O2DockState.DockBottomAutoHide, "O2 Findings Viewer");
+                O2AscxGUI.openAscx(typeof(ascx_XRules_UnitTests), O2DockState.DockRight, "XRules - Unit Tests");
             }
         }
     }
