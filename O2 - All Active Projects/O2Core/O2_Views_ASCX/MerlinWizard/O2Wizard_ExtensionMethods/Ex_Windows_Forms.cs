@@ -66,5 +66,21 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
         {
             textBox.invokeOnThread(() => textBox.Text = text);
         }
+
+        public static void add_CheckBox(this IStep step, string checkBoxText, bool initialCheckedValue, Action<bool> onChange)
+        {
+            step.UI.invokeOnThread(
+                () =>
+                {
+                    var checkBox = new CheckBox();
+                    checkBox.Text = checkBoxText;
+                    checkBox.AutoSize = true;
+                    checkBox.Checked = initialCheckedValue;
+                    if (onChange != null)
+                        checkBox.CheckedChanged += (sender, e) => onChange(checkBox.Checked);
+                    // at the moment this assumes that the control[0] is a contained of (for example) type FlowLayoutPanel
+                    step.UI.Controls[0].Controls.Add(checkBox);
+                });
+        }
     }
 }
