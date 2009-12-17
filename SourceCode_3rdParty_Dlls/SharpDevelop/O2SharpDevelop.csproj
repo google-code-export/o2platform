@@ -55,6 +55,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeCompletion\CodeCompletionData.cs" />
+    <Compile Include="CodeCompletion\CodeCompletionKeyHandler.cs" />
+    <Compile Include="CodeCompletion\CodeCompletionProvider.cs" />
+    <Compile Include="CodeCompletion\form_O2EditorWithCodeComplete.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CodeCompletion\HostCallbackImplementation.cs" />
+    <Compile Include="CodeCompletion\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CodeCompletion\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CodeCompletion\ToolTipProvider.cs" />
     <Compile Include="ICSharpCode.SharpDevelop.Dom\Project\O2_DC\FileUtility.Minimal.cs" />
     <Compile Include="ICSharpCode.SharpDevelop.Dom\Project\Src\Ambience.cs" />
     <Compile Include="ICSharpCode.SharpDevelop.Dom\Project\Src\BusyManager.cs" />
@@ -398,22 +412,22 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ICSharpCode.TextEditor\Project\Resources\ASPX.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\BAT-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\Boo.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\Coco-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\CPP-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\CSharp-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\HTML-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\ASPX.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\BAT-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\Boo.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\Coco-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\CPP-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\CSharp-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\HTML-Mode.xshd" />
     <None Include="ICSharpCode.TextEditor\Project\Resources\ICSharpCode.TextEditor.snk" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\Java-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\JavaScript-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\Mode.xsd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\Patch-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\PHP-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\Tex-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\VBNET-Mode.xshd" />
-    <None Include="ICSharpCode.TextEditor\Project\Resources\XML-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\Java-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\JavaScript-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\Mode.xsd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\Patch-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\PHP-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\Tex-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\VBNET-Mode.xshd" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\XML-Mode.xshd" />
     <None Include="NRefactory\Project\Src\Lexer\BuildKeywords.pl" />
     <None Include="NRefactory\Project\Src\Parser\CSharp\cs.ATG" />
     <None Include="NRefactory\Project\Src\Parser\Frames\Parser.frame" />
@@ -423,9 +437,12 @@
     <None Include="NRefactory\Project\Src\Parser\VBNet\VBNET.ATG" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ICSharpCode.TextEditor\Project\Resources\RightArrow.cur" />
-    <Content Include="ICSharpCode.TextEditor\Project\Resources\SyntaxModes.xml" />
-    <Content Include="ICSharpCode.TextEditor\Project\Resources\TextEditorControl.bmp" />
+    <EmbeddedResource Include="CodeCompletion\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\RightArrow.cur" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\SyntaxModes.xml" />
+    <EmbeddedResource Include="ICSharpCode.TextEditor\Project\Resources\TextEditorControl.bmp" />
     <Content Include="NRefactory\Project\Src\Lexer\CSharp\KeywordList.txt" />
     <Content Include="NRefactory\Project\Src\Lexer\VBNet\KeywordList.txt" />
     <Content Include="NRefactory\Project\Src\Parser\Frames\SharpCoco.exe" />
