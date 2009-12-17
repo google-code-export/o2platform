@@ -103,6 +103,10 @@
       <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
       <Name>O2_External_WinFormsUI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Core_XRules\O2_Core_XRules.csproj">
+      <Project>{E5CB533C-DA98-408E-B021-171293AAAE3E}</Project>
+      <Name>O2_Core_XRules</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>
@@ -123,11 +127,6 @@
   <ItemGroup>
     <None Include="O2_Tool_MsCatNet_TemporaryKey.pfx" />
     <None Include="RnD\Xsd\MSCatNet.Report.xsd" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="O2_Scanner_MsCatNet.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ascx\ascx_MsCatNet.resx">
@@ -168,16 +167,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <PublishFile Include="O2_Scanner_MsCatNet.xml">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

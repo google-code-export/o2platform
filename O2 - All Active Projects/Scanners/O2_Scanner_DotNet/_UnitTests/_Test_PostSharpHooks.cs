@@ -32,27 +32,7 @@ namespace O2.Scanner.DotNet._UnitTests
         private static IO2Log log = PublicDI.log;    	    	
     	
         string scriptToInstrument = @"C:\O2\_XRules_Local\TempFiles\TestScript_MultipleCalls.cs";
-    	
-    	[Test]
-    	public  bool _showO2ObjectModel()
-    	{
-    		var o2Assemblies = CompileEngine.getListOfO2AssembliesInExecutionDir();
-    		var methods = new List<MethodInfo>();
-    		foreach(var assembly in o2Assemblies)
-    		{    			
-    			methods.AddRange(PublicDI.reflection.getMethods(assembly).ToArray());
-    		}
-    		log.info("there are {0} O2 assemblies", o2Assemblies.Count);
-    		log.info("there are {0} methods", methods.Count);    		
-    		var methodsSignature = new List<String>();
-    		foreach(var method in methods)
-    			methodsSignature.Add(method.ToString());
-    		log.info("there are {0} methods sigantures", methodsSignature.Count);    		
-    		var functionsViewer = (ascx_FunctionsViewer)O2AscxGUI.openAscx(typeof(ascx_FunctionsViewer), O2DockState.Float, "O2 Object Model");
-    		functionsViewer.showSignatures(methodsSignature);
-    		return true;
-    	}
-    	     	   	    	
+    	    	     	   	    	
         public static string testStaticExecution(string filename)
         {            
             log.debug("File Exists: {0}", filename);

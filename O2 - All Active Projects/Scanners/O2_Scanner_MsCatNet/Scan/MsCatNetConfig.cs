@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using O2.Kernel;
 using O2.External.Firefox.Ascx.WebAutomation;
 
 namespace O2.Scanner.MsCatNet.Scan
 {
     public class MsCatNetConfig
     {
+    	public static String pathToCatCmdInstallDir = "";
         public static String pathToCatCmdExe = "";
         public static List<string> possibleCatNetExeNames = new List<string> {"CATNetCmd64.exe", "CATNetCmd.exe"};
 
@@ -50,10 +52,13 @@ namespace O2.Scanner.MsCatNet.Scan
                 {
                     pathToCatCmdExe = Path.Combine(folder, file);
                     if (File.Exists(pathToCatCmdExe))
-                        return true;
+                    {
+                    	pathToCatCmdInstallDir = folder;
+                        return true; 
+                    }
                 }
             
-            DI.log.error("Could not find MSCatNet Scanner on this box");            
+            PublicDI.log.error("Could not find MSCatNet Scanner on this box");            
             return false;
         }
 

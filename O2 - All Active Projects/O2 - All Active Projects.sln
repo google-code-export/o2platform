@@ -89,7 +89,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_External_Evaluant", "O2 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_External_SharpDevelop", "O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj", "{E76BCE43-8511-4CE8-A965-C0150F713CE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2 ImportExport OunceLabs", "O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj", "{D388D146-D728-412E-8097-5C6E4E53612E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2 ImportExport OunceLabs", "O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj", "{49F0878F-E643-4D19-BE27-BC4CF4D6A138}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Legacy_OunceV6", "O2Core\O2_Legacy_OunceV6\O2_Legacy_OunceV6.csproj", "{14F52AB9-7FC7-44F5-9A84-422ED47CFA1A}"
 EndProject
@@ -203,7 +203,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		_3rdPartyDlls\Evaluant.NLinq.o2.1.x.dll = _3rdPartyDlls\Evaluant.NLinq.o2.1.x.dll
 		RnD\forO2Core\ExecutionTrace\ExecutionTrace.sln = RnD\forO2Core\ExecutionTrace\ExecutionTrace.sln
 		_3rdPartyDlls\HTMLparserLibDotNet20.dll = _3rdPartyDlls\HTMLparserLibDotNet20.dll
-		_3rdPartyDlls\ICSharpCode.TextEditor.dll = _3rdPartyDlls\ICSharpCode.TextEditor.dll
 		_3rdPartyDlls\Ionic.Zip.dll = _3rdPartyDlls\Ionic.Zip.dll
 		RnD\JavaVelocityAnalyzer\JavaVelocityAnalyzer.sln = RnD\JavaVelocityAnalyzer\JavaVelocityAnalyzer.sln
 		_3rdPartyDlls\Merlin.dll = _3rdPartyDlls\Merlin.dll
@@ -251,6 +250,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		O2_XRules_Database\O2_XRules_Database.sln = O2_XRules_Database\O2_XRules_Database.sln
 		O2Core\O2_Legacy_CoreLib\O2CoreLib_Legacy.sln = O2Core\O2_Legacy_CoreLib\O2CoreLib_Legacy.sln
 		RnD\_OldStuff\O2Scan\O2Scan.sln = RnD\_OldStuff\O2Scan\O2Scan.sln
+		_3rdPartyDlls\O2SharpDevelop.dll = _3rdPartyDlls\O2SharpDevelop.dll
 		_O2_UnitTests\O2UnitTest_O2CoreLib\O2UnitTest_O2CoreLib.sln = _O2_UnitTests\O2UnitTest_O2CoreLib\O2UnitTest_O2CoreLib.sln
 		_O2_UnitTests\O2UnitTest_O2Tools\O2UnitTest_O2Tools.sln = _O2_UnitTests\O2UnitTest_O2Tools\O2UnitTest_O2Tools.sln
 		Scanners\O2_Rules_OunceLabs\OunceRules.sln = Scanners\O2_Rules_OunceLabs\OunceRules.sln
@@ -427,10 +427,10 @@ Global
 		{E76BCE43-8511-4CE8-A965-C0150F713CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E76BCE43-8511-4CE8-A965-C0150F713CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E76BCE43-8511-4CE8-A965-C0150F713CE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D388D146-D728-412E-8097-5C6E4E53612E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D388D146-D728-412E-8097-5C6E4E53612E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D388D146-D728-412E-8097-5C6E4E53612E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D388D146-D728-412E-8097-5C6E4E53612E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49F0878F-E643-4D19-BE27-BC4CF4D6A138}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49F0878F-E643-4D19-BE27-BC4CF4D6A138}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49F0878F-E643-4D19-BE27-BC4CF4D6A138}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49F0878F-E643-4D19-BE27-BC4CF4D6A138}.Release|Any CPU.Build.0 = Release|Any CPU
 		{14F52AB9-7FC7-44F5-9A84-422ED47CFA1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{14F52AB9-7FC7-44F5-9A84-422ED47CFA1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14F52AB9-7FC7-44F5-9A84-422ED47CFA1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -617,7 +617,7 @@ Global
 		{1F252725-D8BE-408A-BE5C-2D11D0DE8586} = {60D3F45B-D4D5-40AE-8AC8-45138833855C}
 		{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0} = {60D3F45B-D4D5-40AE-8AC8-45138833855C}
 		{F19ED2FE-8191-4534-8DAC-4C42DEE87B52} = {60D3F45B-D4D5-40AE-8AC8-45138833855C}
-		{D388D146-D728-412E-8097-5C6E4E53612E} = {60D3F45B-D4D5-40AE-8AC8-45138833855C}
+		{49F0878F-E643-4D19-BE27-BC4CF4D6A138} = {60D3F45B-D4D5-40AE-8AC8-45138833855C}
 		{BC958F16-74FF-4816-B19A-D78524DB1152} = {60D3F45B-D4D5-40AE-8AC8-45138833855C}
 		{A5CB8BED-722D-4A44-A00C-78A3791C7EB8} = {60D3F45B-D4D5-40AE-8AC8-45138833855C}
 		{6CDF7A9F-31CC-4496-90B1-09A39C8EEE08} = {60D3F45B-D4D5-40AE-8AC8-45138833855C}

@@ -17,7 +17,7 @@ namespace O2.Scanner.DotNet
     {        
         static void Main()
         {
-            XRules_Config.PathTo_XRulesDatabase_fromLocalDisk = DI.PathToLocalUnitTestsFiles;
+          //  XRules_Config.PathTo_XRulesDatabase_fromLocalDisk = DI.PathToLocalUnitTestsFiles;
          //   O2AscxGUI.openAscxAsForm(typeof(ascx_PatchAndMonitor));
          //   return;
             if (O2AscxGUI.launch("O2 Scanner - DotNet (Dynamic tracing and patching)"))
