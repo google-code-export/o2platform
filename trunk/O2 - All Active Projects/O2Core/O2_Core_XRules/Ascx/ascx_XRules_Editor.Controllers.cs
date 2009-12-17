@@ -64,8 +64,8 @@ namespace O2.Core.XRules.Ascx
 
                         var fileName = Path.GetFileName(fileToOpen);
                         // check if there is already a tab with this file loaded
-                        if (filesLoaded.ContainsKey(fileName))
-                            tcTabControlWithRulesSource.SelectedTab = filesLoaded[fileName];
+                        if (filesLoaded.ContainsKey(fileToOpen))
+                            tcTabControlWithRulesSource.SelectedTab = filesLoaded[fileToOpen];
                         else
                         {
                             var newTabPage = new TabPage(fileName);
@@ -78,7 +78,7 @@ namespace O2.Core.XRules.Ascx
                             tcTabControlWithRulesSource.SelectedTab = newTabPage;
 
                             // finally add to dictionary
-                            filesLoaded.Add(fileName, newTabPage);
+                            filesLoaded.Add(fileToOpen, newTabPage);
                         }
                     });
             return fileToOpen;

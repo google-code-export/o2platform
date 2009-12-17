@@ -388,6 +388,22 @@ namespace O2.External.SharpDevelop.Ascx
         {
             showSelectedErrorOnSourceCodeFile();
         }
+
+        private void openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // quick hack to show PoC
+            if (sPathToFileLoaded != null)
+            {                
+                CSharpEditor.MainForm.addReferencedAssembly(O2.DotNetWrappers.DotNet.CompileEngine.getListOfO2AssembliesInExecutionDir());
+                O2Thread.staThread(
+                    () =>
+                    {
+                        var form = new O2SharpDevelop.CodeCompletion.form_O2EditorWithCodeComplete(sPathToFileLoaded);
+                        form.setSaveMenuItemSaveState(true);
+                        form.ShowDialog();
+                    });
+            }
+        }
         
                                                                           
     }

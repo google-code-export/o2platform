@@ -107,7 +107,7 @@ namespace O2.External.O2Mono.MonoCecil
                         fileToCreate += ".dll";
                         break;
                 }
-
+            
             AssemblyFactory.SaveAssembly(assemblyDefinition, fileToCreate);
             
             return fileToCreate;

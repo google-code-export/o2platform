@@ -99,7 +99,21 @@ namespace O2.External.SharpDevelop.Ascx
         {
             var data = Dnd.tryToGetObjectFromDroppedObject(e);
             if (data != null)
-                tecSourceCode.ActiveTextAreaControl.TextArea.InsertString(data.ToString());
+            {
+                var dsa = data.GetType().FullName;
+                if (data is List<MethodInfo>)
+                {
+                    var methods = (List<MethodInfo>)data;
+                    if (methods.Count > 0)
+                    {                        
+                        var filteredSignature = new FilteredSignature(methods[0]);
+                        tecSourceCode.ActiveTextAreaControl.TextArea.InsertString(filteredSignature.sFunctionNameAndParams);
+                      //  var functionSignature = new FilteredSignature
+                    }
+                }
+                else
+                    tecSourceCode.ActiveTextAreaControl.TextArea.InsertString(data.ToString());
+            }
         }
 
         void TextArea_DragEnter(object sender, DragEventArgs e)

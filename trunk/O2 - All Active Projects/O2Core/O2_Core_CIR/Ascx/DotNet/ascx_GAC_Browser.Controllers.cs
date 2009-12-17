@@ -25,52 +25,7 @@ namespace O2.Core.CIR.Ascx.DotNet
             treeViewColorFilter = filter;
         }
 
-        static public List<IGacDll> currentGacAssemblies()
-        {
-            var gacAssemblies = new List<IGacDll>();
-            foreach (var directory in Files.getListOfAllDirectoriesFromDirectory(DI.PathToGac, true))
-            {
-                if (DI.PathToGac != Path.GetDirectoryName(directory))
-                {
-                    var name = Path.GetFileName(Path.GetDirectoryName(directory));
-                    var version = Path.GetFileName(directory);
-                    var fullPath = Path.Combine(directory, name + ".dll");
-                    if (File.Exists(fullPath))
-                        gacAssemblies.Add(new KGacDll(name, version, fullPath));
-                    else
-                    {
-                        // handle the rare cases when the assembly is an *.exe
-                        fullPath = Path.Combine(directory, name + ".exe");
-                        if (File.Exists(fullPath))
-                            gacAssemblies.Add(new KGacDll(name, version, fullPath));
-                        else
-                            DI.log.error("ERROR in currentGacAssemblies: could not find: {0}", fullPath);
-                    }
-                }
-            }
-            return gacAssemblies;
-        }
-
-        public static void backupGac()
-        {
-            backupGac(DI.config.getTempFileInTempDirectory("zip"));
-        }
-
-        public static void backupGac(string zipFileToSaveGacContents)
-        {
-            O2Thread.mtaThread(
-                () =>
-                {
-                    DI.log.info("Started unzip process of Gac Folder");
-                    var timer = new O2Timer("Gac Backup").start();
-                    new zipUtils().zipFolder(DI.PathToGac, zipFileToSaveGacContents);
-                    var logMessage = String.Format("Contents of \n\n\t{0}\n\n saved to \n\n\t{1}\n\n ", DI.PathToGac, zipFileToSaveGacContents);
-                    timer.stop();
-                    DI.log.info(logMessage);
-                    DI.log.showMessageBox(logMessage);
-                });
-        }
-
+        
         public string getBackupFilePath(string targetFolder)
         {
             return Path.Combine(targetFolder, string.Format("GAC_Backup_{0}.zip", DateTime.Now.ToShortDateString()));
@@ -93,7 +48,7 @@ namespace O2.Core.CIR.Ascx.DotNet
 
         public void loadListOfGacAssemblies(TreeView lbListOfGacAssemblies, string filter)
         {
-            loadListOfGacAssemblies(lbListOfGacAssemblies, filter, currentGacAssemblies());
+            loadListOfGacAssemblies(lbListOfGacAssemblies, filter, GacUtils.currentGacAssemblies());
         }
        
         public void loadListOfGacAssemblies(TreeView lbListOfGacAssemblies, string filter, List<IGacDll> assembliesToLoad)
@@ -127,8 +82,14 @@ namespace O2.Core.CIR.Ascx.DotNet
         {
             if (e.KeyCode == Keys.Enter)
             {
-                loadListOfGacAssemblies(tvListOfGacAssemblies, tbGacAssemblyFilter.Text);                
+               refreshView();
             }
+        }
+        
+        public void refreshView()
+        {
+             this.invokeOnThread(()=>
+                loadListOfGacAssemblies(tvListOfGacAssemblies, tbGacAssemblyFilter.Text));
         }
 
         public List<IGacDll> getListOfCurrentFilteredAssemblies()
@@ -146,6 +107,20 @@ namespace O2.Core.CIR.Ascx.DotNet
             if (tvListOfGacAssemblies.SelectedNode != null && tvListOfGacAssemblies.SelectedNode.Tag is IGacDll)
                 return (IGacDll) tvListOfGacAssemblies.SelectedNode.Tag;
             return null;
+        }
+
+        public string getGacAssemblyFilter()
+        {
+            return (string)this.invokeOnThread(() => { return tbGacAssemblyFilter.Text; });
+        }
+
+        public void setGacAssemblyFilter(string value)
+        { 
+            this.invokeOnThread(
+                ()=> { 
+                        tbGacAssemblyFilter.Text = value;
+                    refreshView();
+                });
         }
     }
 }

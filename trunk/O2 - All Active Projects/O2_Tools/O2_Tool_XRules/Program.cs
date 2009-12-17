@@ -59,7 +59,7 @@ namespace O2.Tool.XRules
 
                 O2AscxGUI.addControlToMenu(typeof(ascx_O2Rules_Struts), O2DockState.Document, "O2 Rules Struts");
 
-                O2AscxGUI.openAscx(typeof(ascx_XRules_Execution), O2DockState.Document, "XRules Execution");
+                O2AscxGUI.addControlToMenu(typeof(ascx_XRules_Execution), O2DockState.Document, "XRules Execution");
                 O2AscxGUI.openAscx(typeof(ascx_XRules_Editor), O2DockState.Document, "XRules Editor");
 
                 O2AscxGUI.openAscx(typeof(ascx_XRules_UnitTests), O2DockState.DockRight, "XRules & UnitTests");

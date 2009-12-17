@@ -22,7 +22,7 @@ namespace O2.Core.CIR.Ascx.DotNet
 
         private void llBackUpGAC_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            backupGac(getBackupFilePath(directory_ToBackupGAC.getCurrentDirectory()));
+            GacUtils.backupGac(getBackupFilePath(directory_ToBackupGAC.getCurrentDirectory()));
         }
 
         private void tvListOfGacAssemblies_AfterSelect(object sender, TreeViewEventArgs e)
@@ -32,6 +32,16 @@ namespace O2.Core.CIR.Ascx.DotNet
                                                                         {
                                                                                 (IGacDll) tvListOfGacAssemblies.SelectedNode.Tag
                                                                         });
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbGacAssemblyFilter_TextChanged(object sender, EventArgs e)
+        {
+
         }
         
     }

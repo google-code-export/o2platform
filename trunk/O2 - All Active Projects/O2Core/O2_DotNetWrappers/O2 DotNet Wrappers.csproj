@@ -55,6 +55,7 @@
     <Compile Include="DotNet\DevUtils.cs" />
     <Compile Include="DotNet\DnD.cs" />
     <Compile Include="DotNet\ExtensionMethods.cs" />
+    <Compile Include="DotNet\GacUtils.cs" />
     <Compile Include="DotNet\O2Linq.cs" />
     <Compile Include="DotNet\O2Thread.cs" />
     <Compile Include="DotNet\O2Timer.cs" />

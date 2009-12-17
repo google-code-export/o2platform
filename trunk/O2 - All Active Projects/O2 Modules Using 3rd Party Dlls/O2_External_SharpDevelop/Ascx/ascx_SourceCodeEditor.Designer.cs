@@ -31,7 +31,6 @@ namespace O2.External.SharpDevelop.Ascx
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ascx_SourceCodeEditor));
-            this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
             this.menuStripForSourceEdition = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeSelectedMethodToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -101,32 +100,13 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbPartialFileView = new System.Windows.Forms.ListBox();
             this.tbExecutionHistoryOrLog = new System.Windows.Forms.TextBox();
             this.tvCompilationErrors = new System.Windows.Forms.TreeView();
+            this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tecSourceCode
-            // 
-            this.tecSourceCode.AllowDrop = true;
-            this.tecSourceCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tecSourceCode.ContextMenuStrip = this.menuStripForSourceEdition;
-            this.tecSourceCode.IsIconBarVisible = true;
-            this.tecSourceCode.IsReadOnly = false;
-            this.tecSourceCode.Location = new System.Drawing.Point(3, 28);
-            this.tecSourceCode.Name = "tecSourceCode";
-            this.tecSourceCode.ShowEOLMarkers = true;
-            this.tecSourceCode.ShowSpaces = true;
-            this.tecSourceCode.ShowTabs = true;
-            this.tecSourceCode.Size = new System.Drawing.Size(1143, 409);
-            this.tecSourceCode.TabIndex = 17;
-            this.tecSourceCode.Load += new System.EventHandler(this.tecSourceCode_Load);
-            this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
-            this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
-            this.tecSourceCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragEnter);
             // 
             // menuStripForSourceEdition
             // 
@@ -138,50 +118,51 @@ namespace O2.External.SharpDevelop.Ascx
             this.saveToolStripMenuItem,
             this.openFileToolStripMenuItem,
             this.settingsToolStripMenuItem,
-            this.addBreakpointOnCurrentLineToolStripMenuItem});
+            this.addBreakpointOnCurrentLineToolStripMenuItem,
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem});
             this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(220, 180);
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(343, 224);
             this.menuStripForSourceEdition.Opening += new System.ComponentModel.CancelEventHandler(this.menuStripForSourceEdition_Opening);
             // 
             // compileToolStripMenuItem
             // 
             this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-            this.compileToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.compileToolStripMenuItem.Text = "Compile";
             this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
             // 
             // executeSelectedMethodToolStripMenuItem
             // 
             this.executeSelectedMethodToolStripMenuItem.Name = "executeSelectedMethodToolStripMenuItem";
-            this.executeSelectedMethodToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.executeSelectedMethodToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.executeSelectedMethodToolStripMenuItem.Text = "Execute Selected Method";
             this.executeSelectedMethodToolStripMenuItem.Click += new System.EventHandler(this.executeSelectedMethodToolStripMenuItem_Click);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
@@ -190,7 +171,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autoCompileEvery10SecondsToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // autoCompileEvery10SecondsToolStripMenuItem
@@ -204,7 +185,7 @@ namespace O2.External.SharpDevelop.Ascx
             // addBreakpointOnCurrentLineToolStripMenuItem
             // 
             this.addBreakpointOnCurrentLineToolStripMenuItem.Name = "addBreakpointOnCurrentLineToolStripMenuItem";
-            this.addBreakpointOnCurrentLineToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.addBreakpointOnCurrentLineToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.addBreakpointOnCurrentLineToolStripMenuItem.Text = "Add Breakpoint on current line";
             this.addBreakpointOnCurrentLineToolStripMenuItem.Click += new System.EventHandler(this.addBreakpointOnCurrentLineToolStripMenuItem_Click);
             // 
@@ -833,6 +814,34 @@ namespace O2.External.SharpDevelop.Ascx
             this.tvCompilationErrors.Visible = false;
             this.tvCompilationErrors.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvCompilationErrors_AfterSelect);
             // 
+            // tecSourceCode
+            // 
+            this.tecSourceCode.AllowDrop = true;
+            this.tecSourceCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tecSourceCode.ContextMenuStrip = this.menuStripForSourceEdition;
+            this.tecSourceCode.IsIconBarVisible = true;
+            this.tecSourceCode.IsReadOnly = false;
+            this.tecSourceCode.Location = new System.Drawing.Point(3, 28);
+            this.tecSourceCode.Name = "tecSourceCode";
+            this.tecSourceCode.ShowEOLMarkers = true;
+            this.tecSourceCode.ShowSpaces = true;
+            this.tecSourceCode.ShowTabs = true;
+            this.tecSourceCode.Size = new System.Drawing.Size(1143, 409);
+            this.tecSourceCode.TabIndex = 17;
+            this.tecSourceCode.Load += new System.EventHandler(this.tecSourceCode_Load);
+            this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
+            this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
+            this.tecSourceCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragEnter);
+            // 
+            // openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem
+            // 
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Name = "openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem";
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Text = "Open Current file in editor with \'Code Complete\' support";
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Click += new System.EventHandler(this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem_Click);
+            // 
             // ascx_SourceCodeEditor
             // 
             this.AllowDrop = true;
@@ -938,5 +947,6 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripMenuItem addBreakpointOnCurrentLineToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton btDebugMethod;
         private System.Windows.Forms.TreeView tvCompilationErrors;
+        private System.Windows.Forms.ToolStripMenuItem openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem;
     }
 }

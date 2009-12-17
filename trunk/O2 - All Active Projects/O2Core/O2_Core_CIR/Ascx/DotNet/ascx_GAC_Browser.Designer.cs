@@ -64,29 +64,30 @@ namespace O2.Core.CIR.Ascx.DotNet
             this.tpGacContents.Location = new System.Drawing.Point(4, 4);
             this.tpGacContents.Name = "tpGacContents";
             this.tpGacContents.Padding = new System.Windows.Forms.Padding(3);
-            this.tpGacContents.Size = new System.Drawing.Size(208, 269);
+            this.tpGacContents.Size = new System.Drawing.Size(233, 292);
             this.tpGacContents.TabIndex = 0;
             this.tpGacContents.Text = "GAC Contents";
             this.tpGacContents.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 248);
+            this.label5.Location = new System.Drawing.Point(3, 6);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(29, 13);
             this.label5.TabIndex = 4;
             this.label5.Text = "Filter";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // tbGacAssemblyFilter
             // 
-            this.tbGacAssemblyFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.tbGacAssemblyFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbGacAssemblyFilter.Location = new System.Drawing.Point(36, 246);
+            this.tbGacAssemblyFilter.Location = new System.Drawing.Point(33, 3);
             this.tbGacAssemblyFilter.Name = "tbGacAssemblyFilter";
-            this.tbGacAssemblyFilter.Size = new System.Drawing.Size(172, 20);
+            this.tbGacAssemblyFilter.Size = new System.Drawing.Size(201, 20);
             this.tbGacAssemblyFilter.TabIndex = 1;
+            this.tbGacAssemblyFilter.TextChanged += new System.EventHandler(this.tbGacAssemblyFilter_TextChanged);
             this.tbGacAssemblyFilter.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbGacAssemblyFilter_KeyDown);
             // 
             // tvListOfGacAssemblies
@@ -94,9 +95,9 @@ namespace O2.Core.CIR.Ascx.DotNet
             this.tvListOfGacAssemblies.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvListOfGacAssemblies.Location = new System.Drawing.Point(-1, 0);
+            this.tvListOfGacAssemblies.Location = new System.Drawing.Point(0, 23);
             this.tvListOfGacAssemblies.Name = "tvListOfGacAssemblies";
-            this.tvListOfGacAssemblies.Size = new System.Drawing.Size(209, 244);
+            this.tvListOfGacAssemblies.Size = new System.Drawing.Size(234, 263);
             this.tvListOfGacAssemblies.TabIndex = 0;
             this.tvListOfGacAssemblies.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvListOfGacAssemblies_AfterSelect);
             // 
@@ -138,7 +139,11 @@ namespace O2.Core.CIR.Ascx.DotNet
             // 
             // directory_ToBackupGAC
             // 
+            this.directory_ToBackupGAC._FileFilter = "*.*";
+            this.directory_ToBackupGAC._HandleDrop = true;
+            this.directory_ToBackupGAC._HideFiles = false;
             this.directory_ToBackupGAC._ProcessDroppedObjects = true;
+            this.directory_ToBackupGAC._ShowFileContentsOnTopTip = false;
             this.directory_ToBackupGAC._ShowFileSize = false;
             this.directory_ToBackupGAC._ShowLinkToUpperFolder = true;
             this.directory_ToBackupGAC._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;

@@ -28,6 +28,9 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             directory.refreshDirectoryView();
             directory._WatchFolder = true;
             var newStep = new TemplateStep(directory, 0, stepName);
+
+            newStep.OnComponentLoad += (step) => directory.refreshDirectoryView();
+
             steps.Add(newStep);
             return newStep;
         }
@@ -114,6 +117,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             // button
             var button = new Button();
             button.Text = "Select Folder";
+            button.Width += 20;
             button.Click += (sender, e) =>
             {
                 var folderBrowserDialog = new FolderBrowserDialog();

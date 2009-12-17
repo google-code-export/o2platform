@@ -20,8 +20,7 @@ namespace O2.Core.CIR
             reflection = PublicDI.reflection;  // new O2FormsReflectionASCX();
             config = PublicDI.config;
             defaultDirectoryForCirCreationQueue = Path.Combine(DI.config.O2TempDir, "_temp_CirCreationQueue");
-            defaultDirectoryForCreatedCirFiles = Path.Combine(DI.config.O2TempDir,"_temp_CreatedCirFiles");
-            PathToGac = Path.Combine(Environment.GetEnvironmentVariable("windir") ?? "", "Assembly\\GAC_MSIL");
+            defaultDirectoryForCreatedCirFiles = Path.Combine(DI.config.O2TempDir,"_temp_CreatedCirFiles");            
         }
 
         // DI Targets
@@ -35,7 +34,6 @@ namespace O2.Core.CIR
      //   public static ICirData cirData;
         public static string defaultDirectoryForCirCreationQueue { get; set; }
         public static string defaultDirectoryForCreatedCirFiles { get; set; }
-        public static string CONST_NEED_SIGNATURE = "[need signature]";
-        public static string PathToGac { get; set; }
+        public static string CONST_NEED_SIGNATURE = "[need signature]";        
     }
 }

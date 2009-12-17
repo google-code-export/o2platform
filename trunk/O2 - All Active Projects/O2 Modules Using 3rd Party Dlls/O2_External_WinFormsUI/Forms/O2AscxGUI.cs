@@ -8,6 +8,8 @@ using O2.DotNetWrappers.Windows;
 using O2.External.WinFormsUI.Ascx;
 using O2.External.WinFormsUI.O2Environment;
 using O2.Kernel.Interfaces.Views;
+using O2.Views.ASCX.CoreControls;
+using O2.Views.ASCX.O2Findings;
 
 namespace O2.External.WinFormsUI.Forms
 {
@@ -348,6 +350,14 @@ namespace O2.External.WinFormsUI.Forms
                 ascxControl.invokeOnThread(
                     () => ((ascx_WorkingOnTask) ascxControl).close());
             }
+        }
+
+        public static void addDefaultControlsToMenu()
+        {
+            O2AscxGUI.addControlToMenu(typeof(ascx_Directory), O2DockState.Float, "Directory Viewer");
+            O2AscxGUI.addControlToMenu(typeof(ascx_FileMappings), O2DockState.Float, "Files Mappings");
+            O2AscxGUI.addControlToMenu(typeof(ascx_O2ObjectModel), O2DockState.Float, "O2 Object Model");
+            O2AscxGUI.addControlToMenu(typeof(ascx_FindingsViewer), O2DockState.Float, "Findings Viewer");
         }
     }
 }

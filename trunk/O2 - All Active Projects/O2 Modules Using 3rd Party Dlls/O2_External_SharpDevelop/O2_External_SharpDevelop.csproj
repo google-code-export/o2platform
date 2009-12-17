@@ -32,9 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.TextEditor, Version=3.0.0.3683, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a, processorArchitecture=MSIL">
+    <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\_3rdPartyDlls\ICSharpCode.TextEditor.dll</HintPath>
+      <HintPath>..\..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
