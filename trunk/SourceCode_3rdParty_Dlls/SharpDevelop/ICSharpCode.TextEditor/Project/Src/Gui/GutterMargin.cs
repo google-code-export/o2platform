@@ -26,7 +26,9 @@ namespace ICSharpCode.TextEditor
 		
 		static GutterMargin()
 		{
-			Stream cursorStream = Assembly.GetCallingAssembly().GetManifestResourceStream("ICSharpCode.TextEditor.Resources.RightArrow.cur");
+			Stream cursorStream = Assembly.GetCallingAssembly().GetManifestResourceStream(
+                //"ICSharpCode.TextEditor.Resources.RightArrow.cur"      // DC this is a nasty breaking change (cause by the different source root path
+                "O2SharpDevelop.ICSharpCode.TextEditor.Project.Resources.RightArrow.cur");            
 			if (cursorStream == null) throw new Exception("could not find cursor resource");
 			RightLeftCursor = new Cursor(cursorStream);
 			cursorStream.Close();

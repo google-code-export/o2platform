@@ -18,7 +18,7 @@ namespace ICSharpCode.TextEditor
 	/// <summary>
 	/// This class is used for a basic text area control
 	/// </summary>
-	[ToolboxBitmap("ICSharpCode.TextEditor.Resources.TextEditorControl.bmp")]
+	[ToolboxBitmap("O2SharpDevelop.ICSharpCode.TextEditor.Project.Resources.TextEditorControl.bmp")]
 	[ToolboxItem(true)]
 	public class TextEditorControl : TextEditorControlBase
 	{
