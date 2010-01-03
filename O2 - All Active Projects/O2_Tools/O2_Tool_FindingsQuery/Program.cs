@@ -33,7 +33,9 @@ namespace O2.Tool.FindingsQuery
                 O2AscxGUI.openAscx(typeof (ascx_OzasmtQuery),O2DockState.Document,"Findings Query");
 
                 // load demo file                
-                "Ozasmt Query".invokeOnAscx("loadSampleScripts", new object[]{typeof(OzasmtScriptSamples)});
+                //"Ozasmt Query".invokeOnAscx("loadSampleScripts", new object[]{typeof(OzasmtScriptSamples)});
+                // we have to use the direct call due to a bug in Mono
+                O2AscxGUI_Ext.invokeOnAscx("Ozasmt Query", "loadSampleScripts", new object[] { typeof(OzasmtScriptSamples) });
                 
             }
         }

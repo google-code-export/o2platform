@@ -18,7 +18,9 @@ namespace O2.Tool.OzasmtQuery._ScriptSamples
             // open the source Findings Viewer
             O2AscxGUI.openAscxAsForm(typeof(ascx_FindingsViewer), findingsViewerControlName_Source);	             
             // load assessment file into Source Findings Viewer
-            findingsViewerControlName_Source.invokeOnAscx("loadO2Assessment", new object[] { ozasmtFileToUse });
+            // we have to use the direct call due to a bug in Mono            
+            //findingsViewerControlName_Source.invokeOnAscx("loadO2Assessment", new object[] { ozasmtFileToUse });
+            O2AscxGUI_Ext.invokeOnAscx(findingsViewerControlName_Source, "loadO2Assessment", new object[] { ozasmtFileToUse });
                     
             MessageBox.Show("Ozasmt File loaded in Findings Viewer Control: " + ozasmtFileToUse);            
         }
