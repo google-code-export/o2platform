@@ -64,6 +64,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\O2Core\O2CoreLib\_externalDlls\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>

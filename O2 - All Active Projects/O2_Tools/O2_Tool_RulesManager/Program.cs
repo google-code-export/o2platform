@@ -16,6 +16,7 @@ using O2.Rules.OunceLabs.Ascx;
 using O2.Scanner.OunceLabsCLI.Ascx;
 using O2.Views.ASCX.DataViewers;
 using O2.Views.ASCX.O2Findings;
+using O2.Core.XRules.Ascx;
 
 namespace O2.Tool.RulesManager
 {
@@ -51,7 +52,9 @@ namespace O2.Tool.RulesManager
 
                 O2AscxGUI.addControlToMenu(typeof(ascx_SourceCodeEditor), O2DockState.Document, "Source Code Editor");
                 O2AscxGUI.addControlToMenu(typeof(ascx_FunctionsViewer), O2DockState.Document, "Functions Signatures");
-                O2AscxGUI.addControlToMenu(typeof(ascx_ApplyRulesToFindings), O2DockState.Document, "O2 'Call-Flow Scanner' (Apply Rules To Findings)");                
+                O2AscxGUI.addControlToMenu(typeof(ascx_ApplyRulesToFindings), O2DockState.Document, "O2 'Call-Flow Scanner' (Apply Rules To Findings)");
+                O2AscxGUI.openAscx(typeof(ascx_XRules_Editor), O2DockState.Document, "O2 XRules Editor");
+ 
             }
         }
     }

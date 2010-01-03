@@ -48,7 +48,7 @@ namespace O2.External.Firefox.WebAutomation
         }
 
 
-        internal static GeckoWebBrowser createGeckoWebBrowser()
+        public static GeckoWebBrowser createGeckoWebBrowser()
         {
             try
             {
