@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
-using O2.Debugger.Mdbg.NewCode;
+//using O2.Debugger.Mdbg.NewCode;
 using O2.Kernel.CodeUtils;
 using O2.Kernel.Objects;
 
@@ -10,7 +10,7 @@ namespace O2.Rnd.Views.Wpf.GuiHelpers
 {
     public class O2Wpf
     {
-        internal static void populateWpfListBoxWithO2AppDomainFactoryObjectsWithCurrentAppDomains(
+    /*    internal static void populateWpfListBoxWithO2AppDomainFactoryObjectsWithCurrentAppDomains(
             ListBox lbCurrentAppDomains)
         {
             IList<AppDomain> currentAppDomains = ViaMscoree.GetAppDomains();
@@ -37,5 +37,6 @@ namespace O2.Rnd.Views.Wpf.GuiHelpers
             }
       
         }
+     * */
     }
 }

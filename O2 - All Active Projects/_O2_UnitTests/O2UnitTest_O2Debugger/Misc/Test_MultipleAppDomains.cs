@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using O2.Debugger.Mdbg.NewCode;
+//using O2.Debugger.Mdbg.NewCode;
 using O2.Kernel.Objects;
 
 namespace O2.UnitTests.Test_O2Debugger.Misc
 {
-    [TestFixture]
+    /*[TestFixture]
     public class Test_MultipleAppDomains
     {
         private const string assemblyName = "O2_Kernel";
@@ -34,5 +34,5 @@ namespace O2.UnitTests.Test_O2Debugger.Misc
                         "The number of AppDomains should be the original count + 3");
             //var proxy = O2AppDomainFactory.getProxy(assemblyName, typeToCreateSimpleName);            
         }
-    }
+    }*/
 }
