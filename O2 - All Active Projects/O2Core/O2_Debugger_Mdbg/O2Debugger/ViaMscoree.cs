@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using mscoree;
+//using mscoree;
 
 /*namespace O2.Debugger.Mdbg.NewCode
 {
