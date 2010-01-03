@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using mscoree;
 
-namespace O2.Debugger.Mdbg.NewCode
+/*namespace O2.Debugger.Mdbg.NewCode
 {
     public class ViaMscoree
     {
@@ -40,4 +40,4 @@ namespace O2.Debugger.Mdbg.NewCode
             }
         }
     }
-}
+}*/
