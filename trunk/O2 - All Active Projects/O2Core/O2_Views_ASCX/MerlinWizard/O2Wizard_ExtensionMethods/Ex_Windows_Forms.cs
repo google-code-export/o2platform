@@ -60,6 +60,13 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
         {
             if (step.FirstControl != null)
                 step.Controller.wizardForm.invokeOnThread(() => step.FirstControl.Text += message);
+            else if (step.UI != null)
+                if (step.UI.Controls.Count > 0)
+                    if (step.UI.Controls[0] is TextBox)
+                    {
+                        var targetTextBox = step.UI.Controls[0];
+                        targetTextBox.invokeOnThread(() => targetTextBox.Text += message);
+                    }                        
         }
 
         public static void setText(this TextBox textBox, string text)

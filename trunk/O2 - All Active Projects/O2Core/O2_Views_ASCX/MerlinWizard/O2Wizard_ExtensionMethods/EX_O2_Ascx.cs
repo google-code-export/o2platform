@@ -77,6 +77,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
         {
             //control.AllowDrop = false;
             var newStep = new TemplateStep(controlType);//, 10, stepTitle);
+            newStep.Title = stepTitle;
             newStep.Subtitle = stepSubTitle;
             newStep.OnComponentAction = onComponentLoad;
             steps.Add(newStep);
