@@ -28,7 +28,7 @@ namespace O2.wpfGUI.xaml_windows
 
         private void btRefreshAppDomainList_Click(object sender, RoutedEventArgs e)
         {
-            O2Wpf.populateWpfListBoxWithO2AppDomainFactoryObjectsWithCurrentAppDomains(lbCurrentAppDomains);
+            //O2Wpf.populateWpfListBoxWithO2AppDomainFactoryObjectsWithCurrentAppDomains(lbCurrentAppDomains);
             //currentAppDomains.Items.Add("New Item");
         }
 
