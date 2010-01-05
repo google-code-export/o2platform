@@ -259,17 +259,25 @@ namespace Merlin
 
         private static Panel padControl(Control ui, Padding margins)
         {
-            Panel result = new Panel();
-            result.Controls.Add(ui);
-            ui.Parent = result;
-            result.Resize += (object sender, EventArgs args) =>
+            if (ui is Panel)            // DC : exception case when ui is a Panel
             {
-                ui.Top = margins.Top;
-                ui.Left = margins.Left;
-                ui.Height = result.ClientRectangle.Height - margins.Vertical;
-                ui.Width = result.ClientRectangle.Width - margins.Horizontal;
-            };
-            return result;
+                ui.Parent = ui;         // DC: check if this recursive mapping has side effects
+                return (Panel)ui;
+            }
+            else
+            {
+                Panel result = new Panel();
+                result.Controls.Add(ui);
+                ui.Parent = result;
+                result.Resize += (object sender, EventArgs args) =>
+                {
+                    ui.Top = margins.Top;
+                    ui.Left = margins.Left;
+                    ui.Height = result.ClientRectangle.Height - margins.Vertical;
+                    ui.Width = result.ClientRectangle.Width - margins.Horizontal;
+                };
+                return result;
+            }            
         }
 
         /// <summary>
