@@ -133,40 +133,51 @@ class A
 		
 		void ParserThread()
 		{
-			BeginInvoke(new MethodInvoker(delegate { parserThreadLabel.Text = "Loading mscorlib..."; }));
-			myProjectContent.AddReferencedContent(pcRegistry.Mscorlib);
-			
-			// do one initial parser step to enable code-completion while other
-			// references are loading
-			ParseStep();
-			
-			//string[] referencedAssemblies = {
-			//	"System", "System.Data", "System.Drawing", "System.Xml", "System.Windows.Forms", "Microsoft.VisualBasic"
-			//};
+            try
+            {
+                BeginInvoke(new MethodInvoker(delegate { parserThreadLabel.Text = "Loading mscorlib..."; }));
+                myProjectContent.AddReferencedContent(pcRegistry.Mscorlib);
 
-			foreach (string assemblyName in referencedAssemblies.ToArray()) {
-				string assemblyNameCopy = assemblyName; // copy for anonymous method
-				BeginInvoke(new MethodInvoker(delegate { parserThreadLabel.Text = "Loading " + assemblyNameCopy + "..."; }));
-				Dom.IProjectContent referenceProjectContent = pcRegistry.GetProjectContentForReference(assemblyName, assemblyName);
-				myProjectContent.AddReferencedContent(referenceProjectContent);
-				if (referenceProjectContent is Dom.ReflectionProjectContent) {
-					(referenceProjectContent as Dom.ReflectionProjectContent).InitializeReferences();
-				}
-			}
-			if (IsVisualBasic) {
-				myProjectContent.DefaultImports = new Dom.DefaultUsing(myProjectContent);
-				myProjectContent.DefaultImports.Usings.Add("System");
-				myProjectContent.DefaultImports.Usings.Add("System.Text");
-				myProjectContent.DefaultImports.Usings.Add("Microsoft.VisualBasic");
-			}
-			BeginInvoke(new MethodInvoker(delegate { parserThreadLabel.Text = "Ready"; }));
-			
-			// Parse the current file every 2 seconds
-			while (!IsDisposed) {
-				ParseStep();
-				
-				Thread.Sleep(2000);
-			}
+                // do one initial parser step to enable code-completion while other
+                // references are loading
+                ParseStep();
+
+                //string[] referencedAssemblies = {
+                //	"System", "System.Data", "System.Drawing", "System.Xml", "System.Windows.Forms", "Microsoft.VisualBasic"
+                //};
+
+                foreach (string assemblyName in referencedAssemblies.ToArray())
+                {
+                    string assemblyNameCopy = assemblyName; // copy for anonymous method
+                    BeginInvoke(new MethodInvoker(delegate { parserThreadLabel.Text = "Loading " + assemblyNameCopy + "..."; }));
+                    Dom.IProjectContent referenceProjectContent = pcRegistry.GetProjectContentForReference(assemblyName, assemblyName);
+                    myProjectContent.AddReferencedContent(referenceProjectContent);
+                    if (referenceProjectContent is Dom.ReflectionProjectContent)
+                    {
+                        (referenceProjectContent as Dom.ReflectionProjectContent).InitializeReferences();
+                    }
+                }
+                if (IsVisualBasic)
+                {
+                    myProjectContent.DefaultImports = new Dom.DefaultUsing(myProjectContent);
+                    myProjectContent.DefaultImports.Usings.Add("System");
+                    myProjectContent.DefaultImports.Usings.Add("System.Text");
+                    myProjectContent.DefaultImports.Usings.Add("Microsoft.VisualBasic");
+                }
+                BeginInvoke(new MethodInvoker(delegate { parserThreadLabel.Text = "Ready"; }));
+
+                // Parse the current file every 2 seconds
+                while (!IsDisposed)
+                {
+                    ParseStep();
+
+                    Thread.Sleep(2000);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("in MainForm.ParserThread: " + ex.Message);
+            }
 		}
 		
 		void ParseStep()
