@@ -1,0 +1,4 @@
+﻿GAC Installation command (when fired-up as a post-build event):
+
+"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin\gacutil.exe" /i $(TargetFileName)
+

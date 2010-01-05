@@ -261,7 +261,7 @@ namespace Merlin
         {
             if (ui is Panel)            // DC : exception case when ui is a Panel
             {
-                ui.Parent = ui;         // DC: check if this recursive mapping has side effects
+                //ui.Parent = ui;         // DC: check if this recursive mapping has side effects
                 return (Panel)ui;
             }
             else

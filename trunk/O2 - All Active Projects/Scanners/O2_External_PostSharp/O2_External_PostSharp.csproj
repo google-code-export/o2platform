@@ -62,6 +62,7 @@
     <None Include="TempO2Key.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Notes.txt" />
     <Content Include="_ExternalDlls\PostSharp.Core.dll" />
     <Content Include="_ExternalDlls\PostSharp.Core.XmlSerializers.dll" />
     <Content Include="_ExternalDlls\PostSharp.Laos.dll" />
@@ -76,6 +77,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin\gacutil.exe" /i $(TargetFileName)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
