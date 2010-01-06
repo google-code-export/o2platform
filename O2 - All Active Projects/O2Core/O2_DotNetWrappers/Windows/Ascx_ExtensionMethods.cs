@@ -10,7 +10,7 @@ namespace O2.DotNetWrappers.Windows
 {
     public static class Ascx_ExtensionMethods
     {
-        public static Label addLabel(this Control control, string labelText)
+        public static Label add_Label(this Control control, string labelText)
         {
             var label = new Label();
             label.Text = labelText; ;
@@ -18,14 +18,14 @@ namespace O2.DotNetWrappers.Windows
             return label;
         }
 
-        public static SplitContainer addSplitContainer(this Control control)
+        public static SplitContainer add_SplitContainer(this Control control)
         {
-            return addSplitContainer(control, false, false, false);
+            return add_SplitContainer(control, false, false, false);
         }
 
-        public static SplitContainer addSplitContainer(this Control control, bool setOrientationToHorizontal, bool setDockStyleoFill, bool setBorderStyleTo3D)
+        public static SplitContainer add_SplitContainer(this Control control, bool setOrientationToHorizontal, bool setDockStyleoFill, bool setBorderStyleTo3D)
         {
-            return addSplitContainer(
+            return add_SplitContainer(
                         control,
                         (setOrientationToHorizontal) ? Orientation.Horizontal : Orientation.Vertical,
                         setDockStyleoFill,
@@ -33,7 +33,7 @@ namespace O2.DotNetWrappers.Windows
         }
         
         //public static SplitContainer addSplitContainer(this UserControl userControl, Orientation orientation, bool setDockStyleToFill, bool setBorderStyleTo3D)
-        public static SplitContainer addSplitContainer(this Control control, Orientation orientation, bool setDockStyleToFill, bool setBorderStyleTo3D)
+        public static SplitContainer add_SplitContainer(this Control control, Orientation orientation, bool setDockStyleToFill, bool setBorderStyleTo3D)
         {
             var splitContainer = new SplitContainer();
             splitContainer.Orientation = orientation;
@@ -45,7 +45,7 @@ namespace O2.DotNetWrappers.Windows
             return splitContainer;
         }
 
-        public static GroupBox addGroupBox(this Control control, string groupBoxText)
+        public static GroupBox add_GroupBox(this Control control, string groupBoxText)
         {
             var groupBox = new GroupBox();
             groupBox.Text = groupBoxText;
@@ -54,7 +54,7 @@ namespace O2.DotNetWrappers.Windows
             return groupBox;
         }
 
-        public static TreeView addTreeView(this Control control)
+        public static TreeView add_TreeView(this Control control)
         {
             var treeView = new TreeView();
             treeView.Dock = DockStyle.Fill;
@@ -62,11 +62,11 @@ namespace O2.DotNetWrappers.Windows
             return treeView;
         }
 
-        public static TreeNode addNode(this TreeView treeView, string nodeText, int imageId, Color color, object nodeTag)
+        public static TreeNode add_Node(this TreeView treeView, string nodeText, int imageId, Color color, object nodeTag)
         {
             return (TreeNode)treeView.invokeOnThread((()
                 => {
-			            var treeNode = treeView.addNode(nodeText, nodeTag);
+			            var treeNode = treeView.add_Node(nodeText, nodeTag);
 			            treeNode.ForeColor = color;
 			            treeNode.ImageIndex = imageId;
 			            treeNode.SelectedImageIndex = imageId;
@@ -74,7 +74,7 @@ namespace O2.DotNetWrappers.Windows
 			      }));
         }
 
-        public static TreeNode addNode(this TreeView treeView, string nodeText, object nodeTag)
+        public static TreeNode add_Node(this TreeView treeView, string nodeText, object nodeTag)
         {
             return (TreeNode)treeView.invokeOnThread((()
                 =>  {
@@ -87,7 +87,7 @@ namespace O2.DotNetWrappers.Windows
 		            }));
         }
 
-        public static int addNode(this TreeView treeView, TreeNode treeNode)
+        public static int add_Node(this TreeView treeView, TreeNode treeNode)
         {
             return (int)treeView.invokeOnThread((()
                 =>  {
@@ -95,7 +95,7 @@ namespace O2.DotNetWrappers.Windows
 		            }));
         }
 
-        public static TreeNode addNode(this TreeView treeView, string nodeText)
+        public static TreeNode add_Node(this TreeView treeView, string nodeText)
         {
             return (TreeNode)treeView.invokeOnThread((()
                 =>
@@ -104,7 +104,7 @@ namespace O2.DotNetWrappers.Windows
                 }));
         }
 
-        public static TreeNode addNode(this TreeView treeView, TreeNode treeNode, string nodeText)
+        public static TreeNode add_Node(this TreeView treeView, TreeNode treeNode, string nodeText)
         {
             return (TreeNode)treeView.invokeOnThread((()
                 =>
@@ -112,7 +112,7 @@ namespace O2.DotNetWrappers.Windows
                     return O2Forms.newTreeNode(treeNode.Nodes, nodeText, 0, null, false); ;
                 }));
         }
-        public static TreeNode addNode(this TreeView treeView, TreeNode treeNode, string nodeText, object nodeTag, bool addDummyNode)
+        public static TreeNode add_Node(this TreeView treeView, TreeNode treeNode, string nodeText, object nodeTag, bool addDummyNode)
         {
             return (TreeNode)treeView.invokeOnThread((()
                 =>
@@ -124,12 +124,12 @@ namespace O2.DotNetWrappers.Windows
                 }));
         }
 
-        public static TreeNode addNode(this TreeView treeView, string nodeText, object nodeTag, bool addDummyNode)
+        public static TreeNode add_Node(this TreeView treeView, string nodeText, object nodeTag, bool addDummyNode)
         {
             return (TreeNode)treeView.invokeOnThread((()
                 =>
                 {
-                    var treeNode = treeView.addNode(nodeText, nodeTag);
+                    var treeNode = treeView.add_Node(nodeText, nodeTag);
                     if (addDummyNode)
                         treeNode.Nodes.Add("DummyNode_2");
                     return treeNode;

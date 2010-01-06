@@ -49,10 +49,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.2.3270.36083, Culture=neutral, PublicKeyToken=f829da5c02be14ee, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\_3rdPartyDlls\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ascx\ascx_LogViewer.cs">
@@ -148,6 +144,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SourceCode_3rdParty_Dlls\DockPanel\WinFormsUI\WinFormsUI.csproj">
+      <Project>{C75532C4-765B-418E-B09B-46D36B2ABDB1}</Project>
+      <Name>WinFormsUI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>
