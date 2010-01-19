@@ -13,6 +13,13 @@ using System.Threading;
 
 namespace O2.Views.ASCX.MerlinWizard
 {
+    public class O2WizardAttribute : Attribute
+    {    
+    }
+    public class StartWizardAttribute : Attribute
+    {
+    }
+
     public class O2Wizard
     {
         public string Title {get;set;}

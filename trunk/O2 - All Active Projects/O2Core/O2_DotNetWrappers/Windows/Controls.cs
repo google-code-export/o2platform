@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 namespace O2.DotNetWrappers.Windows
 {
-    public class Controls
+    public static class Controls
     {
-        public static ListBox addListBox(Control cTargetControl, String sTitle, int iLeft, int iTop, int iWidth,
+        public static ListBox add_ListBox(Control cTargetControl, String sTitle, int iLeft, int iTop, int iWidth,
                                          int iHeight)
         {
             var lbListBox = new ListBox
@@ -22,32 +22,32 @@ namespace O2.DotNetWrappers.Windows
             cTargetControl.Controls.Add(lbListBox);
             // if sTitle != "" add a title on the top left
             if (sTitle != "")
-                addLabel(cTargetControl, sTitle, iLeft, iTop - 20);
+                add_Label(cTargetControl, sTitle, iLeft, iTop - 20);
             return lbListBox;
         }
 
-        public static Label addLabel(Control cTargetControl, String sLabelText, int iLeft, int iTop)
+        public static Label add_Label(Control cTargetControl, String sLabelText, int iLeft, int iTop)
         {
             var lLabel = new Label {AutoSize = true, Text = sLabelText, Left = iLeft, Top = iTop};
             cTargetControl.Controls.Add(lLabel);
             return lLabel;
         }
 
-        public static TextBox addTextBox(Control cTargetControl, String sLabelText, int iLeft, int iTop)
+        public static TextBox add_TextBox(Control cTargetControl, String sLabelText, int iLeft, int iTop)
         {
             var tbTextBox = new TextBox {AutoSize = true, Text = sLabelText, Left = iLeft, Top = iTop};
             cTargetControl.Controls.Add(tbTextBox);
             return tbTextBox;
         }
 
-        public static Button addButton(Control cTargetControl, String sLabelText, int iLeft, int iTop)
+        public static Button add_Button(Control cTargetControl, String sLabelText, int iLeft, int iTop)
         {
             var btButton = new Button {AutoSize = true, Text = sLabelText, Left = iLeft, Top = iTop};
             cTargetControl.Controls.Add(btButton);
             return btButton;
         }
 
-        public static DataGridView addDataGridView(Control cTargetControl,
+        public static DataGridView add_DataGridView(Control cTargetControl,
                                                    int iLeft, int iTop, int iWidth, int iHeight,
                                                    AnchorStyles asAnchorStyles)
         {
@@ -65,7 +65,7 @@ namespace O2.DotNetWrappers.Windows
             return dgvDataGridView;
         }
 
-        public static SplitContainer addSplitContainer(Control cTargetControl, Control cPanel1, Control cPanel2,
+        public static SplitContainer add_SplitContainer(Control cTargetControl, Control cPanel1, Control cPanel2,
                                                        Orientation oOrientation, int iLeft, int iTop, int iWidth,
                                                        int iHeight, AnchorStyles asAnchorStyles)
         {

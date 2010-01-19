@@ -7,6 +7,7 @@ using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
 
 namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
 {
@@ -35,15 +36,20 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             return newStep;
         }
 
+        public static IStep add_Message(this List<IStep> steps, string stepTitle)
+        {
+            return steps.add_Message(stepTitle, "");
+        }
+
         public static IStep add_Message(this List<IStep> steps, string stepTitle, Func<string> messageToAdd)
         {
             //var message = messageToAdd();
             var initialMessage = "initial message: ";
-            var newStep = Ex_Windows_Forms.createStepWithTextBox(stepTitle, initialMessage);
+            var newStep = Ex_Windows_Forms.createStepWith_TextBox(stepTitle, initialMessage);
             newStep.OnComponentAction =
                 (step) =>
                 {
-                    step.setText(messageToAdd());
+                    step.set_Text(messageToAdd());
                 };
             steps.Add(newStep);
             return newStep;
@@ -51,15 +57,15 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
 
         public static IStep add_Message(this List<IStep> steps, string stepTitle, string message)
         {
-            var newStep = Ex_Windows_Forms.createStepWithTextBox(stepTitle, message);
+            var newStep = Ex_Windows_Forms.createStepWith_TextBox(stepTitle, message);
             steps.Add(newStep);
             return newStep;
         }
 
         public static IStep add_Action(this List<IStep> steps, string stepTitle, Action<IStep> action)
         {
-            var textBox = Ex_Windows_Forms.createTextBox("");
-            var newStep = Ex_Windows_Forms.createStepWithTextBox(stepTitle, textBox);
+            var textBox = Ex_Windows_Forms.create_TextBox("");
+            var newStep = Ex_Windows_Forms.createStepWith_TextBox(stepTitle, textBox);
 
             //newStep.NextHandler = ()=>  action(textBox);
             newStep.OnComponentAction = action;
@@ -112,7 +118,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             textBox.Width = 400;
             textBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
             textBox.AllowDrop = true;
-            textBox.DragDrop += (sender, e) => textBox.setText(Dnd.tryToGetFileOrDirectoryFromDroppedObject(e));
+            textBox.DragDrop += (sender, e) => textBox.set_Text(Dnd.tryToGetFileOrDirectoryFromDroppedObject(e));
             textBox.DragEnter += (sender, e) => e.Effect = DragDropEffects.Copy;
 
             // button
@@ -137,7 +143,168 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             var newStep = new TemplateStep(panel, 10, stepTitle);
             steps.Add(newStep);
             return newStep;
-        }    	 
+        }
+
+        public static IStep add_FlowLayoutPanel(this List<IStep> steps, string stepTitle, string stepSubTitle)
+        {
+            var panel = new FlowLayoutPanel();
+            panel.Dock = DockStyle.Fill;
+            var textBox = new TextBox();
+            textBox.Text = "asdas";
+            panel.Controls.Add(textBox);
+            return steps.add_Control(panel, stepTitle, stepSubTitle);
+        }
+
+        public static IStep add_WebBrowserAndTextBox(this List<IStep> steps, string stepTitle, string stepSubTitle, Action<IStep> onComponentLoad)
+        {
+            var hostPanel = new Panel();
+            var splitControl = hostPanel.add_SplitContainer(
+                                false, 		//setOrientationToHorizontal
+                                true,		// setDockStyleoFill
+                                true);		// setBorderStyleTo3D)
+            var leftGroupBox = splitControl.Panel1.add_GroupBox("Webpage");
+            var rightGroupBox = splitControl.Panel2.add_GroupBox("Analysis");
+
+            splitControl.SplitterDistance = 100;
+            return steps.add_Control(hostPanel, stepTitle, stepSubTitle, onComponentLoad);
+        }
+
+        public static Label add_Label(this IStep step, string text)
+        {
+            return step.add_Label(text, -1, -1);
+        }
+
+        public static Label add_Label(this IStep step, string text, int top)
+        {
+            return step.add_Label(text, top, -1);
+        }
+
+        public static Label add_Label(this IStep step, string text, int top, int left)
+        {
+            if (step.UI == null)
+                return null;
+            var label = new Label();
+            label.Text = text;
+            if (top > -1)
+                label.Top = top;
+            if (left > -1)
+                label.Left = left;
+            step.UI.Controls.Add(label);
+            label.BringToFront();
+            return label;
+        }
+
+        public static TextBox add_TextBox(this IStep step)
+        {
+            if (step.UI == null)
+                return null;
+            var textBox = new TextBox();
+            step.UI.Controls.Add(textBox);
+            textBox.BringToFront();
+            return textBox;
+        }
+
+        public static TextBox add_TextBox(this IStep step, string originalText, int top)
+        {
+            return add_TextBox(step, originalText, top, -1, -1);
+        }
+
+        public static TextBox add_TextBox(this IStep step, string originalText, int top, int left)
+        {
+            return add_TextBox(step, originalText, top, left, -1);
+        }
+
+        public static TextBox add_TextBox(this IStep step, string originalText, int top, int left, int width)
+        {
+            var textBox = step.add_TextBox();
+            if (textBox != null)
+            {
+                textBox.Text = originalText;
+                //textBox.Height = height;       	
+                textBox.Top = top;
+                if (left > -1)
+                    textBox.Left = left;
+                if (width > -1)
+                    textBox.Width = width;
+            }
+            return textBox;
+
+        }
+
+        public static Label append_Label(this Control targetControl, string originalText)
+        {
+            return targetControl.append_Label(originalText, false);
+        }
+
+        public static Label append_Label(this Control targetControl, string originalText, bool appendBelow)
+        {
+            var newLabel = new Label();
+            newLabel.Text = originalText;
+            targetControl.append_Control(newLabel, appendBelow);
+            return newLabel;
+        }
+
+        public static TextBox append_TextBox(this Control targetControl, string originalText)
+        {
+            return targetControl.append_TextBox(originalText, null, false);
+        }
+
+        public static TextBox append_TextBox(this Control targetControl, string originalText, Action<string> onTextChange)
+        {
+            return targetControl.append_TextBox(originalText, onTextChange, false);
+        }
+
+        public static TextBox append_TextBox(this Control targetControl, string originalText, Action<string> onTextChange, bool appendBelow)
+        {
+
+            var newTextBox = new TextBox();
+            newTextBox.Text = originalText;
+            if (onTextChange != null)
+                newTextBox.TextChanged += (sender, e) => onTextChange(newTextBox.Text);
+            targetControl.append_Control(newTextBox, appendBelow);
+            return newTextBox;
+        }
+
+        public static void append_Control(this Control controlToAppend, Control newControl)
+        {
+            controlToAppend.append_Control(newControl, false);
+        }
+
+        public static void append_Control(this Control controlToAppend, Control newControl, bool appendBelow)
+        {
+            if (controlToAppend.Parent != null && newControl != null)
+            {
+                if (appendBelow)
+                {
+                    newControl.Left = controlToAppend.Left;
+                    newControl.Top = controlToAppend.Top + controlToAppend.Height;
+                }
+                else
+                {
+                    newControl.Left = controlToAppend.Left + controlToAppend.Width;
+                    newControl.Top = controlToAppend.Top;
+                }
+                controlToAppend.Parent.Controls.Add(newControl);
+                controlToAppend.BringToFront();
+            }
+            else
+                PublicDI.log.error("in append_Control, controlToAppend.Parent == null or newControl == null");
+        }
+
+        public static IStep add_Panel(this List<IStep> steps, string stepTitle)
+        {
+            return steps.add_Panel(stepTitle, "", null);
+        }
+        public static IStep add_Panel(this List<IStep> steps, string stepTitle, string stepSubTitle, Action<IStep> onComponentLoad)
+        {
+            Panel panel = new Panel();
+            var newStep = new TemplateStep(panel, stepTitle);
+
+            newStep.Subtitle = stepSubTitle;
+            newStep.OnComponentAction = onComponentLoad;
+            steps.Add(newStep);
+            return newStep;
+        }
 
     }
 }

@@ -9,7 +9,7 @@ namespace O2.External.SharpDevelop.Ascx
 {
     public static class Ascx_ExtensionMethods
     {
-        public static ascx_SourceCodeEditor addSourceCodeEditor(this GroupBox groupBox)
+        public static ascx_SourceCodeEditor add_SourceCodeEditor(this GroupBox groupBox)
         {
             var sourceCodeEditor = new ascx_SourceCodeEditor();
             sourceCodeEditor.getObject_TextEditorControl().Document.FormattingStrategy = new DefaultFormattingStrategy();

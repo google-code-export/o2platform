@@ -40,6 +40,7 @@ namespace O2.Views.ASCX.CoreControls
             this.tbRenameSelectedItem = new System.Windows.Forms.ToolStripTextBox();
             this.deleteFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ilDirectoriesAndFiles = new System.Windows.Forms.ImageList(this.components);
             this.btSelectDirectory = new System.Windows.Forms.Button();
             this.btCreateDirectory = new System.Windows.Forms.Button();
@@ -53,7 +54,7 @@ namespace O2.Views.ASCX.CoreControls
             this.cbMoveOnDrag = new System.Windows.Forms.CheckBox();
             this.scAddressAndRest = new System.Windows.Forms.SplitContainer();
             this.scViewerAndSettings = new System.Windows.Forms.SplitContainer();
-            this.refreshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allowDragAndDropToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.directoryMenu.SuspendLayout();
             this.scAddressAndRest.Panel1.SuspendLayout();
             this.scAddressAndRest.Panel2.SuspendLayout();
@@ -99,9 +100,10 @@ namespace O2.Views.ASCX.CoreControls
             this.renameFileToolStripMenuItem,
             this.deleteFileToolStripMenuItem,
             this.deleteFolderToolStripMenuItem,
-            this.refreshToolStripMenuItem});
+            this.refreshToolStripMenuItem,
+            this.allowDragAndDropToolStripMenuItem});
             this.directoryMenu.Name = "contextMenuStrip1";
-            this.directoryMenu.Size = new System.Drawing.Size(155, 136);
+            this.directoryMenu.Size = new System.Drawing.Size(174, 158);
             // 
             // createDirectoryToolStripMenuItem
             // 
@@ -109,7 +111,7 @@ namespace O2.Views.ASCX.CoreControls
             this.miNewDirectoryName,
             this.miCreateDirectory});
             this.createDirectoryToolStripMenuItem.Name = "createDirectoryToolStripMenuItem";
-            this.createDirectoryToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.createDirectoryToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.createDirectoryToolStripMenuItem.Text = "Create Directory";
             // 
             // miNewDirectoryName
@@ -130,7 +132,7 @@ namespace O2.Views.ASCX.CoreControls
             this.renameFileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbRenameSelectedItem});
             this.renameFileToolStripMenuItem.Name = "renameFileToolStripMenuItem";
-            this.renameFileToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.renameFileToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.renameFileToolStripMenuItem.Text = "Rename File";
             // 
             // tbRenameSelectedItem
@@ -142,16 +144,23 @@ namespace O2.Views.ASCX.CoreControls
             // deleteFileToolStripMenuItem
             // 
             this.deleteFileToolStripMenuItem.Name = "deleteFileToolStripMenuItem";
-            this.deleteFileToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.deleteFileToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.deleteFileToolStripMenuItem.Text = "Delete File";
             this.deleteFileToolStripMenuItem.Click += new System.EventHandler(this.deleteFileToolStripMenuItem_Click);
             // 
             // deleteFolderToolStripMenuItem
             // 
             this.deleteFolderToolStripMenuItem.Name = "deleteFolderToolStripMenuItem";
-            this.deleteFolderToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.deleteFolderToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.deleteFolderToolStripMenuItem.Text = "Delete Folder";
             this.deleteFolderToolStripMenuItem.Click += new System.EventHandler(this.deleteFolderToolStripMenuItem_Click);
+            // 
+            // refreshToolStripMenuItem
+            // 
+            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
+            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.refreshToolStripMenuItem.Text = "Refresh";
+            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
             // 
             // ilDirectoriesAndFiles
             // 
@@ -321,12 +330,12 @@ namespace O2.Views.ASCX.CoreControls
             this.scViewerAndSettings.SplitterDistance = 227;
             this.scViewerAndSettings.TabIndex = 0;
             // 
-            // refreshToolStripMenuItem
+            // allowDragAndDropToolStripMenuItem
             // 
-            this.refreshToolStripMenuItem.Name = "refreshToolStripMenuItem";
-            this.refreshToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.refreshToolStripMenuItem.Text = "Refresh";
-            this.refreshToolStripMenuItem.Click += new System.EventHandler(this.refreshToolStripMenuItem_Click);
+            this.allowDragAndDropToolStripMenuItem.Name = "allowDragAndDropToolStripMenuItem";
+            this.allowDragAndDropToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.allowDragAndDropToolStripMenuItem.Text = "Allow Drag And Drop";
+            this.allowDragAndDropToolStripMenuItem.Click += new System.EventHandler(this.allowDragAndDropToolStripMenuItem_Click);
             // 
             // ascx_Directory
             // 
@@ -376,5 +385,6 @@ namespace O2.Views.ASCX.CoreControls
         private System.Windows.Forms.ToolStripMenuItem deleteFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem refreshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allowDragAndDropToolStripMenuItem;
     }
 }

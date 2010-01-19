@@ -27,6 +27,7 @@ using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 
 namespace O2.Core.XRules._Wizards
 {		
+    [O2Wizard]
 	public class Wizard_SyncViaSvn
 	{
 		private static IO2Log log = PublicDI.log;
@@ -37,7 +38,7 @@ namespace O2.Core.XRules._Wizards
         {
             return runWizard(SvnApi.svnO2DatabaseRulesFolder, testTargetFolder);        	
         }
-
+        [StartWizard]
         public Thread runWizard(string svnUrl, string targetFolder)
         {
             var o2Wizard = new O2Wizard("Sync Rules Database via SVN");
@@ -61,18 +62,18 @@ namespace O2.Core.XRules._Wizards
 			()=> {			
         		step.allowNext(false);
 				step.allowBack(false);						
-				step.appendLine(" .... Deleting local database: {0}", targetFolder);
+				step.append_Line(" .... Deleting local database: {0}", targetFolder);
 				Files.deleteFolder(targetFolder,true);
-				step.appendLine(" .... Calculating files to download");
+				step.append_Line(" .... Calculating files to download");
 				var svnMappedUrls= SvnApi.getSvnMappedUrls(svnUrl,true);
-				step.appendLine(" .... There are {0} files & folders to download {1}" , svnMappedUrls.Count(), Environment.NewLine);
+				step.append_Line(" .... There are {0} files & folders to download {1}" , svnMappedUrls.Count(), Environment.NewLine);
 				foreach(var svnMappedUrl in svnMappedUrls)				
 				{
-					step.appendLine("   * Downloading: {0}", svnMappedUrl.FullPath.Replace(svnUrl, ""));
+					step.append_Line("   * Downloading: {0}", svnMappedUrl.FullPath.Replace(svnUrl, ""));
 					SvnApi.download(svnMappedUrl, svnUrl, targetFolder);
 				}
 				
-				step.appendLine("{0}{0} .... Download complete", Environment.NewLine);
+				step.append_Line("{0}{0} .... Download complete", Environment.NewLine);
 															
 				step.allowNext(true);
 				step.allowBack(true);						

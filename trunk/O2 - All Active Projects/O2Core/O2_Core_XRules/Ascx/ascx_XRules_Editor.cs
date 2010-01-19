@@ -55,19 +55,7 @@ namespace O2.Core.XRules.Ascx
                 && tcTabControlWithRulesSource.SelectedTab.Controls[0] is ascx_SourceCodeEditor)
                 reloadFile((ascx_SourceCodeEditor) tcTabControlWithRulesSource.SelectedTab.Controls[0]);    
         }
-
-        private void btLoadUnitTestFromLocalO2Development_Click(object sender, EventArgs e)
-        {
-            XRules_Config.PathTo_XRulesDatabase_fromLocalDisk = DI.PathToLocalUnitTestsFiles;
-            loadXRuleDatabase();
-        }
-
-        private void btLoadXRulesUnitTests_Click(object sender, EventArgs e)
-        {
-            XRules_Config.PathTo_XRulesDatabase_fromLocalDisk = DI.PathToLocalXRulesUnitTestsFiles;
-            loadXRuleDatabase();
-        }
-
+              
         private void tbFileToOpen_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)

@@ -35,11 +35,10 @@ namespace O2.Core.XRules.Ascx
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.btLoadXRulesUnitTests = new System.Windows.Forms.ToolStripButton();
-            this.btLoadUnitTestFromLocalO2Development = new System.Windows.Forms.ToolStripButton();
             this.tbFileToOpen = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.llReloadXRules = new System.Windows.Forms.ToolStripLabel();
+            this.directoryWithLocalXRules = new O2.Views.ASCX.CoreControls.ascx_Directory();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btCreateRuleFromTemplate = new System.Windows.Forms.Button();
             this.tbNewRuleName = new System.Windows.Forms.TextBox();
@@ -52,13 +51,12 @@ namespace O2.Core.XRules.Ascx
             this.btBrowseSVN = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.btBackupLocalFiles = new System.Windows.Forms.ToolStripButton();
+            this.directoryWithXRulesDatabase = new O2.Views.ASCX.CoreControls.ascx_Directory();
             this.llReloadSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
             this.llRemoveSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
             this.tcTabControlWithRulesSource = new System.Windows.Forms.TabControl();
             this.tpNoRulesLoaded = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
-            this.directoryWithLocalXRules = new O2.Views.ASCX.CoreControls.ascx_Directory();
-            this.directoryWithXRulesDatabase = new O2.Views.ASCX.CoreControls.ascx_Directory();
             this.scTopLevel.Panel1.SuspendLayout();
             this.scTopLevel.Panel2.SuspendLayout();
             this.scTopLevel.SuspendLayout();
@@ -144,34 +142,14 @@ namespace O2.Core.XRules.Ascx
             // toolStrip2
             // 
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btLoadXRulesUnitTests,
-            this.btLoadUnitTestFromLocalO2Development,
-            this.tbFileToOpen,
             this.toolStripLabel2,
+            this.tbFileToOpen,
             this.llReloadXRules});
             this.toolStrip2.Location = new System.Drawing.Point(3, 16);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(405, 25);
             this.toolStrip2.TabIndex = 6;
             this.toolStrip2.Text = "toolStrip2";
-            // 
-            // btLoadXRulesUnitTests
-            // 
-            this.btLoadXRulesUnitTests.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btLoadXRulesUnitTests.Image = ((System.Drawing.Image)(resources.GetObject("btLoadXRulesUnitTests.Image")));
-            this.btLoadXRulesUnitTests.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btLoadXRulesUnitTests.Name = "btLoadXRulesUnitTests";
-            this.btLoadXRulesUnitTests.Size = new System.Drawing.Size(23, 22);
-            this.btLoadXRulesUnitTests.Text = "Load XRules Units test (from O2 source code)";
-            // 
-            // btLoadUnitTestFromLocalO2Development
-            // 
-            this.btLoadUnitTestFromLocalO2Development.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btLoadUnitTestFromLocalO2Development.Image = ((System.Drawing.Image)(resources.GetObject("btLoadUnitTestFromLocalO2Development.Image")));
-            this.btLoadUnitTestFromLocalO2Development.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btLoadUnitTestFromLocalO2Development.Name = "btLoadUnitTestFromLocalO2Development";
-            this.btLoadUnitTestFromLocalO2Development.Size = new System.Drawing.Size(23, 22);
-            this.btLoadUnitTestFromLocalO2Development.Text = "Load Unit test (from O2 source code)";
             // 
             // tbFileToOpen
             // 
@@ -191,6 +169,29 @@ namespace O2.Core.XRules.Ascx
             this.llReloadXRules.Size = new System.Drawing.Size(72, 22);
             this.llReloadXRules.Text = "reload XRules";
             this.llReloadXRules.Click += new System.EventHandler(this.llReloadXRules_Click);
+            // 
+            // directoryWithLocalXRules
+            // 
+            this.directoryWithLocalXRules._FileFilter = "*.*";
+            this.directoryWithLocalXRules._HandleDrop = true;
+            this.directoryWithLocalXRules._HideFiles = false;
+            this.directoryWithLocalXRules._ProcessDroppedObjects = true;
+            this.directoryWithLocalXRules._ShowFileContentsOnTopTip = false;
+            this.directoryWithLocalXRules._ShowFileSize = false;
+            this.directoryWithLocalXRules._ShowLinkToUpperFolder = true;
+            this.directoryWithLocalXRules._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
+            this.directoryWithLocalXRules._WatchFolder = true;
+            this.directoryWithLocalXRules.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.directoryWithLocalXRules.BackColor = System.Drawing.SystemColors.Control;
+            this.directoryWithLocalXRules.ForeColor = System.Drawing.Color.Black;
+            this.directoryWithLocalXRules.Location = new System.Drawing.Point(3, 44);
+            this.directoryWithLocalXRules.Name = "directoryWithLocalXRules";
+            this.directoryWithLocalXRules.Size = new System.Drawing.Size(405, 157);
+            this.directoryWithLocalXRules.TabIndex = 0;
+            this.directoryWithLocalXRules._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithLocalXRules__onDirectoryClick);
+            this.directoryWithLocalXRules._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithLocalXRules__onDirectoryDoubleClick);
             // 
             // groupBox1
             // 
@@ -311,6 +312,29 @@ namespace O2.Core.XRules.Ascx
             this.btBackupLocalFiles.Text = "Backup current XRules (From O2)  Database ";
             this.btBackupLocalFiles.Click += new System.EventHandler(this.btBackupLocalFiles_Click);
             // 
+            // directoryWithXRulesDatabase
+            // 
+            this.directoryWithXRulesDatabase._FileFilter = "*.*";
+            this.directoryWithXRulesDatabase._HandleDrop = false;
+            this.directoryWithXRulesDatabase._HideFiles = false;
+            this.directoryWithXRulesDatabase._ProcessDroppedObjects = true;
+            this.directoryWithXRulesDatabase._ShowFileContentsOnTopTip = false;
+            this.directoryWithXRulesDatabase._ShowFileSize = false;
+            this.directoryWithXRulesDatabase._ShowLinkToUpperFolder = true;
+            this.directoryWithXRulesDatabase._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
+            this.directoryWithXRulesDatabase._WatchFolder = true;
+            this.directoryWithXRulesDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.directoryWithXRulesDatabase.BackColor = System.Drawing.SystemColors.Control;
+            this.directoryWithXRulesDatabase.ForeColor = System.Drawing.Color.Black;
+            this.directoryWithXRulesDatabase.Location = new System.Drawing.Point(3, 43);
+            this.directoryWithXRulesDatabase.Name = "directoryWithXRulesDatabase";
+            this.directoryWithXRulesDatabase.Size = new System.Drawing.Size(400, 105);
+            this.directoryWithXRulesDatabase.TabIndex = 0;
+            this.directoryWithXRulesDatabase._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryClick);
+            this.directoryWithXRulesDatabase._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryDoubleClick);
+            // 
             // llReloadSelectedSourceCodeFile
             // 
             this.llReloadSelectedSourceCodeFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -369,52 +393,6 @@ namespace O2.Core.XRules.Ascx
             this.label1.Text = "Choose rule to edit from XRules Database";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // directoryWithLocalXRules
-            // 
-            this.directoryWithLocalXRules._FileFilter = "*.*";
-            this.directoryWithLocalXRules._HandleDrop = true;
-            this.directoryWithLocalXRules._HideFiles = false;
-            this.directoryWithLocalXRules._ProcessDroppedObjects = true;
-            this.directoryWithLocalXRules._ShowFileContentsOnTopTip = false;
-            this.directoryWithLocalXRules._ShowFileSize = false;
-            this.directoryWithLocalXRules._ShowLinkToUpperFolder = true;
-            this.directoryWithLocalXRules._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
-            this.directoryWithLocalXRules._WatchFolder = true;
-            this.directoryWithLocalXRules.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.directoryWithLocalXRules.BackColor = System.Drawing.SystemColors.Control;
-            this.directoryWithLocalXRules.ForeColor = System.Drawing.Color.Black;
-            this.directoryWithLocalXRules.Location = new System.Drawing.Point(3, 44);
-            this.directoryWithLocalXRules.Name = "directoryWithLocalXRules";
-            this.directoryWithLocalXRules.Size = new System.Drawing.Size(405, 157);
-            this.directoryWithLocalXRules.TabIndex = 0;
-            this.directoryWithLocalXRules._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithLocalXRules__onDirectoryClick);
-            this.directoryWithLocalXRules._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithLocalXRules__onDirectoryDoubleClick);
-            // 
-            // directoryWithXRulesDatabase
-            // 
-            this.directoryWithXRulesDatabase._FileFilter = "*.*";
-            this.directoryWithXRulesDatabase._HandleDrop = false;
-            this.directoryWithXRulesDatabase._HideFiles = false;
-            this.directoryWithXRulesDatabase._ProcessDroppedObjects = true;
-            this.directoryWithXRulesDatabase._ShowFileContentsOnTopTip = false;
-            this.directoryWithXRulesDatabase._ShowFileSize = false;
-            this.directoryWithXRulesDatabase._ShowLinkToUpperFolder = true;
-            this.directoryWithXRulesDatabase._ViewMode = O2.Views.ASCX.CoreControls.ascx_Directory.ViewMode.Simple_With_LocationBar;
-            this.directoryWithXRulesDatabase._WatchFolder = true;
-            this.directoryWithXRulesDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.directoryWithXRulesDatabase.BackColor = System.Drawing.SystemColors.Control;
-            this.directoryWithXRulesDatabase.ForeColor = System.Drawing.Color.Black;
-            this.directoryWithXRulesDatabase.Location = new System.Drawing.Point(3, 43);
-            this.directoryWithXRulesDatabase.Name = "directoryWithXRulesDatabase";
-            this.directoryWithXRulesDatabase.Size = new System.Drawing.Size(400, 105);
-            this.directoryWithXRulesDatabase.TabIndex = 0;
-            this.directoryWithXRulesDatabase._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryClick);
-            this.directoryWithXRulesDatabase._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryDoubleClick);
-            // 
             // ascx_XRules_Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -466,8 +444,6 @@ namespace O2.Core.XRules.Ascx
         private System.Windows.Forms.LinkLabel llReloadSelectedSourceCodeFile;
         private System.Windows.Forms.CheckBox cbShowFileContentsOnMouseOver;
         private System.Windows.Forms.ToolStrip toolStrip2;
-        private System.Windows.Forms.ToolStripButton btLoadXRulesUnitTests;
-        private System.Windows.Forms.ToolStripButton btLoadUnitTestFromLocalO2Development;
         private System.Windows.Forms.ToolStripLabel llReloadXRules;
         private System.Windows.Forms.ToolStripTextBox tbFileToOpen;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
