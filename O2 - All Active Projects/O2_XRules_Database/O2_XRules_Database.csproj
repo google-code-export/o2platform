@@ -52,6 +52,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="O2_Core_FileViewers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2_Core_XRules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2_DotNetWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2_External_O2Mono, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2_External_SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2_External_WinFormsUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2_ImportExport_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2_Kernel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2_Views_ASCX, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -66,6 +75,9 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="_HostLocalWebsite %28O2 Tool%29, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <ExecutableExtension>.exe</ExecutableExtension>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InstallXRules.cs" />
@@ -129,56 +141,6 @@
       <LastGenOutput>XRules_Templates.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_O2Mono\O2_External_O2Mono.csproj">
-      <Project>{F457A7EB-A573-41BB-BC12-61ABE5ACF702}</Project>
-      <Name>O2_External_O2Mono</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
-      <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
-      <Name>O2_External_SharpDevelop</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
-      <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
-      <Name>O2_External_WinFormsUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2Core\O2_Core_CIR\O2_Core_CIR.csproj">
-      <Project>{F19ED2FE-8191-4534-8DAC-4C42DEE87B52}</Project>
-      <Name>O2_Core_CIR</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2Core\O2_Core_FileViewers\O2_Core_FileViewers.csproj">
-      <Project>{6CDF7A9F-31CC-4496-90B1-09A39C8EEE08}</Project>
-      <Name>O2_Core_FileViewers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2Core\O2_Core_XRules\O2_Core_XRules.csproj">
-      <Project>{E5CB533C-DA98-408E-B021-171293AAAE3E}</Project>
-      <Name>O2_Core_XRules</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
-      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
-      <Name>O2 DotNet Wrappers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
-      <Project>{49F0878F-E643-4D19-BE27-BC4CF4D6A138}</Project>
-      <Name>O2 ImportExport OunceLabs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2Core\O2_Kernel\O2 Kernel.csproj">
-      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
-      <Name>O2 Kernel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
-      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
-      <Name>O2_Views_ASCX</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2_Tools\O2_Tool_HostLocalWebSite\O2_Tool_HostLocalWebsite.csproj">
-      <Project>{6D9EFAEE-EF33-41E0-BF91-F1E46ADC6F3E}</Project>
-      <Name>O2_Tool_HostLocalWebsite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\O2_Tools\O2_Tool_SearchEngine\O2_Tool_SearchEngine.csproj">
-      <Project>{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}</Project>
-      <Name>O2_Tool_SearchEngine</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
