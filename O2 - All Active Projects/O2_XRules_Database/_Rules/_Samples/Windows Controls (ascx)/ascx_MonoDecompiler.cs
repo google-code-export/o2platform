@@ -74,27 +74,27 @@ namespace O2.Script
     
         public void InitializeComponent()
         {
-        	var splitControl = this.addSplitContainer(
+        	var splitControl = this.add_SplitContainer(
         						false, 		//setOrientationToHorizontal
         						true,		// setDockStyleoFill
         						true);		// setBorderStyleTo3D)
-        	var leftGroupBox = splitControl.Panel1.addGroupBox("Methods");
-            var rightGroupBox = splitControl.Panel2.addGroupBox("SourceCode");
-            tvDirectoriesAndFiles = leftGroupBox.addTreeView();
+        	var leftGroupBox = splitControl.Panel1.add_GroupBox("Methods");
+            var rightGroupBox = splitControl.Panel2.add_GroupBox("SourceCode");
+            tvDirectoriesAndFiles = leftGroupBox.add_TreeView();
             tvDirectoriesAndFiles.AfterSelect += tvDirectoriesAndFiles_AfterSelect;
             tvDirectoriesAndFiles.AllowDrop = true;
             tvDirectoriesAndFiles.DragEnter += tvDirectoriesAndFiles_DragEnter;
             tvDirectoriesAndFiles.DragDrop += tvDirectoriesAndFiles_DragDrop;                        
             
-            var rightSplitControl = rightGroupBox.addSplitContainer(
+            var rightSplitControl = rightGroupBox.add_SplitContainer(
         						true, 		//setOrientationToHorizontal
         						true,		// setDockStyleoFill
         						true);		// setBorderStyleTo3D)
             
-            var topGroupBox = rightSplitControl.Panel1.addGroupBox("SourceCode");
-            var bottomGroupBox = rightSplitControl.Panel2.addGroupBox("ControlFlowGraph");
-            sourceCodeEditor = topGroupBox.addSourceCodeEditor();
-            tvControlFlowGraph = bottomGroupBox.addTreeView();
+            var topGroupBox = rightSplitControl.Panel1.add_GroupBox("SourceCode");
+            var bottomGroupBox = rightSplitControl.Panel2.add_GroupBox("ControlFlowGraph");
+            sourceCodeEditor = topGroupBox.add_SourceCodeEditor();
+            tvControlFlowGraph = bottomGroupBox.add_TreeView();
             tvControlFlowGraph.BeforeExpand += tvDirectoriesAndFiles_BeforeExpand;
             // set-up size
             this.Width = 500;
@@ -130,7 +130,7 @@ namespace O2.Script
     			// add ControFlowGraph
 				tvControlFlowGraph.clear();
 				var controlFlowGraph = ControlFlowGraph.Create(methodDefinition);    			                    
-				tvControlFlowGraph.addNode(controlFlowGraph.ToString(), controlFlowGraph, true);				    			
+				tvControlFlowGraph.add_Node(controlFlowGraph.ToString(), controlFlowGraph, true);				    			
     	 	}
     	}
     
@@ -159,12 +159,12 @@ namespace O2.Script
 						break;	
 					default:
 						// used for not supported types
-						tvDirectoriesAndFiles.addNode(currentTreeNode,"-> Properties in type:  " +  currentTreeNode.Tag.GetType().Name,"",false);						
+						tvDirectoriesAndFiles.add_Node(currentTreeNode,"-> Properties in type:  " +  currentTreeNode.Tag.GetType().Name,"",false);						
 						foreach(var property in PublicDI.reflection.getProperties(currentTreeNode.Tag))
 						{
 							var propertyValue = PublicDI.reflection.getProperty(property, currentTreeNode.Tag);
 							var nodeText = string.Format("{0}: {1}           ({2})",  property.Name, propertyValue ?? "[null]", property);
-							tvDirectoriesAndFiles.addNode(currentTreeNode, nodeText, propertyValue, propertyValue != null);
+							tvDirectoriesAndFiles.add_Node(currentTreeNode, nodeText, propertyValue, propertyValue != null);
 						}
 						break;
 				}											
@@ -176,7 +176,7 @@ namespace O2.Script
     		foreach(var block in controlFlowGraph.Blocks)
     		{
     			var nodeText = string.Format("Block #{0}", block.Index);
-    			tvDirectoriesAndFiles.addNode(treeNode,nodeText,block,true);
+    			tvDirectoriesAndFiles.add_Node(treeNode,nodeText,block,true);
     		}
     	}
     	
@@ -189,19 +189,19 @@ namespace O2.Script
 		public void addNode(TreeNode treeNode, Instruction instruction)
     	{    		    			
 			var nodeText = string.Format("{0} {1}", instruction.OpCode, instruction.Operand);
-			var newNode = tvDirectoriesAndFiles.addNode(treeNode, nodeText);
+			var newNode = tvDirectoriesAndFiles.add_Node(treeNode, nodeText);
 			
 //			if (instruction.Operand is Instruction)    		
 //    			tvDirectoriesAndFiles.addNode(newNode, instruction.OpCode.ToString(),(Instruction)instruction.Operand,true);    		    		
 			
-			tvDirectoriesAndFiles.addNode(newNode, "OpCode details:",  instruction.OpCode,true);    			    			
+			tvDirectoriesAndFiles.add_Node(newNode, "OpCode details:",  instruction.OpCode,true);    			    			
 			if (instruction.Operand !=null)
-				tvDirectoriesAndFiles.addNode(newNode, "Operand details:",  instruction.Operand,true);    		
+				tvDirectoriesAndFiles.add_Node(newNode, "Operand details:",  instruction.Operand,true);    		
     	}
         	
 		public void addNode(TreeNode treeNode, string value)
 		{
-			tvDirectoriesAndFiles.addNode(treeNode, "= " + value);
+			tvDirectoriesAndFiles.add_Node(treeNode, "= " + value);
 		}
     
     	public void loadAssembly(Assembly assemblyToLoad)    	

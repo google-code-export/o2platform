@@ -64,13 +64,13 @@ namespace O2.Script
 		{			
 			O2Thread.mtaThread(
 			()=> {
-				step.setText("");				
+				step.set_Text("");				
 				var sourceDirectory = step.getPathFromStep(0);
 				var targetDirectory = step.getPathFromStep(1);
 				var targetFile = calculateTargetFileName(sourceDirectory, targetDirectory);
-				step.appendText("You are about to create a backup of the folder: {1}{1}\t{0} {1}{1} ", sourceDirectory, Environment.NewLine);
-				step.appendText("into the file: {1}{1}\t{0}{1}{1}", targetFile, Environment.NewLine);
-				step.appendText("Do you want to processed");
+				step.append_Text("You are about to create a backup of the folder: {1}{1}\t{0} {1}{1} ", sourceDirectory, Environment.NewLine);
+                step.append_Text("into the file: {1}{1}\t{0}{1}{1}", targetFile, Environment.NewLine);
+                step.append_Text("Do you want to processed");
 			});
 		}
 		
@@ -86,14 +86,14 @@ namespace O2.Script
 								
 				step.allowNext(false);
 				step.allowBack(false);						
-				step.appendLine(" .... creating zip file ....");
+				step.append_Line(" .... creating zip file ....");
 				
 				new zipUtils().zipFolder(sourceDirectory, targetFile);
 				if (File.Exists(targetFile))
-					step.appendLine("File Created: {0}", targetFile);	
+					step.append_Line("File Created: {0}", targetFile);	
 				else
-					step.appendLine("There was a problem creating the file: {0}", targetFile);	
-				step.appendLine("all done");
+					step.append_Line("There was a problem creating the file: {0}", targetFile);	
+				step.append_Line("all done");
 				step.allowNext(true);
 				step.allowBack(true);									
 			});		

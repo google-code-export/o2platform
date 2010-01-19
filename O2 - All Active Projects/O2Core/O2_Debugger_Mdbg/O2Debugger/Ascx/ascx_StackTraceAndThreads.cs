@@ -54,7 +54,7 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
         public void showThreadsWithStackTrace()
         {                        
             var threads = DI.o2MDbg.sessionData.Threads;
-            tvExecutionArchive.addNode(O2Forms.newTreeNode(itemId++.ToString(),"", 0, threads));
+            tvExecutionArchive.add_Node(O2Forms.newTreeNode(itemId++.ToString(),"", 0, threads));
             showThreadDetails(threads);            
         }
 
@@ -97,7 +97,7 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
                 }
 
 
-                tvThreadsAndStackTrace.addNode(threadNode);
+                tvThreadsAndStackTrace.add_Node(threadNode);
             }
             tvThreadsAndStackTrace.expandAll();
             PublicDI.log.debug("showThreadDetails.End");

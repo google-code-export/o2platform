@@ -107,12 +107,12 @@ namespace O2.Script
         	var fileMappings = (ascx_FileMappings)step.Controller.steps[0].FirstControl;        	
         	var filesToIndex = fileMappings.getFilesThatMatchCurrentExtensionFilter();
         	
-        	step.setText(string.Format("There are {0} files to index", filesToIndex.Count));
+        	step.set_Text(string.Format("There are {0} files to index", filesToIndex.Count));
         	var filesText = new StringBuilder();
         	filesText.AppendLine();
         	foreach(var file in filesToIndex)
         		filesText.AppendLine("  -  " + file);
-			step.appendText(filesText.ToString());
+			step.append_Text(filesText.ToString());
        	}
 	}		
 }
