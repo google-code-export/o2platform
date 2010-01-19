@@ -104,6 +104,9 @@
     <Compile Include="_Rules\_Samples\SampleScripts.cs" />
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples\SvnTest.cs" />
+    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_AssemblyAttributes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\note working - ascx_MonoControlFlowGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -179,9 +182,6 @@
       <Project>{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}</Project>
       <Name>O2_Tool_SearchEngine</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="_Rules\_Samples\Custom Ascx Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
