@@ -144,18 +144,18 @@ namespace O2.Script
 				switch(currentTreeNode.Tag.GetType().Name)
 				{
 					case "ControlFlowGraph":
-						addNodes(currentTreeNode, (ControlFlowGraph)currentTreeNode.Tag);												
+						add_Nodes(currentTreeNode, (ControlFlowGraph)currentTreeNode.Tag);												
 						break;						
 					case "InstructionBlock":
-						addNodes(currentTreeNode, (InstructionBlock)currentTreeNode.Tag);												
+						add_Nodes(currentTreeNode, (InstructionBlock)currentTreeNode.Tag);												
 						break;					
 					case "Instruction":
-						addNode(currentTreeNode, (Instruction)currentTreeNode.Tag);												
+						add_Node(currentTreeNode, (Instruction)currentTreeNode.Tag);												
 						break;	
 					case "String":
 					case "Int32":
 					//case "Int16":
-						addNode(currentTreeNode, currentTreeNode.Tag.ToString());
+						add_Node(currentTreeNode, currentTreeNode.Tag.ToString());
 						break;	
 					default:
 						// used for not supported types
@@ -171,7 +171,7 @@ namespace O2.Script
 			}    		
     	}
     	
-    	public void addNodes(TreeNode treeNode, ControlFlowGraph controlFlowGraph)
+    	public void add_Nodes(TreeNode treeNode, ControlFlowGraph controlFlowGraph)
     	{
     		foreach(var block in controlFlowGraph.Blocks)
     		{
@@ -180,26 +180,26 @@ namespace O2.Script
     		}
     	}
     	
-    	public void addNodes(TreeNode treeNode, InstructionBlock instructionBlock)
+    	public void add_Nodes(TreeNode treeNode, InstructionBlock instructionBlock)
     	{    		
     		foreach(var instruction in instructionBlock)
-    			addNode(treeNode, instruction);
+    			add_Node(treeNode, instruction);
     	}
     	
-		public void addNode(TreeNode treeNode, Instruction instruction)
+		public void add_Node(TreeNode treeNode, Instruction instruction)
     	{    		    			
 			var nodeText = string.Format("{0} {1}", instruction.OpCode, instruction.Operand);
 			var newNode = tvDirectoriesAndFiles.add_Node(treeNode, nodeText);
 			
 //			if (instruction.Operand is Instruction)    		
-//    			tvDirectoriesAndFiles.addNode(newNode, instruction.OpCode.ToString(),(Instruction)instruction.Operand,true);    		    		
+//    			tvDirectoriesAndFiles.add_Node(newNode, instruction.OpCode.ToString(),(Instruction)instruction.Operand,true);    		    		
 			
 			tvDirectoriesAndFiles.add_Node(newNode, "OpCode details:",  instruction.OpCode,true);    			    			
 			if (instruction.Operand !=null)
 				tvDirectoriesAndFiles.add_Node(newNode, "Operand details:",  instruction.Operand,true);    		
     	}
         	
-		public void addNode(TreeNode treeNode, string value)
+		public void add_Node(TreeNode treeNode, string value)
 		{
 			tvDirectoriesAndFiles.add_Node(treeNode, "= " + value);
 		}
