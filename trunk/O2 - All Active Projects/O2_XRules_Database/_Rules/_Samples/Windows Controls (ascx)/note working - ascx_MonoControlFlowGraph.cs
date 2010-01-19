@@ -58,20 +58,20 @@ namespace O2.Script
     
         public void InitializeComponent()
         {
-        	var splitControl = this.addSplitContainer(
+        	var splitControl = this.add_SplitContainer(
         						false, 		//setOrientationToHorizontal
         						true,		// setDockStyleoFill
         						true);		// setBorderStyleTo3D)
-        	var leftGroupBox = splitControl.Panel1.addGroupBox("Methods");
-            var rightGroupBox = splitControl.Panel2.addGroupBox("SourceCode");
-            tvDirectoriesAndFiles = leftGroupBox.addTreeView();
+        	var leftGroupBox = splitControl.Panel1.add_GroupBox("Methods");
+            var rightGroupBox = splitControl.Panel2.add_GroupBox("SourceCode");
+            tvDirectoriesAndFiles = leftGroupBox.add_TreeView();
             tvDirectoriesAndFiles.AfterSelect += tvDirectoriesAndFiles_AfterSelect;
             tvDirectoriesAndFiles.AllowDrop = true;
             tvDirectoriesAndFiles.DragEnter += tvDirectoriesAndFiles_DragEnter;
             tvDirectoriesAndFiles.DragDrop += tvDirectoriesAndFiles_DragDrop;
             
             //tvControlFlowGraph = 
-            sourceCodeEditor = rightGroupBox.addSourceCodeEditor(); 
+            sourceCodeEditor = rightGroupBox.add_SourceCodeEditor(); 
             
             // set-up size
             this.Width = 500;

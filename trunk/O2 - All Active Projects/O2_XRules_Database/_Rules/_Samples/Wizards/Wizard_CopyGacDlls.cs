@@ -75,35 +75,35 @@ namespace O2.Script
 			message.AppendLine(" ");
 			foreach(var gacDll in getAssembliesToCopy(step))
 				message.AppendLine(String.Format("  - {0}   \t\t\t\t ->  {1}", gacDll, gacDll.fullPath));
-			step.setText(message.ToString());
+			step.set_Text(message.ToString());
 		}
             
         public void copyFilesToTargetFolder(IStep step)
         {        
         	O2Thread.mtaThread(
         	()=> {
-        		step.setText("");
+        		step.set_Text("");
 	       		var gacDlls = getAssembliesToCopy(step);
 	        	var message = string.Format("Copying {0} files to {1}", gacDlls.Count,targetFolder);
-	        	step.appendLine(message);
+	        	step.append_Line(message);
 	        	if(false == Directory.Exists(targetFolder))
 	        	{
-	        		step.appendLine("Creating folder: " +  targetFolder);
+	        		step.append_Line("Creating folder: " +  targetFolder);
 	        		Directory.CreateDirectory(targetFolder);
 	        	}
 	        	else
 		        	if (deleteFilesFromTargetFolder)
 		        	{
-	        			step.appendLine("Deleting all files from folder: " +  targetFolder);
+	        			step.append_Line("Deleting all files from folder: " +  targetFolder);
 	        			Files.deleteAllFilesFromDir(targetFolder);
 	        		}	
 	        	foreach(var gacDll in gacDlls)
 	        	{
-	        		step.appendLine(".. copying file: {0}", gacDll.fullPath);
+	        		step.append_Line(".. copying file: {0}", gacDll.fullPath);
 	        		Files.Copy(gacDll.fullPath,targetFolder);
 	        	}
-	        	step.appendLine(" ");
-	        	step.appendLine("Copy complete");
+	        	step.append_Line(" ");
+	        	step.append_Line("Copy complete");
 	        });
         	
         }

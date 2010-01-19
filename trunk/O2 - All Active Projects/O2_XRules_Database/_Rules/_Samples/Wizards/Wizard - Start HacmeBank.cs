@@ -24,8 +24,9 @@ using O2.Tool.HostLocalWebsite.classes;
 
 
 namespace O2.Script
-{
+{	
 	[TestFixture]
+	[O2WizardAttribute]
     public class Wizard_Start_HacmeBank
     {    
     	private static IO2Log log = PublicDI.log;
@@ -71,11 +72,11 @@ namespace O2.Script
     	
     	public void closeWebServers(IStep step)
     	{
-    		step.setText("Closing Web Servers");
-    		step.appendLine(":");
+    		step.set_Text("Closing Web Servers");
+    		step.append_Line(":");
     		webServicesHost.webservices.StopWebService();
     		webSiteHost.webservices.StopWebService();
-    		step.appendLine("Done..");
+    		step.append_Line("Done..");
     	}
     }
 }
