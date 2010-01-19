@@ -62,6 +62,13 @@ namespace O2.DotNetWrappers.Windows
             return treeView;
         }
 
+        public static TreeNode add_Node(this TreeView treeView, TreeNode rootNode, string nodeText, Color textColor)
+        {
+            var newNode = treeView.add_Node(rootNode, nodeText);//, nodeText,0,textColor,null);
+            newNode.ForeColor = textColor;
+            return newNode;
+        }
+
         public static TreeNode add_Node(this TreeView treeView, string nodeText, int imageId, Color color, object nodeTag)
         {
             return (TreeNode)treeView.invokeOnThread((()

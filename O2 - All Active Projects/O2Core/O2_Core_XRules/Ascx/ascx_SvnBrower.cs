@@ -45,19 +45,19 @@ namespace O2.Core.XRules.Ascx
         
         public void InitializeComponent()
         {
-        	splitControl = this.addSplitContainer(
+        	splitControl = this.add_SplitContainer(
             						false, 		//setOrientationToHorizontal
             						true,		// setDockStyleoFill
             						true);		// setBorderStyleTo3D)
-            leftGroupBox = splitControl.Panel1.addGroupBox("Directories and Files");
-            rightGroupBox = splitControl.Panel2.addGroupBox("FileContents");
+            leftGroupBox = splitControl.Panel1.add_GroupBox("Directories and Files");
+            rightGroupBox = splitControl.Panel2.add_GroupBox("FileContents");
             this.Width = 500;
             this.Height = 500;
-            tvDirectoriesAndFiles = leftGroupBox.addTreeView();
+            tvDirectoriesAndFiles = leftGroupBox.add_TreeView();
             tvDirectoriesAndFiles.ImageList = ImagesLists.withFolderAndFile();
             tvDirectoriesAndFiles.NodeMouseDoubleClick += tvDirectoriesAndFiles_DoubleClick;
             tvDirectoriesAndFiles.ItemDrag += tvDirectoriesAndFiles_ItemDrag;
-            sourceCodeEditor = rightGroupBox.addSourceCodeEditor();                        
+            sourceCodeEditor = rightGroupBox.add_SourceCodeEditor();                        
         }
 
         void tvDirectoriesAndFiles_ItemDrag(object sender, ItemDragEventArgs e)
@@ -100,7 +100,7 @@ namespace O2.Core.XRules.Ascx
                     foreach (var svnMappedUrl in svnMappedUrls)
                     {
                         var newTreeNode =
-                            tvDirectoriesAndFiles.addNode(
+                            tvDirectoriesAndFiles.add_Node(
                                 svnMappedUrl.Text,
                                 (svnMappedUrl.IsFile) ? 1 : 0,
                                 (svnMappedUrl.IsFile) ? Color.Blue : Color.Black,

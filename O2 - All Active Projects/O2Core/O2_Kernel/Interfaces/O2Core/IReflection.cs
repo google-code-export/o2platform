@@ -30,7 +30,7 @@ namespace O2.Kernel.Interfaces.O2Core
         List<MethodInfo> getMethods(Assembly assembly);
         List<MethodInfo> getMethods(Type type);
         List<MethodInfo> getMethods(Type type, BindingFlags bindingFlags);
-        List<MethodInfo> getMethods(Type type, Attribute attribute);
+        List<MethodInfo> getMethods(Type type, Attribute attribute);        
         MethodInfo getMethod(string pathToAssembly, string methodName);
         MethodInfo getMethod(string pathToAssembly, string methodName, object[] methodParameters);
         MethodInfo getMethod(Type controlType, string methodName);        
@@ -45,6 +45,8 @@ namespace O2.Kernel.Interfaces.O2Core
 
         Attribute getAttribute(MethodInfo method, Type type);
         List<Attribute> getAttributes(MethodInfo methodInfo);
+        List<Attribute> getAttributes(Type targetType);
+        List<Attribute> getAttributes(Assembly assembly);
 
         List<FieldInfo> getFields(Type type);
         FieldInfo getField(Type type, string fieldName);
@@ -63,6 +65,11 @@ namespace O2.Kernel.Interfaces.O2Core
         Object getInstance(Type tTypeToCreate);
 
         object[] getRealObjects(object[] objectsToConvert);
+
+        // get xx with attribute
+        List<MethodInfo> getTypesWithAttribute(Assembly assembly, Type attributeType);
+        List<MethodInfo> getMethodsWithAttribute(Assembly assembly, Type attributeType);
+        List<MethodInfo> getMethodsWithAttribute(Type targetType, Type attributeType);
 
         //Object getLiveObject(object liveObject, string typeToFind);
 

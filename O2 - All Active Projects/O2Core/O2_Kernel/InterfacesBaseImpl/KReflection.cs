@@ -8,6 +8,8 @@ using O2.Kernel.Objects;
 
 namespace O2.Kernel.InterfacesBaseImpl
 {
+
+	
     public class KReflection : IReflection
     {
         public const BindingFlags bindingFlags_allDeclared = BindingFlags.Public | BindingFlags.NonPublic |
@@ -232,6 +234,7 @@ namespace O2.Kernel.InterfacesBaseImpl
             }
             return results;
         }
+
         public Attribute getAttribute(MethodInfo method, Type type)
         {
             var attributes = getAttributes(method);
@@ -249,6 +252,25 @@ namespace O2.Kernel.InterfacesBaseImpl
                     attributes.Add((Attribute)attribute);
             return attributes;
         }
+        
+        public List<Attribute> getAttributes(Type targetType)
+        {
+            var attributes = new List<Attribute>();
+            foreach(var attribute in targetType.GetCustomAttributes(true))
+                if (attribute is Attribute)
+                    attributes.Add((Attribute)attribute);
+            return attributes;
+        }
+        
+        public List<Attribute> getAttributes(Assembly assembly)
+        {
+            var attributes = new List<Attribute>();
+            foreach(var attribute in assembly.GetCustomAttributes(true))
+                if (attribute is Attribute)
+                    attributes.Add((Attribute)attribute);
+            return attributes;
+        }
+
 
         public List<MethodInfo> getMethods(Type type, BindingFlags bindingFlags)
         {
@@ -459,6 +481,27 @@ namespace O2.Kernel.InterfacesBaseImpl
             return realObjects.ToArray();
         }
 
+        public List<MethodInfo> getTypesWithAttribute(Assembly assembly, Type attributeType)
+        {
+            var methods = new List<MethodInfo>();
+            if (assembly != null)
+            { }
+            return methods;
+        }
+
+        public List<MethodInfo> getMethodsWithAttribute(Assembly assembly, Type attributeType)
+        {
+            var methods = new List<MethodInfo>();
+            
+            return methods;
+        }
+
+        public List<MethodInfo> getMethodsWithAttribute(Type targetType, Type attributeType)
+        {
+            var methods = new List<MethodInfo>();
+
+            return methods;
+        }
 
       /*  public Object getLiveObject(object liveObject, string typeToFind)
         {

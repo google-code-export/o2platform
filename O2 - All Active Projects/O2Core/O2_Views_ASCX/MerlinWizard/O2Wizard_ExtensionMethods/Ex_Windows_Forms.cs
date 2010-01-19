@@ -11,7 +11,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
 {
     public static class Ex_Windows_Forms
     {
-        public static TextBox createTextBox(string message)
+        public static TextBox create_TextBox(string message)
         {
             var textBox = new TextBox();
             textBox.Multiline = true;
@@ -23,40 +23,40 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             return textBox;
         }
 
-        public static TemplateStep createStepWithTextBox(string stepTitle, string message)
+        public static TemplateStep createStepWith_TextBox(string stepTitle, string message)
         {
-            var textBox = createTextBox(message);
-            return createStepWithTextBox(stepTitle, textBox);
+            var textBox = create_TextBox(message);
+            return createStepWith_TextBox(stepTitle, textBox);
         }
 
-        public static TemplateStep createStepWithTextBox(string stepTitle, TextBox textBox)
+        public static TemplateStep createStepWith_TextBox(string stepTitle, TextBox textBox)
         {
             var newStep = new TemplateStep(textBox, 10, stepTitle);
             return newStep;
         }
 
-        public static void setText(this IStep step, string message)
+        public static void set_Text(this IStep step, string message)
         {
             if (step.FirstControl != null)
                 step.Controller.wizardForm.invokeOnThread(() => step.FirstControl.Text = message);
         }
 
-        public static void appendText(this IStep step, string messageFormat, params Object[] variables)
+        public static void append_Text(this IStep step, string messageFormat, params Object[] variables)
         {
-            step.appendText(string.Format(messageFormat, variables));
+            step.append_Text(string.Format(messageFormat, variables));
         }
 
-        public static void appendLine(this IStep step, string messageFormat, params Object[] variables)
+        public static void append_Line(this IStep step, string messageFormat, params Object[] variables)
         {
-            step.appendText(string.Format(messageFormat + Environment.NewLine, variables));
+            step.append_Text(string.Format(messageFormat + Environment.NewLine, variables));
         }
 
-        public static void appendLine(this IStep step, string message)
+        public static void append_Line(this IStep step, string message)
         {
-            step.appendText(message + Environment.NewLine);
+            step.append_Text(message + Environment.NewLine);
         }
 
-        public static void appendText(this IStep step, string message)
+        public static void append_Text(this IStep step, string message)
         {
             if (step.FirstControl != null)
                 step.Controller.wizardForm.invokeOnThread(() => step.FirstControl.Text += message);
@@ -69,7 +69,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
                     }                        
         }
 
-        public static void setText(this TextBox textBox, string text)
+        public static void set_Text(this TextBox textBox, string text)
         {
             textBox.invokeOnThread(() => textBox.Text = text);
         }

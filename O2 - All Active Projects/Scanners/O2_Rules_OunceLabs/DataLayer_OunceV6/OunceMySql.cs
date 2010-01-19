@@ -35,7 +35,7 @@ namespace O2.Rules.OunceLabs.DataLayer_OunceV6
             MySqlLoginUsername = "root";
         }
 
-        private static String getLddbConnectionString()
+        public static String getLddbConnectionString()
         {
             return String.Format("server={0};port={1};uid={2};pwd={3};database={4}", MySqlServerIP, MySqlServerPort, MySqlLoginUsername,
                                  MySqlLoginPassword, MySqlDatabaseName);
@@ -68,7 +68,9 @@ namespace O2.Rules.OunceLabs.DataLayer_OunceV6
             //{
             try
             {
-                msConnection = new MySqlConnection(getLddbConnectionString());
+                var connectionString = getLddbConnectionString();
+                DI.log.debug("Trying to connect using ConnectionString: {0}", connectionString);
+                msConnection = new MySqlConnection(connectionString);
                 msConnection.Open();
                 DI.log.debug("Sucessfully connected to local lddb Database");
                 return true;

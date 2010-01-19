@@ -589,6 +589,7 @@ namespace O2.Views.ASCX.CoreControls
                 var currentNode = tvDirectory.GetNodeAt(e.Location);
                 if (currentNode != null)
                     tvDirectory.SelectedNode = currentNode;
+                allowDragAndDropToolStripMenuItem.Enabled = !tvDirectory.AllowDrop;
             }
         }
 
@@ -646,6 +647,11 @@ namespace O2.Views.ASCX.CoreControls
         private void refreshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             refreshDirectoryView();
+        }
+
+        private void allowDragAndDropToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tvDirectory.AllowDrop = true;            
         }
     }
 }

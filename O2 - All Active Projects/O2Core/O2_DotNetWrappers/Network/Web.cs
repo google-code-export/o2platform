@@ -39,11 +39,11 @@ namespace O2.DotNetWrappers.Network
         }
 
         public static String getUrlContents(String urlToFetch, bool verbose)
-        {
+        {        
             try
             {
                 if (verbose)
-                    DI.log.info("Fetching url: {0}", urlToFetch);
+                    PublicDI.log.info("Fetching url: {0}", urlToFetch);
                 WebRequest webRequest = WebRequest.Create(urlToFetch);
                 WebResponse rResponse = webRequest.GetResponse();
                 Stream sStream = rResponse.GetResponseStream();
@@ -56,25 +56,32 @@ namespace O2.DotNetWrappers.Network
             }
             catch (Exception ex)
             {
-                DI.log.error("Error in getUrlContents: {0}", ex.Message);
+                PublicDI.log.error("Error in getUrlContents: {0}", ex.Message);
                 return "";
             }
         }
-
-        public static string downloadBinaryFile(string urlOfFileToFetch)
+		public static string downloadBinaryFile(string urlOfFileToFetch)
+		{
+			return downloadBinaryFile(urlOfFileToFetch, true);
+		}
+		
+        public static string downloadBinaryFile(string urlOfFileToFetch, bool saveUsingTempFileName)
         {
+        	PublicDI.log.debug("Downloading Binary File {0}", urlOfFileToFetch);
             var webClient = new WebClient();
             try
             {
-                string tempFileName = String.Format("{0}_{1}.zip", DI.config.TempFileNameInTempDirectory,
+                string tempFileName = String.Format("{0}{1}.zip", 
+                									(saveUsingTempFileName) ? PublicDI.config.TempFileNameInTempDirectory + "_" : PublicDI.config.O2TempDir,
                                                     Path.GetFileNameWithoutExtension(urlOfFileToFetch));
                 byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
                 Files.WriteFileContent(tempFileName, pageData);
+                PublicDI.log.debug("Downloaded File saved to: {0}", tempFileName);
                 return tempFileName;
             }
             catch (Exception ex)
             {
-                DI.log.ex(ex);
+                PublicDI.log.ex(ex);
             }
             return null;
         }
@@ -84,7 +91,7 @@ namespace O2.DotNetWrappers.Network
             var webClient = new WebClient();
             try
             {
-                string tempFileName = String.Format("{0}_{1}.zip", DI.config.TempFileNameInTempDirectory,
+                string tempFileName = String.Format("{0}_{1}.zip", PublicDI.config.TempFileNameInTempDirectory,
                                                     Path.GetFileNameWithoutExtension(urlOfFileToFetch));
                 byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
                 Files.WriteFileContent(tempFileName, pageData);
@@ -94,9 +101,31 @@ namespace O2.DotNetWrappers.Network
             }
             catch (Exception ex)
             {
-                DI.log.ex(ex);
+                PublicDI.log.ex(ex);
             }
             return null;
+        }
+        
+        public static string checkIfFileExistsAndDownloadIfNot(string file , string urlToDownloadFile)
+        {
+        	if (File.Exists(file))
+        		return file;
+        	var localTempFile = Path.Combine(PublicDI.config.O2TempDir, file);
+        	if (File.Exists(localTempFile))
+        		return localTempFile;
+        	var downloadedFile = downloadBinaryFile(urlToDownloadFile, false /*saveUsingTempFileName*/);
+        	if (downloadedFile != null && File.Exists(downloadedFile))
+        	{
+        		if (Path.GetExtension(downloadedFile) != ".zip")
+        			return downloadedFile;        			        		
+        			
+        		List<string> extractedFiles = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(downloadedFile, PublicDI.config.O2TempDir);
+        		if (extractedFiles != null)
+        			foreach(var extractedFile in  extractedFiles)
+        				if (Path.GetFileName(extractedFile) == file)
+        					return extractedFile;        					        		        		        		
+        	}
+        	return "";
         }
       
     }
