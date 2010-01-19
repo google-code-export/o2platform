@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using O2.External.WinFormsUI.Ascx;
 using O2.External.WinFormsUI.Forms;
+using O2.Views.ASCX.Ascx.MainGUI;
 
 namespace O2.External.WinFormsUI._UnitTests
 {

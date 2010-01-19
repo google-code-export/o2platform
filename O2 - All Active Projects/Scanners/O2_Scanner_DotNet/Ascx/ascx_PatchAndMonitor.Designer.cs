@@ -1,4 +1,6 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using O2.Views.ASCX.Ascx.MainGUI;
+
 namespace O2.Scanner.DotNet.Ascx
 {
     partial class ascx_PatchAndMonitor
@@ -38,7 +40,7 @@ namespace O2.Scanner.DotNet.Ascx
             this.llHookedAssembly = new System.Windows.Forms.LinkLabel();
             this.llTestCodeAssembly = new System.Windows.Forms.LinkLabel();
             this.btInstallHookIntoNewAssembly = new System.Windows.Forms.Button();
-            this.ascx_LogViewer1 = new O2.External.WinFormsUI.Ascx.ascx_LogViewer();
+            this.ascx_LogViewer1 = new ascx_LogViewer();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -203,6 +205,6 @@ namespace O2.Scanner.DotNet.Ascx
         private System.Windows.Forms.Button btInstallHookIntoNewAssembly;
         private System.Windows.Forms.LinkLabel llHookedAssembly;
         private System.Windows.Forms.LinkLabel llTestCodeAssembly;
-        private O2.External.WinFormsUI.Ascx.ascx_LogViewer ascx_LogViewer1;
+        private ascx_LogViewer ascx_LogViewer1;
     }
 }

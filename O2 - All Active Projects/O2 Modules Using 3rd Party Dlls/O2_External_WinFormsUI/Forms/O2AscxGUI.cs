@@ -5,11 +5,14 @@ using System.Threading;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
-using O2.External.WinFormsUI.Ascx;
 using O2.External.WinFormsUI.O2Environment;
+using O2.Kernel;
 using O2.Kernel.Interfaces.Views;
+using O2.Views.ASCX.Ascx.MainGUI;
+using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.CoreControls;
 using O2.Views.ASCX.O2Findings;
+using O2.Views.ASCX;
 
 namespace O2.External.WinFormsUI.Forms
 {
@@ -139,7 +142,7 @@ namespace O2.External.WinFormsUI.Forms
 
         public static void setLogViewerDockState(O2DockState o2DockState)
         {
-            O2DockUtils.setDockContentState(DI.LogViewerControlName, o2DockState);
+            O2DockUtils.setDockContentState(PublicDI.LogViewerControlName, o2DockState);
         }
 
 

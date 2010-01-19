@@ -5,8 +5,8 @@ using System.IO;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
-using O2.External.WinFormsUI.O2Environment;
 using O2.Kernel.CodeUtils;
+using O2.Views.ASCX.classes.MainGUI;
 
 namespace O2.Scanner.OunceLabsCLI.Utils
 {

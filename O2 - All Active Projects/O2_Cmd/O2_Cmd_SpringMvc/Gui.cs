@@ -8,7 +8,6 @@ using O2.DotNetWrappers.O2CmdShell;
 using O2.External.Python.Ascx;
 using O2.External.SharpDevelop;
 using O2.External.SharpDevelop.Ascx;
-using O2.External.WinFormsUI.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.External.WinFormsUI.O2Environment;
 using O2.ImportExport.OunceLabs;

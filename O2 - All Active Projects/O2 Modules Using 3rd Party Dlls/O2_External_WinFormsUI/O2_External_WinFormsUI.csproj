@@ -49,35 +49,12 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.3.1.1469, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ascx\ascx_LogViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ascx\ascx_LogViewer.Designer.cs">
-      <DependentUpon>ascx_LogViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ascx\ascx_O2InstallAndTempDirectories.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ascx\ascx_O2InstallAndTempDirectories.Designer.cs">
-      <DependentUpon>ascx_O2InstallAndTempDirectories.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ascx\ascx_ViewO2Config.Controllers.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ascx\ascx_ViewO2Config.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ascx\ascx_ViewO2Config.Designer.cs">
-      <DependentUpon>ascx_ViewO2Config.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ascx\ascx_WorkingOnTask.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ascx\ascx_WorkingOnTask.Designer.cs">
-      <DependentUpon>ascx_WorkingOnTask.cs</DependentUpon>
-    </Compile>
     <Compile Include="DI.cs" />
     <Compile Include="Forms\O2AscxGUI.cs" />
     <Compile Include="Forms\O2AscxGUI_Ext.cs" />
@@ -100,13 +77,6 @@
     <Compile Include="Forms\O2GuiWithDockPanel.Designer.cs">
       <DependentUpon>O2GuiWithDockPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ReportBug.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ReportBug.Designer.cs">
-      <DependentUpon>ReportBug.cs</DependentUpon>
-    </Compile>
-    <Compile Include="O2Environment\DebugMsg.cs" />
     <Compile Include="O2Environment\WinFormsUILog.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -114,22 +84,6 @@
     <Compile Include="_UnitTests\_Test_Ascx_ViewO2Config.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Ascx\ascx_LogViewer.resx">
-      <DependentUpon>ascx_LogViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Ascx\ascx_O2InstallAndTempDirectories.resx">
-      <DependentUpon>ascx_O2InstallAndTempDirectories.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Ascx\ascx_ViewO2Config.resx">
-      <DependentUpon>ascx_ViewO2Config.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Ascx\ascx_WorkingOnTask.resx">
-      <DependentUpon>ascx_WorkingOnTask.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\GenericDockContent.resx">
       <DependentUpon>GenericDockContent.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -138,16 +92,8 @@
       <DependentUpon>O2GuiWithDockPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ReportBug.resx">
-      <DependentUpon>ReportBug.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SourceCode_3rdParty_Dlls\DockPanel\WinFormsUI\WinFormsUI.csproj">
-      <Project>{C75532C4-765B-418E-B09B-46D36B2ABDB1}</Project>
-      <Name>WinFormsUI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>

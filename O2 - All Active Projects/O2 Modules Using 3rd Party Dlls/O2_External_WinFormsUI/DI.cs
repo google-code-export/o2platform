@@ -21,15 +21,6 @@ namespace O2.External.WinFormsUI
             
             new O2MessagesHandler(); // set up O2Message hook
 
-            sDefaultFileName_ReportBug_LogView = "ReportBug_LogView.Rtf";
-            sDefaultFileName_ReportBug_ScreenShotImage = "ReportBug_ScreenShotImage.bmp";
-            sEmailDefaultTextFromO2Gui = "enter message here";
-            //sEmailHost = "mail.ouncelabs.com";
-            //sEmailToSendBugReportsTo = "dinis.cruz@ouncelabs.com";
-            sEmailHost = "ASPMX.L.GOOGLE.COM";
-            sEmailToSendBugReportsTo = "dinis.cruz@owasp.org";
-            sO2Website = "https://ounceopen.squarespace.com";
-            LogViewerControlName = "O2 Logs";
             autoAddLogViewerToGui = true;
         }
         
@@ -43,17 +34,7 @@ namespace O2.External.WinFormsUI
         public static Dictionary<String, O2DockContent> dO2LoadedO2DockContent  = new Dictionary<String, O2DockContent>();
         public static O2GuiWithDockPanel o2GuiWithDockPanel;
         public static bool o2GuiStandAloneFormMode;
-
-
-        public static string sDefaultFileName_ReportBug_LogView { get; set; }
-        public static string sDefaultFileName_ReportBug_ScreenShotImage { get; set; }
-        public static string sEmailDefaultTextFromO2Gui { get; set; }
-        public static string sEmailHost { get; set; }
-        public static string sEmailToSendBugReportsTo { get; set; }
-        public static string sO2Website { get; set; }
-
-        public static string LogViewerControlName { get; set; }
-
+        
         public static bool autoAddLogViewerToGui { get; set; }
      
     }

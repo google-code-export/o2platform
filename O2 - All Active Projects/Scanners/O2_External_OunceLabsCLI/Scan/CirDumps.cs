@@ -3,10 +3,10 @@ using System;
 using System.IO;
 using System.Text;
 using O2.DotNetWrappers.Windows;
-using O2.External.WinFormsUI.O2Environment;
 using O2.Kernel.CodeUtils;
 using O2.Kernel.Interfaces.Controllers;
 using O2.Scanner.OunceLabsCLI.Utils;
+using O2.Views.ASCX.classes.MainGUI;
 
 namespace O2.Scanner.OunceLabsCLI.Scan
 {
