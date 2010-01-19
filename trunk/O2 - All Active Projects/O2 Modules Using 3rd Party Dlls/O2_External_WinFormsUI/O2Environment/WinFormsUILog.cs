@@ -3,6 +3,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using O2.Kernel.Interfaces.O2Core;
+using O2.Views.ASCX.classes.MainGUI;
 
 namespace O2.External.WinFormsUI.O2Environment
 {

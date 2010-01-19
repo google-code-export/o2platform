@@ -5,13 +5,16 @@ using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.Windows;
-using O2.External.WinFormsUI.Ascx;
 using O2.External.WinFormsUI.O2Environment;
+using O2.Kernel;
 using O2.Kernel.CodeUtils;
 using O2.Kernel.Interfaces.Messages;
 using O2.Kernel.Interfaces.Views;
+using O2.Views.ASCX.Ascx.MainGUI;
+using O2.Views.ASCX.classes.MainGUI;
 using WeifenLuo.WinFormsUI.Docking;
 using System.IO;
+using O2.Views.ASCX;
 
 namespace O2.External.WinFormsUI.Forms
 {
@@ -75,8 +78,8 @@ namespace O2.External.WinFormsUI.Forms
                         Screenshots.getScreenshotOfFormObjectAndItsControls(this)
                 };
                 DI.log.debug("Sending email to O2 Support with: " + text);
-                Mail.sendMail(DI.sEmailHost, "O2User@ouncelabs.com",
-                              DI.sEmailToSendBugReportsTo, "",
+                Mail.sendMail(PublicDI.sEmailHost, "O2User@ouncelabs.com",
+                              PublicDI.sEmailToSendBugReportsTo, "",
                               "Email from O2 User - " + subject,
                               Mail.getUserDetailsAsEmailFormat() + Environment.NewLine + text,
                               DebugMsg.createAttachmentsForRemoteSupport(DebugMsg.getFirstRtbObject(), screenShotToSend),
@@ -109,7 +112,7 @@ namespace O2.External.WinFormsUI.Forms
             }
             else
             {
-                toolStripTextBoxForMailServer.Text = DI.sEmailHost;
+                toolStripTextBoxForMailServer.Text = PublicDI.sEmailHost;
                 toolStripTextBoxForMailServer.ForeColor = Color.Black;
                 toolStripTextBoxForMailServer.BackColor = Color.LightPink;
                 toolStripTextBoxForMailServer.Visible = true;

@@ -4,10 +4,13 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
-using O2.External.WinFormsUI.Ascx;
 using O2.External.WinFormsUI.Forms;
+using O2.Kernel;
 using O2.Kernel.Interfaces.Views;
+using O2.Views.ASCX.Ascx.MainGUI;
+using O2.Views.ASCX.classes.MainGUI;
 using WeifenLuo.WinFormsUI.Docking;
+using O2.Views.ASCX;
 
 namespace O2.External.WinFormsUI.O2Environment
 {
@@ -181,7 +184,7 @@ namespace O2.External.WinFormsUI.O2Environment
                 if (controlToLoad.type == typeof(ascx_LogViewer))
                     return;
 
-            var logViewer = new O2DockContent(typeof(ascx_LogViewer),DockState.DockBottomAutoHide,DI.LogViewerControlName);
+            var logViewer = new O2DockContent(typeof(ascx_LogViewer), DockState.DockBottomAutoHide, PublicDI.LogViewerControlName);
             controlsToLoad.Add(logViewer);
         }
 

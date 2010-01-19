@@ -6,11 +6,12 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.Windows;
 using O2.External.WinFormsUI;
-using O2.External.WinFormsUI.Ascx;
 using O2.External.WinFormsUI.O2Environment;
 using O2.Kernel;
 using O2.Kernel.Interfaces.Messages;
 using O2.Kernel.Interfaces.Views;
+using O2.Views.ASCX.Ascx.MainGUI;
+using O2.Views.ASCX.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace O2.External.WinFormsUI.Forms
@@ -109,7 +110,7 @@ namespace O2.External.WinFormsUI.Forms
 
         private void setDefaultEmailO2SupportMessage()
         {
-            tbTextToemailSupport.Text = DI.sEmailDefaultTextFromO2Gui;
+            tbTextToemailSupport.Text = PublicDI.sEmailDefaultTextFromO2Gui;
         }
 
         private void O2GuiWithDockPanel_Load(object sender, EventArgs e)
@@ -119,7 +120,7 @@ namespace O2.External.WinFormsUI.Forms
 
         private void tbTextToemailSupport_TextChanged(object sender, EventArgs e)
         {
-            if (tbTextToemailSupport.Text != DI.sEmailDefaultTextFromO2Gui)
+            if (tbTextToemailSupport.Text != PublicDI.sEmailDefaultTextFromO2Gui)
                 tbTextToemailSupport.BackColor = Color.LightGreen;
             else
                 tbTextToemailSupport.BackColor = Color.LightPink;
@@ -127,7 +128,7 @@ namespace O2.External.WinFormsUI.Forms
 
         private void tbTextToemailSupport_KeyDown(object sender, KeyEventArgs e)
         {
-            if (tbTextToemailSupport.Text == DI.sEmailDefaultTextFromO2Gui)
+            if (tbTextToemailSupport.Text == PublicDI.sEmailDefaultTextFromO2Gui)
                 tbTextToemailSupport.Text = "";
             if (e.KeyCode == Keys.Enter)
             {
@@ -140,7 +141,7 @@ namespace O2.External.WinFormsUI.Forms
 
         private void toolStripTextBoxForMailServer_TextChanged(object sender, EventArgs e)
         {
-            DI.sEmailHost = toolStripTextBoxForMailServer.Text;
+            PublicDI.sEmailHost = toolStripTextBoxForMailServer.Text;
             toolStripTextBoxForMailServer.BackColor = Color.LightGreen;
         }
 

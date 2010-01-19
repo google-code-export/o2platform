@@ -1,4 +1,5 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using System;
 using System.Collections.Generic;
 using O2.Kernel.CodeUtils;
 using O2.Kernel.InterfacesBaseImpl;
@@ -10,6 +11,7 @@ namespace O2.Kernel
     /// These are public DI objects which can be used and manipulated by O2 modules 
     /// For example the log one is a good candidate for the GUI controls to take over
     /// </summary>
+    /// todo: merge this with the O2.Kernel.DI class so that only this PublicDI.exists
     public static class PublicDI
     {
         static PublicDI()
@@ -30,7 +32,17 @@ namespace O2.Kernel
             // before we load the O2Config data (which is loaded from the local disk)
             config = O2ConfigLoader.getKO2Config(); 
             */
-            
+
+            sDefaultFileName_ReportBug_LogView = "ReportBug_LogView.Rtf";
+            sDefaultFileName_ReportBug_ScreenShotImage = "ReportBug_ScreenShotImage.bmp";
+            sEmailDefaultTextFromO2Gui = "enter message here";
+            //sEmailHost = "mail.ouncelabs.com";
+            //sEmailToSendBugReportsTo = "dinis.cruz@ouncelabs.com";
+            sEmailHost = "ASPMX.L.GOOGLE.COM";
+            sEmailToSendBugReportsTo = "dinis.cruz@owasp.org";
+            sO2Website = "https://ounceopen.squarespace.com";
+            LogViewerControlName = "O2 Logs";
+
             
         }
 
@@ -40,6 +52,18 @@ namespace O2.Kernel
         public static KO2MessageQueue o2MessageQueue { get; set; }
         public static Dictionary<string, O2AppDomainFactory> appDomainsControledByO2Kernel;
         public static string O2KernelProcessName { get; set; }
+
+        // GUI stuff
+        public static Object CurrentGUIHost { get; set; } // need to assign the existing GUIs to here
+
+        public static string sDefaultFileName_ReportBug_LogView { get; set; }
+        public static string sDefaultFileName_ReportBug_ScreenShotImage { get; set; }
+        public static string sEmailDefaultTextFromO2Gui { get; set; }
+        public static string sEmailHost { get; set; }
+        public static string sEmailToSendBugReportsTo { get; set; }
+        public static string sO2Website { get; set; }
+
+        public static string LogViewerControlName { get; set; }
                         
     }
 }

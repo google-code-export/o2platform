@@ -107,9 +107,6 @@
     <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_AssemblyAttributes.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\note working - ascx_MonoControlFlowGraph.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_MonoDecompiler.cs">
       <SubType>UserControl</SubType>
     </Compile>
