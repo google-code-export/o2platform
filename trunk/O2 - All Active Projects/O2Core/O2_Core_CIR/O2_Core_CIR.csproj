@@ -272,6 +272,7 @@
       <DependentUpon>ascx_GAC_Browser.cs</DependentUpon>
     </Compile>
     <Content Include="CecilDecompiler\CecilDecompiler.cs.txt" />
+    <Compile Include="CecilDecompiler\CecilDecompiler.cs" />
     <Compile Include="CirCreator\DotNet\CirCecilCompare.cs" />
     <Compile Include="CirCreator\DotNet\CirFactory.cs" />
     <Compile Include="CirCreator\DotNet\CirFactoryUtils.cs" />
