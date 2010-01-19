@@ -1,10 +1,5 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
-using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using O2.Kernel;
@@ -14,22 +9,14 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
 using O2.External.WinFormsUI.Forms;
 using O2.Kernel.Interfaces.Views;
-using O2.Views.ASCX;
-using O2.Rules.OunceLabs.DataLayer_OunceV6;
-using O2.Views.ASCX.MerlinWizard;
-using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 //O2Tag_AddReferenceFile:merlin.dll
-using Merlin;
-using MerlinStepLibrary;
 //O2Tag_AddReferenceFile:nunit.framework.dll
-using NUnit.Framework; 
 //O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Kernel\InterfacesBaseImpl\KReflection.cs
 //O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Kernel\Interfaces\O2Core\IReflection.cs
 //O2File: C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
 
 using O2.Kernel.InterfacesBaseImpl;
 
-using O2.Script;
 //O2File:extra.cs
 
 namespace O2.Script
