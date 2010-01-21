@@ -125,11 +125,12 @@
     <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_MonoDecompiler.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="_Rules\_Samples\Wizards\Wizard - Enable or Disable Network Interfaces.cs" />
     <Compile Include="_Rules\_Samples\Wizards\Wizard - Start HacmeBank.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard_BackupFolder.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard_CopyGacDlls.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard_SearchEngine_Use_Case_1 - under dev.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard_ViewStrutsMappings %28under dev%29.cs" />
+    <Compile Include="_Rules\_Samples\Wizards\Wizard - BackupFolder.cs" />
+    <Compile Include="_Rules\_Samples\Wizards\Wizard - CopyGacDlls.cs" />
+    <Compile Include="_Rules\_Samples\Wizards\Wizard - SearchEngine UseCase 1.cs" />
+    <Compile Include="_Rules\_Samples\Wizards\not working\Wizard_ViewStrutsMappings %28under dev%29.cs" />
     <Compile Include="_Templates\Empty_XRule.cs" />
     <Compile Include="_Templates\Empty_Class.cs" />
     <Compile Include="_Templates\Local_Findings_Files.cs" />
