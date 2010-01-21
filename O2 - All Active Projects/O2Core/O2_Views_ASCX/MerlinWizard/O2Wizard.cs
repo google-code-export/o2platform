@@ -23,18 +23,28 @@ namespace O2.Views.ASCX.MerlinWizard
     public class O2Wizard
     {
         public string Title {get;set;}
+        public int Width {get;set;}
+        public int Height {get;set;}
         public List<IStep> Steps { get; set; }
-        public Object Model;
+        public Object Model;                // this is starting to be redundant since just about no Wizard script uses it
         public Type ModelType;
 
         public O2Wizard()
         {
             Title = "Default O2 Wizard";
+            Width = -1;
+            Height = -1;
             Steps = new List<IStep>();
         }
         public O2Wizard(string title) : this()
         {
             Title = title;
+        }
+        
+        public O2Wizard(string title, int width, int height) : this(title)
+        {
+            Width = width;
+            Height = height;
         }
         
         public O2Wizard(string title, object model) : this(title)
@@ -60,7 +70,7 @@ namespace O2.Views.ASCX.MerlinWizard
         	// make sure all steps have access to the Model
         	foreach(var step in Steps)
         		step.Model = Model;
-            return MerlinUtils.runWizardWithSteps(Steps, Title);
+            return MerlinUtils.runWizardWithSteps(Steps, Title, Width, Height);
         }
 
         

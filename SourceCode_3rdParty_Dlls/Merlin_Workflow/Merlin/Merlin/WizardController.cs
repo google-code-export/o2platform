@@ -92,15 +92,23 @@ namespace Merlin
         /// <returns>Whether the wizard was aborted, failed, or ran to completion.</returns>
         public WizardResult StartWizard(string windowName, bool showInTaskBar, Icon icon)
         {
-            if (steps == null || steps.Count < 1)
-            {
+            return StartWizard(windowName, showInTaskBar, icon, -1, -1);
+        }
+
+        public WizardResult StartWizard(string windowName, bool showInTaskBar, Icon icon, int width, int height)  //DC added width and height    
+        {
+            if (steps == null || steps.Count < 1)            
                 throw new EmptyStepSequenceException();
-            }
-            if (steps[steps.Count - 1] is ConditionalStep)
-            {
+            
+            if (steps[steps.Count - 1] is ConditionalStep)            
                 throw new ConditionalStepAtEndException();
-            }
+            
             wizardForm = new WizardForm(windowName);
+                
+            if (width > -1)                                         //DC
+                wizardForm.Width = width;    //DC
+            if (height > -1)                                        //DC    
+                wizardForm.Height = height;  //DC
             wizardForm.LogoImage = this.LogoImage;
             wizardForm.btnNext.Click += new EventHandler(btnNext_Click);
             wizardForm.btnBack.Click += new EventHandler(btnPrevious_Click);

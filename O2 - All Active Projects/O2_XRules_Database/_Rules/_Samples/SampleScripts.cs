@@ -10,8 +10,9 @@ using O2.DotNetWrappers.O2Findings;
 using O2.Core.FileViewers.Struts_1_5;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;
+using O2.XRules.Database._Rules.J2EE.Struts;
 
-namespace O2.XRules.Database._Rules
+namespace O2.XRules.Database._Rules._Samples
 {
     [TestFixture]
     public class SampleScripts : KXRule
@@ -190,8 +191,8 @@ namespace O2.XRules.Database._Rules
 
             // create the struts mapping object
             var strutsMappingsFile = XUtils_Struts_v0_1.calculateAndSaveStrutsMappings(
-                                        PublicDI.config.O2TempDir,
-                                        webXml, strutsConfigXml, tilesDefinitionXml, validationXml);    		
+                PublicDI.config.O2TempDir,
+                webXml, strutsConfigXml, tilesDefinitionXml, validationXml);    		
             // make sure it was created 
             Assert.That(File.Exists(strutsMappingsFile), "strutsMappings was not created");
             // load the object from disk
@@ -209,11 +210,11 @@ namespace O2.XRules.Database._Rules
         // noTraces, and out-of.box Vulns (:)) from a target set of assessments.  RemoveAllNoTraces()  
         // RemoveAll3nodeGetSetVulns(),  RemoveAllMalicousTriggers()
 
-		[XRule(Name="Show Findings in GUI")]
+        [XRule(Name="Show Findings in GUI")]
         public string showFindingsInGUI()   
         {
-        	var o2Findings = XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile);
-        	Assert.That(o2Findings.Count >0, "There were no findings loaded");
+            var o2Findings = XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile);
+            Assert.That(o2Findings.Count >0, "There were no findings loaded");
         	
             XUtils_Findings_v0_1.openFindingsInNewWindow(o2Findings);
             return "number of findings loaded:" + o2Findings.Count;
@@ -222,17 +223,17 @@ namespace O2.XRules.Database._Rules
         [XRule(Name="Remove All Infos (version 1: using IO2Finding)")]
         public List<IO2Finding> removeAllInfos_version_1()    	
         {
-        	// load findings to process
+            // load findings to process
             var o2Findings = XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile);
             Assert.That(o2Findings.Count >0, "There were no findings loaded");
             
             // calculate results 
             var results = new List<IO2Finding>();
             foreach(var o2Finding in o2Findings) // the type of var is IO2Finding
-            	if (o2Finding.severity < 3)
-            		results.Add(o2Finding);
+                if (o2Finding.severity < 3)
+                    results.Add(o2Finding);
            	
-           	// show findings in O2 GUI
+            // show findings in O2 GUI
             XUtils_Findings_v0_1.openFindingsInNewWindow(results);
             
             // return results
@@ -246,8 +247,8 @@ namespace O2.XRules.Database._Rules
             
             var results = new List<IO2Finding>();
             foreach(O2Finding o2Finding in o2Findings) 
-            	if (OzasmtUtils.getSeverityFromId(o2Finding.severity) != "Info")
-            		results.Add(o2Finding);
+                if (OzasmtUtils.getSeverityFromId(o2Finding.severity) != "Info")
+                    results.Add(o2Finding);
             XUtils_Findings_v0_1.openFindingsInNewWindow(results);
             return results;
         }
@@ -255,13 +256,13 @@ namespace O2.XRules.Database._Rules
         [XRule(Name="Remove All Infos (version 3: using LINQ query)")]
         public List<IO2Finding> removeAllInfos_version_3()    	
         {        	
-        	// LINQ query
+            // LINQ query
             var resultsLinq = from IO2Finding o2Finding in XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile)
-            			  where  OzasmtUtils.getSeverityFromId(o2Finding.severity) != "Info"			// o2Finding.severity = 3 maps to "Info"
-            			  select o2Finding;
+                              where  OzasmtUtils.getSeverityFromId(o2Finding.severity) != "Info"			// o2Finding.severity = 3 maps to "Info"
+                              select o2Finding;
            	
-           	// since we are using List<IO2Fiding> below, lets covert the LINQ result which is IEnumerable<IO2Finding> to List<IO2Finding>
-           	var results  = resultsLinq.ToList();
+            // since we are using List<IO2Fiding> below, lets covert the LINQ result which is IEnumerable<IO2Finding> to List<IO2Finding>
+            var results  = resultsLinq.ToList();
            	
             XUtils_Findings_v0_1.openFindingsInNewWindow(results);
             return results;
@@ -270,104 +271,104 @@ namespace O2.XRules.Database._Rules
         [XRule(Name="Only Infos (LINQ)")]
         public string onlyShowInfos_Linq()    	        
         {
-        	var onlyInfos = from IO2Finding o2Finding in XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile)
-            			  where o2Finding.severity == 3
-            			  select o2Finding;
+            var onlyInfos = from IO2Finding o2Finding in XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile)
+                            where o2Finding.severity == 3
+                            select o2Finding;
             			  
-			XUtils_Findings_v0_1.openFindingsInNewWindow(onlyInfos.ToList());  			  			
+            XUtils_Findings_v0_1.openFindingsInNewWindow(onlyInfos.ToList());  			  			
 			
-        	return "# of Infos: " + onlyInfos.Count();
+            return "# of Infos: " + onlyInfos.Count();
         }
     	
         [XRule(Name="Remove All No Traces (LINQ)")]
         public string removeAllNoTraces()    	
         {
-             var onlyTraces = from IO2Finding o2Finding in XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile)
-            			  where o2Finding.o2Traces.Count > 0
-            			  select o2Finding;
+            var onlyTraces = from IO2Finding o2Finding in XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile)
+                             where o2Finding.o2Traces.Count > 0
+                             select o2Finding;
             			  
-			XUtils_Findings_v0_1.openFindingsInNewWindow(onlyTraces.ToList());  			  			
+            XUtils_Findings_v0_1.openFindingsInNewWindow(onlyTraces.ToList());  			  			
 			
-        	return "# of onlyTraces: " + onlyTraces.Count();
+            return "# of onlyTraces: " + onlyTraces.Count();
         }
         
         [XRule(Name="Only Show No Traces (LINQ)")]
         public string onlyShowNoTraces()    	
         {
-             var noTraces = from IO2Finding o2Finding in XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile)
-            			  where o2Finding.o2Traces.Count == 0
-            			  select o2Finding;
+            var noTraces = from IO2Finding o2Finding in XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile)
+                           where o2Finding.o2Traces.Count == 0
+                           select o2Finding;
             			  
-			XUtils_Findings_v0_1.openFindingsInNewWindow(noTraces.ToList());  			  			
+            XUtils_Findings_v0_1.openFindingsInNewWindow(noTraces.ToList());  			  			
 			
-        	return "# of NoTraces: " + noTraces.Count();
+            return "# of NoTraces: " + noTraces.Count();
         }
     	
         [XRule(Name="Remove All 3 node Get Set Vulns")]
         public string RemoveAll3nodeGetSetVulns()    	
         {
-        	// Dinis note, if I understand this request correctly, the query is:
-        		// for all vulns that start in a get and end in set
-        		//      only show the ones that have more than 3 traces
+            // Dinis note, if I understand this request correctly, the query is:
+            // for all vulns that start in a get and end in set
+            //      only show the ones that have more than 3 traces
 
-			var o2Findings = XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile);
-			var thread = XUtils_Findings_v0_1.openFindingsInNewWindow(o2Findings,"Original list of loaded files");
+            var o2Findings = XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile);
+            var thread = XUtils_Findings_v0_1.openFindingsInNewWindow(o2Findings,"Original list of loaded files");
             thread.Join(); // we have to do this to make sure we don't continue before the findings are loaded in the Findings Viewer
 			
-			// first lets see if this happens in the current list of loaded findings        
-        	var getsAndSets = new List<IO2Finding>();
-        	foreach(O2Finding o2Finding in o2Findings)									// need to cast to O2Finding in order to have access to the prepopulated version of IO2Finding
-        		if (o2Finding.Source.IndexOf("get") > -1 && o2Finding.Sink.IndexOf("set") > -1)
-        			getsAndSets.Add(o2Finding);
-        	Assert.That(getsAndSets.Count >0,"There are no Get->Set pairs in the current loaded findings");	// Dinis note: on the WebGoat 6.0.ozasmt file I'm using there are 54 matches
-        	// show in GUI getsAndSets
-        	XUtils_Findings_v0_1.openFindingsInNewWindow(getsAndSets,"Findings with GetsAndSets").Join();  // added .Join() to ensure the load thread is completed
+            // first lets see if this happens in the current list of loaded findings        
+            var getsAndSets = new List<IO2Finding>();
+            foreach(O2Finding o2Finding in o2Findings)									// need to cast to O2Finding in order to have access to the prepopulated version of IO2Finding
+                if (o2Finding.Source.IndexOf("get") > -1 && o2Finding.Sink.IndexOf("set") > -1)
+                    getsAndSets.Add(o2Finding);
+            Assert.That(getsAndSets.Count >0,"There are no Get->Set pairs in the current loaded findings");	// Dinis note: on the WebGoat 6.0.ozasmt file I'm using there are 54 matches
+            // show in GUI getsAndSets
+            XUtils_Findings_v0_1.openFindingsInNewWindow(getsAndSets,"Findings with GetsAndSets").Join();  // added .Join() to ensure the load thread is completed
         	
-        	// now check if there are findings with 3 traces
-        	var getsAndSetsWith3Traces = new List<IO2Finding>();
-        	foreach(O2Finding o2Finding in getsAndSets)	
-        	{
-        		var allTracesFromFinding = OzasmtUtils.getListWithAllTraces(o2Finding);
-        		if (allTracesFromFinding.Count == 3)
-        			getsAndSetsWith3Traces.Add(o2Finding);
-        	}
+            // now check if there are findings with 3 traces
+            var getsAndSetsWith3Traces = new List<IO2Finding>();
+            foreach(O2Finding o2Finding in getsAndSets)	
+            {
+                var allTracesFromFinding = OzasmtUtils.getListWithAllTraces(o2Finding);
+                if (allTracesFromFinding.Count == 3)
+                    getsAndSetsWith3Traces.Add(o2Finding);
+            }
         	
-        	Assert.That(getsAndSetsWith3Traces.Count > 0, "There were no getsAndSetsWith3Traces");
-        	// show in GUI getsAndSetsWith3Traces
-        	XUtils_Findings_v0_1.openFindingsInNewWindow(getsAndSetsWith3Traces, "Findings with getsAndSetsWith3Traces").Join(); // Dinis note: I get 4 findings that match this criteria
+            Assert.That(getsAndSetsWith3Traces.Count > 0, "There were no getsAndSetsWith3Traces");
+            // show in GUI getsAndSetsWith3Traces
+            XUtils_Findings_v0_1.openFindingsInNewWindow(getsAndSetsWith3Traces, "Findings with getsAndSetsWith3Traces").Join(); // Dinis note: I get 4 findings that match this criteria
 			
-			// finally remove the getsAndSetsWith3Traces from the loaded findings 						
-			foreach(var o2FindingToRemove in getsAndSetsWith3Traces)
-				o2Findings.Remove(o2FindingToRemove);
+            // finally remove the getsAndSetsWith3Traces from the loaded findings 						
+            foreach(var o2FindingToRemove in getsAndSetsWith3Traces)
+                o2Findings.Remove(o2FindingToRemove);
 
-			// and show the results (note how this window has less 3 findings than the first one that was loaded)			
-			XUtils_Findings_v0_1.openFindingsInNewWindow(o2Findings,"Original list without 3nodeGetSetVulns").Join();
+            // and show the results (note how this window has less 3 findings than the first one that was loaded)			
+            XUtils_Findings_v0_1.openFindingsInNewWindow(o2Findings,"Original list without 3nodeGetSetVulns").Join();
 			
-        	return "Number of findings after filter: " + o2Findings.Count;
+            return "Number of findings after filter: " + o2Findings.Count;
         	
         } 	// this function could be greatly reduced by using LINQ (I'll do that later :)  )
     	
         [XRule(Name="RemoveAllMaliciousTriggers (LINQ")]
         public string RemoveAllMaliciousTriggers()    	
         {
-        	var o2Findings = XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile);
-        	var vulnNameToFind = "Vulnerability.Malicious.Trigger";
+            var o2Findings = XUtils_Findings_v0_1.loadFindingsFile(sampleOzamtFile);
+            var vulnNameToFind = "Vulnerability.Malicious.Trigger";
         	
-        	// check that there are some o2Findings
-        	var withVulnName = from IO2Finding o2Finding in o2Findings
-            			  where o2Finding.vulnType == vulnNameToFind
-            			  select o2Finding;            			 
+            // check that there are some o2Findings
+            var withVulnName = from IO2Finding o2Finding in o2Findings
+                               where o2Finding.vulnType == vulnNameToFind
+                               select o2Finding;            			 
         	
-        	Assert.That(withVulnName.Count() > 0 , "In the findings loaded, there was no Findings with vulnName = " + vulnNameToFind);
+            Assert.That(withVulnName.Count() > 0 , "In the findings loaded, there was no Findings with vulnName = " + vulnNameToFind);
         	
-        	// and since there are create a list of findings without vunlNameToFind
-			var withoutVulnName = from IO2Finding o2Finding in o2Findings 
-            			  where o2Finding.vulnType != vulnNameToFind
-            			  select o2Finding;            			 
+            // and since there are create a list of findings without vunlNameToFind
+            var withoutVulnName = from IO2Finding o2Finding in o2Findings 
+                                  where o2Finding.vulnType != vulnNameToFind
+                                  select o2Finding;            			 
             			  
-			XUtils_Findings_v0_1.openFindingsInNewWindow(withoutVulnName.ToList(),"withoutVulnName").Join();  			  			
+            XUtils_Findings_v0_1.openFindingsInNewWindow(withoutVulnName.ToList(),"withoutVulnName").Join();  			  			
 			
-        	return "# of Findings without '" + vulnNameToFind + "': " + withoutVulnName.Count();
+            return "# of Findings without '" + vulnNameToFind + "': " + withoutVulnName.Count();
         }
     	    	
         // SinkContains() 

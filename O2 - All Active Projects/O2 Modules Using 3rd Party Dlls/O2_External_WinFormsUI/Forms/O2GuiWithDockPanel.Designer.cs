@@ -29,6 +29,21 @@ namespace O2.External.WinFormsUI.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
+            WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient1 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin dockPaneStripSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripSkin();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient dockPaneStripGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient2 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient2 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient3 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient dockPaneStripToolWindowGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPaneStripToolWindowGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient4 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient5 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient3 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient6 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient7 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.menuStripForO2GuiWithDocPanel = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,6 +53,7 @@ namespace O2.External.WinFormsUI.Forms
             this.configToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editThisO2ModuleStartUpXmlConfigFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewEditO2ConfigSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.requestHelpFromO2SupportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,7 +82,6 @@ namespace O2.External.WinFormsUI.Forms
             this.windowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cbAutoSendLogsOnClose = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.viewEditO2ConfigSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripForO2GuiWithDocPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -78,9 +93,54 @@ namespace O2.External.WinFormsUI.Forms
             this.dockPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.dockPanel.DockBackColor = System.Drawing.SystemColors.Control;
             this.dockPanel.Location = new System.Drawing.Point(0, 22);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.Size = new System.Drawing.Size(1002, 601);
+            dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
+            autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
+            tabGradient1.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient1.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            autoHideStripSkin1.TabGradient = tabGradient1;
+            dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
+            tabGradient2.EndColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient2.StartColor = System.Drawing.SystemColors.ControlLightLight;
+            tabGradient2.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient1.ActiveTabGradient = tabGradient2;
+            dockPanelGradient2.EndColor = System.Drawing.SystemColors.Control;
+            dockPanelGradient2.StartColor = System.Drawing.SystemColors.Control;
+            dockPaneStripGradient1.DockStripGradient = dockPanelGradient2;
+            tabGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
+            tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
+            dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
+            tabGradient4.EndColor = System.Drawing.SystemColors.ActiveCaption;
+            tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient4.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
+            tabGradient4.TextColor = System.Drawing.SystemColors.ActiveCaptionText;
+            dockPaneStripToolWindowGradient1.ActiveCaptionGradient = tabGradient4;
+            tabGradient5.EndColor = System.Drawing.SystemColors.Control;
+            tabGradient5.StartColor = System.Drawing.SystemColors.Control;
+            tabGradient5.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripToolWindowGradient1.ActiveTabGradient = tabGradient5;
+            dockPanelGradient3.EndColor = System.Drawing.SystemColors.ControlLight;
+            dockPanelGradient3.StartColor = System.Drawing.SystemColors.ControlLight;
+            dockPaneStripToolWindowGradient1.DockStripGradient = dockPanelGradient3;
+            tabGradient6.EndColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            tabGradient6.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
+            tabGradient6.StartColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            tabGradient6.TextColor = System.Drawing.SystemColors.ControlText;
+            dockPaneStripToolWindowGradient1.InactiveCaptionGradient = tabGradient6;
+            tabGradient7.EndColor = System.Drawing.Color.Transparent;
+            tabGradient7.StartColor = System.Drawing.Color.Transparent;
+            tabGradient7.TextColor = System.Drawing.SystemColors.ControlDarkDark;
+            dockPaneStripToolWindowGradient1.InactiveTabGradient = tabGradient7;
+            dockPaneStripSkin1.ToolWindowGradient = dockPaneStripToolWindowGradient1;
+            dockPanelSkin1.DockPaneStripSkin = dockPaneStripSkin1;
+            this.dockPanel.Skin = dockPanelSkin1;
             this.dockPanel.TabIndex = 7;
             this.dockPanel.ActiveContentChanged += new System.EventHandler(this.dockPanel_ActiveContentChanged);
             this.dockPanel.DragDrop += new System.Windows.Forms.DragEventHandler(this.dockPanel_DragDrop);
@@ -118,21 +178,21 @@ namespace O2.External.WinFormsUI.Forms
             // relauchThisO2ModuleInTempDirToolStripMenuItem
             // 
             this.relauchThisO2ModuleInTempDirToolStripMenuItem.Name = "relauchThisO2ModuleInTempDirToolStripMenuItem";
-            this.relauchThisO2ModuleInTempDirToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
+            this.relauchThisO2ModuleInTempDirToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.relauchThisO2ModuleInTempDirToolStripMenuItem.Text = "Relauch this O2 Module in Temp Dir";
             this.relauchThisO2ModuleInTempDirToolStripMenuItem.Click += new System.EventHandler(this.relauchThisO2ModuleInTempDirToolStripMenuItem_Click);
             // 
             // relauchThisO2ModuleToolStripMenuItem
             // 
             this.relauchThisO2ModuleToolStripMenuItem.Name = "relauchThisO2ModuleToolStripMenuItem";
-            this.relauchThisO2ModuleToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
+            this.relauchThisO2ModuleToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.relauchThisO2ModuleToolStripMenuItem.Text = "Restart this O2 Module";
             this.relauchThisO2ModuleToolStripMenuItem.Click += new System.EventHandler(this.relauchThisO2ModuleToolStripMenuItem_Click);
             // 
             // closeExitO2ModuleToolStripMenuItem
             // 
             this.closeExitO2ModuleToolStripMenuItem.Name = "closeExitO2ModuleToolStripMenuItem";
-            this.closeExitO2ModuleToolStripMenuItem.Size = new System.Drawing.Size(253, 22);
+            this.closeExitO2ModuleToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
             this.closeExitO2ModuleToolStripMenuItem.Text = "Exit";
             this.closeExitO2ModuleToolStripMenuItem.Click += new System.EventHandler(this.closeExitO2ModuleToolStripMenuItem_Click);
             // 
@@ -149,16 +209,23 @@ namespace O2.External.WinFormsUI.Forms
             // editThisO2ModuleStartUpXmlConfigFileToolStripMenuItem
             // 
             this.editThisO2ModuleStartUpXmlConfigFileToolStripMenuItem.Name = "editThisO2ModuleStartUpXmlConfigFileToolStripMenuItem";
-            this.editThisO2ModuleStartUpXmlConfigFileToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.editThisO2ModuleStartUpXmlConfigFileToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.editThisO2ModuleStartUpXmlConfigFileToolStripMenuItem.Text = "Edit this O2 Module start up Xml Config File";
             this.editThisO2ModuleStartUpXmlConfigFileToolStripMenuItem.Visible = false;
             // 
             // whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem
             // 
             this.whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem.Name = "whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem";
-            this.whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
+            this.whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
             this.whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem.Text = "View O2 Install and Temp directories";
             this.whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem.Click += new System.EventHandler(this.whichDirectoryIsThisO2ModuleRunningFromToolStripMenuItem_Click);
+            // 
+            // viewEditO2ConfigSettingsToolStripMenuItem
+            // 
+            this.viewEditO2ConfigSettingsToolStripMenuItem.Name = "viewEditO2ConfigSettingsToolStripMenuItem";
+            this.viewEditO2ConfigSettingsToolStripMenuItem.Size = new System.Drawing.Size(279, 22);
+            this.viewEditO2ConfigSettingsToolStripMenuItem.Text = "View && Edit O2 Config Settings";
+            this.viewEditO2ConfigSettingsToolStripMenuItem.Click += new System.EventHandler(this.viewEditO2ConfigSettingsToolStripMenuItem_Click);
             // 
             // requestHelpFromO2SupportToolStripMenuItem
             // 
@@ -178,14 +245,14 @@ namespace O2.External.WinFormsUI.Forms
             // logToolStripMenuItem
             // 
             this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-            this.logToolStripMenuItem.Size = new System.Drawing.Size(398, 22);
+            this.logToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.logToolStripMenuItem.Text = "O2 Log Viewer";
             this.logToolStripMenuItem.Click += new System.EventHandler(this.logToolStripMenuItem_Click);
             // 
             // ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem
             // 
             this.ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem.Name = "ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem";
-            this.ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem.Size = new System.Drawing.Size(398, 22);
+            this.ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem.Text = "Ozasmt Query (to view and filter Ozasmt files)";
             this.ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem.Visible = false;
             this.ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem.Click += new System.EventHandler(this.ozasmtQuerytoViewAndFilterOzasmtFilesToolStripMenuItem_Click);
@@ -193,7 +260,7 @@ namespace O2.External.WinFormsUI.Forms
             // findingsViewerToolStripMenuItem
             // 
             this.findingsViewerToolStripMenuItem.Name = "findingsViewerToolStripMenuItem";
-            this.findingsViewerToolStripMenuItem.Size = new System.Drawing.Size(398, 22);
+            this.findingsViewerToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.findingsViewerToolStripMenuItem.Text = "Findings Viewer (from ozasmt files or other O2 modules)";
             this.findingsViewerToolStripMenuItem.Visible = false;
             this.findingsViewerToolStripMenuItem.Click += new System.EventHandler(this.findingsViewerToolStripMenuItem_Click);
@@ -201,7 +268,7 @@ namespace O2.External.WinFormsUI.Forms
             // findingsEditorToolStripMenuItem
             // 
             this.findingsEditorToolStripMenuItem.Name = "findingsEditorToolStripMenuItem";
-            this.findingsEditorToolStripMenuItem.Size = new System.Drawing.Size(398, 22);
+            this.findingsEditorToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.findingsEditorToolStripMenuItem.Text = "Finding Editor (to view and change all trace details)";
             this.findingsEditorToolStripMenuItem.Visible = false;
             this.findingsEditorToolStripMenuItem.Click += new System.EventHandler(this.findingsEditorToolStripMenuItem_Click);
@@ -209,7 +276,7 @@ namespace O2.External.WinFormsUI.Forms
             // cirViewertoViewCirDataFilesToolStripMenuItem
             // 
             this.cirViewertoViewCirDataFilesToolStripMenuItem.Name = "cirViewertoViewCirDataFilesToolStripMenuItem";
-            this.cirViewertoViewCirDataFilesToolStripMenuItem.Size = new System.Drawing.Size(398, 22);
+            this.cirViewertoViewCirDataFilesToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.cirViewertoViewCirDataFilesToolStripMenuItem.Text = "Cir Viewer (to view Cir Data Files)";
             this.cirViewertoViewCirDataFilesToolStripMenuItem.Visible = false;
             this.cirViewertoViewCirDataFilesToolStripMenuItem.Click += new System.EventHandler(this.cirViewertoViewCirDataFilesToolStripMenuItem_Click);
@@ -217,14 +284,14 @@ namespace O2.External.WinFormsUI.Forms
             // sourceCodeEditorwriteAndExecuteDynamicCCodeToolStripMenuItem
             // 
             this.sourceCodeEditorwriteAndExecuteDynamicCCodeToolStripMenuItem.Name = "sourceCodeEditorwriteAndExecuteDynamicCCodeToolStripMenuItem";
-            this.sourceCodeEditorwriteAndExecuteDynamicCCodeToolStripMenuItem.Size = new System.Drawing.Size(398, 22);
+            this.sourceCodeEditorwriteAndExecuteDynamicCCodeToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.sourceCodeEditorwriteAndExecuteDynamicCCodeToolStripMenuItem.Text = "C# Scripts Editor (write and execute dynamic C# code)";
             this.sourceCodeEditorwriteAndExecuteDynamicCCodeToolStripMenuItem.Visible = false;
             // 
             // o2ReflectorveryBetaVersionOfAnBuiltInNETReflectorToolToolStripMenuItem
             // 
             this.o2ReflectorveryBetaVersionOfAnBuiltInNETReflectorToolToolStripMenuItem.Name = "o2ReflectorveryBetaVersionOfAnBuiltInNETReflectorToolToolStripMenuItem";
-            this.o2ReflectorveryBetaVersionOfAnBuiltInNETReflectorToolToolStripMenuItem.Size = new System.Drawing.Size(398, 22);
+            this.o2ReflectorveryBetaVersionOfAnBuiltInNETReflectorToolToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.o2ReflectorveryBetaVersionOfAnBuiltInNETReflectorToolToolStripMenuItem.Text = "O2 Reflector (very beta version of an built in .NET Reflector tool)";
             this.o2ReflectorveryBetaVersionOfAnBuiltInNETReflectorToolToolStripMenuItem.Visible = false;
             // 
@@ -247,46 +314,46 @@ namespace O2.External.WinFormsUI.Forms
             // 
             this.unziputilToUnzipFilesOnUsingDragAndDropToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.unziputilToUnzipFilesOnUsingDragAndDropToolStripMenuItem.Name = "unziputilToUnzipFilesOnUsingDragAndDropToolStripMenuItem";
-            this.unziputilToUnzipFilesOnUsingDragAndDropToolStripMenuItem.Size = new System.Drawing.Size(419, 22);
+            this.unziputilToUnzipFilesOnUsingDragAndDropToolStripMenuItem.Size = new System.Drawing.Size(408, 22);
             this.unziputilToUnzipFilesOnUsingDragAndDropToolStripMenuItem.Text = "Unzip (util to unzip files on using drag and drop)";
             this.unziputilToUnzipFilesOnUsingDragAndDropToolStripMenuItem.Click += new System.EventHandler(this.unziputilToUnzipFilesOnUsingDragAndDropToolStripMenuItem_Click);
             // 
             // webAutomationusesFirefoxGeckoWebBrowserControlToolStripMenuItem
             // 
             this.webAutomationusesFirefoxGeckoWebBrowserControlToolStripMenuItem.Name = "webAutomationusesFirefoxGeckoWebBrowserControlToolStripMenuItem";
-            this.webAutomationusesFirefoxGeckoWebBrowserControlToolStripMenuItem.Size = new System.Drawing.Size(419, 22);
+            this.webAutomationusesFirefoxGeckoWebBrowserControlToolStripMenuItem.Size = new System.Drawing.Size(408, 22);
             this.webAutomationusesFirefoxGeckoWebBrowserControlToolStripMenuItem.Text = "Web Automation (uses Firefox Gecko Web Browser Control)";
             this.webAutomationusesFirefoxGeckoWebBrowserControlToolStripMenuItem.Click += new System.EventHandler(this.webAutomationusesFirefoxGeckoWebBrowserControlToolStripMenuItem_Click_1);
             // 
             // sourceCodeViewerToolStripMenuItem
             // 
             this.sourceCodeViewerToolStripMenuItem.Name = "sourceCodeViewerToolStripMenuItem";
-            this.sourceCodeViewerToolStripMenuItem.Size = new System.Drawing.Size(419, 22);
+            this.sourceCodeViewerToolStripMenuItem.Size = new System.Drawing.Size(408, 22);
             this.sourceCodeViewerToolStripMenuItem.Text = "File Viewer (C# && Xml color coding)";
             // 
             // currentTempDirectoryToolStripMenuItem
             // 
             this.currentTempDirectoryToolStripMenuItem.Name = "currentTempDirectoryToolStripMenuItem";
-            this.currentTempDirectoryToolStripMenuItem.Size = new System.Drawing.Size(419, 22);
+            this.currentTempDirectoryToolStripMenuItem.Size = new System.Drawing.Size(408, 22);
             this.currentTempDirectoryToolStripMenuItem.Text = "Current Temp Directory";
             // 
             // dynamicallyInvokeO2sInternalClassesAndMethodsToolStripMenuItem
             // 
             this.dynamicallyInvokeO2sInternalClassesAndMethodsToolStripMenuItem.Name = "dynamicallyInvokeO2sInternalClassesAndMethodsToolStripMenuItem";
-            this.dynamicallyInvokeO2sInternalClassesAndMethodsToolStripMenuItem.Size = new System.Drawing.Size(419, 22);
+            this.dynamicallyInvokeO2sInternalClassesAndMethodsToolStripMenuItem.Size = new System.Drawing.Size(408, 22);
             this.dynamicallyInvokeO2sInternalClassesAndMethodsToolStripMenuItem.Text = "Dynamically invoke O2\'s internal classes and methods";
             // 
             // fileMappingsfilteredByFileTypeToolStripMenuItem
             // 
             this.fileMappingsfilteredByFileTypeToolStripMenuItem.Name = "fileMappingsfilteredByFileTypeToolStripMenuItem";
-            this.fileMappingsfilteredByFileTypeToolStripMenuItem.Size = new System.Drawing.Size(419, 22);
+            this.fileMappingsfilteredByFileTypeToolStripMenuItem.Size = new System.Drawing.Size(408, 22);
             this.fileMappingsfilteredByFileTypeToolStripMenuItem.Text = "File Mappings (filtered by file type)";
             this.fileMappingsfilteredByFileTypeToolStripMenuItem.Click += new System.EventHandler(this.fileMappingsfilteredByFileTypeToolStripMenuItem_Click);
             // 
             // assemblyObjectInvocationshouldWorkWithMostNetAssesmbliesToolStripMenuItem
             // 
             this.assemblyObjectInvocationshouldWorkWithMostNetAssesmbliesToolStripMenuItem.Name = "assemblyObjectInvocationshouldWorkWithMostNetAssesmbliesToolStripMenuItem";
-            this.assemblyObjectInvocationshouldWorkWithMostNetAssesmbliesToolStripMenuItem.Size = new System.Drawing.Size(419, 22);
+            this.assemblyObjectInvocationshouldWorkWithMostNetAssesmbliesToolStripMenuItem.Size = new System.Drawing.Size(408, 22);
             this.assemblyObjectInvocationshouldWorkWithMostNetAssesmbliesToolStripMenuItem.Text = "Assembly Object Invocation (should work with most .Net assesmblies)";
             // 
             // helpToolStripMenuItem
@@ -386,13 +453,6 @@ namespace O2.External.WinFormsUI.Forms
             this.pictureBox1.Size = new System.Drawing.Size(33, 29);
             this.pictureBox1.TabIndex = 18;
             this.pictureBox1.TabStop = false;
-            // 
-            // viewEditO2ConfigSettingsToolStripMenuItem
-            // 
-            this.viewEditO2ConfigSettingsToolStripMenuItem.Name = "viewEditO2ConfigSettingsToolStripMenuItem";
-            this.viewEditO2ConfigSettingsToolStripMenuItem.Size = new System.Drawing.Size(290, 22);
-            this.viewEditO2ConfigSettingsToolStripMenuItem.Text = "View && Edit O2 Config Settings";
-            this.viewEditO2ConfigSettingsToolStripMenuItem.Click += new System.EventHandler(this.viewEditO2ConfigSettingsToolStripMenuItem_Click);
             // 
             // O2GuiWithDockPanel
             // 
