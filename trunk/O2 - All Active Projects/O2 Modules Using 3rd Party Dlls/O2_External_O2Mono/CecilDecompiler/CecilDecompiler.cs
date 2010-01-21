@@ -8,154 +8,28 @@ using Cecil.Decompiler.Languages;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using O2.DotNetWrappers.Windows;
-using O2.External.O2Mono.MonoCecil;
 
 namespace O2.External.O2Mono.CecilDecompiler
 {
     public class CecilDecompiler
     {
-          public void decompile(AssemblyDefinition assemblyDefinition, string pathToSaveDecompiledSourceCode)
-    {
-        try
-        {
-            foreach (TypeDefinition definition in CecilUtils.getTypes(assemblyDefinition))
-            {
-                DI.log.alsoShowInConsole = true;
-                StringBuilder builder = new StringBuilder();
-                foreach (MethodDefinition definition2 in CecilUtils.getMethods(definition))
-                {
-                    DI.log.info("[{0}]decompiling method: {1}", new object[] { builder.Length, definition2.ToString() });
-                    builder.AppendLine(this.getSourceCode(definition2));
-                }
-                if (builder.Length > 0)
-                {
-                    Files.WriteFileContent(Path.Combine(pathToSaveDecompiledSourceCode, Files.getSafeFileNameString(definition.Name) + ".cs"), builder.ToString());
-                }
-            }
-        }
-        catch (Exception exception)
-        {
-            DI.log.error("in decompile: {0}", new object[] { exception.Message });
-        }
-    }
 
-    public string FormatControlFlowGraph(ControlFlowGraph cfg)
-    {
-        StringWriter writer = new StringWriter();
-        foreach (InstructionBlock block in cfg.Blocks)
-        {
-            writer.WriteLine("block {0}:", block.Index);
-            writer.WriteLine("\tbody:");
-            foreach (Instruction instruction in block)
-            {
-                writer.Write("\t\t");
-                InstructionData data = cfg.GetData(instruction);
-                writer.Write("[{0}:{1}] ", data.StackBefore, data.StackAfter);
-                Formatter.WriteInstruction(writer, instruction);
-                writer.WriteLine();
-            }
-            InstructionBlock[] successors = block.Successors;
-            if (successors.Length > 0)
-            {
-                writer.WriteLine("\tsuccessors:");
-                foreach (InstructionBlock block2 in successors)
-                {
-                    writer.WriteLine("\t\tblock {0}", block2.Index);
-                }
-            }
-        }
-        return writer.ToString();
-    }
 
-    public string getIL(MethodDefinition method)
-    {
-        return this.getIL_usingControlFLowGraph(method);
-    }
-
-    public string getIL_usingControlFLowGraph(MethodDefinition method)
-    {
-        try
-        {
-            ControlFlowGraph cfg = ControlFlowGraph.Create(method);
-            return this.FormatControlFlowGraph(cfg);
-        }
-        catch (Exception exception)
-        {
-            DI.log.error("in CecilDecompiler.getIL :{0} \n\n{1}\n\n", new object[] { exception.Message, exception.StackTrace });
-        }
-        return "";
-    }
-
-    public string getIL_usingRawIlParsing(MethodDefinition methodDefinition)
-    {
-        try
-        {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < methodDefinition.Body.Instructions.Count; i++)
-            {
-                Instruction instruction = methodDefinition.Body.Instructions[i];
-                string str = instruction.OpCode.ToString();
-                if (instruction.Operand != null)
-                {
-                    str = str + "   ...   " + instruction.Operand;
-                }
-                builder.AppendLine(str);
-            }
-            return builder.ToString();
-        }
-        catch (Exception exception)
-        {
-            DI.log.error("In getIL_usingRawIlParsing :{0} \n\n {1} \n\n", new object[] { exception.Message, exception.StackTrace });
-        }
-        return "";
-    }
-
-    public string getILfromClonedMethod(MethodDefinition methodDefinition)
-    {
-        return "Not working at the moment";
-    }
-
-    public string getSourceCode(MethodDefinition method)
-    {
-        try
-        {
-            ILanguage language = CSharp.GetLanguage(CSharpVersion.V1);
-            StringWriter writer = new StringWriter();
-            language.GetWriter(new PlainTextFormatter(writer)).Write(method);
-            MemoryStream stream = new MemoryStream();
-            StreamWriter writer3 = new StreamWriter(stream);
-            language.GetWriter(new PlainTextFormatter(writer3)).Write(method);
-            stream.Flush();
-            return writer.ToString();
-        }
-        catch (Exception exception)
-        {
-            DI.log.error("in getSourceCode: {0}", new object[] { exception.Message });
-            return ("Error in creating source code from IL: " + exception.Message);
-        }
-    }
-
-    public string getSourceCode(string testExe)
-    {
-        AssemblyDefinition assembly = AssemblyFactory.GetAssembly(testExe);
-        if (assembly != null)
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach (MethodDefinition definition2 in CecilUtils.getMethods(assembly))
-            {
-                string str = this.getSourceCode(definition2);
-                builder.Append(str);
-            }
-            return builder.ToString();
-        }
-        return "";
-    }
-
-        /* previous version of the code (before corruption and Restore via Reflection)
-         * 
         public string getSourceCode(string testExe)
         {
-            return getSourceCode(AssemblyFactory.GetAssembly(testExe).EntryPoint);
+            var assembly = AssemblyFactory.GetAssembly(testExe);
+            if (assembly != null)
+            {
+                var sourceCode = new StringBuilder();
+                foreach (var methods in O2.External.O2Mono.MonoCecil.CecilUtils.getMethods(assembly))
+                {
+                    var methodCode = getSourceCode(methods);
+                    sourceCode.Append(methodCode);
+                }
+                return sourceCode.ToString();
+            }
+            return "";
+
         }
 
         public string getSourceCode(MethodDefinition method)
@@ -201,14 +75,14 @@ namespace O2.External.O2Mono.CecilDecompiler
         {
             try
             {
-                / * var stringWriter = new StringWriter();
+                /*var stringWriter = new StringWriter();
                 foreach (Instruction instruction in methodDefinition.Body.Instructions)
-                {
+                {                    
                     Formatter.WriteInstruction(stringWriter, instruction);
                     stringWriter.WriteLine();
                 }
                 return stringWriter.ToString();
-                 * * /
+                 * */
                 var ilCode = new StringBuilder();
                 for (int i = 0; i < methodDefinition.Body.Instructions.Count; i++)
                 {
@@ -219,10 +93,10 @@ namespace O2.External.O2Mono.CecilDecompiler
                     ilCode.AppendLine(instructionText);
                 }
                 return ilCode.ToString();
-                / *
+                /*
                         if (instruction.Operand != null)
                         {
-
+                        
                             if (instruction.Operand.ToString() == methodToFind)
                             {
                                 var sourceMethod = (MethodDefinition) instruction.Operand;
@@ -236,7 +110,7 @@ namespace O2.External.O2Mono.CecilDecompiler
                                 //MethodDefinition property = (MethodDefinition)method.Body.Instructions[i - parameterOffset].Operand;
                                 findings.Add(String.Format("{0} -- > {1}", sourceMethod.Name, sinkMethod.Name));
                             }
-                        }* /
+                        }*/
 
                 //        return ilCode.ToString();
                 //            return "raw Il Parsing";
@@ -309,6 +183,34 @@ namespace O2.External.O2Mono.CecilDecompiler
             //return getIL_usingRawIlParsing(methodDefinition);
             //return "this is cloned IL";
         }
-         */ 
+
+
+        public void decompile(AssemblyDefinition assemblyDefinition, string pathToSaveDecompiledSourceCode)
+        {
+            //       Files.checkIfDirectoryExistsAndCreateIfNot(pathToSaveDecompiledSourceCode);
+            //var methodIndex =  
+            try
+            {
+                foreach (var typeDefinition in MonoCecil.CecilUtils.getTypes(assemblyDefinition))
+                {
+                    DI.log.alsoShowInConsole = true;
+                    var sourceCodeContents = new StringBuilder();
+                    foreach (var method in MonoCecil.CecilUtils.getMethods((typeDefinition)))
+                    {
+                        DI.log.info("[{0}]decompiling method: {1}", sourceCodeContents.Length, method.ToString());
+                        sourceCodeContents.AppendLine(getSourceCode(method));
+                    }
+                    if (sourceCodeContents.Length > 0)
+                    {
+                        var targetFile = Path.Combine(pathToSaveDecompiledSourceCode, Files.getSafeFileNameString(typeDefinition.Name) + ".cs");
+                        Files.WriteFileContent(targetFile, sourceCodeContents.ToString());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in decompile: {0}", ex.Message);
+            }
+        }
     }
 }

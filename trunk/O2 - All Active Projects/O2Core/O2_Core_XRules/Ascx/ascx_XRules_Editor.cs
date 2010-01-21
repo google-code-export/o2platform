@@ -100,19 +100,36 @@ namespace O2.Core.XRules.Ascx
         }
 
         private void btBackupLocalFiles_Click(object sender, EventArgs e)
-        {            
-            new Wizard_BackupFolder().runWizard(directoryWithXRulesDatabase.getCurrentDirectory());
+        {
+            O2Thread.mtaThread(
+                () => new Wizard_BackupFolder().runWizard(directoryWithXRulesDatabase.getCurrentDirectory()));
         }
 
         private void btSyncViaSvn_Click(object sender, EventArgs e)
         {
-            new Wizard_SyncViaSvn().runWizard(SvnApi.svnO2DatabaseRulesFolder, XRules_Config.PathTo_XRulesDatabase_fromO2);
+            O2Thread.mtaThread(
+                () => new Wizard_SyncViaSvn().runWizard(SvnApi.svnO2DatabaseRulesFolder, XRules_Config.PathTo_XRulesDatabase_fromO2));
         }
 
         private void btBrowseSVN_Click(object sender, EventArgs e)
         {
-            ascx_SvnBrowser.openInFloatWindow(DI.SvnXRulesDatabaseUrl);
+            O2Thread.mtaThread(
+                () => ascx_SvnBrowser.openInFloatWindow(DI.SvnXRulesDatabaseUrl));
         }
-      
+
+        private void toolStripLabel3_Click(object sender, EventArgs e)
+        {
+            btSyncViaSvn_Click(null, null); 
+        }
+
+        private void toolStripLabel4_Click(object sender, EventArgs e)
+        {
+            btBrowseSVN_Click(null, null);
+        }
+
+        private void toolStripLabel1_Click(object sender, EventArgs e)
+        {
+            btBackupLocalFiles_Click(null, null);
+        }      
     }
 }

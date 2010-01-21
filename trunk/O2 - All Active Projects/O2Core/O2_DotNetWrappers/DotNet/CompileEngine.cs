@@ -397,10 +397,17 @@ namespace O2.DotNetWrappers.DotNet
         }*/
 
         public static void addReferencesIncludedInSourceCode(List<string> sourceCodeFiles, List<string> referencedAssemblies)
-        {            
+        {                        
             foreach( var sourceCodeFile in sourceCodeFiles)
             {
+                // handle special case where we want (for performace & other reasons) be explicit on the references we add to the current script
+                var sourceCode = Files.getFileContents(sourceCodeFile);
+                if (sourceCode.Contains("//O2Tag_OnlyAddReferencedAssemblies"))
+                    referencedAssemblies.Clear();
+                
+                // search for references in the source code
                 var fileLines = Files.getFileLines(sourceCodeFile);
+
                 foreach (var fileLine in fileLines)
                 {
                     var match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_ExtraReferences);
@@ -408,9 +415,10 @@ namespace O2.DotNetWrappers.DotNet
                     if (match!="")
                     {
                         var extraReference = fileLine.Replace(match, "").Trim();
-                        if (File.Exists(extraReference) && false == referencedAssemblies.Contains(extraReference))
+                        //if (File.Exists(extraReference) && false == referencedAssemblies.Contains(extraReference))
+                        if (false == referencedAssemblies.Contains(extraReference))
                         {
-                            Files.Copy(extraReference, PublicDI.config.O2TempDir, true);
+                            //Files.Copy(extraReference, PublicDI.config.O2TempDir, true);
                             /*var assembly = PublicDI.reflection.getAssembly(extraReference);
                             if (assembly == null)
                                 DI.log.error("(this could be a problem for execution) in addReferencesIncludedInSourceCode could not load assembly :{0}", extraReference);
@@ -439,6 +447,7 @@ namespace O2.DotNetWrappers.DotNet
             return referencedAssemblies;
         }
 
+        private CSharpCodeProvider cscpCSharpCodeProvider;
         public bool compileSourceFiles(List<String> sourceCodeFiles, String[] sReferenceAssembliesToAdd,
                                              ref Assembly aCompiledAssembly, ref String sErrorMessages,
                                              bool bVerbose, string exeMainClass, string outputAssemblyName)
@@ -455,8 +464,11 @@ namespace O2.DotNetWrappers.DotNet
                 String sDefaultPathToResolveReferenceAssesmblies = PublicDI.config.O2TempDir;
                 //if (bVerbose)
                 //    PublicDI.log.debug("Compiling source code \n\n {0} \n\n", sSourceCode);
-                var providerOptions = new Dictionary<string, string> {{"CompilerVersion", "v3.5"}};
-                var cscpCSharpCodeProvider = new CSharpCodeProvider(providerOptions);
+                if (cscpCSharpCodeProvider == null)
+                {
+                    var providerOptions = new Dictionary<string, string> {{"CompilerVersion", "v3.5"}};
+                    cscpCSharpCodeProvider = new CSharpCodeProvider(providerOptions);
+                }
                 var cpCompilerParameters = new CompilerParameters
                                                {
                                                    GenerateInMemory = false,

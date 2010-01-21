@@ -98,6 +98,7 @@
     <Compile Include="ViewObjects\Reflection_MethodInfo.cs" />
     <Compile Include="Windows\Ascx_ExtensionMethods.cs" />
     <Compile Include="Windows\Controls.cs" />
+    <Compile Include="Network\Netsh.cs" />
     <Compile Include="Windows\O2Forms_ThreadSafe_FlowLayoutPanel.cs" />
     <Compile Include="Windows\Files.cs" />
     <Compile Include="Windows\FillTreeViewWithlSerializedObjectData.cs" />

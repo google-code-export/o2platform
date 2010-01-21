@@ -129,6 +129,7 @@
     <Compile Include="_Rules\_Samples\Wizards\Wizard_BackupFolder.cs" />
     <Compile Include="_Rules\_Samples\Wizards\Wizard_CopyGacDlls.cs" />
     <Compile Include="_Rules\_Samples\Wizards\Wizard_SearchEngine_Use_Case_1 - under dev.cs" />
+    <Compile Include="_Rules\_Samples\Wizards\Wizard_ViewStrutsMappings %28under dev%29.cs" />
     <Compile Include="_Templates\Empty_XRule.cs" />
     <Compile Include="_Templates\Empty_Class.cs" />
     <Compile Include="_Templates\Local_Findings_Files.cs" />

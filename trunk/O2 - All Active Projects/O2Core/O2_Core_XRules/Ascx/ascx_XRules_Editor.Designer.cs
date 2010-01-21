@@ -35,8 +35,8 @@ namespace O2.Core.XRules.Ascx
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.tbFileToOpen = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.tbFileToOpen = new System.Windows.Forms.ToolStripTextBox();
             this.llReloadXRules = new System.Windows.Forms.ToolStripLabel();
             this.directoryWithLocalXRules = new O2.Views.ASCX.CoreControls.ascx_Directory();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -151,16 +151,16 @@ namespace O2.Core.XRules.Ascx
             this.toolStrip2.TabIndex = 6;
             this.toolStrip2.Text = "toolStrip2";
             // 
-            // tbFileToOpen
-            // 
-            this.tbFileToOpen.Name = "tbFileToOpen";
-            this.tbFileToOpen.Size = new System.Drawing.Size(100, 25);
-            // 
             // toolStripLabel2
             // 
             this.toolStripLabel2.Name = "toolStripLabel2";
             this.toolStripLabel2.Size = new System.Drawing.Size(56, 22);
             this.toolStripLabel2.Text = "Open File:";
+            // 
+            // tbFileToOpen
+            // 
+            this.tbFileToOpen.Name = "tbFileToOpen";
+            this.tbFileToOpen.Size = new System.Drawing.Size(100, 25);
             // 
             // llReloadXRules
             // 
@@ -269,6 +269,7 @@ namespace O2.Core.XRules.Ascx
             this.toolStripLabel3.Name = "toolStripLabel3";
             this.toolStripLabel3.Size = new System.Drawing.Size(69, 22);
             this.toolStripLabel3.Text = "Sync via SVN";
+            this.toolStripLabel3.Click += new System.EventHandler(this.toolStripLabel3_Click);
             // 
             // btSyncViaSvn
             // 
@@ -285,6 +286,7 @@ namespace O2.Core.XRules.Ascx
             this.toolStripLabel4.Name = "toolStripLabel4";
             this.toolStripLabel4.Size = new System.Drawing.Size(64, 22);
             this.toolStripLabel4.Text = "browse SVN";
+            this.toolStripLabel4.Click += new System.EventHandler(this.toolStripLabel4_Click);
             // 
             // btBrowseSVN
             // 
@@ -301,6 +303,7 @@ namespace O2.Core.XRules.Ascx
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(45, 22);
             this.toolStripLabel1.Text = "backup:";
+            this.toolStripLabel1.Click += new System.EventHandler(this.toolStripLabel1_Click);
             // 
             // btBackupLocalFiles
             // 

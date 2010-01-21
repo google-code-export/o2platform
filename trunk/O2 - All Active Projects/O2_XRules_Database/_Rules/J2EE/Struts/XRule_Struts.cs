@@ -2,37 +2,29 @@
 using System;
 using O2.Kernel;
 using System.Collections.Generic;
-using O2.Core.FileViewers.Ascx;
-using O2.Core.FileViewers.Ascx.O2Rules;
-using O2.Core.FileViewers.JoinTraces;
 using O2.DotNetWrappers.DotNet;
-using O2.DotNetWrappers.O2Findings;
-using O2.External.WinFormsUI.Forms;
 using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
 using O2.Kernel.Interfaces.O2Findings;
-using O2.Kernel.Interfaces.Views;
 using O2.Kernel.Interfaces.XRules;
-using O2.Views.ASCX.O2Findings;
 
-namespace O2.XRules.Database._Rules
+namespace O2.XRules.Database._Rules.J2EE.Struts
 {
-
-	public class XRule_Struts : KXRule
-	{
+    public class XRule_Struts : KXRule
+    {
 
         static string strutsMappingsFile = @"F:\Java_Apps\struts\xplanner-0.7b7-war\_OunceApplication\O2Data\XPlanner.O2StrutsMapping";
         static string baseO2FindingsFile = @"F:\Java_Apps\struts\xplanner-0.7b7-war\_OunceApplication\O2Data\OSA - XPlanner  11-3-09 807PM.ozasmt";    	
 
         
-		public static bool showResultsInO2RulesStrutsGUI = false;
-	    public static bool showResultsInNewFindingsViewer = false;
+        public static bool showResultsInO2RulesStrutsGUI = false;
+        public static bool showResultsInNewFindingsViewer = false;
 
         public XRule_Struts()
         {
             Name = "_WORKING Rule fo Struts";
         }
 
-	    [XRule(Name="Test with local files")]
+        [XRule(Name="Test with local files")]
         public static void Test()
         {
             var baseO2Findings = XUtils_Findings_v0_1.loadFindingsFile(baseO2FindingsFile);
@@ -45,10 +37,10 @@ namespace O2.XRules.Database._Rules
         [XRule(Name = "_StrutsRule.from.GetParameter.to.Print.via.SetGetAttributeJoins")]
         public static List<IO2Finding> strutsRule_fromGetParameterToPringViaGetSetAttributeJoins(List<IO2Finding> baseO2Findings, IStrutsMappings strutsMappings)
         {        
-        	PublicDI.log.info("executing rule: StrutsRule.from.GetParameter.to.Print.via.SetGetAttributeJoins with {0} fingings and {1} action servlets", 
-        		baseO2Findings.Count, strutsMappings.actionServlets.Count);
+            PublicDI.log.info("executing rule: StrutsRule.from.GetParameter.to.Print.via.SetGetAttributeJoins with {0} fingings and {1} action servlets", 
+                              baseO2Findings.Count, strutsMappings.actionServlets.Count);
 
-	        var taintSources_SourceRegEx = @"getParameter\(java.lang.String\)";
+            var taintSources_SourceRegEx = @"getParameter\(java.lang.String\)";
             var taintSources_SinkRegEx = @"setAttribute\(java.lang.String";
 
             var finalSinks_SourceRegEx = @"getAttribute\(java.lang.String\)";
@@ -95,7 +87,7 @@ namespace O2.XRules.Database._Rules
             return xRulesObject.getResults();
         }
 
-	    public static string joinPointFilter(string dataToFilter)
+        public static string joinPointFilter(string dataToFilter)
         {
             return dataToFilter
                 .Replace("\\__",".")
@@ -106,12 +98,9 @@ namespace O2.XRules.Database._Rules
                 .Replace("\\", ".").Replace('/', '.');
         }
                
-		/*public static void test()
+        /*public static void test()
 		{
 			new XRule_Struts().calculateFindings(baseO2Findings,strutsMappingFile);
 		}*/
-	}
-	
-	
-  
+    }
 }

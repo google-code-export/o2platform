@@ -90,24 +90,25 @@ namespace O2.Core.XRules.Ascx
         
         public void openSvnUrl(string urlToOpen)
         {
-            tvDirectoriesAndFiles.invokeOnThread(
-                () =>
-                {
-                    if (false == urlToOpen.StartsWith("http"))
-                        urlToOpen = svnBaseUrl + urlToOpen;
-                    tvDirectoriesAndFiles.clear();
-                    var svnMappedUrls = SvnApi.getSvnMappedUrls(urlToOpen);
-                    foreach (var svnMappedUrl in svnMappedUrls)
-                    {
-                        var newTreeNode =
+            if (false == urlToOpen.StartsWith("http"))
+                urlToOpen = svnBaseUrl + urlToOpen;
+            var svnMappedUrls = SvnApi.getSvnMappedUrls(urlToOpen);
+            if (svnMappedUrls.Count == 0)            
+                DI.log.error("in openSvnUrl there was no svnMappedUrls");
+            else
+                tvDirectoriesAndFiles.invokeOnThread(
+                    () =>
+                    {                    
+                        tvDirectoriesAndFiles.clear();
+                        foreach (var svnMappedUrl in svnMappedUrls)
+                        {
                             tvDirectoriesAndFiles.add_Node(
                                 svnMappedUrl.Text,
                                 (svnMappedUrl.IsFile) ? 1 : 0,
                                 (svnMappedUrl.IsFile) ? Color.Blue : Color.Black,
-                                (object)svnMappedUrl);
-                    }
-                });
-        	
+                                (object) svnMappedUrl);
+                        }
+                    });        	
         }
 
         public static Thread openInFloatWindow()
