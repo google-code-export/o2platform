@@ -404,7 +404,11 @@ namespace O2.DotNetWrappers.DotNet
                 var sourceCode = Files.getFileContents(sourceCodeFile);
                 if (sourceCode.Contains("//O2Tag_OnlyAddReferencedAssemblies"))
                     referencedAssemblies.Clear();
-                
+
+                // extract the names from referencedAssemblies
+                var referencedAssembliesFileNames = new List<String>();
+                foreach(var referencedAssembly in referencedAssemblies)
+                    referencedAssembliesFileNames.Add(Path.GetFileName(referencedAssembly));
                 // search for references in the source code
                 var fileLines = Files.getFileLines(sourceCodeFile);
 
@@ -416,13 +420,16 @@ namespace O2.DotNetWrappers.DotNet
                     {
                         var extraReference = fileLine.Replace(match, "").Trim();
                         //if (File.Exists(extraReference) && false == referencedAssemblies.Contains(extraReference))
-                        if (false == referencedAssemblies.Contains(extraReference))
+                        var extraReferenceFileName = Path.GetFileName(extraReference);
+                        if (false == referencedAssembliesFileNames.Contains(extraReferenceFileName))
                         {
                             //Files.Copy(extraReference, PublicDI.config.O2TempDir, true);
                             /*var assembly = PublicDI.reflection.getAssembly(extraReference);
                             if (assembly == null)
                                 DI.log.error("(this could be a problem for execution) in addReferencesIncludedInSourceCode could not load assembly :{0}", extraReference);
                              */
+                            referencedAssembliesFileNames.
+                                Add(extraReferenceFileName);
                             referencedAssemblies.Add(extraReference);
                         }
                     }

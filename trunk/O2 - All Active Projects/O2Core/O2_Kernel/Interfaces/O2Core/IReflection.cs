@@ -85,10 +85,15 @@ namespace O2.Kernel.Interfaces.O2Core
         void invokeASync(object oLiveObject, MethodInfo methodInfo, object[] methodParameters,Action<object> onMethodExecutionCompletion);
 
         bool invokeMethod_returnSucess(object oLiveObject, string sMethodToInvoke, object[] methodParameters);
+
+        object invoke(MethodInfo methodInfo);
         object invoke(MethodInfo methodInfo, object[] methodParameters);
+        object invoke(object oLiveObject, MethodInfo methodInfo);
         object invoke(object oLiveObject, MethodInfo methodInfo, object[] methodParameters);
         object invoke(object oLiveObject, string sMethodToInvoke, object[] methodParameters);
-        object invokeMethod_InstanceStaticPublicNonPublic(Object oLiveObject, String sMethodToInvoke, Object[] methodParameters);
+
+        object invokeMethod_Instance(MethodInfo methodInfo);
+        object invokeMethod_InstanceStaticPublicNonPublic(Object oLiveObject, String sMethodToInvoke, Object[] methodParameters);        
         object invokeMethod_Static(Type tMethodToInvokeType, string sMethodToInvokeName, object[] methodParameters);
         object invokeMethod_Static(String sMethodToInvokeType, string sMethodToInvokeName, object[] methodParameters);
         Object invokeMethod_Static(MethodInfo methodToExecute);

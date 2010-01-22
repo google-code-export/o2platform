@@ -102,6 +102,8 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbExecutionHistoryOrLog = new System.Windows.Forms.TextBox();
             this.tvCompilationErrors = new System.Windows.Forms.TreeView();
             this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
+            this.compileSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -119,9 +121,10 @@ namespace O2.External.SharpDevelop.Ascx
             this.openFileToolStripMenuItem,
             this.settingsToolStripMenuItem,
             this.addBreakpointOnCurrentLineToolStripMenuItem,
-            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem});
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem,
+            this.compileSettingsToolStripMenuItem});
             this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(343, 202);
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(343, 246);
             this.menuStripForSourceEdition.Opening += new System.ComponentModel.CancelEventHandler(this.menuStripForSourceEdition_Opening);
             // 
             // compileToolStripMenuItem
@@ -842,6 +845,21 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
             this.tecSourceCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragEnter);
             // 
+            // compileSettingsToolStripMenuItem
+            // 
+            this.compileSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem});
+            this.compileSettingsToolStripMenuItem.Name = "compileSettingsToolStripMenuItem";
+            this.compileSettingsToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.compileSettingsToolStripMenuItem.Text = "Compile Settings";
+            // 
+            // listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem
+            // 
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Name = "listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem";
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Size = new System.Drawing.Size(409, 22);
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Text = "List (in LogView) the current assembly references automatically added";
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Click += new System.EventHandler(this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem_Click);
+            // 
             // ascx_SourceCodeEditor
             // 
             this.AllowDrop = true;
@@ -948,5 +966,7 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripButton btDebugMethod;
         private System.Windows.Forms.TreeView tvCompilationErrors;
         private System.Windows.Forms.ToolStripMenuItem openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem compileSettingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem;
     }
 }

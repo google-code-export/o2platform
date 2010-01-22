@@ -161,6 +161,7 @@ namespace O2.Core.XRules.Ascx
             // 
             this.tbFileToOpen.Name = "tbFileToOpen";
             this.tbFileToOpen.Size = new System.Drawing.Size(100, 25);
+            this.tbFileToOpen.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tbFileToOpen_KeyUp);
             // 
             // llReloadXRules
             // 

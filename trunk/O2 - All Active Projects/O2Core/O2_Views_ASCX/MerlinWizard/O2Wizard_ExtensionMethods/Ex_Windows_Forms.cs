@@ -46,6 +46,25 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             step.append_Text(string.Format(messageFormat, variables));
         }
 
+        public static void append_Line(this IStep step)
+        {
+            step.append_Text(Environment.NewLine);
+        }
+
+        public static void append_Line(this IStep step, string message, bool extraLineAfter)
+        {
+            step.append_Line(message, extraLineAfter, false);
+        }
+
+        public static void append_Line(this IStep step, string message, bool extraLineAfter, bool extraLineBefore)
+        {
+            if (extraLineBefore)
+                step.append_Line();
+            step.append_Text(message + Environment.NewLine);
+            if (extraLineAfter)
+                step.append_Line();
+        }
+        
         public static void append_Line(this IStep step, string messageFormat, params Object[] variables)
         {
             step.append_Text(string.Format(messageFormat + Environment.NewLine, variables));

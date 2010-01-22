@@ -404,7 +404,10 @@ namespace O2.External.SharpDevelop.Ascx
                     });
             }
         }
-        
-                                                                          
+
+        private void listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            listinLogViewCurrentAssemblyReferencesAutomaticallyAdded();           
+        }                                                                                        
     }
 }

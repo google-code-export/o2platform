@@ -53,7 +53,7 @@ namespace O2.Core.XRules.Classes
         }
 
         public static void executeXRuleMethod(MethodInfo methodToExecute, Action<bool,object> executionResult)
-        {
+        {            
             if (methodToExecute == null)
             {                
                 executionResult(false,null);
