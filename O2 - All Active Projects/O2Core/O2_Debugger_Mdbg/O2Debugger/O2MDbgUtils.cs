@@ -49,9 +49,14 @@ namespace O2.Debugger.Mdbg.O2Debugger
 
         public static void debugMethod(MethodInfo targetMethod, string loadDllsFrom)
         {
-            DI.log.debug("Starting method under debugged: {0}", targetMethod.Name);
-            var exeInPackagedDirectory = StandAloneExe.createPackagedDirectoryForMethod(targetMethod, loadDllsFrom);
-            startProcessUnderDebugger(exeInPackagedDirectory);
+            if (IsDebuggerAvailable() == false)
+                DI.log.error("in debugMethod, could not debug method since there is no Debugger Available");
+            else
+            {
+                DI.log.debug("Starting method under debugged: {0}", targetMethod.Name);
+                var exeInPackagedDirectory = StandAloneExe.createPackagedDirectoryForMethod(targetMethod, loadDllsFrom);
+                startProcessUnderDebugger(exeInPackagedDirectory);    
+            }            
         }
 
         public static Thread startProcessUnderDebugger(string executableToStart)

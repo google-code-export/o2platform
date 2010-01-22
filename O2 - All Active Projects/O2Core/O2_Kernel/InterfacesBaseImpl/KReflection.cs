@@ -740,6 +740,14 @@ namespace O2.Kernel.InterfacesBaseImpl
             }
         }
 
+        public object invoke(MethodInfo methodInfo)
+        {
+            if (methodInfo.IsStatic)
+                return invokeMethod_Static(methodInfo);
+            else
+                return invokeMethod_Instance(methodInfo);
+        }        
+
         /// <summary>
         /// invokes static or instance method
         /// (for instance methods, the default constructor will be used to create the method's class)
@@ -763,6 +771,11 @@ namespace O2.Kernel.InterfacesBaseImpl
                 PublicDI.log.ex(ex, "in reflection.invokeMethod_InstanceStaticPublicNonPublic", true);
             }
             return null;
+        }
+
+        public object invoke(object oLiveObject, MethodInfo methodInfo)
+        {
+            return invoke(oLiveObject, methodInfo, new object[] {});
         }
 
         public object invoke(object oLiveObject, MethodInfo methodInfo, object[] methodParameters)
@@ -799,7 +812,23 @@ namespace O2.Kernel.InterfacesBaseImpl
                 return null;
             }
         }
-        
+
+
+        public object invokeMethod_Instance(MethodInfo methodInfo)
+        {
+            try
+            {
+                DI.log.info("Executing Instance Method:{0}", methodInfo.Name);
+                var liveObject = DI.reflection.createObjectUsingDefaultConstructor(methodInfo.DeclaringType);
+                if (liveObject != null)
+                    return invoke(liveObject, methodInfo);
+            }
+            catch (Exception ex)
+            {                
+                PublicDI.log.ex(ex, "in invokeMethod_Instance: ");
+            }
+            return null;
+        }
 
         public Object invokeMethod_Static(MethodInfo methodToExecute)
         {

@@ -24,18 +24,8 @@ namespace Merlin
     /// and by composition by providing handler and button enablement strategy
     /// delegates.
     /// </summary>
-    public class TemplateStep : IStep
-    {
-        /// <summary>
-        /// A delegate for a void function with no arguments
-        /// </summary>
-        public delegate void VoidDelegate();
-        
-        /// <summary>
-        /// A delegate for a function with no arguments that returns a boolean.
-        /// </summary>
-        public delegate bool BoolDelegate();
-
+   public class TemplateStep : IStep
+    {  
         /// <summary>
         /// Creates a new TemplateStep.
         /// </summary>
@@ -43,7 +33,7 @@ namespace Merlin
         public TemplateStep(Control ui)
             : this()
         {
-            this.UI = ui;
+            UI = ui;
         }
 
         // DC add support for just defining the Type
@@ -135,7 +125,7 @@ namespace Merlin
         /// <summary>
         /// Gets and sets the handler that executes when the step is reached
         /// </summary>
-        public VoidDelegate StepReachedHandler { get; set; }
+        public MethodInvoker StepReachedHandler { get; set; }
         public virtual void StepReached()
         {
             if (this.UI == null)
@@ -151,7 +141,7 @@ namespace Merlin
         /// <summary>
         /// Gets and sets the handler that executes when the Next button is clicked.
         /// </summary>
-        public BoolDelegate NextHandler { get; set; }
+        public Func<bool> NextHandler { get; set; }
         public virtual bool OnNext()
         {
             if (NextHandler != null)
@@ -167,7 +157,7 @@ namespace Merlin
         /// <summary>
         /// Gets and sets the handler that executes when the Previous button is clicked.
         /// </summary>
-        public BoolDelegate PreviousHandler { get; set; }
+        public Func<bool> PreviousHandler { get; set; }
         public virtual bool OnPrevious()
         {
             if (PreviousHandler != null)
@@ -191,7 +181,7 @@ namespace Merlin
         /// <summary>
         /// Gets and sets the handler that executes when the Cancel button is clicked.
         /// </summary>
-        public VoidDelegate CancelHandler { get; set; }
+        public MethodInvoker CancelHandler { get; set; }
         public virtual void OnCancel()
         {
             CancelHandler();
@@ -203,7 +193,7 @@ namespace Merlin
         /// <summary>
         /// A boolean function to determine whether the "Next" button is enabled.
         /// </summary>
-        public BoolDelegate AllowNextStrategy { get; set; }
+        public Func<bool> AllowNextStrategy { get; set; }
         public virtual bool AllowNext()
         {
             if (AllowNextStrategy != null)
@@ -219,7 +209,7 @@ namespace Merlin
         /// <summary>
         /// A boolean function to determine whether the "Previous" button is enabled.
         /// </summary>
-        public BoolDelegate AllowPreviousStrategy { get; set; }
+        public Func<bool> AllowPreviousStrategy { get; set; }
         public virtual bool AllowPrevious()
         {
             if (AllowPreviousStrategy != null)
@@ -235,7 +225,7 @@ namespace Merlin
         /// <summary>
         /// A boolean function to determine whether the "Cancel" button is enabled.
         /// </summary>
-        public BoolDelegate AllowCancelStrategy { get; set; }
+        public Func<bool> AllowCancelStrategy { get; set; }
         public virtual bool AllowCancel()
         {
             if (AllowCancelStrategy != null)

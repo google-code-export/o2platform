@@ -42,6 +42,8 @@ namespace Merlin
         {
         }
 
+        public MethodInvoker StepReachedHandler { get; set; }
+
         /// <summary>
         /// Creates a ConditionalStep
         /// </summary>
@@ -78,6 +80,11 @@ namespace Merlin
         public string Title { get { return "Conditional Step"; } }
         public string Subtitle { get { return null; } }
 
+        public void StateUpdated()
+        {
+            throw new NotImplementedException();
+        }
+
         public Control UI { get; set; }
         public Type UIType { get; set; }
 
@@ -86,15 +93,21 @@ namespace Merlin
             return UnderlyingStep.AllowNext();
         }
 
+        public Func<bool> AllowNextStrategy { get; set; }
+
         public bool AllowPrevious()
         {
             return UnderlyingStep.AllowPrevious();
         }
 
+        public Func<bool> AllowPreviousStrategy { get; set; }
+
         public bool AllowCancel()
         {
             return UnderlyingStep.AllowCancel();
         }
+
+        public Func<bool> AllowCancelStrategy { get; set; }
 
         public bool OnNext()
         {
@@ -102,14 +115,20 @@ namespace Merlin
             return true;
         }
 
+        public Func<bool> NextHandler { get; set; }
+
         public bool OnPrevious()
         {
             LastWentNext = false;
             return false;
         }
 
+        public Func<bool> PreviousHandler { get; set; }
+
         public void OnCancel()
         { }
+
+        public MethodInvoker CancelHandler { get; set; }
 
 
         public event EventHandler StepStateChanged;

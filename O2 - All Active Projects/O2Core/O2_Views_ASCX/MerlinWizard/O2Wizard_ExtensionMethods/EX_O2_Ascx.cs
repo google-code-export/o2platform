@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Merlin;
 using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
@@ -98,12 +97,95 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
         public static IStep add_Control(this List<IStep> steps, Control control, string stepTitle, string stepSubTitle, Action<IStep> onComponentLoad)
         {
             control.AllowDrop = false;
-            var newStep = new TemplateStep(control, 10, stepTitle);
-            newStep.Subtitle = stepSubTitle;
-            newStep.OnComponentAction = onComponentLoad;
+            var newStep = new TemplateStep(control, 10, stepTitle)
+                              {
+                                  Subtitle = stepSubTitle,
+                                  OnComponentAction = onComponentLoad
+                              };
             steps.Add(newStep);
             return newStep;
         }
+
+        public static Control add_Control(this IStep step, Type controlType)
+        {
+            if (step.UI != null)
+            {
+                return (Control)step.UI.invokeOnThread(
+                    () =>
+                    {
+                        var control = (Control)PublicDI.reflection.createObjectUsingDefaultConstructor(controlType);
+                        if (control != null)
+                            step.add_Control(control);
+                        return control;
+                    });
+            }
+            PublicDI.log.error("was null");
+            return null;
+        }
+
+        public static Control add_Control(this IStep step, Control control)
+        {
+            if (step.UI == null)
+                return null;
+            return (Control) step.UI.invokeOnThread(
+                                 () =>
+                                     {
+                                         step.UI.Controls.Add(control);
+                                         control.BringToFront();
+                                         return control;
+                                     });
+        }
+
+        public static IStep add_SelectFile(this List<IStep> steps, string stepTitle, string defaultFolder, Action<string> setResult, Action<TextBox, Button> callbackWithControls)
+        {
+            return steps.add_SelectFile(stepTitle, defaultFolder, -1, -1, -1, setResult, callbackWithControls);
+        }
+
+        public static IStep add_SelectFile(this List<IStep> steps, string stepTitle, string defaultFolder, int top, int textBoxLeft, int textBoxWidth, Action<string> setResult, Action<TextBox, Button> callbackWithControls)
+        {
+            // textbox
+            var textBox = new TextBox();
+            textBox.TextChanged += (sender, e) => setResult(textBox.Text);
+            textBox.Text = defaultFolder;
+            if (top > -1)
+                textBox.Top = top;
+            if (textBoxLeft > -1)
+                textBox.Left = textBoxLeft;
+            textBox.Width = (textBoxWidth > -1) ? textBoxWidth : 90;
+            textBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+            textBox.AllowDrop = true;
+            textBox.DragDrop += (sender, e) => textBox.set_Text(Dnd.tryToGetFileOrDirectoryFromDroppedObject(e));
+            textBox.DragEnter += (sender, e) => e.Effect = DragDropEffects.Copy;
+
+            // button
+            var button = new Button();
+            if (top > -1)
+                button.Top = top;
+            button.Top -= 2;
+            button.Text = "Select File";
+            button.Width += 20;
+            button.Left = textBox.Width + textBox.Left + 2;
+            button.Anchor = AnchorStyles.Right | AnchorStyles.Top;
+            button.Click += (sender, e) =>
+            {
+                var openFileDialog = new OpenFileDialog();
+                openFileDialog.InitialDirectory = defaultFolder;
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    textBox.Text = openFileDialog.FileName;
+            };
+
+            // panel
+            var step = steps.add_Panel("stepTitle");
+            //var panel = new FlowLayoutPanel();
+            //panel.Dock = DockStyle.Fill;// AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+
+            step.add_Control(textBox);
+            step.add_Control(button);
+            callbackWithControls(textBox, button);
+            //var newStep = new TemplateStep(panel, 10, stepTitle);
+            //steps.Add(newStep);
+            return step;
+        }  
 
         public static IStep add_SelectFolder(this List<IStep> steps, string stepTitle, string defaultFolder, Action<string> setResult)
         {
@@ -180,18 +262,70 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
         }
 
         public static Label add_Label(this IStep step, string text, int top, int left)
-        {
+        {            
             if (step.UI == null)
                 return null;
-            var label = new Label();
-            label.Text = text;
-            if (top > -1)
-                label.Top = top;
-            if (left > -1)
-                label.Left = left;
-            step.UI.Controls.Add(label);
-            label.BringToFront();
-            return label;
+            return (Label) step.UI.invokeOnThread(
+                               () =>
+                                   {
+                                       var label = new Label
+                                                       {
+                                                           AutoSize = true, 
+                                                           Text = text
+                                                       };
+                                       if (top > -1)
+                                           label.Top = top;
+                                       if (left > -1)
+                                           label.Left = left;
+                                       step.UI.Controls.Add(label);
+                                       label.BringToFront();
+                                       return label;
+                                   });
+        }
+
+        public static LinkLabel add_Link(this IStep step, string text, int top, int left, MethodInvoker onClick)
+        {
+            var link = new LinkLabel();
+            link.AutoSize = true;
+            link.Text = text;
+            link.Top = top;
+            link.Left = left;
+            link.LinkClicked += (sender, e) => { if (onClick != null) onClick(); };
+            step.add_Control(link);
+            return link;
+        }
+
+        public static TextBox add_DropArea(this IStep step, int left, int top, int width, int height, Action<string> onDroppedFile)
+        {
+            var colorWhenNotReadyToDrop = Color.LightCoral;
+            var colorWhenReadyToDrop = Color.LightGreen;
+            var dropArea = new TextBox();
+            dropArea.Multiline = true;
+            dropArea.BackColor = colorWhenNotReadyToDrop;
+            dropArea.Left = left;
+            dropArea.Top = top;
+            dropArea.Width = width;
+            dropArea.Height = height;
+            dropArea.AllowDrop = true;
+
+            dropArea.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+
+            dropArea.DragDrop += (sender, e) =>
+            {
+                var fileOrDirectory = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
+                dropArea.set_Text(fileOrDirectory);
+                onDroppedFile(fileOrDirectory);
+            };
+            dropArea.DragEnter += (sender, e) =>
+            {
+                e.Effect = DragDropEffects.Copy;
+                dropArea.BackColor = colorWhenReadyToDrop;
+            };
+            dropArea.DragLeave += (sender, e) => dropArea.BackColor = colorWhenNotReadyToDrop;
+
+            step.add_Control(dropArea);
+
+            return dropArea;
         }
 
         public static TextBox add_TextBox(this IStep step)
@@ -304,6 +438,22 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             newStep.OnComponentAction = onComponentLoad;
             steps.Add(newStep);
             return newStep;
+        }
+
+        public static void clear(this IStep step)
+        {
+            if (step.UI != null)
+            {
+                PublicDI.log.info("clearing");
+                step.UI.invokeOnThread(
+                    () =>
+                    {
+                        step.UI.Controls.Clear();
+                        return;
+                    });
+            }
+            else
+                PublicDI.log.error("was null");
         }
 
     }

@@ -39,7 +39,7 @@ namespace O2.Script
 
         public void runWizardss()
         {
-        	var o2Wizard = new O2Wizard("Enable/Disable Network Adapters", 300, 300);		
+        	var o2Wizard = new O2Wizard("Enable/Disable Network Adapters", 500, 500);		
         	if (false == Netsh.isAvailable())
         		o2Wizard.Steps.add_Message("Error onEnable/Disable Network Adapters","no NetSh found on this system");
         	else

@@ -27,7 +27,7 @@ namespace O2.External.SharpDevelop.Ascx
         private bool runOnLoad = true;
         public event Callbacks.dMethod_String eDocumentDataChanged;
         public event Callbacks.dMethod_String_String eDocumentSelectionChanged_WordAndLine;
-        public event Callbacks.dMethod eEnterInSource_Event;        
+        public event Callbacks.dMethod eEnterInSource_Event;
         //public delegate void documentDataChanged_EventHandler(String sDocumentText);
 
         // external compilers
@@ -40,7 +40,7 @@ namespace O2.External.SharpDevelop.Ascx
         public String sPathToFileLoaded = "";
         private Dictionary<string, string> sampleScripts;
         public List<string> partialFileContents = new List<string>();
-        public bool partialFileViewMode;        
+        public bool partialFileViewMode;
         public int startLine;
         public int endLine;
         public Assembly compiledAssembly;
@@ -49,7 +49,7 @@ namespace O2.External.SharpDevelop.Ascx
         public void onLoad()
         {
             if (false == DesignMode && runOnLoad)
-            {                
+            {
                 tbMaxLoadSize.Text = iMaxFileSize.ToString();
                 if (File.Exists(sFileToOpen))
                     loadSourceCodeFile(sFileToOpen);
@@ -61,17 +61,17 @@ namespace O2.External.SharpDevelop.Ascx
                 configureOnLoadMenuOptions();
                 configureDefaultSettingsForTextEditor(tecSourceCode);
                 tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseDown += new MarginMouseEventHandler(IconBarMargin_MouseDown);
-        //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseMove += new MarginMouseEventHandler(IconBarMargin_MouseMove);
-        //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseLeave += new EventHandler(IconBarMargin_MouseLeave);
+                //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseMove += new MarginMouseEventHandler(IconBarMargin_MouseMove);
+                //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseLeave += new EventHandler(IconBarMargin_MouseLeave);
                 //        tecSourceCode.ActiveTextAreaControl.TextArea.KeyPress += TextArea_KeyPress;
                 tecSourceCode.ActiveTextAreaControl.TextArea.KeyEventHandler += TextArea_KeyEventHandler;
                 tecSourceCode.ActiveTextAreaControl.TextArea.DragEnter += new DragEventHandler(TextArea_DragEnter);
                 tecSourceCode.ActiveTextAreaControl.TextArea.DragOver += new DragEventHandler(TextArea_DragOver);
                 tecSourceCode.ActiveTextAreaControl.TextArea.DragDrop += new DragEventHandler(TextArea_DragDrop);
                 tecSourceCode.ActiveTextAreaControl.SelectionManager.SelectionChanged += SelectionManager_SelectionChanged;
-                tecSourceCode.ActiveTextAreaControl.Caret.PositionChanged += SelectionManager_SelectionChanged;                
+                tecSourceCode.ActiveTextAreaControl.Caret.PositionChanged += SelectionManager_SelectionChanged;
 
-                tecSourceCode.TextEditorProperties.Font = new Font("Courier New", 9, FontStyle.Regular);                
+                tecSourceCode.TextEditorProperties.Font = new Font("Courier New", 9, FontStyle.Regular);
 
                 mapExternalExecutionEngines();
                 runOnLoad = false;
@@ -80,19 +80,19 @@ namespace O2.External.SharpDevelop.Ascx
 
         void IconBarMargin_MouseDown(AbstractMargin sender, Point mousepos, MouseButtons mouseButtons)
         {
-        /*    IconBarMargin margin = (IconBarMargin)sender;
-            Graphics g = margin.TextArea.CreateGraphics();
-            //g.Clear(Color.Red);
-            //g.DrawString("B", new Font("Arial", 16), new SolidBrush(Color.Black), 0, mousepos.Y);
-            //margin.DrawBookmark(g, mousepos.Y, true);
-            margin.DrawBreakpoint(g, mousepos.Y, true,true);
-*/                        
+            /*    IconBarMargin margin = (IconBarMargin)sender;
+                Graphics g = margin.TextArea.CreateGraphics();
+                //g.Clear(Color.Red);
+                //g.DrawString("B", new Font("Arial", 16), new SolidBrush(Color.Black), 0, mousepos.Y);
+                //margin.DrawBookmark(g, mousepos.Y, true);
+                margin.DrawBreakpoint(g, mousepos.Y, true,true);
+    */
             //tecSourceCode.Document.BookmarkManager.AddMark(bookmark);
         }
 
         void TextArea_DragOver(object sender, DragEventArgs e)
         {
-            Dnd.setEffect(e);    
+            Dnd.setEffect(e);
         }
 
         void TextArea_DragDrop(object sender, DragEventArgs e)
@@ -105,10 +105,10 @@ namespace O2.External.SharpDevelop.Ascx
                 {
                     var methods = (List<MethodInfo>)data;
                     if (methods.Count > 0)
-                    {                        
+                    {
                         var filteredSignature = new FilteredSignature(methods[0]);
                         tecSourceCode.ActiveTextAreaControl.TextArea.InsertString(filteredSignature.sFunctionNameAndParams);
-                      //  var functionSignature = new FilteredSignature
+                        //  var functionSignature = new FilteredSignature
                     }
                 }
                 else
@@ -118,23 +118,23 @@ namespace O2.External.SharpDevelop.Ascx
 
         void TextArea_DragEnter(object sender, DragEventArgs e)
         {
-            Dnd.setEffect(e);    
-        
+            Dnd.setEffect(e);
+
         }
 
-        
+
 
         public void mapExternalExecutionEngines()
         {
-            this.invokeOnThread( 
+            this.invokeOnThread(
                 () =>
-                    {
-                        cbExternalEngineToUse.Items.Clear();
-                        foreach (var externalEngine in externalExecutionEngines.Keys)
-                            cbExternalEngineToUse.Items.Add(externalEngine);
-                        if (cbExternalEngineToUse.Items.Count > 0)
-                            cbExternalEngineToUse.SelectedIndex = 0;                
-                    });
+                {
+                    cbExternalEngineToUse.Items.Clear();
+                    foreach (var externalEngine in externalExecutionEngines.Keys)
+                        cbExternalEngineToUse.Items.Add(externalEngine);
+                    if (cbExternalEngineToUse.Items.Count > 0)
+                        cbExternalEngineToUse.SelectedIndex = 0;
+                });
         }
 
         private void configureOnLoadMenuOptions()
@@ -172,13 +172,13 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void loadSourceCodeFileIntoTextEditor(String fileToLoad, TextEditorControlBase tecTargetTextEditor)
         {
-            fileToLoad = HandleO2MessageOnSD.tryToResolveFileLocation(fileToLoad,this);
+            fileToLoad = HandleO2MessageOnSD.tryToResolveFileLocation(fileToLoad, this);
             //this.okThreadSync(delegate
-            ExtensionMethods.invokeOnThread((Control) this, ()=>
+            ExtensionMethods.invokeOnThread((Control)this, () =>
                                     {
                                         try
                                         {
-                                            partialFileViewMode = false; 
+                                            partialFileViewMode = false;
                                             lbPartialFileView.Visible = false;
                                             tecSourceCode.Visible = true;
                                             long iCurrentFileSize = Files.getFileSize(fileToLoad);
@@ -201,7 +201,7 @@ namespace O2.External.SharpDevelop.Ascx
                                         }
                                         return null;
                                     });
-            
+
         }
 
         public void loadPartialFileView(string fileToLoad)
@@ -212,16 +212,16 @@ namespace O2.External.SharpDevelop.Ascx
                         partialFileViewMode = true;
                         lbPartialFileView.Visible = true;
                         tecSourceCode.Visible = false;
-                        partialFileContents = Files.loadLargeSourceFileIntoList(fileToLoad,true);
-                        showLinesFromPartialFileContents(0, 1000);                        
+                        partialFileContents = Files.loadLargeSourceFileIntoList(fileToLoad, true);
+                        showLinesFromPartialFileContents(0, 1000);
                     });
-        }        
+        }
 
         public void showLinesFromPartialFileContents(int _startLine, int _endLine)
         {
             startLine = _startLine;
             endLine = _endLine;
-            ExtensionMethods.invokeOnThread((Control) this, () =>
+            ExtensionMethods.invokeOnThread((Control)this, () =>
                     {
                         var numberOflinesInCurrentFile = partialFileContents.Count;
                         if (startLine > numberOflinesInCurrentFile)
@@ -233,13 +233,13 @@ namespace O2.External.SharpDevelop.Ascx
                         if (endLine < startLine)
                             endLine = startLine + 1000;
                         if (endLine > numberOflinesInCurrentFile)
-                            endLine = numberOflinesInCurrentFile - 1;                        
+                            endLine = numberOflinesInCurrentFile - 1;
                         lbPartialFileView.Items.Clear();
                         for (int i = startLine; i < endLine; i++)
                             lbPartialFileView.Items.Add(partialFileContents[i]);
 
 
-                    }); 
+                    });
         }
 
         public void selectLineFromPartialFileContents(uint lineToSelect)
@@ -247,17 +247,17 @@ namespace O2.External.SharpDevelop.Ascx
             // handle the special case where 0 is provided as the line to select 
             //  if (lineToSelect == 0)
             //      lineToSelect = 1;
-            ExtensionMethods.invokeOnThread((Control) this, () =>
+            ExtensionMethods.invokeOnThread((Control)this, () =>
                     {
                         if (startLine < lineToSelect && lineToSelect < endLine)
                         {
-                            var selectedIndex = (int) lineToSelect - startLine - 1;
+                            var selectedIndex = (int)lineToSelect - startLine - 1;
                             if (lbPartialFileView.Items.Count > selectedIndex)
                                 lbPartialFileView.SelectedIndex = selectedIndex;
                         }
                         else
                         {
-                            var newStartLine = (int) lineToSelect - 500;
+                            var newStartLine = (int)lineToSelect - 500;
                             var newEndLine = (int)lineToSelect + 500;
                             if (newStartLine < 0)
                             {
@@ -268,7 +268,7 @@ namespace O2.External.SharpDevelop.Ascx
                             if (lineToSelect - startLine > 0 && lineToSelect - startLine < endLine)
                                 lbPartialFileView.SelectedIndex = (int)lineToSelect - startLine;
                         }
-                        tbExecutionHistoryOrLog.Text = string.Format("{0}: {1}{2}", lbPartialFileView.SelectedIndex + 1, lbPartialFileView.Text, Environment.NewLine) + 
+                        tbExecutionHistoryOrLog.Text = string.Format("{0}: {1}{2}", lbPartialFileView.SelectedIndex + 1, lbPartialFileView.Text, Environment.NewLine) +
                                                        tbExecutionHistoryOrLog.Text;
 
                     });
@@ -278,16 +278,16 @@ namespace O2.External.SharpDevelop.Ascx
         public void saveSourceCodeFile(String sTargetLocation)
         {
             try
-            {                
+            {
                 tecSourceCode.SaveFile(sTargetLocation);
                 if (sPathToFileLoaded != sTargetLocation)
                 {
                     sPathToFileLoaded = sTargetLocation;
-                    
+
                 }
-                
+
                 DI.log.info("Source code saved to: {0}", sTargetLocation);
-                tbSourceCode_FileLoaded.Text = Path.GetFileName(sTargetLocation);                
+                tbSourceCode_FileLoaded.Text = Path.GetFileName(sTargetLocation);
                 lbSource_CodeFileSaved.Visible = true;
                 lbSourceCode_UnsavedChanges.Visible = false;
                 btSaveFile.Enabled = false;
@@ -300,7 +300,7 @@ namespace O2.External.SharpDevelop.Ascx
         }
 
         public bool loadSourceCodeFile(String pathToSourceCodeFileToLoad)
-        {            
+        {
             if (pathToSourceCodeFileToLoad == "")
                 return false;
 
@@ -311,7 +311,7 @@ namespace O2.External.SharpDevelop.Ascx
             {
                 DI.log.error("Skipping file load due to its extension or contents: {0}", Path.GetFileName(pathToSourceCodeFileToLoad));
                 return false;
-            }            
+            }
             return (bool)(this.invokeOnThread(() =>
                                  {
                                      try
@@ -323,7 +323,7 @@ namespace O2.External.SharpDevelop.Ascx
                                                  DI.log.debug("Loading File: {0}",
                                                               pathToSourceCodeFileToLoad);
                                                  if (pathToSourceCodeFileToLoad != "")
-                                                 {                                                     
+                                                 {
 
                                                      //tbSourceCode.Text = files.GetFileContent(config.getDefaultSourceCodeCompilationExampleFile());
 
@@ -341,7 +341,7 @@ namespace O2.External.SharpDevelop.Ascx
 
 
                                                      DI.log.debug("Source code file loaded: {0}", pathToSourceCodeFileToLoad);
-                                                     setCompileAndInvokeButtonsState(sPathToFileLoaded);                                    
+                                                     setCompileAndInvokeButtonsState(sPathToFileLoaded);
                                                  }
                                                  return true;
                                              }
@@ -369,7 +369,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             bool supportCSharpCompileAndExecute = true;
             switch (Path.GetExtension(pathToFileLoaded))
-            {                
+            {
                 case ".cs":
                     btExecuteOnExternalEngine.Visible = false;
                     lbExecuteOnEngine.Visible = false;
@@ -383,13 +383,13 @@ namespace O2.External.SharpDevelop.Ascx
                     btShowHidePythonLogExecutionOutputData.Visible = true;
                     supportCSharpCompileAndExecute = false;
                     break;
-               
+
             }
             lbCompileCode.Visible = supportCSharpCompileAndExecute;
             btCompileCode.Visible = supportCSharpCompileAndExecute;
             btDragAssemblyCreated.Visible = supportCSharpCompileAndExecute;
             btSelectedLineHistory.Visible = supportCSharpCompileAndExecute;
-            tsCompileStripSeparator.Visible = supportCSharpCompileAndExecute; 
+            tsCompileStripSeparator.Visible = supportCSharpCompileAndExecute;
         }
 
         /// <summary>
@@ -398,7 +398,7 @@ namespace O2.External.SharpDevelop.Ascx
         /// <returns></returns>
         public String getSourceCode()
         {
-            return (string)ExtensionMethods.invokeOnThread((Control) this, () => tecSourceCode.Text);
+            return (string)ExtensionMethods.invokeOnThread((Control)this, () => tecSourceCode.Text);
 
             /*try
             {
@@ -419,7 +419,7 @@ namespace O2.External.SharpDevelop.Ascx
             catch (Exception)
             {
                 return "";                
-            }  */          
+            }  */
         }
 
         public TextEditorControl getObject_TextEditorControl()
@@ -431,7 +431,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             Files.checkIfDirectoryExistsAndCreateIfNot(tbSourceCode_DirectoryOfFileLoaded.Text);
             //return Path.Combine(sDirectoryOfFileLoaded, tbSourceCode_FileLoaded.Text);            
-            return Path.Combine(tbSourceCode_DirectoryOfFileLoaded.Text, tbSourceCode_FileLoaded.Text);            
+            return Path.Combine(tbSourceCode_DirectoryOfFileLoaded.Text, tbSourceCode_FileLoaded.Text);
         }
 
         public void saveSourceCode()
@@ -464,7 +464,7 @@ namespace O2.External.SharpDevelop.Ascx
             try
             {
                 if (partialFileViewMode)
-                    selectLineFromPartialFileContents((uint) iLineToSelect);
+                    selectLineFromPartialFileContents((uint)iLineToSelect);
                 else
                     ExtensionMethods.okThreadSync(this, delegate
                                                             {
@@ -504,7 +504,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
 
             if (sPathToFileLoaded != sPathSourceCodeFile)
-                // only load if the current file is different from the one already loaded
+            // only load if the current file is different from the one already loaded
             {
                 // tecSourceCode.Visible = false;   
                 loadSourceCodeFile(sPathSourceCodeFile);
@@ -582,7 +582,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void setDirectoryOfFileLoaded(string newPath)
         {
-            if (ExtensionMethods.okThread((Control) (tbSourceCode_DirectoryOfFileLoaded), delegate { setDirectoryOfFileLoaded(newPath); }))
+            if (ExtensionMethods.okThread((Control)(tbSourceCode_DirectoryOfFileLoaded), delegate { setDirectoryOfFileLoaded(newPath); }))
                 if (newPath != tbSourceCode_DirectoryOfFileLoaded.Text)
                 {
                     tbSourceCode_DirectoryOfFileLoaded.Text = newPath;
@@ -636,7 +636,7 @@ namespace O2.External.SharpDevelop.Ascx
             }
         }
 
-        public void setSelectedLineNumber(string fileName , int lineNumber)
+        public void setSelectedLineNumber(string fileName, int lineNumber)
         {
             gotoLine(fileName, lineNumber);
         }
@@ -648,26 +648,26 @@ namespace O2.External.SharpDevelop.Ascx
 
         public int getSelectedLineNumber()
         {
-            return (int)ExtensionMethods.invokeOnThread((Control) (this), () => tecSourceCode.ActiveTextAreaControl.Caret.Line + 1);         
+            return (int)ExtensionMethods.invokeOnThread((Control)(this), () => tecSourceCode.ActiveTextAreaControl.Caret.Line + 1);
         }
 
         public string getSelectedLineText()
         {
-            return (string)ExtensionMethods.invokeOnThread((Control) (this), () =>
+            return (string)ExtensionMethods.invokeOnThread((Control)(this), () =>
                                                      {
                                                          var currentLine = tecSourceCode.ActiveTextAreaControl.Caret.Line;
                                                          var lineSegment = tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetLineSegment(currentLine);
-                                                         return tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetText(lineSegment.Offset, lineSegment.Length);                                                       
-                                                     });         
-        }        
+                                                         return tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetText(lineSegment.Offset, lineSegment.Length);
+                                                     });
+        }
 
         private void executeMethod()
         {
-            ExtensionMethods.invokeOnThread((Control) this, () =>
+            ExtensionMethods.invokeOnThread((Control)this, () =>
                                     {
                                         if (cboxCompliledSourceCodeMethods.SelectedItem != null)
                                         {
-                                            var method = (Reflection_MethodInfo) cboxCompliledSourceCodeMethods.SelectedItem;
+                                            var method = (Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem;
                                             method.invokeMTA(new object[0]);
                                         }
                                         return null;
@@ -686,13 +686,13 @@ namespace O2.External.SharpDevelop.Ascx
                                 {
                                     case ".cs":
                                         compileDotNetCode();
-                                        break;                                    
+                                        break;
                                     default:
                                         var currentExternalEngine = cbExternalEngineToUse.Text;
                                         //DI.log.info("Going to execute PY");
                                         executeOnExternalEngine(currentExternalEngine);
                                         break;
-                                    
+
                                 }
                             }
                         );
@@ -719,10 +719,10 @@ namespace O2.External.SharpDevelop.Ascx
 
                 btShowHideCompilationErrors.Visible = tvCompilationErrors.Visible = lbCompilationErrors.Visible =
                     !assemblyCreated && compileEngine.sbErrorMessage != null;
-                
-                btDebugMethod.Visible = executeSelectedMethodToolStripMenuItem.Visible = 
+
+                btDebugMethod.Visible = executeSelectedMethodToolStripMenuItem.Visible =
                     btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
-                    lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible 
+                    lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible
                     = assemblyCreated;
                 cboxCompliledSourceCodeMethods.Items.Clear();
 
@@ -738,8 +738,8 @@ namespace O2.External.SharpDevelop.Ascx
                     // if not, populate the cbox for dynamic execution                
                     O2Messages.dotNetAssemblyAvailable(compiledAssembly.Location);
                     foreach (var method in DI.reflection.getMethods(compiledAssembly))
-                    if (false == method.IsAbstract && false == method.IsSpecialName)
-                        cboxCompliledSourceCodeMethods.Items.Add(new Reflection_MethodInfo(method));
+                        if (false == method.IsAbstract && false == method.IsSpecialName)
+                            cboxCompliledSourceCodeMethods.Items.Add(new Reflection_MethodInfo(method));
                     // remap the previously executed method
                     if (cboxCompliledSourceCodeMethods.Items.Count > 0)
                     {
@@ -760,26 +760,26 @@ namespace O2.External.SharpDevelop.Ascx
         }
 
         private void showErrorsInSourceCodeEditor(string errorMessages)
-        {            
-            String[] sSplitedErrorMessage = errorMessages.Split(new[] { Environment.NewLine },StringSplitOptions.RemoveEmptyEntries);
+        {
+            String[] sSplitedErrorMessage = errorMessages.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string sSplitMessage in sSplitedErrorMessage)
             {
-                string[] sSplitedLine = sSplitMessage.Split(new [] {"::"}, StringSplitOptions.None);
-                    if (sSplitedLine.Length == 5)
+                string[] sSplitedLine = sSplitMessage.Split(new[] { "::" }, StringSplitOptions.None);
+                if (sSplitedLine.Length == 5)
+                {
+                    if (sPathToFileLoaded.ToLower() == sSplitedLine[4].ToLower())            // only show errors for the loaded file
                     {
-                        if (sPathToFileLoaded.ToLower() == sSplitedLine[4].ToLower())            // only show errors for the loaded file
-                        {
-                            int iLine = Int32.Parse(sSplitedLine[0]);
-                            int iColumn = Int32.Parse(sSplitedLine[1]);
-                            setSelectedText(iLine, iColumn, true);
-                        }
-                        //O2Messages.fileErrorHighlight(sSplitedLine[4], iLine, iColumn);                    
+                        int iLine = Int32.Parse(sSplitedLine[0]);
+                        int iColumn = Int32.Parse(sSplitedLine[1]);
+                        setSelectedText(iLine, iColumn, true);
                     }
+                    //O2Messages.fileErrorHighlight(sSplitedLine[4], iLine, iColumn);                    
+                }
             }
         }
 
 
-        public static void addExternalEngine(string engineName , Func<string,DataReceivedEventHandler,Process> engineExecuteFunction)
+        public static void addExternalEngine(string engineName, Func<string, DataReceivedEventHandler, Process> engineExecuteFunction)
         {
             externalExecutionEngines.Add(engineName, engineExecuteFunction);
         }
@@ -791,38 +791,38 @@ namespace O2.External.SharpDevelop.Ascx
                 DI.log.error("Count not find Iron Phyton executable: {0}", ironPhytonExe);
             else
             {*/
-                saveSourceCode();
-                // make the log visible
-                tbExecutionHistoryOrLog.Visible = true;
-                tbExecutionHistoryOrLog.Text =
-                    "****************************************************************************************" + Environment.NewLine +
-                    "O2 Message: Executing External Engine script: " + Path.GetFileName(sPathToFileLoaded) + Environment.NewLine +
-                    "****************************************************************************************" + Environment.NewLine + Environment.NewLine;
-                // execute script
+            saveSourceCode();
+            // make the log visible
+            tbExecutionHistoryOrLog.Visible = true;
+            tbExecutionHistoryOrLog.Text =
+                "****************************************************************************************" + Environment.NewLine +
+                "O2 Message: Executing External Engine script: " + Path.GetFileName(sPathToFileLoaded) + Environment.NewLine +
+                "****************************************************************************************" + Environment.NewLine + Environment.NewLine;
+            // execute script
 
-                if (externalExecutionEngines.ContainsKey(engineToUse))
-                {
-                    if (externalExecutionEngines[engineToUse] != null)
-                        externalExecutionEngines[engineToUse](sPathToFileLoaded, externalEngineExecutionLogCallback);
-                }
-                else
-                    writeMessageTo_ExecutionHistoryOrLog(string.Format("COULD NOT EXECUTE SCRIPT. Engine Not supported: {0}", engineToUse));
-                /*switch(engineToUse)
-                {
-                    case "IronPython":
-                        IronPythonExec.executePythonFile(sPathToFileLoaded, pythonExecutionLogCallback);
-                        break;
-                    case "Jython":
-                        JythonExec.executePythonFile(sPathToFileLoaded, pythonExecutionLogCallback);
-                        break;
-                    case "CPython":
-                        CPythonExec.executePythonFile(sPathToFileLoaded, pythonExecutionLogCallback);
-                        break;
-                    default:
+            if (externalExecutionEngines.ContainsKey(engineToUse))
+            {
+                if (externalExecutionEngines[engineToUse] != null)
+                    externalExecutionEngines[engineToUse](sPathToFileLoaded, externalEngineExecutionLogCallback);
+            }
+            else
+                writeMessageTo_ExecutionHistoryOrLog(string.Format("COULD NOT EXECUTE SCRIPT. Engine Not supported: {0}", engineToUse));
+            /*switch(engineToUse)
+            {
+                case "IronPython":
+                    IronPythonExec.executePythonFile(sPathToFileLoaded, pythonExecutionLogCallback);
+                    break;
+                case "Jython":
+                    JythonExec.executePythonFile(sPathToFileLoaded, pythonExecutionLogCallback);
+                    break;
+                case "CPython":
+                    CPythonExec.executePythonFile(sPathToFileLoaded, pythonExecutionLogCallback);
+                    break;
+                default:
                         
-                        break;
-                }*/
-                //Processes.startProcessAsConsoleApplication(ironPhytonExe, sPathToFileLoaded, pythonExecutionLogCallback);
+                    break;
+            }*/
+            //Processes.startProcessAsConsoleApplication(ironPhytonExe, sPathToFileLoaded, pythonExecutionLogCallback);
             //}
 
         }
@@ -843,23 +843,23 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void showLogViewerControl()
         {
-            O2Messages.setAscxDockStateAndOpenIfNotAvailable("ascx_LogViewer",O2DockState.DockBottom,"O2 Logs");
+            O2Messages.setAscxDockStateAndOpenIfNotAvailable("ascx_LogViewer", O2DockState.DockBottom, "O2 Logs");
         }
 
-        
+
         public List<String> getSampleScriptsNames()
         {
-            return (sampleScripts!= null)? new List<string>(sampleScripts.Keys) : new List<string>();
+            return (sampleScripts != null) ? new List<string>(sampleScripts.Keys) : new List<string>();
         }
 
         public void loadSampleScripts()
         {
-            loadSampleScripts(typeof (O2SampleScripts));
+            loadSampleScripts(typeof(O2SampleScripts));
         }
 
         public void loadSampleScripts(object resourcesObjectWithSampleScripts)
         {
-            ExtensionMethods.invokeOnThread((Control) this, ()=>
+            ExtensionMethods.invokeOnThread((Control)this, () =>
                                     {
                                         sampleScripts = SampleScripts.getDictionaryWithSampleScripts(resourcesObjectWithSampleScripts);
                                         cBoxSampleScripts.Items.Clear();
@@ -873,7 +873,7 @@ namespace O2.External.SharpDevelop.Ascx
                                         }
                                         return null;
                                     });
-                
+
             /*    O2Forms.newTreeNode(tvSampleScripts.Nodes, scriptName, 1, sampleScripts[scriptName]);
 
             if (tvSampleScripts.Nodes.Count > 0)
@@ -882,7 +882,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void loadSampleScript(string scriptToLoad)
         {
-            if (scriptToLoad!= "" && sampleScripts.ContainsKey(scriptToLoad))
+            if (scriptToLoad != "" && sampleScripts.ContainsKey(scriptToLoad))
             {
                 var tempScriptFileName = DI.config.TempFileNameInTempDirectory + "_" + Path.GetFileName(scriptToLoad);
                 Files.WriteFileContent(tempScriptFileName, sampleScripts[scriptToLoad]);
@@ -902,7 +902,7 @@ namespace O2.External.SharpDevelop.Ascx
             {
                 DI.log.ex(ex, "in setMaxLoadSize");
             }
-            
+
         }
 
         private void showSelectedErrorOnSourceCodeFile()
@@ -916,7 +916,7 @@ namespace O2.External.SharpDevelop.Ascx
             if (sSplitedLine.Length == 5)
             {
                 int iLine = Int32.Parse(sSplitedLine[0]);
-                gotoLine(iLine);                
+                gotoLine(iLine);
             }
         }
 
@@ -1001,7 +1001,7 @@ namespace O2.External.SharpDevelop.Ascx
         public void setSelectedText(int line, int column, bool color)
         {
             this.invokeOnThread(
-                ()=> setSelectedText2(line,column,color));                        
+                () => setSelectedText2(line, column, color));
         }
 
         public void setSelectedText2(int line, int column, bool color)
@@ -1010,14 +1010,14 @@ namespace O2.External.SharpDevelop.Ascx
             column--; // same for column
             var text = tecSourceCode.ActiveTextAreaControl.TextArea.Text;
             var location = new TextLocation(column, line);
-            var bookmark = new Bookmark(tecSourceCode.Document, location);                        
-            
-            tecSourceCode.Document.BookmarkManager.AddMark(bookmark);            
+            var bookmark = new Bookmark(tecSourceCode.Document, location);
+
+            tecSourceCode.Document.BookmarkManager.AddMark(bookmark);
             var offset = bookmark.Anchor.Offset;
             var length = bookmark.Anchor.Line.Length - column;
             var newMarker = new TextMarker(offset, length, TextMarkerType.WaveLine);
             tecSourceCode.Document.MarkerStrategy.AddMarker(newMarker);
-           // tecSourceCode.ActiveTextAreaControl.Refresh();
+            // tecSourceCode.ActiveTextAreaControl.Refresh();
         }
 
         public void clearBookmarksAndMarkers()
@@ -1026,12 +1026,12 @@ namespace O2.External.SharpDevelop.Ascx
             // since there is easy way to remove markers, lets make the current ones invisible
             var textMarkers = new List<TextMarker>(tecSourceCode.Document.MarkerStrategy.TextMarker);
             foreach (var textMarker in textMarkers)
-                tecSourceCode.Document.MarkerStrategy.RemoveMarker(textMarker);          
+                tecSourceCode.Document.MarkerStrategy.RemoveMarker(textMarker);
         }
 
         public void openO2ObjectModel()
         {
-            O2Messages.openControlInGUI(typeof(ascx_O2ObjectModel),O2DockState.Float, "O2 Object Model");
+            O2Messages.openControlInGUI(typeof(ascx_O2ObjectModel), O2DockState.Float, "O2 Object Model");
         }
 
         public void setAutoCompileStatus(bool state)
@@ -1055,58 +1055,63 @@ namespace O2.External.SharpDevelop.Ascx
 
                     autoCompileThread.Priority = ThreadPriority.Lowest;
                 }
-            
+
         }
 
-        
-       public void addBreakpointOnCurrentLine()
+
+        public void addBreakpointOnCurrentLine()
         {
             var currentLine = tecSourceCode.ActiveTextAreaControl.Caret.Line;
             var lineSegment = tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetLineSegment(currentLine);
-            O2Messages.raiseO2MDbg_SetBreakPointOnFile(sPathToFileLoaded, lineSegment.LineNumber +1);
+            O2Messages.raiseO2MDbg_SetBreakPointOnFile(sPathToFileLoaded, lineSegment.LineNumber + 1);
         }
 
-       public void createStandAloneExeAndDebugMethod(string loadDllsFrom)
-       {
-           this.invokeOnThread(
-               () =>
-               {
-                   if (cboxCompliledSourceCodeMethods.SelectedItem != null && cboxCompliledSourceCodeMethods.SelectedItem is Reflection_MethodInfo)
-                   {
-                       ((Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem).raiseO2MDbgDebugMethodInfoRequest(loadDllsFrom);                       
-                   }
-               });
-       }
+        public void createStandAloneExeAndDebugMethod(string loadDllsFrom)
+        {
+            this.invokeOnThread(
+                () =>
+                {
+                    if (cboxCompliledSourceCodeMethods.SelectedItem != null && cboxCompliledSourceCodeMethods.SelectedItem is Reflection_MethodInfo)
+                    {
+                        ((Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem).raiseO2MDbgDebugMethodInfoRequest(loadDllsFrom);
+                    }
+                });
+        }
 
-       private void setDebugButtonEnableState()
-       {
-           this.invokeOnThread(
-           () =>
-           {
-               if (O2Messages.isDebuggerAvailable())
-               {
-                   btDebugMethod.Visible = true;
-                   if (cboxCompliledSourceCodeMethods.SelectedItem != null && cboxCompliledSourceCodeMethods.SelectedItem is Reflection_MethodInfo)
-                   {
-                       var selectedMethod = ((Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem).Method;
-                       if (selectedMethod != null)
-                       {
-                           if (selectedMethod.IsStatic &&
-                                   selectedMethod.ReturnType.FullName == "System.Void" &&
-                                   selectedMethod.GetParameters().Length == 0)
-                           {
-                               btDebugMethod.Enabled = true;
-                               return;
-                           }
-                           else
-                               DI.log.debug("Debugging note: the only supported methods to start the debugging session are: static methods, with no parameters and returning void");
-                       }
-                       btDebugMethod.Enabled = false;
-                   }
-               }
-               else
-                   btDebugMethod.Visible = false;
-           });
-       }
+        private void setDebugButtonEnableState()
+        {
+            this.invokeOnThread(
+            () =>
+            {
+                if (O2Messages.isDebuggerAvailable())
+                {
+                    btDebugMethod.Visible = true;
+                    if (cboxCompliledSourceCodeMethods.SelectedItem != null && cboxCompliledSourceCodeMethods.SelectedItem is Reflection_MethodInfo)
+                    {
+                        var selectedMethod = ((Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem).Method;
+                        if (selectedMethod != null)
+                        {
+                            if (selectedMethod.IsStatic &&
+                                    selectedMethod.ReturnType.FullName == "System.Void" &&
+                                    selectedMethod.GetParameters().Length == 0)
+                            {
+                                btDebugMethod.Enabled = true;
+                                return;
+                            }
+                            else
+                                DI.log.debug("Debugging note: the only supported methods to start the debugging session are: static methods, with no parameters and returning void");
+                        }
+                        btDebugMethod.Enabled = false;
+                    }
+                }
+                else
+                    btDebugMethod.Visible = false;
+            });
+        }
+
+        private static void listinLogViewCurrentAssemblyReferencesAutomaticallyAdded()
+        {
+            DI.log.debug(StringsAndLists.fromStringList_getText(new CompileEngine().getListOfReferencedAssembliesToUse()));
+        }
     }
 }

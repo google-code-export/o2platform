@@ -43,6 +43,7 @@ namespace Merlin
         /// Executes every time this step is reached.
         /// </summary>
         void StepReached();
+        MethodInvoker StepReachedHandler { get; set; } // DC
 
         /// <summary>
         /// Occurs when the user clicks the next button.
@@ -51,6 +52,7 @@ namespace Merlin
         /// </summary>
         /// <returns></returns>
         bool OnNext();
+        Func<bool> NextHandler { get; set; }  // DC
 
         /// <summary>
         /// Occurs when the user clicks the previous button.
@@ -59,11 +61,14 @@ namespace Merlin
         /// </summary>
         /// <returns></returns>
         bool OnPrevious();
+        Func<bool> PreviousHandler { get; set; } // DC
+        
 
         /// <summary>
         /// Occurs when the user clicks the cancel button.
         /// </summary>
         void OnCancel();
+        MethodInvoker CancelHandler { get; set; }   // DC
 
         /// <summary>
         /// True when the state of the step makes it 
@@ -73,12 +78,14 @@ namespace Merlin
         /// with legitimate values.
         /// </summary>
         bool AllowNext();
+        Func<bool> AllowNextStrategy { get; set; }        // DC
         
         /// <summary>
         /// True when it is permissible for the previous
         /// button to be clicked.
         /// </summary>
         bool AllowPrevious();
+        Func<bool> AllowPreviousStrategy { get; set; }    // DC
 
 
         /// <summary>
@@ -88,11 +95,13 @@ namespace Merlin
         /// would somehow create an inconsistent state.
         /// </summary>
         bool AllowCancel();
+        Func<bool> AllowCancelStrategy { get; set; }    // DC
 
         /// <summary>
         /// Occurs when the state of the component is changed.
         /// </summary>
         event EventHandler StepStateChanged;
+        void StateUpdated();        // DC
 
         /// <summary>
         /// The control that is displayed in the wizard when this

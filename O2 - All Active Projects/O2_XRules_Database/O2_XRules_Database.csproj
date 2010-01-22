@@ -131,6 +131,7 @@
     <Compile Include="_Rules\_Samples\Wizards\Wizard - CopyGacDlls.cs" />
     <Compile Include="_Rules\_Samples\Wizards\Wizard - SearchEngine UseCase 1.cs" />
     <Compile Include="_Rules\_Samples\Wizards\not working\Wizard_ViewStrutsMappings %28under dev%29.cs" />
+    <Compile Include="_Rules\_Samples\Wizards\Wizard - Sync XRules Via Svn.cs" />
     <Compile Include="_Templates\Empty_XRule.cs" />
     <Compile Include="_Templates\Empty_Class.cs" />
     <Compile Include="_Templates\Local_Findings_Files.cs" />

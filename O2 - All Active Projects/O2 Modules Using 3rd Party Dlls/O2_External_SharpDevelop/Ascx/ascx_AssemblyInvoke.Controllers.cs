@@ -94,7 +94,7 @@ namespace O2.External.SharpDevelop.Ascx
 //                        btSourceCode_executeStaticMethod.Enabled =
 //                            DI.reflection.doesMethodOnlyHasSupportedParameters((MethodInfo)selectedNode.Tag);
                         dgvSourceCode_SelectedMethodParameters.Enabled = true;
-                        btDebugMethod.Enabled = true;
+                        btDebugMethod.Enabled = O2Messages.isDebuggerAvailable();
                         btExecuteMethodWithoutDebugger.Enabled = true; 
                         break;
                     case "RuntimeType":
