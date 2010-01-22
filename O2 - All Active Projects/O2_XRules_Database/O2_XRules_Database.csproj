@@ -119,6 +119,7 @@
     <Compile Include="_Rules\_Samples\SampleScripts.cs" />
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples\SvnTest.cs" />
+    <Compile Include="_Rules\_Samples\Under_Development\Rohit%27s GUI v0.1.cs" />
     <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_AssemblyAttributes.cs">
       <SubType>UserControl</SubType>
     </Compile>
