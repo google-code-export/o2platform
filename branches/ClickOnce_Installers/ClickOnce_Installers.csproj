@@ -68,6 +68,32 @@
     <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_0\WeifenLuo.WinFormsUI.Docking.dll.deploy" />
     <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_0\_HostLocalWebsite %28O2 Tool%29.exe.deploy" />
     <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_0\_SearchEngine %28O2 Tool%29.exe.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\Cecil.Decompiler.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\HTMLparserLibDotNet20.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\Ionic.Zip.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\log4net.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\Merlin.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\Mono.Cecil.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\Mono.Cecil.Pdb.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\nunit.framework.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2Logo.ico.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2SharpDevelop.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_Core_CIR.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_Core_FileViewers.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_Core_XRules.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_DotNetWrappers.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_External_O2Mono.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_External_SharpDevelop.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_External_WinFormsUI.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_ImportExport_OunceLabs.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_Kernel.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_Views_ASCX.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_XRules_Database.application" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_XRules_Database.exe.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\O2_XRules_Database.exe.manifest" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\WeifenLuo.WinFormsUI.Docking.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\_HostLocalWebsite %28O2 Tool%29.exe.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_1\_SearchEngine %28O2 Tool%29.exe.deploy" />
     <None Include="O2_XRules_Database\O2_XRules_Database.application" />
   </ItemGroup>
 </Project>
