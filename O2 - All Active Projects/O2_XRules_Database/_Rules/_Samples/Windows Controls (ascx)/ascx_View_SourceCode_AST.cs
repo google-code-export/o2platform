@@ -35,7 +35,7 @@ namespace O2.Script
 	{
 		public ascx_SourceCodeEditor sourceCodeEditor;
         public TabControl tabControl;
-        public TreeView ast_TreeView;
+        public TreeView ast_TreeView; 
         public TreeView usingDeclarations_TreeView;
         public TreeView types_TreeView;
         public TreeView methods_TreeView;
