@@ -19,7 +19,7 @@
     <ManifestKeyFile>O2_XRules_Database_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
-    <PublishUrl>C:\O2\Releases\Deploy/O2_XRules_Database/</PublishUrl>
+    <PublishUrl>C:\O2\ClickOnce_Installers\O2_XRules_Database\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -29,12 +29,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://deploy.o2-ounceopen.com/O2_XRules_Database/</InstallUrl>
+    <InstallUrl>http://o2platform.googlecode.com/svn/branches/ClickOnce_Installers/O2_XRules_Database/</InstallUrl>
     <ProductName>O2 XRules Database</ProductName>
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -79,21 +79,50 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="O2_Core_CIR, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_Core_FileViewers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_Core_XRules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_DotNetWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_External_O2Mono, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_External_SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_External_WinFormsUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_ImportExport_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_Kernel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="O2_Views_ASCX, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2SharpDevelop.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Core_CIR, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Core_CIR.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Core_FileViewers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Core_FileViewers.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Core_XRules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Core_XRules.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_DotNetWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_DotNetWrappers.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_External_O2Mono, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_External_O2Mono.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_External_SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_External_SharpDevelop.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_External_WinFormsUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_External_WinFormsUI.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_ImportExport_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_ImportExport_OunceLabs.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Kernel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Kernel.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Rules_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Rules_OunceLabs.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Views_ASCX, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Views_ASCX.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -105,9 +134,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="_HostLocalWebsite %28O2 Tool%29, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <ExecutableExtension>.exe</ExecutableExtension>
+      <HintPath>..\..\_Bin_(O2_Binaries)\_HostLocalWebsite (O2 Tool).exe</HintPath>
     </Reference>
     <Reference Include="_SearchEngine %28O2 Tool%29, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <ExecutableExtension>.exe</ExecutableExtension>
+      <HintPath>..\..\_Bin_(O2_Binaries)\_SearchEngine (O2 Tool).exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +166,7 @@
     <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_5.cs" />
     <Compile Include="Interfaces\IAnalysisArtifacts.cs" />
     <Compile Include="_Rules\Findings Filtering\XRule_Findings_Filter.cs" />
+    <Compile Include="_Rules\IBM\Wizard_Setup_MySql.cs" />
     <Compile Include="_Rules\J2EE\Struts\XRule_Struts.cs" />
     <Compile Include="_Rules\Analysis_Workflows\XUtils_Analysis.cs" />
     <Compile Include="_Rules\Analysis_Workflows\XUtils_AnalysisWorkflow.cs" />
@@ -155,6 +187,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_MonoDecompiler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_Running_Processes_Details.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_View_SourceCode_AST.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="_Rules\_Samples\Wizards\Wizard - Enable or Disable Network Interfaces.cs" />
@@ -214,6 +252,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="O2Logo.ico" />
+    <Content Include="O2_Kernel.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".o2">
+      <Visible>False</Visible>
+      <Description>O2 XRule Script</Description>
+      <Progid>O2.XRule.Script.ProgId</Progid>
+      <DefaultIcon>O2Logo.ico</DefaultIcon>
+    </FileAssociation>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

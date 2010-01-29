@@ -25,7 +25,7 @@ namespace O2.Views.ASCX.SourceCodeEdit.ScriptSamples
         }
 
         // chose EXE option on the C#Scripts GUI to start invocation from this method
-        public static void Main()
+        public static void runMain()
         {
             log.info("from main {0}", sayHelloO2World());
         }
