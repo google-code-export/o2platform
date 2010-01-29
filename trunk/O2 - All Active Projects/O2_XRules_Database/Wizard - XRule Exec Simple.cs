@@ -52,8 +52,14 @@ namespace O2.XRules.Database
         
         private string getClickOnceScriptPath()
         {
-            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Count() > 0)
-                return AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
+            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null &&
+                AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null &&
+                AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Count() > 0)
+            {
+                var file = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
+                return file.Replace("file:///", "").Replace("%20", "");
+            }
+            
             return "";
         }
 

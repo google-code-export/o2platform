@@ -3,23 +3,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Windows.Forms;
 using System.Data;
 using O2.Kernel;
 using O2.Kernel.Interfaces.O2Core;
-using O2.Kernel.Interfaces.Views;
 using O2.DotNetWrappers.DotNet;
-using O2.DotNetWrappers.Windows;
-using O2.Views.ASCX;
 using O2.Views.ASCX.DataViewers;
-using O2.External.WinFormsUI.Forms;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.classes;
-using O2.XRules.Database._Rules;
+
 
 namespace O2.Script
 {	
