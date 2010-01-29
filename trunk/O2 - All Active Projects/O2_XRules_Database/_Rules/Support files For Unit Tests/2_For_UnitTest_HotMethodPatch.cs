@@ -8,7 +8,7 @@ namespace O2.Views.ASCX.SourceCodeEdit.ScriptSamples
     {
         public static int counterB;
 
-        public static void runTest()
+        public static void Main()
         {
             Console.WriteLine("This is a Embeded in O2 C# file that contains a nice multi-thread loop " +
                               "which we can use to test HOT patching of functions using the O2MDbg");

@@ -1,13 +1,22 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+//O2Tag_OnlyAddReferencedAssemblies
 using System.IO;
+//O2Ref:O2_Kernel.dll
 using O2.Kernel;
 using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.Interfaces.XRules;
+//O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;
+//O2File:..\..\Interfaces\IAnalysisArtifacts.cs
 using O2.XRules.Database.Interfaces;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;
+//O2File:Analysis_WorkFlow_Phase_1.cs
+//O2File:Analysis_WorkFlow_Phase_2.cs
+//O2File:Analysis_WorkFlow_Phase_3.cs
+//O2File:Analysis_WorkFlow_Phase_4.cs
+//O2File:Analysis_WorkFlow_Phase_5.cs
 
 namespace O2.XRules.Database._Rules
 {
