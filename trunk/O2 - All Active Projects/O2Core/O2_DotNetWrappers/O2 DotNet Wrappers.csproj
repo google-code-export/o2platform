@@ -59,6 +59,7 @@
     <Compile Include="DotNet\O2Linq.cs" />
     <Compile Include="DotNet\O2Thread.cs" />
     <Compile Include="DotNet\O2Timer.cs" />
+    <Compile Include="DotNet\Reflection_ExtensionMethods.cs" />
     <Compile Include="DotNet\RegEx.cs" />
     <Compile Include="DotNet\Serialize.cs" />
     <Compile Include="DotNet\StringsAndLists.cs" />

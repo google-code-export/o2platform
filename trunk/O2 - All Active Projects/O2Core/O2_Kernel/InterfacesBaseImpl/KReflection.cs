@@ -645,9 +645,23 @@ namespace O2.Kernel.InterfacesBaseImpl
             {
                 return Assembly.LoadFrom(assemblyToLoad);
             }
-            catch (Exception ex)
+            catch (Exception ex1)
             {
-                PublicDI.log.error("in loadAssembly :{0}", ex.Message);
+            	try
+            	{
+            		var assembly = Assembly.LoadWithPartialName(assemblyToLoad);
+            		if (assembly != null)
+            		{
+            			//PublicDI.log.info("load using partial name ('{0}') assembly: {1}",assemblyToLoad, assembly.Location); 
+            			return assembly;
+            		}
+            		PublicDI.log.error("load using partial name ('{0}') returned null",assemblyToLoad);
+            	}
+            	catch  (Exception ex2)
+            	{
+            		PublicDI.log.error("in loadAssembly (Assembly.LoadFrom) :{0}", ex1.Message);
+            		PublicDI.log.error("in loadAssembly (Assembly.Load) :{0}", ex2.Message);
+            	}            	                
             }
             return null;
         }
@@ -796,7 +810,7 @@ namespace O2.Kernel.InterfacesBaseImpl
             return invokeMethod_InstanceStaticPublicNonPublic(oLiveObject, sMethodToInvoke, methodParameters);
         }
 
-        public Object invokeMethod_InstanceStaticPublicNonPublic(object oLiveObject, string sMethodToInvoke,
+        public object invokeMethod_InstanceStaticPublicNonPublic(object oLiveObject, string sMethodToInvoke,
                                                                  object[] methodParameters)
         {
             try
@@ -818,8 +832,8 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             try
             {
-                DI.log.info("Executing Instance Method:{0}", methodInfo.Name);
-                var liveObject = DI.reflection.createObjectUsingDefaultConstructor(methodInfo.DeclaringType);
+                PublicDI.log.info("Executing Instance Method:{0}", methodInfo.Name);
+                var liveObject = PublicDI.reflection.createObjectUsingDefaultConstructor(methodInfo.DeclaringType);
                 if (liveObject != null)
                     return invoke(liveObject, methodInfo);
             }
@@ -925,7 +939,8 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             try
             {
-                Type type = assembly.GetType(typeToCreateObject);
+                //Type type = assembly.GetType(typeToCreateObject);
+                Type type = getType(assembly, typeToCreateObject);
                 var constructorArgumentTypes = new List<Type>();
                 if (constructorArguments!=null)
                     foreach (object argument in constructorArguments)
@@ -954,7 +969,9 @@ namespace O2.Kernel.InterfacesBaseImpl
             }
             catch (Exception ex)
             {
-                PublicDI.log.error("In createObjectUsingDefaultConstructor: {0}", ex.Message);
+                PublicDI.log.error("..In createObjectUsingDefaultConstructor: {0}", ex.Message);
+                if (ex.InnerException != null)
+                PublicDI.log.error("    InnerException : {0}", ex.InnerException.Message);	
                 return null;
             }
         }

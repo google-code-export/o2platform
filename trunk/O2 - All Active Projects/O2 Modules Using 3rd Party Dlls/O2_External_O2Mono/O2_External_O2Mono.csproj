@@ -62,7 +62,7 @@
       <DependentUpon>ascx_O2Reflector.cs</DependentUpon>
     </Compile>
     <Compile Include="AssemblyAnalysisImpl.cs" />
-    <Compile Include="CecilDecompiler\CecilDecompiler.cs" />
+    <Compile Include="CecilDecompiler\_CecilDecompiler.cs" />
     <Compile Include="MonoCecil\CecilConvert.cs" />
     <Compile Include="MonoCecil\MethodCalled.cs" />
     <Compile Include="MonoCecil\StandAloneExe.cs" />

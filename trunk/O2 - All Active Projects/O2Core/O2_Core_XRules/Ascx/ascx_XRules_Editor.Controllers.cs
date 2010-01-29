@@ -75,10 +75,18 @@ namespace O2.Core.XRules.Ascx
                             if (tcTabControlWithRulesSource.TabPages.Contains(tpNoRulesLoaded))
                                 tcTabControlWithRulesSource.TabPages.Remove(tpNoRulesLoaded);
 
-                            tcTabControlWithRulesSource.SelectedTab = newTabPage;
+                            
 
-                            // finally add to dictionary
-                            filesLoaded.Add(fileToOpen, newTabPage);
+                            // check again (sometimes there can be a race condition on double click
+                            if (filesLoaded.ContainsKey(fileToOpen))
+                                tcTabControlWithRulesSource.TabPages.Remove(newTabPage);
+                            else
+                            {
+                                // make it the selected tab
+                                tcTabControlWithRulesSource.SelectedTab = newTabPage;
+                                // finally add to dictionary                                
+                                filesLoaded.Add(fileToOpen, newTabPage);
+                            }                            
                         }
                     });
             return fileToOpen;
