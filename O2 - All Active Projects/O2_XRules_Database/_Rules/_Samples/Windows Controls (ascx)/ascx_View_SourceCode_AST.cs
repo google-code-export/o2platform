@@ -8,21 +8,10 @@ using O2.DotNetWrappers.Network;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.Ascx;
 
-
-//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
-//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\classes\MainGUI\WinForms.cs
-//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\classes\MainGUI\O2Gui.cs
-//O2_File:extra.cs
-//O2_File:c:\O2\O2 - All Active Projects\O2 - All Active Projects\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\AST\AstTreeView.cs
-
-
-
 namespace O2.Script
 {
     public class Main
     {    
-    	//private static IO2Log log = PublicDI.log;
-		
         public static void openAscx()
 		{
 			var sourceCodeAST = (ascx_View_SourceCode_AST)WinForms.showAscxInForm(
@@ -31,8 +20,7 @@ namespace O2.Script
 				700, 
 				500);		
 							
-			sourceCodeAST.loadFile(testFileToUse());
-		//	sourceCodeAST.showAST();
+			sourceCodeAST.loadFile(testFileToUse());		
 		}
 		
 		private static string testFileToUse()
