@@ -52,7 +52,7 @@ namespace O2.Script
 		{
 		    //var testFile = @"http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/O2_XRules_Database/_Rules/_Samples/HelloWorld.cs";
 		    const string testFile = @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules/_Samples/Windows Controls (ascx)/ascx_View_SourceCode_AST.cs";
-		    return Web.checkIfFileExistsAndDownloadIfNot("HelloWorld.cs", testFile);
+            return Web.checkIfFileExistsAndDownloadIfNot(Path.GetFileName(testFile), testFile);
 		}
     }
 	
