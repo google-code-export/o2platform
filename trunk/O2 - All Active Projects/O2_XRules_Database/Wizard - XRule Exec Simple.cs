@@ -36,17 +36,28 @@ namespace O2.XRules.Database
     {    
         private static IO2Log log = PublicDI.log;
         public static string scriptToExecute = "";
+//        public static string scriptToAutoCompile { get; set; }
 				
         [StartWizard]
         public void startWizard()
         {			
-            var o2Wizard = new O2Wizard("Execute XRule");	        	       
-            addStep_SelectXRuleToExecute(o2Wizard);	      		
-            addStep_CompileScript(o2Wizard);	      		
+            var o2Wizard = new O2Wizard("Execute XRule");
+            scriptToExecute = getClickOnceScriptPath();
+            if (false == File.Exists(scriptToExecute))
+                addStep_SelectXRuleToExecute(o2Wizard);
+            addStep_CompileScript(o2Wizard);
+            
             o2Wizard.start();
         }
- 
-        public string testFileToUse()
+        
+        private string getClickOnceScriptPath()
+        {
+            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null && AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Count() > 0)
+                return AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
+            return "";
+        }
+
+        private string testFileToUse()
         {
             return @"C:\O2\XRulesDatabase\_Rules\_Samples\HelloWorld.cs";
         }

@@ -1,13 +1,14 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Windows.Forms;
 using System.Data;
-//O2Ref:System.Management.dll
-using System.Management;
 using O2.Kernel;
 using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.Interfaces.Views;
@@ -18,6 +19,7 @@ using O2.Views.ASCX.DataViewers;
 using O2.External.WinFormsUI.Forms;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.classes;
+using O2.XRules.Database._Rules;
 
 namespace O2.Script
 {	
@@ -94,4 +96,116 @@ namespace O2.Script
 		    return queryResults;
 		}
 	}
+
+
+    // Here are the extra classes created (manually) and which wrap the required functionality from System.Management.dll
+    // A powerfull next step would be to use an AST to automatically build this code
+
+    public class SelectQuery
+    {
+        public object obj;
+        public SelectQuery(string wmiClass, string condition, string[] queryProperties)
+        {
+            obj = "SelectQuery".ctor("System.Management", wmiClass, condition, queryProperties);
+        }
+    }
+
+    public class ManagementScope
+    {
+        public object obj;
+
+        public ManagementScope(string path)
+        {
+            obj = "ManagementScope".ctor("System.Management", path);
+        }
+    }
+
+    public class ManagementObjectSearcher
+    {
+        public object obj;
+
+        public ManagementObjectSearcher(ManagementScope scope, SelectQuery wmiQuery)
+        {
+            obj = "ManagementObjectSearcher".ctor("System.Management", scope.obj, wmiQuery.obj);
+        }
+
+        public ManagementObjectCollection Get()
+        {
+            var managementObjectCollection = new ManagementObjectCollection();
+            managementObjectCollection.obj = obj.invoke("Get");
+            return managementObjectCollection;
+        }
+    }
+
+    public class ManagementObjectCollection : ICollection, IEnumerable, IDisposable
+    {
+        public object obj;
+
+        public IEnumerator GetEnumerator()
+        {
+            var list = new List<ManagementObject>();
+            foreach (var item in (ICollection)obj)
+            {
+                var managementObject = new ManagementObject();
+                managementObject.obj = item;
+                ((ManagementBaseObject)managementObject).obj = item;
+                list.Add(managementObject);
+                //PublicDI.log.info("item: {0}", item.GetType());
+            }
+            return list.GetEnumerator();
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Count
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public object SyncRoot
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public bool IsSynchronized
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ManagementObject : ManagementBaseObject, ICloneable
+    {
+        public object obj;
+    }
+
+    public class ManagementBaseObject : Component, ICloneable, ISerializable
+    {
+        public object obj;
+
+        public object Clone()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object this[string propertyName]
+        {
+            get
+            {
+                return obj.invoke("get_Item", propertyName);
+            }
+        }
+    }
 }

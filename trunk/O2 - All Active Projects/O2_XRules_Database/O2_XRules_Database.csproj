@@ -34,7 +34,7 @@
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -122,7 +122,6 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -178,8 +177,8 @@
     <Compile Include="_Rules\Support files For Unit Tests\2_For_UnitTest_HotMethodPatch.cs" />
     <Compile Include="_Rules\Support files For Unit Tests\4_For_UnitTest_SimpleCalls.cs" />
     <Compile Include="_Rules\Support files For Unit Tests\_Sample_UnitTests.cs" />
-    <Compile Include="_Rules\_Samples\HelloWorld.cs" />
-    <Compile Include="_Rules\_Samples\SampleScripts.cs" />
+    <None Include="_Rules\_Samples\HelloWorld.cs.o2" />
+    <None Include="_Rules\_Samples\SampleScripts.cs.o2" />
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples\SvnTest.cs" />
     <Compile Include="_Rules\_Samples\Under_Development\Rohit%27s GUI v0.1.cs" />
