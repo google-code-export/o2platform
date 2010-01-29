@@ -50,10 +50,11 @@ namespace O2.Script
 		
 		private static string testFileToUse()
 		{
-			var testFile = @"http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/O2_XRules_Database/_Rules/_Samples/HelloWorld.cs";
-			return Web.checkIfFileExistsAndDownloadIfNot("HelloWorld.cs", testFile);
+		    //var testFile = @"http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/O2_XRules_Database/_Rules/_Samples/HelloWorld.cs";
+		    const string testFile = @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules/_Samples/Windows Controls (ascx)/ascx_View_SourceCode_AST.cs";
+		    return Web.checkIfFileExistsAndDownloadIfNot("HelloWorld.cs", testFile);
 		}
-	}
+    }
 	
 	public class ascx_View_SourceCode_AST : UserControl
 	{
