@@ -1,15 +1,22 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+
+//O2Ref:System.dll
 using System;
 using System.Collections.Generic;
 using System.IO;
+//O2Ref:System.Core.dll
 using System.Linq;
 using System.Text;
+//O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.Interfaces.O2Findings;
 using O2.Kernel.Interfaces.XRules;
+//O2File:..\Findings Filtering\XRule_Findings_Filter.cs
+
+//O2File:..\J2EE\Struts\XUtils_Struts_v0_1.cs
 
 namespace O2.XRules.Database._Rules
 {

@@ -1,19 +1,30 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+//O2Tag_OnlyAddReferencedAssemblies
+//O2Ref:System.dll
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using O2.Core.FileViewers.Ascx;
-using O2.Core.FileViewers.Ascx.O2Rules;
-using O2.Core.FileViewers.JoinTraces;
-using O2.DotNetWrappers.DotNet;
-using O2.DotNetWrappers.O2Findings;
-using O2.External.WinFormsUI.Forms;
+//O2Ref:System.Core.dll
+using System.Linq;
+//O2Ref:System.Windows.Forms.dll
+using System.Windows.Forms;
+//O2Ref:O2_Kernel.dll
 using O2.Kernel;
 using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
 using O2.Kernel.Interfaces.O2Findings;
 using O2.Kernel.Interfaces.Views;
+//O2Ref:O2_Core_FileViewers.dll
+using O2.Core.FileViewers.Ascx;
+using O2.Core.FileViewers.Ascx.O2Rules;
+using O2.Core.FileViewers.JoinTraces;
+//O2Ref:O2_DotNetWrappers.dll
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.O2Findings;
+//O2Ref:O2_External_WinFormsUI.dll
+using O2.External.WinFormsUI.Forms;
+//O2Ref:O2_Views_ASCX.dll
 using O2.Views.ASCX.O2Findings;
+//O2File:..\..\Findings Filtering\XUtils_Findings_v0_1.cs
 
 /*public XRule_Struts()
         {

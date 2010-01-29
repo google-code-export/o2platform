@@ -32,6 +32,7 @@ using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 namespace O2.Script
 {	
 	[TestFixture]
+	[O2Wizard]
 	public class Workflow_BackupFolder
 	{
 		private static IO2Log log = PublicDI.log;

@@ -10,7 +10,7 @@ namespace O2.Views.ASCX.SourceCodeEdit.ScriptSamples
         public static int sleepValue = 500;
         public static string textToShow = "";
 
-        public static void SimpleTest()
+        public static void Main()
         {
             Console.WriteLine("In Simple test");
             while (true)

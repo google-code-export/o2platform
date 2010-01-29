@@ -37,7 +37,7 @@ namespace O2.Script
     {    
     	private static IO2Log log = PublicDI.log;
 
-        public void runWizardss()
+        public void runWizard()
         {
         	var o2Wizard = new O2Wizard("Enable/Disable Network Adapters", 500, 500);		
         	if (false == Netsh.isAvailable())

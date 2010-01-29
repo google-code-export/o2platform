@@ -11,9 +11,6 @@ using O2.External.WinFormsUI.Forms;
 using O2.Kernel.Interfaces.Views;
 //O2Tag_AddReferenceFile:merlin.dll
 //O2Tag_AddReferenceFile:nunit.framework.dll
-//O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Kernel\InterfacesBaseImpl\KReflection.cs
-//O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Kernel\Interfaces\O2Core\IReflection.cs
-//O2File: C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
 
 using O2.Kernel.InterfacesBaseImpl;
 
