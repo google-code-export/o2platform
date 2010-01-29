@@ -8,7 +8,7 @@ namespace O2.Core.XRules.XRulesEngine
 {
     public class XRules_DatabaseSetup
     {
-        
+        // Todo: change this function to reflect the new XRules SVN Sync wizard
         public static void installXRulesDatabase()
         {
             if (XRules_Config.xRulesDatabase != null)

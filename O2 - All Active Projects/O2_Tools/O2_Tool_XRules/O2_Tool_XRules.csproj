@@ -18,7 +18,7 @@
     <ManifestKeyFile>O2_Tool_XRules_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
-    <PublishUrl>C:\O2\Releases\Deploy\O2_Tool_XRules\</PublishUrl>
+    <PublishUrl>C:\O2\ClickOnce_Installers\O2_Tool_XRules\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -28,12 +28,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://deploy.o2-ounceopen.com/O2_Tool_XRules/</InstallUrl>
+    <InstallUrl>http://o2platform.googlecode.com/svn/branches/ClickOnce_Installers/O2_Tool_XRules/</InstallUrl>
     <ProductName>O2 Tool - XRules</ProductName>
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>31</ApplicationRevision>
+    <ApplicationRevision>32</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

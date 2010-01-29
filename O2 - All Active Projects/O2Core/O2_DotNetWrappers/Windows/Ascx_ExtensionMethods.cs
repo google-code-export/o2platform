@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using System.Drawing;
 
@@ -12,10 +8,14 @@ namespace O2.DotNetWrappers.Windows
     {
         public static Label add_Label(this Control control, string labelText)
         {
-            var label = new Label();
-            label.Text = labelText; ;
-            control.Controls.Add(label);
-            return label;
+            return (Label) control.invokeOnThread(
+                               () =>
+                                   {
+                                       var label = new Label();
+                                       label.Text = labelText;
+                                       control.Controls.Add(label);
+                                       return label;
+                                   });
         }
 
         public static SplitContainer add_SplitContainer(this Control control)
@@ -35,35 +35,89 @@ namespace O2.DotNetWrappers.Windows
         //public static SplitContainer addSplitContainer(this UserControl userControl, Orientation orientation, bool setDockStyleToFill, bool setBorderStyleTo3D)
         public static SplitContainer add_SplitContainer(this Control control, Orientation orientation, bool setDockStyleToFill, bool setBorderStyleTo3D)
         {
-            var splitContainer = new SplitContainer();
-            splitContainer.Orientation = orientation;
-            if (setDockStyleToFill)
-                splitContainer.Dock = DockStyle.Fill;
-            if (setBorderStyleTo3D)
-                splitContainer.BorderStyle = BorderStyle.Fixed3D;
-            control.Controls.Add(splitContainer);
-            return splitContainer;
+            return (SplitContainer) control.invokeOnThread(
+                                        () =>
+                                            {
+                                                var splitContainer = new SplitContainer();
+                                                splitContainer.Orientation = orientation;
+                                                if (setDockStyleToFill)
+                                                    splitContainer.Dock = DockStyle.Fill;
+                                                if (setBorderStyleTo3D)
+                                                    splitContainer.BorderStyle = BorderStyle.Fixed3D;
+                                                control.Controls.Add(splitContainer);
+                                                return splitContainer;
+                                            });
         }
 
         public static GroupBox add_GroupBox(this Control control, string groupBoxText)
         {
-            var groupBox = new GroupBox();
-            groupBox.Text = groupBoxText;
-            groupBox.Dock = DockStyle.Fill;
-            control.Controls.Add(groupBox);
-            return groupBox;
+            return (GroupBox) control.invokeOnThread(
+                                  () =>
+                                      {
+                                          var groupBox = new GroupBox();
+                                          groupBox.Text = groupBoxText;
+                                          groupBox.Dock = DockStyle.Fill;
+                                          control.Controls.Add(groupBox);
+                                          return groupBox;
+                                      });
+        }
+
+
+        public static TabControl add_TabControl(this Control control)
+        {
+            return (TabControl)control.invokeOnThread(
+               () =>
+               {
+                   var tabControl = new TabControl();
+                   tabControl.Dock = DockStyle.Fill;
+                   control.Controls.Add(tabControl);
+                   return tabControl;
+               });
+        }
+
+        public static TabPage add_Tab(this TabControl tabControl, string tabTitle)
+        {
+            return (TabPage)tabControl.invokeOnThread(
+               () =>
+               {
+                   var tabPage = new TabPage();
+                   tabPage.Text = tabTitle;
+                   tabControl.TabPages.Add(tabPage);
+                   return tabPage;
+               });
+        }
+
+
+        public static TextBox add_TextBox(this Control control)
+        {
+            return (TextBox)control.invokeOnThread(
+               () =>
+               {
+                   var textBox = new TextBox
+                                     {
+                                         Dock = DockStyle.Fill, 
+                                         Multiline = true, 
+                                         ScrollBars = ScrollBars.Both
+                                     };
+                   control.Controls.Add(textBox);
+                   return textBox;
+               });
         }
 
         public static TreeView add_TreeView(this Control control)
         {
-            var treeView = new TreeView();
-            treeView.Dock = DockStyle.Fill;
-            control.Controls.Add(treeView);
-            return treeView;
+            return (TreeView) control.invokeOnThread(
+                                  () =>
+                                      {
+                                          var treeView = new TreeView();
+                                          treeView.Dock = DockStyle.Fill;
+                                          control.Controls.Add(treeView);
+                                          return treeView;
+                                      });
         }
 
         public static TreeNode add_Node(this TreeView treeView, TreeNode rootNode, string nodeText, Color textColor)
-        {
+        {            
             var newNode = treeView.add_Node(rootNode, nodeText);//, nodeText,0,textColor,null);
             newNode.ForeColor = textColor;
             return newNode;
@@ -105,19 +159,13 @@ namespace O2.DotNetWrappers.Windows
         public static TreeNode add_Node(this TreeView treeView, string nodeText)
         {
             return (TreeNode)treeView.invokeOnThread((()
-                =>
-                {
-                    return treeView.Nodes.Add(nodeText);
-                }));
+                => treeView.Nodes.Add(nodeText)));
         }
 
         public static TreeNode add_Node(this TreeView treeView, TreeNode treeNode, string nodeText)
         {
             return (TreeNode)treeView.invokeOnThread((()
-                =>
-                {
-                    return O2Forms.newTreeNode(treeNode.Nodes, nodeText, 0, null, false); ;
-                }));
+                => O2Forms.newTreeNode(treeNode.Nodes, nodeText, 0, null, false)));
         }
         public static TreeNode add_Node(this TreeView treeView, TreeNode treeNode, string nodeText, object nodeTag, bool addDummyNode)
         {
@@ -180,7 +228,7 @@ namespace O2.DotNetWrappers.Windows
                 {
                     treeNode.ForeColor = color;
                 });
-        }
+        }        
 
     }
 }

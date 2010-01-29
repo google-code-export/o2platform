@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B10305CD-A47E-41C7-8116-CA34180F6C6F}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -67,10 +67,6 @@
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
       <Name>O2 Kernel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\O2_XRules_Database\O2_XRules_Database.csproj">
-      <Project>{83957D55-86AB-4C26-9F82-6182999F09E8}</Project>
-      <Name>O2_XRules_Database</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

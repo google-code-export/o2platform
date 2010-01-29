@@ -19,6 +19,7 @@ namespace O2.DotNetWrappers.DotNet
 {
     public class CompileEngine
     {
+        static string onlyAddReferencedAssemblies = "O2Tag_OnlyAddReferencedAssemblies";
         static List<string> specialO2Tag_ExtraReferences = new List<string>() {"//O2Tag_AddReferenceFile:", "//O2Ref:"};
         static List<string> specialO2Tag_ExtraSourceFile = new List<string>() { "//O2Tag_AddSourceFile:", "//O2File:" };
         static List<string> specialO2Tag_ExtraFolder = new List<string>() { "//O2Tag_AddSourceFolder:", "//O2Folder:", "//O2Dir:" };
@@ -285,15 +286,41 @@ namespace O2.DotNetWrappers.DotNet
             compiledAssembly = null;
             var referencedAssemblies = getListOfReferencedAssembliesToUse();
             // see if there are any extra DLL references in the code
-            addReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
-
-            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles);
+            
+            mapReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);            
 
             if (compileSourceFiles(sourceCodeFiles, referencedAssemblies.ToArray(), ref compiledAssembly, ref errorMessages, false
                                   /*verbose*/, mainClass, outputAssemblyName))
                 return compiledAssembly;
             PublicDI.log.error("Compilation failed: {0}", errorMessages);
             return null;
+        }
+
+        public void mapReferencesIncludedInSourceCode(string sourceCodeFile, List<string> referencedAssemblies)
+        {
+            var sourceCodeFiles = new List<string> { sourceCodeFile };
+            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles);
+            addReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
+            
+        }
+
+        public void mapReferencesIncludedInSourceCode(List<string> sourceCodeFiles, List<string> referencedAssemblies)
+        {
+            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles);
+            addReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
+
+            if (sourceCodeFiles.Count > 1)
+            {
+                PublicDI.log.debug("There are {0} files to compile", sourceCodeFiles.Count);
+                foreach (var file in sourceCodeFiles)
+                    PublicDI.log.debug("   {0}", file);
+            }
+            if (referencedAssemblies.Count > 1)
+            {
+                PublicDI.log.debug("There are {0} referencedAssemblies used", referencedAssemblies.Count);
+                foreach (var referencedAssembly in referencedAssemblies)
+                    PublicDI.log.debug("   {0}", referencedAssembly);
+            }
         }
 
         public static List<string> checkForNoCompileFiles(List<string> sourceCodeFiles)
@@ -333,7 +360,9 @@ namespace O2.DotNetWrappers.DotNet
                      //   var file = fileLine.Replace(specialO2Tag_ExtraSourceFile, "").Trim();
                         var file = fileLine.Replace(match, "").Trim();
                         if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
-                            filesToAdd.Add(file);
+                        {
+                            filesToAdd.Add(file);                          
+                        }
                     }
                     //else if (fileLine.StartsWith(specialO2Tag_ExtraFolder))
                     else 
@@ -362,30 +391,33 @@ namespace O2.DotNetWrappers.DotNet
             {                
                 PublicDI.log.info("There are {0} extra files to add to the list of source code files to compile: {0}", filesToAdd.Count);
                 foreach (var file in filesToAdd)
-                {
+                {                    
+                    var filePath = "";
                     if (File.Exists(file))
-                        sourceCodeFiles.Add(file);
+                        filePath = file;
                     else
                     {
-                        bool resolvedFilePath = false;
+                        
                         // try to find the file in the current sourceCodeFiles directories                        
                         foreach (var directory in currentSourceDirectories)
                             if (File.Exists(Path.Combine(directory, file)))
                             {
-                                sourceCodeFiles.Add(Path.Combine(directory, file));
-                                resolvedFilePath = true;
+                                filePath = Path.Combine(directory, file);
                                 break;
                             }
-                        if (false == resolvedFilePath)
+                        if (filePath == "")
                             PublicDI.log.error("in addSourceFileOrFolderIncludedInSourceCode, could not file file to add: {0}", file);
                     }
-                }
-                if (sourceCodeFiles.Count > 1)
-                {
-                    PublicDI.log.debug("There are {0} files to compile", sourceCodeFiles.Count);
-                    foreach (var file in sourceCodeFiles)
-                        PublicDI.log.debug("   {0}", file);
-                }
+                    if (filePath != "" )
+                    {
+                        filePath = Path.GetFullPath(filePath);
+                        if (false == sourceCodeFiles.Contains(filePath))
+                        {
+                            sourceCodeFiles.Add(filePath);
+                            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles); // we need to recursively add new new dependencies 
+                        }
+                    }
+                }               
             }
         }
 
@@ -396,15 +428,26 @@ namespace O2.DotNetWrappers.DotNet
             sourceCodeFiles.Insert(0, fileToInsert);            // and insert the file at the top of the list (so that it is compiled first)
         }*/
 
+        public static void addReferencesIncludedInSourceCode(string sourceCodeFile, List<string> referencedAssemblies)
+        {
+            addReferencesIncludedInSourceCode(new List<string> { sourceCodeFile }, referencedAssemblies);
+        }
+
         public static void addReferencesIncludedInSourceCode(List<string> sourceCodeFiles, List<string> referencedAssemblies)
-        {                        
+        {
+            // the onlyAddReferencedAssemblies check needs to be done seperately for all files
             foreach( var sourceCodeFile in sourceCodeFiles)
             {
                 // handle special case where we want (for performace & other reasons) be explicit on the references we add to the current script
                 var sourceCode = Files.getFileContents(sourceCodeFile);
-                if (sourceCode.Contains("//O2Tag_OnlyAddReferencedAssemblies"))
+                if (sourceCode.Contains(onlyAddReferencedAssemblies))
+                {
                     referencedAssemblies.Clear();
-
+                    break;              // once one the files has the onlyAddReferencedAssemblies ref, we can clear the referencedAssemblies and break the loop
+                }
+            }
+            foreach (var sourceCodeFile in sourceCodeFiles)
+            {
                 // extract the names from referencedAssemblies
                 var referencedAssembliesFileNames = new List<String>();
                 foreach(var referencedAssembly in referencedAssemblies)
