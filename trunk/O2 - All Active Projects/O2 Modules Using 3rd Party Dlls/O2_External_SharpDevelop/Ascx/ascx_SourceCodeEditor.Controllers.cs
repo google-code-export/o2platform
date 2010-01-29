@@ -174,33 +174,36 @@ namespace O2.External.SharpDevelop.Ascx
         {
             fileToLoad = HandleO2MessageOnSD.tryToResolveFileLocation(fileToLoad, this);
             //this.okThreadSync(delegate
-            ExtensionMethods.invokeOnThread((Control)this, () =>
-                                    {
-                                        try
-                                        {
-                                            partialFileViewMode = false;
-                                            lbPartialFileView.Visible = false;
-                                            tecSourceCode.Visible = true;
-                                            long iCurrentFileSize = Files.getFileSize(fileToLoad);
-                                            if (iCurrentFileSize > (iMaxFileSize * 1024))
-                                            {
-                                                DI.log.error("File to load is too big: max is {0}k, this file is {1}k : {2}", iMaxFileSize,
-                                                             iCurrentFileSize / 1024, fileToLoad);
-                                                loadPartialFileView(fileToLoad);
-                                            }
-                                            else
-                                            {
-                                                tecTargetTextEditor.LoadFile(fileToLoad);
-                                                lbSourceCode_UnsavedChanges.Visible = false;
-                                                btSaveFile.Enabled = false;
-                                            }
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            DI.log.error("in loadSourceCodeFileIntoTextEditor: {0}", ex.Message);
-                                        }
-                                        return null;
-                                    });
+            //ExtensionMethods.invokeOnThread((Control)this, () =>
+            tecSourceCode.invokeOnThread(
+                () =>
+                    {
+                        try
+                        {
+                            partialFileViewMode = false;
+                            lbPartialFileView.Visible = false;
+                            tecSourceCode.Visible = true;
+                            long iCurrentFileSize = Files.getFileSize(fileToLoad);
+                            if (iCurrentFileSize > (iMaxFileSize*1024))
+                            {
+                                DI.log.error("File to load is too big: max is {0}k, this file is {1}k : {2}",
+                                             iMaxFileSize,
+                                             iCurrentFileSize/1024, fileToLoad);
+                                loadPartialFileView(fileToLoad);
+                            }
+                            else
+                            {
+                                tecTargetTextEditor.LoadFile(fileToLoad);
+                                lbSourceCode_UnsavedChanges.Visible = false;
+                                btSaveFile.Enabled = false;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            DI.log.error("in loadSourceCodeFileIntoTextEditor: {0}", ex.Message);
+                        }
+                        return null;
+                    });
 
         }
 

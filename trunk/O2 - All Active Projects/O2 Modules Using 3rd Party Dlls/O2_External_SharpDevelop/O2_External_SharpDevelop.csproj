@@ -56,6 +56,8 @@
       <DependentUpon>ascx_AssemblyInvoke.cs</DependentUpon>
     </Compile>
     <Compile Include="Ascx\Ascx_ExtensionMethods.cs" />
+    <Compile Include="AST\AstTreeView.cs" />
+    <Compile Include="AST\Ast_CSharp.cs" />
     <Compile Include="DI.cs" />
     <Compile Include="HandleO2MessageOnSD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

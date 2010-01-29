@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using O2.Kernel;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.External.O2Mono.MonoCecil;
@@ -58,7 +59,7 @@ namespace O2.Core.XRules.XRulesEngine
             var xRules = new List<IXRule>();
             foreach(var xRuleAssembly in xRulesAssemblies)
             {
-                var assembly = DI.reflection.getAssembly(xRuleAssembly);
+                var assembly = PublicDI.reflection.getAssembly(xRuleAssembly);
                 if (assembly != null)
                     xRules.AddRange(createXRulesFromAssembly(assembly));
                 if (onStepEvent != null)
@@ -119,11 +120,11 @@ namespace O2.Core.XRules.XRulesEngine
             currentTask("Compiling all rules together");
             numberOfStepsToPerform(1);
             // first try to scan all together
-            var filesToCompile = Files.getFilesFromDir_returnFullPath(XRules_Config.PathTo_XRulesDatabase_fromO2, "*.cs", false);
-            foreach(var xRuleFile in Files.getFilesFromDir_returnFullPath(XRules_Config.PathTo_XRulesDatabase_fromLocalDisk, "*.cs", false))
+            var filesToCompile = Files.getFilesFromDir_returnFullPath(XRules_Config.PathTo_XRulesDatabase_fromO2, "*.cs", true); 			// recursive search
+            foreach(var xRuleFile in Files.getFilesFromDir_returnFullPath(XRules_Config.PathTo_XRulesDatabase_fromLocalDisk, "*.cs", true)) // recursive search
                 if (false == filesToCompile.Contains(xRuleFile))
                     filesToCompile.Add(xRuleFile);
-            DI.log.info("There are {0} XRules to Compile", filesToCompile.Count);
+            PublicDI.log.info("There are {0} XRules to Compile", filesToCompile.Count);
 
             var compiledXRulesAssembly = compileAllFilesTogether(filesToCompile);
             onStepEvent();
@@ -131,13 +132,14 @@ namespace O2.Core.XRules.XRulesEngine
                 return new List<String> {compiledXRulesAssembly.Location};
             
             // if we couldn't compile all at once, then compile each file individually
-            DI.log.error("It was not possible to compile all XRules together, going to try to compile each XRule file individually");           
-            return compileAllFilesIndividually(filesToCompile,currentTask,numberOfStepsToPerform,onStepEvent);
+            PublicDI.log.error("It was not possible to compile all XRules together, going to try to compile each XRule file individually");           
+            //return compileAllFilesIndividually(filesToCompile,currentTask,numberOfStepsToPerform,onStepEvent);
+            return null;
         }
 
         public static Assembly compileAllFilesTogether(List<String> filesToCompile)
         {
-            DI.log.info("Compiling All XRules source code files together");
+            PublicDI.log.info("Compiling All XRules source code files together");
             return new CompileEngine().compileSourceFiles(filesToCompile);
         }
 
@@ -146,7 +148,7 @@ namespace O2.Core.XRules.XRulesEngine
             currentTask("Compiling all rules individualy (one file at the time)");
             numberOfStepsToPerform(filesToCompile.Count);
             var compileEngine = new CompileEngine();
-            DI.log.info("Compiling All XRules source code files ONE at the time");
+            PublicDI.log.info("Compiling All XRules source code files ONE at the time");
             var results = new List<String>();
             foreach (var fileToCompile in filesToCompile)
             {
@@ -154,7 +156,7 @@ namespace O2.Core.XRules.XRulesEngine
                 if (assembly != null)
                     results.Add(assembly.Location);
                 else
-                    DI.log.error("In XRules_Execution.compileAllFilesIndividually, could not compile file: {0}", fileToCompile);
+                    PublicDI.log.error("In XRules_Execution.compileAllFilesIndividually, could not compile file: {0}", fileToCompile);
                 onStepEvent();
             }
             return results;
@@ -169,7 +171,7 @@ namespace O2.Core.XRules.XRulesEngine
 
                 if (assembly != null)
                 {
-                    var types = DI.reflection.getTypes(assembly);
+                    var types = PublicDI.reflection.getTypes(assembly);
                     foreach (var type in types)
                     {
 
@@ -179,7 +181,7 @@ namespace O2.Core.XRules.XRulesEngine
                         // if there is an interface of IXRule then this is a rule
                         if (type.GetInterface(typeof(IXRule).FullName) != null)
                         {
-                            var ruleObject = DI.reflection.createObject(assembly, type);
+                            var ruleObject = PublicDI.reflection.createObject(assembly, type);
                             if (ruleObject != null && ruleObject is IXRule)
                             {
                                 var xRule = (IXRule)ruleObject;
@@ -195,7 +197,7 @@ namespace O2.Core.XRules.XRulesEngine
             }
             catch (Exception ex)
             {
-                DI.log.error("in createXRulesFromAssembly: {0}", ex.Message);
+                PublicDI.log.error("in createXRulesFromAssembly: {0}", ex.Message);
             }
             return xRules;
         }

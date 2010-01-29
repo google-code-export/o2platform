@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_External_O2Mono", "..\..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2 ImportExport OunceLabs", "..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj", "{49F0878F-E643-4D19-BE27-BC4CF4D6A138}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_XRules_Database", "..\..\O2_XRules_Database\O2_XRules_Database.csproj", "{83957D55-86AB-4C26-9F82-6182999F09E8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Cmd_XRules", "..\..\O2_Cmd\O2_Cmd_XRules\O2_Cmd_XRules.csproj", "{B10305CD-A47E-41C7-8116-CA34180F6C6F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Core_FileViewers", "..\..\O2Core\O2_Core_FileViewers\O2_Core_FileViewers.csproj", "{6CDF7A9F-31CC-4496-90B1-09A39C8EEE08}"
@@ -106,12 +104,6 @@ Global
 		{49F0878F-E643-4D19-BE27-BC4CF4D6A138}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
 		{49F0878F-E643-4D19-BE27-BC4CF4D6A138}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49F0878F-E643-4D19-BE27-BC4CF4D6A138}.Release|Any CPU.Build.0 = Release|Any CPU
-		{83957D55-86AB-4C26-9F82-6182999F09E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{83957D55-86AB-4C26-9F82-6182999F09E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{83957D55-86AB-4C26-9F82-6182999F09E8}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
-		{83957D55-86AB-4C26-9F82-6182999F09E8}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
-		{83957D55-86AB-4C26-9F82-6182999F09E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{83957D55-86AB-4C26-9F82-6182999F09E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B10305CD-A47E-41C7-8116-CA34180F6C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B10305CD-A47E-41C7-8116-CA34180F6C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B10305CD-A47E-41C7-8116-CA34180F6C6F}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
