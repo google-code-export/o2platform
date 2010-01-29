@@ -255,7 +255,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="O2Logo.ico" />
-    <Content Include="O2_Kernel.dll" />
   </ItemGroup>
   <ItemGroup>
     <FileAssociation Include=".o2">
