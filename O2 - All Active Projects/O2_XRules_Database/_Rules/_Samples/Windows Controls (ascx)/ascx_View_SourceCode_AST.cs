@@ -1,25 +1,12 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
-using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
-using O2.Views.ASCX;
 using O2.DotNetWrappers.Network;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.Ascx;
-
-using ICSharpCode.NRefactory;
-using ICSharpCode.NRefactory.Ast;
-using ICSharpCode.NRefactory.PrettyPrinter;
 
 
 //O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
@@ -34,7 +21,7 @@ namespace O2.Script
 {
     public class Main
     {    
-    	private static IO2Log log = PublicDI.log;
+    	//private static IO2Log log = PublicDI.log;
 		
         public static void openAscx()
 		{
@@ -58,17 +45,17 @@ namespace O2.Script
 	
 	public class ascx_View_SourceCode_AST : UserControl
 	{
-		ascx_SourceCodeEditor sourceCodeEditor;
-		TabControl tabControl;
-		TreeView ast_TreeView;
-		TreeView usingDeclarations_TreeView;
-        TreeView types_TreeView;
-        TreeView methods_TreeView;
-        TreeView fields_TreeView;
-        TreeView properties_TreeView;
-        TreeView comments_TreeView;
-		ascx_SourceCodeEditor rewritenCSharpCode_SourceCodeEditor;
-		ascx_SourceCodeEditor rewritenVBNet_SourceCodeEditor;
+		public ascx_SourceCodeEditor sourceCodeEditor;
+        public TabControl tabControl;
+        public TreeView ast_TreeView;
+        public TreeView usingDeclarations_TreeView;
+        public TreeView types_TreeView;
+        public TreeView methods_TreeView;
+        public TreeView fields_TreeView;
+        public TreeView properties_TreeView;
+        public TreeView comments_TreeView;
+        public ascx_SourceCodeEditor rewritenCSharpCode_SourceCodeEditor;
+        public ascx_SourceCodeEditor rewritenVBNet_SourceCodeEditor;
 		
 		public ascx_View_SourceCode_AST()
 		{
@@ -91,13 +78,13 @@ namespace O2.Script
         	        	
         	ast_TreeView = tabControl.add_Tab("AST").add_TreeView();
         	usingDeclarations_TreeView = tabControl.add_Tab("Using Declarations").add_TreeView();
-        	types_TreeView = tabControl.add_Tab("Types").add_TreeView();;        	
-        	methods_TreeView = tabControl.add_Tab("Methods").add_TreeView();;
-        	fields_TreeView = tabControl.add_Tab("Fields").add_TreeView();;
-        	properties_TreeView = tabControl.add_Tab("Properties").add_TreeView();;
-        	comments_TreeView = tabControl.add_Tab("Comments").add_TreeView();;
+        	types_TreeView = tabControl.add_Tab("Types").add_TreeView();       	
+        	methods_TreeView = tabControl.add_Tab("Methods").add_TreeView();
+        	fields_TreeView = tabControl.add_Tab("Fields").add_TreeView();
+        	properties_TreeView = tabControl.add_Tab("Properties").add_TreeView();
+        	comments_TreeView = tabControl.add_Tab("Comments").add_TreeView();
         	rewritenCSharpCode_SourceCodeEditor = tabControl.add_Tab("Re-writen Code : CSharp").add_SourceCodeEditor();        	
-        	rewritenVBNet_SourceCodeEditor = tabControl.add_Tab("Re-writen Code : VB.Net").add_SourceCodeEditor();;       
+        	rewritenVBNet_SourceCodeEditor = tabControl.add_Tab("Re-writen Code : VB.Net").add_SourceCodeEditor();
         	
         	sourceCodeEditor.eDocumentDataChanged += updateView;    
         	
@@ -108,38 +95,7 @@ namespace O2.Script
         	properties_TreeView.AfterSelect += showInSourceCode;
         	comments_TreeView.AfterSelect += showInSourceCode;
  		}
-		
-		
-		// move to TextEditor control
-		public void showInSourceCode(Object sender,TreeViewEventArgs e)
-		{
-			var treeNoteTag = e.Node.Tag;
-			if (treeNoteTag is AstValue)
-			{
-				var astValue = (AstValue)treeNoteTag;
-				PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
-				
-				var textEditorControl = sourceCodeEditor.getObject_TextEditorControl();
-				var start = new ICSharpCode.TextEditor.TextLocation(astValue.StartLocation.X-1,astValue.StartLocation.Y-1);
-				var end = new ICSharpCode.TextEditor.TextLocation(astValue.EndLocation.X-1,astValue.EndLocation.Y-1);
-				var selection = new ICSharpCode.TextEditor.Document.DefaultSelection(textEditorControl.Document,start, end);
-				textEditorControl.ActiveTextAreaControl.SelectionManager.SetSelection(selection);	
-				setCaretToCurrentSelection(textEditorControl);
-			}			
-		}
-		
-		public void setCaretToCurrentSelection(ICSharpCode.TextEditor.TextEditorControl textEditorControl)
-		{
-			var finalCaretPosition = textEditorControl.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection[0].StartPosition;
-			var tempCaretPosition = new ICSharpCode.TextEditor.TextLocation();
-			tempCaretPosition.X = finalCaretPosition.X;
-			tempCaretPosition.Y = finalCaretPosition.Y + 10;
-			textEditorControl.ActiveTextAreaControl.Caret.Position = tempCaretPosition;				
-			textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
-			textEditorControl.ActiveTextAreaControl.Caret.Position = finalCaretPosition;				
-			textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
-		}
-		
+							
 		public void loadFile(string fileToLoad)
 		{				
 			PublicDI.log.info("Loading file into SourceCode Editor: {0}", fileToLoad);
@@ -159,60 +115,42 @@ namespace O2.Script
 			comments_TreeView.show_List(ast.astDetails.Comments,"Text");
 			
 			rewritenCSharpCode_SourceCodeEditor.setDocumentContents(ast.astDetails.CSharpCode, ".cs");
-			rewritenVBNet_SourceCodeEditor.setDocumentContents(ast.astDetails.VBNetCode, ".vb");		
-			
-			/*foreach(var line in StringsAndLists.fromTextGetLines(sourceCode))
-				methods_TreeView.add_Node(line);*/
-			
-			/*astTreeView.clear();
-			//var sourceCode = sourceCodeEditor.getSourceCode();
-			var language = SupportedLanguage.CSharp;
-			IParser parser = ParserFactory.CreateParser(language, new StringReader(sourceCode));
-			parser.Parse();
-			var unit = parser.CompilationUnit;
-			astTreeView.add_Node(new CollectionNode("CompilationUnit", unit.Children));
-			*/
-					
-/*			FieldDeclaration fd = new FieldDeclaration( null,
-														new TypeReference("TypeRef.Test"),
-			                                            Modifiers.Private);
-			unit.Children.Insert(0,fd);
-			
-			UsingDeclaration ud = new UsingDeclaration("O2.Kernel.BBB");//,new TypeReference("AAAA.BBB"));
-			unit.Children.Insert(0,ud);*/
-			
-	
-			
-			//IList<ISpecial> savedSpecialsList = parser.Lexer.SpecialTracker.RetrieveSpecials();
-			
-			//showDetailsOfSpecialsList(savedSpecialsList);
-						
-			//showRecreatedCode(unit,savedSpecialsList);
-			//foreach(var line in StringsAndLists.fromTextGetLines(sourceCode))
-			//	astTreeView.add_Node(line);
+			rewritenVBNet_SourceCodeEditor.setDocumentContents(ast.astDetails.VBNetCode, ".vb");								
 		}
-    	    	
-    	/*public void showDetailsOfSpecialsList(IList<ISpecial> savedSpecialsList)    	
-    	{
-    		foreach(var special in savedSpecialsList)
-    		{
-    			PublicDI.log.info("[{0} {1} -> {2}", special.GetType().Name, special.StartPosition, special.EndPosition);
-    			if (special is Comment)
-    				PublicDI.log.info("  CommentText = {0}", ((Comment)special).CommentText);
-    		}
-    	}
-    	
-    	public void showRecreatedCode(CompilationUnit unit, IList<ISpecial> savedSpecialsList)
-    	{
-    		var outputVisitor  = new CSharpOutputVisitor();    		
-    		using (SpecialNodesInserter.Install(savedSpecialsList, outputVisitor)) {
-				unit.AcceptVisitor(outputVisitor, null);
-			}
-			//codeTextBox.Text = outputVisitor.Text.Replace("\t", "  ");
-    		var recreatedCode = outputVisitor.Text;
-    		PublicDI.log.debug(recreatedCode);
-    	}
-		*/
-		
+
+
+
+
+        //NOTE: these two methods need to be moved to the ascx_SourceCodeEditor control
+        public void showInSourceCode(Object sender, TreeViewEventArgs e)
+        {
+            var treeNoteTag = e.Node.Tag;
+            if (treeNoteTag is AstValue)
+            {
+                var astValue = (AstValue)treeNoteTag;
+                PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
+
+                var textEditorControl = sourceCodeEditor.getObject_TextEditorControl();
+                var start = new ICSharpCode.TextEditor.TextLocation(astValue.StartLocation.X - 1, astValue.StartLocation.Y - 1);
+                var end = new ICSharpCode.TextEditor.TextLocation(astValue.EndLocation.X - 1, astValue.EndLocation.Y - 1);
+                var selection = new ICSharpCode.TextEditor.Document.DefaultSelection(textEditorControl.Document, start, end);
+                textEditorControl.ActiveTextAreaControl.SelectionManager.SetSelection(selection);
+                setCaretToCurrentSelection(textEditorControl);
+            }
+        }
+
+        public void setCaretToCurrentSelection(ICSharpCode.TextEditor.TextEditorControl textEditorControl)
+        {
+            var finalCaretPosition = textEditorControl.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection[0].StartPosition;
+            var tempCaretPosition = new ICSharpCode.TextEditor.TextLocation
+                                        {
+                                            X = finalCaretPosition.X,
+                                            Y = finalCaretPosition.Y + 10
+                                        };
+            textEditorControl.ActiveTextAreaControl.Caret.Position = tempCaretPosition;
+            textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
+            textEditorControl.ActiveTextAreaControl.Caret.Position = finalCaretPosition;
+            textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
+        }
 	}
 }
