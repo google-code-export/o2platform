@@ -44,7 +44,6 @@
   -->
   <ItemGroup>
     <Content Include="antlr.runtime.dll" />
-    <Content Include="app.config.txt" />
     <Content Include="Cecil.Decompiler.dll" />
     <Content Include="Cecil.Decompiler.pdb" />
     <Content Include="Common.Logging.dll" />
@@ -57,7 +56,6 @@
     <Content Include="help\images\O2_Banner.gif" />
     <Content Include="HTMLparserLibDotNet20.dll" />
     <Content Include="HTMLparserLibDotNet20.pdb" />
-    <Content Include="ildasm.exe" />
     <Content Include="Interop.mscoree.dll" />
     <Content Include="Ionic.Zip.dll" />
     <Content Include="log4net.dll" />
@@ -103,8 +101,6 @@
     <Content Include="O2_External_Python.pdb" />
     <Content Include="O2_External_SharpDevelop.dll" />
     <Content Include="O2_External_SharpDevelop.pdb" />
-    <Content Include="O2_External_SpringNet.dll" />
-    <Content Include="O2_External_SpringNet.pdb" />
     <Content Include="O2_External_WinFormsUI.dll" />
     <Content Include="O2_External_WinFormsUI.pdb" />
     <Content Include="O2_ImportExport_Misc.dll" />
@@ -121,9 +117,6 @@
     <Content Include="O2_Rules_OunceLabs.pdb" />
     <Content Include="O2_Scanner_OunceLabsCLI.dll" />
     <Content Include="O2_Scanner_OunceLabsCLI.pdb" />
-    <Content Include="O2_Tool_CirAnalysis.xml" />
-    <Content Include="O2_Tool_CSharpScripts.xml" />
-    <Content Include="O2_Tool_O2Reflector.xml" />
     <Content Include="O2_Tool_SearchAssessmentRun.xml" />
     <Content Include="O2_Tool_WebInspectConverter.exe" />
     <Content Include="O2_Tool_WebInspectConverter.pdb" />
@@ -133,9 +126,6 @@
     <Content Include="PostSharp.Core.XmlSerializers.dll" />
     <Content Include="QuickGraph.dll" />
     <Content Include="Skybound.Gecko.dll" />
-    <Content Include="Spring.Aop.dll" />
-    <Content Include="Spring.Core.dll" />
-    <Content Include="WebDev.WebServer.EXE" />
     <Content Include="WeifenLuo.WinFormsUI.Docking.dll" />
     <Content Include="WeifenLuo.WinFormsUI.Docking.pdb" />
     <Content Include="_CirAnalysis %28O2 Tool%29.exe" />
