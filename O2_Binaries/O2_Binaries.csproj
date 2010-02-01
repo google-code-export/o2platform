@@ -42,4 +42,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Content Include="O2_Kernel.dll" />
+    <Content Include="O2_Kernel.pdb" />
+  </ItemGroup>
 </Project>
