@@ -177,7 +177,7 @@
     <Compile Include="_Rules\_Samples\Support files For Unit Tests\2_For_UnitTest_HotMethodPatch.cs" />
     <Compile Include="_Rules\_Samples\Support files For Unit Tests\4_For_UnitTest_SimpleCalls.cs" />
     <Compile Include="_Rules\_Samples\Support files For Unit Tests\_Sample_UnitTests.cs" />
-    <None Include="_Rules\_Samples\HelloWorld.cs.o2" />
+    <None Include="_Rules\HelloWorld.cs.o2" />
     <None Include="_Rules\_Samples\SampleScripts.cs.o2" />
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples\SvnTest.cs" />
@@ -196,11 +196,11 @@
     </Compile>
     <Compile Include="_Rules\Windows Utils\Wizard - Enable or Disable Network Interfaces.cs" />
     <Compile Include="_Rules\DotNet\Wizard - Start HacmeBank.cs" />
-    <Compile Include="_Rules\O2 Utils\Wizard - BackupFolder.cs" />
+    <None Include="_Rules\O2 Utils\Wizard - BackupFolder.cs.o2" />
     <Compile Include="_Rules\DotNet\Wizard - CopyGacDlls.cs" />
     <Compile Include="_Rules\Misc Utils\Wizard - SearchEngine UseCase 1.cs" />
     <Compile Include="_Rules\_Samples\Under_Development\Wizard_ViewStrutsMappings %28under dev%29.cs" />
-    <Compile Include="_Rules\O2 Utils\Wizard - Sync XRules Via Svn.cs" />
+    <None Include="_Rules\O2 Utils\Wizard - Sync XRules Via Svn.cs.o2" />
     <Compile Include="_Rules\_Templates\Empty_XRule.cs" />
     <Compile Include="_Rules\_Templates\Empty_Class.cs" />
     <Compile Include="_Rules\_Templates\Local_Findings_Files.cs" />
@@ -251,6 +251,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
+    <None Include="_Rules\O2 Utils\ascx_SvnBrower.cs.o2">
+      <SubType>UserControl</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="O2Logo.ico" />
