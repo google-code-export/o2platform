@@ -18,7 +18,7 @@
     <ManifestKeyFile>O2_Tool_XRules_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
-    <PublishUrl>C:\O2\ClickOnce_Installers\O2_Tool_XRules\</PublishUrl>
+    <PublishUrl>C:\O2\_O2 - LOCAL SVN - DEV\O2_ClickOnce_Installers\O2_Tool_XRules\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -28,12 +28,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://o2platform.googlecode.com/svn/branches/ClickOnce_Installers/O2_Tool_XRules/</InstallUrl>
+    <InstallUrl>http://o2platform.googlecode.com/svn/O2_ClickOnce_Installers/O2_Tool_XRules/</InstallUrl>
     <ProductName>O2 Tool - XRules</ProductName>
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>32</ApplicationRevision>
+    <ApplicationRevision>34</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -43,7 +43,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\_Bin_%28O2_Binaries%29\O2_Tool_XRules\</OutputPath>
+    <OutputPath>..\..\..\O2_Binaries\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>

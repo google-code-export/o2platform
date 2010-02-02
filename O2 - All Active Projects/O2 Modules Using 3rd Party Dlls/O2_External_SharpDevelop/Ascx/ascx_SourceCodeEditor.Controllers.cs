@@ -194,6 +194,12 @@ namespace O2.External.SharpDevelop.Ascx
                             else
                             {
                                 tecTargetTextEditor.LoadFile(fileToLoad);
+                                if (Path.GetExtension(fileToLoad).ToLower() == ".o2")
+                                {
+                                    var realFileTypeToload = Path.GetFileNameWithoutExtension(fileToLoad);
+                                    tecSourceCode.Document.HighlightingStrategy =
+                                        HighlightingStrategyFactory.CreateHighlightingStrategyForFile(realFileTypeToload);
+                                }
                                 lbSourceCode_UnsavedChanges.Visible = false;
                                 btSaveFile.Enabled = false;
                             }
@@ -371,8 +377,10 @@ namespace O2.External.SharpDevelop.Ascx
         private void setCompileAndInvokeButtonsState(string pathToFileLoaded)
         {
             bool supportCSharpCompileAndExecute = true;
+            if (Path.GetExtension(pathToFileLoaded).ToLower() == ".o2")
+                pathToFileLoaded = Path.GetFileNameWithoutExtension(pathToFileLoaded);
             switch (Path.GetExtension(pathToFileLoaded))
-            {
+            {               
                 case ".cs":
                     btExecuteOnExternalEngine.Visible = false;
                     lbExecuteOnEngine.Visible = false;
@@ -684,8 +692,11 @@ namespace O2.External.SharpDevelop.Ascx
                 if (partialFileViewMode == false)
                     this.invokeOnThread(() =>
                             {
+                                var fileExtention = Path.GetExtension(sPathToFileLoaded).ToLower();
+                                if (fileExtention == ".o2")
+                                    fileExtention = Path.GetExtension(Path.GetFileNameWithoutExtension(sPathToFileLoaded));
                                 //DI.log.info("in compileSourceCode");
-                                switch (Path.GetExtension(sPathToFileLoaded))
+                                switch (fileExtention)
                                 {
                                     case ".cs":
                                         compileDotNetCode();
