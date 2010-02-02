@@ -278,6 +278,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
                                        if (left > -1)
                                            label.Left = left;
                                        step.UI.Controls.Add(label);
+                                       label.AutoSize = true;
                                        label.BringToFront();
                                        return label;
                                    });
