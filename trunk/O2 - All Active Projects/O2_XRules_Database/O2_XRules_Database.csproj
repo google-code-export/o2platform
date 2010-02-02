@@ -182,25 +182,25 @@
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples\SvnTest.cs" />
     <Compile Include="_Rules\_Samples\Under_Development\Rohit%27s GUI v0.1.cs" />
-    <Compile Include="_Rules\_Samples\User Controls [Ascx]\ascx_AssemblyAttributes.cs">
+    <Compile Include="_Rules\DotNet\ascx_AssemblyAttributes.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\_Samples\User Controls [Ascx]\ascx_MonoDecompiler.cs">
+    <Compile Include="_Rules\DotNet\ascx_MonoDecompiler.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\_Samples\User Controls [Ascx]\ascx_Running_Processes_Details.cs">
+    <Compile Include="_Rules\Windows Utils\ascx_Running_Processes_Details.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\_Samples\User Controls [Ascx]\ascx_View_SourceCode_AST.cs">
+    <Compile Include="_Rules\DotNet\ascx_View_SourceCode_AST.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\_Samples\Wizards\Wizard - Enable or Disable Network Interfaces.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard - Start HacmeBank.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard - BackupFolder.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard - CopyGacDlls.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard - SearchEngine UseCase 1.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\not working\Wizard_ViewStrutsMappings %28under dev%29.cs" />
-    <Compile Include="_Rules\_Samples\Wizards\Wizard - Sync XRules Via Svn.cs" />
+    <Compile Include="_Rules\Windows Utils\Wizard - Enable or Disable Network Interfaces.cs" />
+    <Compile Include="_Rules\DotNet\Wizard - Start HacmeBank.cs" />
+    <Compile Include="_Rules\O2 Utils\Wizard - BackupFolder.cs" />
+    <Compile Include="_Rules\DotNet\Wizard - CopyGacDlls.cs" />
+    <Compile Include="_Rules\Misc Utils\Wizard - SearchEngine UseCase 1.cs" />
+    <Compile Include="_Rules\_Samples\Under_Development\Wizard_ViewStrutsMappings %28under dev%29.cs" />
+    <Compile Include="_Rules\O2 Utils\Wizard - Sync XRules Via Svn.cs" />
     <Compile Include="_Rules\_Templates\Empty_XRule.cs" />
     <Compile Include="_Rules\_Templates\Empty_Class.cs" />
     <Compile Include="_Rules\_Templates\Local_Findings_Files.cs" />
@@ -264,7 +264,9 @@
     </FileAssociation>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="_Rules\O2 Utils\" />
+    <Folder Include="_Rules\IBM\Analysis_Workflows\" />
+    <Folder Include="_Rules\_Samples\User Controls [Ascx]\" />
+    <Folder Include="_Rules\_Samples\Wizards\not working\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
