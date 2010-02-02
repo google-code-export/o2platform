@@ -14,12 +14,12 @@ using O2.XRules.Database.Interfaces;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;
 
-namespace O2.XRules.Database._Rules
+namespace O2.XRules.Database._Rules.Analysis_Workflows
 {
     public class Analysis_Workflow_Phase_1 : KXRule
     {          	       
-       	//string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
-    	string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";    	        
+        //string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
+        string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";    	        
     
         //public static IO2Log log = PublicDI.log;
         public bool deletePhase1FolderBeforeCopying = false;
@@ -39,19 +39,19 @@ namespace O2.XRules.Database._Rules
     	        
         public void task1_copyAssessmentFiles(IAnalysisArtifacts analysisArtifacts)
         {        
-			if (deletePhase1FolderBeforeCopying)
+            if (deletePhase1FolderBeforeCopying)
                 Files.deleteAllFilesFromDir(folderWithArtifacts_Phase1);
                 
-        	var filesCopied = new List<string>();
-        	foreach(var fileOrFolder in analysisArtifacts.assessmentFilesOrFolderToLoad)
-        	{        		
-        		if (File.Exists(fileOrFolder))
-        			filesCopied.Add(Files.CopyVerbose(fileOrFolder, folderWithArtifacts_Phase1,dontCopyIfTargetFileAlreadyExists));
-        		else 
-        		if (Directory.Exists(fileOrFolder))        		        			
-        			foreach(var assessmentFile in Files.getFilesFromDir_returnFullPath(fileOrFolder, "*.ozasmt", true))
-        				filesCopied.Add(Files.CopyVerbose(assessmentFile, folderWithArtifacts_Phase1,dontCopyIfTargetFileAlreadyExists));
-        	}
+            var filesCopied = new List<string>();
+            foreach(var fileOrFolder in analysisArtifacts.assessmentFilesOrFolderToLoad)
+            {        		
+                if (File.Exists(fileOrFolder))
+                    filesCopied.Add(Files.CopyVerbose(fileOrFolder, folderWithArtifacts_Phase1,dontCopyIfTargetFileAlreadyExists));
+                else 
+                    if (Directory.Exists(fileOrFolder))        		        			
+                        foreach(var assessmentFile in Files.getFilesFromDir_returnFullPath(fileOrFolder, "*.ozasmt", true))
+                            filesCopied.Add(Files.CopyVerbose(assessmentFile, folderWithArtifacts_Phase1,dontCopyIfTargetFileAlreadyExists));
+            }
 
   			            
             //check to see if files were copied  ok
@@ -66,8 +66,8 @@ namespace O2.XRules.Database._Rules
     	       
         public void task2_copyProjectConfigFiles(IAnalysisArtifacts analysisArtifacts)
         {
-     		if (analysisArtifacts.projectWebRoots.Count ==0)
-     			return;
+            if (analysisArtifacts.projectWebRoots.Count ==0)
+                return;
             O2Cmd.log.write("Copying {0} Project Config Files to : {1} ", analysisArtifacts.projectWebRoots.Count, folderWithArtifacts_Phase1);
     		
             //Assert.That(virtualPathsTo_ProjectWebRoot != null, "virtualPathsTo_ProjectWebRoot was null");

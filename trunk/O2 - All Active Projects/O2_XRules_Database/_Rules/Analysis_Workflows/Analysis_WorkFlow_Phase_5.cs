@@ -8,13 +8,13 @@ using O2.XRules.Database.Interfaces;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;
 
-namespace O2.XRules.Database._Rules
+namespace O2.XRules.Database._Rules.Analysis_Workflows
 {
     public class Analysis_Workflow_Phase_5 : KXRule
     {        	 
 
-		//string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
-    	string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";
+        //string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
+        string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";
     	
         public static string  workflowFolder {get;set;}
         public string  folderWithArtifacts_Phase4 {get;set;}
@@ -47,16 +47,16 @@ namespace O2.XRules.Database._Rules
         }
 		
 		
-		public void copyFinalAssessmentFileToWorkflowFolder()
-		{
-			Files.Copy(finalAssessmentFile,workflowFolder);
-		}
+        public void copyFinalAssessmentFileToWorkflowFolder()
+        {
+            Files.Copy(finalAssessmentFile,workflowFolder);
+        }
 	
         
 		
        
-		// PHASE 4 : XRules    	
-    	[XRule(Name = "Run Phase 5 (Test)")]
+        // PHASE 4 : XRules    	
+        [XRule(Name = "Run Phase 5 (Test)")]
         public string  runPhase5()
         {            
             var testAnalysisArtifacts = KAnalysisArtifacts.load(testAnalysisArtifactsFile);
@@ -69,11 +69,11 @@ namespace O2.XRules.Database._Rules
     	
         [XRule(Name = "Run Phase 5")]
         public string runPhase5(IAnalysisArtifacts analysisArtifacts)
-  		{
-  			O2Cmd.log.write("\n\n*****  PHASE 5 ***");
+        {
+            O2Cmd.log.write("\n\n*****  PHASE 5 ***");
   			
-			// setup expected target folders
-  			workflowFolder = analysisArtifacts.targetFolder;   	
+            // setup expected target folders
+            workflowFolder = analysisArtifacts.targetFolder;   	
   			
             folderWithArtifacts_Phase4 = Path.Combine(workflowFolder,"Phase 4 - Artifacts");
             folderWithArtifacts_Phase5 = Path.Combine(workflowFolder,"Phase 5 - Artifacts");

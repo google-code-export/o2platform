@@ -13,11 +13,11 @@ using NUnit.Framework;
 //O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\IAnalysisArtifacts.cs
 //O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\KAnalysisArtifacts.cs
 
-namespace O2.XRules.Database._Rules
+namespace O2.XRules.Database._Rules.Analysis_Workflows
 {
     public class Analysis_Workflow_Phase_3 : KXRule
     {        	     
-	    public string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts.xml";
+        public string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts.xml";
         //public string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";    	                
     
         public static string  workflowFolder {get; set;}
@@ -57,14 +57,14 @@ namespace O2.XRules.Database._Rules
         {			                       
             foreach(var sourceSink in analysisArtifacts.phase_3.task2_sourceSink)
             {
-            	XUtils_Analysis.saveQuery(tracesToFilter, targetFolder, fileName,sourceSink.Source, sourceSink.Sink, sourceSink.RemoveMatches);	
+                XUtils_Analysis.saveQuery(tracesToFilter, targetFolder, fileName,sourceSink.Source, sourceSink.Sink, sourceSink.RemoveMatches);	
             }            					
             // save what was left (i.e. findings that didn't match the above filters) in a separate file
             if (tracesToFilter.Count > 0)
             {
-            	O2Cmd.log.write("After task2 filters there were {0} findings that matched no filter", tracesToFilter.Count);
-            	var targetFile = Path.Combine(targetFolder,"__NO FILTER__" + " - " + fileName + ".ozasmt");
-            	XUtils_Findings_v0_1.saveFindings(tracesToFilter, targetFile);
+                O2Cmd.log.write("After task2 filters there were {0} findings that matched no filter", tracesToFilter.Count);
+                var targetFile = Path.Combine(targetFolder,"__NO FILTER__" + " - " + fileName + ".ozasmt");
+                XUtils_Findings_v0_1.saveFindings(tracesToFilter, targetFile);
             }
         }
 		
@@ -112,20 +112,20 @@ namespace O2.XRules.Database._Rules
                     // make sure we had results 
                     //Assert.That(o2Results.Count > 0 , "There were no results");
 		        	
-		        	if (o2Results.Count==0)
-		        		O2Cmd.log.error("there were no results in task4_CalculateStrutsFindings");
-		        	else
-		        	{
-	                    // save results
-	                    var targetFolder = Path.Combine(folderWithArtifacts_Phase3, "Struts Mappings");
-	                    Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);
-	                    var fileWithSavedResults = Path.Combine(targetFolder,projectName + ".ozasmt");
-	                    XUtils_Findings_v0_1.saveFindings(o2Results,fileWithSavedResults);
+                    if (o2Results.Count==0)
+                        O2Cmd.log.error("there were no results in task4_CalculateStrutsFindings");
+                    else
+                    {
+                        // save results
+                        var targetFolder = Path.Combine(folderWithArtifacts_Phase3, "Struts Mappings");
+                        Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);
+                        var fileWithSavedResults = Path.Combine(targetFolder,projectName + ".ozasmt");
+                        XUtils_Findings_v0_1.saveFindings(o2Results,fileWithSavedResults);
 			        	
-	                    // make sure saved file exists
-	                    Assert.That(File.Exists(fileWithSavedResults), "fileWithSavedResults did not exist: " + fileWithSavedResults);
+                        // make sure saved file exists
+                        Assert.That(File.Exists(fileWithSavedResults), "fileWithSavedResults did not exist: " + fileWithSavedResults);
 			        	
-	                    O2Cmd.log.write("All OK. There were {0} results \r\nsaved to: {1}", o2Results.Count, fileWithSavedResults);
+                        O2Cmd.log.write("All OK. There were {0} results \r\nsaved to: {1}", o2Results.Count, fileWithSavedResults);
                     }
                 }
             }
@@ -161,9 +161,9 @@ namespace O2.XRules.Database._Rules
 
             if (analysisArtifacts.phase_3.task2_filterFindings)
             {
-            	var targetFolder = Path.Combine(folderWithArtifacts_Phase3, "Filtered_Findings");
-            	Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);	
-            	Files.deleteAllFilesFromDir(targetFolder);
+                var targetFolder = Path.Combine(folderWithArtifacts_Phase3, "Filtered_Findings");
+                Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);	
+                Files.deleteAllFilesFromDir(targetFolder);
             	
                 var allTraces_KnownSinks = XUtils_Analysis.getAllTraces_KnownSinks(folderWithArtifacts_Phase2);
                 var allTraces_LostSinks = XUtils_Analysis.getAllTraces_LostSinks(folderWithArtifacts_Phase2);
