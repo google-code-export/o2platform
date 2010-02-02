@@ -264,7 +264,6 @@
     </FileAssociation>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="_Rules\Analysis_Workflows\" />
     <Folder Include="_Rules\_Samples\User Controls [Ascx]\" />
     <Folder Include="_Rules\_Samples\Wizards\not working\" />
   </ItemGroup>
