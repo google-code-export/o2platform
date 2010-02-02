@@ -17,12 +17,12 @@ using NUnit.Framework;
 //O2File:..\Findings Filtering\xUtils_Findings_v0_1.cs
 //O2File:XUtils_Analysis.cs
 
-namespace O2.XRules.Database._Rules
+namespace O2.XRules.Database._Rules.Analysis_Workflows
 {
     public class Analysis_Workflow_Phase_2 : KXRule
     {    
-    	//string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
-    	string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";
+        //string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
+        string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";
     	
         public bool onlyRunTasksOnOneFile = false;
 	                    	
@@ -128,7 +128,7 @@ namespace O2.XRules.Database._Rules
                     var o2FindingsInFile = XUtils_Findings_v0_1.loadFindingsFile(file);
                     // check if file was loaded ok
                     Assert.That(o2FindingsInFile != null ,"o2FindingsInFile was null. file loaded :"+ file );
-                   // Assert.That(o2FindingsInFile.Count > 0, "There were no findings loaded from file: " + file);
+                    // Assert.That(o2FindingsInFile.Count > 0, "There were no findings loaded from file: " + file);
                     O2Cmd.log.write("Loaded {0} findings from file {1}",o2FindingsInFile.Count  , fileName);
                     task1_FilterFindings(o2FindingsInFile, fileName);  		
                     if (onlyRunTasksOnOneFile)

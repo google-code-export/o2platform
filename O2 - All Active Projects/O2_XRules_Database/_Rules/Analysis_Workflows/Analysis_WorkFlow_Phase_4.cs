@@ -12,12 +12,12 @@ using O2.XRules.Database.Interfaces;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;
 
-namespace O2.XRules.Database._Rules
+namespace O2.XRules.Database._Rules.Analysis_Workflows
 {
     public class Analysis_Workflow_Phase_4 : KXRule
     {        	 
-    	//string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
-    	string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";
+        //string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
+        string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";
     	
         public bool deleteAllFiles = true;           
     	
@@ -111,15 +111,15 @@ namespace O2.XRules.Database._Rules
             //XUtils_Findings_v0_1.openFindingsInNewWindow(maybeExploitable).Join();
         }
 		
-		// note this should be the last one to run
-		public void makeKnownFindingsTypeII(List<IO2Finding> o2Findings)
-		{
-			foreach(var o2Finding in o2Findings)
-				o2Finding.confidence = 2;
-			var saveAsTypeII  = Path.Combine(folderWithArtifacts_Phase4, "all_Non_Processed_KnownSink_Findings_as_Type_II.ozasmt");
+        // note this should be the last one to run
+        public void makeKnownFindingsTypeII(List<IO2Finding> o2Findings)
+        {
+            foreach(var o2Finding in o2Findings)
+                o2Finding.confidence = 2;
+            var saveAsTypeII  = Path.Combine(folderWithArtifacts_Phase4, "all_Non_Processed_KnownSink_Findings_as_Type_II.ozasmt");
 	 	
             XUtils_Findings_v0_1.saveFindings(o2Findings,saveAsTypeII);
-		}
+        }
 		
         public void task2_AdjustsStrutsFindings()
         {

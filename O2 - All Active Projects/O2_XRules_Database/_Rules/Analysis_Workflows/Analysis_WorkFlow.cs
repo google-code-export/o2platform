@@ -18,13 +18,13 @@ using NUnit.Framework;
 //O2File:Analysis_WorkFlow_Phase_4.cs
 //O2File:Analysis_WorkFlow_Phase_5.cs
 
-namespace O2.XRules.Database._Rules
+namespace O2.XRules.Database._Rules.Analysis_Workflows
 {
-	[TestFixture]
+    [TestFixture]
     public class Analysis_Workflow : KXRule
     {    
-    	string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
-    	//string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";
+        string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\WebGoat.AnalysisArtifacts";
+        //string testAnalysisArtifactsFile = @"E:\O2\Demodata\_AnalysisWorkflow\XPlanner.AnalysisArtifacts";
     	
         private static IO2Log log = PublicDI.log;
 
@@ -36,7 +36,7 @@ namespace O2.XRules.Database._Rules
         [XRule(Name = "Start from GUI")]
         public string start()
         {
-        	return start(testAnalysisArtifactsFile);
+            return start(testAnalysisArtifactsFile);
         }
         [XRule(Name = "Start with artifacts file")]
         public string start(string analysisArtifactsFile)
@@ -95,17 +95,17 @@ namespace O2.XRules.Database._Rules
         [XRule(Name = "test Manual Phases")]
         public string testManualPhases()
         {        	
-        	return manual_phases(testAnalysisArtifactsFile,"1234");        	
+            return manual_phases(testAnalysisArtifactsFile,"1234");        	
         }
         
         [XRule(Name = "Manual_Phases")]
         public string manual_phases(string analysisArtifactsFile, string phase)
         {
-        	O2Cmd.log.write("\n\n*********   O2 Analysis Workflow : Manual Phase execution **********\n\n");
-        	O2Cmd.log.write("\n: analysisArtifactsFile = {0}", analysisArtifactsFile);
-        	O2Cmd.log.write("\n: phase = {0}", phase);
+            O2Cmd.log.write("\n\n*********   O2 Analysis Workflow : Manual Phase execution **********\n\n");
+            O2Cmd.log.write("\n: analysisArtifactsFile = {0}", analysisArtifactsFile);
+            O2Cmd.log.write("\n: phase = {0}", phase);
 
-			var analysisArtifacts = KAnalysisArtifacts.load(analysisArtifactsFile);
+            var analysisArtifacts = KAnalysisArtifacts.load(analysisArtifactsFile);
 
             O2Cmd.log.write(analysisArtifacts.getAnalysisDetails());
 
@@ -118,10 +118,10 @@ namespace O2.XRules.Database._Rules
             if (phase.IndexOf("3") > -1)
                 new Analysis_Workflow_Phase_3().runPhase3(analysisArtifacts);
                 
-			if (phase.IndexOf("4") > -1)
+            if (phase.IndexOf("4") > -1)
                 new Analysis_Workflow_Phase_4().runPhase4(analysisArtifacts);
                 
-			if (phase.IndexOf("5") > -1)
+            if (phase.IndexOf("5") > -1)
                 new Analysis_Workflow_Phase_5().runPhase5(analysisArtifacts);            
                         
             return "manual phase  execution completed";
