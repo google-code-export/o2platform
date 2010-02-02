@@ -143,7 +143,7 @@
   <ItemGroup>
     <Compile Include="DI.cs" />
     <Compile Include="InstallXRules.cs" />
-    <Compile Include="_Rules\Interfaces\KAnalysisArtifacts.cs" />
+    <Compile Include="_Rules\_Interfaces\KAnalysisArtifacts.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wizard - XRule Exec Simple.cs" />
@@ -163,7 +163,7 @@
     <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_3.cs" />
     <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_4.cs" />
     <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_5.cs" />
-    <Compile Include="_Rules\Interfaces\IAnalysisArtifacts.cs" />
+    <Compile Include="_Rules\_Interfaces\IAnalysisArtifacts.cs" />
     <Compile Include="_Rules\Findings Filtering\XRule_Findings_Filter.cs" />
     <Compile Include="_Rules\IBM\Wizard_Setup_MySql.cs" />
     <Compile Include="_Rules\J2EE\Struts\XRule_Struts.cs" />
