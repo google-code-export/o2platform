@@ -1,32 +1,19 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using O2.Kernel;
 using O2.Kernel.Interfaces.O2Core;
-using O2.Kernel.Interfaces.Views;
 using O2.DotNetWrappers.DotNet;
-using O2.DotNetWrappers.Windows;
-using O2.Views.ASCX;
-using O2.Views.ASCX.Ascx.MainGUI;
-using O2.Views.ASCX.classes;
-using O2.Views.ASCX.CoreControls;
-using O2.External.WinFormsUI.Forms;
-using O2.External.SharpDevelop.Ascx;
 using O2.Views.ASCX.MerlinWizard;
-using O2.DotNetWrappers.Zip;
 // extra references and the namespaces they import
 //O2Tag_AddReferenceFile:nunit.framework.dll
-using NUnit.Framework; 
 //O2Tag_AddReferenceFile:merlin.dll
 using Merlin;
-using MerlinStepLibrary;
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
+using O2.DotNetWrappers.Network;
 //O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\MerlinWizard_ExtensionMethods.cs
 
 namespace O2.XRules.Database
@@ -43,8 +30,9 @@ namespace O2.XRules.Database
         {			
             var o2Wizard = new O2Wizard("Execute XRule");
             scriptToExecute = getClickOnceScriptPath();
-            if (false == File.Exists(scriptToExecute))
-                addStep_SelectXRuleToExecute(o2Wizard);
+            //scriptToExecute = @"C:\O2\XRulesDatabase\_Rules\_Samples\HelloWorld.cs.o2";
+            //if (false == File.Exists(scriptToExecute))
+            addStep_SelectXRuleToExecute(o2Wizard);
             addStep_CompileScript(o2Wizard);
             
             o2Wizard.start();
@@ -55,9 +43,14 @@ namespace O2.XRules.Database
             if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null &&
                 AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null &&
                 AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Count() > 0)
-            {
+            {                
                 var file = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
-                return file.Replace("file:///", "").Replace("%20", "");
+                PublicDI.log.debug("ClickOnce file raw: {0}", file);
+                file = file.Replace("file:///", "");
+                file = WebEncoding.urlDecode(file);
+                file = file.Replace( "/","\\");
+                PublicDI.log.debug("ClickOnce file final: {0}", file);
+                return file;
             }
             
             return "";
@@ -65,6 +58,8 @@ namespace O2.XRules.Database
 
         private string testFileToUse()
         {
+            return Web.checkIfFileExistsAndDownloadIfNot("HelloWorld.cs",
+                                                         @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules/_Samples/HelloWorld.cs.o2");
             return @"C:\O2\XRulesDatabase\_Rules\_Samples\HelloWorld.cs";
         }
  		
@@ -124,8 +119,9 @@ namespace O2.XRules.Database
                         step.clear();
                         //var panel = step.FirstControl; 
                         step.add_Label("Compiling Script:" +  scriptToExecute);
-						
-                        var compiledAssembly = new CompileEngine().compileSourceFile(scriptToExecute);
+
+                        var compileEngine = new CompileEngine();
+                        var compiledAssembly = compileEngine.compileSourceFile(scriptToExecute);
                         if (compiledAssembly != null)					
                         {
                             var label = step.add_Label("Compilation was ok", 20);
@@ -147,6 +143,7 @@ namespace O2.XRules.Database
                         {
                             var label = step.add_Label("Compilation Failed", 20);
                             label.ForeColor = Color.DarkRed;
+                            step.add_Label(compileEngine.sbErrorMessage.ToString(), 40);                            
                         }
 						
                     });			   

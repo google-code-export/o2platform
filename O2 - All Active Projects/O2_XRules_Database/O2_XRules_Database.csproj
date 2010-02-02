@@ -19,7 +19,7 @@
     <ManifestKeyFile>O2_XRules_Database_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
-    <PublishUrl>C:\O2\ClickOnce_Installers\O2_XRules_Database\</PublishUrl>
+    <PublishUrl>C:\O2\_O2 - LOCAL SVN - DEV\O2_ClickOnce_Installers\O2_XRules_Database\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -29,12 +29,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://o2platform.googlecode.com/svn/branches/ClickOnce_Installers/O2_XRules_Database/</InstallUrl>
+    <InstallUrl>http://o2platform.googlecode.com/svn/O2_ClickOnce_Installers/O2_XRules_Database/</InstallUrl>
     <ProductName>O2 XRules Database</ProductName>
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationRevision>16</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -143,7 +143,7 @@
   <ItemGroup>
     <Compile Include="DI.cs" />
     <Compile Include="InstallXRules.cs" />
-    <Compile Include="Interfaces\KAnalysisArtifacts.cs" />
+    <Compile Include="_Rules\Interfaces\KAnalysisArtifacts.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wizard - XRule Exec Simple.cs" />
@@ -163,7 +163,7 @@
     <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_3.cs" />
     <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_4.cs" />
     <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_5.cs" />
-    <Compile Include="Interfaces\IAnalysisArtifacts.cs" />
+    <Compile Include="_Rules\Interfaces\IAnalysisArtifacts.cs" />
     <Compile Include="_Rules\Findings Filtering\XRule_Findings_Filter.cs" />
     <Compile Include="_Rules\IBM\Wizard_Setup_MySql.cs" />
     <Compile Include="_Rules\J2EE\Struts\XRule_Struts.cs" />
@@ -182,16 +182,16 @@
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples\SvnTest.cs" />
     <Compile Include="_Rules\_Samples\Under_Development\Rohit%27s GUI v0.1.cs" />
-    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_AssemblyAttributes.cs">
+    <Compile Include="_Rules\_Samples\User Controls [Ascx]\ascx_AssemblyAttributes.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_MonoDecompiler.cs">
+    <Compile Include="_Rules\_Samples\User Controls [Ascx]\ascx_MonoDecompiler.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_Running_Processes_Details.cs">
+    <Compile Include="_Rules\_Samples\User Controls [Ascx]\ascx_Running_Processes_Details.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\_Samples\Windows Controls %28ascx%29\ascx_View_SourceCode_AST.cs">
+    <Compile Include="_Rules\_Samples\User Controls [Ascx]\ascx_View_SourceCode_AST.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="_Rules\_Samples\Wizards\Wizard - Enable or Disable Network Interfaces.cs" />
@@ -201,9 +201,9 @@
     <Compile Include="_Rules\_Samples\Wizards\Wizard - SearchEngine UseCase 1.cs" />
     <Compile Include="_Rules\_Samples\Wizards\not working\Wizard_ViewStrutsMappings %28under dev%29.cs" />
     <Compile Include="_Rules\_Samples\Wizards\Wizard - Sync XRules Via Svn.cs" />
-    <Compile Include="_Templates\Empty_XRule.cs" />
-    <Compile Include="_Templates\Empty_Class.cs" />
-    <Compile Include="_Templates\Local_Findings_Files.cs" />
+    <Compile Include="_Rules\_Templates\Empty_XRule.cs" />
+    <Compile Include="_Rules\_Templates\Empty_Class.cs" />
+    <Compile Include="_Rules\_Templates\Local_Findings_Files.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="XRules_RulesSourceCode.resx">
