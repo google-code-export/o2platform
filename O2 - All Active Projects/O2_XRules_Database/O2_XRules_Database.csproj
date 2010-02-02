@@ -157,22 +157,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>XRules_Templates.resx</DependentUpon>
     </Compile>
-    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow.cs" />
-    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_1.cs" />
-    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_2.cs" />
-    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_3.cs" />
-    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_4.cs" />
-    <Compile Include="_Rules\Analysis_Workflows\Analysis_WorkFlow_Phase_5.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_1.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_2.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_3.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_4.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_5.cs" />
     <Compile Include="_Rules\_Interfaces\IAnalysisArtifacts.cs" />
     <Compile Include="_Rules\Findings Filtering\XRule_Findings_Filter.cs" />
     <Compile Include="_Rules\IBM\Wizard_Setup_MySql.cs" />
     <Compile Include="_Rules\J2EE\Struts\XRule_Struts.cs" />
-    <Compile Include="_Rules\Analysis_Workflows\XUtils_Analysis.cs" />
-    <Compile Include="_Rules\Analysis_Workflows\XUtils_AnalysisWorkflow.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\XUtils_Analysis.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\XUtils_AnalysisWorkflow.cs" />
     <Compile Include="_Rules\Findings Filtering\xUtils_Findings_v0_1.cs" />
     <Compile Include="_Rules\J2EE\Struts\XUtils_Struts_Joins_V0_1.cs" />
     <Compile Include="_Rules\J2EE\Struts\xUtils_Struts_v0_1.cs" />
-    <Compile Include="_Rules\Analysis_Workflows\Sample_Analysis_Workflow_WebGoat.cs" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\Sample_Analysis_Workflow_WebGoat.cs" />
     <Compile Include="_Rules\Support files For Unit Tests\1_helloWorld.cs" />
     <Compile Include="_Rules\Support files For Unit Tests\2_For_UnitTest_HotMethodPatch.cs" />
     <Compile Include="_Rules\Support files For Unit Tests\4_For_UnitTest_SimpleCalls.cs" />
@@ -264,7 +264,7 @@
     </FileAssociation>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="_Rules\IBM\Analysis_Workflows\" />
+    <Folder Include="_Rules\Analysis_Workflows\" />
     <Folder Include="_Rules\_Samples\User Controls [Ascx]\" />
     <Folder Include="_Rules\_Samples\Wizards\not working\" />
   </ItemGroup>
