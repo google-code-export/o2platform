@@ -173,10 +173,10 @@
     <Compile Include="_Rules\J2EE\Struts\XUtils_Struts_Joins_V0_1.cs" />
     <Compile Include="_Rules\J2EE\Struts\xUtils_Struts_v0_1.cs" />
     <Compile Include="_Rules\IBM\Analysis_Workflows\Sample_Analysis_Workflow_WebGoat.cs" />
-    <Compile Include="_Rules\Support files For Unit Tests\1_helloWorld.cs" />
-    <Compile Include="_Rules\Support files For Unit Tests\2_For_UnitTest_HotMethodPatch.cs" />
-    <Compile Include="_Rules\Support files For Unit Tests\4_For_UnitTest_SimpleCalls.cs" />
-    <Compile Include="_Rules\Support files For Unit Tests\_Sample_UnitTests.cs" />
+    <Compile Include="_Rules\_Samples\Support files For Unit Tests\1_helloWorld.cs" />
+    <Compile Include="_Rules\_Samples\Support files For Unit Tests\2_For_UnitTest_HotMethodPatch.cs" />
+    <Compile Include="_Rules\_Samples\Support files For Unit Tests\4_For_UnitTest_SimpleCalls.cs" />
+    <Compile Include="_Rules\_Samples\Support files For Unit Tests\_Sample_UnitTests.cs" />
     <None Include="_Rules\_Samples\HelloWorld.cs.o2" />
     <None Include="_Rules\_Samples\SampleScripts.cs.o2" />
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
