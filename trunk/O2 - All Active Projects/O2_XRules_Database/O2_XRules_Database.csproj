@@ -157,7 +157,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>XRules_Templates.resx</DependentUpon>
     </Compile>
-    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow.cs" />
+    <None Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow.cs.o2" />
     <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_1.cs" />
     <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_2.cs" />
     <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_3.cs" />
@@ -182,23 +182,23 @@
     <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
     <Compile Include="_Rules\_Samples\SvnTest.cs" />
     <Compile Include="_Rules\_Samples\Under_Development\Rohit%27s GUI v0.1.cs" />
-    <Compile Include="_Rules\DotNet\ascx_AssemblyAttributes.cs">
+    <None Include="_Rules\DotNet\ascx_AssemblyAttributes.cs.o2">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\DotNet\ascx_MonoDecompiler.cs">
+    </None>
+    <None Include="_Rules\DotNet\ascx_MonoDecompiler.cs.o2">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\Windows Utils\ascx_Running_Processes_Details.cs">
+    </None>
+    <None Include="_Rules\Windows Utils\ascx_Running_Processes_Details.cs.o2">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\DotNet\ascx_View_SourceCode_AST.cs">
+    </None>
+    <None Include="_Rules\DotNet\ascx_View_SourceCode_AST.cs.o2">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\Windows Utils\Wizard - Enable or Disable Network Interfaces.cs" />
-    <Compile Include="_Rules\DotNet\Wizard - Start HacmeBank.cs" />
+    </None>
+    <None Include="_Rules\Windows Utils\Wizard - Enable or Disable Network Interfaces.cs.o2" />
+    <None Include="_Rules\DotNet\Wizard - Start HacmeBank.cs.o2" />
     <None Include="_Rules\O2 Utils\Wizard - BackupFolder.cs.o2" />
-    <Compile Include="_Rules\DotNet\Wizard - CopyGacDlls.cs" />
-    <Compile Include="_Rules\Misc Utils\Wizard - SearchEngine UseCase 1.cs" />
+    <None Include="_Rules\DotNet\Wizard - CopyGacDlls.cs.o2" />
+    <None Include="_Rules\Misc Utils\Wizard - SearchEngine UseCase 1.cs.o2" />
     <Compile Include="_Rules\_Samples\Under_Development\Wizard_ViewStrutsMappings %28under dev%29.cs" />
     <None Include="_Rules\O2 Utils\Wizard - Sync XRules Via Svn.cs.o2" />
     <Compile Include="_Rules\_Templates\Empty_XRule.cs" />
