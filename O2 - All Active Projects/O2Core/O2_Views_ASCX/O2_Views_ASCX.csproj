@@ -78,6 +78,9 @@
     <Compile Include="Ascx\MainGUI\ascx_WorkingOnTask.Designer.cs">
       <DependentUpon>ascx_WorkingOnTask.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ascx\Web\O2WebBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="classes\Ascx_ExtensionMethods.cs" />
     <Compile Include="classes\CreateDataTable.cs" />
     <Compile Include="classes\ImagesLists.cs" />

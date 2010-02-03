@@ -42,6 +42,8 @@ namespace O2.External.SharpDevelop.Ascx
             this.autoCompileEvery10SecondsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addBreakpointOnCurrentLineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compileSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cboxVRuler = new System.Windows.Forms.CheckBox();
             this.cboxInvalidLines = new System.Windows.Forms.CheckBox();
             this.cboxHRuler = new System.Windows.Forms.CheckBox();
@@ -60,7 +62,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbSourceCode_DirectoryOfFileLoaded = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripWithSourceCodeActions = new System.Windows.Forms.ToolStrip();
             this.tbShowO2ObjectModel = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
@@ -102,10 +104,8 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbExecutionHistoryOrLog = new System.Windows.Forms.TextBox();
             this.tvCompilationErrors = new System.Windows.Forms.TreeView();
             this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
-            this.compileSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripForSourceEdition.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -124,7 +124,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem,
             this.compileSettingsToolStripMenuItem});
             this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(343, 246);
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(343, 224);
             this.menuStripForSourceEdition.Opening += new System.ComponentModel.CancelEventHandler(this.menuStripForSourceEdition_Opening);
             // 
             // compileToolStripMenuItem
@@ -198,6 +198,21 @@ namespace O2.External.SharpDevelop.Ascx
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Text = "Open Current file in editor with \'Code Complete\' support";
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Click += new System.EventHandler(this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem_Click);
+            // 
+            // compileSettingsToolStripMenuItem
+            // 
+            this.compileSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem});
+            this.compileSettingsToolStripMenuItem.Name = "compileSettingsToolStripMenuItem";
+            this.compileSettingsToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.compileSettingsToolStripMenuItem.Text = "Compile Settings";
+            // 
+            // listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem
+            // 
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Name = "listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem";
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Size = new System.Drawing.Size(409, 22);
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Text = "List (in LogView) the current assembly references automatically added";
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Click += new System.EventHandler(this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem_Click);
             // 
             // cboxVRuler
             // 
@@ -410,9 +425,9 @@ namespace O2.External.SharpDevelop.Ascx
             this.label3.TabIndex = 44;
             this.label3.Text = "File Loaded:";
             // 
-            // toolStrip1
+            // toolStripWithSourceCodeActions
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripWithSourceCodeActions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbShowO2ObjectModel,
             this.toolStripSeparator7,
             this.toolStripLabel3,
@@ -443,11 +458,11 @@ namespace O2.External.SharpDevelop.Ascx
             this.cBoxSampleScripts,
             this.toolStripSeparator5,
             this.btOpenFile});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1149, 25);
-            this.toolStrip1.TabIndex = 45;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStripWithSourceCodeActions.Location = new System.Drawing.Point(0, 0);
+            this.toolStripWithSourceCodeActions.Name = "toolStripWithSourceCodeActions";
+            this.toolStripWithSourceCodeActions.Size = new System.Drawing.Size(1149, 25);
+            this.toolStripWithSourceCodeActions.TabIndex = 45;
+            this.toolStripWithSourceCodeActions.Text = "toolStrip1";
             // 
             // tbShowO2ObjectModel
             // 
@@ -676,7 +691,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.cBoxSampleScripts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxSampleScripts.Name = "cBoxSampleScripts";
-            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 25);
+            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 21);
             this.cBoxSampleScripts.Visible = false;
             this.cBoxSampleScripts.SelectedIndexChanged += new System.EventHandler(this.cBoxSampleScripts_SelectedIndexChanged);
             // 
@@ -691,7 +706,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btOpenFile.Image")));
             this.btOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btOpenFile.Name = "btOpenFile";
-            this.btOpenFile.Size = new System.Drawing.Size(23, 22);
+            this.btOpenFile.Size = new System.Drawing.Size(23, 20);
             this.btOpenFile.Text = "Open File";
             this.btOpenFile.Click += new System.EventHandler(this.btOpenFile_Click);
             // 
@@ -833,7 +848,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.ContextMenuStrip = this.menuStripForSourceEdition;
             this.tecSourceCode.IsIconBarVisible = true;
             this.tecSourceCode.IsReadOnly = false;
-            this.tecSourceCode.Location = new System.Drawing.Point(3, 28);
+            this.tecSourceCode.Location = new System.Drawing.Point(0, 28);
             this.tecSourceCode.Name = "tecSourceCode";
             this.tecSourceCode.ShowEOLMarkers = true;
             this.tecSourceCode.ShowSpaces = true;
@@ -845,21 +860,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
             this.tecSourceCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragEnter);
             // 
-            // compileSettingsToolStripMenuItem
-            // 
-            this.compileSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem});
-            this.compileSettingsToolStripMenuItem.Name = "compileSettingsToolStripMenuItem";
-            this.compileSettingsToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
-            this.compileSettingsToolStripMenuItem.Text = "Compile Settings";
-            // 
-            // listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem
-            // 
-            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Name = "listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem";
-            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Size = new System.Drawing.Size(409, 22);
-            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Text = "List (in LogView) the current assembly references automatically added";
-            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Click += new System.EventHandler(this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem_Click);
-            // 
             // ascx_SourceCodeEditor
             // 
             this.AllowDrop = true;
@@ -869,7 +869,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.Controls.Add(this.tvCompilationErrors);
             this.Controls.Add(this.groupBoxWithFileAndSaveSettings);
             this.Controls.Add(this.tbExecutionHistoryOrLog);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStripWithSourceCodeActions);
             this.Controls.Add(this.tecSourceCode);
             this.Controls.Add(this.lbPartialFileView);
             this.Controls.Add(this.label1);
@@ -882,8 +882,8 @@ namespace O2.External.SharpDevelop.Ascx
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.ascx_SourceCodeEditor_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.ascx_SourceCodeEditor_DragEnter);
             this.menuStripForSourceEdition.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStripWithSourceCodeActions.ResumeLayout(false);
+            this.toolStripWithSourceCodeActions.PerformLayout();
             this.groupBoxWithFileAndSaveSettings.ResumeLayout(false);
             this.groupBoxWithFileAndSaveSettings.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -914,7 +914,7 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.TextBox tbSourceCode_DirectoryOfFileLoaded;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStripWithSourceCodeActions;
         private System.Windows.Forms.GroupBox groupBoxWithFileAndSaveSettings;
         private System.Windows.Forms.ToolStripButton btSettings;
         private System.Windows.Forms.ToolStripButton btCompileCode;

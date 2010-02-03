@@ -56,7 +56,7 @@ namespace O2.External.SharpDevelop.Ascx
                 else
                 {
                     if (sFileToOpen != "")
-                        DI.log.error("in ascx_SourceCodeEditor .ctor: File provided does not exist: {0}", sFileToOpen);
+                        PublicDI.log.error("in ascx_SourceCodeEditor .ctor: File provided does not exist: {0}", sFileToOpen);
                 }
                 configureOnLoadMenuOptions();
                 configureDefaultSettingsForTextEditor(tecSourceCode);
@@ -186,7 +186,7 @@ namespace O2.External.SharpDevelop.Ascx
                             long iCurrentFileSize = Files.getFileSize(fileToLoad);
                             if (iCurrentFileSize > (iMaxFileSize*1024))
                             {
-                                DI.log.error("File to load is too big: max is {0}k, this file is {1}k : {2}",
+                                PublicDI.log.error("File to load is too big: max is {0}k, this file is {1}k : {2}",
                                              iMaxFileSize,
                                              iCurrentFileSize/1024, fileToLoad);
                                 loadPartialFileView(fileToLoad);
@@ -206,7 +206,7 @@ namespace O2.External.SharpDevelop.Ascx
                         }
                         catch (Exception ex)
                         {
-                            DI.log.error("in loadSourceCodeFileIntoTextEditor: {0}", ex.Message);
+                            PublicDI.log.error("in loadSourceCodeFileIntoTextEditor: {0}", ex.Message);
                         }
                         return null;
                     });
@@ -295,7 +295,7 @@ namespace O2.External.SharpDevelop.Ascx
 
                 }
 
-                DI.log.info("Source code saved to: {0}", sTargetLocation);
+                PublicDI.log.info("Source code saved to: {0}", sTargetLocation);
                 tbSourceCode_FileLoaded.Text = Path.GetFileName(sTargetLocation);
                 lbSource_CodeFileSaved.Visible = true;
                 lbSourceCode_UnsavedChanges.Visible = false;
@@ -304,7 +304,7 @@ namespace O2.External.SharpDevelop.Ascx
             }
             catch (Exception ex)
             {
-                DI.log.error("in saveSourceCodeFile {0}", ex.Message);
+                PublicDI.log.error("in saveSourceCodeFile {0}", ex.Message);
             }
         }
 
@@ -318,7 +318,7 @@ namespace O2.External.SharpDevelop.Ascx
             var fileExtension = Path.GetExtension(pathToSourceCodeFileToLoad).ToLower();
             if (fileExtension == ".dll" || fileExtension == ".exe" || fileExtension == ".class" || hasNonRendredChars(pathToSourceCodeFileToLoad))
             {
-                DI.log.error("Skipping file load due to its extension or contents: {0}", Path.GetFileName(pathToSourceCodeFileToLoad));
+                PublicDI.log.error("Skipping file load due to its extension or contents: {0}", Path.GetFileName(pathToSourceCodeFileToLoad));
                 return false;
             }
             return (bool)(this.invokeOnThread(() =>
@@ -329,7 +329,7 @@ namespace O2.External.SharpDevelop.Ascx
                                          {
                                              if (sPathToFileLoaded != pathToSourceCodeFileToLoad)
                                              {
-                                                 DI.log.debug("Loading File: {0}",
+                                                 PublicDI.log.debug("Loading File: {0}",
                                                               pathToSourceCodeFileToLoad);
                                                  if (pathToSourceCodeFileToLoad != "")
                                                  {
@@ -349,7 +349,7 @@ namespace O2.External.SharpDevelop.Ascx
                                                      btSaveFile.Enabled = false;
 
 
-                                                     DI.log.debug("Source code file loaded: {0}", pathToSourceCodeFileToLoad);
+                                                     PublicDI.log.debug("Source code file loaded: {0}", pathToSourceCodeFileToLoad);
                                                      setCompileAndInvokeButtonsState(sPathToFileLoaded);
                                                  }
                                                  return true;
@@ -360,7 +360,7 @@ namespace O2.External.SharpDevelop.Ascx
                                      }
                                      catch (Exception ex)
                                      {
-                                         DI.log.ex(ex, "in loadSourceCodeFile");
+                                         PublicDI.log.ex(ex, "in loadSourceCodeFile");
                                      }
                                      return false;
                                  }));
@@ -496,7 +496,7 @@ namespace O2.External.SharpDevelop.Ascx
             }
             catch (Exception ex)
             {
-                DI.log.error("in SourceCodeEditor.gotoLine: {0}", ex.Message);
+                PublicDI.log.error("in SourceCodeEditor.gotoLine: {0}", ex.Message);
             }
         }
 
@@ -508,7 +508,7 @@ namespace O2.External.SharpDevelop.Ascx
             }
             catch (Exception ex)
             {
-                DI.log.error("in gotoLine: {0}", ex.Message);
+                PublicDI.log.error("in gotoLine: {0}", ex.Message);
             }
         }
         public void gotoLine(String sPathSourceCodeFile, Int32 iLineToSelect)
@@ -642,7 +642,7 @@ namespace O2.External.SharpDevelop.Ascx
                         else
                             break;
 
-                    DI.log.debug("Word: {0}     Object:{1}", sWord, sObject);
+                    PublicDI.log.debug("Word: {0}     Object:{1}", sWord, sObject);
                 }
             }
         }
@@ -695,7 +695,7 @@ namespace O2.External.SharpDevelop.Ascx
                                 var fileExtention = Path.GetExtension(sPathToFileLoaded).ToLower();
                                 if (fileExtention == ".o2")
                                     fileExtention = Path.GetExtension(Path.GetFileNameWithoutExtension(sPathToFileLoaded));
-                                //DI.log.info("in compileSourceCode");
+                                //PublicDI.log.info("in compileSourceCode");
                                 switch (fileExtention)
                                 {
                                     case ".cs":
@@ -703,7 +703,7 @@ namespace O2.External.SharpDevelop.Ascx
                                         break;
                                     default:
                                         var currentExternalEngine = cbExternalEngineToUse.Text;
-                                        //DI.log.info("Going to execute PY");
+                                        //PublicDI.log.info("Going to execute PY");
                                         executeOnExternalEngine(currentExternalEngine);
                                         break;
 
@@ -751,7 +751,7 @@ namespace O2.External.SharpDevelop.Ascx
                 {
                     // if not, populate the cbox for dynamic execution                
                     O2Messages.dotNetAssemblyAvailable(compiledAssembly.Location);
-                    foreach (var method in DI.reflection.getMethods(compiledAssembly))
+                    foreach (var method in PublicDI.reflection.getMethods(compiledAssembly))
                         if (false == method.IsAbstract && false == method.IsSpecialName)
                             cboxCompliledSourceCodeMethods.Items.Add(new Reflection_MethodInfo(method));
                     // remap the previously executed method
@@ -800,9 +800,9 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void executeOnExternalEngine(string engineToUse)
         {
-            //DI.log.info("executing PY");
+            //PublicDI.log.info("executing PY");
             /*if (!File.Exists(ironPhytonExe))
-                DI.log.error("Count not find Iron Phyton executable: {0}", ironPhytonExe);
+                PublicDI.log.error("Count not find Iron Phyton executable: {0}", ironPhytonExe);
             else
             {*/
             saveSourceCode();
@@ -851,7 +851,7 @@ namespace O2.External.SharpDevelop.Ascx
             if (!string.IsNullOrEmpty(logMessage))
             {
                 this.invokeOnThread(() => tbExecutionHistoryOrLog.AppendText(logMessage + Environment.NewLine));
-                DI.log.info("\t:{0}:", logMessage);
+                PublicDI.log.info("\t:{0}:", logMessage);
             }
         }
 
@@ -898,7 +898,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             if (scriptToLoad != "" && sampleScripts.ContainsKey(scriptToLoad))
             {
-                var tempScriptFileName = DI.config.TempFileNameInTempDirectory + "_" + Path.GetFileName(scriptToLoad);
+                var tempScriptFileName = PublicDI.config.TempFileNameInTempDirectory + "_" + Path.GetFileName(scriptToLoad);
                 Files.WriteFileContent(tempScriptFileName, sampleScripts[scriptToLoad]);
                 loadSourceCodeFile(tempScriptFileName);
                 tecSourceCode.Focus();
@@ -914,7 +914,7 @@ namespace O2.External.SharpDevelop.Ascx
             }
             catch (Exception ex)
             {
-                DI.log.ex(ex, "in setMaxLoadSize");
+                PublicDI.log.ex(ex, "in setMaxLoadSize");
             }
 
         }
@@ -924,7 +924,7 @@ namespace O2.External.SharpDevelop.Ascx
             var selectedError = getSelectedError();
             if (selectedError == "")
                 return;
-            DI.log.info(selectedError);
+            PublicDI.log.info(selectedError);
 
             string[] sSplitedLine = selectedError.Split(new[] { "::" }, StringSplitOptions.None);
             if (sSplitedLine.Length == 5)
@@ -950,7 +950,7 @@ namespace O2.External.SharpDevelop.Ascx
             //compileEngine.lsGACExtraReferencesToAdd();
             foreach (var referencedAssesmbly in referencedAssemblies)
                 if (File.Exists(referencedAssesmbly))
-                    foreach (var method in DI.reflection.getMethods(referencedAssesmbly))
+                    foreach (var method in PublicDI.reflection.getMethods(referencedAssesmbly))
                         signatures.Add(new FilteredSignature(method).sSignature);
             timer.stop();
             return signatures;
@@ -961,7 +961,7 @@ namespace O2.External.SharpDevelop.Ascx
             var currentLoadedFile = sPathToFileLoaded;// getFullPathTOCurrentSourceCodeFile();
             if (File.Exists(currentLoadedFile))
             {
-                DI.log.info("reloading file: {0}", currentLoadedFile);
+                PublicDI.log.info("reloading file: {0}", currentLoadedFile);
                 sPathToFileLoaded = ""; // reset this value (since that would prevent this file from being opened again
                 loadSourceCodeFile(currentLoadedFile);
             }
@@ -969,11 +969,11 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void openFile()
         {
-            DI.log.info("Select file to open");
+            PublicDI.log.info("Select file to open");
             var openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                DI.log.info("Loading file: {0}", openFileDialog.FileName);
+                PublicDI.log.info("Loading file: {0}", openFileDialog.FileName);
                 loadSourceCodeFile(openFileDialog.FileName);
             }
         }
@@ -1007,7 +1007,7 @@ namespace O2.External.SharpDevelop.Ascx
                         }
                         catch (Exception ex)
                         {
-                            DI.log.error("In setDocumentContents: ", ex.Message);
+                            PublicDI.log.error("In setDocumentContents: ", ex.Message);
                         }
                     });
         }
@@ -1058,13 +1058,13 @@ namespace O2.External.SharpDevelop.Ascx
                     autoCompileThread = O2Thread.mtaThread(
                         () =>
                         {
-                            DI.log.debug("Starting auto compile loop");
+                            PublicDI.log.debug("Starting auto compile loop");
                             while (true)
                             {
                                 compileSourceCode();
                                 Processes.Sleep(10000, true);
                             }
-                            DI.log.debug("Exiting auto compile loop");
+                            //PublicDI.log.debug("Exiting auto compile loop");
                         });
 
                     autoCompileThread.Priority = ThreadPriority.Lowest;
@@ -1113,7 +1113,7 @@ namespace O2.External.SharpDevelop.Ascx
                                 return;
                             }
                             else
-                                DI.log.debug("Debugging note: the only supported methods to start the debugging session are: static methods, with no parameters and returning void");
+                                PublicDI.log.debug("Debugging note: the only supported methods to start the debugging session are: static methods, with no parameters and returning void");
                         }
                         btDebugMethod.Enabled = false;
                     }
@@ -1125,7 +1125,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         private static void listinLogViewCurrentAssemblyReferencesAutomaticallyAdded()
         {
-            DI.log.debug(StringsAndLists.fromStringList_getText(new CompileEngine().getListOfReferencedAssembliesToUse()));
+            PublicDI.log.debug(StringsAndLists.fromStringList_getText(new CompileEngine().getListOfReferencedAssembliesToUse()));
         }
     }
 }
