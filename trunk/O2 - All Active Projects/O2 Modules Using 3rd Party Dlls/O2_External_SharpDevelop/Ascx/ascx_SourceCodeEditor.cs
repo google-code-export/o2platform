@@ -1,5 +1,6 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor.Document;
 using O2.DotNetWrappers.DotNet;
@@ -8,7 +9,7 @@ using O2.Kernel.CodeUtils;
 namespace O2.External.SharpDevelop.Ascx
 {
     public partial class ascx_SourceCodeEditor : UserControl
-    {        
+    {
 
         public ascx_SourceCodeEditor()
         {
@@ -35,8 +36,8 @@ namespace O2.External.SharpDevelop.Ascx
                 if (tecSourceCode.ActiveTextAreaControl.TextArea.SelectionManager.HasSomethingSelected)
                 {
                     // if we are supporting compilation, see if there must be another controls that want to handle compilation on TextSelected+Enter                    
-                    if (btCompileCode.Visible && eEnterInSource_Event != null)                      
-                        eEnterInSource_Event();                    
+                    if (btCompileCode.Visible && eEnterInSource_Event != null)
+                        eEnterInSource_Event();
                     else
                         compileSourceCode();
                     return true;
@@ -44,7 +45,7 @@ namespace O2.External.SharpDevelop.Ascx
             }
             return false;
         }
-        
+
 
         private void Document_DocumentChanged(object sender, DocumentEventArgs e)
         {
@@ -54,7 +55,7 @@ namespace O2.External.SharpDevelop.Ascx
             lbSource_CodeFileSaved.Visible = false;
             if (null != eDocumentDataChanged)
                 foreach (Delegate dDelegate in eDocumentDataChanged.GetInvocationList())
-                    dDelegate.DynamicInvoke(new Object[] {tecSourceCode.Text});
+                    dDelegate.DynamicInvoke(new Object[] { tecSourceCode.Text });
         }
 
         private void SelectionManager_SelectionChanged(object sender, EventArgs e)
@@ -64,7 +65,7 @@ namespace O2.External.SharpDevelop.Ascx
                 {
                     String sWord = "", sObject = "";
                     getAtCaret_WordAndObject(ref sWord, ref sObject);
-                    dDelegate.DynamicInvoke(new Object[] {sWord, sObject});
+                    dDelegate.DynamicInvoke(new Object[] { sWord, sObject });
                 }
         }
 
@@ -103,7 +104,7 @@ namespace O2.External.SharpDevelop.Ascx
             tecSourceCode.ShowVRuler = cboxVRuler.Checked;
         }
 
-        
+
         private void tecSourceCode_Load(object sender, EventArgs e)
         {
         }
@@ -113,7 +114,7 @@ namespace O2.External.SharpDevelop.Ascx
             saveSourceCode();
         }
 
-        
+
 
         private void tbSourceCode_FileLoaded_DragEnter(object sender, DragEventArgs e)
         {
@@ -126,7 +127,7 @@ namespace O2.External.SharpDevelop.Ascx
         }
 
         private void ascx_SourceCodeEditor_DragEnter(object sender, DragEventArgs e)
-        {            
+        {
             Dnd.setEffect(e);
         }
 
@@ -179,10 +180,10 @@ namespace O2.External.SharpDevelop.Ascx
         }*/
 
         // this is not working at the moment (need to find a way to implement this highlight
-       
+
         private void tbTextSearch_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter)
                 searchForTextInTextEditor_findNext(tbTextSearch.Text);
         }
 
@@ -191,14 +192,14 @@ namespace O2.External.SharpDevelop.Ascx
             searchForTextInTextEditor(tbTextSearch.Text);
         }
 
-/*        public static ascx_SourceCodeEditor loadFile(string file)
-        {
-            var sourceCodeEditor =
-                (ascx_SourceCodeEditor)
-                DI.windowsForms.openAscx(typeof (ascx_SourceCodeEditor), false, "Editing: " + file);
-            sourceCodeEditor.loadSourceCodeFile(file);
-            return sourceCodeEditor;
-        }*/
+        /*        public static ascx_SourceCodeEditor loadFile(string file)
+                {
+                    var sourceCodeEditor =
+                        (ascx_SourceCodeEditor)
+                        DI.windowsForms.openAscx(typeof (ascx_SourceCodeEditor), false, "Editing: " + file);
+                    sourceCodeEditor.loadSourceCodeFile(file);
+                    return sourceCodeEditor;
+                }*/
 
         /*  public static void loadFile(string file, int lineToSelect)
         {
@@ -214,7 +215,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void tbSourceCode_FileLoaded_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char) Keys.Enter)
+            if (e.KeyChar == (char)Keys.Enter)
                 saveSourceCode();
         }
 
@@ -227,7 +228,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             O2Thread.mtaThread(compileSourceCode);
         }
-       
+
         private void executeSelectedMethod_Click(object sender, EventArgs e)
         {
             O2Thread.mtaThread(executeMethod);
@@ -311,9 +312,9 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void tbShowO2ObjectModel_Click(object sender, EventArgs e)
         {
-            openO2ObjectModel();            
-        }        
-        
+            openO2ObjectModel();
+        }
+
         private void compileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             compile_Click(null, null);
@@ -321,7 +322,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            tecSourceCode.ActiveTextAreaControl.TextArea.ClipboardHandler.Copy(null,null);   
+            tecSourceCode.ActiveTextAreaControl.TextArea.ClipboardHandler.Copy(null, null);
         }
 
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -346,14 +347,14 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void cboxCompliledSourceCodeMethods_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void autoCompileEvery10SecondsToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
         {
             setAutoCompileStatus(autoCompileEvery10SecondsToolStripMenuItem.Checked);
         }
-        
+
         private void executeSelectedMethodToolStripMenuItem_Click(object sender, EventArgs e)
         {
             O2Thread.mtaThread(executeMethod);
@@ -371,7 +372,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void cboxCompliledSourceCodeMethods_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void cboxCompliledSourceCodeMethods_SelectedIndexChanged(object sender, EventArgs e)
@@ -393,7 +394,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             // quick hack to show PoC
             if (sPathToFileLoaded != null)
-            {                
+            {
                 CSharpEditor.MainForm.addReferencedAssembly(O2.DotNetWrappers.DotNet.CompileEngine.getListOfO2AssembliesInExecutionDir());
                 O2Thread.staThread(
                     () =>
@@ -407,7 +408,37 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            listinLogViewCurrentAssemblyReferencesAutomaticallyAdded();           
-        }                                                                                        
+            listinLogViewCurrentAssemblyReferencesAutomaticallyAdded();
+        }
+
+
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [Bindable(true)]
+        public bool _ShowTopMenu
+        {
+            set
+            {
+                toolStripWithSourceCodeActions.Visible = value;
+                if (toolStripWithSourceCodeActions.Visible)
+                {
+                    tecSourceCode.Dock = DockStyle.None;
+                    tecSourceCode.Top = 28;
+                    tecSourceCode.Left = 0;
+                    tecSourceCode.Height = Height - tecSourceCode.Top * 2;
+                    tecSourceCode.Width = Width - tecSourceCode.Left; 
+                    
+                }
+                else
+                    tecSourceCode.Dock = DockStyle.Fill;
+            }
+
+            get
+            {
+                return toolStripWithSourceCodeActions.Visible;
+            }
+        }
     }
 }
