@@ -7,7 +7,7 @@ namespace O2.External.Firefox.WebAutomation.WebObjects
     {
         /*public Dictionary<String, O2FormInputField> dFormInputFields = new Dictionary<String, O2FormInputField>();
         private HTMLFormElementClass hfeForm;*/
-        private GeckoElement geckoElement;
+        public GeckoElement geckoElement { get; set; }
 
         public O2Form(GeckoElement _geckoElement)
         {
