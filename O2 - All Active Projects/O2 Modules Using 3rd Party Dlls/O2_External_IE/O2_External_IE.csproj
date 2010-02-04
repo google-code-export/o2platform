@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="DI.cs" />
     <Compile Include="O2BrowserIE.cs" />
+    <Compile Include="WebObjects\O2Form.cs" />
     <Compile Include="WebObjects_\O2Form.cs" />
     <Compile Include="WebObjects_\O2FormInputField.cs" />
     <Compile Include="WebObjects_\O2HtmlPage.cs" />
@@ -66,9 +67,6 @@
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
       <Name>O2 Kernel</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WebObjects\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
