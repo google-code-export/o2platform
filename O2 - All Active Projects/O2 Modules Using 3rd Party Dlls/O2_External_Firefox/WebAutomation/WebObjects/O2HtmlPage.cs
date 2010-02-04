@@ -1,8 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System.Collections.Generic;
-using Skybound.Gecko;
 
-namespace O2.External.Firefox.WebAutomation.WebObjects
+namespace O2.External.IE.WebObjects
 {
     public class O2HtmlPage
     {
@@ -10,6 +9,7 @@ namespace O2.External.Firefox.WebAutomation.WebObjects
         public List<O2Link> lLinks = new List<O2Link>();
 
         // only call this after the page is loaded
+/*
         public static O2HtmlPage getHtmlPageObjectFromWebBrowserObject(GeckoWebBrowser wbWebBrowser)
         {
             var hpHtmlPage = new O2HtmlPage();
@@ -27,5 +27,6 @@ namespace O2.External.Firefox.WebAutomation.WebObjects
             }
             return hpHtmlPage;
         }
+ */
     }
 }
