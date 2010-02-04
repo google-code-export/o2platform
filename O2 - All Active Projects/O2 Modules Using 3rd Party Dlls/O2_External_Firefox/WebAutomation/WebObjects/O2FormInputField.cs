@@ -1,11 +1,15 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 //using mshtml;
 
-namespace O2.External.Firefox.WebAutomation.WebObjects
+using System;
+using System.Windows.Forms;
+using mshtml;
+
+namespace O2.External.IE.WebObjects
 {
     public class O2FormInputField
     {
-        /*      private readonly HTMLInputElementClass hieForm_InputField;
+        public HTMLInputElementClass hieForm_InputField;
 
         public O2FormInputField(HtmlElement heForm_InputField)
         {
@@ -43,6 +47,6 @@ namespace O2.External.Firefox.WebAutomation.WebObjects
         {
             get { return hieForm_InputField.outerHTML; }
             set { hieForm_InputField.outerHTML = value; }
-        }*/
+        }
     }
 }
