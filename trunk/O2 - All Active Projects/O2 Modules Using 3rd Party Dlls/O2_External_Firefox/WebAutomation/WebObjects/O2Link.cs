@@ -1,15 +1,14 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.Reflection;
-using Skybound.Gecko;
 
 // using mshtml;
 
-namespace O2.External.Firefox.WebAutomation.WebObjects
+namespace O2.External.IE.WebObjects
 {
     public class O2Link
     {
-        private readonly GeckoElement geckoElement;
+        /*private readonly GeckoElement geckoElement;
 
         public O2Link(GeckoElement _geckoElement)
         {
@@ -57,6 +56,6 @@ namespace O2.External.Firefox.WebAutomation.WebObjects
         public override string ToString()
         {
             return Text ?? "";
-        }
+        }*/
     }
 }
