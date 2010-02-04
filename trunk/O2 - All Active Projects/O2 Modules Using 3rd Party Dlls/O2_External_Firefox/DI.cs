@@ -12,9 +12,7 @@ namespace O2.External.Firefox
         {
             config = PublicDI.config;
             log = PublicDI.log;
-
-            reflection = PublicDI.reflection;       
-                       
+            reflection = PublicDI.reflection;                              
         }
 
         // DI which will need to be injected 
