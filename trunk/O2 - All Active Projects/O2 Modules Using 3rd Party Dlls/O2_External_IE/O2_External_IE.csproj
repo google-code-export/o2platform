@@ -56,6 +56,10 @@
     <Compile Include="DI.cs" />
     <Compile Include="O2BrowserIE.cs" />
     <Compile Include="WebObjects\O2Form.cs" />
+    <Compile Include="WebObjects\O2FormInputField.cs" />
+    <Compile Include="WebObjects\O2HtmlPage.cs" />
+    <Compile Include="WebObjects\O2JavaScript.cs" />
+    <Compile Include="WebObjects\O2Link.cs" />
     <Compile Include="WebObjects_\O2Form.cs" />
     <Compile Include="WebObjects_\O2FormInputField.cs" />
     <Compile Include="WebObjects_\O2HtmlPage.cs" />
