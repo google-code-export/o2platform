@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Merlin;
 using O2.DotNetWrappers.DotNet;
+using O2.Kernel.CodeUtils;
 
 
 namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
@@ -38,7 +39,12 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
         public static void set_Text(this IStep step, string message)
         {
             if (step.FirstControl != null)
-                step.Controller.wizardForm.invokeOnThread(() => step.FirstControl.Text = message);
+                step.Controller.wizardForm.invokeOnThread(
+                    () =>
+                        {                            
+                            step.FirstControl.Text = message;
+                            //step.FirstControl.invoke("DeselectAll");                               
+                        });            
         }
 
         public static void append_Text(this IStep step, string messageFormat, params Object[] variables)
@@ -78,13 +84,18 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
         public static void append_Text(this IStep step, string message)
         {
             if (step.FirstControl != null)
-                step.Controller.wizardForm.invokeOnThread(() => step.FirstControl.Text += message);
+                step.Controller.wizardForm.invokeOnThread(
+                    () => step.FirstControl.Text += message);
             else if (step.UI != null)
                 if (step.UI.Controls.Count > 0)
                     if (step.UI.Controls[0] is TextBox)
                     {
-                        var targetTextBox = step.UI.Controls[0];
-                        targetTextBox.invokeOnThread(() => targetTextBox.Text += message);
+                        var targetTextBox = (TextBox)step.UI.Controls[0];
+                        targetTextBox.invokeOnThread(
+                            () =>
+                                {
+                                    targetTextBox.Text += message;                                    
+                                });                        
                     }                        
         }
 

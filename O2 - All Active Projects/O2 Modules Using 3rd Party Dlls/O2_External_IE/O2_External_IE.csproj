@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\O2_Binaries\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -39,6 +39,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -54,7 +55,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DI.cs" />
-    <Compile Include="O2BrowserIE.cs" />
+    <Compile Include="ExtendedWebBrowser.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="IE_ExtensionMethods.cs" />
+    <Compile Include="Interfaces\IO2Browser.cs" />
+    <Compile Include="O2BrowserIE.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WebObjects\HtmlPageIE.cs" />
     <Compile Include="WebObjects\O2Form.cs" />
     <Compile Include="WebObjects\O2FormInputField.cs" />
     <Compile Include="WebObjects\O2HtmlPage.cs" />
@@ -62,6 +71,10 @@
     <Compile Include="WebObjects\O2Link.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
       <Name>O2 Kernel</Name>

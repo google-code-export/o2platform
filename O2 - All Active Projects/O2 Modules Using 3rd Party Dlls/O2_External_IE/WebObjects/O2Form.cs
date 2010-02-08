@@ -8,8 +8,6 @@ namespace O2.External.IE.WebObjects
     public class O2Form
     {
 
-
-
         /*public Dictionary<String, O2FormInputField> dFormInputFields = new Dictionary<String, O2FormInputField>();
         private HTMLFormElementClass hfeForm;*/
 

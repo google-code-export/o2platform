@@ -22,7 +22,7 @@ namespace O2.Kernel.Interfaces.O2Core
         Type getType(Assembly assembly, string typeToFind);
         Type getType(Type type, string typeToFind);
         Type getType(string typeToFind);
-        
+        string getComObjectTypeName(object comObject);
         List<Type> GetObjectsTypes(object[] objectsToGetType);
         Dictionary<string, List<Type>> getDictionaryWithTypesMappedToNamespaces(Module module);
 
@@ -116,6 +116,7 @@ namespace O2.Kernel.Interfaces.O2Core
         object createObject(Assembly assembly, Type typeToCreateObject, params object[] constructorArguments);
         object createObject(Assembly assembly, String typeToCreateObject);
         object createObject(Assembly assembly, String typeToCreateObject, params object[] constructorArguments);
+        object createObject(Type type, params object[] constructorArguments);
         object createObjectUsingDefaultConstructor(Type tTypeToCreateObject);       
     }
 }

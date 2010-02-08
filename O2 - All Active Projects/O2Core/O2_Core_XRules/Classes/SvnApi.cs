@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using O2.Views.ASCX.classes;
-using System.Xml.Linq;
 using O2.Kernel;
 using O2.Kernel.Interfaces.O2Core;
 using O2.DotNetWrappers.Windows;
@@ -13,6 +12,12 @@ using O2.DotNetWrappers.Network;
 using HTMLparserLibDotNet20.O2ExtraCode;
 //O2Tag_AddReferenceFile:System.Web.dll
 using System.Web;
+
+//O2Ref:System.Core.dll
+//O2Ref:System.Xml.dll
+//O2Ref:System.Xml.Linq.dll
+using System.Xml.Linq;
+//O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
 
 namespace O2.Core.XRules.Classes
 {
@@ -38,8 +43,10 @@ namespace O2.Core.XRules.Classes
 				var childUrls = new List<SvnMappedUrl>();
 				foreach(var svnMappedUrl in svnMappedUrls)
 					if (svnMappedUrl.IsFile == false && svnMappedUrl.VirtualPath != "../")
+					{						
 						//log.error("fetching sub dir: {0}", svnMappedUrl.VirtualPath);
-						childUrls.AddRange(getSvnMappedUrls(svnMappedUrl.FullPath,recursive));
+						childUrls.AddRange(getSvnMappedUrls(svnMappedUrl.FullPath,true));						
+					}
 				svnMappedUrls.AddRange(childUrls);
 				return svnMappedUrls;
 			}
@@ -54,8 +61,12 @@ namespace O2.Core.XRules.Classes
             if (codeToParse != "")
             {                
                 var nodes = Majestic12ToXml.ConvertNodesToXml(codeToParse);                
-                foreach (var element in nodes.OfType<XElement>().Descendants("li").Descendants("a"))                            
-                    svnMappedUrls.Add(new SvnMappedUrl(urlToFetch, element.Attribute("href").Value, element.Value));                
+                foreach (var element in nodes.OfType<XElement>().Descendants("li").Descendants("a"))
+                {
+               		var virtualPath = element.Attribute("href").Value;
+               		if (virtualPath != "../")
+	                    svnMappedUrls.Add(new SvnMappedUrl(urlToFetch, virtualPath, element.Value));                
+                }
             }
             return svnMappedUrls;
         }                
@@ -71,11 +82,15 @@ namespace O2.Core.XRules.Classes
         	if (svnMappedUrl.IsFile)
         	{
         		var localfile = targetFolder +  localVirtualPath;
-        		var fileContents = Web.getUrlContents(svnMappedUrl.FullPath);
-        		Files.WriteFileContent(localfile,fileContents);
-        		if (File.Exists(localfile))
-        			log.info("contents saved to local file: {0}", localfile);        		
-        		else
+        		
+        		//var fileContents = Web.getUrlContents(svnMappedUrl.FullPath);
+        		//Files.WriteFileContent(localfile,fileContents);
+        		
+        		Web.downloadBinaryFile(svnMappedUrl.FullPath, localfile);
+        		
+        		if (!File.Exists(localfile))
+//        			log.info("contents saved to local file: {0}", localfile);        		
+//        		else
         			log.info("could not create file: {0}", localfile);        		
         	}
         	else
@@ -99,7 +114,7 @@ namespace O2.Core.XRules.Classes
         public string FileExtension { get; set; }
 
         public SvnMappedUrl(string basePath, string virtualPath, string text)
-        {
+        {        	
             BasePath = basePath;
             VirtualPath = virtualPath;
             Text = text;

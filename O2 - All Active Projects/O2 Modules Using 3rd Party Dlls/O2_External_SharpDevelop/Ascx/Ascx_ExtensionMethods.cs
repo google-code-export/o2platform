@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor.Document;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -37,6 +38,11 @@ namespace O2.External.SharpDevelop.Ascx
                    control.Controls.Add(sourceCodeEditor);
                    return sourceCodeEditor;
                });
+        }
+
+        public static ascx_SourceCodeViewer add_SourceCodeViewer(this Control control)
+        {
+            return (ascx_SourceCodeViewer)control.add_Control(typeof(ascx_SourceCodeViewer));
         }
     }
 }

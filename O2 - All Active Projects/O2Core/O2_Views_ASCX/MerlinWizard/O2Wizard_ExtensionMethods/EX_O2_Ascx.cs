@@ -12,6 +12,27 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
 {
     public static class EX_O2_Ascx
     {
+        public static ascx_Directory add_Directory(this IStep step)
+        {
+            return step.add_Directory(PublicDI.config.O2TempDir);
+        }
+
+        public static ascx_Directory add_Directory(this IStep step, string startDirectory)
+        {
+            var directory = new ascx_Directory
+                                {
+                                    AllowDrop = false,
+                                    _ViewMode = ascx_Directory.ViewMode.Simple_With_LocationBar,
+                                    _HideFiles = true,
+                                    Dock = DockStyle.Fill
+                                };
+            directory.openDirectory(startDirectory);
+            directory.refreshDirectoryView();
+            directory._WatchFolder = true;
+            step.add_Control(directory);
+            return directory;
+        }
+
 
         public static IStep add_Directory(this List<IStep> steps, string stepName)
         {
@@ -20,16 +41,12 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
 
         public static IStep add_Directory(this List<IStep> steps, string stepName, string startDirectory)
         {
-            var directory = new ascx_Directory();
-            directory.AllowDrop = false;    // to deal with the "DragDrop registration did not succeed" problem
-            directory._ViewMode = ascx_Directory.ViewMode.Simple_With_LocationBar;
-            directory._HideFiles = true;
-            directory.openDirectory(startDirectory);
-            directory.refreshDirectoryView();
-            directory._WatchFolder = true;
-            var newStep = new TemplateStep(directory, 0, stepName);
 
-            newStep.OnComponentLoad += (step) => directory.refreshDirectoryView();
+            var newStep = steps.add_Panel(stepName);// new TemplateStep(new Panel(), 0, stepName);
+
+            var directory = newStep.add_Directory(startDirectory);
+
+            newStep.OnComponentLoad += step => directory.refreshDirectoryView();
 
             steps.Add(newStep);
             return newStep;
@@ -68,7 +85,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
 
             //newStep.NextHandler = ()=>  action(textBox);
             newStep.OnComponentAction = action;
-            steps.Add((IStep)newStep);
+            steps.Add(newStep);
             return newStep;
         }
 
@@ -237,19 +254,19 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             return steps.add_Control(panel, stepTitle, stepSubTitle);
         }
 
-        public static IStep add_WebBrowserAndTextBox(this List<IStep> steps, string stepTitle, string stepSubTitle, Action<IStep> onComponentLoad)
+        /*public static IStep add_WebBrowserAndTextBox(this List<IStep> steps, string stepTitle, string stepSubTitle, Action<IStep> onComponentLoad)
         {
             var hostPanel = new Panel();
             var splitControl = hostPanel.add_SplitContainer(
                                 false, 		//setOrientationToHorizontal
                                 true,		// setDockStyleoFill
                                 true);		// setBorderStyleTo3D)
-            var leftGroupBox = splitControl.Panel1.add_GroupBox("Webpage");
-            var rightGroupBox = splitControl.Panel2.add_GroupBox("Analysis");
+            splitControl.Panel1.add_GroupBox("Webpage");
+            splitControl.Panel2.add_GroupBox("Analysis");
 
             splitControl.SplitterDistance = 100;
             return steps.add_Control(hostPanel, stepTitle, stepSubTitle, onComponentLoad);
-        }
+        }*/
 
         public static Label add_Label(this IStep step, string text)
         {
@@ -334,6 +351,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             if (step.UI == null)
                 return null;
             var textBox = new TextBox();
+            textBox.DeselectAll();
             step.UI.Controls.Add(textBox);
             textBox.BringToFront();
             return textBox;
@@ -355,6 +373,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
             if (textBox != null)
             {
                 textBox.Text = originalText;
+                textBox.DeselectAll();
                 //textBox.Height = height;       	
                 textBox.Top = top;
                 if (left > -1)

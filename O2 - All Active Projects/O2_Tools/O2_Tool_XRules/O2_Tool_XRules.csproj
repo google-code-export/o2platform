@@ -33,7 +33,7 @@
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>36</ApplicationRevision>
+    <ApplicationRevision>38</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -108,6 +108,10 @@
     <Compile Include="_UnitTests\_Test_XRules_UnitTestExecution.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_IE\O2_External_IE.csproj">
+      <Project>{F6942664-5E64-4182-B3EB-11F481F461FB}</Project>
+      <Name>O2_External_IE</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
       <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
       <Name>O2_External_SharpDevelop</Name>
