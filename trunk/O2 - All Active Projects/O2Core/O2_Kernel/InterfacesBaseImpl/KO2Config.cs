@@ -67,7 +67,11 @@ namespace O2.Kernel.InterfacesBaseImpl
 
         public string CurrentExecutableDirectory
         {
-            get { return Environment.CurrentDirectory; }
+            get
+            {
+                var entryAssemblyLocation = Assembly.GetEntryAssembly().Location;
+                return Path.GetDirectoryName(entryAssemblyLocation);                                
+            }
             set { }
         }
 

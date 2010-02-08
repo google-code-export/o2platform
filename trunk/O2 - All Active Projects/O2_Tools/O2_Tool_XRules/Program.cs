@@ -38,7 +38,7 @@ namespace O2.Tool.XRules
             OunceAvailableEngines.addAvailableEnginesToControl(typeof(ascx_FindingsViewer));
             XRules_Config.xRulesDatabase = new KXRulesDatabase();
             if (O2AscxGUI.launch("O2 XRules", 1000, 800))
-            {
+            {                
                 HandleO2MessageOnMdbg.setO2MessageMdbgListener();       // be able to handle Debugger events             
                 HandleO2MessageOnSD.setO2MessageFileEventListener();    // be able to handle open file events
 

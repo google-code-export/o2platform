@@ -57,7 +57,7 @@ namespace O2.Views.ASCX.CoreControls
                 openDirectory(DI.config.O2TempDir); // if not specified one, open the temp directory
         }
 
-        public ascx_Directory(String sDirectoryToOpen)
+        public ascx_Directory(String sDirectoryToOpen) : this()
         {
             InitializeComponent();
             openDirectory(sDirectoryToOpen);

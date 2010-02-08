@@ -288,6 +288,11 @@ namespace Merlin
 
         void btnPrevious_Click(object sender, EventArgs e)
         {
+            GoToPrevious();     // DC
+        }
+
+        public void GoToPrevious()          // Dc
+        {
             IStep departingComponent = steps[currentStepIndex] is ConditionalStep
                 ? (steps[currentStepIndex] as ConditionalStep).UnderlyingStep
                 : steps[currentStepIndex];
@@ -295,9 +300,9 @@ namespace Merlin
             bool successful = departingComponent.OnPrevious();
             if (successful)
             {
-                if (currentStepIndex > 0 )
+                if (currentStepIndex > 0)
                 {
-                    -- currentStepIndex;
+                    --currentStepIndex;
                     IStep displayedComponent = steps[currentStepIndex];
                     while (displayedComponent is ConditionalStep
                         && !(displayedComponent as ConditionalStep).Displayed)
@@ -310,7 +315,8 @@ namespace Merlin
                         --currentStepIndex;
                         displayedComponent = steps[currentStepIndex];
                     }
-                    if (displayedComponent is ConditionalStep){
+                    if (displayedComponent is ConditionalStep)
+                    {
                         displayedComponent = (displayedComponent as ConditionalStep).UnderlyingStep;
                     }
                     runComponent(displayedComponent);
@@ -325,7 +331,6 @@ namespace Merlin
                 updateButtonState();
             }
         }
-
 
 
         /// <summary>

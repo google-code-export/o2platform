@@ -12,7 +12,7 @@ namespace O2.Kernel.InterfacesBaseImpl
 	
     public class KReflection : IReflection
     {
-        public const BindingFlags bindingFlags_allDeclared = BindingFlags.Public | BindingFlags.NonPublic |
+        public const BindingFlags BindingFlagsAllDeclared = BindingFlags.Public | BindingFlags.NonPublic |
                                                              BindingFlags.Instance | BindingFlags.Static |
                                                              BindingFlags.DeclaredOnly;
 
@@ -209,6 +209,30 @@ namespace O2.Kernel.InterfacesBaseImpl
             return null;
         }
 
+        // this is an example of using dynamic reflection so that we don't have to add reference to O2_Kernel.dll
+        //tip (to document): the code below can also be represented like this
+        //var typeName = "Microsoft.VisualBasic".assembly().type("Information").invoke("TypeName");
+        // or
+        //var typeName = "Microsoft.VisualBasic".type("Information").invoke("TypeName");
+        public string getComObjectTypeName(object _object)
+        {                        
+            var assembly = PublicDI.reflection.getAssembly("Microsoft.VisualBasic");
+            if (assembly != null)
+            {
+                var type = PublicDI.reflection.getType(assembly, "Information");
+                if (type != null)
+                {
+                    var method = PublicDI.reflection.getMethod(type, "TypeName");
+                    if (method != null)
+                    {
+                        var typeName = PublicDI.reflection.invoke(method, new [] {_object});
+                        if (typeName is string)
+                            return typeName.ToString();
+                    }
+                }
+            }
+            return null;
+        }  
         public List<MethodInfo> getMethods(string pathToassemblyToProcess)
         {
             return getMethods(getAssembly(pathToassemblyToProcess));
@@ -218,7 +242,7 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             var methods = new List<MethodInfo>();
             foreach (Type type in getTypes(assembly))
-                methods.AddRange(type.GetMethods(bindingFlags_allDeclared));
+                methods.AddRange(type.GetMethods(BindingFlagsAllDeclared));
             return methods;
         }
 
@@ -382,7 +406,7 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             try
             {
-                return new List<FieldInfo>(type.GetFields(bindingFlags_allDeclared));
+                return new List<FieldInfo>(type.GetFields(BindingFlagsAllDeclared));
             }
             catch (Exception ex)
             {
@@ -758,8 +782,8 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             if (methodInfo.IsStatic)
                 return invokeMethod_Static(methodInfo);
-            else
-                return invokeMethod_Instance(methodInfo);
+            
+            return invokeMethod_Instance(methodInfo);
         }        
 
         /// <summary>
@@ -936,13 +960,17 @@ namespace O2.Kernel.InterfacesBaseImpl
 
         public object createObject(Assembly assembly, String typeToCreateObject,
                                    params object[] constructorArguments)
+        {                            
+                Type type = getType(assembly, typeToCreateObject);
+                return createObject(type,constructorArguments);
+        }
+
+        public object createObject(Type type, params object[] constructorArguments)
         {
             try
             {
-                //Type type = assembly.GetType(typeToCreateObject);
-                Type type = getType(assembly, typeToCreateObject);
                 var constructorArgumentTypes = new List<Type>();
-                if (constructorArguments!=null)
+                if (constructorArguments != null)
                     foreach (object argument in constructorArguments)
                         constructorArgumentTypes.Add(argument.GetType());
                 ConstructorInfo constructor = type.GetConstructor(constructorArgumentTypes.ToArray());
@@ -950,15 +978,13 @@ namespace O2.Kernel.InterfacesBaseImpl
 
                 // this only really works for types derived from marshal by object
                 //var wrappedObject = Activator.CreateInstanceFrom(assemblyToLoad, typeToCreateObject, arguments); 
-                //return (wrappedObject != null) ? wrappedObject.Unwrap() : null;
+                //return (wrappedObject != null) ? wrappedObject.Unwrap() : null;            
             }
             catch (Exception ex)
             {
                 PublicDI.log.ex(ex, " createObject(Assembly assembly,");
             }
             return null;
-
-            // throw new NotImplementedException();            
         }
 
         public Object createObjectUsingDefaultConstructor(Type tTypeToCreateObject)

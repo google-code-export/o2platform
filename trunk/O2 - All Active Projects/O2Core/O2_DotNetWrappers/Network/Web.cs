@@ -64,20 +64,30 @@ namespace O2.DotNetWrappers.Network
 		{
 			return downloadBinaryFile(urlOfFileToFetch, true);
 		}
+				
 		
         public static string downloadBinaryFile(string urlOfFileToFetch, bool saveUsingTempFileName)
         {
+        	string targetFile = String.Format("{0}.{1}", 
+                									(saveUsingTempFileName) ? PublicDI.config.TempFileNameInTempDirectory + "_" : PublicDI.config.O2TempDir,
+                                                    Path.GetFileName(urlOfFileToFetch));
+            return downloadBinaryFile(urlOfFileToFetch,targetFile);
+        }
+        
+        public static string downloadBinaryFile(string urlOfFileToFetch, string targetFileOrFolder)
+        {
+        	var targetFile = targetFileOrFolder;
+        	if (Directory.Exists(targetFileOrFolder))
+        		targetFile = Path.Combine(targetFileOrFolder, Path.GetFileName(urlOfFileToFetch));
+        		
         	PublicDI.log.debug("Downloading Binary File {0}", urlOfFileToFetch);
             var webClient = new WebClient();
             try
-            {
-                string tempFileName = String.Format("{0}{1}.zip", 
-                									(saveUsingTempFileName) ? PublicDI.config.TempFileNameInTempDirectory + "_" : PublicDI.config.O2TempDir,
-                                                    Path.GetFileNameWithoutExtension(urlOfFileToFetch));
+            {                
                 byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
-                Files.WriteFileContent(tempFileName, pageData);
-                PublicDI.log.debug("Downloaded File saved to: {0}", tempFileName);
-                return tempFileName;
+                Files.WriteFileContent(targetFile, pageData);
+                PublicDI.log.debug("Downloaded File saved to: {0}", targetFile);
+                return targetFile;
             }
             catch (Exception ex)
             {
