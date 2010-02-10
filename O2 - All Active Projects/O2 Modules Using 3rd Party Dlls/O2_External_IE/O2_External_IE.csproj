@@ -68,7 +68,7 @@
     <Compile Include="WebObjects\O2FormInputField.cs" />
     <Compile Include="WebObjects\O2HtmlPage.cs" />
     <Compile Include="WebObjects\O2JavaScript.cs" />
-    <Compile Include="WebObjects\O2Link.cs" />
+    <Compile Include="WebObjects\IE_Link.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">

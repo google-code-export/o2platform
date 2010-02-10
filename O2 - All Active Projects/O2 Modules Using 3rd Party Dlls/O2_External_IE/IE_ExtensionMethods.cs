@@ -7,20 +7,25 @@ namespace O2.External.IE
 {
     public static class IE_ExtensionMethods
     {
-        public static IO2Browser_ add_WebBrowser_(this Control control)
+        public static IO2Browser add_WebBrowser(this Control control)
         {
-            return (IO2Browser_) control.invokeOnThread(
+            return (IO2Browser) control.invokeOnThread(
                 () =>
                     {
-                        var o2BrowserIE = new O2BrowserIE_ {Dock = DockStyle.Fill};
+                        var o2BrowserIE = new O2BrowserIE {Dock = DockStyle.Fill};
                         control.Controls.Add(o2BrowserIE);                        
                         return o2BrowserIE;
                     });
         }
         
-        public static IO2Browser_ add_WebBrowserWithLocationBar_(this Control control, string startUrl)
+        public static IO2Browser add_WebBrowserWithLocationBar(this Control control)
         {
-            return (IO2Browser_) control.invokeOnThread(
+        	return control.add_WebBrowserWithLocationBar("");
+        }
+        
+        public static IO2Browser add_WebBrowserWithLocationBar(this Control control, string startUrl)
+        {
+            return (IO2Browser) control.invokeOnThread(
                 () =>
                     {
                     	var splitControl = control.add_SplitContainer(
@@ -32,8 +37,9 @@ namespace O2.External.IE
         				splitControl.SplitterDistance = 20; 
         				control.Controls.Add(splitControl);	
 						var textBox = splitControl.Panel1.add_TextBox();
-                        textBox.Multiline = false;
-                        var webBrowser = splitControl.Panel2.add_WebBrowser_();
+                        //textBox.Multiline = false;
+                        textBox.Dock = DockStyle.Fill;
+                        var webBrowser = splitControl.Panel2.add_WebBrowser();
 
                         //textBox.TextChanged += (sender, e) => webBrowser.open(textBox.Text);
                         textBox.KeyUp += 
@@ -43,7 +49,8 @@ namespace O2.External.IE
                                         webBrowser.open(textBox.Text);
                                 };
                         textBox.Text = startUrl;
-                        webBrowser.open(startUrl);
+                        if (startUrl!= "")
+	                        webBrowser.open(startUrl);
                         return webBrowser;
                     });
         }
