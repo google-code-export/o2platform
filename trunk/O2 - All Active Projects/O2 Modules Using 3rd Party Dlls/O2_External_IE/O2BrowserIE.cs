@@ -8,12 +8,12 @@ using O2.Kernel;
 
 namespace O2.External.IE
 {
-    public class O2BrowserIE_ : ExtendedWebBrowser, IO2Browser_
+    public class O2BrowserIE : ExtendedWebBrowser, IO2Browser
     //public class O2BrowserIE : WebBrowser, IO2Browser
     {
         public event Action<IHtmlPage> onDocumentCompleted;
 
-        public O2BrowserIE_()
+        public O2BrowserIE()
         {
             Navigated += O2BrowserIE_Navigated;
             Navigating += O2BrowserIE_Navigating;
@@ -52,7 +52,7 @@ namespace O2.External.IE
             try
             {
                 if (onDocumentCompleted != null)
-                    onDocumentCompleted(new HtmlPageIE_(e.PageSource, e.Url));    
+                    onDocumentCompleted(new HtmlPageIE(e.DocumentClass));//.,.PageSource, e.Url));    
             }
             catch (Exception ex)
             {

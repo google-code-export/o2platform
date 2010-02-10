@@ -5,10 +5,73 @@ using System.Data;
 using System.Linq;
 using System.Text;
 
+//temp extra references
+using System.Reflection;
+using O2.Kernel;
+using O2.Kernel.CodeUtils;
+
 namespace O2.Views.ASCX.classes
 {
+
+	// to add to O2_Kernel.dll Reflection_ExtensionMethods
+	public static class reflectionEx
+	{
+		public static List<PropertyInfo> properties(this Type type)
+		{
+			return PublicDI.reflection.getProperties(type);
+		}
+		
+		public static List<FieldInfo> fields(this Type type)
+		{
+			return PublicDI.reflection.getFields(type);
+		}
+		
+		public static object field(this object liveObject, string fieldName)
+		{
+			return PublicDI.reflection.getFieldValue(fieldName,liveObject);
+		}
+	}
+  
+
+	
     public class CreateDataTable
     {
+    	// create DataTable from a generic list (by using it's properties)
+    	public static DataTable from_List<T>(List<T> data)
+    	{
+    		var dataTable = new DataTable();
+    		//foreach(var property in typeof(T).properties())
+    		foreach(var property in typeof(T).properties())    		
+    			dataTable.Columns.Add(property.Name);
+    		foreach(var item in data)
+    		{
+    			var rowContents = new List<object>();
+    			foreach(var property in typeof(T).properties())  
+    				rowContents.Add(item.prop(property.Name));
+    				
+                dataTable.Rows.Add(rowContents.ToArray());
+    		}
+    	    removeEmptyColumns(dataTable);
+    		return dataTable;
+    	}
+        
+    	
+    	// create DataTable from a generic list (by using it's fields)
+    	public static DataTable from_List_using_Fields<T>(List<T> data)
+    	{    		
+    		var dataTable = new DataTable();    		
+    		foreach(var field in typeof(T).fields())      		
+    			dataTable.Columns.Add(field.Name);    		    		
+    		foreach(var item in data)
+    		{
+    			var rowContents = new List<object>();
+    			foreach(var field in typeof(T).fields())  
+    				rowContents.Add(item.field(field.Name));    			
+                dataTable.Rows.Add(rowContents.ToArray());
+    		}    		
+    		return dataTable;
+    	}
+    	
         public static DataTable fromDictionary_StringString(Dictionary<string, string> dictionary, string column1Title, string column2Title)
         {
             var dataTable = new DataTable();
@@ -18,6 +81,42 @@ namespace O2.Views.ASCX.classes
                 foreach (var item in dictionary)
                     dataTable.Rows.Add(new[] { item.Key, item.Value });
             return dataTable;
+        }
+
+
+        private static void removeEmptyColumns(DataTable dataTable)
+        {
+           
+            // calculate columnsWithData
+            var columnsWithData = new List<DataColumn>();
+            foreach(DataRow row in dataTable.Rows)                            
+                foreach(DataColumn column in dataTable.Columns)                                    
+                    {
+                        var cellValue = row[column];
+                        if (cellValue != null && cellValue.ToString() != "")
+                        {
+                            if (false == columnsWithData.Contains(column))
+                                columnsWithData.Add(column);
+
+                            if (cellValue.ToString() == "System.__ComObject")
+                                row[column] = PublicDI.reflection.getComObjectTypeName(cellValue);
+                            //break;
+                        }
+                    }
+            PublicDI.log.info("There are {0} columns with data", columnsWithData.Count);
+            // calculate the columnsToDelete
+            var columnsToDelete =  new List<DataColumn>();
+            foreach(DataColumn column in dataTable.Columns)
+                if(false == columnsWithData.Contains(column))
+                    columnsToDelete.Add(column);
+            // delete them 
+            foreach(DataColumn column in columnsToDelete)
+                dataTable.Columns.Remove(column);                    
+
+            //from DataRow row in dataTable.Rows
+            //from cell in row.
+            //select cell;
+            
         }
     }
 }
