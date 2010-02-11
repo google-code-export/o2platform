@@ -59,6 +59,7 @@
     <Compile Include="CodeUtils\O2Messages.cs" />
     <Compile Include="CodeUtils\O2Kernel_Processes.cs" />
     <Compile Include="CodeUtils\Reflection_ExtensionMethods.cs" />
+    <Compile Include="CodeUtils\String_ExtensionMethods.cs" />
     <Compile Include="DI.cs" />
     <Compile Include="InterfacesBaseImpl\KScanTarget.cs" />
     <Compile Include="InterfacesBaseImpl\KO2Message .cs" />

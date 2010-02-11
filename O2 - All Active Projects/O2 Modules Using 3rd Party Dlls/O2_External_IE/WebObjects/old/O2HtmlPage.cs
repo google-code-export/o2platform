@@ -6,7 +6,7 @@ namespace O2.External.IE.WebObjects
     public class O2HtmlPage
     {
         public List<O2Form> lForms = new List<O2Form>();
-        public List<O2Link> lLinks = new List<O2Link>();
+        //public List<O2Link> lLinks = new List<O2Link>();
 
         // only call this after the page is loaded
 /*

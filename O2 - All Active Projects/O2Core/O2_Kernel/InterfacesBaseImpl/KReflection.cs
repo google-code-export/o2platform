@@ -982,7 +982,7 @@ namespace O2.Kernel.InterfacesBaseImpl
             }
             catch (Exception ex)
             {
-                PublicDI.log.ex(ex, " createObject(Assembly assembly,");
+                PublicDI.log.ex(ex, " createObject for type: " + type.Name);
             }
             return null;
         }

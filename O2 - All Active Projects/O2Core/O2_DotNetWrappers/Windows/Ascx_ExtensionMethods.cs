@@ -30,14 +30,173 @@ namespace O2.DotNetWrappers.Windows
                                      });
         }
 
-        public static void clear(this Control control)
+        public static Control clear(this Control control)
         {
-            control.invokeOnThread(
+            return (Control)control.invokeOnThread(
                 () =>
                     {
                         control.Controls.Clear();
-                        return;
+                        return control;
                     });
+        }
+
+        public static Control fill(this Control control)
+        {
+            control.Dock = DockStyle.Fill;
+            return control;
+        }
+
+        public static Control mapToWidth(this Control hostControl, Control control, bool alignToTop)
+        {
+            if (alignToTop)
+                control.anchor_TopLeftRight();
+            else
+                control.anchor_BottomLeftRight();
+
+            var pad = 5;
+            control.Left = hostControl.Left + pad;
+            control.Width = hostControl.Width - pad - pad;
+            return control;
+        }
+
+        #endregion
+
+        #region Control Anchor
+
+        public static Control anchor(this Control control)
+        {
+            control.Anchor = AnchorStyles.None;
+            return control;
+        }
+
+        public static Control top(this Control control)
+        {
+            control.Anchor = control.Anchor | AnchorStyles.Top;
+            return control;
+        }
+
+        public static Control bottom(this Control control)
+        {
+            control.Anchor = control.Anchor | AnchorStyles.Bottom;
+            return control;
+        }
+
+        public static Control left(this Control control)
+        {
+            control.Anchor = control.Anchor | AnchorStyles.Left;
+            return control;
+        }
+
+        public static Control right(this Control control)
+        {
+            control.Anchor = control.Anchor | AnchorStyles.Right;
+            return control;
+        }
+
+        public static Control anchor_TopLeft(this Control control)
+        {
+            control.anchor().top().left();
+            return control;
+        }
+
+        public static Control anchor_BottomLeft(this Control control)
+        {
+            control.anchor().bottom().left();
+            return control;
+        }
+
+        public static Control anchor_TopRight(this Control control)
+        {
+            control.anchor().top().right();
+            return control;
+        }
+
+        public static Control anchor_BottomRight(this Control control)
+        {
+            control.anchor().bottom().right();
+            return control;
+        }
+
+        public static Control anchor_TopLeftRight(this Control control)
+        {
+            control.anchor().top().left().right();
+            return control;
+        }
+
+        public static Control anchor_BottomLeftRight(this Control control)
+        {
+            control.anchor().bottom().left().right();
+            return control;
+        }
+
+        public static Control anchor_All(this Control control)
+        {
+            control.anchor().top().right().bottom().left();
+            return control;
+        }
+
+        #endregion
+
+        #region Button
+
+        public static Button add_Button(this Control control, string text)
+        {
+            return control.add_Button(text, -1);
+        }
+
+        public static Button add_Button(this Control control, string text, int top)
+        {
+            return control.add_Button(text, top, -1);
+        }
+
+        public static Button add_Button(this Control control, string text, int top, int left)
+        {
+            return control.add_Button(text, top, left, -1, -1);
+        }
+
+        public static Button add_Button(this Control control, string text, int top, int left, int height)
+        {
+            return control.add_Button(text, top, left, height, -1);
+        }
+
+        public static Button add_Button(this Control control, string text, int top, int left, int height, int width)
+        {
+            return control.add_Button(text, top, left, height, width, null);
+        }
+
+        public static Button add_Button(this Control control, string text, int top, int left, int height, int width, MethodInvoker onClick)
+        {
+            return (Button)control.invokeOnThread(
+                            () =>
+                            {
+                                var button = new Button();
+                                button.Text = text;
+                                if (top > -1)
+                                    button.Top = top;
+                                if (left > -1)
+                                    button.Left = left;
+                                if (width == -1 && height == -1)
+                                    button.AutoSize = true;
+                                else
+                                {
+                                    if (width > -1)
+                                        button.Width = width;
+                                    if (height > -1)
+                                        button.Height = height;
+                                }
+                                button.onClick(onClick);
+                                /*if (onClick != null)
+                                    button.Click += (sender, e) => onClick();*/
+                                control.Controls.Add(button);
+                                return button;
+                            });
+        }
+
+        public static Button onClick(this Button button, MethodInvoker onClick)
+        {
+            if (onClick != null)
+                button.Click += (sender, e) => onClick();
+            return button;
         }
 
         #endregion
@@ -496,6 +655,17 @@ namespace O2.DotNetWrappers.Windows
                                     => { treeNode.ForeColor = color; });
         }
 
+
+        public static void afterSelect<T>(this TreeView treeView, Action<T> callback)
+        {
+            treeView.AfterSelect += (sender, e)
+                =>
+                {
+                    if (e.Node.Tag is T)
+
+                        callback((T)e.Node.Tag);
+                };
+        }
         #endregion
 
         #region RichTextBox
@@ -531,6 +701,12 @@ namespace O2.DotNetWrappers.Windows
             richTextBox.invokeOnThread(() => richTextBox.AppendText(contents));
         }
 
+        public static RichTextBox textColor(this RichTextBox richTextBox, Color color)
+        {
+            richTextBox.ForeColor = color;
+            return richTextBox;
+        }
+
         #endregion
 
         #region CheckBox
@@ -552,5 +728,7 @@ namespace O2.DotNetWrappers.Windows
         }
 
         #endregion
+
+
     }
 }

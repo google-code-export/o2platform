@@ -53,5 +53,21 @@ namespace O2.Views.ASCX.classes.MainGUI
 		{
 			o2Gui.Controls.Add(control);
 		}
+
+        public static Control showInForm(this string typeName, string name, int width, int height)
+        {
+            var ascxType = PublicDI.reflection.getType(typeName);
+            if (ascxType != null)
+                return ascxType.showInForm(name, width, height);
+
+            PublicDI.log.error("in string.showInForm, coult not find type: {0}", typeName);
+            return null;
+        }
+
+        public static Control showInForm(this Type ascxType, string name, int width, int height)
+        {
+
+            return WinForms.showAscxInForm(ascxType, name, width, height);
+        } 
     }
 }
