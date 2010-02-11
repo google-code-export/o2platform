@@ -983,12 +983,12 @@ namespace O2.External.SharpDevelop.Ascx
             setDocumentContents(documentContents, "", true);
         }
 
-        public void setDocumentContents(string documentContents, string fileName)
+        public void setDocumentContents(string documentContents, string fileNameOrExtension)
         {
-            setDocumentContents(documentContents, fileName, true);
+            setDocumentContents(documentContents, fileNameOrExtension, true);
         }
 
-        public void setDocumentContents(string documentContents, string fileName, bool clearFileLocationValues)
+        public void setDocumentContents(string documentContents, string fileNameOrExtension, bool clearFileLocationValues)
         {
             this.invokeOnThread(
                     () =>
@@ -996,7 +996,7 @@ namespace O2.External.SharpDevelop.Ascx
                         try
                         {
                             tecSourceCode.Document.TextContent = documentContents;
-                            tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(fileName);
+                            tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(fileNameOrExtension);
                             if (clearFileLocationValues)
                             {
                                 sPathToFileLoaded = "";
