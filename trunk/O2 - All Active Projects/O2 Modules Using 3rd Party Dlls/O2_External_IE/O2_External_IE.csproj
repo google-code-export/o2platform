@@ -55,10 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DI.cs" />
-    <Compile Include="ExtendedWebBrowser.cs">
+    <Compile Include="Wrapper\ExtendedWebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="IE_ExtensionMethods.cs" />
+    <Compile Include="Wrapper\IE_ExtensionMethods.cs" />
     <Compile Include="Interfaces\IO2Browser.cs" />
     <Compile Include="Interfaces\IO2HtmlAnchor.cs" />
     <Compile Include="Interfaces\IO2HtmlForm.cs" />
@@ -67,7 +67,7 @@
     <Compile Include="Interfaces\IO2HtmlLink.cs" />
     <Compile Include="Interfaces\IO2HtmlPage.cs" />
     <Compile Include="Interfaces\IO2HtmlScript.cs" />
-    <Compile Include="O2BrowserIE.cs">
+    <Compile Include="Wrapper\O2BrowserIE.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WebObjects\IE_HtmlPage.cs" />
