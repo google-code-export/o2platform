@@ -11,46 +11,31 @@ using O2.Kernel;
 using O2.Kernel.CodeUtils;
 
 namespace O2.Views.ASCX.classes
-{
-
-	// to add to O2_Kernel.dll Reflection_ExtensionMethods
-	public static class reflectionEx
-	{
-		public static List<PropertyInfo> properties(this Type type)
-		{
-			return PublicDI.reflection.getProperties(type);
-		}
-		
-		public static List<FieldInfo> fields(this Type type)
-		{
-			return PublicDI.reflection.getFields(type);
-		}
-		
-		public static object field(this object liveObject, string fieldName)
-		{
-			return PublicDI.reflection.getFieldValue(fieldName,liveObject);
-		}
-	}
-  
-
-	
+{  	
     public class CreateDataTable
     {
     	// create DataTable from a generic list (by using it's properties)
     	public static DataTable from_List<T>(List<T> data)
     	{
     		var dataTable = new DataTable();
-    		//foreach(var property in typeof(T).properties())
-    		foreach(var property in typeof(T).properties())    		
-    			dataTable.Columns.Add(property.Name);
-    		foreach(var item in data)
-    		{
-    			var rowContents = new List<object>();
-    			foreach(var property in typeof(T).properties())  
-    				rowContents.Add(item.prop(property.Name));
-    				
-                dataTable.Rows.Add(rowContents.ToArray());
-    		}
+            try
+            {
+                //foreach(var property in typeof(T).properties())
+                foreach (var property in typeof (T).properties())
+                    dataTable.Columns.Add(property.Name);
+                foreach (var item in data)
+                {
+                    var rowContents = new List<object>();
+                    foreach (var property in typeof (T).properties())
+                        rowContents.Add(item.prop(property.Name));
+
+                    dataTable.Rows.Add(rowContents.ToArray());
+                }
+            }
+            catch (Exception ex)
+            {
+                PublicDI.log.error("in from_List: {0}", ex.Message);
+            }
     	    removeEmptyColumns(dataTable);
     		return dataTable;
     	}
@@ -85,8 +70,7 @@ namespace O2.Views.ASCX.classes
 
 
         private static void removeEmptyColumns(DataTable dataTable)
-        {
-           
+        {           
             // calculate columnsWithData
             var columnsWithData = new List<DataColumn>();
             foreach(DataRow row in dataTable.Rows)                            
@@ -112,10 +96,6 @@ namespace O2.Views.ASCX.classes
             // delete them 
             foreach(DataColumn column in columnsToDelete)
                 dataTable.Columns.Remove(column);                    
-
-            //from DataRow row in dataTable.Rows
-            //from cell in row.
-            //select cell;
             
         }
     }

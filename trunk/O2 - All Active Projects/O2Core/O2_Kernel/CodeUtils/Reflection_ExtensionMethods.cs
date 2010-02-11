@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using O2.Kernel.Interfaces.O2Core;
-using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Kernel.CodeUtils
 {
@@ -48,17 +46,42 @@ namespace O2.Kernel.CodeUtils
         {
             return _object.GetType();
         }
+
+        public static List<PropertyInfo> properties(this Type type)
+		{
+			return PublicDI.reflection.getProperties(type);
+		}
         
+        public static object property(this Type type, string propertyName)
+        {
+            return type.prop(propertyName);
+        }
+
         public static object prop(this Type type, string propertyName)
         {
             return PublicDI.reflection.getProperty(propertyName, type);
+        }
+
+        public static object property(this object liveObject, string propertyName)
+        {
+            return liveObject.prop(propertyName);
         }
 
         public static object prop(this object liveObject, string propertyName)
         {
             return PublicDI.reflection.getProperty(propertyName, liveObject);
         }
-        
+
+        public static List<FieldInfo> fields(this Type type)
+        {
+            return PublicDI.reflection.getFields(type);
+        }
+
+        public static object field(this object liveObject, string fieldName)
+        {
+            return PublicDI.reflection.getFieldValue(fieldName, liveObject);
+        }
+
         public static object field(this Type type, string fieldName)
         {
             return PublicDI.reflection.getField(type, fieldName);
@@ -75,4 +98,4 @@ namespace O2.Kernel.CodeUtils
         }
 
     }
-}
+}				

@@ -11,21 +11,26 @@ using O2.Kernel.CodeUtils;
 
 namespace O2.External.IE.WebObjects
 {
-    public class HtmlPageIE : IHtmlPage
+    public class HtmlPageIE : IO2HtmlPage
     {        
         public Uri PageUri { get; set; }
         public string PageSource { get; set; }
 
-        public List<IE_Anchor> Anchors { get; set; }
-        public List<IE_Form> Forms { get; set; }
-        public List<IE_Img> Images { get; set; }
-        public List<IE_Link> Links { get; set; }
-        public List<IE_Script> Scripts { get; set; }
+        public List<IO2HtmlAnchor> Anchors { get; set; }
+        public List<IO2HtmlForm> Forms { get; set; }
+        public List<IO2HtmlImg> Images { get; set; }
+        public List<IO2HtmlLink> Links { get; set; }
+        public List<IO2HtmlScript> Scripts { get; set; }
 
         public HtmlPageIE()
         {
             //PageUri = new Uri("");
             PageSource = "";
+            Anchors = new List<IO2HtmlAnchor>();
+            Forms = new List<IO2HtmlForm>();
+            Images = new List<IO2HtmlImg>();
+            Links = new List<IO2HtmlLink>();
+            Scripts = new List<IO2HtmlScript>();
             //Scripts = new List<string>();
         }
 
@@ -41,23 +46,14 @@ namespace O2.External.IE.WebObjects
             populateData(documentClass);
         }
 
-        private List<T> populateVar<T>(IHTMLElementCollection elementCollection) //, List<T> targetList) 
+        private List<T1> populateVar<T, T1>(IHTMLElementCollection elementCollection) //, List<T> targetList) 
         {
-            var targetList = new List<T>();
-            //PublicDI.log.debug("### Mapping  {0}", targetList);
+            var targetList = new List<T1>();
             foreach (IHTMLElement element in elementCollection)
-            //    if (element is HTMLAnchorElementClass)
-                {
-            
-                    var t = (T)typeof(T).ctor(element);                    
-                    targetList.Add(t);
-                        //PublicDI.log.debug("t not null: {0}", t.prop("href"));
-                    //targetList.Add(element);
-                    //var t1 = new T1(elementCollection);
-//                    targetList.Add(new T((T1)elementCollection));
-                    //PublicDI.log.debug(" {0} {1} ", element.tagName, element.GetType().FullName, element.outerHTML);
-                }
-            //PublicDI.log.info("-------- there are {0} elements in the current List of Type: {1}", targetList.Count, typeof(T).Name);
+            {
+                var t = (T1) typeof (T).ctor(element);
+                targetList.Add(t);
+            }
             return targetList;
         }
 
@@ -69,14 +65,16 @@ namespace O2.External.IE.WebObjects
             var documentElement = (HTMLHtmlElementClass)documentClass.documentElement;
             PageSource = documentElement.outerHTML;
 
-            Anchors = populateVar<IE_Anchor>(documentClass.anchors);//, new List<IE_Link>());// "Anchors");
+
+
+            Anchors = populateVar<IE_Anchor,IO2HtmlAnchor>(documentClass.anchors);//, new List<IE_Link>());// "Anchors");
             //populateVar<HTMLAnchorElementClass>(documentClass.applets, "Applets");
             //populateVar<HTMLAnchorElementClass>(documentClass.embeds, "Embeds");
-            Forms = populateVar<IE_Form>(documentClass.forms);//, "Forms");            
-            Images = populateVar<IE_Img>(documentClass.images);//, "Images");
-            Links = populateVar<IE_Link>(documentClass.links); //, new List<IE_Link>()); //"Links");            
+            Forms = populateVar<IE_Form,IO2HtmlForm>(documentClass.forms);//, "Forms");                        
+            Images = populateVar<IE_Img, IO2HtmlImg>(documentClass.images);//, "Images");
+            Links = populateVar<IE_Link, IO2HtmlLink>(documentClass.links); //, new List<IE_Link>()); //"Links");            
             //populateVar<HTMLAnchorElementClass>(documentClass.plugins, "Plugins");                        
-            Scripts = populateVar<IE_Script>(documentClass.scripts);//, "Scripts");
+            Scripts = populateVar<IE_Script, IO2HtmlScript>(documentClass.scripts);//, "Scripts");
 
             //populateVar<HTMLAnchorElementClass>(documentClass.frames, "Frames");
             //populateVar<HTMLAnchorElementClass>(documentClass.namespaces, "Namespaces");
@@ -124,29 +122,7 @@ namespace O2.External.IE.WebObjects
 
 
         }
-
-        /*public HtmlPageIE(O2BrowserIE o2BrowserIE, Uri uri)
-        {
-            PageUri = uri;            
-            if (o2BrowserIE.Document != null && o2BrowserIE.Document.Body != null)
-            {
-                PageSource = o2BrowserIE.Document.DomDocument.ToString(); // o2BrowserIE.Document.Body.OuterHtml;                
-            }
-        }*/
-
-        //PageSource = o2BrowserIE.DocumentText;
-        //PublicDI.log.info("in HtmlPageIE");
-        //var doc = (HTMLDocumentClass)o2BrowserIE.Document;
-
-        //PublicDI.log.info("LocationURL: {0}", o2BrowserIE.Url.ToString());
-        //PublicDI.log.info("LocationName: {0}", o2BrowserIE.Name);
-        //PublicDI.log.info("Document obj: {0}", (o2BrowserIE.Document.GetType().FullName));
-
-
-        /*PublicDI.log.info("doc.title:{0}", o2BrowserIE.Document.Title);
-        PublicDI.log.info("doc.url:{0}", o2BrowserIE.Document.Url);
-        PublicDI.log.debug("doc.outherHtml:{0}", o2BrowserIE.Document.Body.OuterHtml);*/
-
+     
         public override string ToString()
         {
             return PageUri.ToString();

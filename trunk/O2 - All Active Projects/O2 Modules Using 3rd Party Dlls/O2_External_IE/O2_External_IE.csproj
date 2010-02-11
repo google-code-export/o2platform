@@ -60,14 +60,21 @@
     </Compile>
     <Compile Include="IE_ExtensionMethods.cs" />
     <Compile Include="Interfaces\IO2Browser.cs" />
+    <Compile Include="Interfaces\IO2HtmlAnchor.cs" />
+    <Compile Include="Interfaces\IO2HtmlForm.cs" />
+    <Compile Include="Interfaces\IO2HtmlFormField.cs" />
+    <Compile Include="Interfaces\IO2HtmlImg.cs" />
+    <Compile Include="Interfaces\IO2HtmlLink.cs" />
+    <Compile Include="Interfaces\IO2HtmlPage.cs" />
+    <Compile Include="Interfaces\IO2HtmlScript.cs" />
     <Compile Include="O2BrowserIE.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="WebObjects\HtmlPageIE.cs" />
-    <Compile Include="WebObjects\O2Form.cs" />
-    <Compile Include="WebObjects\O2FormInputField.cs" />
-    <Compile Include="WebObjects\O2HtmlPage.cs" />
-    <Compile Include="WebObjects\O2JavaScript.cs" />
+    <Compile Include="WebObjects\old\O2Form.cs" />
+    <Compile Include="WebObjects\old\O2FormInputField.cs" />
+    <Compile Include="WebObjects\old\O2HtmlPage.cs" />
+    <Compile Include="WebObjects\old\O2JavaScript.cs" />
     <Compile Include="WebObjects\IE_Link.cs" />
   </ItemGroup>
   <ItemGroup>

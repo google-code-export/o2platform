@@ -11,7 +11,7 @@ namespace O2.External.IE
     public class O2BrowserIE : ExtendedWebBrowser, IO2Browser
     //public class O2BrowserIE : WebBrowser, IO2Browser
     {
-        public event Action<IHtmlPage> onDocumentCompleted;
+        public event Action<IO2HtmlPage> onDocumentCompleted;
 
         public O2BrowserIE()
         {
