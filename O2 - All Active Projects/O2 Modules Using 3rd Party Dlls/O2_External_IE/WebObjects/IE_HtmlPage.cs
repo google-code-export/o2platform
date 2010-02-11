@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 //O2Ref:C:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll
-using System.Windows.Forms;
 using mshtml;
 using O2.External.IE.Interfaces;
-using O2.Kernel;
 using O2.Kernel.CodeUtils;
 
 namespace O2.External.IE.WebObjects
 {
-    public class HtmlPageIE : IO2HtmlPage
+    public class IE_HtmlPage : IO2HtmlPage
     {        
         public Uri PageUri { get; set; }
         public string PageSource { get; set; }
@@ -22,7 +18,7 @@ namespace O2.External.IE.WebObjects
         public List<IO2HtmlLink> Links { get; set; }
         public List<IO2HtmlScript> Scripts { get; set; }
 
-        public HtmlPageIE()
+        public IE_HtmlPage()
         {
             //PageUri = new Uri("");
             PageSource = "";
@@ -34,13 +30,13 @@ namespace O2.External.IE.WebObjects
             //Scripts = new List<string>();
         }
 
-        public HtmlPageIE(string pageSource, string rawUrl) : this()
+        public IE_HtmlPage(string pageSource, string rawUrl) : this()
         {
             PageSource = pageSource;
             PageUri = new Uri(rawUrl);
         }
 
-        public HtmlPageIE(HTMLDocumentClass documentClass)
+        public IE_HtmlPage(HTMLDocumentClass documentClass)
             : this()
         {
             populateData(documentClass);

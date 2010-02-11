@@ -15,8 +15,8 @@ namespace O2.External.IE
 
         public O2BrowserIE()
         {
-            Navigated += O2BrowserIE_Navigated;
-            Navigating += O2BrowserIE_Navigating;
+          //  Navigated += O2BrowserIE_Navigated;
+          //  Navigating += O2BrowserIE_Navigating;
 
             //this.Navigated += O2BrowserIE_Navigated;
 
@@ -28,21 +28,21 @@ namespace O2.External.IE
                     {
                         PublicDI.log.debug("Document Complete:{0}" , e.Url);
                         if (onDocumentCompleted != null)
-                            onDocumentCompleted(new HtmlPageIE((O2BrowserIE)sender, e.Url));
+                            onDocumentCompleted(new IE_HtmlPage((O2BrowserIE)sender, e.Url));
                     };*/
             
         }
 
-        void O2BrowserIE_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+       /* void O2BrowserIE_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            PublicDI.log.info("Navigating: {0} ({1}", e.Url, e.TargetFrameName);
+         //   PublicDI.log.info("Navigating: {0} ({1}", e.Url, e.TargetFrameName);
             //throw new NotImplementedException();
         }
 
         void O2BrowserIE_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            PublicDI.log.info("Navigated: {0}", e.Url);
-        }
+         //   PublicDI.log.info("Navigated: {0}", e.Url);
+        }*/
 
         void O2BrowserIE_DocumentComplete(object sender, DocumentCompleteEventArgs e)
         {
@@ -52,7 +52,7 @@ namespace O2.External.IE
             try
             {
                 if (onDocumentCompleted != null)
-                    onDocumentCompleted(new HtmlPageIE(e.DocumentClass));//.,.PageSource, e.Url));    
+                    onDocumentCompleted(new IE_HtmlPage(e.DocumentClass));//.,.PageSource, e.Url));    
             }
             catch (Exception ex)
             {
@@ -60,9 +60,7 @@ namespace O2.External.IE
             }
                         
         }
-           
-      
-
+                 
         public void open(string url)
         {
             PublicDI.log.debug("[O2BrowserIE] opening: {0}", url);

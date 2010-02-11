@@ -70,7 +70,12 @@
     <Compile Include="O2BrowserIE.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="WebObjects\HtmlPageIE.cs" />
+    <Compile Include="WebObjects\IE_HtmlPage.cs" />
+    <Compile Include="WebObjects\IE_Anchor.cs" />
+    <Compile Include="WebObjects\IE_Form.cs" />
+    <Compile Include="WebObjects\IE_Form_Field.cs" />
+    <Compile Include="WebObjects\IE_Img.cs" />
+    <Compile Include="WebObjects\IE_Script.cs" />
     <Compile Include="WebObjects\old\O2Form.cs" />
     <Compile Include="WebObjects\old\O2FormInputField.cs" />
     <Compile Include="WebObjects\old\O2HtmlPage.cs" />

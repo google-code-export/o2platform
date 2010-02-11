@@ -8,13 +8,7 @@ using O2.Kernel;
 
 // this file uses code from: http://blogs.artinsoft.net/mrojas/archive/2008/09/18/newwindow2-events-in-the-c-webbrowsercontrol.aspx
 namespace O2.External.IE
-{    
-
-    public class DC_Extra
-    {
-         
-
-    }
+{        
     //First define a new EventArgs class to contain the newly exposed data
     public class NewWindow2EventArgs : CancelEventArgs
     {
@@ -38,10 +32,10 @@ namespace O2.External.IE
 
     public class DocumentCompleteEventArgs : EventArgs
     {
-        public ExtendedWebBrowser.IWebBrowser2 WebBrowser2 { get; set; }
-        public HTMLDocumentClass DocumentClass { get; set; }
-        public string Url { get; set; }
-        public string PageSource { get; set; }
+        public ExtendedWebBrowser.IWebBrowser2 WebBrowser2 { get; set; }        // DC
+        public HTMLDocumentClass DocumentClass { get; set; }                    // DC
+        public string Url { get; set; }                                         // DC
+        public string PageSource { get; set; }                                  // DC
 
         //private object ppDisp;
         //private object url;
