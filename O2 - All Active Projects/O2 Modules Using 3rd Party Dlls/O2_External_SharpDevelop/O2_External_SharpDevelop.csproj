@@ -55,7 +55,7 @@
     <Compile Include="Ascx\ascx_AssemblyInvoke.Designer.cs">
       <DependentUpon>ascx_AssemblyInvoke.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ascx\Ascx_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\SourceCode_ExtensionMethods.cs" />
     <Compile Include="Ascx\ascx_SourceCodeViewer.Controllers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -69,6 +69,8 @@
     <Compile Include="AST\AstTreeView.cs" />
     <Compile Include="AST\AstValue.cs" />
     <Compile Include="AST\Ast_CSharp.cs" />
+    <Compile Include="ExtensionMethods\Ast_CSharp_ExtensionMethods.cs" />
+    <Compile Include="AST\Ast_CSharp_ShowDetailsInViewer.cs" />
     <Compile Include="DI.cs" />
     <Compile Include="HandleO2MessageOnSD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

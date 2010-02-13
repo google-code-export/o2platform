@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using O2.Kernel;
 
 using O2.DotNetWrappers.DotNet;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.Views.ASCX.classes.MainGUI
 {
@@ -68,6 +69,27 @@ namespace O2.Views.ASCX.classes.MainGUI
         {
 
             return WinForms.showAscxInForm(ascxType, name, width, height);
-        } 
+        }
+
+        public static object showAsForm(this Type type)
+        {
+            return type.showAsForm(-1, -1);
+        }
+
+        public static object showAsForm(this Type type, string title)
+        {
+            return type.showAsForm(title, -1, -1);
+        }
+
+        public static object showAsForm(this Type type, int width, int height)
+        {
+            var title = type.Name.remove("ascx_").toSpace("_");
+            return type.showAsForm(title, width, height);
+        }
+
+        public static object showAsForm(this Type type, string title, int width, int height)
+        {
+            return type.showInForm(title, width, height);
+        }
     }
 }

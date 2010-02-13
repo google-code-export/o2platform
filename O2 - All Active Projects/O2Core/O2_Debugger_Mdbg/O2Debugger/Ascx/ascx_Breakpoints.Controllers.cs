@@ -97,7 +97,7 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
 
         public void setBreakpointTarget(string breakpointTarget)
         {
-            if (ExtensionMethods.okThread((Control) tbBreakPointSignature, delegate { setBreakpointTarget(breakpointTarget); }))
+            if (Threads_ExtensionMethods.okThread((Control) tbBreakPointSignature, delegate { setBreakpointTarget(breakpointTarget); }))
                 tbBreakPointSignature.Text = breakpointTarget;
         }
 

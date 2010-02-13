@@ -2,13 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-
-//temp extra references
-using System.Reflection;
 using O2.Kernel;
-using O2.Kernel.CodeUtils;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.Views.ASCX.classes
 {  	

@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using O2.Kernel;
 
 namespace O2.DotNetWrappers.Windows
 {
@@ -24,12 +25,12 @@ namespace O2.DotNetWrappers.Windows
         {
             try
             {
-                Object oControls = DI.reflection.getProperty("Controls", oObjectToTakeScreenShotOf);
+                Object oControls = PublicDI.reflection.getProperty("Controls", oObjectToTakeScreenShotOf);
                 if (oControls != null)
                 {
                     var cccControls = (Control.ControlCollection) oControls;
-                    Object oWidth = DI.reflection.getProperty("Width", oObjectToTakeScreenShotOf);
-                    Object oHeight = DI.reflection.getProperty("Height", oObjectToTakeScreenShotOf);
+                    Object oWidth = PublicDI.reflection.getProperty("Width", oObjectToTakeScreenShotOf);
+                    Object oHeight = PublicDI.reflection.getProperty("Height", oObjectToTakeScreenShotOf);
                     if (null != oWidth && null != oHeight && (int) oWidth > 0 && (int) oHeight > 0)
                     {
                         var bWorkBitmap = new Bitmap((int) oWidth, (int) oHeight);
@@ -55,31 +56,44 @@ namespace O2.DotNetWrappers.Windows
                     }
                 }
                 else
-                    DI.log.error(
+                    PublicDI.log.error(
                         "In getScreenshotOfFormObjectAndItsControls, class doesn't have a Controls property {0}",
                         oObjectToTakeScreenShotOf.GetType());
             }
             catch (Exception ex)
             {
-                DI.log.ex(ex, "getScreenshotOfFormObjectAndItsControls");
+                PublicDI.log.ex(ex, "getScreenshotOfFormObjectAndItsControls");
             }
             return null;
         }
 
         public static Image getScreenshotOfObject(Object oObjectToTakeScreenShotOf)
         {
-            Object oWidth = DI.reflection.getProperty("Width", oObjectToTakeScreenShotOf);
-            Object oHeight = DI.reflection.getProperty("Height", oObjectToTakeScreenShotOf);
+            Object oWidth = PublicDI.reflection.getProperty("Width", oObjectToTakeScreenShotOf);
+            Object oHeight = PublicDI.reflection.getProperty("Height", oObjectToTakeScreenShotOf);
             if (null != oWidth && null != oHeight && (int) oWidth > 0 && (int) oHeight > 0)
             {
                 var bBitmap = new Bitmap((Int32) oWidth, (Int32) oHeight);
                 var oParams = new object[] {bBitmap, new Rectangle(0, 0, (Int32) oWidth, (Int32) oHeight)};
-                object oResult = DI.reflection.invokeMethod_InstanceStaticPublicNonPublic(oObjectToTakeScreenShotOf,
+                object oResult = PublicDI.reflection.invokeMethod_InstanceStaticPublicNonPublic(oObjectToTakeScreenShotOf,
                                                                                           "DrawToBitmap", oParams);
                 return bBitmap;
             }
             return null;
         }
+
+		public static Image getScreenshotOfDesktop()
+		{
+			Bitmap WorkingImage = null;
+        	Graphics WorkingGraphics = null;
+        	Rectangle TargetArea = Screen.PrimaryScreen.WorkingArea;
+        	Image ReturnImage = null;
+        	WorkingImage = new Bitmap(TargetArea.Width,TargetArea.Height);
+
+            WorkingGraphics = Graphics.FromImage(WorkingImage);
+            WorkingGraphics.CopyFromScreen(TargetArea.X, TargetArea.X, 0, 0, TargetArea.Size);
+			return (Image)WorkingImage.Clone();
+		}
 
         /*  public static void takeScreenShotOfObject(String sObjectToTakeScreenShot)
         {

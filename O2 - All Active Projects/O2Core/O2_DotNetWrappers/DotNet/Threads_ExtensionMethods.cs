@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace O2.DotNetWrappers.DotNet
 {
-    public static class ExtensionMethods
+    public static class Threads_ExtensionMethods
     {
         /// <summary>
         /// Sync execution of code on the the Control thread

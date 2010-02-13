@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Merlin;
+﻿using Merlin;
 using O2.DotNetWrappers.DotNet;
-using O2.Kernel.CodeUtils;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
 {

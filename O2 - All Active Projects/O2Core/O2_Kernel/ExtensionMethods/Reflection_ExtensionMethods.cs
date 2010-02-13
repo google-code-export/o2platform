@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using O2.Kernel.Interfaces.O2Core;
 
-namespace O2.Kernel.CodeUtils
+namespace O2.Kernel.ExtensionMethods
 {
     public static class Reflection_ExtensionMethods
     {
@@ -47,10 +47,15 @@ namespace O2.Kernel.CodeUtils
             return _object.GetType();
         }
 
+        public static string typeName(this object _object)
+        {
+            return _object.type().Name;
+        }
+
         public static List<PropertyInfo> properties(this Type type)
-		{
-			return PublicDI.reflection.getProperties(type);
-		}
+        {
+            return PublicDI.reflection.getProperties(type);
+        }
         
         public static object property(this Type type, string propertyName)
         {
@@ -61,15 +66,25 @@ namespace O2.Kernel.CodeUtils
         {
             return PublicDI.reflection.getProperty(propertyName, type);
         }
+    
+        public static object prop(this object liveObject, string propertyName)
+        {
+            return PublicDI.reflection.getProperty(propertyName, liveObject);
+        }
+
+        public static void prop(this object _liveObject, PropertyInfo propertyInfo, object value)
+        {
+            PublicDI.reflection.setProperty(propertyInfo, _liveObject, value);
+        }
 
         public static object property(this object liveObject, string propertyName)
         {
             return liveObject.prop(propertyName);
         }
 
-        public static object prop(this object liveObject, string propertyName)
+        public static void prop(this object _liveObject, string propertyName, object value)
         {
-            return PublicDI.reflection.getProperty(propertyName, liveObject);
+            PublicDI.reflection.setProperty(propertyName, _liveObject, value);
         }
 
         public static List<FieldInfo> fields(this Type type)
@@ -96,6 +111,6 @@ namespace O2.Kernel.CodeUtils
         {
             return reflection.invoke(liveObject, methodName, parameters);                        
         }
-
+                
     }
-}				
+}

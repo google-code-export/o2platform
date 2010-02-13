@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace O2.External.SharpDevelop.Ascx
 {
     public partial class ascx_SourceCodeViewer
@@ -14,7 +10,12 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void setDocumentContents(string documentContents)
         {
-            sourceCodeEditor.setDocumentContents(documentContents,"aaa.cs");
+            sourceCodeEditor.setDocumentContents(documentContents,"xyz.cs");
+        }
+
+        public void setDocumentContents(string documentContents, string file)
+        {
+            sourceCodeEditor.setDocumentContents(documentContents, file);
         }
     }
 }

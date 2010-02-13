@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.Interfaces.Messages;
 using O2.Kernel;
 using O2.DotNetWrappers.Windows;

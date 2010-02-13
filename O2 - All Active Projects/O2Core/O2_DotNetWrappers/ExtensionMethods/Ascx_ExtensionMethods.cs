@@ -3,65 +3,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
-using O2.Kernel;
-using O2.Kernel.CodeUtils;
+using O2.DotNetWrappers.Windows;
+using O2.Kernel.ExtensionMethods;
 
-namespace O2.DotNetWrappers.Windows
+namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class Ascx_ExtensionMethods
-    {
-        #region Control
-
-        public static Control add_Control(this Control control, Type childControlType)
-        {
-            return (Control) control.invokeOnThread(
-                                 () =>
-                                     {
-                                         var childControl =
-                                             (Control)
-                                             PublicDI.reflection.createObjectUsingDefaultConstructor(childControlType);
-                                         if (control != null)
-                                         {
-                                             childControl.Dock = DockStyle.Fill;
-                                             control.Controls.Add(childControl);
-                                             return childControl;
-                                         }
-                                         return null;
-                                     });
-        }
-
-        public static Control clear(this Control control)
-        {
-            return (Control)control.invokeOnThread(
-                () =>
-                    {
-                        control.Controls.Clear();
-                        return control;
-                    });
-        }
-
-        public static Control fill(this Control control)
-        {
-            control.Dock = DockStyle.Fill;
-            return control;
-        }
-
-        public static Control mapToWidth(this Control hostControl, Control control, bool alignToTop)
-        {
-            if (alignToTop)
-                control.anchor_TopLeftRight();
-            else
-                control.anchor_BottomLeftRight();
-
-            var pad = 5;
-            control.Left = hostControl.Left + pad;
-            control.Width = hostControl.Width - pad - pad;
-            return control;
-        }
-
-        #endregion
-
-        #region Control Anchor
+    {       
+        #region Anchor
 
         public static Control anchor(this Control control)
         {
@@ -167,29 +116,28 @@ namespace O2.DotNetWrappers.Windows
         public static Button add_Button(this Control control, string text, int top, int left, int height, int width, MethodInvoker onClick)
         {
             return (Button)control.invokeOnThread(
-                            () =>
-                            {
-                                var button = new Button();
-                                button.Text = text;
-                                if (top > -1)
-                                    button.Top = top;
-                                if (left > -1)
-                                    button.Left = left;
-                                if (width == -1 && height == -1)
-                                    button.AutoSize = true;
-                                else
-                                {
-                                    if (width > -1)
-                                        button.Width = width;
-                                    if (height > -1)
-                                        button.Height = height;
-                                }
-                                button.onClick(onClick);
-                                /*if (onClick != null)
+                               () =>
+                                   {
+                                       var button = new Button {Text = text};
+                                       if (top > -1)
+                                           button.Top = top;
+                                       if (left > -1)
+                                           button.Left = left;
+                                       if (width == -1 && height == -1)
+                                           button.AutoSize = true;
+                                       else
+                                       {
+                                           if (width > -1)
+                                               button.Width = width;
+                                           if (height > -1)
+                                               button.Height = height;
+                                       }
+                                       button.onClick(onClick);
+                                       /*if (onClick != null)
                                     button.Click += (sender, e) => onClick();*/
-                                control.Controls.Add(button);
-                                return button;
-                            });
+                                       control.Controls.Add(button);
+                                       return button;
+                                   });
         }
 
         public static Button onClick(this Button button, MethodInvoker onClick)
@@ -236,17 +184,19 @@ namespace O2.DotNetWrappers.Windows
         public static LinkLabel add_Link(this Control control, string text, int top, int left, MethodInvoker onClick)
         {
             return (LinkLabel)control.invokeOnThread(
-                                            () =>
-                                            {
-                                                var link = new LinkLabel();
-                                                link.AutoSize = true;
-                                                link.Text = text;
-                                                link.Top = top;
-                                                link.Left = left;
-                                                link.LinkClicked += (sender, e) => { if (onClick != null) onClick(); };
-                                                control.Controls.Add(link);
-                                                return link;
-                                            });
+                                  () =>
+                                      {
+                                          var link = new LinkLabel
+                                                         {
+                                                             AutoSize = true,
+                                                             Text = text,
+                                                             Top = top,
+                                                             Left = left
+                                                         };
+                                          link.LinkClicked += (sender, e) => { if (onClick != null) onClick(); };
+                                          control.Controls.Add(link);
+                                          return link;
+                                      });
 
         }
 
@@ -503,19 +453,19 @@ namespace O2.DotNetWrappers.Windows
         {
             textBox.invokeOnThread(
                 () =>
-                {
-                    textBox.Text += text;
-                    textBox.goToEnd();
-                });
+                    {
+                        textBox.Text += text;
+                        textBox.goToEnd();
+                    });
         }
 
         public static void goToEnd(this TextBox textBox)
         {
             textBox.invokeOnThread(() =>
-            {
-                textBox.Select(textBox.Text.Length, 0);
-                textBox.ScrollToCaret();
-            });
+                                       {
+                                           textBox.Select(textBox.Text.Length, 0);
+                                           textBox.ScrollToCaret();
+                                       });
         }
 
         #endregion
@@ -659,12 +609,12 @@ namespace O2.DotNetWrappers.Windows
         public static void afterSelect<T>(this TreeView treeView, Action<T> callback)
         {
             treeView.AfterSelect += (sender, e)
-                =>
-                {
-                    if (e.Node.Tag is T)
+                                    =>
+                                        {
+                                            if (e.Node.Tag is T)
 
-                        callback((T)e.Node.Tag);
-                };
+                                                callback((T)e.Node.Tag);
+                                        };
         }
         #endregion
 
@@ -729,6 +679,198 @@ namespace O2.DotNetWrappers.Windows
 
         #endregion
 
+        #region ContextMenuStrip
+        public static ContextMenuStrip add_ContextMenu(this Control control)
+        {
+            var contextMenu = new ContextMenuStrip();
+            control.ContextMenuStrip = contextMenu;
+            return contextMenu;
+        }
+
+        public static ToolStripMenuItem add(this ContextMenuStrip contextMenu, string text, Action<ToolStripMenuItem> onClick)
+        {
+            var menuItem = new ToolStripMenuItem {Text = text};
+            contextMenu.Items.Add(menuItem);
+            contextMenu.Click += (sender, e) => onClick(menuItem);
+            return menuItem;
+        }
+        #endregion
+
+        #region PictureBox
+
+        public static PictureBox add_PictureBox(this Control control)
+        {
+            return control.add_PictureBox(-1, -1);
+        }
+
+        public static PictureBox add_PictureBox(this Control control, int top, int left)
+        {
+            return (PictureBox)control.invokeOnThread(
+                                   () =>
+                                       {
+                                           var pictureBox = new PictureBox
+                                                                {
+                                                                    BackgroundImageLayout = ImageLayout.Stretch
+                                                                };
+                                           if (top == -1 && left == -1)
+                                               pictureBox.fill();
+                                           else
+                                           {
+                                               if (top > -1)
+                                                   pictureBox.Top = top;
+                                               if (left > -1)
+                                                   pictureBox.Left = left;
+                                           }
+                                           control.Controls.Add(pictureBox);
+                                           return pictureBox;
+                                       });
+        }
+
+        public static void load(this PictureBox pictureBox, Image image)
+        {
+            pictureBox.BackgroundImage = image;
+        }
+        #endregion
+
+        #region ProgressBar
+        // order of params is: int top, int left, int width, int height)
+        public static ProgressBar add_ProgressBar(this Control control, params int[] position)
+        {
+            return control.add_Control<ProgressBar>(position);
+        }
+
+        #endregion
+
+        #region DataGridView
+
+        public static DataGridView add_DataGridView(this Control control, params int[] position)
+        {
+            var dataGridView = control.add_Control<DataGridView>(position);
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.RowHeadersVisible = false;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            return dataGridView;
+        }
+
+        public static void columnWidth(this DataGridView dataGridView, int id, int width)
+        {
+            if (width > -1)
+                dataGridView.Columns[id].Width = width;
+            else
+                dataGridView.Columns[id].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        }
+
+        public static int add_Column(this DataGridView dataGridView, string title)
+        {
+            return dataGridView.add_Column(title, -1);
+        }
+
+        public static int add_Column(this DataGridView dataGridView, string title, int width)
+        {
+            int id = dataGridView.Columns.Add(title, title);
+            dataGridView.columnWidth(id, width);
+            return id;
+        }
+
+        public static int add_Column_Link(this DataGridView dataGridView, string title)
+        {
+            return dataGridView.add_Column_Link(title, -1, false);
+        }
+
+        public static int add_Column_Link(this DataGridView dataGridView, string title, bool useColumnTextForLinkValue)
+        {
+            return dataGridView.add_Column_Link(title, -1, useColumnTextForLinkValue);
+        }
+
+        public static int add_Column_Link(this DataGridView dataGridView, string title, int width, bool useColumnTextForLinkValue)
+        {
+            var links = new DataGridViewLinkColumn
+                            {
+                                HeaderText = title,
+                                DataPropertyName = title,
+                                ActiveLinkColor = Color.White,
+                                LinkBehavior = LinkBehavior.SystemDefault,
+                                LinkColor = Color.Blue,
+                                TrackVisitedState = true
+                            };
+            if (useColumnTextForLinkValue)
+            {
+                links.UseColumnTextForLinkValue = true;
+                links.Text = title;
+            }
+            //links.VisitedLinkColor = Color.Blue;	
+            dataGridView.DefaultCellStyle.SelectionBackColor = Color.LightBlue;
+            var id = dataGridView.Columns.Add(links);
+            dataGridView.columnWidth(id, width);
+            return id;
+        }
+
+        public static void add_Columns(this DataGridView dataGridView, Type type)
+        {
+            type.properties().ForEach(property => dataGridView.add_Column(property.Name));
+        }
+
+        public static int add_Row(this DataGridView dataGridView, params object[] cells)
+        {
+            int id = dataGridView.Rows.Add(cells);
+            //DataGridViewRow dgvr = dgvDataGridView.Rows[id];
+            //dgvr.Tag = oTagObject;
+            return id;
+        }
+
+        public static void add_Rows<T>(this DataGridView dataGridView, List<T> collection)
+        {
+            collection.ForEach(
+                item =>
+                    {
+                        var values = new List<object>();
+                        foreach (var property in item.type().properties())
+                            values.Add(item.prop(property.Name));
+                        dataGridView.add_Row(values.ToArray());
+                    });
+        }
+
+
+        public static object value(this DataGridView dataGridView, int row, int column)
+        {
+            var data = dataGridView.Rows[row].Cells[column].Value;
+            if (data != null)
+                return data;
+            return "";			// default to returning "" if data is null
+        }
+
+        public static void onClick(this DataGridView dataGridView, Action<int, int> cellClicked)
+        {
+            dataGridView.CellContentClick += (sender, e) => cellClicked(e.RowIndex, e.ColumnIndex);
+        }
+
+        public static void remove_Rows(this DataGridView dataGridView)
+        {
+            dataGridView.Rows.Clear();
+        }
+
+        public static void remove_Columns(this DataGridView dataGridView)
+        {
+            dataGridView.Columns.Clear();
+        }
+
+        public static List<List<object>> rows(this DataGridView dataGridView)
+        {
+            var rows = new List<List<object>>();
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                var rowData = new List<object>();
+                foreach (DataGridViewCell cell in row.Cells)
+                {
+                    rowData.Add(cell.Value ?? "");
+                }
+                rows.Add(rowData);
+            }
+            return rows;
+        }
+
+        #endregion		
 
     }
 }

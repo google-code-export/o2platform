@@ -257,12 +257,7 @@ namespace O2.External.SharpDevelop.Ascx
         private void btSelectedLineHistory_Click(object sender, EventArgs e)
         {
             tbExecutionHistoryOrLog.Visible = !tbExecutionHistoryOrLog.Visible;
-        }
-
-        private void cbCompilationErrors_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            showSelectedErrorOnSourceCodeFile();
-        }
+        }        
 
         private void llCurrenlyLoadedObjectModel_MouseDown(object sender, MouseEventArgs e)
         {
@@ -380,7 +375,7 @@ namespace O2.External.SharpDevelop.Ascx
             setDebugButtonEnableState();
         }
 
-        private void menuStripForSourceEdition_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        private void menuStripForSourceEdition_Opening(object sender, CancelEventArgs e)
         {
             addBreakpointOnCurrentLineToolStripMenuItem.Visible = O2Messages.isDebuggerAvailable();
         }
@@ -395,7 +390,7 @@ namespace O2.External.SharpDevelop.Ascx
             // quick hack to show PoC
             if (sPathToFileLoaded != null)
             {
-                CSharpEditor.MainForm.addReferencedAssembly(O2.DotNetWrappers.DotNet.CompileEngine.getListOfO2AssembliesInExecutionDir());
+                CSharpEditor.MainForm.addReferencedAssembly(CompileEngine.getListOfO2AssembliesInExecutionDir());
                 O2Thread.staThread(
                     () =>
                     {
@@ -439,6 +434,11 @@ namespace O2.External.SharpDevelop.Ascx
             {
                 return toolStripWithSourceCodeActions.Visible;
             }
+        }
+
+        private void lbFileLoaded_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(sPathToFileLoaded);
         }
     }
 }

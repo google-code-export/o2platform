@@ -54,8 +54,9 @@
     <Compile Include="DotNet\CompileEngine.cs" />
     <Compile Include="DotNet\DevUtils.cs" />
     <Compile Include="DotNet\DnD.cs" />
-    <Compile Include="DotNet\ExtensionMethods.cs" />
+    <Compile Include="DotNet\Threads_ExtensionMethods.cs" />
     <Compile Include="DotNet\GacUtils.cs" />
+    <Compile Include="DotNet\Loop.cs" />
     <Compile Include="DotNet\O2Linq.cs" />
     <Compile Include="DotNet\O2Thread.cs" />
     <Compile Include="DotNet\O2Timer.cs" />
@@ -64,6 +65,11 @@
     <Compile Include="DotNet\StringsAndLists.cs" />
     <Compile Include="DI.cs" />
     <Compile Include="DotNet\XmlHelpers.cs" />
+    <Compile Include="ExtensionMethods\Collections_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Control_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\IO_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Misc_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Serialize_ExtensionMethods.cs" />
     <Compile Include="Filters\FilteredSignature.cs" />
     <Compile Include="Filters\FilteredUrl.cs" />
     <Compile Include="NetSDK\IL.cs" />
@@ -96,7 +102,7 @@
     <Compile Include="SearchApi\TextSearchResult.cs" />
     <Compile Include="Network\WebEncoding.cs" />
     <Compile Include="ViewObjects\Reflection_MethodInfo.cs" />
-    <Compile Include="Windows\Ascx_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Ascx_ExtensionMethods.cs" />
     <Compile Include="Windows\Controls.cs" />
     <Compile Include="Network\Netsh.cs" />
     <Compile Include="Windows\O2Forms_ThreadSafe_FlowLayoutPanel.cs" />

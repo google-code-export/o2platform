@@ -30,7 +30,7 @@ namespace O2.Views.ASCX.Forms
                     () =>
                         {
                             var rtfText = rtbSourceRichTextBox.Rtf;
-                            ExtensionMethods.invokeOnThread(rtbLogViewContentsToSend, () =>
+                            Threads_ExtensionMethods.invokeOnThread(rtbLogViewContentsToSend, () =>
                                     {
                                         rtbLogViewContentsToSend.Rtf = rtfText;
                                     });
