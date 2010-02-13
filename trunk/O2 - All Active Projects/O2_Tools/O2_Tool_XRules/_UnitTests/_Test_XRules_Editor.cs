@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using O2.Core.XRules.Ascx;
 using O2.Core.XRules.XRulesEngine;
-using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.WinFormsUI.Forms;
 using System.IO;
 

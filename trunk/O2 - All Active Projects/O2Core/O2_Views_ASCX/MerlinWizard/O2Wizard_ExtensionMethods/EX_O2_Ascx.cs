@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Collections.Generic;
 using Merlin;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
 using System.Windows.Forms;

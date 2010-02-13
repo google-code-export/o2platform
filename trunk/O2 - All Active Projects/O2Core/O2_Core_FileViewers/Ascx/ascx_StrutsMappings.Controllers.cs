@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using O2.Core.FileViewers.JoinTraces;
 using O2.Core.FileViewers.Struts_1_5;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
 

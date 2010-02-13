@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Filters;
 using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;

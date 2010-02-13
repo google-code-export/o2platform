@@ -2,8 +2,9 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using O2.DotNetWrappers.DotNet;
 
-namespace O2.DotNetWrappers.DotNet
+namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class Threads_ExtensionMethods
     {
@@ -99,7 +100,7 @@ namespace O2.DotNetWrappers.DotNet
         /// <param name="target"></param>
         /// <returns></returns>
         public static bool okThread(this Control control, EventHandler target)
-        // Control liveObject, string methodToInvoke, object[] delegateParams)
+            // Control liveObject, string methodToInvoke, object[] delegateParams)
         {
             if (control == null || control.IsDisposed)
             {     
@@ -124,11 +125,11 @@ namespace O2.DotNetWrappers.DotNet
         }
 
         public static bool okThread(this Form form, EventHandler target)
-        // Control liveObject, string methodToInvoke, object[] delegateParams)
+            // Control liveObject, string methodToInvoke, object[] delegateParams)
         {
             if (form == null || form.IsDisposed)
             {
-              //  DI.log.info("in okThread form variable was null or dispose, so returning false");
+                //  DI.log.info("in okThread form variable was null or dispose, so returning false");
                 return false;
             }
             try

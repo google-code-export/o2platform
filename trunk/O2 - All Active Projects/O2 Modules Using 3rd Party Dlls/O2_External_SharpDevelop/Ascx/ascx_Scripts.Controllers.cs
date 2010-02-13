@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
 using O2.Kernel.CodeUtils;
 

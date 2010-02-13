@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.WinFormsUI.Forms;
 using O2.Kernel.Interfaces.Views;
 using WeifenLuo.WinFormsUI.Docking;

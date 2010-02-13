@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using O2.Core.XRules.XRulesEngine;
-using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.O2Findings;
 using O2.Kernel.Interfaces.Messages;
 using O2.Kernel.Interfaces.O2Findings;

@@ -7,6 +7,7 @@ using System.Text;
 using NUnit.Framework;
 using O2.Core.FileViewers.Ascx;
 using O2.Core.FileViewers.J2EE;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.DotNet;
 using O2.External.WinFormsUI.Forms;

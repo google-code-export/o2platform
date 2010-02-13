@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using O2.Core.CIR.CirUtils;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.CodeUtils;
