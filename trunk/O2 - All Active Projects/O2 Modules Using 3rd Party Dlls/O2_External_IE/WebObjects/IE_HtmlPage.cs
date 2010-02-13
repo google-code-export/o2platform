@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-//O2Ref:C:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll
 using mshtml;
 using O2.External.IE.Interfaces;
-using O2.Kernel.CodeUtils;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.External.IE.WebObjects
 {

@@ -1,24 +1,16 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.Drawing;
-using System.Linq;
-using System.Xml.Linq;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Kernel;
 using O2.Kernel.Interfaces.O2Core;
 using O2.DotNetWrappers.DotNet;
-using O2.DotNetWrappers.Windows;
-using O2.Views.ASCX;
 using O2.Kernel.Interfaces.Views;
 using O2.External.SharpDevelop.Ascx;
 using O2.Views.ASCX.classes;
-using HTMLparserLibDotNet20.O2ExtraCode;
-using O2.Views.ASCX.CoreControls;
 using O2.Core.XRules.Classes;
-using System.IO;
 using O2.Kernel.CodeUtils;
 using System.Threading;
 
@@ -51,8 +43,8 @@ namespace O2.Core.XRules.Ascx
             						true);		// setBorderStyleTo3D)
             leftGroupBox = splitControl.Panel1.add_GroupBox("Directories and Files");
             rightGroupBox = splitControl.Panel2.add_GroupBox("FileContents");
-            this.Width = 500;
-            this.Height = 500;
+            Width = 500;
+            Height = 500;
             tvDirectoriesAndFiles = leftGroupBox.add_TreeView();
             tvDirectoriesAndFiles.ImageList = ImagesLists.withFolderAndFile();
             tvDirectoriesAndFiles.NodeMouseDoubleClick += tvDirectoriesAndFiles_DoubleClick;
@@ -106,7 +98,7 @@ namespace O2.Core.XRules.Ascx
                                 svnMappedUrl.Text,
                                 (svnMappedUrl.IsFile) ? 1 : 0,
                                 (svnMappedUrl.IsFile) ? Color.Blue : Color.Black,
-                                (object) svnMappedUrl);
+                                svnMappedUrl);
                         }
                     });        	
         }

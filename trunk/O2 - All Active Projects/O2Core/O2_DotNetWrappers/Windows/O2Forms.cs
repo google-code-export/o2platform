@@ -287,7 +287,7 @@ namespace O2.DotNetWrappers.Windows
                 //if (false == dontAdd)
                 //{
                     var newNode = newTreeNode(treeview.Nodes, assemblyInAppDomain.GetName().Name, 0, assemblyInAppDomain);
-                    if (assemblyInAppDomain.Location != "")
+                    if (!string.IsNullOrEmpty(assemblyInAppDomain.Location))
                     {
                         var pdbFile = assemblyInAppDomain.Location.Replace(Path.GetExtension(assemblyInAppDomain.Location), ".pdb");
                         if (File.Exists(pdbFile))

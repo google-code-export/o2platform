@@ -61,7 +61,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbSearch_textNotFound = new System.Windows.Forms.Label();
             this.tbSourceCode_DirectoryOfFileLoaded = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lbFileLoaded = new System.Windows.Forms.Label();
             this.toolStripWithSourceCodeActions = new System.Windows.Forms.ToolStrip();
             this.tbShowO2ObjectModel = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
@@ -104,10 +104,14 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbExecutionHistoryOrLog = new System.Windows.Forms.TextBox();
             this.tvCompilationErrors = new System.Windows.Forms.TreeView();
             this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tcSourceInfo = new System.Windows.Forms.TabControl();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tcSourceInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripForSourceEdition
@@ -363,8 +367,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             // tbTextSearch
             // 
-            this.tbTextSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.tbTextSearch.Location = new System.Drawing.Point(153, 439);
+            this.tbTextSearch.Location = new System.Drawing.Point(6, 26);
             this.tbTextSearch.Name = "tbTextSearch";
             this.tbTextSearch.Size = new System.Drawing.Size(267, 20);
             this.tbTextSearch.TabIndex = 39;
@@ -373,9 +376,8 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 442);
+            this.label1.Location = new System.Drawing.Point(2, 10);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(141, 13);
             this.label1.TabIndex = 40;
@@ -383,11 +385,10 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             // lbSearch_textNotFound
             // 
-            this.lbSearch_textNotFound.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lbSearch_textNotFound.AutoSize = true;
             this.lbSearch_textNotFound.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbSearch_textNotFound.ForeColor = System.Drawing.Color.Red;
-            this.lbSearch_textNotFound.Location = new System.Drawing.Point(426, 440);
+            this.lbSearch_textNotFound.Location = new System.Drawing.Point(279, 28);
             this.lbSearch_textNotFound.Name = "lbSearch_textNotFound";
             this.lbSearch_textNotFound.Size = new System.Drawing.Size(98, 15);
             this.lbSearch_textNotFound.TabIndex = 41;
@@ -416,14 +417,15 @@ namespace O2.External.SharpDevelop.Ascx
             this.label2.TabIndex = 43;
             this.label2.Text = "\\";
             // 
-            // label3
+            // lbFileLoaded
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 24);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 13);
-            this.label3.TabIndex = 44;
-            this.label3.Text = "File Loaded:";
+            this.lbFileLoaded.AutoSize = true;
+            this.lbFileLoaded.Location = new System.Drawing.Point(6, 24);
+            this.lbFileLoaded.Name = "lbFileLoaded";
+            this.lbFileLoaded.Size = new System.Drawing.Size(65, 13);
+            this.lbFileLoaded.TabIndex = 44;
+            this.lbFileLoaded.Text = "File Loaded:";
+            this.lbFileLoaded.Click += new System.EventHandler(this.lbFileLoaded_Click);
             // 
             // toolStripWithSourceCodeActions
             // 
@@ -691,7 +693,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.cBoxSampleScripts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxSampleScripts.Name = "cBoxSampleScripts";
-            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 21);
+            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 25);
             this.cBoxSampleScripts.Visible = false;
             this.cBoxSampleScripts.SelectedIndexChanged += new System.EventHandler(this.cBoxSampleScripts_SelectedIndexChanged);
             // 
@@ -706,7 +708,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btOpenFile.Image")));
             this.btOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btOpenFile.Name = "btOpenFile";
-            this.btOpenFile.Size = new System.Drawing.Size(23, 20);
+            this.btOpenFile.Size = new System.Drawing.Size(23, 22);
             this.btOpenFile.Text = "Open File";
             this.btOpenFile.Click += new System.EventHandler(this.btOpenFile_Click);
             // 
@@ -718,7 +720,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.llCurrenlyLoadedObjectModel);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.tbMaxLoadSize);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.label4);
-            this.groupBoxWithFileAndSaveSettings.Controls.Add(this.label3);
+            this.groupBoxWithFileAndSaveSettings.Controls.Add(this.lbFileLoaded);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.tbSourceCode_DirectoryOfFileLoaded);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.btSave);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.lbSource_CodeFileSaved);
@@ -812,7 +814,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbPartialFileView.FormattingEnabled = true;
             this.lbPartialFileView.Location = new System.Drawing.Point(3, 30);
             this.lbPartialFileView.Name = "lbPartialFileView";
-            this.lbPartialFileView.Size = new System.Drawing.Size(1146, 381);
+            this.lbPartialFileView.Size = new System.Drawing.Size(1146, 342);
             this.lbPartialFileView.TabIndex = 47;
             this.lbPartialFileView.Visible = false;
             // 
@@ -820,7 +822,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.tbExecutionHistoryOrLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbExecutionHistoryOrLog.Location = new System.Drawing.Point(764, 28);
+            this.tbExecutionHistoryOrLog.Location = new System.Drawing.Point(767, 28);
             this.tbExecutionHistoryOrLog.Multiline = true;
             this.tbExecutionHistoryOrLog.Name = "tbExecutionHistoryOrLog";
             this.tbExecutionHistoryOrLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -831,7 +833,7 @@ namespace O2.External.SharpDevelop.Ascx
             // tvCompilationErrors
             // 
             this.tvCompilationErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvCompilationErrors.Location = new System.Drawing.Point(764, 28);
+            this.tvCompilationErrors.Location = new System.Drawing.Point(769, 28);
             this.tvCompilationErrors.Name = "tvCompilationErrors";
             this.tvCompilationErrors.ShowNodeToolTips = true;
             this.tvCompilationErrors.Size = new System.Drawing.Size(361, 209);
@@ -853,12 +855,36 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.ShowEOLMarkers = true;
             this.tecSourceCode.ShowSpaces = true;
             this.tecSourceCode.ShowTabs = true;
-            this.tecSourceCode.Size = new System.Drawing.Size(1143, 409);
+            this.tecSourceCode.Size = new System.Drawing.Size(1149, 342);
             this.tecSourceCode.TabIndex = 17;
             this.tecSourceCode.Load += new System.EventHandler(this.tecSourceCode_Load);
             this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
             this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
             this.tecSourceCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragEnter);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.tbTextSearch);
+            this.tabPage1.Controls.Add(this.lbSearch_textNotFound);
+            this.tabPage1.Controls.Add(this.label1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1132, 65);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Text Search";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tcSourceInfo
+            // 
+            this.tcSourceInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tcSourceInfo.Controls.Add(this.tabPage1);
+            this.tcSourceInfo.Location = new System.Drawing.Point(3, 370);
+            this.tcSourceInfo.Name = "tcSourceInfo";
+            this.tcSourceInfo.SelectedIndex = 0;
+            this.tcSourceInfo.Size = new System.Drawing.Size(1140, 91);
+            this.tcSourceInfo.TabIndex = 52;
             // 
             // ascx_SourceCodeEditor
             // 
@@ -867,14 +893,12 @@ namespace O2.External.SharpDevelop.Ascx
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.Controls.Add(this.tvCompilationErrors);
+            this.Controls.Add(this.tcSourceInfo);
             this.Controls.Add(this.groupBoxWithFileAndSaveSettings);
             this.Controls.Add(this.tbExecutionHistoryOrLog);
             this.Controls.Add(this.toolStripWithSourceCodeActions);
             this.Controls.Add(this.tecSourceCode);
             this.Controls.Add(this.lbPartialFileView);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.tbTextSearch);
-            this.Controls.Add(this.lbSearch_textNotFound);
             this.ForeColor = System.Drawing.Color.Black;
             this.Name = "ascx_SourceCodeEditor";
             this.Size = new System.Drawing.Size(1149, 461);
@@ -888,6 +912,9 @@ namespace O2.External.SharpDevelop.Ascx
             this.groupBoxWithFileAndSaveSettings.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            this.tcSourceInfo.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -913,7 +940,7 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.Label lbSearch_textNotFound;
         private System.Windows.Forms.TextBox tbSourceCode_DirectoryOfFileLoaded;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lbFileLoaded;
         private System.Windows.Forms.ToolStrip toolStripWithSourceCodeActions;
         private System.Windows.Forms.GroupBox groupBoxWithFileAndSaveSettings;
         private System.Windows.Forms.ToolStripButton btSettings;
@@ -968,5 +995,7 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripMenuItem openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem compileSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabControl tcSourceInfo;
     }
 }

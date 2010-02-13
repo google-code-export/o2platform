@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Windows.Forms;
+using mshtml;
 using O2.External.IE.Interfaces;
 using O2.External.IE.WebObjects;
 using O2.Kernel;
 
 //O2Ref:C:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll
+using O2.External.IE;
 
 namespace O2.External.IE
 {
+    
+
     public class O2BrowserIE : ExtendedWebBrowser, IO2Browser
     //public class O2BrowserIE : WebBrowser, IO2Browser
     {
@@ -21,6 +25,8 @@ namespace O2.External.IE
             //this.Navigated += O2BrowserIE_Navigated;
 
             DocumentComplete += O2BrowserIE_DocumentComplete;
+            AllowWebBrowserDrop = false;
+            
 
             /*DocumentCompleted +=
                 (sender, e)
@@ -33,7 +39,9 @@ namespace O2.External.IE
             
         }
 
-       /* void O2BrowserIE_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+       
+
+        /* void O2BrowserIE_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
          //   PublicDI.log.info("Navigating: {0} ({1}", e.Url, e.TargetFrameName);
             //throw new NotImplementedException();

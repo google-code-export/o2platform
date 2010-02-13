@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using mshtml;
+using O2.External.IE.ExtensionMethods;
 using O2.External.IE.Interfaces;
 using O2.Kernel;
-using O2.Kernel.CodeUtils;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.External.IE.WebObjects
 {
@@ -41,7 +42,7 @@ namespace O2.External.IE.WebObjects
             //PublicDI.log.debug(" --- there are {0} elements loaded", Elements.Count);        
         }
         private void loadData(HTMLFormElementClass form)
-        {
+        {            
             Action = ((IHTMLFormElement)form).action;
             Dir = ((IHTMLFormElement)form).dir;
             Encoding = ((IHTMLFormElement)form).encoding;
@@ -62,6 +63,7 @@ namespace O2.External.IE.WebObjects
                     case "HTMLInputElementClass":
                     case "HTMLTextAreaElementClass":
                     case "HTMLSelectElementClass":
+                        //case "HTMLFieldSetElementClass":  //todo: need to solve this issue that shows up in news.bbc.co.uk                        
                         FormFields.Add(this.formField(element));                        
                         break;                                                    
                     default:

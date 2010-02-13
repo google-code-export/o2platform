@@ -55,10 +55,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DI.cs" />
+    <Compile Include="ExtensionMethods\IEChangeSink.cs" />
     <Compile Include="Wrapper\ExtendedWebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Wrapper\IE_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\IE_ExtensionMethods.cs" />
     <Compile Include="Interfaces\IO2Browser.cs" />
     <Compile Include="Interfaces\IO2HtmlAnchor.cs" />
     <Compile Include="Interfaces\IO2HtmlForm.cs" />

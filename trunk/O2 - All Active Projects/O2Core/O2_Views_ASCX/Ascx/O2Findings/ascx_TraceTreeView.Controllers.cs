@@ -38,7 +38,7 @@ namespace O2.Views.ASCX.O2Findings
 
         public void loadO2Finding(IO2Finding _o2Finding)        
         {
-            ExtensionMethods.invokeOnThread((Control) this, () =>
+            Threads_ExtensionMethods.invokeOnThread((Control) this, () =>
                                     {
                                         o2Finding = _o2Finding;
                                         showO2TraceTree();
@@ -48,7 +48,7 @@ namespace O2.Views.ASCX.O2Findings
 
         public void showO2TraceTree()
         {
-            ExtensionMethods.invokeOnThread(tvSmartTrace, () =>
+            Threads_ExtensionMethods.invokeOnThread(tvSmartTrace, () =>
                                             {
                                                 if (o2Finding != null)
                                                 {

@@ -28,7 +28,7 @@ namespace O2.Debugger.Mdbg.O2Debugger.Ascx
 
         private void refreshListOfAvailableManagedProcesses()
         {
-            if (ExtensionMethods.okThread((Control) lvManagedProcesses, delegate { refreshListOfAvailableManagedProcesses(); }))
+            if (Threads_ExtensionMethods.okThread((Control) lvManagedProcesses, delegate { refreshListOfAvailableManagedProcesses(); }))
             {
                 lvManagedProcesses.Items.Clear();
                 var processes = DI.o2MDbg.sessionData.getManagedProcesses();

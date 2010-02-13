@@ -36,7 +36,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
                           while (runAnnimation)                        
                           {
                               timeElapsed += 1;                              
-                              ExtensionMethods.invokeOnThread(progressBar, () =>
+                              Threads_ExtensionMethods.invokeOnThread(progressBar, () =>
                                                                                {
                                                                                    lbTimeElapsed.Text = String.Format("{0} Sec", timeElapsed);
                                                                                    progressBar.Value++;                                                                                    

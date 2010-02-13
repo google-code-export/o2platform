@@ -50,6 +50,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             if (false == DesignMode && runOnLoad)
             {
+                buildCodeDetailsTabControl();
                 tbMaxLoadSize.Text = iMaxFileSize.ToString();
                 if (File.Exists(sFileToOpen))
                     loadSourceCodeFile(sFileToOpen);
@@ -76,6 +77,11 @@ namespace O2.External.SharpDevelop.Ascx
                 mapExternalExecutionEngines();
                 runOnLoad = false;
             }
+        }
+
+        private void buildCodeDetailsTabControl()
+        {
+//            tcSourceInfo
         }
 
         void IconBarMargin_MouseDown(AbstractMargin sender, Point mousepos, MouseButtons mouseButtons)
@@ -230,7 +236,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             startLine = _startLine;
             endLine = _endLine;
-            ExtensionMethods.invokeOnThread((Control)this, () =>
+            this.invokeOnThread(() =>
                     {
                         var numberOflinesInCurrentFile = partialFileContents.Count;
                         if (startLine > numberOflinesInCurrentFile)
@@ -256,7 +262,7 @@ namespace O2.External.SharpDevelop.Ascx
             // handle the special case where 0 is provided as the line to select 
             //  if (lineToSelect == 0)
             //      lineToSelect = 1;
-            ExtensionMethods.invokeOnThread((Control)this, () =>
+            this.invokeOnThread(() =>
                     {
                         if (startLine < lineToSelect && lineToSelect < endLine)
                         {
@@ -409,7 +415,7 @@ namespace O2.External.SharpDevelop.Ascx
         /// <returns></returns>
         public String getSourceCode()
         {
-            return (string)ExtensionMethods.invokeOnThread((Control)this, () => tecSourceCode.Text);
+            return (string)this.invokeOnThread(() => tecSourceCode.Text);
 
             /*try
             {
@@ -477,7 +483,7 @@ namespace O2.External.SharpDevelop.Ascx
                 if (partialFileViewMode)
                     selectLineFromPartialFileContents((uint)iLineToSelect);
                 else
-                    ExtensionMethods.okThreadSync(this, delegate
+                    this.okThreadSync(delegate
                                                             {
                                                                 tecSourceCode.LineViewerStyle = LineViewerStyle.FullRow;
                                                                 TextAreaControl teaControl =
@@ -593,7 +599,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void setDirectoryOfFileLoaded(string newPath)
         {
-            if (ExtensionMethods.okThread((Control)(tbSourceCode_DirectoryOfFileLoaded), delegate { setDirectoryOfFileLoaded(newPath); }))
+            if (((tbSourceCode_DirectoryOfFileLoaded)).okThread(delegate { setDirectoryOfFileLoaded(newPath); }))
                 if (newPath != tbSourceCode_DirectoryOfFileLoaded.Text)
                 {
                     tbSourceCode_DirectoryOfFileLoaded.Text = newPath;
@@ -659,30 +665,32 @@ namespace O2.External.SharpDevelop.Ascx
 
         public int getSelectedLineNumber()
         {
-            return (int)ExtensionMethods.invokeOnThread((Control)(this), () => tecSourceCode.ActiveTextAreaControl.Caret.Line + 1);
+            return (int)this.invokeOnThread(() => tecSourceCode.ActiveTextAreaControl.Caret.Line + 1);
         }
 
         public string getSelectedLineText()
         {
-            return (string)ExtensionMethods.invokeOnThread((Control)(this), () =>
-                                                     {
-                                                         var currentLine = tecSourceCode.ActiveTextAreaControl.Caret.Line;
-                                                         var lineSegment = tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetLineSegment(currentLine);
-                                                         return tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetText(lineSegment.Offset, lineSegment.Length);
-                                                     });
+            return (string) this.invokeOnThread(
+                                () =>
+                                    {
+                                        var currentLine = tecSourceCode.ActiveTextAreaControl.Caret.Line;
+                                        var lineSegment = tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetLineSegment(currentLine);
+                                        return
+                                            tecSourceCode.ActiveTextAreaControl.TextArea.TextView.Document.GetText(lineSegment.Offset, lineSegment.Length);
+                                    });
         }
 
         private void executeMethod()
         {
-            ExtensionMethods.invokeOnThread((Control)this, () =>
-                                    {
-                                        if (cboxCompliledSourceCodeMethods.SelectedItem != null)
-                                        {
-                                            var method = (Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem;
-                                            method.invokeMTA(new object[0]);
-                                        }
-                                        return null;
-                                    });
+            this.invokeOnThread(
+                () => {
+                           if (cboxCompliledSourceCodeMethods.SelectedItem != null)
+                           {
+                               var method = (Reflection_MethodInfo)cboxCompliledSourceCodeMethods.SelectedItem;
+                               method.invokeMTA(new object[0]);
+                           }
+                           return null;
+                       });
         }
 
 
@@ -873,20 +881,20 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void loadSampleScripts(object resourcesObjectWithSampleScripts)
         {
-            ExtensionMethods.invokeOnThread((Control)this, () =>
-                                    {
-                                        sampleScripts = SampleScripts.getDictionaryWithSampleScripts(resourcesObjectWithSampleScripts);
-                                        cBoxSampleScripts.Items.Clear();
-                                        foreach (var scriptName in sampleScripts.Keys)
-                                            cBoxSampleScripts.Items.Add(scriptName);
-                                        if (cBoxSampleScripts.Items.Count > 0)
-                                        {
-                                            cBoxSampleScripts.SelectedIndex = 0;
-                                            lbSampleScripts.Visible = true;
-                                            cBoxSampleScripts.Visible = true;
-                                        }
-                                        return null;
-                                    });
+            this.invokeOnThread(
+                () => {
+                           sampleScripts = SampleScripts.getDictionaryWithSampleScripts(resourcesObjectWithSampleScripts);
+                           cBoxSampleScripts.Items.Clear();
+                           foreach (var scriptName in sampleScripts.Keys)
+                               cBoxSampleScripts.Items.Add(scriptName);
+                           if (cBoxSampleScripts.Items.Count > 0)
+                           {
+                               cBoxSampleScripts.SelectedIndex = 0;
+                               lbSampleScripts.Visible = true;
+                               cBoxSampleScripts.Visible = true;
+                           }
+                           return null;
+                       });
 
             /*    O2Forms.newTreeNode(tvSampleScripts.Nodes, scriptName, 1, sampleScripts[scriptName]);
 
