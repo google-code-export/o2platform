@@ -3,6 +3,7 @@ using System.IO;
 using NUnit.Framework;
 using O2.Core.FileViewers.Ascx;
 using O2.Core.FileViewers.XSD;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.DotNet;
 using O2.External.WinFormsUI.Forms;

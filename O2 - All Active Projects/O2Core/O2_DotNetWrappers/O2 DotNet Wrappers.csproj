@@ -54,7 +54,7 @@
     <Compile Include="DotNet\CompileEngine.cs" />
     <Compile Include="DotNet\DevUtils.cs" />
     <Compile Include="DotNet\DnD.cs" />
-    <Compile Include="DotNet\Threads_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Threads_ExtensionMethods.cs" />
     <Compile Include="DotNet\GacUtils.cs" />
     <Compile Include="DotNet\Loop.cs" />
     <Compile Include="DotNet\O2Linq.cs" />

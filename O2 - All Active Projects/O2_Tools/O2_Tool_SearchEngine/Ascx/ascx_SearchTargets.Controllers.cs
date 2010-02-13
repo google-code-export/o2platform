@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using System.IO;
+using O2.DotNetWrappers.ExtensionMethods;
 
 namespace O2.Tool.SearchEngine.Ascx
 {
