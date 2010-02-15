@@ -74,14 +74,14 @@ namespace O2.Script
         						true,		// setDockStyleoFill
         						true);		// setBorderStyleTo3D)
         	var leftGroupBox = splitControl.Panel1.add_GroupBox("Methods");
-            var rightGroupBox = splitControl.Panel2.add_GroupBox("SourceCode");
+            //var rightGroupBox = splitControl.Panel2.add_GroupBox("SourceCode");
             tvDirectoriesAndFiles = leftGroupBox.add_TreeView();
             tvDirectoriesAndFiles.AfterSelect += tvDirectoriesAndFiles_AfterSelect;
             tvDirectoriesAndFiles.AllowDrop = true;
             tvDirectoriesAndFiles.DragEnter += tvDirectoriesAndFiles_DragEnter;
             tvDirectoriesAndFiles.DragDrop += tvDirectoriesAndFiles_DragDrop;                        
             
-            var rightSplitControl = rightGroupBox.add_SplitContainer(
+            var rightSplitControl = splitControl.Panel2.add_SplitContainer(
         						true, 		//setOrientationToHorizontal
         						true,		// setDockStyleoFill
         						true);		// setBorderStyleTo3D)

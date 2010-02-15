@@ -4,12 +4,19 @@ using System.IO;
 using System.Windows.Forms;
 using O2.Kernel;
 using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Network;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.Ascx;
 
+//O2File:C:\O2\_XRules_Local\MiscTestss\extra.cs
+
+using ICSharpCode.NRefactory;
+using ICSharpCode.NRefactory.Ast;
+using ICSharpCode.NRefactory.Visitors;
+
 namespace O2.Script
-{
+{		
     public class Main
     {    
         public static void openAscx()
@@ -44,7 +51,7 @@ namespace O2.Script
         public TreeView comments_TreeView;
         public ascx_SourceCodeEditor rewritenCSharpCode_SourceCodeEditor;
         public ascx_SourceCodeEditor rewritenVBNet_SourceCodeEditor;
-		
+		public RichTextBox errors_RichTextBox;
 		public ascx_View_SourceCode_AST()
 		{
 			createGUI();					
@@ -63,7 +70,7 @@ namespace O2.Script
         	sourceCodeEditor = topGroupBox.add_SourceCodeEditor();
         	
         	tabControl = splitControl.Panel2.add_TabControl();
-        	        	
+        	    
         	ast_TreeView = tabControl.add_Tab("AST").add_TreeView();
         	usingDeclarations_TreeView = tabControl.add_Tab("Using Declarations").add_TreeView();
         	types_TreeView = tabControl.add_Tab("Types").add_TreeView();       	
@@ -71,6 +78,7 @@ namespace O2.Script
         	fields_TreeView = tabControl.add_Tab("Fields").add_TreeView();
         	properties_TreeView = tabControl.add_Tab("Properties").add_TreeView();
         	comments_TreeView = tabControl.add_Tab("Comments").add_TreeView();
+        	errors_RichTextBox = tabControl.add_Tab("Errors").add_RichTextBox();
         	rewritenCSharpCode_SourceCodeEditor = tabControl.add_Tab("Re-writen Code : CSharp").add_SourceCodeEditor();        	
         	rewritenVBNet_SourceCodeEditor = tabControl.add_Tab("Re-writen Code : VB.Net").add_SourceCodeEditor();
         	
@@ -94,14 +102,15 @@ namespace O2.Script
 		public void updateView(string sourceCode)
 		{	
 			var ast = new Ast_CSharp(sourceCode);
-			ast_TreeView.show_Ast(ast);
+						
+			ast_TreeView.show_Ast(ast);						
 			types_TreeView.show_List(ast.astDetails.Types, "Text");
 			usingDeclarations_TreeView.show_List(ast.astDetails.UsingDeclarations,"Text");
 			methods_TreeView.show_List(ast.astDetails.Methods,"Text");
 			fields_TreeView.show_List(ast.astDetails.Fields,"Text");
 			properties_TreeView.show_List(ast.astDetails.Properties,"Text");
 			comments_TreeView.show_List(ast.astDetails.Comments,"Text");
-			
+			errors_RichTextBox.set_Text(ast.errors);						
 			rewritenCSharpCode_SourceCodeEditor.setDocumentContents(ast.astDetails.CSharpCode, ".cs");
 			rewritenVBNet_SourceCodeEditor.setDocumentContents(ast.astDetails.VBNetCode, ".vb");								
 		}
