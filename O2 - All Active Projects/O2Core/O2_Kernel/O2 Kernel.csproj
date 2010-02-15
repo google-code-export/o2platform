@@ -61,6 +61,7 @@
     <Compile Include="ExtensionMethods\Reflection_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\String_ExtensionMethods.cs" />
     <Compile Include="DI.cs" />
+    <Compile Include="InterfacesBaseImpl\KLoadedXRule.cs" />
     <Compile Include="InterfacesBaseImpl\KScanTarget.cs" />
     <Compile Include="InterfacesBaseImpl\KO2Message .cs" />
     <Compile Include="InterfacesBaseImpl\O2Rule.cs" />
