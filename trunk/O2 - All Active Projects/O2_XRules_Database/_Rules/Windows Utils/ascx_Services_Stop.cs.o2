@@ -105,27 +105,5 @@ namespace O2.Script
 			};
      	}
     	    	    	    	    
-   } 
-    
-    public static class text
-    {	
-    	public static void set(this DataGridView dataGridView, int row,int column, object value)
-    	{
-    		dataGridView.invokeOnThread(
-    			()=> {
-    					dataGridView.Rows[row].Cells[column].Value = value;
-    					//cell.Value = value;
-    				 });
-    	}
-    	public static void remove_Row(this DataGridView dataGridView, DataGridViewRow row)
-    	{
-    		dataGridView.invokeOnThread(()=>
-    			dataGridView.Rows.Remove(row));
-    	}
-    	
-    	public static DataGridViewRow get_Row(this DataGridView dataGridView, int row)
-    	{
-    		return (DataGridViewRow)dataGridView.invokeOnThread(()=> dataGridView.Rows[row]);
-    	}
-    }
+   }         
 }
