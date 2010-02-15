@@ -20,49 +20,49 @@ namespace O2.External.SharpDevelop.AST
     {    
         private static IO2Log log = PublicDI.log;
     	
-        public CompilationUnit compilationUnit {get; set;}
-        public IParser parser {get; set;}
-        public string sourceCodeFile {get ; set;}
-        public AstDetails astDetails {get; set;}
-        public string errors  {get; set;}
+        public CompilationUnit CompilationUnit {get; set;}
+        public IParser Parser {get; set;}
+        public string SourceCodeFile {get ; set;}
+        public AstDetails AstDetails {get; set;}
+        public string Errors  {get; set;}
 		
         SupportedLanguage language = SupportedLanguage.CSharp;
 		
         public Ast_CSharp(string _sourceCodeFile)
         {    	
             createAst(_sourceCodeFile);
-            mapAstDetails(parser.CompilationUnit);   
+            mapAstDetails(Parser.CompilationUnit);   
         }
+    
 
         public Ast_CSharp(CompilationUnit unit)
         {
-        	createAst("");
+            createAst("");
             mapAstDetails(unit);
         }
-    	
+    
         public void createAst(string _sourceCodeFile)
         {
-            sourceCodeFile = _sourceCodeFile;    		
-            parser = ParserFactory.CreateParser(language, new StringReader(sourceCodeFile));
-            parser.Parse();			
-            errors  = (parser.Errors.Count > 0)?  parser.Errors.ErrorOutput : "";                                     
+            SourceCodeFile = _sourceCodeFile;    		
+            Parser = ParserFactory.CreateParser(language, new StringReader(SourceCodeFile));
+            Parser.Parse();
+            Errors = (Parser.Errors.Count > 0) ?  Parser.Errors.ErrorOutput : "";                                     
         }
         
 	    public void mapAstDetails(CompilationUnit unit)
 	    {
 	    	try
-	    	{
-	    		
-	        	compilationUnit = unit;
+	    	{	    		
+	        	CompilationUnit = unit;
 
-	            astDetails = new AstDetails();	            
-	            var specials = parser.Lexer.SpecialTracker.RetrieveSpecials();
-	            
-	            astDetails.mapSpecials(specials);
-	            astDetails.rewriteCode_CSharp(compilationUnit, specials);
-	            astDetails.rewriteCode_VBNet(compilationUnit, specials);	            
+	            AstDetails = new AstDetails();	            
+	            var specials = Parser.Lexer.SpecialTracker.RetrieveSpecials();
+
+                AstDetails.mapSpecials(specials);
+                AstDetails.rewriteCode_CSharp(CompilationUnit, specials);
+                AstDetails.rewriteCode_VBNet(CompilationUnit, specials);	            
 	
-	            compilationUnit.AcceptVisitor(astDetails, null);
+	            CompilationUnit.AcceptVisitor(AstDetails, null);
 			}
 			catch(Exception ex)
 			{

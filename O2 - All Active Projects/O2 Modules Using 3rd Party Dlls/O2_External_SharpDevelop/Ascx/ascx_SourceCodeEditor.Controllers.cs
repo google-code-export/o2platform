@@ -13,6 +13,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.O2Misc;
 using O2.DotNetWrappers.Windows;
+using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ScriptSamples;
 using O2.Kernel.CodeUtils;
 using O2.Kernel.Interfaces.Views;
@@ -34,6 +35,7 @@ namespace O2.External.SharpDevelop.Ascx
         // external compilers
         public static Dictionary<string, Func<string, DataReceivedEventHandler, Process>> externalExecutionEngines = new Dictionary<string, Func<string, DataReceivedEventHandler, Process>>();
 
+        private Ast_CSharp_ShowDetailsInViewer showAstDetails;
         private int iLastFoundPosition;
         public long iMaxFileSize = 200; //  200k
         public String sDirectoryOfFileLoaded = "";
@@ -50,8 +52,7 @@ namespace O2.External.SharpDevelop.Ascx
         public void onLoad()
         {
             if (false == DesignMode && runOnLoad)
-            {
-                buildCodeDetailsTabControl();
+            {                
                 tbMaxLoadSize.Text = iMaxFileSize.ToString();
                 if (File.Exists(sFileToOpen))
                     loadSourceCodeFile(sFileToOpen);
@@ -79,11 +80,7 @@ namespace O2.External.SharpDevelop.Ascx
                 runOnLoad = false;
             }
         }
-
-        private void buildCodeDetailsTabControl()
-        {
-//            tcSourceInfo
-        }
+        
 
         void IconBarMargin_MouseDown(AbstractMargin sender, Point mousepos, MouseButtons mouseButtons)
         {

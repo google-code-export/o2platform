@@ -2,8 +2,9 @@
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using O2.DotNetWrappers.ExtensionMethods;
-using O2.DotNetWrappers.Windows;
 using O2.External.SharpDevelop.Ascx;
+using O2.External.SharpDevelop.AST;
+using O2.Kernel;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -58,6 +59,34 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             var tecSourceCode = sourceCodeEditor.control();
             var dummyFileName = string.Format("aaa.{0}", extension);
             tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(dummyFileName);
+        }
+
+        public static void showAstValueInSourceCode(this TextEditorControl textEditorControl, AstValue astValue)
+        {
+
+            PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
+            
+            var start = new ICSharpCode.TextEditor.TextLocation(astValue.StartLocation.X - 1,
+                                                                astValue.StartLocation.Y - 1);
+            var end = new ICSharpCode.TextEditor.TextLocation(astValue.EndLocation.X - 1, astValue.EndLocation.Y - 1);
+            var selection = new ICSharpCode.TextEditor.Document.DefaultSelection(textEditorControl.Document, start, end);
+            textEditorControl.ActiveTextAreaControl.SelectionManager.SetSelection(selection);
+            setCaretToCurrentSelection(textEditorControl);
+
+        }
+
+        public static void setCaretToCurrentSelection(this TextEditorControl textEditorControl)
+        {
+            var finalCaretPosition = textEditorControl.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection[0].StartPosition;
+            var tempCaretPosition = new TextLocation
+            {
+                X = finalCaretPosition.X,
+                Y = finalCaretPosition.Y + 10
+            };
+            textEditorControl.ActiveTextAreaControl.Caret.Position = tempCaretPosition;
+            textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
+            textEditorControl.ActiveTextAreaControl.Caret.Position = finalCaretPosition;
+            textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
         }
     }
 }
