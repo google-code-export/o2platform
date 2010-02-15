@@ -37,28 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CIR\ICirAttribute.cs" />
-    <Compile Include="CIR\ICirClass.cs" />
-    <Compile Include="CIR\ICirData.cs" />
-    <Compile Include="CIR\ICirDataAnalysis.cs" />
-    <Compile Include="CIR\ICirDataSearchResult.cs" />
-    <Compile Include="CIR\ICirFieldClass.cs" />
-    <Compile Include="CIR\ICirFieldMember.cs" />
-    <Compile Include="CIR\ICirFunction.cs" />
-    <Compile Include="CIR\ICirFunctionCall.cs" />
-    <Compile Include="CIR\ICirFunctionParameter.cs" />
-    <Compile Include="CIR\ICirFunctionVariable.cs" />
-    <Compile Include="CIR\ICirSsaVariable.cs" />
-    <Compile Include="CIR\ICirTraces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CIR\.svn\prop-base\" />
-    <Folder Include="CIR\.svn\props\" />
-    <Folder Include="CIR\.svn\text-base\" />
-    <Folder Include="CIR\.svn\tmp\prop-base\" />
-    <Folder Include="CIR\.svn\tmp\props\" />
-    <Folder Include="CIR\.svn\tmp\text-base\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
