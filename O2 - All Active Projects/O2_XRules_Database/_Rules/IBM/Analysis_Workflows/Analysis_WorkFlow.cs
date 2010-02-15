@@ -18,7 +18,7 @@ using NUnit.Framework;
 //O2File:Analysis_WorkFlow_Phase_4.cs
 //O2File:Analysis_WorkFlow_Phase_5.cs
 
-namespace O2.XRules.Database._Rules.Analysis_Workflows
+namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {
     [TestFixture]
     public class Analysis_Workflow : KXRule

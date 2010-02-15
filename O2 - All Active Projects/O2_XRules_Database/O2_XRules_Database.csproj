@@ -34,7 +34,7 @@
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>16</ApplicationRevision>
+    <ApplicationRevision>18</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -81,41 +81,42 @@
     </Reference>
     <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2SharpDevelop.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2SharpDevelop.dll</HintPath>
     </Reference>
     <Reference Include="O2_Core_CIR, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Core_CIR.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_Core_CIR.dll</HintPath>
     </Reference>
     <Reference Include="O2_Core_FileViewers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Core_FileViewers.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_Core_FileViewers.dll</HintPath>
     </Reference>
     <Reference Include="O2_Core_XRules, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Core_XRules.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_Core_XRules.dll</HintPath>
     </Reference>
     <Reference Include="O2_DotNetWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_DotNetWrappers.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\O2_Binaries\O2_DotNetWrappers.dll</HintPath>
     </Reference>
     <Reference Include="O2_External_O2Mono, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_External_O2Mono.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_External_O2Mono.dll</HintPath>
     </Reference>
     <Reference Include="O2_External_SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_External_SharpDevelop.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_External_SharpDevelop.dll</HintPath>
     </Reference>
     <Reference Include="O2_External_WinFormsUI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_External_WinFormsUI.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_External_WinFormsUI.dll</HintPath>
     </Reference>
     <Reference Include="O2_ImportExport_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_ImportExport_OunceLabs.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_ImportExport_OunceLabs.dll</HintPath>
     </Reference>
     <Reference Include="O2_Kernel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Kernel.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_Kernel.dll</HintPath>
     </Reference>
     <Reference Include="O2_Rules_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Rules_OunceLabs.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_Rules_OunceLabs.dll</HintPath>
     </Reference>
     <Reference Include="O2_Views_ASCX, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\_Bin_(O2_Binaries)\O2_Views_ASCX.dll</HintPath>
+      <HintPath>..\..\O2_Binaries\O2_Views_ASCX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -133,11 +134,11 @@
     <Reference Include="System.Xml" />
     <Reference Include="_HostLocalWebsite %28O2 Tool%29, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\_Bin_(O2_Binaries)\_HostLocalWebsite (O2 Tool).exe</HintPath>
+      <HintPath>..\..\O2_Binaries\_HostLocalWebsite (O2 Tool).exe</HintPath>
     </Reference>
     <Reference Include="_SearchEngine %28O2 Tool%29, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\_Bin_(O2_Binaries)\_SearchEngine (O2 Tool).exe</HintPath>
+      <HintPath>..\..\O2_Binaries\_SearchEngine (O2 Tool).exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -147,17 +148,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Wizard - XRule Exec Simple.cs" />
-    <Compile Include="XRules_RulesSourceCode.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>XRules_RulesSourceCode.resx</DependentUpon>
-    </Compile>
-    <Compile Include="XRules_Templates.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>XRules_Templates.resx</DependentUpon>
-    </Compile>
-    <None Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow.cs.o2" />
+    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow.cs" />
     <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_1.cs" />
     <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_2.cs" />
     <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_3.cs" />
@@ -204,18 +195,6 @@
     <Compile Include="_Rules\_Templates\Empty_XRule.cs" />
     <Compile Include="_Rules\_Templates\Empty_Class.cs" />
     <Compile Include="_Rules\_Templates\Local_Findings_Files.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="XRules_RulesSourceCode.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>XRules_RulesSourceCode.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="XRules_Templates.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>XRules_Templates.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

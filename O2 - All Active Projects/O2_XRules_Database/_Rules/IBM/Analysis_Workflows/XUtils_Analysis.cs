@@ -18,7 +18,7 @@ using O2.Kernel.Interfaces.XRules;
 
 //O2File:..\J2EE\Struts\XUtils_Struts_v0_1.cs
 
-namespace O2.XRules.Database._Rules.Analysis_Workflows
+namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {
     public class XUtils_Analysis
     {

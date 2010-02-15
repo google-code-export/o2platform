@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using O2.Kernel;
 using O2.Kernel.Interfaces.O2Core;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.MerlinWizard;
 // extra references and the namespaces they import
 //O2Tag_AddReferenceFile:nunit.framework.dll
@@ -37,7 +38,7 @@ namespace O2.XRules.Database
             var o2Wizard = new O2Wizard("Execute XRule",500,400);
             scriptToExecute = getClickOnceScriptPath();
             
-            scriptToExecute = @"C:\O2\XRulesDatabase\_Rules\HelloWorld.cs.o2";
+            //scriptToExecute = @"C:\O2\XRulesDatabase\_Rules\HelloWorld.cs.o2";
             if (File.Exists(scriptToExecute))
             {           
            		var compiledAssembly = new CompileEngine().compileSourceFile(scriptToExecute);
@@ -61,9 +62,9 @@ namespace O2.XRules.Database
         	PublicDI.log.error("in add_StepExecuteScript: {0}", assemblyToExecute.Location);        	
         	o2Wizard.Steps.add_Control(
         		typeof(ascx_AssemblyInvoke),
-        		"Execute Assembly", 
-        		"....",
-        		(step) => onStepLoad(step, assemblyToExecute));
+        		"Execute Assembly",
+                assemblyToExecute.Location,
+        		step => onStepLoad(step, assemblyToExecute));
         	//var step = o2Wizard.Steps.createStepWith_TextBox("Executing Script","");
         	
         	/*var step = o2Wizard.Steps.add_Panel("Executing Script");
@@ -148,6 +149,7 @@ namespace O2.XRules.Database
             else
                 step.allowNext(false);		
         }
+
         public void addStep_CompileScript(O2Wizard o2Wizard)
         {			
             var panel = o2Wizard.Steps.add_Panel("Compiling and Executing script","",onCompileScript);																			

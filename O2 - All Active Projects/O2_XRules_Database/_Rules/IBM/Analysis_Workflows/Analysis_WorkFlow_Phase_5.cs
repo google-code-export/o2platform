@@ -8,7 +8,7 @@ using O2.XRules.Database.Interfaces;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;
 
-namespace O2.XRules.Database._Rules.Analysis_Workflows
+namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {
     public class Analysis_Workflow_Phase_5 : KXRule
     {        	 
