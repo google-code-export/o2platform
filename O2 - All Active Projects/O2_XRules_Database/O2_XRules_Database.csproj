@@ -254,6 +254,10 @@
     <None Include="_Rules\O2 Utils\ascx_SvnBrower.cs.o2">
       <SubType>UserControl</SubType>
     </None>
+    <None Include="_Rules\O2 Utils\Wizard - SVN Checkout.cs.o2" />
+    <None Include="_Rules\Windows Utils\ascx_Processes_Stop.cs.o2" />
+    <None Include="_Rules\Windows Utils\ascx_Services_Stop.cs.o2" />
+    <None Include="_Rules\Windows Utils\ascx_Start_Tools.cs.o2" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="O2Logo.ico" />
@@ -265,10 +269,6 @@
       <Progid>O2.XRule.Script.ProgId</Progid>
       <DefaultIcon>O2Logo.ico</DefaultIcon>
     </FileAssociation>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="_Rules\_Samples\User Controls [Ascx]\" />
-    <Folder Include="_Rules\_Samples\Wizards\not working\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

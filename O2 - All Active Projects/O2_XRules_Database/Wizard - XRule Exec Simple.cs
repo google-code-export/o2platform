@@ -1,5 +1,6 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.Reflection;
 using System.IO;
 using System.Linq;
 using System.Drawing;
@@ -14,7 +15,11 @@ using O2.Views.ASCX.MerlinWizard;
 using Merlin;
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 using O2.DotNetWrappers.Network;
-//O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\MerlinWizard_ExtensionMethods.cs
+using O2.External.SharpDevelop.Ascx;
+
+//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\MerlinWizard_ExtensionMethods.cs
+
+//O2File:C:\O2\_XRules_Local\MiscTestss\extra.cs
 
 namespace O2.XRules.Database
 {
@@ -23,21 +28,58 @@ namespace O2.XRules.Database
     {    
         private static IO2Log log = PublicDI.log;
         public static string scriptToExecute = "";
-//        public static string scriptToAutoCompile { get; set; }
+        // public static Assembly assembly;
+		// public static string scriptToAutoCompile { get; set; }
 				
         [StartWizard]
         public void startWizard()
         {			
-            var o2Wizard = new O2Wizard("Execute XRule");
+            var o2Wizard = new O2Wizard("Execute XRule",500,400);
             scriptToExecute = getClickOnceScriptPath();
-            //scriptToExecute = @"C:\O2\XRulesDatabase\_Rules\_Samples\HelloWorld.cs.o2";
-            //if (false == File.Exists(scriptToExecute))
-            addStep_SelectXRuleToExecute(o2Wizard);
-            addStep_CompileScript(o2Wizard);
             
-            o2Wizard.start();
+            scriptToExecute = @"C:\O2\XRulesDatabase\_Rules\HelloWorld.cs.o2";
+            if (File.Exists(scriptToExecute))
+            {           
+           		var compiledAssembly = new CompileEngine().compileSourceFile(scriptToExecute);
+           		if (compiledAssembly != null)
+           		{
+            		add_StepExecuteScript(o2Wizard,compiledAssembly);            
+            		o2Wizard.start();
+            		return;
+            	}
+            }
+            
+            addStep_SelectXRuleToExecute(o2Wizard);
+            addStep_CompileScript(o2Wizard);            	
+            o2Wizard.start();         
         }
         
+        
+        
+        private void add_StepExecuteScript(O2Wizard o2Wizard, Assembly assemblyToExecute)
+        {
+        	PublicDI.log.error("in add_StepExecuteScript: {0}", assemblyToExecute.Location);        	
+        	o2Wizard.Steps.add_Control(
+        		typeof(ascx_AssemblyInvoke),
+        		"Execute Assembly", 
+        		"....",
+        		(step) => onStepLoad(step, assemblyToExecute));
+        	//var step = o2Wizard.Steps.createStepWith_TextBox("Executing Script","");
+        	
+        	/*var step = o2Wizard.Steps.add_Panel("Executing Script");
+        	step.add_TextBox("Executing assembly:" +  assemblyToExecute.Location, 10);
+        	PublicDI.log.error("done...");*/
+			//step.add_ExecuteAssembly();
+        }
+		
+		public void onStepLoad(IStep step, Assembly assembly)
+		{
+			var assemblyInvoke = (ascx_AssemblyInvoke)step.FirstControl;
+			assemblyInvoke.loadAssembly(assembly);
+			assemblyInvoke.setExecuteMethodOnDoubleClick(true);
+			//PublicDI.log.error("type:{0}:", assemblyInvoke.GetType().FullName);
+		}
+		
         private string getClickOnceScriptPath()
         {
             if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null &&
@@ -60,7 +102,7 @@ namespace O2.XRules.Database
         {
             return Web.checkIfFileExistsAndDownloadIfNot("HelloWorld.cs",
                                                          @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules/_Samples/HelloWorld.cs.o2");
-            return @"C:\O2\XRulesDatabase\_Rules\_Samples\HelloWorld.cs";
+            //return @"C:\O2\XRulesDatabase\_Rules\_Samples\HelloWorld.cs";
         }
  		
         public void addStep_SelectXRuleToExecute(O2Wizard o2Wizard)

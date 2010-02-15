@@ -15,8 +15,10 @@ using O2.Views.ASCX;
 using O2.Kernel.Interfaces.Views;
 using O2.External.SharpDevelop.Ascx;
 using O2.Views.ASCX.classes;
+//O2Ref:HTMLparserLibDotNet20.dll
 using HTMLparserLibDotNet20.O2ExtraCode;
 using O2.Views.ASCX.CoreControls;
+using O2.Views.ASCX.classes.MainGUI;
 using O2.Core.XRules.Classes;
 using System.IO;
 using O2.Kernel.CodeUtils;
@@ -36,6 +38,15 @@ namespace O2.Core.XRules.Ascx
 
         static string svnBaseUrl = @"http://o2platform.googlecode.com/svn/trunk/";
 
+		public static void startControl()
+    	{       		     		
+    		WinForms.showAscxInForm(
+				typeof(ascx_SvnBrowser), 
+				"Svn Browser", 
+				700, 
+				600);		    	
+    	}  
+    	
 		public ascx_SvnBrowser()
         {
         	log.info("in ascx_SvnBrowser constructor");
@@ -57,7 +68,7 @@ namespace O2.Core.XRules.Ascx
             tvDirectoriesAndFiles.ImageList = ImagesLists.withFolderAndFile();
             tvDirectoriesAndFiles.NodeMouseDoubleClick += tvDirectoriesAndFiles_DoubleClick;
             tvDirectoriesAndFiles.ItemDrag += tvDirectoriesAndFiles_ItemDrag;
-            sourceCodeEditor = rightGroupBox.add_SourceCodeEditor();                        
+            sourceCodeEditor = rightGroupBox.add_SourceCodeViewer().getSourceCodeEditor();                        
         }
 
         void tvDirectoriesAndFiles_ItemDrag(object sender, ItemDragEventArgs e)
@@ -94,7 +105,7 @@ namespace O2.Core.XRules.Ascx
                 urlToOpen = svnBaseUrl + urlToOpen;
             var svnMappedUrls = SvnApi.getSvnMappedUrls(urlToOpen);
             if (svnMappedUrls.Count == 0)            
-                DI.log.error("in openSvnUrl there was no svnMappedUrls");
+                PublicDI.log.error("in openSvnUrl there was no svnMappedUrls");
             else
                 tvDirectoriesAndFiles.invokeOnThread(
                     () =>
