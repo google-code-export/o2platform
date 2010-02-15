@@ -97,12 +97,7 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
                                     targetTextBox.Text += message;                                    
                                 });                        
                     }                        
-        }
-
-        public static void set_Text(this TextBox textBox, string text)
-        {
-            textBox.invokeOnThread(() => textBox.Text = text);
-        }
+        }        
 
         public static void add_CheckBox(this IStep step, string checkBoxText, bool initialCheckedValue, Action<bool> onChange)
         {

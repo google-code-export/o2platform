@@ -16,41 +16,62 @@ namespace O2.External.SharpDevelop.AST
     {
         public static void show_List(this TreeView treeView, IEnumerable list, string textParameterName)
         {
-            treeView.clear();
-            foreach(var item in list)
-            {
-                var parameterValue = PublicDI.reflection.getProperty(textParameterName,item);
-                var nodeText = (parameterValue != null) ? parameterValue.ToString() : "[null value for '" + textParameterName + "' parameter in object of type: " +  item.ToString();
-                treeView.add_Node(nodeText, item);
-            }
+            treeView.invokeOnThread(
+                () =>
+                    {
+                        treeView.clear();
+                        foreach (var item in list)
+                        {
+                            var parameterValue = PublicDI.reflection.getProperty(textParameterName, item);
+                            var nodeText = (parameterValue != null)
+                                               ? parameterValue.ToString()
+                                               : "[null value for '" + textParameterName +
+                                                 "' parameter in object of type: " + item.ToString();
+                            treeView.add_Node(nodeText, item);
+                        }
+                    });
         }
         public static void show_List(this TreeView treeView, List<string> list)
         {
-            treeView.clear();
-            foreach(var item in list)
-                treeView.add_Node(item);		
+            treeView.invokeOnThread(
+                () =>
+                    {
+                        treeView.clear();
+                        foreach (var item in list)
+                            treeView.add_Node(item);
+                    });
         }
 	
         public static void show_Ast(this TreeView treeView, string sourceCode)
         {
-            treeView.show_SourceCode_Ast_InTreeView(sourceCode);
+            treeView.invokeOnThread(
+                () => treeView.show_SourceCode_Ast_InTreeView(sourceCode));
         }
 		
         public static void show_Ast(this TreeView treeView, Ast_CSharp ast)
         {
-            treeView.show_SourceCode_Ast_InTreeView(ast.compilationUnit);
+            treeView.invokeOnThread(
+                () => treeView.show_SourceCode_Ast_InTreeView(ast.CompilationUnit));
         }
 		
         public static void show_SourceCode_Ast_InTreeView(this TreeView treeView, string sourceCodeFile)
-        {	    	
-            var ast = new Ast_CSharp(sourceCodeFile);
-            treeView.show_SourceCode_Ast_InTreeView(ast.compilationUnit);
+        {
+            treeView.invokeOnThread(
+                () =>
+                    {
+                        var ast = new Ast_CSharp(sourceCodeFile);
+                        treeView.show_SourceCode_Ast_InTreeView(ast.CompilationUnit);
+                    });
         }				
 		
         public static void show_SourceCode_Ast_InTreeView(this TreeView treeView, CompilationUnit compilationUnit)
         {
-            treeView.clear();
-            treeView.add_Node(new CollectionNode("CompilationUnit", compilationUnit.Children));
+            treeView.invokeOnThread(
+                () =>
+                    {
+                        treeView.clear();
+                        treeView.add_Node(new CollectionNode("CompilationUnit", compilationUnit.Children));
+                    });
         }
 	    
         static TreeNode CreateNode(object child)

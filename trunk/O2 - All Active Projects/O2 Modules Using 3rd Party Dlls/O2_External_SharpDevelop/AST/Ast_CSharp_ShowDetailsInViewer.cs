@@ -1,36 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using O2.DotNetWrappers.Windows;
-using O2.External.SharpDevelop.Ascx;
-using O2.Kernel.ExtensionMethods;
+﻿using System.Windows.Forms;
+using ICSharpCode.TextEditor;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.External.SharpDevelop.ExtensionMethods;
+//using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 
 namespace O2.External.SharpDevelop.AST
 {
     public class Ast_CSharp_ShowDetailsInViewer
     {
-        private TabControl tabControl;
-        private ascx_SourceCodeEditor sourceCodeEditor;
+        public readonly TextEditorControl textEditorControl;
+        public readonly TabControl tabControl;                
+        public TreeView ast_TreeView;
+        public TreeView usingDeclarations_TreeView;
+        public TreeView types_TreeView;
+        public TreeView methods_TreeView;
+        public TreeView fields_TreeView;
+        public TreeView properties_TreeView;
+        public TreeView comments_TreeView;
+        public TextBox errors_TextBox;
 
-        public Ast_CSharp_ShowDetailsInViewer(ascx_SourceCodeEditor _sourceCodeEditor)
+        public Ast_CSharp_ShowDetailsInViewer(TextEditorControl _textEditorControl, TabControl _tabControl)
         {
-            sourceCodeEditor = _sourceCodeEditor;            
+            /*sourceCodeEditor = _sourceCodeEditor;            
             tabControl = (TabControl)sourceCodeEditor.field("tcSourceInfo");
+             * */
+            tabControl = _tabControl;
+            textEditorControl = _textEditorControl;
+            createGUI();
         }
 
-        public void populateTabControl()
-        {
-            /*
-            ast_TreeView = tabControl.add_Tab("AST").add_TreeView();
-            usingDeclarations_TreeView = tabControl.add_Tab("Using Declarations").add_TreeView();
-            types_TreeView = tabControl.add_Tab("Types").add_TreeView();
+        public void createGUI()
+        {                                    
             methods_TreeView = tabControl.add_Tab("Methods").add_TreeView();
-            fields_TreeView = tabControl.add_Tab("Fields").add_TreeView();
             properties_TreeView = tabControl.add_Tab("Properties").add_TreeView();
+            fields_TreeView = tabControl.add_Tab("Fields").add_TreeView();
+            types_TreeView = tabControl.add_Tab("Types").add_TreeView();                        
             comments_TreeView = tabControl.add_Tab("Comments").add_TreeView();
-            */ 
+            usingDeclarations_TreeView = tabControl.add_Tab("Using Declarations").add_TreeView();
+            ast_TreeView = tabControl.add_Tab("AST").add_TreeView();
+            errors_TextBox = tabControl.add_Tab("AST Errors").add_TextBox(true);
+
+            textEditorControl.Document.DocumentChanged += (sender, e) => update();
+
+            usingDeclarations_TreeView.AfterSelect += showInSourceCode;
+            types_TreeView.AfterSelect += showInSourceCode;
+            methods_TreeView.AfterSelect += showInSourceCode;
+            fields_TreeView.AfterSelect += showInSourceCode;
+            properties_TreeView.AfterSelect += showInSourceCode;
+            comments_TreeView.AfterSelect += showInSourceCode;
+        }
+        
+        public void update()
+        {
+            textEditorControl.invokeOnThread(
+                () =>
+                    {
+                        var documentText = textEditorControl.Text;
+                        O2Thread.mtaThread(() => update(documentText));
+                    });            
+        }
+
+        public void updateSync()
+        {
+            update(textEditorControl.Text);
+        }
+
+        public void update(string sourceCode)
+        {           
+            var ast = new Ast_CSharp(sourceCode);
+            ast_TreeView.show_Ast(ast);
+            types_TreeView.show_List(ast.AstDetails.Types, "Text");
+            usingDeclarations_TreeView.show_List(ast.AstDetails.UsingDeclarations, "Text");
+            methods_TreeView.show_List(ast.AstDetails.Methods, "Text");
+            fields_TreeView.show_List(ast.AstDetails.Fields, "Text");
+            properties_TreeView.show_List(ast.AstDetails.Properties, "Text");
+            comments_TreeView.show_List(ast.AstDetails.Comments, "Text");
+            errors_TextBox.set_Text(ast.Errors);
+        }
+
+        private void showInSourceCode(object sender, TreeViewEventArgs e)
+        {
+            var treeNoteTag = e.Node.Tag;
+            if (treeNoteTag is AstValue)
+            {
+                var astValue = (AstValue)treeNoteTag;
+                //var textEditorControl = sourceCodeEditor.getObject_TextEditorControl();
+                textEditorControl.showAstValueInSourceCode(astValue);
+            }
         }
     }
 }

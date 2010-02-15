@@ -106,12 +106,16 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tcSourceInfo = new System.Windows.Forms.TabControl();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tcSourceInfo.SuspendLayout();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripForSourceEdition
@@ -462,7 +466,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btOpenFile});
             this.toolStripWithSourceCodeActions.Location = new System.Drawing.Point(0, 0);
             this.toolStripWithSourceCodeActions.Name = "toolStripWithSourceCodeActions";
-            this.toolStripWithSourceCodeActions.Size = new System.Drawing.Size(1149, 25);
+            this.toolStripWithSourceCodeActions.Size = new System.Drawing.Size(963, 25);
             this.toolStripWithSourceCodeActions.TabIndex = 45;
             this.toolStripWithSourceCodeActions.Text = "toolStrip1";
             // 
@@ -727,7 +731,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.label2);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.lbSourceCode_UnsavedChanges);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.tbSourceCode_FileLoaded);
-            this.groupBoxWithFileAndSaveSettings.Location = new System.Drawing.Point(3, 28);
+            this.groupBoxWithFileAndSaveSettings.Location = new System.Drawing.Point(10, 0);
             this.groupBoxWithFileAndSaveSettings.Name = "groupBoxWithFileAndSaveSettings";
             this.groupBoxWithFileAndSaveSettings.Size = new System.Drawing.Size(727, 134);
             this.groupBoxWithFileAndSaveSettings.TabIndex = 46;
@@ -812,9 +816,9 @@ namespace O2.External.SharpDevelop.Ascx
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.lbPartialFileView.FormattingEnabled = true;
-            this.lbPartialFileView.Location = new System.Drawing.Point(3, 30);
+            this.lbPartialFileView.Location = new System.Drawing.Point(0, -2);
             this.lbPartialFileView.Name = "lbPartialFileView";
-            this.lbPartialFileView.Size = new System.Drawing.Size(1146, 342);
+            this.lbPartialFileView.Size = new System.Drawing.Size(957, 290);
             this.lbPartialFileView.TabIndex = 47;
             this.lbPartialFileView.Visible = false;
             // 
@@ -822,18 +826,18 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.tbExecutionHistoryOrLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbExecutionHistoryOrLog.Location = new System.Drawing.Point(767, 28);
+            this.tbExecutionHistoryOrLog.Location = new System.Drawing.Point(573, 0);
             this.tbExecutionHistoryOrLog.Multiline = true;
             this.tbExecutionHistoryOrLog.Name = "tbExecutionHistoryOrLog";
             this.tbExecutionHistoryOrLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbExecutionHistoryOrLog.Size = new System.Drawing.Size(364, 284);
+            this.tbExecutionHistoryOrLog.Size = new System.Drawing.Size(364, 263);
             this.tbExecutionHistoryOrLog.TabIndex = 48;
             this.tbExecutionHistoryOrLog.Visible = false;
             // 
             // tvCompilationErrors
             // 
             this.tvCompilationErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvCompilationErrors.Location = new System.Drawing.Point(769, 28);
+            this.tvCompilationErrors.Location = new System.Drawing.Point(574, 0);
             this.tvCompilationErrors.Name = "tvCompilationErrors";
             this.tvCompilationErrors.ShowNodeToolTips = true;
             this.tvCompilationErrors.Size = new System.Drawing.Size(361, 209);
@@ -850,12 +854,12 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.ContextMenuStrip = this.menuStripForSourceEdition;
             this.tecSourceCode.IsIconBarVisible = true;
             this.tecSourceCode.IsReadOnly = false;
-            this.tecSourceCode.Location = new System.Drawing.Point(0, 28);
+            this.tecSourceCode.Location = new System.Drawing.Point(0, 0);
             this.tecSourceCode.Name = "tecSourceCode";
             this.tecSourceCode.ShowEOLMarkers = true;
             this.tecSourceCode.ShowSpaces = true;
             this.tecSourceCode.ShowTabs = true;
-            this.tecSourceCode.Size = new System.Drawing.Size(1149, 342);
+            this.tecSourceCode.Size = new System.Drawing.Size(956, 288);
             this.tecSourceCode.TabIndex = 17;
             this.tecSourceCode.Load += new System.EventHandler(this.tecSourceCode_Load);
             this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
@@ -870,21 +874,45 @@ namespace O2.External.SharpDevelop.Ascx
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1132, 65);
+            this.tabPage1.Size = new System.Drawing.Size(952, 85);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Text Search";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tcSourceInfo
             // 
-            this.tcSourceInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tcSourceInfo.Controls.Add(this.tabPage1);
-            this.tcSourceInfo.Location = new System.Drawing.Point(3, 370);
+            this.tcSourceInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tcSourceInfo.Location = new System.Drawing.Point(0, 0);
             this.tcSourceInfo.Name = "tcSourceInfo";
             this.tcSourceInfo.SelectedIndex = 0;
-            this.tcSourceInfo.Size = new System.Drawing.Size(1140, 91);
+            this.tcSourceInfo.Size = new System.Drawing.Size(960, 111);
             this.tcSourceInfo.TabIndex = 52;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 30);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.groupBoxWithFileAndSaveSettings);
+            this.splitContainer1.Panel1.Controls.Add(this.tvCompilationErrors);
+            this.splitContainer1.Panel1.Controls.Add(this.tbExecutionHistoryOrLog);
+            this.splitContainer1.Panel1.Controls.Add(this.tecSourceCode);
+            this.splitContainer1.Panel1.Controls.Add(this.lbPartialFileView);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.tcSourceInfo);
+            this.splitContainer1.Size = new System.Drawing.Size(960, 406);
+            this.splitContainer1.SplitterDistance = 291;
+            this.splitContainer1.TabIndex = 53;
             // 
             // ascx_SourceCodeEditor
             // 
@@ -892,16 +920,11 @@ namespace O2.External.SharpDevelop.Ascx
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.Controls.Add(this.tvCompilationErrors);
-            this.Controls.Add(this.tcSourceInfo);
-            this.Controls.Add(this.groupBoxWithFileAndSaveSettings);
-            this.Controls.Add(this.tbExecutionHistoryOrLog);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStripWithSourceCodeActions);
-            this.Controls.Add(this.tecSourceCode);
-            this.Controls.Add(this.lbPartialFileView);
             this.ForeColor = System.Drawing.Color.Black;
             this.Name = "ascx_SourceCodeEditor";
-            this.Size = new System.Drawing.Size(1149, 461);
+            this.Size = new System.Drawing.Size(963, 439);
             this.Load += new System.EventHandler(this.ascx_SourceCodeEditor_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.ascx_SourceCodeEditor_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.ascx_SourceCodeEditor_DragEnter);
@@ -915,6 +938,10 @@ namespace O2.External.SharpDevelop.Ascx
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tcSourceInfo.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -997,5 +1024,6 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripMenuItem listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabControl tcSourceInfo;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }

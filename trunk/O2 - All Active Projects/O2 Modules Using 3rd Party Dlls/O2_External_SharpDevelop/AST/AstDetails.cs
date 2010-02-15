@@ -66,7 +66,7 @@ namespace O2.External.SharpDevelop.AST
                                      special, 
                                      special.StartPosition, 
                                      special.EndPosition));				
-                    PublicDI.log.info(((Comment)special).CommentText);
+                    //PublicDI.log.info(((Comment)special).CommentText);
                 }
             }
         }	

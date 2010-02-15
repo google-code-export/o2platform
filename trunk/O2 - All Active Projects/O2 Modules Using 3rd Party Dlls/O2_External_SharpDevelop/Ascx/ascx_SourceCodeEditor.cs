@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor.Document;
 using O2.DotNetWrappers.DotNet;
+using O2.External.SharpDevelop.AST;
 using O2.Kernel.CodeUtils;
 
 namespace O2.External.SharpDevelop.Ascx
@@ -14,11 +15,12 @@ namespace O2.External.SharpDevelop.Ascx
         public ascx_SourceCodeEditor()
         {
             InitializeComponent();
+            showAstDetails = new Ast_CSharp_ShowDetailsInViewer(tecSourceCode, tcSourceInfo);                
         }
 
-        public ascx_SourceCodeEditor(String sFileToOpen)
+        public ascx_SourceCodeEditor(String sFileToOpen) : this()
         {
-            InitializeComponent();
+            //InitializeComponent();
             this.sFileToOpen = sFileToOpen;
         }
 
@@ -440,5 +442,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             Clipboard.SetText(sPathToFileLoaded);
         }
+
+
     }
 }

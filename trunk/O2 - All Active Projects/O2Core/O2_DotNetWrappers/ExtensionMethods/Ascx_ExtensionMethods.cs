@@ -438,6 +438,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             textBox.invokeOnThread(() => textBox.Select(start, length));
         }
 
+        public static void set_Text(this TextBox textBox, string text)
+        {
+            textBox.invokeOnThread(() => textBox.Text = text);
+        }
+
         public static void append_Line(this TextBox textBox, string textFormat, params object[] parameters)
         {
             textBox.append_Line(string.Format(textFormat, parameters));
@@ -830,12 +835,32 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     });
         }
 
-
-        public static object value(this DataGridView dataGridView, int row, int column)
+        public static void set(this DataGridView dataGridView, int row, int column, object value)
         {
-            var data = dataGridView.Rows[row].Cells[column].Value;
-            if (data != null)
-                return data;
+            dataGridView.invokeOnThread(
+                () =>
+                {
+                    dataGridView.Rows[row].Cells[column].Value = value;
+                });
+        }
+    
+        public static DataGridViewRow get_Row(this DataGridView dataGridView, int rowId)
+        {
+            return (DataGridViewRow)dataGridView.invokeOnThread(() => dataGridView.Rows[rowId]);
+        }
+
+        public static object value(this DataGridView dataGridView, int rowId, int columnId)
+        {
+            try
+            {
+                var data = dataGridView.Rows[rowId].Cells[columnId].Value;
+                if (data != null)
+                    return data;
+            }
+            catch (Exception ex)
+            {
+                Kernel.PublicDI.log.ex(ex, "in DataGridView.value");
+            }            
             return "";			// default to returning "" if data is null
         }
 
@@ -844,6 +869,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
             dataGridView.CellContentClick += (sender, e) => cellClicked(e.RowIndex, e.ColumnIndex);
         }
 
+        public static void remove_Row(this DataGridView dataGridView, DataGridViewRow row)
+        {
+            dataGridView.invokeOnThread(() =>
+                dataGridView.Rows.Remove(row));
+        }
+
+        public static void remove_Column(this DataGridView dataGridView, DataGridViewColumn column)
+        {
+            dataGridView.invokeOnThread(() =>
+                dataGridView.Columns.Remove(column));
+        }
         public static void remove_Rows(this DataGridView dataGridView)
         {
             dataGridView.Rows.Clear();
