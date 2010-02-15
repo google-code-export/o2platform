@@ -13,7 +13,7 @@ using NUnit.Framework;
 //O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\IAnalysisArtifacts.cs
 //O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\KAnalysisArtifacts.cs
 
-namespace O2.XRules.Database._Rules.Analysis_Workflows
+namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {
     public class Analysis_Workflow_Phase_3 : KXRule
     {        	     

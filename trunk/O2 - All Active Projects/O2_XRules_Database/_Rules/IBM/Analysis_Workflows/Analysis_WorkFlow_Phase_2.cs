@@ -17,7 +17,7 @@ using NUnit.Framework;
 //O2File:..\Findings Filtering\xUtils_Findings_v0_1.cs
 //O2File:XUtils_Analysis.cs
 
-namespace O2.XRules.Database._Rules.Analysis_Workflows
+namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {
     public class Analysis_Workflow_Phase_2 : KXRule
     {    
