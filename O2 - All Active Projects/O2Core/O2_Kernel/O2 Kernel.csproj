@@ -68,9 +68,6 @@
     <Compile Include="InterfacesBaseImpl\KGacDll.cs" />
     <Compile Include="InterfacesBaseImpl\KM_DotNetAssemblyAvailable .cs" />
     <Content Include="InterfacesBaseImpl\KM_OpenControlInGUI.cs.txt" />
-    <Content Include="Interfaces\IControl_DownloadFile.cs.txt" />
-    <Content Include="Interfaces\Messages\IM_OpenControlInGUI.cs.txt" />
-    <Content Include="Interfaces\O2Tools\ISearchEngine.cs.txt" />
     <Compile Include="InterfacesBaseImpl\KM_FileOrFolderSelected.cs" />
     <Compile Include="InterfacesBaseImpl\KM_SelectedTypeOrMethod.cs" />
     <Compile Include="InterfacesBaseImpl\KM_GUIAction.cs" />
@@ -83,65 +80,6 @@
     <Compile Include="InterfacesBaseImpl\KO2GenericMessage.cs" />
     <Compile Include="InterfacesBaseImpl\KO2MessageQueue.cs" />
     <Compile Include="CodeUtils\O2ConfigLoader.cs" />
-    <Compile Include="Interfaces\CIR\ICirAttribute.cs" />
-    <Compile Include="Interfaces\CIR\ICirClass.cs" />
-    <Compile Include="Interfaces\CIR\ICirData.cs" />
-    <Compile Include="Interfaces\CIR\ICirDataAnalysis.cs" />
-    <Compile Include="Interfaces\CIR\ICirDataSearchResult.cs" />
-    <Compile Include="Interfaces\CIR\ICirFieldClass.cs" />
-    <Compile Include="Interfaces\CIR\ICirFieldMember.cs" />
-    <Compile Include="Interfaces\CIR\ICirFunction.cs" />
-    <Compile Include="Interfaces\CIR\ICirFunctionCall.cs" />
-    <Compile Include="Interfaces\CIR\ICirFunctionParameter.cs" />
-    <Compile Include="Interfaces\CIR\ICirFunctionVariable.cs" />
-    <Compile Include="Interfaces\CIR\ICirSsaVariable.cs" />
-    <Compile Include="Interfaces\CIR\ICirTraces.cs" />
-    <Compile Include="Interfaces\Controllers\IAssemblyAnalysis.cs" />
-    <Compile Include="Interfaces\Controllers\IScanTarget.cs" />
-    <Compile Include="Interfaces\Controllers\IXmlConverter.cs" />
-    <Compile Include="Interfaces\DotNet\IGacDll.cs" />
-    <Compile Include="Interfaces\DotNet\PostSharpHookStatus.cs" />
-    <Compile Include="Interfaces\ExternalDlls\IO2MonoCecil.cs" />
-    <Compile Include="Interfaces\FrameworkSupport\J2EE\IStrutsConfigXml.cs" />
-    <Compile Include="Interfaces\FrameworkSupport\J2EE\IStrutsMappings.cs" />
-    <Compile Include="Interfaces\FrameworkSupport\J2EE\ITilesDefinition.cs" />
-    <Compile Include="Interfaces\FrameworkSupport\J2EE\IValidationXml.cs" />
-    <Compile Include="Interfaces\FrameworkSupport\J2EE\IWebXml.cs" />
-    <Compile Include="Interfaces\IZipUtils.cs" />
-    <Compile Include="Interfaces\Messages\IM_CirAction.cs" />
-    <Compile Include="Interfaces\Messages\IM_DotNetAssemblyAvailable.cs" />
-    <Compile Include="Interfaces\Messages\IM_FileOrFolderSelected.cs" />
-    <Compile Include="Interfaces\Messages\IM_GUIAction.cs" />
-    <Compile Include="Interfaces\Messages\IM_O2MdbgAction.cs" />
-    <Compile Include="Interfaces\Messages\IM_SelectedTypeOrMethod.cs" />
-    <Compile Include="Interfaces\Messages\IO2Message.cs" />
-    <Compile Include="Interfaces\Messages\IO2MessageQueue.cs" />
-    <Compile Include="Interfaces\O2Core\IO2Config.cs" />
-    <Compile Include="Interfaces\O2Core\IO2Log.cs" />
-    <Compile Include="Interfaces\O2Core\IReflection.cs" />
-    <Compile Include="Interfaces\O2Core\IReflectionASCX.cs" />
-    <Compile Include="Interfaces\O2Findings\IO2Assessment.cs" />
-    <Compile Include="Interfaces\O2Findings\IO2AssessmentLoad.cs" />
-    <Compile Include="Interfaces\O2Findings\IO2AssessmentSave.cs" />
-    <Compile Include="Interfaces\O2Findings\IO2Finding.cs" />
-    <Compile Include="Interfaces\O2Findings\IO2Trace.cs" />
-    <Compile Include="Interfaces\O2Findings\TraceType.cs" />
-    <Compile Include="Interfaces\Rules\IDatabaseRules.cs" />
-    <Compile Include="Interfaces\Rules\IO2Rule.cs" />
-    <Compile Include="Interfaces\Rules\O2RuleType.cs" />
-    <Compile Include="Interfaces\Rules\SupportedLanguage.cs" />
-    <Compile Include="Interfaces\Tasks\ITask.cs" />
-    <Compile Include="Interfaces\Tasks\ITaskControl.cs" />
-    <Compile Include="Interfaces\Tasks\ITaskThread.cs" />
-    <Compile Include="Interfaces\Tasks\TaskEvents.cs" />
-    <Compile Include="Interfaces\Tasks\TaskStatus.cs" />
-    <Compile Include="Interfaces\Views\O2DockState.cs" />
-    <Compile Include="Interfaces\XRules\ILoadedXRule.cs" />
-    <Compile Include="Interfaces\XRules\IXRule.cs" />
-    <Compile Include="Interfaces\XRules\IXRulesDatabase.cs" />
-    <Compile Include="Interfaces\XRules\IXRule_Generic.cs" />
-    <Compile Include="Interfaces\XRules\IXRule_J2EE_Struts.cs" />
-    <Compile Include="Interfaces\XRules\XRuleAttribute.cs" />
     <Compile Include="O2KernelCmdShell\O2Shell.cs" />
     <Compile Include="O2KernelCmdShell\ShellCmdLet.cs" />
     <Compile Include="O2KernelCmdShell\ShellCommands.cs" />
@@ -157,13 +95,6 @@
     <Compile Include="Objects\O2Proxy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicDI.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Interfaces\app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\NewFolder1\" />
-    <Folder Include="Interfaces\WCF\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
