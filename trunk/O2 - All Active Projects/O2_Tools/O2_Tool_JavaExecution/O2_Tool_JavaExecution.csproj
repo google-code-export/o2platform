@@ -111,6 +111,10 @@
       <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>
       <Name>O2_External_WinFormsUI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
       <Name>O2 Kernel</Name>

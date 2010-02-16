@@ -32,10 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.TextEditor, Version=3.0.0.3683, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\_3rdPartyDlls\ICSharpCode.TextEditor.dll</HintPath>
-    </Reference>
+    <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -74,6 +71,10 @@
     <ProjectReference Include="..\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>

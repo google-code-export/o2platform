@@ -81,7 +81,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebAutomation\FirefoxXul.cs" />
     <Compile Include="WebAutomation\WebObjects\O2Form.cs" />
-    <Compile Include="WebAutomation\WebObjects\O2FormInputField.cs" />
     <Compile Include="WebAutomation\WebObjects\O2HtmlPage.cs" />
     <Compile Include="WebAutomation\WebObjects\O2JavaScript.cs" />
     <Compile Include="WebAutomation\WebObjects\O2Link.cs" />
@@ -90,6 +89,10 @@
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>

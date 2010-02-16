@@ -130,6 +130,10 @@
       <Project>{3EDD49CB-F7F2-4CFE-AFAC-698B13B0C968}</Project>
       <Name>O2_Debugger_Mdbg</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
       <Name>O2 Kernel</Name>

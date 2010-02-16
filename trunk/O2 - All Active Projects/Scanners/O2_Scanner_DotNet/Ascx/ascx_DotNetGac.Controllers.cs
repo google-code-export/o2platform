@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.Interfaces.DotNet;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.DotNetWrappers.DotNet;

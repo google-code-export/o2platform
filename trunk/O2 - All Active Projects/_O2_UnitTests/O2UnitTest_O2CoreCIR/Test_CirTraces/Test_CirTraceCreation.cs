@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using O2.Core.CIR.Ascx;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.WinFormsUI.Forms;
 using O2.Kernel.Interfaces.Views;
 using O2.Views.ASCX.O2Findings;

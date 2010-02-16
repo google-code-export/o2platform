@@ -50,7 +50,7 @@ namespace O2.UnitTests.Test_O2ViewsASCX
             else
                 onFormClose.WaitOne();
             
-            DI.log.i("Test Completed");            
+            DI.log.info("Test Completed");            
         }
         
 

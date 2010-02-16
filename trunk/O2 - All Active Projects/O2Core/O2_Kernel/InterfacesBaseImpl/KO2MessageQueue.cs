@@ -1,4 +1,5 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using System;
 using System.Threading;
 using O2.Kernel.CodeUtils;
 using O2.Kernel.Interfaces.Messages;
@@ -19,7 +20,7 @@ namespace O2.Kernel.InterfacesBaseImpl
             return o2MessageQueue;
         }
 
-        public event Callbacks.callbackFor_O2Message onMessages;
+        public event Action<IO2Message> onMessages;
 
         public Thread sendMessage(string messageText)
         {
