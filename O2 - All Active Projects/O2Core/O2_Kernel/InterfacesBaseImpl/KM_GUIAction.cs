@@ -17,7 +17,7 @@ namespace O2.Kernel.InterfacesBaseImpl
         public string targetMethod { get; set; }
         public string[] methodParameters { get; set; }
 
-        public Callbacks.dMethod_Object returnDataCallback { get; set; }
+        public Action<object> returnDataCallback { get; set; }
 
 
         public static KM_GUIAction openControlInGui(Type _controlType)
@@ -43,7 +43,7 @@ namespace O2.Kernel.InterfacesBaseImpl
             return kmGuiAction;
         }
 
-        public static KM_GUIAction getGuiAscx(string ascxToGet, Callbacks.dMethod_Object _returnDataCallback)
+        public static KM_GUIAction getGuiAscx(string ascxToGet, Action<object> _returnDataCallback)
         {
             var kmGuiAction = new KM_GUIAction
                                   {

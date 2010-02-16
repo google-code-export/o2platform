@@ -67,7 +67,7 @@ namespace O2.Kernel.CodeUtils
         }
 
 
-        public static Thread getAscx(string ascxToGet, Callbacks.dMethod_Object actionReturnData)
+        public static Thread getAscx(string ascxToGet, Action<object> actionReturnData)
         {
             return DI.o2MessageQueue.sendMessage(KM_GUIAction.getGuiAscx(ascxToGet, actionReturnData));
         }

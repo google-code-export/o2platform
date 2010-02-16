@@ -2,9 +2,11 @@
 using System;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.External.Firefox.WebAutomation;
 using O2.External.Firefox.WebAutomation.WebObjects;
+using O2.External.IE.WebObjects;
 using Skybound.Gecko;
 
 namespace O2.External.Firefox.Ascx.WebAutomation
@@ -131,10 +133,10 @@ namespace O2.External.Firefox.Ascx.WebAutomation
             var hpHtmPage = new O2HtmlPage();
             try
             {
-                hpHtmPage = O2HtmlPage.getHtmlPageObjectFromWebBrowserObject(webBrowser);
+                /*hpHtmPage = O2HtmlPage.getHtmlPageObjectFromWebBrowserObject(webBrowser);
 
                 foreach (O2Link lLink in hpHtmPage.lLinks)
-                    lbLinks.Items.Add(lLink);
+                    lbLinks.Items.Add(lLink);*/
             }
             catch (Exception ex)
             {

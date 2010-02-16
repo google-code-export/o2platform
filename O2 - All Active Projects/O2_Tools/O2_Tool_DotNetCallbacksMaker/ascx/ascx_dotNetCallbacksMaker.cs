@@ -6,6 +6,7 @@ using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Rules.OunceLabs.DataLayer;
 using O2.Rules.OunceLabs.DataLayer_OunceV6;
 using O2.Rules.OunceLabs.RulesUtils;

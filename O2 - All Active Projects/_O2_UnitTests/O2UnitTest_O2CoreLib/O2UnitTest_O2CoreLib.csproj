@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{0F63204A-4922-4FC3-8F9B-E80F27233FA5}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -94,6 +94,10 @@
     <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
       <Project>{D388D146-D728-412E-8097-5C6E4E53612E}</Project>
       <Name>O2 ImportExport OunceLabs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>

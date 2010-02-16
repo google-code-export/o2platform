@@ -35,8 +35,8 @@ namespace O2.External.O2Mono
 
         #region IAssemblyAnalysis Members
 
-        public event Callbacks.dMethod_String onMethodSelectedGetILCode;
-        public event Callbacks.dMethod_String onMethodSelectedGetSourceCode;
+        public event Action<string> onMethodSelectedGetILCode;
+        public event Action<string> onMethodSelectedGetSourceCode;
 
         public bool canAssemblyBeLoaded(string assemblyToLoad)
         {

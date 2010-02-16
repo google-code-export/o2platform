@@ -119,6 +119,10 @@
       <Project>{49F0878F-E643-4D19-BE27-BC4CF4D6A138}</Project>
       <Name>O2 ImportExport OunceLabs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
       <Project>{F84A06BA-48C8-42E5-A70A-1E737E7A735F}</Project>
       <Name>O2 Kernel</Name>
