@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.O2Findings;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 using O2.Views.ASCX;
 
 namespace O2.Views.ASCX.O2Findings

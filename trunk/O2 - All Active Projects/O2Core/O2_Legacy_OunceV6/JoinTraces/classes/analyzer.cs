@@ -8,8 +8,8 @@ using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
-using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.CIR;
+using O2.Interfaces.O2Findings;
 using O2.Legacy.OunceV6.JoinTraces.classes.filters;
 using O2.Legacy.OunceV6.SavedAssessmentFile.classes;
 

@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.O2Findings;
-using O2.Kernel.Interfaces.O2Findings;
-using O2.Kernel.Interfaces.Rules;
+using O2.Interfaces.O2Findings;
+using O2.Interfaces.Rules;
 using O2.Rules.OunceLabs.RulesUtils;
 
 namespace O2.Rules.OunceLabs.Filters

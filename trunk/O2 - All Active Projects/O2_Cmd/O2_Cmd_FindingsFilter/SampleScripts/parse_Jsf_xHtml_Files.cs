@@ -9,8 +9,8 @@ using System.Xml.Linq;
 using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.Windows;
 using O2.External.WinFormsUI.Forms;
-using O2.Kernel.Interfaces.O2Core;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Core;
+using O2.Interfaces.O2Findings;
 using O2.Views.ASCX.O2Findings;
 
 namespace O2.Cmd.FindingsFilter.SampleScripts

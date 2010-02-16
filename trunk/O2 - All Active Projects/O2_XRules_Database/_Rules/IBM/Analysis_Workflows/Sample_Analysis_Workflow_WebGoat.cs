@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using O2.Interfaces.O2Core;
+using O2.Interfaces.XRules;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
-using O2.Kernel.Interfaces.XRules;
 using O2.XRules.Database.Interfaces;
 //O2Tag_AddReferenceFile:nunit.framework.dll
 using NUnit.Framework;

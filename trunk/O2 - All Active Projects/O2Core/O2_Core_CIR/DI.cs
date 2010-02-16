@@ -5,9 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using O2.Core.CIR.CirObjects;
+using O2.Interfaces.O2Core;
 using O2.Kernel;
-using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Core.CIR

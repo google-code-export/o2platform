@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using O2.DotNetWrappers.Filters;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 using O2.Legacy.OunceV6.SavedAssessmentFile.classes;
 using O2.Legacy.OunceV6.TraceViewer;
 

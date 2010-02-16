@@ -8,7 +8,7 @@ using NUnit.Framework;
 using O2.Core.CIR.CirCreator.DotNet;
 using O2.Core.CIR.CirObjects;
 using O2.External.O2Mono.MonoCecil;
-using O2.Kernel.Interfaces.CIR;
+using O2.Interfaces.CIR;
 
 namespace O2.UnitTests.Test_O2CoreCIR.Test_Objects
 {

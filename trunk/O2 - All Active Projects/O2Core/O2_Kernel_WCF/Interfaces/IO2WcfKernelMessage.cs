@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Messages;
+using O2.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Kernel.WCF.Interfaces

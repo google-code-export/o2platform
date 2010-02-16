@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace O2.Kernel.Interfaces.FrameworkSupport.J2EE
+namespace O2.Interfaces.FrameworkSupport.J2EE
 {
     public interface IStrutsMappings
     {

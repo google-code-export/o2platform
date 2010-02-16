@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 //using System.Linq;
 using System.Reflection;
-using O2.Kernel.Interfaces.O2Core;
+using O2.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Kernel.Objects;
 

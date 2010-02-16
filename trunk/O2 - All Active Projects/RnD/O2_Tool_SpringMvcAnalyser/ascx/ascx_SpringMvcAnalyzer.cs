@@ -9,7 +9,7 @@ using O2.Core.CIR.CirUtils;
 using O2.Core.CIR.Xsd;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.Windows;
-using O2.Kernel.Interfaces.CIR;
+using O2.Interfaces.CIR;
 using O2.RnD.SpringMVCAnalyzer.classes;
 //using O2.Rules.OunceLabs.DataLayer;
 

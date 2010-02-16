@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using O2.External.O2Mono.MonoCecil;
+using O2.Interfaces.XRules;
 using O2.Kernel.Interfaces.XRules;
 using O2.Kernel;
 //O2Tag_AddReferenceFile:mono.cecil.dll

@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using O2.Interfaces.O2Core;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.Objects;
 
 namespace O2.Kernel.InterfacesBaseImpl

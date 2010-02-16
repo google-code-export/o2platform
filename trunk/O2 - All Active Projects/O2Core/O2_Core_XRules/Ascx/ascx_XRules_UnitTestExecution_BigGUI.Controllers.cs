@@ -11,9 +11,9 @@ using O2.Core.XRules.Classes;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.External.O2Mono.MonoCecil;
+using O2.Interfaces.Messages;
+using O2.Interfaces.XRules;
 using O2.Kernel;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.XRules;
 
 namespace O2.Core.XRules.Ascx
 {

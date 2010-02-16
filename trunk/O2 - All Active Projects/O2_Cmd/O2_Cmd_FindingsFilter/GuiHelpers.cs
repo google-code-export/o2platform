@@ -7,7 +7,7 @@ using O2.External.SharpDevelop;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.External.WinFormsUI.O2Environment;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Cmd.FindingsFilter

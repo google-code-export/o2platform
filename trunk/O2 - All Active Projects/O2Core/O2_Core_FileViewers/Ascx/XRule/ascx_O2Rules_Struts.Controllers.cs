@@ -9,8 +9,7 @@ using System.Windows.Forms;
 using O2.Core.FileViewers.JoinTraces;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.O2Findings;
-using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 using O2.Views.ASCX.O2Findings;
 
 namespace O2.Core.FileViewers.Ascx.O2Rules

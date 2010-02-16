@@ -12,9 +12,9 @@ using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.Windows;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6_1;
+using O2.Interfaces.Messages;
+using O2.Interfaces.O2Findings;
 using O2.Kernel;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.O2Findings;
 using O2.Views.ASCX.O2Findings;
 
 namespace O2.Cmd.FindingsFilter.Ascx

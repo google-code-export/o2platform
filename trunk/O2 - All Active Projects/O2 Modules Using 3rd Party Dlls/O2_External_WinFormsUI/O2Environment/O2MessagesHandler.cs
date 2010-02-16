@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using O2.DotNetWrappers.Windows;
 using O2.External.WinFormsUI.Forms;
-using O2.Kernel.Interfaces.Messages;
+using O2.Interfaces.Messages;
 
 namespace O2.External.WinFormsUI.O2Environment
 {

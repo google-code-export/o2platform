@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Text;
 using System.IO;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Kernel.CodeUtils

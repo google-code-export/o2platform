@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using O2.DotNetWrappers.ExtensionMethods;
-using O2.Kernel.Interfaces.DotNet;
+using O2.Interfaces.DotNet;
 using System.IO;
 using O2.External.O2Mono.MonoCecil;
 using O2.Views.ASCX.classes;

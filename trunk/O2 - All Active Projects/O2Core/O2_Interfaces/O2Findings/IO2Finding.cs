@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace O2.Kernel.Interfaces.O2Findings
+namespace O2.Interfaces.O2Findings
 {
     public interface IO2Finding
     {

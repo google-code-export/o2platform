@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 
-namespace O2.Kernel.Interfaces.Messages
+namespace O2.Interfaces.Messages
 {
     public interface IO2MessageQueue
     {

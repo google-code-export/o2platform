@@ -11,8 +11,8 @@ using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.Zip;
 using O2.External.Python.Jython;
-using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.CIR;
+using O2.Interfaces.O2Findings;
 using O2.DotNetWrappers.Windows;
 
 namespace O2.Cmd.SpringMvc.PythonScripts

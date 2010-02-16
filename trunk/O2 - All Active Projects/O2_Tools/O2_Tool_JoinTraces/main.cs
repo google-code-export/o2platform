@@ -5,7 +5,7 @@ using O2.External.WinFormsUI.Forms;
 using O2.External.WinFormsUI.O2Environment;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6_1;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Legacy.OunceV6.JoinTraces;
 using O2.Tool.JoinTraces.ascx;
 using O2.Views.ASCX.O2Findings;

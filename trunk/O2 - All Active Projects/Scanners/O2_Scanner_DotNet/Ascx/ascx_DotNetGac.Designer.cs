@@ -1,4 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using O2.Interfaces.CIR;
+using O2.Interfaces.DotNet;
+
 namespace O2.Scanner.DotNet.Ascx
 {
     partial class ascx_DotNetGac
@@ -338,7 +341,7 @@ namespace O2.Scanner.DotNet.Ascx
             this.gacBrowser.Name = "gacBrowser";
             this.gacBrowser.Size = new System.Drawing.Size(186, 205);
             this.gacBrowser.TabIndex = 12;
-            this.gacBrowser._onGacDllSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<O2.Kernel.Interfaces.DotNet.IGacDll>(this.gacBrowser__onGacDllSelected);
+            this.gacBrowser._onGacDllSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<IGacDll>(this.gacBrowser__onGacDllSelected);
             // 
             // btUnInstallHooksOnAllFiltered
             // 
@@ -369,7 +372,7 @@ namespace O2.Scanner.DotNet.Ascx
             this.cirDataViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cirDataViewer.cirDataAnalysis = ((O2.Kernel.Interfaces.CIR.ICirDataAnalysis)(resources.GetObject("cirDataViewer.cirDataAnalysis")));
+            this.cirDataViewer.cirDataAnalysis = ((ICirDataAnalysis)(resources.GetObject("cirDataViewer.cirDataAnalysis")));
             this.cirDataViewer.Location = new System.Drawing.Point(0, 26);
             this.cirDataViewer.Name = "cirDataViewer";
             this.cirDataViewer.Size = new System.Drawing.Size(240, 232);

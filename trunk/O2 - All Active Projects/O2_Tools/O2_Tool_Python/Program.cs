@@ -5,7 +5,7 @@ using O2.External.Python;
 using O2.External.Python.Ascx;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 
 namespace O2.Tool.Python
 {

@@ -7,7 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using O2.Kernel.Interfaces.DotNet;
+using O2.Interfaces.DotNet;
 using O2.Scanner.DotNet.PostSharp;
 using O2.DotNetWrappers.DotNet;
 

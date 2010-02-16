@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace O2.Kernel.Interfaces.O2Core
+namespace O2.Interfaces.O2Core
 {
     public interface IReflection
     {

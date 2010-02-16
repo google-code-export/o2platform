@@ -11,7 +11,7 @@ using O2.Core.FileViewers.Struts_1_5;
 using O2.DotNetWrappers.Windows;
 using O2.External.WinFormsUI.Forms;
 using O2.ImportExport.OunceLabs;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Views.ASCX.O2Findings;
 
 namespace O2.Core.FileViewers._UnitTests

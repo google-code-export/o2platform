@@ -7,9 +7,9 @@ using O2.Core.CIR.CirObjects;
 using O2.Core.CIR.CirUtils;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Filters;
+using O2.Interfaces.CIR;
+using O2.Interfaces.Messages;
 using O2.Kernel;
-using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.Messages;
 
 namespace O2.Core.CIR.Ascx
 {

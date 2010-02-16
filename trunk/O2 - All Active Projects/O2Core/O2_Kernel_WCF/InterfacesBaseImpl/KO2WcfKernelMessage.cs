@@ -3,10 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Forms;
+using O2.Interfaces.Messages;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.Messages;
-
 using O2.Kernel.Objects;
 using O2.Kernel.WCF;
 using O2.Kernel.WCF.classes;

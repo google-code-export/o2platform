@@ -7,8 +7,8 @@ using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.O2Misc;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Xsd;
+using O2.Interfaces.O2Core;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;
 using System.IO;
 

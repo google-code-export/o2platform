@@ -9,8 +9,8 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.Windows;
+using O2.Interfaces.CIR;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.CIR;
 
 namespace O2.Cmd.SpringMvc.Ascx
 {

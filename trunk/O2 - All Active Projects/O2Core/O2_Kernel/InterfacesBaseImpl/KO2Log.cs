@@ -3,7 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
-using O2.Kernel.Interfaces.O2Core;
+using O2.Interfaces.O2Core;
 
 namespace O2.Kernel.InterfacesBaseImpl
 {

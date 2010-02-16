@@ -5,7 +5,7 @@ using O2.DotNetWrappers.O2Misc;
 using O2.External.WinFormsUI.Forms;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6_1;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 using O2.UnitTests.Test_Ozasmt._SampleScans;
 using O2.Views.ASCX.O2Findings;
 using System.IO;

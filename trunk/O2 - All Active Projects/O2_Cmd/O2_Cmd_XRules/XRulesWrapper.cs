@@ -7,7 +7,7 @@ using System.Text;
 using O2.Core.XRules.XRulesEngine;
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;
-using O2.Kernel.Interfaces.XRules;
+using O2.Interfaces.XRules;
 using O2.Kernel.Objects;
 using O2_Cmd_XRules;
 

@@ -2,7 +2,7 @@
 using System;
 using O2.External.WinFormsUI.Forms;
 using O2.External.WinFormsUI.O2Environment;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Scanners.Ascx;
 
 namespace O2.Scanners

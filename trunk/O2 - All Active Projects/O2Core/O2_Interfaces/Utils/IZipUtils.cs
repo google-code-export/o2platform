@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace O2.Kernel.Interfaces
+namespace O2.Interfaces.Utils
 {
     public interface IZipUtils
     {

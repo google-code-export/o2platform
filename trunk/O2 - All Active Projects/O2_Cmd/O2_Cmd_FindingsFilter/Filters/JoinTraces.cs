@@ -6,7 +6,7 @@ using System.Text;
 using O2.Cmd.FindingsFilter.Ascx;
 using O2.DotNetWrappers.O2CmdShell;
 using O2.External.WinFormsUI.Forms;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 
 namespace O2.Cmd.FindingsFilter.Filters
 {

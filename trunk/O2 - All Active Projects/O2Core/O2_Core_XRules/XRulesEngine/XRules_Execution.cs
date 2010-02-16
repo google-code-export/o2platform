@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using O2.Core.XRules;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using O2.Interfaces.XRules;
 using O2.Kernel.Interfaces.XRules;
 using System.Reflection;
 

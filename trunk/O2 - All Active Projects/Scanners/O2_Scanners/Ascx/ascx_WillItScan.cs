@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
-using O2.Kernel.Interfaces.Controllers;
+using O2.Interfaces.Controllers;
 using O2.Rules.OunceLabs.DataLayer;
 using O2.Scanner.MsCatNet.Scan;
 using O2.Scanner.OunceLabsCLI.Scan;

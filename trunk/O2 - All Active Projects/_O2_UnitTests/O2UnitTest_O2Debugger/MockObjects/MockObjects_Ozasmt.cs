@@ -2,7 +2,7 @@
 //using O2.Core.Ozasmt.Ozasmt_OunceV6;
 using O2.DotNetWrappers.O2Findings;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 
 namespace O2.UnitTests.Test_O2Debugger.MockObjects
 {

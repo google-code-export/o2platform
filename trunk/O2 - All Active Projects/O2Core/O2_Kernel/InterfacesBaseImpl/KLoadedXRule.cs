@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
+using O2.Interfaces.XRules;
 
 namespace O2.Kernel.Interfaces.XRules
 {

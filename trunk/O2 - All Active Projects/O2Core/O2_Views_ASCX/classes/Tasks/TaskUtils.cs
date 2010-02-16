@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using O2.Interfaces.Tasks;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Tasks;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes.Tasks;
 using O2.Views.ASCX.classes.TasksWrappers;

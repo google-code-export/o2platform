@@ -7,7 +7,7 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.O2Misc;
 using O2.DotNetWrappers.Windows;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 
 namespace O2.Legacy.OunceV6.SavedAssessmentFile.classes
 {

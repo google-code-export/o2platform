@@ -9,8 +9,8 @@ using O2.Core.CIR.CirObjects;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.Windows;
 using O2.External.O2Mono.MonoCecil;
+using O2.Interfaces.CIR;
 using O2.Kernel;
-using O2.Kernel.Interfaces.CIR;
 using System.Reflection;
 using O2.External.O2Mono.CecilDecompiler;
 

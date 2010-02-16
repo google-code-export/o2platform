@@ -11,9 +11,9 @@ using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.O2Misc;
 using O2.DotNetWrappers.Windows;
+using O2.Interfaces.O2Findings;
+using O2.Interfaces.Views;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.O2Findings;
-using O2.Kernel.Interfaces.Views;
 
 namespace O2.Views.ASCX.O2Findings
 {

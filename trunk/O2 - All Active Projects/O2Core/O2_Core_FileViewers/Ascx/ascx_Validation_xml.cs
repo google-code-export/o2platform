@@ -12,7 +12,7 @@ using O2.Core.FileViewers.J2EE;
 using O2.DotNetWrappers.DotNet;
 using O2.Core.FileViewers.ViewHelpers;
 using O2.DotNetWrappers.ExtensionMethods;
-using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
+using O2.Interfaces.FrameworkSupport.J2EE;
 
 namespace O2.Core.FileViewers.Ascx
 {

@@ -3,7 +3,7 @@ using System;
 using System.Windows.Forms;
 //using O2.Kernel.CodeUtils;
 
-namespace O2.Kernel.Interfaces.Controllers
+namespace O2.Interfaces.Controllers
 {
     public interface IAssemblyAnalysis
     {

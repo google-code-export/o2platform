@@ -9,10 +9,10 @@ using System.Linq;
 //O2Ref:System.Windows.Forms.dll
 using System.Windows.Forms;
 //O2Ref:O2_Kernel.dll
+using O2.Interfaces.FrameworkSupport.J2EE;
+using O2.Interfaces.O2Findings;
+using O2.Interfaces.Views;
 using O2.Kernel;
-using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
-using O2.Kernel.Interfaces.O2Findings;
-using O2.Kernel.Interfaces.Views;
 //O2Ref:O2_Core_FileViewers.dll
 using O2.Core.FileViewers.Ascx;
 using O2.Core.FileViewers.Ascx.O2Rules;

@@ -4,10 +4,10 @@
 using System;
 using System.Collections.Generic;
 //O2Ref:O2_Kernel.dll
+using O2.Interfaces.FrameworkSupport.J2EE;
+using O2.Interfaces.O2Findings;
+using O2.Interfaces.XRules;
 using O2.Kernel;
-using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
-using O2.Kernel.Interfaces.O2Findings;
-using O2.Kernel.Interfaces.XRules;
 //O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.DotNet;
 //O2File:..\..\Findings Filtering\XUtils_Findings_v0_1.cs

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using O2.DotNetWrappers.DotNet;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 
 namespace O2.DotNetWrappers.O2Findings
 {
