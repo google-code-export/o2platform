@@ -7,7 +7,6 @@ using O2.Debugger.Mdbg.O2Debugger.Objects;
 using O2.DotNetWrappers.DotNet;
 using O2.External.WinFormsUI.Forms;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Debugger.Mdbg.O2Debugger

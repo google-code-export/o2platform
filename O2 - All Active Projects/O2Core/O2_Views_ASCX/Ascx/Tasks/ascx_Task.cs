@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using O2.DotNetWrappers.Windows;
-using O2.Kernel.Interfaces.Tasks;
+using O2.Interfaces.Tasks;
 
 namespace O2.Views.ASCX.Tasks
 {

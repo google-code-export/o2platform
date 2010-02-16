@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.O2Core;
+using O2.Interfaces.Messages;
+using O2.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Kernel.CodeUtils

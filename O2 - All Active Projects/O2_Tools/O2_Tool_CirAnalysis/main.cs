@@ -2,8 +2,8 @@
 using System;
 using O2.Core.CIR.Ascx;
 using O2.External.WinFormsUI.Forms;
+using O2.Interfaces.Views;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Views;
 
 
 namespace O2.Tool.CirAnalysis

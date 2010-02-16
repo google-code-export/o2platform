@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using O2.Interfaces.XRules;
 using O2.Kernel;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.External.O2Mono.MonoCecil;
-using O2.Kernel.Interfaces.XRules;
 
 namespace O2.Core.XRules.XRulesEngine
 {

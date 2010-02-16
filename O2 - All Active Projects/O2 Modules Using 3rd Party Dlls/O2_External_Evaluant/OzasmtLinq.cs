@@ -10,7 +10,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Evaluant.NLinq.Memory;
 using O2.DotNetWrappers.O2Findings;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 using O2.Views.ASCX.classes;
 
 namespace O2.External.Evaluant

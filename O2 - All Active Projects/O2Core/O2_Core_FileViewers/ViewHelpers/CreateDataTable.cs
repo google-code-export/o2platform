@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
-using O2.Kernel.Interfaces.FrameworkSupport.J2EE;
+using O2.Interfaces.FrameworkSupport.J2EE;
 
 namespace O2.Core.FileViewers.ViewHelpers
 {

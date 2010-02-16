@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using O2.Interfaces.O2Core;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
 
 namespace o2.aspnetanalysis
 {

@@ -1,4 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using O2.Interfaces.CIR;
+using O2.Interfaces.O2Findings;
+
 namespace O2.Tool.JoinTraces.ascx
 {
     partial class ascx_JoinTracesOnInterfaces
@@ -225,7 +228,7 @@ namespace O2.Tool.JoinTraces.ascx
             this.findingsViewer_DynamicJoin.Name = "findingsViewer_DynamicJoin";
             this.findingsViewer_DynamicJoin.Size = new System.Drawing.Size(176, 179);
             this.findingsViewer_DynamicJoin.TabIndex = 5;
-            this.findingsViewer_DynamicJoin._onTraceSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<O2.Kernel.Interfaces.O2Findings.IO2Trace>(this.findingsViewer_DynamicJoin__onTraceSelected);
+            this.findingsViewer_DynamicJoin._onTraceSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<IO2Trace>(this.findingsViewer_DynamicJoin__onTraceSelected);
             // 
             // label4
             // 
@@ -291,7 +294,7 @@ namespace O2.Tool.JoinTraces.ascx
             this.cirDataViewer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.cirDataViewer.cirDataAnalysis = ((O2.Kernel.Interfaces.CIR.ICirDataAnalysis)(resources.GetObject("cirDataViewer.cirDataAnalysis")));
+            this.cirDataViewer.cirDataAnalysis = ((ICirDataAnalysis)(resources.GetObject("cirDataViewer.cirDataAnalysis")));
             this.cirDataViewer.Location = new System.Drawing.Point(1, 22);
             this.cirDataViewer.Name = "cirDataViewer";
             this.cirDataViewer.Size = new System.Drawing.Size(267, 200);

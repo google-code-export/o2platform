@@ -2,7 +2,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace O2.Kernel.Interfaces.O2Core
+namespace O2.Interfaces.O2Core
 {
     public interface IO2Log
     {

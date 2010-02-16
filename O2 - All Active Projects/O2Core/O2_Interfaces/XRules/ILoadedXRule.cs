@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace O2.Kernel.Interfaces.XRules
+namespace O2.Interfaces.XRules
 {
     public interface ILoadedXRule
     {

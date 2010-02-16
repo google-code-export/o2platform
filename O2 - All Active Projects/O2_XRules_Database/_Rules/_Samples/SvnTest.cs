@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using O2.Interfaces.O2Core;
+using O2.Interfaces.Views;
 using O2.Kernel;
 using System.Windows.Forms;
-using O2.Kernel.Interfaces.O2Core;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
-using O2.Kernel.Interfaces.Views;
 using O2.External.WinFormsUI.Forms;
 //O2Tag_AddReferenceFile:HTMLparserLibDotNet20.dll
 //O2Tag_AddReferenceFile:nunit.framework.dll

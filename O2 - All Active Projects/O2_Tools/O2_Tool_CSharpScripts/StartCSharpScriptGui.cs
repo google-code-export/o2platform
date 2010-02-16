@@ -7,9 +7,9 @@ using O2.External.O2Mono.Ascx;
 using O2.External.SharpDevelop;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
+using O2.Interfaces.Messages;
+using O2.Interfaces.Views;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Views.ASCX.SourceCodeEdit;
 

@@ -2,9 +2,9 @@
 //O2Tag_OnlyAddReferencedAssemblies
 using System.IO;
 //O2Ref:O2_Kernel.dll
+using O2.Interfaces.O2Core;
+using O2.Interfaces.XRules;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
-using O2.Kernel.Interfaces.XRules;
 //O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;

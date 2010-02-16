@@ -7,7 +7,7 @@ using Mono.Cecil;
 using O2.DotNetWrappers.Windows;
 using O2.External.O2Mono.MonoCecil;
 using O2.External.O2Mono.ViewHelpers;
-using O2.Kernel.Interfaces.ExternalDlls;
+using O2.Interfaces.ExternalDlls;
 
 namespace O2.External.O2Mono
 {

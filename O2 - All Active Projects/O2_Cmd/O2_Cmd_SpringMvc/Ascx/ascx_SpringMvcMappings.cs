@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using O2.Cmd.SpringMvc.Objects;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.CIR;
 
 namespace O2.Cmd.SpringMvc.Ascx
 {

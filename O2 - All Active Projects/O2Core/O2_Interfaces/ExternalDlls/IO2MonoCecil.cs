@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace O2.Kernel.Interfaces.ExternalDlls
+namespace O2.Interfaces.ExternalDlls
 {
     public interface IO2MonoCecil
     {

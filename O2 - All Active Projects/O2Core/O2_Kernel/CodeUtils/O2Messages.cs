@@ -3,9 +3,9 @@ using System;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
-using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.CIR;
+using O2.Interfaces.Messages;
+using O2.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Kernel.CodeUtils

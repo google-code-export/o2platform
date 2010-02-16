@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
-using O2.Kernel.Interfaces.Controllers;
+using O2.Interfaces.Controllers;
 
 namespace O2.Scanner.OunceLabsCLI.ScanTargets
 {

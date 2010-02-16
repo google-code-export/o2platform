@@ -1,4 +1,6 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using O2.Interfaces.O2Findings;
+
 namespace O2.Rules.OunceLabs.Ascx
 {
     partial class ascx_ApplyRulesToFindings
@@ -227,8 +229,8 @@ namespace O2.Rules.OunceLabs.Ascx
             this.findingsViewerSourceFindings.Size = new System.Drawing.Size(374, 238);
             this.findingsViewerSourceFindings.TabIndex = 2;
             this.findingsViewerSourceFindings._onFolderSelectEvent += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<string>(this.findingsViewerSourceFindings__onFolderSelectEvent);
-            this.findingsViewerSourceFindings._onFindingSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<O2.Kernel.Interfaces.O2Findings.IO2Finding>(this.findingsViewerSourceFindings__onFindingSelected);
-            this.findingsViewerSourceFindings._onTraceSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<O2.Kernel.Interfaces.O2Findings.IO2Trace>(this.findingsViewerSourceFindings__onTraceSelected);
+            this.findingsViewerSourceFindings._onFindingSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<IO2Finding>(this.findingsViewerSourceFindings__onFindingSelected);
+            this.findingsViewerSourceFindings._onTraceSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<IO2Trace>(this.findingsViewerSourceFindings__onTraceSelected);
             // 
             // findingsViewerMappedFindings
             // 
@@ -239,8 +241,8 @@ namespace O2.Rules.OunceLabs.Ascx
             this.findingsViewerMappedFindings.Name = "findingsViewerMappedFindings";
             this.findingsViewerMappedFindings.Size = new System.Drawing.Size(383, 237);
             this.findingsViewerMappedFindings.TabIndex = 4;
-            this.findingsViewerMappedFindings._onFindingSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<O2.Kernel.Interfaces.O2Findings.IO2Finding>(this.findingsViewerMappedFindings__onFindingSelected);
-            this.findingsViewerMappedFindings._onTraceSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<O2.Kernel.Interfaces.O2Findings.IO2Trace>(this.findingsViewerMappedFindings__onTraceSelected);
+            this.findingsViewerMappedFindings._onFindingSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<IO2Finding>(this.findingsViewerMappedFindings__onFindingSelected);
+            this.findingsViewerMappedFindings._onTraceSelected += new O2.DotNetWrappers.DotNet.O2Thread.FuncVoidT1<IO2Trace>(this.findingsViewerMappedFindings__onTraceSelected);
             // 
             // ascx_ApplyRulesToFindings
             // 

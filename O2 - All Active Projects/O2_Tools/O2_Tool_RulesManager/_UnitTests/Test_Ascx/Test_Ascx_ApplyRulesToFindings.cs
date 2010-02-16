@@ -6,8 +6,8 @@ using System.Text;
 using NUnit.Framework;
 using O2.External.WinFormsUI.Forms;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
+using O2.Interfaces.O2Findings;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Findings;
 using O2.Rules.OunceLabs.Ascx;
 using O2.Views.ASCX.O2Findings;
 

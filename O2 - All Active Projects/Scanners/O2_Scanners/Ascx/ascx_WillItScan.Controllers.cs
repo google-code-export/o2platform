@@ -6,7 +6,7 @@ using O2.Core.CIR.CirUtils;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
-using O2.Kernel.Interfaces.Controllers;
+using O2.Interfaces.Controllers;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Rules.OunceLabs.RulesUtils;
 using O2.Scanner.MsCatNet.Scan;

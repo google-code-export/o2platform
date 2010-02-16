@@ -10,7 +10,6 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel;
-using O2.Kernel.Interfaces.Views;
 using O2.Views.ASCX.DataViewers;
 using System.IO;
 using O2.Kernel.CodeUtils;

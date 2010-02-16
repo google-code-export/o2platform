@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using O2.Core.CIR.CirObjects;
 using O2.DotNetWrappers.Windows;
+using O2.Interfaces.CIR;
 
 namespace O2.Core.CIR.CirUtils
 {
@@ -30,7 +31,7 @@ namespace O2.Core.CIR.CirUtils
                         try
                         {
                             fcdCirData.dSymbols = new Dictionary<string, string>();
-                            fcdCirData.dTemp_Functions_bySymbolDef = new Dictionary<string, O2.Kernel.Interfaces.CIR.ICirFunction>();
+                            fcdCirData.dTemp_Functions_bySymbolDef = new Dictionary<string, ICirFunction>();
                             CirLoad.loadCirDumpXmlFile_andPopulateDictionariesWithXrefs(sFile, fcdCirData, true);
                         }
                         catch (Exception ex)

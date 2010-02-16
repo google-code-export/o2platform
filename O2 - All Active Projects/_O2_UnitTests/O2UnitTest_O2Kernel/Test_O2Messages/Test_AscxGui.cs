@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using O2.Interfaces.Views;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Views;
 using System.Threading;
 using O2.UnitTests.Test_O2Kernel;
 

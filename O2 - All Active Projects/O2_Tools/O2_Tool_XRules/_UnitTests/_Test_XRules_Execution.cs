@@ -6,7 +6,7 @@ using System.Text;
 using NUnit.Framework;
 using O2.Core.XRules.Ascx;
 using O2.External.WinFormsUI.Forms;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 
 namespace O2.Tool.XRules._UnitTests
 {

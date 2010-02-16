@@ -10,7 +10,7 @@ using O2.Debugger.Mdbg.O2Debugger.Objects;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
-using O2.Kernel.Interfaces.Messages;
+using O2.Interfaces.Messages;
 using O2.Kernel;
 
 namespace O2.Debugger.Mdbg.O2Debugger.Ascx

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.Interfaces.Controllers;
 using O2.Kernel.CodeUtils;
 using O2.Core.CIR.CirUtils;
-using O2.Kernel.Interfaces.Controllers;
 using O2.Scanner.OunceLabsCLI.Scan;
 using O2.Scanner.OunceLabsCLI.ScanTargets;
 using O2.DotNetWrappers.DotNet;

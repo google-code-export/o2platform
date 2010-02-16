@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Filters;
-using O2.Kernel.Interfaces.O2Core;
+using O2.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.DotNetWrappers.Windows

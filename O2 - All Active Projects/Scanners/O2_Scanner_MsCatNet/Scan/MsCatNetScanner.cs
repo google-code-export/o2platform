@@ -3,8 +3,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using O2.DotNetWrappers.Windows;
+using O2.Interfaces.Controllers;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Controllers;
 using O2.Scanner.MsCatNet.Converter;
 
 namespace O2.Scanner.MsCatNet.Scan

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using O2.Kernel.Interfaces.Rules;
+using O2.Interfaces.Rules;
 
 namespace O2.Rules.OunceLabs.RulesUtils
 {

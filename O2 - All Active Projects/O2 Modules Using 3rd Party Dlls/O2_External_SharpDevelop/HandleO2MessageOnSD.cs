@@ -6,9 +6,9 @@ using O2.DotNetWrappers.O2Misc;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.External.WinFormsUI.O2Environment;
+using O2.Interfaces.Messages;
+using O2.Interfaces.Views;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.External.SharpDevelop

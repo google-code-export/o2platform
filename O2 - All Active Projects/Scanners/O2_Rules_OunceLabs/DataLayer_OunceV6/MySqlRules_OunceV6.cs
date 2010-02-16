@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using O2.Kernel.Interfaces.Rules;
+using O2.Interfaces.Rules;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Rules.OunceLabs.DataLayer;
 using O2.Rules.OunceLabs.RulesUtils;

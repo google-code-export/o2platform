@@ -9,7 +9,7 @@ using O2.Cmd.SpringMvc.Scripts;
 using O2.Core.CIR.CirUtils;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 
 namespace O2.Cmd.SpringMvc.Ascx
 {

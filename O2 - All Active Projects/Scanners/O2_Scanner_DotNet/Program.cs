@@ -8,7 +8,7 @@ using O2.Core.XRules.XRulesEngine;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.External.WinFormsUI.O2Environment;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Scanner.DotNet.Ascx;
 
 namespace O2.Scanner.DotNet

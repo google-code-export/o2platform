@@ -9,9 +9,6 @@ using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.ImportExport.OunceLabs;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.Views;
-
 using O2.Views.ASCX.O2Findings;
 using O2.Core.CIR.Ascx;
 using System;

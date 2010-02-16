@@ -5,8 +5,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 //O2Ref:O2_Kernel.dll
-using O2.Kernel.Interfaces.O2Findings;
-using O2.Kernel.Interfaces.XRules;
+using O2.Interfaces.O2Findings;
+using O2.Interfaces.XRules;
 using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;

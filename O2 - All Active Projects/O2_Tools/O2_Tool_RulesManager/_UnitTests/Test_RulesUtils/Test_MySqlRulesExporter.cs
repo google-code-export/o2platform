@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using O2.Kernel.Interfaces.Rules;
+using O2.Interfaces.Rules;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Rules.OunceLabs;
 using O2.Rules.OunceLabs.DataLayer;

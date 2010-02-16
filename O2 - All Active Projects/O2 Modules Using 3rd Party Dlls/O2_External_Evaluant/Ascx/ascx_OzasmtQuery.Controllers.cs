@@ -11,7 +11,7 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.Windows;
 using O2.External.Evaluant;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes.Tasks;
 using O2.Views.ASCX.classes.TasksWrappers;

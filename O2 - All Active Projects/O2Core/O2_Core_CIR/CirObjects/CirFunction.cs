@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using O2.Core.CIR.Xsd;
 using O2.DotNetWrappers.Filters;
-using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.CIR;
+using O2.Interfaces.O2Findings;
 
 namespace O2.Core.CIR.CirObjects
 {

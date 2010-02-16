@@ -7,7 +7,7 @@ using O2.External.SharpDevelop;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.ImportExport.OunceLabs;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Tool.SearchEngine.Ascx;
 using O2.Views.ASCX.CoreControls;
 using O2.Views.ASCX.DataViewers;

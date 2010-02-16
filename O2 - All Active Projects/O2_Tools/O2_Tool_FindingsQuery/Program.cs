@@ -3,7 +3,7 @@ using O2.External.Evaluant.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6_1;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Tool.FindingsQuery._ScriptSamples;
 using O2.Tool.OzasmtQuery._ScriptSamples;
 using O2.Views.ASCX.O2Findings;

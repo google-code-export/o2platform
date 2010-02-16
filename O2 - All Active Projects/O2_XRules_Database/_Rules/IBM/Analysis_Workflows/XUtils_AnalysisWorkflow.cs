@@ -9,9 +9,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 //O2Ref:O2_Kernel.dll
+using O2.Interfaces.O2Core;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
-using O2.Kernel.Interfaces.O2Findings;
 using O2.Kernel.Interfaces.XRules;
 //O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.O2Findings;

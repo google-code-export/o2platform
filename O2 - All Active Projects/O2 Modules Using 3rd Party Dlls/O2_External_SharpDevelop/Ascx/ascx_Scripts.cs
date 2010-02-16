@@ -7,8 +7,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Views.ASCX;
 using O2.Views.ASCX.SourceCodeEdit;

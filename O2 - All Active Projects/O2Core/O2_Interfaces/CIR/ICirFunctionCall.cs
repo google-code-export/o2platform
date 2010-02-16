@@ -2,7 +2,7 @@
 using System;
 
 
-namespace O2.Kernel.Interfaces.CIR
+namespace O2.Interfaces.CIR
 {
     public interface ICirFunctionCall
     {

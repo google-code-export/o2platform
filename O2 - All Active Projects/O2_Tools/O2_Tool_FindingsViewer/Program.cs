@@ -9,8 +9,7 @@ using O2.ImportExport.Misc.FindBugs;
 using O2.ImportExport.Misc.WebScarab;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6_1;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Views.ASCX.O2Findings;
 

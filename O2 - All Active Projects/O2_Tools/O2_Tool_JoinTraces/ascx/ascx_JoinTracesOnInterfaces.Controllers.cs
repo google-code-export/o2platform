@@ -7,7 +7,7 @@ using System.Threading;
 using O2.Core.CIR.Ascx;
 using O2.Core.CIR.CirO2Findings;
 using O2.Core.CIR.CirUtils;
-using O2.Kernel.Interfaces.O2Findings;
+using O2.Interfaces.O2Findings;
 using O2.Views.ASCX.O2Findings;
 
 namespace O2.Tool.JoinTraces.ascx

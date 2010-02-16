@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using O2.Core.CIR.CirObjects;
-using O2.Kernel.Interfaces.CIR;
+using O2.Interfaces.CIR;
 
 namespace O2.Core.CIR.CirUtils
 {

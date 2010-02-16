@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using O2.Debugger.Mdbg.O2Debugger;
-using O2.Kernel.Interfaces.Messages;
+using O2.Interfaces.Messages;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.Debugger.Mdbg

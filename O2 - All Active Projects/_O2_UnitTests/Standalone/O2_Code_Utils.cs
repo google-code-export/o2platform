@@ -1,11 +1,11 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.IO;
+using O2.Interfaces.O2Core;
+using O2.Interfaces.Views;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
 using O2.DotNetWrappers.Windows;
 using O2.External.WinFormsUI.Forms;
-using O2.Kernel.Interfaces.Views;
 using O2.Views.ASCX.CoreControls;
 using O2.External.O2Mono.MonoCecil;
 //O2Tag_AddReferenceFile:nunit.framework.dll

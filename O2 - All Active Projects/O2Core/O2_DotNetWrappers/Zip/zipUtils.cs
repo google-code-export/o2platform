@@ -5,7 +5,7 @@ using System.IO;
 using Ionic.Zip;
 using O2.DotNetWrappers;
 using O2.DotNetWrappers.Windows;
-using O2.Kernel.Interfaces;
+using O2.Interfaces.Utils;
 
 namespace O2.DotNetWrappers.Zip
 {

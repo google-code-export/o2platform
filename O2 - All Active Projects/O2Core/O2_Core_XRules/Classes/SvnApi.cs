@@ -3,9 +3,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using O2.Interfaces.O2Core;
 using O2.Views.ASCX.classes;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
 //O2Tag_AddReferenceFile:HTMLparserLibDotNet20.dll

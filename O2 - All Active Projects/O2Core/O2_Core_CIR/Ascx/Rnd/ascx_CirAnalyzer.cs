@@ -12,8 +12,8 @@ using O2.Core.CIR.CirUtils;
 using O2.Core.CIR.Xsd;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using O2.Interfaces.CIR;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.CIR;
 
 namespace O2.Core.CIR.Ascx.Rnd
 {

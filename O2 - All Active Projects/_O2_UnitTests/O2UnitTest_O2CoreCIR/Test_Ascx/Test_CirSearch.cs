@@ -7,9 +7,9 @@ using O2.Core.CIR.CirCreator.DotNet;
 using O2.Core.CIR.CirObjects;
 using O2.External.O2Mono.MonoCecil;
 using O2.External.WinFormsUI.Forms;
+using O2.Interfaces.CIR;
+using O2.Interfaces.Views;
 using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.CIR;
-using O2.Kernel.Interfaces.Views;
 
 namespace O2.UnitTests.Test_O2CoreCIR.Test_Ascx
 {

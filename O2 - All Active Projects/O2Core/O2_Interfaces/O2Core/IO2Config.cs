@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace O2.Kernel.Interfaces.O2Core
+namespace O2.Interfaces.O2Core
 {
     public interface IO2Config
     {
@@ -35,5 +35,4 @@ namespace O2.Kernel.Interfaces.O2Core
         // misc global vars
         string O2FindingsFileExtension { get; set;}         
     }
-    
 }

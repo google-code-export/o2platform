@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace O2.Kernel.Interfaces.CIR
+namespace O2.Interfaces.CIR
 {
     public interface ICirFieldClass
     {

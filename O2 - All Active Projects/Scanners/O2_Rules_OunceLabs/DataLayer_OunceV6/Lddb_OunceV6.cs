@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using O2.Kernel.Interfaces.Rules;
+using O2.Interfaces.Rules;
 using O2.Rules.OunceLabs.DataLayer_OunceV6;
 
 namespace O2.Rules.OunceLabs.DataLayer

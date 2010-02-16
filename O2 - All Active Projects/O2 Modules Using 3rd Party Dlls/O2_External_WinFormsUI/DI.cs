@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using O2.External.WinFormsUI.Forms;
 using O2.External.WinFormsUI.O2Environment;
+using O2.Interfaces.Messages;
+using O2.Interfaces.O2Core;
 using O2.Kernel;
-using O2.Kernel.Interfaces.Messages;
-using O2.Kernel.Interfaces.O2Core;
 using O2.Kernel.InterfacesBaseImpl;
 
 namespace O2.External.WinFormsUI

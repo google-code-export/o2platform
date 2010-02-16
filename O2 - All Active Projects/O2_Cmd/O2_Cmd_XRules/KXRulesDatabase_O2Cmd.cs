@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using O2.Kernel.Interfaces.XRules;
+using O2.Interfaces.XRules;
 
 
 namespace O2.Cmd.XRules

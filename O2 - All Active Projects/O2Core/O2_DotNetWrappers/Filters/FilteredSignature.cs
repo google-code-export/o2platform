@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using O2.Kernel.Interfaces.CIR;
+using O2.Interfaces.CIR;
 using O2.Kernel;
 
 //using Mono.Cecil;

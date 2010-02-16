@@ -2,8 +2,8 @@
 using System;
 using System.Reflection;
 using O2.DotNetWrappers.Filters;
+using O2.Interfaces.O2Core;
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
 
 
 namespace O2.DotNetWrappers.O2CmdShell

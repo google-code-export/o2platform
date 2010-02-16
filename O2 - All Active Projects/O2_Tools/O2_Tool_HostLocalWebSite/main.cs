@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using O2.External.WinFormsUI.Forms;
 using O2.External.WinFormsUI.O2Environment;
-using O2.Kernel.Interfaces.Views;
+using O2.Interfaces.Views;
 using O2.Tool.HostLocalWebsite.ascx;
 using O2.Tool.HostLocalWebsite.ascx;
 

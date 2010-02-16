@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using NUnit.Framework;
 using O2.DotNetWrappers.Windows;
-using O2.Kernel.Interfaces.Tasks;
+using O2.Interfaces.Tasks;
 using O2.UnitTests.Test_O2Debugger.MockObjects;
 using O2.Views.ASCX.classes;
 using O2.Views.ASCX.classes.Tasks;

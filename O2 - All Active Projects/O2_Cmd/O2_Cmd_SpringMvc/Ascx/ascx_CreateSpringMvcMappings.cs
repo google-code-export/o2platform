@@ -10,7 +10,6 @@ using O2.Core.CIR.CirCreator.Java;
 using O2.Core.CIR.CirObjects;
 using O2.Core.CIR.CirUtils;
 using O2.DotNetWrappers.DotNet;
-using O2.Kernel.Interfaces.CIR;
 
 namespace O2.Cmd.SpringMvc.Ascx
 {
