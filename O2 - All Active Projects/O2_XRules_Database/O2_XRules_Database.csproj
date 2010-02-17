@@ -245,7 +245,7 @@
     <Compile Include="_Rules\Windows Utils\ascx_Processes_Stop.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\Windows Utils\ascx_Services_Stop.cs.o2">
+    <Compile Include="_Rules\Windows Utils\ascx_Services_Stop.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="_Rules\Windows Utils\ascx_Start_Tools.cs.o2">
