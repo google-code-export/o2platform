@@ -1,0 +1,195 @@
+// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+//_O2Tag_OnlyAddReferencedAssemblies
+//O2Ref:System.dll
+using System;
+using System.Reflection;
+using System.Text;
+using System.Collections.Generic;
+//O2Ref:System.Core.dll
+using System.Linq;
+//O2Ref:System.Drawing.dll
+using System.Drawing;
+//O2Ref:System.Windows.Forms.dll
+using System.Windows.Forms;
+//O2Ref:O2_Kernel.dll
+using O2.Kernel;
+using O2.Interfaces.O2Core;
+//O2Ref:O2_External_WinformsUI.dll
+using O2.External.WinFormsUI.Forms;
+//O2Ref:O2_DotNetWrappers.dll
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.ExtensionMethods;
+//O2Ref:O2_Views_ASCX.dll
+using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX;
+//O2Ref:O2_External_SharpDevelop.dll
+using O2.External.SharpDevelop.Ascx;
+using O2.External.SharpDevelop.AST;
+using O2.External.SharpDevelop.ExtensionMethods;
+//O2Ref:O2SharpDevelop.dll
+using ICSharpCode.NRefactory;
+using ICSharpCode.NRefactory.Ast;   
+
+// Comments: (17 Feb 2010): This was the first pass at building an O2 Command Prompt directlly as an XRule
+// 							Most of this code will be incorporated into O2's main APIs
+namespace O2.Script
+{
+    public class ascx_O2_Command_Line: UserControl
+    {    
+    	private static IO2Log log = PublicDI.log;
+		public ascx_SourceCodeViewer sourceCodeViewer;
+		public RichTextBox command_RichTextBox;
+		public RichTextBox result_RichTextBox;
+		//public Button compileButton;
+		public Button executeButton;
+		public string wrappedSourceCode;
+		public Assembly assembly;				
+		
+        public static void startControl()
+    	{   
+    		WinForms.showAscxInForm(
+				typeof(ascx_O2_Command_Line), 
+				"O2 Command Line V1.0", 
+				500, 
+				500);		    		
+    	}    	
+    	
+    	public ascx_O2_Command_Line()
+    	{    	    		
+    		buildGui();	            
+    		command_RichTextBox.append_Text("PublicDI.log.info(\"this is a test\");");
+    		command_RichTextBox.append_Line("return \"test 1,2,3\";");
+        }
+    
+        private void buildGui()
+        {
+        	// create controls
+        	var groupBoxes = this.add_SplitContainer_2x2("Command To Execute", "Action", "Source Code", "Result",true,40,150,100);        	
+        	command_RichTextBox = groupBoxes[0].add_RichTextBox();        	        	        	
+        	sourceCodeViewer = groupBoxes[2].add_SourceCodeViewer();
+        	result_RichTextBox = groupBoxes[3].add_RichTextBox();
+        	
+        	// control's options:
+        	executeButton = groupBoxes[1].add_Button("Execute", 15, -1, 100);        	
+        	executeButton.Enabled = false;        	
+        	executeButton.onClick(executeCode);        
+        	groupBoxes[1].mapToWidth(executeButton, true);
+        	command_RichTextBox.TextChanged += (sender,e) => onTextChanged(command_RichTextBox.Text);        	        	        	
+     	}        	     	     	
+     	     	
+     	public void onTextChanged(string newText)
+     	{     	     	     	     		     	     	
+     		wrappedSourceCode = createCSharpCodeWith_Class_Method_WithMethodText(newText);
+     		
+     		if (wrappedSourceCode == null)
+     		{
+     			executeButton.Enabled = false;     			     		
+     			sourceCodeViewer.setDocumentContents("");
+     			return;
+     		}	     		
+     		sourceCodeViewer.setDocumentContents(wrappedSourceCode);     		
+     		compileCode(wrappedSourceCode);			    		     	    		     	
+     	}
+     	
+     	
+     	public void compileCode(string code)
+     	{
+     		O2Thread.mtaThread(
+     			()=> {	     				
+	     				var csharpCodeProvider = new Microsoft.CSharp.CSharpCodeProvider();
+     					var compiler = csharpCodeProvider.CreateCompiler();     
+						var compilerParams = new System.CodeDom.Compiler.CompilerParameters();
+	     				compilerParams.ReferencedAssemblies.Add("O2_Kernel.dll");	     				
+	     				compilerParams.GenerateInMemory = true;		     				     		
+	     				
+			     		var compilerResults = compiler.CompileAssemblyFromSource(compilerParams, code);
+			     					     		
+			     		
+			     		if (compilerResults.Errors.Count > 0 || compilerResults.CompiledAssembly == null)
+			     		{		     
+			     			executeButton.Enabled = false;
+							result_RichTextBox.set_Text("Compilation Errors:\r\n\r\n");				
+							result_RichTextBox.textColor(Color.Red);																	
+			     			foreach(var error in compilerResults.Errors)
+			     				result_RichTextBox.append_Line(error.ToString());						     					     		
+			     			return;
+			     		}
+			     		
+			     		executeButton.Enabled = true;
+			     		result_RichTextBox.textColor(Color.Green);
+			     		result_RichTextBox.set_Text("Compilation Ok");				
+			     				     		
+			     		assembly = compilerResults.CompiledAssembly;					
+			     		log.info("compilation ok");
+	     		});
+     	}     	  
+     	
+     	public void executeCode()
+     	{     		
+     		if (assembly != null)
+     		{
+     			var method = PublicDI.reflection.getMethods(assembly)[0];
+				var result = PublicDI.reflection.invoke(method);
+				result_RichTextBox.set_Text((result ?? "[null return value]").ToString());
+			}
+     	}
+     	
+
+		public string getAstErrors(string sourceCode)
+		{
+			return new O2.External.SharpDevelop.AST.Ast_CSharp(sourceCode).Errors;
+		}						
+		
+		public string createCSharpCodeWith_Class_Method_WithMethodText(string code)
+		{		
+			var compilationUnit = new CompilationUnit();
+			
+     		compilationUnit.add_Using("O2.Kernel");     		     		
+     		     		     		
+     		Modifiers modifiers = Modifiers.None | Modifiers.Public;
+     		
+     		var dynamicType = new TypeDeclaration(modifiers,new List<AttributeSection>());
+     		dynamicType.Name = "DynamicType";
+     		
+     		var dynamicMethod = new MethodDeclaration();     		
+     		dynamicMethod.Name ="dynamicMethod";     		
+     		dynamicMethod.TypeReference = new TypeReference("object",true);
+     		dynamicMethod.Modifier = modifiers | Modifiers.Static;			
+     		     		
+     		var snippetParser = new SnippetParser(SupportedLanguage.CSharp);
+     		var parsedCode = snippetParser.Parse(code);
+     		
+			if (snippetParser.Errors.Count > 0)
+			{				
+     			result_RichTextBox.set_Text("AST Parsing Errors:\r\n\r\n");		
+     			result_RichTextBox.append_Text(snippetParser.Errors.ErrorOutput);
+     			result_RichTextBox.textColor(Color.Red);
+     		}
+     		if (false == parsedCode is BlockStatement)
+     			return null;
+     			
+     		var blockStatement = (BlockStatement)parsedCode;
+     		var returnOK = new ReturnStatement(new PrimitiveExpression("OK"));
+     		blockStatement.AddChild(returnOK);
+     		
+     		dynamicMethod.Body = blockStatement;
+     		     		     	     		
+     		dynamicType.AddChild(dynamicMethod);     	
+     		compilationUnit.AddChild(dynamicType);     		     		     		     		     	     		     			
+     		
+     		var ast = new O2.External.SharpDevelop.AST.Ast_CSharp(compilationUnit);     	
+     		return ast.AstDetails.CSharpCode;
+		}
+    	    	    	    	    
+    }
+    
+    public static class AST_Writing_ExtensionMethods
+    {
+    	public static void add_Using(this CompilationUnit compilationUnit, string usingNamespace)
+    	{
+    		var usingText = new UsingDeclaration(usingNamespace);
+     		compilationUnit.AddChild(usingText);
+    	}
+    }
+}

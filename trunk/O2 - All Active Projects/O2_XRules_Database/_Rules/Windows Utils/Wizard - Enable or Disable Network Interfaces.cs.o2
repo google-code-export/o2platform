@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Management;
 //O2Ref:O2_Kernel.dll
 using O2.Kernel;
-using O2.Kernel.Interfaces.O2Core;
+using O2.Interfaces.O2Core;
 //O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;

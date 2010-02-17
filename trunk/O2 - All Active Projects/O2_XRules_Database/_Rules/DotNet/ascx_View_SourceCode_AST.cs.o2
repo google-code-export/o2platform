@@ -4,13 +4,13 @@ using System.IO;
 using System.Windows.Forms;
 using O2.Kernel;
 using O2.DotNetWrappers.Windows;
-using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Network;
 using O2.Views.ASCX.classes.MainGUI;
+//O2Ref:O2_External_SharpDevelop.dll
 using O2.External.SharpDevelop.Ascx;
-
-//O2File:C:\O2\_XRules_Local\MiscTestss\extra.cs
-
+using O2.External.SharpDevelop.AST;
+using O2.External.SharpDevelop.ExtensionMethods;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.NRefactory.Visitors;
@@ -104,15 +104,15 @@ namespace O2.Script
 			var ast = new Ast_CSharp(sourceCode);
 						
 			ast_TreeView.show_Ast(ast);						
-			types_TreeView.show_List(ast.astDetails.Types, "Text");
-			usingDeclarations_TreeView.show_List(ast.astDetails.UsingDeclarations,"Text");
-			methods_TreeView.show_List(ast.astDetails.Methods,"Text");
-			fields_TreeView.show_List(ast.astDetails.Fields,"Text");
-			properties_TreeView.show_List(ast.astDetails.Properties,"Text");
-			comments_TreeView.show_List(ast.astDetails.Comments,"Text");
-			errors_RichTextBox.set_Text(ast.errors);						
-			rewritenCSharpCode_SourceCodeEditor.setDocumentContents(ast.astDetails.CSharpCode, ".cs");
-			rewritenVBNet_SourceCodeEditor.setDocumentContents(ast.astDetails.VBNetCode, ".vb");								
+			types_TreeView.show_List(ast.AstDetails.Types, "Text");
+			usingDeclarations_TreeView.show_List(ast.AstDetails.UsingDeclarations,"Text");
+			methods_TreeView.show_List(ast.AstDetails.Methods,"Text");
+			fields_TreeView.show_List(ast.AstDetails.Fields,"Text");
+			properties_TreeView.show_List(ast.AstDetails.Properties,"Text");
+			comments_TreeView.show_List(ast.AstDetails.Comments,"Text");
+			errors_RichTextBox.set_Text(ast.Errors);						
+			rewritenCSharpCode_SourceCodeEditor.setDocumentContents(ast.AstDetails.CSharpCode, ".cs");
+			rewritenVBNet_SourceCodeEditor.setDocumentContents(ast.AstDetails.VBNetCode, ".vb");								
 		}
 
 
