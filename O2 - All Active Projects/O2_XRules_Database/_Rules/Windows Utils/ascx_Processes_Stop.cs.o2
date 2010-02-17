@@ -44,12 +44,18 @@ namespace O2.Script
 
 		public void loadProcessData()
 		{
+            this.info("Loading Processes Data");
 			this.invokeOnThread(
 				()=> {
 						 this.clear();
 						 dataGridView = this.add_DataGridView();  
 						 dataGridView.CellContentClick+= (sender,e) => 	cellClicked(e.RowIndex,e.ColumnIndex);
 						 dataGridView.Columns.Clear();
+
+                         var menu = dataGridView.add_ContextMenu();
+                         menu.add("refresh", (menuItem) => loadProcessData());
+                         //menu.add("close", (menuItem) => ParentForm.Close());
+
 			        	 //dataGridView.SelectionChanged+=(sender,e)=> dataGridView.ClearSelection();
 			        	 // use this to see all available properties
 			        	 //foreach(var property in Processes.getCurrentProcess().type().properties())
