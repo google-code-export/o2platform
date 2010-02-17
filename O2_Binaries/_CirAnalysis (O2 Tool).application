@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Tool_CirAnalysis/_CirAnalysis%20(O2%20Tool).application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_CirAnalysis (O2 Tool).exe.manifest" size="12999">
+    <dependentAssembly dependencyType="install" codebase="_CirAnalysis (O2 Tool).exe.manifest" size="13624">
       <assemblyIdentity name="_CirAnalysis (O2 Tool).exe" version="3.0.0.20" publicKeyToken="0000000000000000" language="en" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>7R9cf7j+EgTohe290sygLcpvBBo=</dsig:DigestValue>
+        <dsig:DigestValue>5EmqZpWTCBvi++yfrFwY4Z6m3JA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

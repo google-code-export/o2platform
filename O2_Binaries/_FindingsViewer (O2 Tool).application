@@ -4,14 +4,14 @@
   <description asmv2:publisher="O2 - Ounce Open" asmv2:product="O2 Tool - Findings Viewer" xmlns="urn:schemas-microsoft-com:asm.v1" />
   <deployment install="true" mapFileExtensions="true" />
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_FindingsViewer (O2 Tool).exe.manifest" size="12651">
+    <dependentAssembly dependencyType="install" codebase="_FindingsViewer (O2 Tool).exe.manifest" size="13276">
       <assemblyIdentity name="_FindingsViewer (O2 Tool).exe" version="1.0.0.6" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>P7bPXDNBInKKALimE0NwM7w1p90=</dsig:DigestValue>
+        <dsig:DigestValue>1nHCG06mzzwvWlarQcQAlUhZk/s=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

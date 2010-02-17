@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Scanners/_O2_Scanners.application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_O2_Scanners.exe.manifest" size="20399">
+    <dependentAssembly dependencyType="install" codebase="_O2_Scanners.exe.manifest" size="21023">
       <assemblyIdentity name="_O2_Scanners.exe" version="3.0.0.56" publicKeyToken="0000000000000000" language="en" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>skiEw3NMVoxLK4HiZVo+971Px84=</dsig:DigestValue>
+        <dsig:DigestValue>1kGZCbuZP8mGN5/hlr/dL3k5q6c=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Tool_DotNetCallbacksMaker/_DotNetCallbacksMaker%20(O2%20Tool).application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_DotNetCallbacksMaker (O2 Tool).exe.manifest" size="14978">
+    <dependentAssembly dependencyType="install" codebase="_DotNetCallbacksMaker (O2 Tool).exe.manifest" size="15603">
       <assemblyIdentity name="_DotNetCallbacksMaker (O2 Tool).exe" version="1.0.0.4" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>gMYHMfvDFL7+40qOSVfR/4pqIxk=</dsig:DigestValue>
+        <dsig:DigestValue>spr5MSt7iQC4BFQ7w3SK3/ib1S4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Cmd_FindingsFilter/O2_Cmd_FindingsFilter.application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="O2_Cmd_FindingsFilter.exe.manifest" size="11992">
+    <dependentAssembly dependencyType="install" codebase="O2_Cmd_FindingsFilter.exe.manifest" size="12617">
       <assemblyIdentity name="O2_Cmd_FindingsFilter.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>HaQmKH7gTS/sS/9of/9wPbHpjmY=</dsig:DigestValue>
+        <dsig:DigestValue>xeIwdP28qdTYZ3xNjWDhvR7JnPs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Cmd_SpringMvc/O2_Cmd_SpringMvc.application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="O2_Cmd_SpringMvc.exe.manifest" size="18023">
+    <dependentAssembly dependencyType="install" codebase="O2_Cmd_SpringMvc.exe.manifest" size="18647">
       <assemblyIdentity name="O2_Cmd_SpringMvc.exe" version="1.0.0.8" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>hX7OiQV0kFtpJ4DcochBR0Kc+ls=</dsig:DigestValue>
+        <dsig:DigestValue>qpRUoH4nMoNuOia/b5isjn7MCb8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Tool_CirViewer/_CirViewer%20(O2%20Tool).application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_CirViewer (O2 Tool).exe.manifest" size="14506">
+    <dependentAssembly dependencyType="install" codebase="_CirViewer (O2 Tool).exe.manifest" size="15131">
       <assemblyIdentity name="_CirViewer (O2 Tool).exe" version="1.0.0.8" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>T9vp03S3z73lKNUZPeZYDvGJoRk=</dsig:DigestValue>
+        <dsig:DigestValue>VFJ68e8MtAtEjjsEHGR/RZDapxw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

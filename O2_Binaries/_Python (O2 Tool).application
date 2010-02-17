@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Tool_Python/_Python%20(O2%20Tool).application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_Python (O2 Tool).exe.manifest" size="13357">
+    <dependentAssembly dependencyType="install" codebase="_Python (O2 Tool).exe.manifest" size="13982">
       <assemblyIdentity name="_Python (O2 Tool).exe" version="1.0.0.4" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>tknZNkD437lPl1rWbEHcDIZiAOI=</dsig:DigestValue>
+        <dsig:DigestValue>43M2//PZgze4vv/w9IWSKltpenY=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Tool_O2Scripts/_O2Scripts%20(O2%20Tool).application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_O2Scripts (O2 Tool).exe.manifest" size="14508">
+    <dependentAssembly dependencyType="install" codebase="_O2Scripts (O2 Tool).exe.manifest" size="15133">
       <assemblyIdentity name="_O2Scripts (O2 Tool).exe" version="1.0.0.12" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>Chw/WhyLVCrfGbZnOc7aFf6yf6g=</dsig:DigestValue>
+        <dsig:DigestValue>jcnPMZSEhb/NLypKap+wswpjkXM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

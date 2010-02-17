@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://76.12.247.164/O2_Tool_O2Reflector/_O2Reflector%20(O2%20Tool).application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_O2Reflector (O2 Tool).exe.manifest" size="11101">
+    <dependentAssembly dependencyType="install" codebase="_O2Reflector (O2 Tool).exe.manifest" size="11726">
       <assemblyIdentity name="_O2Reflector (O2 Tool).exe" version="1.0.0.2" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>KZakohiGd7uYY1zPGz0gz5TUHrU=</dsig:DigestValue>
+        <dsig:DigestValue>5BByT4xPCbjO7epgO3BuZ6U1AmE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

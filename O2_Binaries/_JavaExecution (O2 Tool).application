@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Tool_JavaExecution/_JavaExecution%20(O2%20Tool).application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_JavaExecution (O2 Tool).exe.manifest" size="11988">
+    <dependentAssembly dependencyType="install" codebase="_JavaExecution (O2 Tool).exe.manifest" size="12613">
       <assemblyIdentity name="_JavaExecution (O2 Tool).exe" version="1.0.0.3" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ghk1/l1YUKjadJiyeGjCDGdYzEo=</dsig:DigestValue>
+        <dsig:DigestValue>hOY1I3TRtUSabSJ21vdh1TcPz2w=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

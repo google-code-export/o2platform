@@ -11,14 +11,14 @@
     <deploymentProvider codebase="http://deploy.o2-ounceopen.com/O2_Tool_FindingsQuery/_FindingsQuery%20(O2%20Tool).application" />
   </deployment>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="_FindingsQuery (O2 Tool).exe.manifest" size="15125">
+    <dependentAssembly dependencyType="install" codebase="_FindingsQuery (O2 Tool).exe.manifest" size="15750">
       <assemblyIdentity name="_FindingsQuery (O2 Tool).exe" version="3.0.0.30" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>/Lt3sSdo7VqhwT4tJbjh5SqnlUQ=</dsig:DigestValue>
+        <dsig:DigestValue>SaoNFZ74FQ9aV4hPwuj1cjJGjI4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
