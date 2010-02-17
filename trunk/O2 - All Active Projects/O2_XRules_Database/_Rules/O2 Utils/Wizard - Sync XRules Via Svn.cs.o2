@@ -32,8 +32,8 @@ namespace O2.Core.XRules._Wizards
 	public class Wizard_SyncXRulesViaSvn
 	{
 		private static IO2Log log = PublicDI.log;
-		
-        public static string testTargetFolder = PublicDI.config.getTempFolderInTempDirectory("Svn To Sync");
+
+        public static string testTargetFolder = @"C:\O2\XRulesDatabase"; //PublicDI.config.getTempFolderInTempDirectory("Svn To Sync");
 
         public Thread test_runWizard()
         {
