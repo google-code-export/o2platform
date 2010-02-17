@@ -7,10 +7,11 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using O2.Kernel;
-using O2.Kernel.CodeUtils;
-using O2.Kernel.Interfaces.O2Core;
+using O2.Kernel.ExtensionMethods;
+using O2.Interfaces.O2Core;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX;
 
@@ -53,22 +54,25 @@ namespace O2.Script
 			        	 // use this to see all available properties
 			        	 //foreach(var property in Processes.getCurrentProcess().type().properties())
 			        	 //		dataGridView.column(property.Name,150);
-			        	 dataGridView.column("Name");
-			        	 dataGridView.column("Id");
-			        	 dataGridView.column("Handle");
-			        	 dataGridView.column("Paged Memory Size");
-			        	 dataGridView.column("Working Set");
-			        	 dataGridView.column("Priority Class");
-			        	 dataGridView.column_Link("stop process");        	 
+			        	 dataGridView.add_Column("Name");
+			        	 dataGridView.add_Column("Window Title");
+			        	 dataGridView.add_Column("Id");
+			        	 dataGridView.add_Column("Handle");
+			        	 dataGridView.add_Column("Paged Memory Size (Mb)");
+			        	 dataGridView.add_Column("Working Set (Mb)");
+			        	 dataGridView.add_Column("Priority Class");
+			        	 dataGridView.add_Column_Link("stop process");        	 
+			        	 var megaByte = 1024*1024;
 			        	 foreach(var process in Processes.getProcesses())      	 
 			        	 {        	 
-			        	 	var id = dataGridView.row(process.ProcessName,
-			        	 					 process.Id,
-			        	 					 process.prop("Handle"),
-			        	 					 process.PagedMemorySize64,
-			        	 					 process.WorkingSet64,
-			        	 					 process.prop("PriorityClass"),
-			        	 					 "stop");
+			        	 	var id = dataGridView.add_Row(   process.ProcessName,
+							        	 					 process.MainWindowTitle,
+							        	 					 process.Id,
+							        	 					 process.prop("Handle"),
+							        	 					 (double)process.PagedMemorySize64 / megaByte,
+							        	 					 (double)process.WorkingSet64 / megaByte,
+							        	 					 process.prop("PriorityClass"),
+							        	 					 "stop");
 			        	 	dataGridView.Rows[id].Tag = process;
 			        	 
 			    	 		// use this to see all available properties
@@ -80,21 +84,25 @@ namespace O2.Script
 			        });
 		}
 		
-     	public void cellClicked(int row,int column)
+     	public void cellClicked(int rowId,int columnId)
      	{
-     		var cell = dataGridView.value(row,column).ToString();
+     		var cell = dataGridView.value(rowId,columnId).ToString();
      		//this.info(cell);
      		if (cell.eq("stop"))
+     		{
+     			dataGridView.set(rowId,columnId,"stopping");
      			O2Thread.mtaThread(
-	     			()=>{	     					
-				     		var process = (Process)dataGridView.Rows[row].Tag;
+	     			()=>{	   
+	     					var row = dataGridView.get_Row(rowId); 					
+				     		var process = (Process)dataGridView.Rows[rowId].Tag;
 				     		this.info("Stopping process: {0}", process.ProcessName);
 				     		this.info(process.ProcessName);
 				     		process.Kill();
 				     		process.WaitForExit();
-				     		loadProcessData();
+				     		dataGridView.remove_Row(row);				     						     		
 				     	});
+			}
      	}
-    	    	    	    	    
+     	         	    	    	    	   
     }
 }
