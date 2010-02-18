@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace O2.Kernel.ExtensionMethods
 {
     public static class String_ExtensionMethods
@@ -32,6 +34,16 @@ namespace O2.Kernel.ExtensionMethods
         public static bool starts(this string string1, string string2)
         {
             return string1.StartsWith(string2);
+        }
+
+        public static void starts(this string textToSearch, string textToFind, Action<string> onMatch)
+        {
+            if (textToSearch.starts(textToFind))
+            {
+                var textForCallback = textToSearch.remove(textToFind);
+                if (textForCallback.valid())
+                    onMatch(textForCallback);
+            }            
         }
 
         public static bool ends(this string string1, string string2)
@@ -72,6 +84,27 @@ namespace O2.Kernel.ExtensionMethods
             foreach (var stringToProcess in stringsToProcess)
                 _string = _string.Replace(stringToProcess, replaceString);
             return _string;
-        }        
+        }
+
+        public static int size(this string _string)
+        {
+            return _string.Length;
+        }
+        public static string line(this string firstString, string secondString)
+        {
+            return firstString.line() + secondString;
+        }
+
+        public static string line(this string firstString)
+        {
+            return firstString + Environment.NewLine;
+        }
+
+        public static int toInt(this string _string)
+        {
+            Int32 value;
+            Int32.TryParse(_string, out value);
+            return value;
+        }   
     }
 }

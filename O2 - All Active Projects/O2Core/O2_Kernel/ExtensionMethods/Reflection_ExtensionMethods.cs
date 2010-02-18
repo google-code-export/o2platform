@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Windows.Forms;
 using O2.Interfaces.O2Core;
 
 namespace O2.Kernel.ExtensionMethods
@@ -9,7 +10,9 @@ namespace O2.Kernel.ExtensionMethods
     {
         public static IReflection reflection =  PublicDI.reflection;
 
-        public static bool verbose; // = false
+        public static bool verbose; // = false            	        	        
+
+        #region ctor
 
         public static object ctor(this string className, string assembly, params object[] parameters)
         {
@@ -27,10 +30,18 @@ namespace O2.Kernel.ExtensionMethods
             return PublicDI.reflection.createObject(type, constructorParams);
         }
         
+        #endregion
+
+        #region assembly
+
         public static Assembly assembly(this string assemblyName)
         {
             return PublicDI.reflection.getAssembly(assemblyName);
         }
+    
+        #endregion
+
+        #region type
 
         public static Type type(this Assembly assembly, string typeName)
         {
@@ -51,6 +62,16 @@ namespace O2.Kernel.ExtensionMethods
         {
             return _object.type().Name;
         }
+
+        public static string typeFullName(this object _object)
+        {
+            return _object.type().FullName;
+        }
+	
+
+        #endregion
+
+        #region properties
 
         public static List<PropertyInfo> properties(this Type type)
         {
@@ -87,6 +108,24 @@ namespace O2.Kernel.ExtensionMethods
             PublicDI.reflection.setProperty(propertyName, _liveObject, value);
         }
 
+        #endregion
+
+        #region methods
+        
+        public static List<MethodInfo> methods(this Type type)
+        {
+            return PublicDI.reflection.getMethods(type);
+        }
+
+        public static List<MethodInfo> methods(this Assembly assembly)
+        {
+            return PublicDI.reflection.getMethods(assembly);
+        }        		
+
+        #endregion
+
+        #region fields
+
         public static List<FieldInfo> fields(this Type type)
         {
             return PublicDI.reflection.getFields(type);
@@ -102,6 +141,16 @@ namespace O2.Kernel.ExtensionMethods
             return PublicDI.reflection.getField(type, fieldName);
         }
 
+        public static object fieldValue(this Type type, string fieldName)
+        {
+            var fieldInfo = (FieldInfo)type.field(fieldName);
+            return PublicDI.reflection.getFieldValue(fieldInfo, null);
+        }
+
+        #endregion
+
+        #region invoke 
+
         public static object invoke(this object liveObject, string methodName)
         {
             return liveObject.invoke(methodName, new object[] { });
@@ -109,8 +158,29 @@ namespace O2.Kernel.ExtensionMethods
 
         public static object invoke(this object liveObject, string methodName, params object[] parameters)
         {
-            return reflection.invoke(liveObject, methodName, parameters);                        
+            return reflection.invoke(liveObject, methodName, parameters);
         }
-                
+
+        public static object invokeStatic(this Type type, string methodName, params object[] parameters)
+        {
+            return PublicDI.reflection.invokeMethod_Static(type, methodName, parameters);
+        }
+        
+        public static void invoke(this object _object, MethodInvoker methodInvoker)
+        {
+            if (methodInvoker != null)
+                methodInvoker();
+        }
+
+        public static object invoke(this MethodInfo methodInfo)
+        {
+            return PublicDI.reflection.invoke(methodInfo);
+        }
+
+        public static object invoke(this MethodInfo methodInfo, params object[] parameters)
+        {
+            return PublicDI.reflection.invoke(methodInfo, parameters);
+        }
+        #endregion 
     }
 }

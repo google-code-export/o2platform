@@ -27,9 +27,9 @@ namespace O2.External.SharpDevelop.Ascx
     public partial class ascx_SourceCodeEditor
     {
         private bool runOnLoad = true;
-        public event Callbacks.dMethod_String eDocumentDataChanged;
-        public event Callbacks.dMethod_String_String eDocumentSelectionChanged_WordAndLine;
-        public event Callbacks.dMethod eEnterInSource_Event;
+        public event Action<string> eDocumentDataChanged;
+        public event Action<string,string> eDocumentSelectionChanged_WordAndLine;
+        public event MethodInvoker eEnterInSource_Event;
         //public delegate void documentDataChanged_EventHandler(String sDocumentText);
 
         // external compilers
@@ -48,6 +48,7 @@ namespace O2.External.SharpDevelop.Ascx
         public int endLine;
         public Assembly compiledAssembly;
         Thread autoCompileThread;
+        public bool allowCodeCompilation = true;
 
         public void onLoad()
         {
@@ -694,7 +695,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void compileSourceCode()
         {
-            if (getSourceCode() != "")
+            if (getSourceCode() != "" && allowCodeCompilation)
                 if (partialFileViewMode == false)
                     this.invokeOnThread(() =>
                             {
@@ -993,6 +994,14 @@ namespace O2.External.SharpDevelop.Ascx
         {
             setDocumentContents(documentContents, fileNameOrExtension, true);
         }
+        
+        public void setDocumentHighlightingStrategy(string fileNameOrExtension)
+        {            
+            this.invokeOnThread(
+                    () => tecSourceCode.Document.HighlightingStrategy =
+                                HighlightingStrategyFactory.CreateHighlightingStrategyForFile(fileNameOrExtension));
+
+        }
 
         public void setDocumentContents(string documentContents, string fileNameOrExtension, bool clearFileLocationValues)
         {
@@ -1013,40 +1022,58 @@ namespace O2.External.SharpDevelop.Ascx
                         }
                         catch (Exception ex)
                         {
-                            PublicDI.log.error("In setDocumentContents: ", ex.Message);
+                            PublicDI.log.error("In setDocumentContents: {0}", ex.Message);
                         }
                     });
         }
 
-        public void setSelectedText(int line, int column, bool color)
+        public void setSelectedText(int line, int column, bool showAsError)
         {
-            this.invokeOnThread(
-                () => setSelectedText2(line, column, color));
+            setSelectedText(line, column, showAsError, true);
         }
 
-        public void setSelectedText2(int line, int column, bool color)
+        public void setSelectedText(int line, int column, bool showAsError, bool showAsBookMark)
         {
-            line--; // since the first line is at 0
-            column--; // same for column
-            var text = tecSourceCode.ActiveTextAreaControl.TextArea.Text;
-            var location = new TextLocation(column, line);
-            var bookmark = new Bookmark(tecSourceCode.Document, location);
+            this.invokeOnThread(
+                () =>
+                    {
+                        line--; // since the first line is at 0
+                        column--; // same for column
+                        var text = tecSourceCode.ActiveTextAreaControl.TextArea.Text;
+                        var location = new TextLocation(column, line);
+                        var bookmark = new Bookmark(tecSourceCode.Document, location);
+                        if (showAsBookMark)
+                            tecSourceCode.Document.BookmarkManager.AddMark(bookmark);
 
-            tecSourceCode.Document.BookmarkManager.AddMark(bookmark);
-            var offset = bookmark.Anchor.Offset;
-            var length = bookmark.Anchor.Line.Length - column;
-            var newMarker = new TextMarker(offset, length, TextMarkerType.WaveLine);
-            tecSourceCode.Document.MarkerStrategy.AddMarker(newMarker);
+                        if (showAsError)
+                        {
+                            var offset = bookmark.Anchor.Offset;
+                            var length = bookmark.Anchor.Line.Length - column;
+                            var newMarker = new TextMarker(offset, length, TextMarkerType.WaveLine);
+                            tecSourceCode.Document.MarkerStrategy.AddMarker(newMarker);
+                        }
+                        refresh();                        
+                    });
             // tecSourceCode.ActiveTextAreaControl.Refresh();
+        }
+
+        public void refresh()
+        {
+            this.invokeOnThread(
+                () =>
+                    {
+                        tecSourceCode.Document.RequestUpdate(new TextAreaUpdate(TextAreaUpdateType.WholeTextArea));
+                        tecSourceCode.Document.CommitUpdate();
+                    });
         }
 
         public void clearBookmarksAndMarkers()
         {
-            tecSourceCode.Document.BookmarkManager.Clear();
-            // since there is easy way to remove markers, lets make the current ones invisible
+            tecSourceCode.Document.BookmarkManager.Clear();            
             var textMarkers = new List<TextMarker>(tecSourceCode.Document.MarkerStrategy.TextMarker);
             foreach (var textMarker in textMarkers)
                 tecSourceCode.Document.MarkerStrategy.RemoveMarker(textMarker);
+            refresh();
         }
 
         public void openO2ObjectModel()

@@ -7,9 +7,9 @@ using O2.DotNetWrappers.DotNet;
 using O2.Kernel;
 
 // this file uses code from: http://blogs.artinsoft.net/mrojas/archive/2008/09/18/newwindow2-events-in-the-c-webbrowsercontrol.aspx
-namespace O2.External.IE
-{        
-    //First define a new EventArgs class to contain the newly exposed data
+
+namespace O2.External.IE.Wrapper
+{
     public class NewWindow2EventArgs : CancelEventArgs
     {
 
@@ -87,8 +87,6 @@ namespace O2.External.IE
         }
     }
 
-
-    //Extend the WebBrowser control
     public class ExtendedWebBrowser : WebBrowser
     {
         AxHost.ConnectionPointCookie cookie;

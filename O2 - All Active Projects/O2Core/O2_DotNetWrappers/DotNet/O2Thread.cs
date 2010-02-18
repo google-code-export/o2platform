@@ -30,9 +30,15 @@ namespace O2.DotNetWrappers.DotNet
 
         public static Thread staThread(FuncVoid codeToExecute)
         {
+            return staThread(codeToExecute, ThreadPriority.Normal);
+        }
+
+        public static Thread staThread(FuncVoid codeToExecute, ThreadPriority threadPriority)            
+        {
             var stackTrace = getCurrentStackTrace();    // used for cross thread debugging purposes
             var staThread = new Thread(() => codeToExecute());
             staThread.SetApartmentState(ApartmentState.STA);
+            staThread.Priority = threadPriority;
             staThread.Start();            
             return staThread;
         }
@@ -51,7 +57,17 @@ namespace O2.DotNetWrappers.DotNet
             return mtaThread("[O2 Mta Thread]", codeToExecute);
         }
 
+        public static Thread mtaThread(FuncVoid codeToExecute, ThreadPriority threadPriority)
+        {
+            return mtaThread("[O2 Mta Thread]", codeToExecute, threadPriority);
+        }
+
         public static Thread mtaThread(string threadName, FuncVoid codeToExecute)
+        {
+            return mtaThread(threadName, codeToExecute, ThreadPriority.Normal);
+        }
+
+        public static Thread mtaThread(string threadName, FuncVoid codeToExecute, ThreadPriority threadPriority)
         {
             var stackTrace = getCurrentStackTrace();    // used for cross thread debugging purposes
             var mtaThread = new Thread(() =>
@@ -70,28 +86,28 @@ namespace O2.DotNetWrappers.DotNet
                                             Name = threadName
                                         };
             mtaThread.SetApartmentState(ApartmentState.MTA);
+            mtaThread.Priority = threadPriority;
             mtaThread.Start();
             return mtaThread;
         }
-        
+
         public static Thread mtaThread(Semaphore semaphore, FuncVoid codeToExecute)
         {
-            var stackTrace = getCurrentStackTrace();    // used for cross thread debugging purposes
+            var stackTrace = getCurrentStackTrace(); // used for cross thread debugging purposes
             if (semaphore == null)
                 return mtaThread(codeToExecute);
-                // if no use the mtaThread function with no semaphore support
-            else
-            {
-                var _mtaThread = new Thread(() =>
-                                                {
-                                                    semaphore.WaitOne();
-                                                    codeToExecute();
-                                                    semaphore.Release();
-                                                });
-                _mtaThread.SetApartmentState(ApartmentState.MTA);
-                _mtaThread.Start();
-                return _mtaThread;
-            }
+            // if no use the mtaThread function with no semaphore support
+
+            var _mtaThread = new Thread(() =>
+                                            {
+                                                semaphore.WaitOne();
+                                                codeToExecute();
+                                                semaphore.Release();
+                                            });
+            _mtaThread.SetApartmentState(ApartmentState.MTA);
+            _mtaThread.Start();
+            return _mtaThread;
+
         }
 
         public static string getCurrentStackTrace()

@@ -19,6 +19,7 @@ namespace O2.External.SharpDevelop.AST
         public TreeView properties_TreeView;
         public TreeView comments_TreeView;
         public TextBox errors_TextBox;
+        public bool enabled = true;
 
         public Ast_CSharp_ShowDetailsInViewer(TextEditorControl _textEditorControl, TabControl _tabControl)
         {
@@ -67,16 +68,19 @@ namespace O2.External.SharpDevelop.AST
         }
 
         public void update(string sourceCode)
-        {           
-            var ast = new Ast_CSharp(sourceCode);
-            ast_TreeView.show_Ast(ast);
-            types_TreeView.show_List(ast.AstDetails.Types, "Text");
-            usingDeclarations_TreeView.show_List(ast.AstDetails.UsingDeclarations, "Text");
-            methods_TreeView.show_List(ast.AstDetails.Methods, "Text");
-            fields_TreeView.show_List(ast.AstDetails.Fields, "Text");
-            properties_TreeView.show_List(ast.AstDetails.Properties, "Text");
-            comments_TreeView.show_List(ast.AstDetails.Comments, "Text");
-            errors_TextBox.set_Text(ast.Errors);
+        {
+            if (enabled)
+            {
+                var ast = new Ast_CSharp(sourceCode);
+                ast_TreeView.show_Ast(ast);
+                types_TreeView.show_List(ast.AstDetails.Types, "Text");
+                usingDeclarations_TreeView.show_List(ast.AstDetails.UsingDeclarations, "Text");
+                methods_TreeView.show_List(ast.AstDetails.Methods, "Text");
+                fields_TreeView.show_List(ast.AstDetails.Fields, "Text");
+                properties_TreeView.show_List(ast.AstDetails.Properties, "Text");
+                comments_TreeView.show_List(ast.AstDetails.Comments, "Text");
+                errors_TextBox.set_Text(ast.Errors);
+            }
         }
 
         private void showInSourceCode(object sender, TreeViewEventArgs e)

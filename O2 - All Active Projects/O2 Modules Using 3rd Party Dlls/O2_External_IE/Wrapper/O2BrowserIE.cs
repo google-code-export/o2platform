@@ -8,19 +8,17 @@ using O2.Kernel;
 //O2Ref:C:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll
 using O2.External.IE;
 
-namespace O2.External.IE
+namespace O2.External.IE.Wrapper
 {
-    
-
     public class O2BrowserIE : ExtendedWebBrowser, IO2Browser
-    //public class O2BrowserIE : WebBrowser, IO2Browser
+        //public class O2BrowserIE : WebBrowser, IO2Browser
     {
         public event Action<IO2HtmlPage> onDocumentCompleted;
 
         public O2BrowserIE()
         {
-          //  Navigated += O2BrowserIE_Navigated;
-          //  Navigating += O2BrowserIE_Navigating;
+            //  Navigated += O2BrowserIE_Navigated;
+            //  Navigating += O2BrowserIE_Navigating;
 
             //this.Navigated += O2BrowserIE_Navigated;
 
