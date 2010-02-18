@@ -26,5 +26,23 @@
         {
             PublicDI.log.info(messageFormat.format(parameters));
         }
+
+        public static void info(this bool enabled, string infoFormat, params object[] parameters)
+        {
+            if (enabled)
+                PublicDI.log.info(infoFormat, parameters);
+        }
+
+        public static void debug(this bool enabled, string debugFormat, params object[] parameters)
+        {
+            if (enabled)
+                PublicDI.log.debug(debugFormat, parameters);
+        }
+
+        public static void error(this bool enabled, string errorFormat, params object[] parameters)
+        {
+            if (enabled)
+                PublicDI.log.error(errorFormat, parameters);
+        }
     }
 }

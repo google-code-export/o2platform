@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor.Document;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
 using O2.Kernel.CodeUtils;
 
@@ -408,7 +409,24 @@ namespace O2.External.SharpDevelop.Ascx
             listinLogViewCurrentAssemblyReferencesAutomaticallyAdded();
         }
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [Browsable(true)]
+        [Bindable(true)]
+        public bool _ShowSearchAndAstDetails
+        {
+            set
+            {
+                showAstDetails.enabled = value;
+                this.invokeOnThread(() => scCodeAndAst.Panel2Collapsed = ! value);
+            }
 
+            get
+            {
+                return scCodeAndAst.Panel2Collapsed;
+            }
+        }
+            
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [EditorBrowsable(EditorBrowsableState.Always)]
@@ -421,15 +439,20 @@ namespace O2.External.SharpDevelop.Ascx
                 toolStripWithSourceCodeActions.Visible = value;
                 if (toolStripWithSourceCodeActions.Visible)
                 {
-                    tecSourceCode.Dock = DockStyle.None;
-                    tecSourceCode.Top = 28;
-                    tecSourceCode.Left = 0;
-                    tecSourceCode.Height = Height - tecSourceCode.Top * 2;
-                    tecSourceCode.Width = Width - tecSourceCode.Left; 
-                    
+                    scCodeAndAst.Top = 30;
+                    scCodeAndAst.Height = Height - scCodeAndAst.Top;
+                    //tecSourceCode.Dock = DockStyle.None;
+                    //tecSourceCode.Top = 30;
+                    //tecSourceCode.Left = 0;
+                    //tecSourceCode.Height = scCodeAndAst.Panel1.Height - tecSourceCode.Top;
+                    //tecSourceCode.Width = scCodeAndAst.Panel1.Width - tecSourceCode.Left;
                 }
                 else
-                    tecSourceCode.Dock = DockStyle.Fill;
+                {
+                    scCodeAndAst.Top = 0;
+                    scCodeAndAst.Height = Height;
+                    //tecSourceCode.Dock = DockStyle.Fill;
+                }
             }
 
             get
@@ -441,6 +464,16 @@ namespace O2.External.SharpDevelop.Ascx
         private void lbFileLoaded_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(sPathToFileLoaded);
+        }
+
+        private void toolStripSeparator6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btSeachAndViewAst_Click(object sender, EventArgs e)
+        {
+            scCodeAndAst.Panel2Collapsed = !scCodeAndAst.Panel2Collapsed;
         }
 
 

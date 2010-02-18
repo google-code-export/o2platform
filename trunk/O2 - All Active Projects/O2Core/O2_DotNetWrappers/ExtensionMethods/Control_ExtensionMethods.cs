@@ -44,6 +44,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return control;
         }
 
+        public static void enabled(this Control control, bool state)
+        {
+            control.invokeOnThread(() => control.invoke("set_Enabled", state));
+        }
+
+
+        public static void visible(this Control control, bool state)
+        {
+            control.invokeOnThread(() => control.invoke("set_Visible", state));
+        }
         public static Control mapToWidth(this Control hostControl, Control control, bool alignToTop)
         {
             if (alignToTop)

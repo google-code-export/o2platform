@@ -86,6 +86,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.btDragAssemblyCreated = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btSeachAndViewAst = new System.Windows.Forms.ToolStripButton();
             this.btSelectedLineHistory = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btShowLogs = new System.Windows.Forms.ToolStripButton();
@@ -106,16 +107,16 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode = new ICSharpCode.TextEditor.TextEditorControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tcSourceInfo = new System.Windows.Forms.TabControl();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.scCodeAndAst = new System.Windows.Forms.SplitContainer();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tcSourceInfo.SuspendLayout();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            this.scCodeAndAst.Panel1.SuspendLayout();
+            this.scCodeAndAst.Panel2.SuspendLayout();
+            this.scCodeAndAst.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStripForSourceEdition
@@ -457,6 +458,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.toolStripSeparator6,
             this.btDragAssemblyCreated,
             this.toolStripSeparator2,
+            this.btSeachAndViewAst,
             this.btSelectedLineHistory,
             this.toolStripSeparator4,
             this.btShowLogs,
@@ -644,6 +646,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator6.Click += new System.EventHandler(this.toolStripSeparator6_Click);
             // 
             // btDragAssemblyCreated
             // 
@@ -660,6 +663,16 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btSeachAndViewAst
+            // 
+            this.btSeachAndViewAst.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btSeachAndViewAst.Image = ((System.Drawing.Image)(resources.GetObject("btSeachAndViewAst.Image")));
+            this.btSeachAndViewAst.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btSeachAndViewAst.Name = "btSeachAndViewAst";
+            this.btSeachAndViewAst.Size = new System.Drawing.Size(23, 22);
+            this.btSeachAndViewAst.Text = "toolStripButton1";
+            this.btSeachAndViewAst.Click += new System.EventHandler(this.btSeachAndViewAst_Click);
             // 
             // btSelectedLineHistory
             // 
@@ -889,30 +902,30 @@ namespace O2.External.SharpDevelop.Ascx
             this.tcSourceInfo.Size = new System.Drawing.Size(960, 111);
             this.tcSourceInfo.TabIndex = 52;
             // 
-            // splitContainer1
+            // scCodeAndAst
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.scCodeAndAst.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 30);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.scCodeAndAst.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.scCodeAndAst.Location = new System.Drawing.Point(3, 30);
+            this.scCodeAndAst.Name = "scCodeAndAst";
+            this.scCodeAndAst.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer1.Panel1
+            // scCodeAndAst.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.groupBoxWithFileAndSaveSettings);
-            this.splitContainer1.Panel1.Controls.Add(this.tvCompilationErrors);
-            this.splitContainer1.Panel1.Controls.Add(this.tbExecutionHistoryOrLog);
-            this.splitContainer1.Panel1.Controls.Add(this.tecSourceCode);
-            this.splitContainer1.Panel1.Controls.Add(this.lbPartialFileView);
+            this.scCodeAndAst.Panel1.Controls.Add(this.groupBoxWithFileAndSaveSettings);
+            this.scCodeAndAst.Panel1.Controls.Add(this.tvCompilationErrors);
+            this.scCodeAndAst.Panel1.Controls.Add(this.tbExecutionHistoryOrLog);
+            this.scCodeAndAst.Panel1.Controls.Add(this.tecSourceCode);
+            this.scCodeAndAst.Panel1.Controls.Add(this.lbPartialFileView);
             // 
-            // splitContainer1.Panel2
+            // scCodeAndAst.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.tcSourceInfo);
-            this.splitContainer1.Size = new System.Drawing.Size(960, 406);
-            this.splitContainer1.SplitterDistance = 291;
-            this.splitContainer1.TabIndex = 53;
+            this.scCodeAndAst.Panel2.Controls.Add(this.tcSourceInfo);
+            this.scCodeAndAst.Size = new System.Drawing.Size(960, 406);
+            this.scCodeAndAst.SplitterDistance = 291;
+            this.scCodeAndAst.TabIndex = 53;
             // 
             // ascx_SourceCodeEditor
             // 
@@ -920,7 +933,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.scCodeAndAst);
             this.Controls.Add(this.toolStripWithSourceCodeActions);
             this.ForeColor = System.Drawing.Color.Black;
             this.Name = "ascx_SourceCodeEditor";
@@ -938,10 +951,10 @@ namespace O2.External.SharpDevelop.Ascx
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tcSourceInfo.ResumeLayout(false);
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel1.PerformLayout();
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.ResumeLayout(false);
+            this.scCodeAndAst.Panel1.ResumeLayout(false);
+            this.scCodeAndAst.Panel1.PerformLayout();
+            this.scCodeAndAst.Panel2.ResumeLayout(false);
+            this.scCodeAndAst.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1024,6 +1037,7 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripMenuItem listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabControl tcSourceInfo;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer scCodeAndAst;
+        private System.Windows.Forms.ToolStripButton btSeachAndViewAst;
     }
 }

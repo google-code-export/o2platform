@@ -250,6 +250,27 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region SplitContainer_nxn
 
+        public static List<Control> add_1x1(this Control control, string title1, string title2)
+        {
+            return control.add_1x1(title1, title2, true, 100);
+        }
+
+        public static List<Control> add_1x1(this Control control, string title1, string title2, bool align, int distance1)
+        {
+            return control.add_SplitContainer_1x1(title1, title2, align, distance1);
+        }
+
+        public static List<Control> add_1x2(this Control control, string title1, string title2, string title3)
+        {
+            return control.add_1x2(title1, title2, title3, true, 100, 100);
+        }
+
+        public static List<Control> add_1x2(this Control control, string title1, string title2, string title3, bool align, int distance1, int distance2)
+        {
+            return control.add_SplitContainer_1x2(title1, title2, title3, align, distance1, distance2);
+        }
+
+
         public static List<Control> add_SplitContainer_1x1(this Control control, string title_1, string title_2,
                                                            bool verticalSplit, int spliterDistance)
         {
@@ -433,14 +454,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                      });
         }
 
-        public static void select(this TextBox textBox, int start, int length)
+        public static TextBox select(this TextBox textBox, int start, int length)
         {
             textBox.invokeOnThread(() => textBox.Select(start, length));
+            return textBox;
         }
 
-        public static void set_Text(this TextBox textBox, string text)
+        public static TextBox set_Text(this TextBox textBox, string text)
         {
             textBox.invokeOnThread(() => textBox.Text = text);
+            return textBox;
         }
 
         public static void append_Line(this TextBox textBox, string textFormat, params object[] parameters)
@@ -640,25 +663,46 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                          });
         }
 
-        public static void set_Text(this RichTextBox richTextBox, string contents)
+        public static RichTextBox set_Text(this RichTextBox richTextBox, string contents)
         {
-            richTextBox.invokeOnThread(() => richTextBox.Text = contents);
+            return (RichTextBox)richTextBox.invokeOnThread(
+                () =>
+                    {
+                        richTextBox.Text = contents;
+                        return richTextBox;
+                    });
+            
         }
 
-        public static void append_Line(this RichTextBox richTextBox, string contents)
+        public static RichTextBox append_Line(this RichTextBox richTextBox, string contents)
         {
-            richTextBox.invokeOnThread(() => richTextBox.append_Text(Environment.NewLine + contents));
+            return (RichTextBox) richTextBox.invokeOnThread(
+                () =>
+                    {
+                        richTextBox.append_Text(Environment.NewLine + contents);
+                       return richTextBox;
+                    });
+            
         }
 
-        public static void append_Text(this RichTextBox richTextBox, string contents)
+        public static RichTextBox append_Text(this RichTextBox richTextBox, string contents)
         {
-            richTextBox.invokeOnThread(() => richTextBox.AppendText(contents));
+            return (RichTextBox)richTextBox.invokeOnThread(
+                () =>
+                    {
+                        richTextBox.AppendText(contents);
+                        return richTextBox;
+                    });            
         }
 
         public static RichTextBox textColor(this RichTextBox richTextBox, Color color)
         {
-            richTextBox.ForeColor = color;
-            return richTextBox;
+            return (RichTextBox) richTextBox.invokeOnThread(
+                                     () =>
+                                         {
+                                             richTextBox.ForeColor = color;
+                                             return richTextBox;
+                                         });
         }
 
         #endregion

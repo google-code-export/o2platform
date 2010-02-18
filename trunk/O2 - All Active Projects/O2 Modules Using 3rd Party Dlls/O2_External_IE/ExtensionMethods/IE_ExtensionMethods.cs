@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.IE.Interfaces;
 using O2.External.IE.WebObjects;
+using O2.External.IE.Wrapper;
 using O2.Kernel.ExtensionMethods;
 
 namespace O2.External.IE.ExtensionMethods
