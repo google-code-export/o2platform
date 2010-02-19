@@ -67,6 +67,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\HTMLparserLibDotNet20.dll</HintPath>
     </Reference>
+    <Reference Include="Jayrock.Json, Version=0.9.11214.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Jayrock.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Merlin, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\Merlin.dll</HintPath>
@@ -256,6 +260,9 @@
     <None Include="_Rules\Web Utils\ascx_View_WebPage_Details.cs.o2">
       <SubType>UserControl</SubType>
     </None>
+    <Compile Include="_Rules\Web Utils\ascx_Translate_Text.cs.o2">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="_Rules\Windows Utils\ascx_Processes_Stop.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
