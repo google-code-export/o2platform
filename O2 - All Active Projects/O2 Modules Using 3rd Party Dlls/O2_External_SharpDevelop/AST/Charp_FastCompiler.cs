@@ -134,7 +134,9 @@ namespace O2.External.SharpDevelop.AST
        			var sourceCode = compileStack.Pop();
        			compileStack.Clear();						// remove all previous compile requests (since their source code is now out of date
             	O2Thread.mtaThread(
-	                ()=>{	    
+	                ()=>{	  
+	                		//Files.setCurrentDirectoryToExecutableDirectory();                			                		
+	                		Environment.CurrentDirectory = O2.Kernel.PublicDI.config.CurrentExecutableDirectory;;
 	                		this.invoke(beforeCompile);
 	                		DebugMode.info("Compiling Source Code (Size: {0})", sourceCode.size());            
 	                		SourceCode = sourceCode;   
@@ -186,26 +188,32 @@ namespace O2.External.SharpDevelop.AST
             {
             	var snippetParser = new SnippetParser(SupportedLanguage.CSharp);
                 var parsedCode = snippetParser.Parse(code);                
-				AstErrors = snippetParser.errors();			
-				if (parsedCode is BlockStatement)
-				{
-					// map parsedCode into a new type and method 
-					CompilationUnit = new CompilationUnit();            					
-	                var blockStatement = (BlockStatement)parsedCode; 
-					CompilationUnit.add_Type(default_TypeName)								
-								   .add_Method(default_MethodName, InvocationParameters, blockStatement);
-								   
-					// create sourceCode using Ast_CSharp & AstDetails		
-	                var astCSharp = new Ast_CSharp(CompilationUnit);
-	                astCSharp.AstDetails.mapSpecials(snippetParser.Specials); // // keep this so that we can process the instructions included as comments  	                        
-	                
-	                // add references included in the original source code file
-	                mapCodeO2References(astCSharp);
-	                SourceCode = astCSharp.AstDetails.CSharpCode;
-	                DebugMode.debug("Ast parsing was OK");
-	                this.invoke(onAstOK);                
-	                return SourceCode;  
-				} 
+				AstErrors = snippetParser.errors();
+                CompilationUnit = new CompilationUnit();
+                if (parsedCode is BlockStatement || parsedCode is CompilationUnit)
+                {
+                    if (parsedCode is BlockStatement)
+                    {
+                        // map parsedCode into a new type and method 
+
+                        var blockStatement = (BlockStatement) parsedCode;
+                        CompilationUnit.add_Type(default_TypeName)
+                            .add_Method(default_MethodName, InvocationParameters, blockStatement);
+                    }
+                    else
+                        CompilationUnit = (CompilationUnit) parsedCode;
+                    // create sourceCode using Ast_CSharp & AstDetails		
+                    var astCSharp = new Ast_CSharp(CompilationUnit);
+                    astCSharp.AstDetails.mapSpecials(snippetParser.Specials);
+                    // // keep this so that we can process the instructions included as comments  	                        
+
+                    // add references included in the original source code file
+                    mapCodeO2References(astCSharp);
+                    SourceCode = astCSharp.AstDetails.CSharpCode;
+                    DebugMode.debug("Ast parsing was OK");
+                    this.invoke(onAstOK);
+                    return SourceCode;
+                }            
             }
             catch (Exception ex)
             {                            	
@@ -221,13 +229,20 @@ namespace O2.External.SharpDevelop.AST
         	ReferencedAssemblies = getDefaultReferencedAssemblies();
         	var compilationUnit = astCSharp.CompilationUnit;
         	
-        	foreach(var usingStatement in getDefaultUsingStatements())
-        		compilationUnit.add_Using(usingStatement);
+        	var currentUsingDeclarations = new List<string>();
+        	foreach(var usingDeclaration in astCSharp.AstDetails.UsingDeclarations)
+        		currentUsingDeclarations.Add(usingDeclaration.Text);
+        	
+        	var defaultUsingStatements = getDefaultUsingStatements();
+        	foreach(var usingStatement in defaultUsingStatements)
+        		if (false == currentUsingDeclarations.Contains(usingStatement))
+        			compilationUnit.add_Using(usingStatement);
         	
         	foreach(var comment in astCSharp.AstDetails.Comments)
         	{
         		comment.Text.starts("using ", (value) => astCSharp.CompilationUnit.add_Using(value));
-        		comment.Text.starts("ref ", (value) => ReferencedAssemblies.Add(value));        			        		
+        		comment.Text.starts("ref ", (value) => ReferencedAssemblies.Add(value));
+        		comment.Text.starts("O2Ref:", (value) => ReferencedAssemblies.Add(value));
         	}
         		        	
 			// reset the astCSharp.AstDetails object        	
@@ -248,19 +263,17 @@ namespace O2.External.SharpDevelop.AST
         	{
         		var methods = assembly.methods();
         		if (methods.Count >0)        		
-        			return methods[0].invoke(parameters);
-        			
+        		{
+        			this.error("XXXXX");
+        			this.error(" - method: {0}", methods[0].parameters().size());
+        			this.error(" - param: {0}", parameters.size());
+        			if (methods[0].parameters().size() == parameters.size())
+        				return methods[0].invoke(parameters);
+        			else
+        				return methods[0].invoke();
+        		}
         	}
         	return null;
         }                
-    }
-    
-    // already added to Reflection_ExtensionMethods
-    public static class extra
-    {
-    	public static object invoke(this MethodInfo methodInfo, params object[] parameters)
-        {
-            return O2.Kernel.PublicDI.reflection.invoke(methodInfo, parameters);
-        }
     }
 }

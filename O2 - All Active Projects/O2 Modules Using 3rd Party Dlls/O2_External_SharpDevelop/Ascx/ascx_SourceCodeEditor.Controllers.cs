@@ -21,6 +21,7 @@ using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
 using System.Threading;
 using O2.DotNetWrappers.ViewObjects;
+using O2.DotNetWrappers.H2Scripts;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -102,6 +103,12 @@ namespace O2.External.SharpDevelop.Ascx
 
         void TextArea_DragDrop(object sender, DragEventArgs e)
         {
+            var fileOrFolder = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
+            if (fileOrFolder.fileExists())
+            {
+                loadSourceCodeFile(fileOrFolder);
+                return;
+            }
             var data = Dnd.tryToGetObjectFromDroppedObject(e);
             if (data != null)
             {
@@ -198,8 +205,16 @@ namespace O2.External.SharpDevelop.Ascx
                             }
                             else
                             {
-                                tecTargetTextEditor.LoadFile(fileToLoad);
-                                if (Path.GetExtension(fileToLoad).ToLower() == ".o2")
+                                if (fileToLoad.extension(".h2"))
+                                {
+                                    setDocumentContents(H2.load(fileToLoad).SourceCode); 
+                                    setDocumentHighlightingStrategy("aa.cs");
+                                }
+                                else
+                                {
+                                    tecTargetTextEditor.LoadFile(fileToLoad);
+                                }
+                                if (fileToLoad.extension(".o2"))
                                 {
                                     var realFileTypeToload = Path.GetFileNameWithoutExtension(fileToLoad);
                                     tecSourceCode.Document.HighlightingStrategy =

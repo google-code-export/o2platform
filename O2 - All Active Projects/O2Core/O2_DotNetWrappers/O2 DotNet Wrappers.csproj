@@ -54,6 +54,7 @@
     <Compile Include="DotNet\CompileEngine.cs" />
     <Compile Include="DotNet\DevUtils.cs" />
     <Compile Include="DotNet\DnD.cs" />
+    <Compile Include="ExtensionMethods\H2_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Threads_ExtensionMethods.cs" />
     <Compile Include="DotNet\GacUtils.cs" />
     <Compile Include="DotNet\Loop.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="ExtensionMethods\Serialize_ExtensionMethods.cs" />
     <Compile Include="Filters\FilteredSignature.cs" />
     <Compile Include="Filters\FilteredUrl.cs" />
+    <Compile Include="H2Scripts\H2.cs" />
     <Compile Include="NetSDK\IL.cs" />
     <Compile Include="Network\Mail.cs" />
     <Compile Include="Network\Ping.cs" />

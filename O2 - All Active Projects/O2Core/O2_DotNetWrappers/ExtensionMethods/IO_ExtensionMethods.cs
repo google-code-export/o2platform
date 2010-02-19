@@ -17,12 +17,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string extension(this string file)
         {
-            return Path.GetExtension(file);
+            return Path.GetExtension(file).ToLower();
         }
 
         public static bool extension(this string file, string extension)
         {
-            return Path.GetExtension(file) == extension;
+            return file.extension() == extension;
         }
 
         public static bool exists(this string file)

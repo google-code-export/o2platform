@@ -182,5 +182,14 @@ namespace O2.Kernel.ExtensionMethods
             return PublicDI.reflection.invoke(methodInfo, parameters);
         }
         #endregion 
+
+        #region parameters
+
+        public static List<ParameterInfo> parameters(this MethodInfo methodInfo)
+        {
+            return PublicDI.reflection.getParameters(methodInfo);
+        }
+
+        #endregion
     }
 }
