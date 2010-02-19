@@ -1,4 +1,8 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+//ref O2_External_IE.dll
+//ref O2_External_SharpDevelop.dll
+//ref O2SharpDevelop.dll
+//ref System.Drawing.dll
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -28,7 +32,6 @@ using O2.External.SharpDevelop.ExtensionMethods;
 //O2Ref:C:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll
 using mshtml;
 
-//O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Windows\Screenshots.cs
 
 using System.Threading;
 
