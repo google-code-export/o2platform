@@ -34,7 +34,7 @@
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>19</ApplicationRevision>
+    <ApplicationRevision>21</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -95,6 +95,10 @@
     <Reference Include="O2_DotNetWrappers, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\O2_Binaries\O2_DotNetWrappers.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_External_IE, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\O2_Binaries\O2_External_IE.dll</HintPath>
     </Reference>
     <Reference Include="O2_External_O2Mono, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\O2_Binaries\O2_External_O2Mono.dll</HintPath>
@@ -238,6 +242,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
+    <Compile Include="_Rules\O2 Utils\ascx_Execute_H2_Script.cs.o2">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Line_v2.1.cs.o2">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="_Rules\O2 Utils\ascx_SvnBrower.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
@@ -259,10 +269,16 @@
     <Content Include="O2Logo.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FileAssociation Include=".h2">
+      <Visible>False</Visible>
+      <Description>O2 H2 Script</Description>
+      <Progid>O2.XRule.Script.h2</Progid>
+      <DefaultIcon>O2Logo.ico</DefaultIcon>
+    </FileAssociation>
     <FileAssociation Include=".o2">
       <Visible>False</Visible>
       <Description>O2 XRule Script</Description>
-      <Progid>O2.XRule.Script.ProgId</Progid>
+      <Progid>O2.XRule.Script.o2</Progid>
       <DefaultIcon>O2Logo.ico</DefaultIcon>
     </FileAssociation>
   </ItemGroup>

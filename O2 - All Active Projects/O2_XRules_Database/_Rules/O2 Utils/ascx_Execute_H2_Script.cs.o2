@@ -1,0 +1,134 @@
+// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using System;
+using System.Drawing;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Windows.Forms;
+using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
+using O2.Interfaces.O2Core;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX;
+using O2.External.SharpDevelop.AST;
+using O2.DotNetWrappers.H2Scripts;
+using O2.DotNetWrappers.Network;
+//O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\AST\Charp_FastCompiler.cs
+
+namespace O2.XRules.Database
+{ 
+    public class ascx_Execute_H2_Script: UserControl
+    {   
+    	string pathToPictureBox = @"C:\O2\_localDevStuff\o2UsedIcons\O2Logo_Small.gif";        	
+    	public string currentScript = "";
+    	public Label statusLabel;
+    	public RichTextBox results_RichTextBox;
+
+        public static void startControl()
+    	{   
+    		typeof(ascx_Execute_H2_Script).showAsForm("Execute H2 Script", 400, 400);		    		
+    	}    	
+    	
+    	public ascx_Execute_H2_Script()
+    	{    
+		    pathToPictureBox = Web.checkIfFileExistsAndDownloadIfNot("_O2_Logo.", @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
+    		buildGui();
+            var scriptToExecute = ClickOnceDeployment.getClickOnceScriptPath();
+            if (scriptToExecute.fileExists())
+                loadH2Script(scriptToExecute);
+        }
+    
+        private void buildGui()
+        {
+            this.BackColor = Color.White;
+        	var pictureBox = this.add_PictureBox();     		
+        	pictureBox.load(pathToPictureBox)
+        		      .location(20,20)
+        		      .align_Bottom(this, 400)
+        		      .align_Right(this,20);		        	
+        	
+        	statusLabel = (Label)this.add_Label("Drop *.h2 script on the big logo to execute it")
+        						  .anchor()        						 
+        						  //.align_Left(this,40)
+        						  .align_Bottom(this, 0);
+// already in add_Label        						  
+			statusLabel.AutoSize = true;
+			statusLabel.Left -= 70;
+			statusLabel.Top += 30;
+			statusLabel.Font = new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Bold);
+        	
+        	results_RichTextBox = this.add_RichTextBox();
+        	results_RichTextBox.location(50,10)
+        					   .anchor()  
+        					   .align_Left(this,20)
+        					   .align_Bottom(this, 10)
+        					   .align_Right(this,20);
+        					   
+        	        	
+        	//this.add_Link("reload",10,2,()=>loadH2Script());
+        	
+        	pictureBox.onDrop((file)=>loadH2Script(file));
+        	
+        	results_RichTextBox.enabled(false);
+        	//loadH2Script();
+        	currentScript = @"C:\O2\_XRules_Local\H2Scripts\open Web Browser.h2";
+     	}   
+     	
+     	public void loadH2Script()
+     	{     	
+     		loadH2Script(currentScript);
+     	}
+     	
+     	public void loadH2Script(string scriptToLoad)
+     	{
+     		results_RichTextBox.enabled(false);
+     		currentScript = scriptToLoad;
+     		statusLabel.set_Text("loading script: {0}".format( scriptToLoad.fileName()));
+     		
+     		var csharpCompiler = new CSharp_FastCompiler();     
+			     		 		
+	    	csharpCompiler.onAstFail = 
+     			()=>{     					
+     					statusLabel.set_Text("Ast creation failed").textColor(Color.Red);
+     					results_RichTextBox.set_Text(csharpCompiler.AstErrors).textColor(Color.Red);
+     					results_RichTextBox.enabled(true);
+	     			};
+	     			 
+	     	csharpCompiler.onAstOK = 
+	     		()=>{		     				
+	     				statusLabel.set_Text("Ast creation Ok").textColor(Color.Green);
+     		 		};     		      		 
+     		 		
+     		 csharpCompiler.onCompileFail = 
+     		 	()=>{   
+     		 			statusLabel.set_Text("Compilation failed").textColor(Color.Red);
+     		 			results_RichTextBox.set_Text(csharpCompiler.CompilationErrors).textColor(Color.Red);
+     		 			results_RichTextBox.enabled(true);
+     		 		};
+     		 		
+     		 csharpCompiler.onCompileOK =
+     		 	()=>{
+     					statusLabel.set_Text("Compilation Ok: Executing 1st method").textColor(Color.Green);
+     					var result = (csharpCompiler.executeFirstMethod() ?? "").ToString();
+     					statusLabel.set_Text("Execution Completed").textColor(Color.Green);     					
+     					results_RichTextBox.textColor(Color.Black)
+     								  	   .set_Text(result.ToString());	
+						results_RichTextBox.enabled(result.valid());
+					};
+			//this.info("file: {0}", scriptToLoad);
+			var sourceCode = "";			
+			if (scriptToLoad.extension(".h2"))
+				sourceCode = H2.load(scriptToLoad).SourceCode;
+			if (scriptToLoad.extension(".o2") || scriptToLoad.extension(".cs"))
+				sourceCode = scriptToLoad.contents();			
+			if (sourceCode.valid())
+				csharpCompiler.compileSnippet(sourceCode);
+			else
+				statusLabel.set_Text("Non supported file").textColor(Color.Red);					
+     	}     	    	    	    	    	    
+    }
+}

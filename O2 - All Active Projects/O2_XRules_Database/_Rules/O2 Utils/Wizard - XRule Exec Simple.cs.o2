@@ -10,17 +10,12 @@ using O2.Kernel;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.MerlinWizard;
-// extra references and the namespaces they import
 //O2Tag_AddReferenceFile:nunit.framework.dll
 //O2Tag_AddReferenceFile:merlin.dll
 using Merlin;
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 using O2.DotNetWrappers.Network;
 using O2.External.SharpDevelop.Ascx;
-
-//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\MerlinWizard_ExtensionMethods.cs
-
-//O2File:C:\O2\_XRules_Local\MiscTestss\extra.cs
 
 namespace O2.XRules.Database
 {

@@ -16,18 +16,10 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX;
-//O2File:extra.cs
-namespace O2.Script
-{		
-	[Serializable]
-	public class ProcessDetail
-	{
-		public string Name 		{ get; set; }
-		public string Path 		{ get; set; }
-		public string Argument 	{ get; set; }
-	}
-	
 
+namespace O2.Script
+{			
+	
     public class ascx_Start_Tools: UserControl
     {        	
     	public static List<ProcessDetail> processDetails;
@@ -114,4 +106,12 @@ namespace O2.Script
 			}
 		}			
     }
+    
+    [Serializable]
+	public class ProcessDetail
+	{
+		public string Name 		{ get; set; }
+		public string Path 		{ get; set; }
+		public string Argument 	{ get; set; }
+	}
 }

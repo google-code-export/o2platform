@@ -16,9 +16,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.classes;
-
 //O2Ref:System.ServiceProcess.dll
-//using System.ServiceProcess;
 
 namespace O2.Script
 {
@@ -192,25 +190,6 @@ namespace O2.Script
         Stopped = 1,
         StopPending = 3
 
-    }
-    
-    public static class extra
-    {
-    	public static object fieldValue(this Type type, string fieldName)
-    	{
-    		var fieldInfo = (FieldInfo)type.field("Stopped");
-            return PublicDI.reflection.getFieldValue(fieldInfo,null);
-    	}    	
-    
-    	public static List<MethodInfo> methods(this Type type)
-    	{
-    		return PublicDI.reflection.getMethods(type);
-    	}
-
-        public static object invokeStatic(this Type type, string methodName, params object[] parameters)
-        {
-            return PublicDI.reflection.invokeMethod_Static(type, methodName, parameters);
-        }
     }
 }
 
