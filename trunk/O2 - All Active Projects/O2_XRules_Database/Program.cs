@@ -9,6 +9,7 @@ using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.ImportExport.OunceLabs;
 using O2.Kernel.CodeUtils;
+using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.O2Findings;
 using O2.Core.CIR.Ascx;
 using System;
@@ -24,7 +25,8 @@ namespace O2.XRules.Database
         [STAThread]
         static void Main()
         {
-            new Wizard_XRule_Exec_Simple().startWizard();
+            typeof(ascx_Execute_H2_Script).showAsForm("O2 Script Execution", 400,400);
+            //new Wizard_XRule_Exec_Simple().startWizard();
         }                
     }
 }

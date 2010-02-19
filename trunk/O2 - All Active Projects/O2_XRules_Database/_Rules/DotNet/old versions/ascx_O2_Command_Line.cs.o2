@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Windows.Forms;
 //O2Ref:O2_Kernel.dll
 using O2.Kernel;
+//O2Ref:O2_Interfaces.dll
 using O2.Interfaces.O2Core;
 //O2Ref:O2_External_WinformsUI.dll
 using O2.External.WinFormsUI.Forms;

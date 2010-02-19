@@ -1,0 +1,192 @@
+// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+//_O2Tag_OnlyAddReferencedAssemblies
+//O2Ref:System.dll
+using System;
+using System.Reflection;
+using System.Text;
+using System.Collections.Generic;
+//O2Ref:System.Core.dll
+using System.Linq;
+//O2Ref:System.Drawing.dll
+using System.Drawing;
+//O2Ref:System.Windows.Forms.dll
+using System.Windows.Forms;
+//O2Ref:O2_Kernel.dll
+using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
+//O2Ref:O2_Interfaces.dll
+using O2.Interfaces.O2Core;
+//O2Ref:O2_External_WinformsUI.dll
+using O2.External.WinFormsUI.Forms;
+//O2Ref:O2_DotNetWrappers.dll
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.ExtensionMethods;
+//O2Ref:O2_Views_ASCX.dll
+using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX;
+//O2Ref:O2_External_SharpDevelop.dll
+using O2.External.SharpDevelop.Ascx;
+using O2.External.SharpDevelop.AST;
+using O2.External.SharpDevelop.ExtensionMethods;
+//O2Ref:O2SharpDevelop.dll
+using ICSharpCode.NRefactory;
+using ICSharpCode.NRefactory.Ast;   
+using O2.DotNetWrappers.H2Scripts;
+
+namespace O2.XRules.Database
+{
+
+	// Comments: (18 Feb 2010): This was the 2nd pass at building an O2 Command Prompt directlly as an XRule
+	// 							Most of this code will be incorporated into O2's main APIs
+	
+    public class ascx_O2_Command_Line_V2_1: UserControl
+    {    
+    	private static IO2Log log = PublicDI.log;
+		public ascx_SourceCodeViewer sourceCodeViewer;
+		public ascx_SourceCodeViewer commandsToExecute;
+		public RichTextBox result_RichTextBox;		
+		public Button executeButton;		
+		
+		public CSharp_FastCompiler csharpCompiler;
+		
+        public static void startControl()
+    	{
+            typeof(ascx_O2_Command_Line_V2_1).showAsForm("O2 Command Line V2.0", 500, 500);			
+    	}    	
+    	
+    	public ascx_O2_Command_Line_V2_1()
+    	{    	    		
+    		setCompilerEnvironment();
+    		buildGui();	     
+    		O2Thread.mtaThread(()=>
+    		commandsToExecute.set_Text(
+    			"PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
+    			.line("return \"test:\" + testString ;")    			
+    			));
+        }
+    
+        private void buildGui()
+        {
+        	// create controls
+        	var groupBoxes = this.add_SplitContainer_2x2("Command To Execute", "Action", "Source Code", "Result",true,40,150,150);        	
+        	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();        	        	        	
+        	sourceCodeViewer = groupBoxes[2].add_SourceCodeViewer();
+        	result_RichTextBox = groupBoxes[3].add_RichTextBox();        	        	
+        	
+        	// control's options:
+        	executeButton = groupBoxes[1].add_Button("Execute", 15, -1, 100);        	
+        	executeButton.Enabled = false;        	
+        	executeButton.onClick(execute);        
+        	groupBoxes[1].mapToWidth(executeButton, true);
+        	commandsToExecute.onTextChanged(compileCodeSnippet);        	
+        	
+        	commandsToExecute.vScroolBar_Enabled(false);
+        	commandsToExecute.hScroolBar_Enabled(false);
+        	commandsToExecute.set_ColorsForCSharp();
+        	
+        	commandsToExecute.allowCompile(false);
+        	sourceCodeViewer.allowCompile(false);
+        	
+        	sourceCodeViewer.astDetails(false);
+        	commandsToExecute.astDetails(false);
+        	sourceCodeViewer.textEditorControl().remove_ContextMenu();        	
+        	var contextMenu = commandsToExecute.textEditorControl().add_ContextMenu();
+        	
+        	contextMenu.add("save",(menuitem)=> saveScript());        	        	
+     	}        	     	
+	     	
+	    public void setCompilerEnvironment()
+	    {
+	    	csharpCompiler = new CSharp_FastCompiler();     
+
+			csharpCompiler.beforeSnippetAst = 
+     		 	()=>{
+     		 			csharpCompiler.InvocationParameters.Add("testNumber",12); 
+     		 			csharpCompiler.InvocationParameters.Add("testString","Hello World"); 
+     		 		};	    	
+     		 		
+	    	csharpCompiler.onAstFail = 
+     			()=>{     					
+     					csharpCompiler.AstErrors.runForEachAstParsingError( 
+     											  (row,col)=> commandsToExecute.editor().setSelectedText(row,col, true,false));
+     					sourceCodeViewer.enabled(false);    	 				
+	     				executeButton.enabled(false);
+    	 				result_RichTextBox.textColor(Color.Red)
+     		 							  .set_Text("Ast Parsing Errors:\r\n\r\n")										  
+										  .append_Text(csharpCompiler.AstErrors);
+	     			};
+	     			 
+	     	csharpCompiler.onAstOK = 
+	     		()=>{		     				
+	     				commandsToExecute.editor().refresh();
+	     				sourceCodeViewer.enabled(true);
+	     				commandsToExecute.invokeOnThread(()=>commandsToExecute.Refresh());;
+						sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
+     		 		};     		      		 
+     		 		
+     		 csharpCompiler.onCompileFail = 
+     		 	()=>{
+     		 			
+     		 			//sourceCodeViewer.editor().invoke("showErrorsInSourceCodeEditor",csharpCompiler.CompilationErrors);
+     		 			//sourceCodeViewer.editor().setSelectedText(1,2, true,false);
+     		 			csharpCompiler.CompilationErrors.runForEachCompilationError( 
+     											  (row,col)=> 
+     											  	{ 
+     											  		sourceCodeViewer.editor().setSelectedText(row,col, true,false);
+     											  		/*if (row > 50)
+     											  		{
+     											  			row -= 5;
+     											  			col -= 2;
+     											  		}*/
+     											  		commandsToExecute.editor().setSelectedText(row-6,col-2, true,false);
+     											  		
+     											  	});
+     		 			result_RichTextBox.textColor(Color.Red)
+     		 							  .set_Text("Compilation Errors:\r\n\r\n")										  
+										  .append_Text(csharpCompiler.CompilationErrors);
+						
+     		 		};
+     		 csharpCompiler.onCompileOK =
+     		 	()=>{
+     		 			commandsToExecute.editor().refresh();
+     		 			sourceCodeViewer.editor().refresh();
+     		 			result_RichTextBox.set_Text("Compilation OK:\r\n\r\n")
+										  .textColor(Color.Green);
+						executeButton.enabled(true);										 
+					};
+     		 		 
+	    }	         	
+
+		public void compileCodeSnippet(string codeSnippet)
+     	{
+     		if (codeSnippet.size() > 200)
+     		{
+     			commandsToExecute.vScroolBar_Enabled(true);
+        		commandsToExecute.hScroolBar_Enabled(true);
+        	}
+     		commandsToExecute.editor().clearBookmarksAndMarkers();
+     		csharpCompiler.compileSnippet(codeSnippet);
+     	}     	     	
+     	
+     	public void execute()
+     	{     		
+     		var result = csharpCompiler.executeFirstMethod() ?? "[null value]";
+     		result_RichTextBox.textColor(Color.Black)
+     						  .set_Text(result.ToString());
+     	}
+     	
+     	public void saveScript()
+     	{
+     		var defaultH2ScriptFolder = @"C:\O2\_XRules_Local\H2Scripts";
+     		Files.checkIfDirectoryExistsAndCreateIfNot(defaultH2ScriptFolder);
+     		var targetFile = O2Forms.askUserForFileToSave(defaultH2ScriptFolder,".h2");
+     		if (targetFile.valid())
+     		{
+     			var h2Script = new H2(commandsToExecute.get_Text());
+     			h2Script.save(targetFile);
+     		}
+     		this.info("target: {0}", targetFile);
+     	}	
+     }
+}
