@@ -252,6 +252,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="_Rules\O2 Utils\Wizard - SVN Checkout.cs.o2" />
+    <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
     <None Include="_Rules\Web Utils\ascx_View_WebPage_Details.cs.o2">
       <SubType>UserControl</SubType>
     </None>
