@@ -3,6 +3,8 @@ using System;
 //using System.Deployment.Application;
 using System.Threading;
 using System.Windows.Forms;
+using O2.DotNetWrappers.Network;
+using O2.Kernel;
 
 namespace O2.DotNetWrappers.DotNet
 {
@@ -79,6 +81,23 @@ namespace O2.DotNetWrappers.DotNet
         */
 
         
+        public static string getClickOnceScriptPath()
+        {
+            if (AppDomain.CurrentDomain.SetupInformation.ActivationArguments != null &&
+                AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData != null &&
+                AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData.Length > 0)
+            {
+                var file = AppDomain.CurrentDomain.SetupInformation.ActivationArguments.ActivationData[0];
+                PublicDI.log.debug("ClickOnce file raw: {0}", file);
+                file = file.Replace("file:///", "");
+                file = WebEncoding.urlDecode(file);
+                file = file.Replace("/", "\\");
+                PublicDI.log.debug("ClickOnce file final: {0}", file);
+                return file;
+            }
+            return "";
+        }
+    
         public static String getFormTitle_forClickOnce(String sFormName)
         {
             var executionMode = "O2 Binaries folder";

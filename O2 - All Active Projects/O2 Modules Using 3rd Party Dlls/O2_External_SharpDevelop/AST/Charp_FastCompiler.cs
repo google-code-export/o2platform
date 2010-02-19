@@ -72,8 +72,8 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.Kernel")
                                      .add("O2.Kernel.ExtensionMethods")
                                      .add("O2.Views.ASCX.CoreControls")
-                                     .add("O2.Views.ASCX.classes.MainGUI")
-                                     .add("O2.External.IE");
+                                     .add("O2.Views.ASCX.classes.MainGUI");
+                                     //.add("O2.External.IE");
         }
 		public List<string> getDefaultReferencedAssemblies()
         {
@@ -83,8 +83,8 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2_Kernel.dll")
                                      .add("O2_Interfaces.dll")
                                      .add("O2_DotNetWrappers.dll")
-                                     .add("O2_Views_Ascx.dll")
-                                     .add("O2_External_IE.dll");
+                                     .add("O2_Views_Ascx.dll");
+                                     //.add("O2_External_IE.dll");
         }
 
 		public Dictionary<string,object> getDefaultInvocationParameters()
