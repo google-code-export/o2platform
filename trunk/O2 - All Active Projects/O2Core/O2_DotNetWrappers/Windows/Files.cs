@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using System.Xml;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.O2Misc;
+using O2.Kernel;
 
 namespace O2.DotNetWrappers.Windows
 {
@@ -37,7 +37,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.ex(ex, "in Files.Copy");
+                PublicDI.log.ex(ex, "in Files.Copy");
                 return null;
             }            
         }
@@ -48,15 +48,15 @@ namespace O2.DotNetWrappers.Windows
             var targetFileLocation = Path.Combine(targetFolder, Path.GetFileName(fileToCopy));
             if (false == File.Exists(targetFileLocation))
             {
-                DI.log.write("copying file {0} to folder {1}", fileName, targetFolder);
+                PublicDI.log.write("copying file {0} to folder {1}", fileName, targetFolder);
                 Copy(fileToCopy, targetFolder);
             }
             else
                 if (dontCopyIfTargetFileAlreadyExists)
-                    DI.log.write("skipping file: {0}", fileName);
+                    PublicDI.log.write("skipping file: {0}", fileName);
                 else
                 {
-                    DI.log.write("over-writing file: {0}", fileName);
+                    PublicDI.log.write("over-writing file: {0}", fileName);
                     Copy(fileToCopy, targetFolder);
                 }
             return fileToCopy;
@@ -78,7 +78,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.error("in MoveFile: {0}", ex.Message);
+                PublicDI.log.error("in MoveFile: {0}", ex.Message);
             }
             return "";
         }
@@ -105,7 +105,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.error("in copyDllAndPdb:{0}", ex.Message);
+                PublicDI.log.error("in copyDllAndPdb:{0}", ex.Message);
             }
         }
 
@@ -113,7 +113,7 @@ namespace O2.DotNetWrappers.Windows
         {
             if (false == Directory.Exists(sSourceDirectory))
             {
-                DI.log.error("Source Directory doesn't exist:{0}", sSourceDirectory);
+                PublicDI.log.error("Source Directory doesn't exist:{0}", sSourceDirectory);
                 return false;
             }
             if (false == Directory.Exists(sTargetDirectory))
@@ -121,7 +121,7 @@ namespace O2.DotNetWrappers.Windows
                 Directory.CreateDirectory(sTargetDirectory);
                 if (false == Directory.Exists(sTargetDirectory))
                 {
-                    DI.log.error("Target Directory doesn't exist:{0}", sTargetDirectory);
+                    PublicDI.log.error("Target Directory doesn't exist:{0}", sTargetDirectory);
                     return false;
                 }
             }
@@ -157,13 +157,13 @@ namespace O2.DotNetWrappers.Windows
                 {
                     File.Delete(fileToDelete);
                     if (logFileDeletion)
-                        DI.log.error("Deleted File :{0}:", fileToDelete);                    
+                        PublicDI.log.error("Deleted File :{0}:", fileToDelete);                    
                 }
                 return true;
             }
             catch (Exception ex)
             {
-                DI.log.error("In deleteFile:{0}:", ex.Message);
+                PublicDI.log.error("In deleteFile:{0}:", ex.Message);
             }
             return false;
         }
@@ -186,7 +186,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.error("In deleteFolder:{0}:", ex.Message);                
+                PublicDI.log.error("In deleteFolder:{0}:", ex.Message);                
             }
             return false;
         }
@@ -206,7 +206,7 @@ namespace O2.DotNetWrappers.Windows
                 }
                 catch (Exception ex)
                 {
-                    DI.log.error("In deleteFilesFromDirThatMatchPattern:{0}:", ex.Message);
+                    PublicDI.log.error("In deleteFilesFromDirThatMatchPattern:{0}:", ex.Message);
                 }
         }
 
@@ -231,7 +231,7 @@ namespace O2.DotNetWrappers.Windows
                 foreach (String sFile in Directory.GetFiles(sTargetDir, sSearchPattern))
                     lsFiles.Add(Path.GetFileName(sFile));
             else
-                DI.log.error("in getFilesFromDir, sTargetDir doesn't exist: {0}", sTargetDir);
+                PublicDI.log.error("in getFilesFromDir, sTargetDir doesn't exist: {0}", sTargetDir);
             return lsFiles;
         }
 
@@ -307,7 +307,7 @@ namespace O2.DotNetWrappers.Windows
                         String[] sFileMatches = Directory.GetFiles(sStartDirectory, sSearchPattern);
                         if (bVerbose)
                             foreach (String sFile in sFileMatches)
-                                DI.log.debug("File matched filter: {0}", sFile);
+                                PublicDI.log.debug("File matched filter: {0}", sFile);
                         lsFiles.AddRange(sFileMatches);
                     }
                     if (bSearchRecursively)
@@ -319,7 +319,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.debug("Error in getListOfAllFilesFromDirectory {0}", ex.Message);
+                PublicDI.log.debug("Error in getListOfAllFilesFromDirectory {0}", ex.Message);
             }
         }
 
@@ -353,7 +353,7 @@ namespace O2.DotNetWrappers.Windows
                         String[] asDirectoryMatches = Directory.GetDirectories(sStartDirectory, sSearchPattern);
                         if (bVerbose)
                             foreach (String sDirectory in asDirectoryMatches)
-                                DI.log.debug("File matched filter: {0}", sDirectory);
+                                PublicDI.log.debug("File matched filter: {0}", sDirectory);
                         lsDirectories.AddRange(asDirectoryMatches);
                     }
                     if (bSearchRecursively)
@@ -362,22 +362,22 @@ namespace O2.DotNetWrappers.Windows
                                                                  sSearchPattern, bVerbose);
                 }
                 else
-                    DI.log.debug("Directory does not exist: {0}", sStartDirectory);
+                    PublicDI.log.debug("Directory does not exist: {0}", sStartDirectory);
             }
             catch (Exception ex)
             {
-                DI.log.error("Error in getListOfAllDirectoriesFromDirectory {0}", ex.Message);
+                PublicDI.log.error("Error in getListOfAllDirectoriesFromDirectory {0}", ex.Message);
             }
         }
 
         public static List<String> findFiles(String sPathToFolder, String sFilter)
         {
-            DI.log.debug("Discovering all files that match the pattern: {0} in the directory: {1}", sFilter,
+            PublicDI.log.debug("Discovering all files that match the pattern: {0} in the directory: {1}", sFilter,
                          sPathToFolder);
             List<String> lsFiles = getFiles(sPathToFolder, sFilter);
-            DI.log.debug("{0} Files Found", lsFiles.Count);
+            PublicDI.log.debug("{0} Files Found", lsFiles.Count);
             foreach (String sFile in lsFiles)
-                DI.log.info(sFile);
+                PublicDI.log.info(sFile);
             return lsFiles;
         }
 
@@ -392,7 +392,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.error("Error in saveAsFile_StringList {0}", ex.Message);
+                PublicDI.log.error("Error in saveAsFile_StringList {0}", ex.Message);
             }
         }
 
@@ -418,7 +418,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.error("Error in getFileLines {0}", ex.Message);
+                PublicDI.log.error("Error in getFileLines {0}", ex.Message);
             }
             if (sr != null)
                 sr.Close();
@@ -441,7 +441,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch(Exception ex)
             {
-                DI.log.ex(ex, "in getFileContentsAsByteArray");
+                PublicDI.log.ex(ex, "in getFileContentsAsByteArray");
                 return null;
             }
         }       
@@ -461,7 +461,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.error("Error GetFileContent {0}", ex.Message);
+                PublicDI.log.error("Error GetFileContent {0}", ex.Message);
             }
             if (sr != null)
                 sr.Close();
@@ -502,7 +502,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.error("Error WriteFileContent {0}", ex.Message);
+                PublicDI.log.error("Error WriteFileContent {0}", ex.Message);
             }
             return false;
         }
@@ -528,7 +528,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception e)
             {
-                DI.log.error("Could not create directory: {0} ({1})", directory, e.Message);
+                PublicDI.log.error("Could not create directory: {0} ({1})", directory, e.Message);
             }
             return "";
         }
@@ -563,9 +563,9 @@ namespace O2.DotNetWrappers.Windows
             {                
                 lsSourceCode.Add(textReader.ReadLine());
                 if (itemsProcessed++ % 100000 == 0)
-                    DI.log.info("in loadLargeSourceFileIntoList, # lines loaded so far :{0}", itemsProcessed);
+                    PublicDI.log.info("in loadLargeSourceFileIntoList, # lines loaded so far :{0}", itemsProcessed);
             }
-            DI.log.info("in loadLargeSourceFileIntoList, total # lines loaded:{0}", itemsProcessed);
+            PublicDI.log.info("in loadLargeSourceFileIntoList, total # lines loaded:{0}", itemsProcessed);
             textReader.Close();
             DI.dFilesLines.Add(pathToSourceCodeFile, lsSourceCode);
             return lsSourceCode;
@@ -607,7 +607,7 @@ namespace O2.DotNetWrappers.Windows
             if (uLineNumber > 0 && uLineNumber < lsSourceCode.Count)
                 return lsSourceCode[(int) uLineNumber - 1];
             if (lsSourceCode.Count >0)
-                DI.log.error("In getLineFromSourceCode uLineNumeber==0 || uLineNumber >= lsSourceCode.Count");
+                PublicDI.log.error("In getLineFromSourceCode uLineNumeber==0 || uLineNumber >= lsSourceCode.Count");
             return "";
         }
 
@@ -620,9 +620,9 @@ namespace O2.DotNetWrappers.Windows
         public static void copyFolder(string sourceFolder, string targetFolder, bool copyRecursively)
         {
             if (false == Directory.Exists(sourceFolder))
-                DI.log.error("in copyFolder , sourceFolder doesn't exist: {0}", sourceFolder);
+                PublicDI.log.error("in copyFolder , sourceFolder doesn't exist: {0}", sourceFolder);
             else if (false == Directory.Exists(targetFolder))
-                DI.log.error("in copyFolder , targetFolder doesn't exist: {0}", targetFolder);
+                PublicDI.log.error("in copyFolder , targetFolder doesn't exist: {0}", targetFolder);
             else
             {
                 List<string> foldersToCreate = getListOfAllDirectoriesFromDirectory(sourceFolder, copyRecursively);
@@ -679,7 +679,7 @@ namespace O2.DotNetWrappers.Windows
                                         String.Format("Are you sure you want to delete {0} file(s)", filesToDelete.Count),
                                         "Delete Files", MessageBoxButtons.YesNo))
             {
-                DI.log.debug("Deleting {0} files", filesToDelete.Count);
+                PublicDI.log.debug("Deleting {0} files", filesToDelete.Count);
                 foreach (var fileToDelete in filesToDelete)
                     deleteFile(fileToDelete);
                 return true;
@@ -729,7 +729,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch (Exception ex)
             {
-                DI.log.ex(ex);
+                PublicDI.log.ex(ex);
                 return false;
             }            
         }
@@ -742,5 +742,10 @@ namespace O2.DotNetWrappers.Windows
                 extentionToCheck = "." + extentionToCheck;
             return Path.GetExtension(pathToFile) == extentionToCheck;            
         }
+
+        public static void setCurrentDirectoryToExecutableDirectory()
+        {
+            Environment.CurrentDirectory = PublicDI.config.CurrentExecutableDirectory;
+        }        
     }
 }

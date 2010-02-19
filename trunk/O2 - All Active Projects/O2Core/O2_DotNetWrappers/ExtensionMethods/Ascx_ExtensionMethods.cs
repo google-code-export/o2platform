@@ -9,82 +9,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class Ascx_ExtensionMethods
     {       
-        #region Anchor
-
-        public static Control anchor(this Control control)
-        {
-            control.Anchor = AnchorStyles.None;
-            return control;
-        }
-
-        public static Control top(this Control control)
-        {
-            control.Anchor = control.Anchor | AnchorStyles.Top;
-            return control;
-        }
-
-        public static Control bottom(this Control control)
-        {
-            control.Anchor = control.Anchor | AnchorStyles.Bottom;
-            return control;
-        }
-
-        public static Control left(this Control control)
-        {
-            control.Anchor = control.Anchor | AnchorStyles.Left;
-            return control;
-        }
-
-        public static Control right(this Control control)
-        {
-            control.Anchor = control.Anchor | AnchorStyles.Right;
-            return control;
-        }
-
-        public static Control anchor_TopLeft(this Control control)
-        {
-            control.anchor().top().left();
-            return control;
-        }
-
-        public static Control anchor_BottomLeft(this Control control)
-        {
-            control.anchor().bottom().left();
-            return control;
-        }
-
-        public static Control anchor_TopRight(this Control control)
-        {
-            control.anchor().top().right();
-            return control;
-        }
-
-        public static Control anchor_BottomRight(this Control control)
-        {
-            control.anchor().bottom().right();
-            return control;
-        }
-
-        public static Control anchor_TopLeftRight(this Control control)
-        {
-            control.anchor().top().left().right();
-            return control;
-        }
-
-        public static Control anchor_BottomLeftRight(this Control control)
-        {
-            control.anchor().bottom().left().right();
-            return control;
-        }
-
-        public static Control anchor_All(this Control control)
-        {
-            control.anchor().top().right().bottom().left();
-            return control;
-        }
-
-        #endregion
-
+       
         #region Button
 
         public static Button add_Button(this Control control, string text)
@@ -170,10 +95,34 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (Label) control.invokeOnThread(
                                () =>
                                    {
-                                       var label = new Label {Text = labelText};
+                                       var label = new Label
+                                                       {
+                                                           Text = labelText, 
+                                                           AutoSize = true
+                                                       };
                                        control.Controls.Add(label);
                                        return label;
                                    });
+        }
+
+        public static Label set_Text(this Label label, string text)
+        {
+            return (Label)label.invokeOnThread(
+                                    () =>
+                                    {
+                                        label.Text = text;
+                                        return label;
+                                    });
+        }
+
+        public static Label textColor(this Label label, Color color)
+        {
+            return (Label)label.invokeOnThread(
+                () =>
+                {
+                    label.ForeColor = color;
+                    return label;
+                });
         }
 
         #endregion
@@ -739,7 +688,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             var menuItem = new ToolStripMenuItem {Text = text};
             contextMenu.Items.Add(menuItem);
-            contextMenu.Click += (sender, e) => onClick(menuItem);
+            menuItem.Click += (sender, e) => onClick(menuItem);
             return menuItem;
         }
         #endregion
@@ -778,6 +727,24 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             pictureBox.BackgroundImage = image;
         }
+
+        public static PictureBox add_PictureBox(this Control control, string pathToImage)
+        {
+            var pictureBox = control.add_PictureBox();
+            return pictureBox.load(pathToImage);
+        }
+
+        public static PictureBox load(this PictureBox pictureBox, string pathToImage)
+        {
+            if (pathToImage.fileExists())
+            {
+                var image = Bitmap.FromFile(pathToImage);
+                pictureBox.load(image);
+                return pictureBox;
+            }
+            return null;
+        }
+
         #endregion
 
         #region ProgressBar

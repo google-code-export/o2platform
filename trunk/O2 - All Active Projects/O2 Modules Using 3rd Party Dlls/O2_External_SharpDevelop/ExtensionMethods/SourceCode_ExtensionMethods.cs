@@ -46,19 +46,24 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return (ascx_SourceCodeViewer)control.add_Control(typeof(ascx_SourceCodeViewer));
         }
 
-        public static TextEditorControl control(this ascx_SourceCodeEditor sourceCodeEditor)
+        public static TextEditorControl textEditorControl(this ascx_SourceCodeEditor sourceCodeEditor)
         {
             return sourceCodeEditor.getObject_TextEditorControl();
         }
 
+        public static TextEditorControl textEditorControl(this ascx_SourceCodeViewer sourceCodeViewer)
+        {
+            return sourceCodeViewer.editor().getObject_TextEditorControl();
+        }
+
         public static int caretLine(this ascx_SourceCodeEditor sourceCodeEditor)
         {
-            return sourceCodeEditor.control().ActiveTextAreaControl.Caret.Line;
+            return sourceCodeEditor.textEditorControl().ActiveTextAreaControl.Caret.Line;
         }
 
         public static void colorCodeForExtension(this ascx_SourceCodeEditor sourceCodeEditor, string extension)
         {
-            var tecSourceCode = sourceCodeEditor.control();
+            var tecSourceCode = sourceCodeEditor.textEditorControl();
             var dummyFileName = string.Format("aaa.{0}", extension);
             tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(dummyFileName);
         }
@@ -150,9 +155,11 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         {
             return sourceCodeEditor.getObject_TextEditorControl().Document;
         }
+
         public static IDocument document(this ascx_SourceCodeViewer sourceCodeViewer)
         {
             return sourceCodeViewer.editor().document();
-        }        
+        }
+                
     }
 }
