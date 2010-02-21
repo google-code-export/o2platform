@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var panel = (Panel)typeof(Panel).showAsForm("Web Browser", 850,500);
+panel.add_WebBrowserWithLocationBar(@"o2-platform.com");
+
+//ref O2_External_IE.dll
+//using O2.External.IE.Wrapper
+//using O2.External.IE.ExtensionMethods</SourceCode>
+  <ReferencedAssemblies />
+</H2>

@@ -256,6 +256,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="_Rules\O2 Utils\Wizard - SVN Checkout.cs.o2" />
+    <None Include="_Rules\H2 SCRIPTS\open - O2 Object Model.h2" />
+    <None Include="_Rules\H2 SCRIPTS\open - Web Browser.h2" />
+    <None Include="_Rules\H2 SCRIPTS\open - XRules Editor.h2" />
     <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
     <None Include="_Rules\Web Utils\ascx_View_WebPage_Details.cs.o2">
       <SubType>UserControl</SubType>
@@ -272,11 +275,15 @@
     <Compile Include="_Rules\Windows Utils\ascx_Start_Tools.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="_Rules\_Samples\Under_Development\ascx_WebBrowser_with_FormData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\SqlCommand.cs" />
     <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\HttpContext.cs" />
     <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\HttpRequest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="H2Logo.ico" />
     <Content Include="O2Logo.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -284,7 +291,7 @@
       <Visible>False</Visible>
       <Description>O2 H2 Script</Description>
       <Progid>O2.XRule.Script.h2</Progid>
-      <DefaultIcon>O2Logo.ico</DefaultIcon>
+      <DefaultIcon>H2Logo.ico</DefaultIcon>
     </FileAssociation>
     <FileAssociation Include=".o2">
       <Visible>False</Visible>
