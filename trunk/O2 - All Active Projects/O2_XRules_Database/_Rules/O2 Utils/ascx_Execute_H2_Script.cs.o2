@@ -1,6 +1,14 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
-//ref O2_External_SharpDevelop.dll
-//ref System.Drawing.dll
+//O2Tag_OnlyAddReferencedAssemblies
+//O2Ref:System.dll
+//O2Ref:System.Drawing.dll
+//O2Ref:System.Core.dll
+//O2Ref:System.Windows.Forms.dll
+//O2Ref:O2_Kernel.dll
+//O2Ref:O2_Interfaces.dll
+//O2Ref:O2_DotNetWrappers.dll
+//O2Ref:O2_Views_ASCX.dll
+//O2Ref:O2_External_SharpDevelop.dll
 using System;
 using System.Drawing;
 using System.Collections.Generic;
@@ -19,13 +27,12 @@ using O2.Views.ASCX;
 using O2.External.SharpDevelop.AST;
 using O2.DotNetWrappers.H2Scripts;
 using O2.DotNetWrappers.Network;
-//O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\AST\Charp_FastCompiler.cs
 
 namespace O2.XRules.Database
 { 
     public class ascx_Execute_H2_Script: UserControl
     {   
-    	string pathToPictureBox = @"C:\O2\_localDevStuff\o2UsedIcons\O2Logo_Small.gif";        	
+    	string pathToPictureBox = "";    
     	public string currentScript = "";
     	public Label statusLabel;
     	public RichTextBox results_RichTextBox;
@@ -37,7 +44,9 @@ namespace O2.XRules.Database
     	
     	public ascx_Execute_H2_Script()
     	{    
-		    pathToPictureBox = Web.checkIfFileExistsAndDownloadIfNot("_O2_Logo.", @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
+		    pathToPictureBox = Web.checkIfFileExistsAndDownloadIfNot("_O2_Logo.gif", @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
+		    if (false == pathToPictureBox.fileExists())
+		    	pathToPictureBox = @"C:\O2\JustLogo.gif";
     		buildGui();
             var scriptToExecute = ClickOnceDeployment.getClickOnceScriptPath();
             if (scriptToExecute.fileExists())
