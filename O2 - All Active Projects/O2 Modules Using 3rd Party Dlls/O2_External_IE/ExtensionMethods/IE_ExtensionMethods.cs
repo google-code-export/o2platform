@@ -77,7 +77,7 @@ namespace O2.External.IE.ExtensionMethods
             return new IE_Form_Field
                        {
                            Form = form,
-                           Name = (name != null) ? form.ToString() : "",
+                           Name = (name != null) ? name.ToString() : "",
                            Type = (type != null) ? type.ToString() : "",
                            Value = (value != null) ? value.ToString() : "",
                            Enabled = (enabled != null) ? bool.Parse(enabled.ToString()) : false

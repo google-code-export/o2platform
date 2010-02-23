@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel;
@@ -10,6 +11,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
     {
 
         #region Control - add
+
+        public static Control add(this Control hostControl, Control childControl)
+        {
+            return (Control)hostControl.invokeOnThread(
+                    () =>
+                    {
+                        hostControl.Controls.Add(childControl);
+                        return childControl;
+                    });
+        }
+
+        public static T add<T>(this Control hostControl, params int[] position)
+        {
+            return hostControl.add_Control<T>(position);
+        }
 
         public static Control add_Control(this Control control, Type childControlType)
         {
@@ -28,12 +44,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                      return null;
                                  });
         }
-
-        public static T add<T>(this Control hostControl, params int[] position)
-        {
-            return hostControl.add_Control<T>(position);
-        }
-   
+           
         public static T add_Control<T>(this Control hostControl, params int[] position)
         {
             var values = new[] { -1, -1, -1, -1 };
@@ -327,6 +338,129 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #endregion
 
+        #region Control - inject control
+        public static List<Control> injectControl_Top(this Control controlToWrap, Control controlToInject)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Top);
+        }
 
+        public static List<Control> injectControl_Top(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Top, splitterDistance, border3D);
+        }
+
+        public static List<Control> injectControl_Bottom(this Control controlToWrap, Control controlToInject)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Bottom);
+        }
+
+        public static List<Control> injectControl_Bottom(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Bottom, splitterDistance, border3D);
+        }
+
+        public static List<Control> injectControl_Left(this Control controlToWrap, Control controlToInject)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Left);
+        }
+
+        public static List<Control> injectControl_Left(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Left, splitterDistance, border3D);
+        }
+
+        public static List<Control> injectControl_Right(this Control controlToWrap, Control controlToInject)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Right);
+        }
+
+        public static List<Control> injectControl_Right(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Right, splitterDistance, border3D);
+        }
+
+        public static List<Control> injectControl(this Control controlToWrap, Control controlToInject, AnchorStyles location)
+        {
+            return controlToWrap.injectControl(controlToInject, location, -1, false, controlToWrap.Text, controlToInject.Text);
+        }
+
+        public static List<Control> injectControl(this Control controlToWrap, Control controlToInject, AnchorStyles location, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, location, splitterDistance, border3D, controlToWrap.Text, controlToInject.Text);
+        }
+
+        public static List<Control> injectControl(this Control controlToWrap, Control controlToInject, AnchorStyles location, int splitterDistance, bool border3D, string title_1, string title_2)
+        {
+            try
+            {
+                var parentControl = controlToWrap.Parent;
+                parentControl.clear();
+                var controls = new List<Control>();
+                SplitContainer splitContainer = parentControl.add_SplitContainer();
+                splitContainer.fill();
+                if (border3D)
+                    splitContainer.border3D();
+                switch (location)
+                {
+                    case AnchorStyles.Top:
+                    case AnchorStyles.Left:
+                        splitContainer.Panel1.add(controlToInject);
+                        splitContainer.Panel2.add(controlToWrap);
+                        splitContainer.FixedPanel = FixedPanel.Panel1;
+                        if (splitterDistance > -1)
+                            splitContainer.SplitterDistance = splitterDistance;
+                        splitContainer.Orientation = (location == AnchorStyles.Top) ? Orientation.Horizontal : Orientation.Vertical;
+                        break;
+
+                    case AnchorStyles.Bottom:
+                    case AnchorStyles.Right:
+                        splitContainer.Panel1.add(controlToWrap);
+                        splitContainer.Panel2.add(controlToInject);
+                        splitContainer.FixedPanel = FixedPanel.Panel2;
+
+                        if (splitterDistance > -1)
+                            splitContainer.SplitterDistance = (location == AnchorStyles.Bottom)
+                                                                ? splitContainer.Height - splitterDistance
+                                                                : splitContainer.Width - splitterDistance;
+
+                        splitContainer.Orientation = (location == AnchorStyles.Bottom) ? Orientation.Horizontal : Orientation.Vertical;
+                        break;
+                    case AnchorStyles.None:
+                        PublicDI.log.error("in injectControl the location provided was AnchorStyles.None");
+                        break;
+                }
+                controls.add(splitContainer)
+                        .add(controlToWrap)
+                        .add(controlToInject);
+
+                return controls;
+            }
+            catch (Exception ex)
+            {
+                PublicDI.log.ex(ex, "in injectControl");
+                return null;
+            }
+        }
+
+        public static List<Control> insert_Right(this Control controlToWrap, Control controlToInject, int splitterDistance)
+        {
+            return controlToWrap.injectControl_Right(controlToInject, splitterDistance, false);
+        }
+
+        public static List<Control> insert_Left(this Control controlToWrap, Control controlToInject, int splitterDistance)
+        {
+            return controlToWrap.injectControl_Left(controlToInject, splitterDistance, false);
+        }
+
+        public static List<Control> insert_Above(this Control controlToWrap, Control controlToInject, int splitterDistance)
+        {
+            return controlToWrap.injectControl_Top(controlToInject, splitterDistance, false);
+        }
+
+        public static List<Control> insert_Below(this Control controlToWrap, Control controlToInject, int splitterDistance)
+        {
+            return controlToWrap.injectControl_Bottom(controlToInject, splitterDistance, false);
+        }
+        #endregion
     }
 }

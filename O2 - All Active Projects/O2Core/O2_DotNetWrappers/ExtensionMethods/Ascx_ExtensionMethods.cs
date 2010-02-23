@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using O2.DotNetWrappers.Windows;
+using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 
 namespace O2.DotNetWrappers.ExtensionMethods
@@ -193,6 +194,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                                 control.Controls.Add(splitContainer);
                                                 return splitContainer;
                                             });
+        }
+
+        
+        public static Control border3D(this SplitContainer control)
+        {
+            control.BorderStyle = BorderStyle.Fixed3D;
+            return control;
         }
 
         #endregion
@@ -914,6 +922,59 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 rows.Add(rowData);
             }
             return rows;
+        }
+
+        public static void noSelection(this DataGridView dataGridView)
+        {
+            dataGridView.SelectionChanged += (sender, e) => dataGridView.ClearSelection();
+        }
+
+        public static void column_backColor(this DataGridView dataGridView, int columnId, Color color)
+        {
+            dataGridView.Columns[columnId].DefaultCellStyle.BackColor = color;
+        }
+
+        public static void showFileStrings(this DataGridView dataGridView, string file, bool ignoreCharZeroAfterValidChar, int minimumStringSize)
+        {
+            dataGridView.Columns.Clear();
+            dataGridView.add_Column("string");
+
+            foreach (var _string in file.contentsAsBytes().strings(ignoreCharZeroAfterValidChar, minimumStringSize))
+                dataGridView.add_Row(_string);
+        }
+
+        public static void showFileContents(this DataGridView dataGridView, string file, Func<byte, string> encoding)
+        {
+            dataGridView.invokeOnThread(
+                () =>
+                {
+                    dataGridView.Columns.Clear();
+                    dataGridView.add_Column("");
+                    for (byte b = 0; b < 16; b++)
+                        dataGridView.add_Column(b.hex());
+                    dataGridView.column_backColor(0, Color.LightGray);
+                    if (!file.fileExists())
+                    {
+                        PublicDI.log.error("provided file to load doesn't exists :{0}", file);
+                        return;
+                    }
+                    var bytes = file.contentsAsBytes();
+                    var row = new List<string>();
+                    var rowId = 0;
+                    row.add(rowId.hex());
+                    foreach (var value in bytes)
+                    {
+                        row.add(encoding(value));
+                        if (row.Count == 16)
+                        {
+                            dataGridView.add_Row(row.ToArray());
+                            row.Clear();
+                            row.add((rowId++).hex()); ;
+                        }
+                    }
+                    dataGridView.add_Row(row.ToArray());
+                    //dataGridView.add_Row(row);
+                });
         }
 
         #endregion		

@@ -1,23 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using O2.Interfaces.O2Core;
-using O2.Views.ASCX.classes;
 using O2.Kernel;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
-//O2Tag_AddReferenceFile:HTMLparserLibDotNet20.dll
 using HTMLparserLibDotNet20.O2ExtraCode;
-//O2Tag_AddReferenceFile:System.Web.dll
-using System.Web;
-
-//O2Ref:System.Core.dll
-//O2Ref:System.Xml.dll
-//O2Ref:System.Xml.Linq.dll
 using System.Xml.Linq;
-//O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
 
 namespace O2.Core.XRules.Classes
 {

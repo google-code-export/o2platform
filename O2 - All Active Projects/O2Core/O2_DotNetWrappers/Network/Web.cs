@@ -44,7 +44,43 @@ namespace O2.DotNetWrappers.Network
             {
                 if (verbose)
                     PublicDI.log.info("Fetching url: {0}", urlToFetch);
-                WebRequest webRequest = WebRequest.Create(urlToFetch);
+                WebRequest webRequest = WebRequest.Create(urlToFetch);                
+                WebResponse rResponse = webRequest.GetResponse();
+                Stream sStream = rResponse.GetResponseStream();
+                var srStreamReader = new StreamReader(sStream);
+                string sHtml = srStreamReader.ReadToEnd();
+                sStream.Close();
+                srStreamReader.Close();
+                rResponse.Close();
+                return sHtml;
+            }
+            catch (Exception ex)
+            {
+                PublicDI.log.error("Error in getUrlContents: {0}", ex.Message);
+                return "";
+            }
+        }
+        
+        public static String getUrlContents_POST(String urlToFetch, string postData)
+        {
+            return getUrlContents_POST(urlToFetch, Encoding.ASCII.GetBytes(postData));
+        }
+
+        public static String getUrlContents_POST(String urlToFetch, byte[] postData)
+        {        
+            try
+            {   
+                
+                WebRequest webRequest = WebRequest.Create(urlToFetch);                
+                // setup POST details:
+
+                webRequest.Method = "POST";
+                webRequest.ContentLength = postData.Length;
+                webRequest.ContentType = "application/x-www-form-urlencoded";
+                Stream dataStream = webRequest.GetRequestStream();
+                dataStream.Write(postData, 0, postData.Length);
+                dataStream.Close();
+
                 WebResponse rResponse = webRequest.GetResponse();
                 Stream sStream = rResponse.GetResponseStream();
                 var srStreamReader = new StreamReader(sStream);

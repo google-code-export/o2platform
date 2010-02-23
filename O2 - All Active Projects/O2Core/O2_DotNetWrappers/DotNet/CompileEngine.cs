@@ -467,7 +467,9 @@ namespace O2.DotNetWrappers.DotNet
                         var extraReferenceFileName = Path.GetFileName(extraReference);
                         if (false == referencedAssembliesFileNames.Contains(extraReferenceFileName))
                         {
-                            //Files.Copy(extraReference, PublicDI.config.O2TempDir, true);
+                            if (true == extraReference.fileExists() &&
+                                false ==Path.Combine(PublicDI.config.O2TempDir,extraReference.fileName()).fileExists())
+                                Files.Copy(extraReference, PublicDI.config.O2TempDir, true);
                             /*var assembly = PublicDI.reflection.getAssembly(extraReference);
                             if (assembly == null)
                                 DI.log.error("(this could be a problem for execution) in addReferencesIncludedInSourceCode could not load assembly :{0}", extraReference);

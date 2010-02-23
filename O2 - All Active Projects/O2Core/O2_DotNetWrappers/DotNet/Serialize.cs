@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Xml.Serialization;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 
 namespace O2.DotNetWrappers.DotNet
@@ -22,7 +23,7 @@ namespace O2.DotNetWrappers.DotNet
         {
             return createSerializedXmlFileFromObject(oObjectToProcess, sTargetFile, null);
         }
-
+        
         public static bool createSerializedXmlFileFromObject(Object oObjectToProcess, String sTargetFile, Type[] extraTypes)
         {
             FileStream fileStream = null;
@@ -33,11 +34,8 @@ namespace O2.DotNetWrappers.DotNet
                 var xsXmlSerializer = (extraTypes != null)
                                           ? new XmlSerializer(oObjectToProcess.GetType(), extraTypes)
                                           : new XmlSerializer(oObjectToProcess.GetType());
-
-                fileStream = new FileStream(sTargetFile, FileMode.Create);
-
+                fileStream = new FileStream(sTargetFile, FileMode.Create);                
                 xsXmlSerializer.Serialize(fileStream, oObjectToProcess, xnsXmlSerializerNamespaces);
-                //fileStream.Close();
                         
                  return true;
             }
@@ -50,7 +48,7 @@ namespace O2.DotNetWrappers.DotNet
             {
                 if (fileStream != null)
                 {
-                    fileStream.Close();                   
+                    fileStream.Close();                    
                 }
             }
 
