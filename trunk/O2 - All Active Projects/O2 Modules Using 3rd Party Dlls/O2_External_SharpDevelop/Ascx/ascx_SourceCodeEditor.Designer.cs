@@ -671,7 +671,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btSeachAndViewAst.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btSeachAndViewAst.Name = "btSeachAndViewAst";
             this.btSeachAndViewAst.Size = new System.Drawing.Size(23, 22);
-            this.btSeachAndViewAst.Text = "toolStripButton1";
+            this.btSeachAndViewAst.Text = "Search and AST details view";
             this.btSeachAndViewAst.Click += new System.EventHandler(this.btSeachAndViewAst_Click);
             // 
             // btSelectedLineHistory
@@ -831,7 +831,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbPartialFileView.FormattingEnabled = true;
             this.lbPartialFileView.Location = new System.Drawing.Point(0, -2);
             this.lbPartialFileView.Name = "lbPartialFileView";
-            this.lbPartialFileView.Size = new System.Drawing.Size(957, 290);
+            this.lbPartialFileView.Size = new System.Drawing.Size(957, 394);
             this.lbPartialFileView.TabIndex = 47;
             this.lbPartialFileView.Visible = false;
             // 
@@ -843,7 +843,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbExecutionHistoryOrLog.Multiline = true;
             this.tbExecutionHistoryOrLog.Name = "tbExecutionHistoryOrLog";
             this.tbExecutionHistoryOrLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbExecutionHistoryOrLog.Size = new System.Drawing.Size(364, 263);
+            this.tbExecutionHistoryOrLog.Size = new System.Drawing.Size(364, 378);
             this.tbExecutionHistoryOrLog.TabIndex = 48;
             this.tbExecutionHistoryOrLog.Visible = false;
             // 
@@ -872,7 +872,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.ShowEOLMarkers = true;
             this.tecSourceCode.ShowSpaces = true;
             this.tecSourceCode.ShowTabs = true;
-            this.tecSourceCode.Size = new System.Drawing.Size(956, 288);
+            this.tecSourceCode.Size = new System.Drawing.Size(956, 403);
             this.tecSourceCode.TabIndex = 17;
             this.tecSourceCode.Load += new System.EventHandler(this.tecSourceCode_Load);
             this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
@@ -899,7 +899,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tcSourceInfo.Location = new System.Drawing.Point(0, 0);
             this.tcSourceInfo.Name = "tcSourceInfo";
             this.tcSourceInfo.SelectedIndex = 0;
-            this.tcSourceInfo.Size = new System.Drawing.Size(960, 111);
+            this.tcSourceInfo.Size = new System.Drawing.Size(150, 46);
             this.tcSourceInfo.TabIndex = 52;
             // 
             // scCodeAndAst
@@ -923,6 +923,7 @@ namespace O2.External.SharpDevelop.Ascx
             // scCodeAndAst.Panel2
             // 
             this.scCodeAndAst.Panel2.Controls.Add(this.tcSourceInfo);
+            this.scCodeAndAst.Panel2Collapsed = true;
             this.scCodeAndAst.Size = new System.Drawing.Size(960, 406);
             this.scCodeAndAst.SplitterDistance = 291;
             this.scCodeAndAst.TabIndex = 53;

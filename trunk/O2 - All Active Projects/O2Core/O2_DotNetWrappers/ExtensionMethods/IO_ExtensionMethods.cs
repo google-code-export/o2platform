@@ -1,5 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using O2.DotNetWrappers.Windows;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -7,47 +9,71 @@ namespace O2.DotNetWrappers.ExtensionMethods
     {
         public static string fileName(this string file)
         {
-            return Path.GetFileName(file);
+            if (file.valid())
+                return Path.GetFileName(file);
+            return "";
         }
 
         public static string directoryName(this string file)
         {
-            return Path.GetDirectoryName(file);
+            if (file.valid())
+                return Path.GetDirectoryName(file);
+            return "";            
         }
 
         public static string extension(this string file)
         {
-            return Path.GetExtension(file).ToLower();
+            if (file.valid())
+                return Path.GetExtension(file).ToLower();
+            return "";
         }
 
         public static bool extension(this string file, string extension)
         {
-            return file.extension() == extension;
+            if (file.valid())
+                return file.extension() == extension;
+            return false;
         }
 
         public static bool exists(this string file)
         {
-            return file.fileExists() || file.dirExists();
+            if (file.valid())
+                return file.fileExists() || file.dirExists();
+            return false;
         }
 
         public static bool fileExists(this string file)
         {
-            return File.Exists(file);
+            if (file.valid())
+                return File.Exists(file);
+            return false;
         }
 
         public static bool dirExists(this string file)
         {
-            return Directory.Exists(file);
+            if (file.valid())
+                return Directory.Exists(file);
+            return false;
         }
 
         public static void create(this string file, string fileContents)
         {
-            Files.WriteFileContent(file, fileContents);
+            if (file.valid())
+                Files.WriteFileContent(file, fileContents);            
         }
 
         public static string contents(this string file)
         {
-            return Files.getFileContents(file);
+            if (file.valid())
+                return Files.getFileContents(file);
+            return "";
+        }
+
+        public static byte[] contentsAsBytes(this string file)
+        {
+            if (file.fileExists())
+                return Files.getFileContentsAsByteArray(file);
+            return null;
         }
     }
 }

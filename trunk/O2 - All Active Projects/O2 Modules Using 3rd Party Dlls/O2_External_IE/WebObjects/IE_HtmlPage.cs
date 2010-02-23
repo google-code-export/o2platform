@@ -8,7 +8,7 @@ namespace O2.External.IE.WebObjects
 {
     public class IE_HtmlPage : IO2HtmlPage
     {        
-        public Uri PageUri { get; set; }
+        public Uri PageUrl { get; set; }
         public string PageSource { get; set; }
 
         public List<IO2HtmlAnchor> Anchors { get; set; }
@@ -32,7 +32,7 @@ namespace O2.External.IE.WebObjects
         public IE_HtmlPage(string pageSource, string rawUrl) : this()
         {
             PageSource = pageSource;
-            PageUri = new Uri(rawUrl);
+            PageUrl = new Uri(rawUrl);
         }
 
         public IE_HtmlPage(HTMLDocumentClass documentClass)
@@ -55,7 +55,7 @@ namespace O2.External.IE.WebObjects
         private void populateData(HTMLDocumentClass documentClass)
         {
             // PageUri
-            PageUri = new Uri(documentClass.url);
+            PageUrl = new Uri(documentClass.url);
             // get PageSource
             var documentElement = (HTMLHtmlElementClass)documentClass.documentElement;
             PageSource = documentElement.outerHTML;
@@ -120,7 +120,7 @@ namespace O2.External.IE.WebObjects
      
         public override string ToString()
         {
-            return PageUri.ToString();
+            return PageUrl.ToString();
         }
     }
 }

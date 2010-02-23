@@ -23,6 +23,7 @@ namespace O2.External.SharpDevelop.AST
         public CompilationUnit CompilationUnit { get; set; }
         //public AstDetails AstDetails { get; set; }
         public string AstErrors { get; set; }
+        public bool generateDebugSymbols { get; set; }
         public string CompilationErrors { get; set; }        
         public CompilerResults CompilerResults { get; set; }
         
@@ -52,17 +53,11 @@ namespace O2.External.SharpDevelop.AST
         	InvocationParameters = new Dictionary<string, object>();
         	ReferencedAssemblies = getDefaultReferencedAssemblies();
             default_MethodName = "dynamicMethod";
-            default_TypeName = "DynamicType";                                   
+            default_TypeName = "DynamicType";
+            generateDebugSymbols = false;
             // defaults
 
         }
-
-        //using 
-        //using 
-        //using 
-        //using 
-        //ref 
-
 
         public List<string> getDefaultUsingStatements()
         {
@@ -72,8 +67,7 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.Kernel")
                                      .add("O2.Kernel.ExtensionMethods")
                                      .add("O2.Views.ASCX.CoreControls")
-                                     .add("O2.Views.ASCX.classes.MainGUI");
-                                     //.add("O2.External.IE");
+                                     .add("O2.Views.ASCX.classes.MainGUI");                                    
         }
 		public List<string> getDefaultReferencedAssemblies()
         {
@@ -83,8 +77,7 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2_Kernel.dll")
                                      .add("O2_Interfaces.dll")
                                      .add("O2_DotNetWrappers.dll")
-                                     .add("O2_Views_Ascx.dll");
-                                     //.add("O2_External_IE.dll");
+                                     .add("O2_Views_Ascx.dll");                                     
         }
 
 		public Dictionary<string,object> getDefaultInvocationParameters()
@@ -143,8 +136,12 @@ namespace O2.External.SharpDevelop.AST
 	                		var providerOptions = new Dictionary<string,string>(); 
 							providerOptions.Add ("CompilerVersion", "v3.5");
 		                    var csharpCodeProvider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);                    
-		                    var compilerParams = new CompilerParameters {GenerateInMemory = true};
-		                    
+		                    var compilerParams = new CompilerParameters
+		                                             {
+                                                         GenerateInMemory = ! generateDebugSymbols,
+                                                         IncludeDebugInformation = generateDebugSymbols
+		                                             };	                        
+
 		                    foreach(var referencedAssembly in ReferencedAssemblies)
 		                        compilerParams.ReferencedAssemblies.Add(referencedAssembly);		                        
 		                        
@@ -202,17 +199,20 @@ namespace O2.External.SharpDevelop.AST
                     }
                     else
                         CompilationUnit = (CompilationUnit) parsedCode;
-                    // create sourceCode using Ast_CSharp & AstDetails		
-                    var astCSharp = new Ast_CSharp(CompilationUnit);
-                    astCSharp.AstDetails.mapSpecials(snippetParser.Specials);
-                    // // keep this so that we can process the instructions included as comments  	                        
-
-                    // add references included in the original source code file
-                    mapCodeO2References(astCSharp);
-                    SourceCode = astCSharp.AstDetails.CSharpCode;
-                    DebugMode.debug("Ast parsing was OK");
-                    this.invoke(onAstOK);
-                    return SourceCode;
+                    if(CompilationUnit.Children.Count > 0)
+                    {
+	                    // create sourceCode using Ast_CSharp & AstDetails		
+	                    var astCSharp = new Ast_CSharp(CompilationUnit);
+	                    astCSharp.AstDetails.mapSpecials(snippetParser.Specials);
+	                    // // keep this so that we can process the instructions included as comments  	                        
+	
+	                    // add references included in the original source code file
+	                    mapCodeO2References(astCSharp);
+	                    SourceCode = astCSharp.AstDetails.CSharpCode;
+	                    DebugMode.debug("Ast parsing was OK");
+	                    this.invoke(onAstOK);
+	                    return SourceCode;
+                    }
                 }            
             }
             catch (Exception ex)
@@ -225,7 +225,8 @@ namespace O2.External.SharpDevelop.AST
         }                
         
         public void mapCodeO2References(Ast_CSharp astCSharp)
-        {        	              	
+        {
+            generateDebugSymbols = false; // default to not generating debug symbols and creating the assembly only in memory
         	ReferencedAssemblies = getDefaultReferencedAssemblies();
         	var compilationUnit = astCSharp.CompilationUnit;
         	
@@ -237,15 +238,17 @@ namespace O2.External.SharpDevelop.AST
         	foreach(var usingStatement in defaultUsingStatements)
         		if (false == currentUsingDeclarations.Contains(usingStatement))
         			compilationUnit.add_Using(usingStatement);
-        	
-        	foreach(var comment in astCSharp.AstDetails.Comments)
-        	{
-        		comment.Text.starts("using ", (value) => astCSharp.CompilationUnit.add_Using(value));
-        		comment.Text.starts("ref ", (value) => ReferencedAssemblies.Add(value));
-        		comment.Text.starts("O2Ref:", (value) => ReferencedAssemblies.Add(value));
-        	}
-        		        	
-			// reset the astCSharp.AstDetails object        	
+
+            foreach (var comment in astCSharp.AstDetails.Comments)
+            {
+                comment.Text.starts("using ", false, value => astCSharp.CompilationUnit.add_Using(value));
+                comment.Text.starts(new [] {"ref ", "O2Ref:"}, false,  value => ReferencedAssemblies.Add(value));                
+
+                comment.Text.starts(new[] {"O2:debugSymbols",
+                                        "generateDebugSymbols", 
+                                        "debugSymbols"}, true, (value) => generateDebugSymbols = true);                
+            }
+            // reset the astCSharp.AstDetails object        	
         	astCSharp.mapAstDetails(astCSharp.CompilationUnit);        	        	
         }               
         
