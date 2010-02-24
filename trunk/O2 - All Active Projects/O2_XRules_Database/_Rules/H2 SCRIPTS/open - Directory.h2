@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var directory = (ascx_Directory)typeof(ascx_Directory).showAsForm();
+directory._ViewMode = ascx_Directory.ViewMode.Simple_With_LocationBar;
+directory.openDirectory(Environment.CurrentDirectory);
+//directory.simpleMode_withAddressBar(); // will work on next publish
+</SourceCode>
+  <ReferencedAssemblies />
+</H2>

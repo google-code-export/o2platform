@@ -61,7 +61,7 @@ namespace O2.XRules.Database
     		var logoFile = "O2_Logo.gif";
     		var tempPath = System.IO.Path.Combine(PublicDI.config.O2TempDir,logoFile);
     		if (! tempPath.fileExists())
-		    	pathToPictureBox = Web.checkIfFileExistsAndDownloadIfNot(logoFile, @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
+                pathToPictureBox = Web.checkIfFileExistsAndDownloadIfNot(logoFile, @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/Images/O2Logo_Medium.gif");
 		    else
 		    	pathToPictureBox = tempPath;		    
         }
