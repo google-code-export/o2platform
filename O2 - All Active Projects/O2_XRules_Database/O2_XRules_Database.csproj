@@ -35,7 +35,7 @@
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>25</ApplicationRevision>
+    <ApplicationRevision>26</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -257,7 +257,10 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="_Rules\O2 Utils\Wizard - SVN Checkout.cs.o2" />
+    <None Include="_Rules\H2 SCRIPTS\open - Directory.h2" />
     <None Include="_Rules\H2 SCRIPTS\open - O2 Object Model.h2" />
+    <None Include="_Rules\H2 SCRIPTS\open - O2 Rules at SVN server.h2" />
+    <None Include="_Rules\H2 SCRIPTS\open - Source Code Editor.h2" />
     <None Include="_Rules\H2 SCRIPTS\open - Web Browser.h2" />
     <None Include="_Rules\H2 SCRIPTS\open - XRules Editor.h2" />
     <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
