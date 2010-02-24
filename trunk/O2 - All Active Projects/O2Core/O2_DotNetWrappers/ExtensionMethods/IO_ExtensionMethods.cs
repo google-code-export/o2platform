@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.ExtensionMethods;
@@ -42,6 +43,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return false;
         }
 
+        public static bool isFile(this string path)
+        {
+            return path.fileExists();
+        }
+
         public static bool fileExists(this string file)
         {
             if (file.valid())
@@ -49,10 +55,15 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return false;
         }
 
-        public static bool dirExists(this string file)
+        public static bool isFolder(this string path)
         {
-            if (file.valid())
-                return Directory.Exists(file);
+            return path.dirExists();
+        }
+
+        public static bool dirExists(this string path)
+        {
+            if (path.valid())
+                return Directory.Exists(path);
             return false;
         }
 
@@ -74,6 +85,58 @@ namespace O2.DotNetWrappers.ExtensionMethods
             if (file.fileExists())
                 return Files.getFileContentsAsByteArray(file);
             return null;
+        }
+
+        public static List<T> wrapOnList<T>(this T item)
+        {
+            var list = new List<T>();
+            list.add(item);
+            return list;
+        }
+
+        public static List<string> files(this string path)
+        {
+            return path.files("", false);
+        }
+
+        public static List<string> files(this string path, string  searchPattern)
+        {
+            return path.files(searchPattern, false);
+        }
+
+        public static List<string> files(this string path, string searchPatterns, bool recursive)
+        {
+            return path.files(searchPatterns.wrapOnList(), recursive);
+        }
+
+        public static List<string> files(this string path, List<string> searchPatterns)
+        {
+            return path.files(searchPatterns, false);
+        }       
+
+        public static List<string> files(this string path, List<string> searchPatterns, bool recursive)
+        {
+            return (path.isFolder()) 
+                ? Files.getFilesFromDir_returnFullPath(path, searchPatterns, recursive)
+                : new List<string>();
+        }
+
+
+        public static List<string> dirs(this string path)
+        {
+            return path.folders(false);
+        }
+
+        public static List<string> folders(this string path)
+        {
+            return path.folders(false);
+        }
+
+        public static List<string> folders(this string path, bool recursive)
+        {
+            return (path.isFolder())
+                ? Files.getListOfAllDirectoriesFromDirectory(path, recursive)
+                : new List<string>();
         }
     }
 }

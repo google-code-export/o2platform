@@ -69,5 +69,38 @@ namespace O2.Views.ASCX.classes.MainGUI
         	formLoaded.WaitOne();
         }
 
+
+        public static T load<T>() where T : Control
+        {
+            return (T)typeof(T).showAsForm();
+        }
+
+        public static T load<T>(string title) where T : Control
+        {
+            return (T)WinForms.showAscxInForm(typeof(T), title);
+        }
+
+        public static T load<T>(string title, int width, int height) where T : Control
+        {
+            return (T)WinForms.showAscxInForm(typeof(T), title, width, height);
+        }
+
+        public static T showAsForm<T>() where T : Control
+        {
+            return (T) typeof (T).showAsForm();            
+        }
+
+        public static T showAsForm<T>(string title) where T : Control
+        {
+            return (T)WinForms.showAscxInForm(typeof(T),title);
+        }
+
+        public static T showAsForm<T>(string title, int width, int height) where T : Control
+        {
+            return (T)WinForms.showAscxInForm(typeof(T), title,width, height);
+        }
+        
+            
+
     }
 }
