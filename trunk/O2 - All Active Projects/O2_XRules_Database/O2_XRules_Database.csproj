@@ -19,6 +19,7 @@
     <ManifestKeyFile>O2_XRules_Database_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
+    <ApplicationIcon>O2Logo.ico</ApplicationIcon>
     <PublishUrl>C:\O2\_O2 - LOCAL SVN - DEV\O2_ClickOnce_Installers\O2_XRules_Database\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -34,7 +35,7 @@
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>22</ApplicationRevision>
+    <ApplicationRevision>25</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -246,10 +247,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
-    <Compile Include="_Rules\O2 Utils\ascx_Execute_H2_Script.cs.o2">
+    <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Line_v2.1.cs.o2">
+    <Compile Include="_Rules\O2 Utils\ascx_Simple_Script_Editor.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="_Rules\O2 Utils\ascx_SvnBrower.cs.o2">
@@ -287,6 +288,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="H2Logo.ico" />
+    <Content Include="Images\O2Logo_Medium.gif" />
     <Content Include="O2Logo.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -302,6 +304,18 @@
       <Progid>O2.XRule.Script.o2</Progid>
       <DefaultIcon>O2Logo.ico</DefaultIcon>
     </FileAssociation>
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="Microsoft.mshtml">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
