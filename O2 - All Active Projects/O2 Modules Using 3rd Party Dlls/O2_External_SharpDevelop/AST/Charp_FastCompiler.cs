@@ -67,7 +67,8 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.Kernel")
                                      .add("O2.Kernel.ExtensionMethods")
                                      .add("O2.Views.ASCX.CoreControls")
-                                     .add("O2.Views.ASCX.classes.MainGUI");                                    
+                                     .add("O2.Views.ASCX.classes.MainGUI")
+                                     .add("O2.DotNetWrappers.ExtensionMethods");                                    
         }
 		public List<string> getDefaultReferencedAssemblies()
         {
@@ -129,7 +130,7 @@ namespace O2.External.SharpDevelop.AST
             	O2Thread.mtaThread(
 	                ()=>{	  
 	                		//Files.setCurrentDirectoryToExecutableDirectory();                			                		
-	                		Environment.CurrentDirectory = O2.Kernel.PublicDI.config.CurrentExecutableDirectory;;
+	                		Environment.CurrentDirectory = Kernel.PublicDI.config.CurrentExecutableDirectory;;
 	                		this.invoke(beforeCompile);
 	                		DebugMode.info("Compiling Source Code (Size: {0})", sourceCode.size());            
 	                		SourceCode = sourceCode;   

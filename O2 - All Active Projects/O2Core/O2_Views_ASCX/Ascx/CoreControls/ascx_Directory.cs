@@ -72,22 +72,26 @@ namespace O2.Views.ASCX.CoreControls
         {
             set
             {
-                viewMode = value;
-                switch (value)
-                {
-                    case ViewMode.Simple:
-                        scAddressAndRest.Panel1Collapsed = true;
-                        scViewerAndSettings.Panel2Collapsed = true;
-                        break;
-                    case ViewMode.Simple_With_LocationBar:
-                        scAddressAndRest.Panel1Collapsed = false;
-                        scViewerAndSettings.Panel2Collapsed = true;
-                        break;
-                    case ViewMode.Advanced:
-                        scAddressAndRest.Panel1Collapsed = false;
-                        scViewerAndSettings.Panel2Collapsed = false;
-                        break;
-                }
+                this.invokeOnThread(
+                    () =>
+                        {
+                            viewMode = value;
+                            switch (value)
+                            {
+                                case ViewMode.Simple:
+                                    scAddressAndRest.Panel1Collapsed = true;
+                                    scViewerAndSettings.Panel2Collapsed = true;
+                                    break;
+                                case ViewMode.Simple_With_LocationBar:
+                                    scAddressAndRest.Panel1Collapsed = false;
+                                    scViewerAndSettings.Panel2Collapsed = true;
+                                    break;
+                                case ViewMode.Advanced:
+                                    scAddressAndRest.Panel1Collapsed = false;
+                                    scViewerAndSettings.Panel2Collapsed = false;
+                                    break;
+                            }
+                        });
             }
             get { return viewMode; }
         }
@@ -382,19 +386,34 @@ namespace O2.Views.ASCX.CoreControls
 
         public void simpleMode()
         {
-            tvDirectory.Dock = DockStyle.Fill;
-            tvDirectory.BringToFront();
+            _ViewMode = ViewMode.Simple;
+
+            /*this.invokeOnThread(
+                () =>
+                    {
+                        tvDirectory.Dock = DockStyle.Fill;
+                        tvDirectory.BringToFront();
+                    });*/
+            
         }
 
         public void simpleMode_withAddressBar()
         {
-            tbCurrentDirectoryName.Top = 0;
-            tbCurrentDirectoryName.BringToFront();
+            _ViewMode = ViewMode.Simple_With_LocationBar;
+            /*
+            this.invokeOnThread(
+                () =>
+                    {
+                        tbCurrentDirectoryName.Top = 0;
+                        tbCurrentDirectoryName.BringToFront();
 
-            tvDirectory.Top = 20;
-            tvDirectory.Height = Height - 20;
-            tvDirectory.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
-            tvDirectory.BringToFront();
+                        tvDirectory.Top = 20;
+                        tvDirectory.Height = Height - 20;
+                        tvDirectory.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right |
+                                             AnchorStyles.Top;
+                        tvDirectory.BringToFront();
+                    });
+             */ 
         }
 
         public String getCurrentDirectory()

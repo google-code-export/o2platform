@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
 using O2.Kernel;
@@ -152,6 +152,11 @@ namespace O2.DotNetWrappers.Network
             return null;
         }
         
+        public static string checkIfFileExistsAndDownloadIfNot(string urlToDownloadFile)
+        {
+            return checkIfFileExistsAndDownloadIfNot(urlToDownloadFile.fileName(), urlToDownloadFile);
+        }
+
         public static string checkIfFileExistsAndDownloadIfNot(string file , string urlToDownloadFile)
         {
         	if (File.Exists(file))
@@ -159,13 +164,14 @@ namespace O2.DotNetWrappers.Network
         	var localTempFile = Path.Combine(PublicDI.config.O2TempDir, file);
         	if (File.Exists(localTempFile))
         		return localTempFile;
-        	var downloadedFile = downloadBinaryFile(urlToDownloadFile, false /*saveUsingTempFileName*/);
-        	if (downloadedFile != null && File.Exists(downloadedFile))
+            downloadBinaryFile(urlToDownloadFile, localTempFile);
+        	//var downloadedFile = downloadBinaryFile(urlToDownloadFile, false /*saveUsingTempFileName*/);
+            if (File.Exists(localTempFile))
         	{
-        		if (Path.GetExtension(downloadedFile) != ".zip")
-        			return downloadedFile;        			        		
-        			
-        		List<string> extractedFiles = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(downloadedFile, PublicDI.config.O2TempDir);
+                if (Path.GetExtension(localTempFile) != ".zip")
+                    return localTempFile;
+
+                List<string> extractedFiles = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(localTempFile, PublicDI.config.O2TempDir);
         		if (extractedFiles != null)
         			foreach(var extractedFile in  extractedFiles)
         				if (Path.GetFileName(extractedFile) == file)
