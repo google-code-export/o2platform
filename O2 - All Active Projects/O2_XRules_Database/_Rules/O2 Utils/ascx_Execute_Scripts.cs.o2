@@ -9,6 +9,7 @@
 //O2Ref:O2_DotNetWrappers.dll
 //O2Ref:O2_Views_ASCX.dll
 //O2Ref:O2_External_SharpDevelop.dll
+//O2Ref:O2_Core_XRules.dll
 using System;
 using System.Drawing;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.DotNetWrappers.H2Scripts;
 using O2.DotNetWrappers.Network;
+using O2.Core.XRules.XRulesEngine;
 
 //O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
 
@@ -51,8 +53,9 @@ namespace O2.XRules.Database
     			()=>{
     					executeScripts.buildGui();
             			var scriptToExecute = ClickOnceDeployment.getClickOnceScriptPath();
-            			if (scriptToExecute.fileExists())           	
-                			executeScripts.loadH2Script(scriptToExecute);            
+            			if (scriptToExecute.fileExists())      
+            				executeScripts.openSimpleScriptEditor();
+                			//executeScripts.loadH2Script(scriptToExecute);            
     				});
     	}    	
     	
@@ -61,13 +64,14 @@ namespace O2.XRules.Database
     		var logoFile = "O2_Logo.gif";
     		var tempPath = System.IO.Path.Combine(PublicDI.config.O2TempDir,logoFile);
     		if (! tempPath.fileExists())
-                pathToPictureBox = Web.checkIfFileExistsAndDownloadIfNot(logoFile, @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/Images/O2Logo_Medium.gif");
+		    	pathToPictureBox = Web.checkIfFileExistsAndDownloadIfNot(logoFile, @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
 		    else
 		    	pathToPictureBox = tempPath;		    
         }
     
         private void buildGui()
         {   
+                	
         	// add controls            
             this.BackColor = Color.White;
 			var topPanel = this.add_Panel();         			
@@ -93,6 +97,8 @@ namespace O2.XRules.Database
         	var contextMenu = pictureBox.add_ContextMenu();        	
         	contextMenu.add("View loaded script source Code", (item)=> showLoadedScriptSourceCode() );
         	contextMenu.add("Execute Again", (item)=> executeCompiledCode() );
+        	contextMenu.add("View available scripts", (item)=> showAvailableScripts() );
+        	contextMenu.add("Open Simple Script Editor", (item)=> openSimpleScriptEditor() );
         	
         	// load data map actions
 			if (pathToPictureBox.fileExists())
@@ -158,6 +164,44 @@ namespace O2.XRules.Database
      		}
      	}
      	
+     	public void showAvailableScripts()
+     	{     		
+            var path = XRules_Config.PathTo_XRulesDatabase_fromO2;
+
+            Action<TreeView, TreeNode> mapFoldersAndFiles =
+                (targetTreeView, treeNode) =>
+                {
+                    targetTreeView.clear(treeNode);
+                    var folder = treeNode.Tag.ToString();
+                    foreach (var dir in folder.dirs())
+                        targetTreeView.add_Node(treeNode, dir.fileName(), dir, true)
+                            .ForeColor = Color.DarkOrange;
+                    foreach (var file in folder.files())
+                        targetTreeView.add_Node(treeNode, file.fileName(), file, false)
+                            .ForeColor = Color.DarkBlue;
+                };
+            //var treeView = new TreeView();
+            var treeView = (TreeView)WinForms.showAscxInForm(typeof(TreeView));
+            treeView.BeforeExpand += (sender, e) => { mapFoldersAndFiles(treeView, e.Node); };
+            treeView.ItemDrag += (sender, e) =>
+            {
+                var node = (TreeNode)e.Item;
+                treeView.SelectedNode = node;
+                var target = node.Tag.ToString();
+                if (target.isFile())
+                    treeView.DoDragDrop(target, DragDropEffects.Copy);
+            };
+
+            var rootNode = treeView.add_Node("Scripts in: " + path + "", path, true);
+            mapFoldersAndFiles(treeView, rootNode);
+            rootNode.Expand();
+     	}
+     	
+     	public void openSimpleScriptEditor()
+     	{
+     		typeof(ascx_Simple_Script_Editor).showAsForm("Simple Script Editor", 600,400);     		
+     	}
+     	
      	public object executeCompiledCode()
      	{
      		if (csharpCompiler != null)
@@ -211,6 +255,43 @@ namespace O2.XRules.Database
     			if (control.type() == typeof(T))
     				return (T)control;
     		return null;
+    	}
+    	
+    	//reflection
+    	
+    	public static List<Type> types(this Assembly assembly)
+    	{
+    		return PublicDI.reflection.getTypes(assembly);
+    	}
+    	
+    	public static Assembly compile(this string pathToFileToCompile)
+    	{
+    		var csharpCompiler = new CSharp_FastCompiler();
+    		
+    		var compileProcess = new System.Threading.AutoResetEvent(false);
+    		
+    		csharpCompiler.compileSourceCode(pathToFileToCompile.contents());    		
+    		csharpCompiler.onCompileFail= ()=> compileProcess.Set();
+    		csharpCompiler.onCompileOK = ()=> compileProcess.Set();
+    		compileProcess.WaitOne();
+    		return csharpCompiler.assembly();    		    	
+    	}
+    	
+    	public static Assembly assembly(this CSharp_FastCompiler csharpCompiler)
+    	{
+    		if (csharpCompiler != null)
+     			if (csharpCompiler.CompilerResults != null)
+     				if (csharpCompiler.CompilerResults.CompiledAssembly != null)
+     					return csharpCompiler.CompilerResults.CompiledAssembly;
+     		return null;
+    	}
+    	
+    	public static MethodInfo firstMethod(this Assembly assembly)
+    	{
+    		var methods = assembly.methods();
+        	if (methods.Count >0)          
+        		return methods[0];
+        	return null;
     	}
     }
 }
