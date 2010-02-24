@@ -25,7 +25,7 @@ namespace O2.XRules.Database
         [STAThread]
         static void Main()
         {
-            typeof(ascx_Execute_H2_Script).showAsForm("O2 Script Execution", 400,400);
+            typeof(ascx_Execute_Scripts).showAsForm("Execute *.cs *.o2 and *.cs scripts", 400,400);
             //new Wizard_XRule_Exec_Simple().startWizard();
         }                
     }

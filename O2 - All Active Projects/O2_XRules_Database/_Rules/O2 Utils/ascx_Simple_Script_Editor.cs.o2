@@ -33,14 +33,14 @@ using O2.External.SharpDevelop.ExtensionMethods;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;   
 using O2.DotNetWrappers.H2Scripts;
-
+//O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\AST\Charp_FastCompiler.cs
 namespace O2.XRules.Database
 {
 
 	// Comments: (18 Feb 2010): This was the 2nd pass at building an O2 Command Prompt directlly as an XRule
 	// 							Most of this code will be incorporated into O2's main APIs
 	
-    public class ascx_O2_Command_Line_V2_1: UserControl
+    public class ascx_Simple_Script_Editor: UserControl
     {    
     	private static IO2Log log = PublicDI.log;
 		public ascx_SourceCodeViewer sourceCodeViewer;
@@ -52,10 +52,10 @@ namespace O2.XRules.Database
 		
         public static void startControl()
     	{
-            typeof(ascx_O2_Command_Line_V2_1).showAsForm("O2 Command Line V2.0", 500, 500);			
-    	}    	
-    	
-    	public ascx_O2_Command_Line_V2_1()
+            typeof(ascx_Simple_Script_Editor).showAsForm("O2 Simple Script Editor", 500, 500);			
+    	}
+
+        public ascx_Simple_Script_Editor()
     	{    	    		
     		setCompilerEnvironment();
     		buildGui();	     
