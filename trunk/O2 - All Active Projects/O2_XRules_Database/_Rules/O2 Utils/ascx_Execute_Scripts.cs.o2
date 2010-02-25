@@ -181,7 +181,7 @@ namespace O2.XRules.Database
                             .ForeColor = Color.DarkBlue;
                 };
             //var treeView = new TreeView();
-            var treeView = (TreeView)WinForms.showAscxInForm(typeof(TreeView));
+            var treeView = (TreeView)WinForms.showAscxInForm(typeof(TreeView),"O2 - Available scripts");
             treeView.BeforeExpand += (sender, e) => { mapFoldersAndFiles(treeView, e.Node); };
             treeView.ItemDrag += (sender, e) =>
             {
@@ -199,7 +199,8 @@ namespace O2.XRules.Database
      	
      	public void openSimpleScriptEditor()
      	{
-     		typeof(ascx_Simple_Script_Editor).showAsForm("Simple Script Editor", 600,400);     		
+            ascx_Simple_Script_Editor.startControl();
+     		//typeof(ascx_Simple_Script_Editor).showAsForm("Simple Script Editor", 600,400);     		
      	}
      	
      	public object executeCompiledCode()
