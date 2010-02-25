@@ -81,7 +81,7 @@
     <Compile Include="Ascx\Web\O2WebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="classes\CoreControls_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CoreControls_ExtensionMethods.cs" />
     <Compile Include="classes\CreateDataTable.cs" />
     <Compile Include="classes\ImagesLists.cs" />
     <Compile Include="classes\MainGUI\DebugMsg.cs" />
@@ -89,7 +89,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="classes\MainGUI\WinForms.cs" />
-    <Compile Include="classes\MainGUI\WinForms_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\WinForms_ExtensionMethods.cs" />
     <Compile Include="classes\O2CoreResources.Designer.cs">
       <DependentUpon>O2CoreResources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -160,13 +160,12 @@
     </Compile>
     <Compile Include="MerlinWizard\IO2Wizard.cs" />
     <Compile Include="MerlinWizard\MerlinUtils.cs" />
-    <Compile Include="MerlinWizard\MerlinWizard_ExtensionMethods.cs" />
     <Compile Include="MerlinWizard\O2Wizard.cs" />
-    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\Ex_Business_Logic.cs" />
-    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\Ex_Misc_Utils.cs" />
-    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\EX_O2_Ascx.cs" />
-    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\Ex_Windows_Forms.cs" />
-    <Compile Include="MerlinWizard\O2Wizard_ExtensionMethods\Ex_Wizard_GUI.cs" />
+    <Compile Include="ExtensionMethods\O2Wizard_ExtensionMethods\Ex_Business_Logic.cs" />
+    <Compile Include="ExtensionMethods\O2Wizard_ExtensionMethods\Ex_Misc_Utils.cs" />
+    <Compile Include="ExtensionMethods\O2Wizard_ExtensionMethods\EX_O2_Ascx.cs" />
+    <Compile Include="ExtensionMethods\O2Wizard_ExtensionMethods\Ex_Windows_Forms.cs" />
+    <Compile Include="ExtensionMethods\O2Wizard_ExtensionMethods\Ex_Wizard_GUI.cs" />
     <Compile Include="Ascx\O2Findings\ascx_FindingEditor.Controllers.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -320,9 +319,6 @@
   <ItemGroup>
     <Content Include="ChangeLog.txt" />
     <Content Include="classes\o2FindingsScriptLibrary.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ExtensionMethods\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
