@@ -86,6 +86,7 @@
     <Compile Include="O2KernelCmdShell\ShellCommands.cs" />
     <Compile Include="O2KernelCmdShell\ShellExecution.cs" />
     <Compile Include="O2KernelCmdShell\ShellIO.cs" />
+    <Compile Include="O2LiveObjects.cs" />
     <Compile Include="Objects\O2AppDomainFactory.cs" />
     <Compile Include="CodeUtils\AppDomainUtils.cs" />
     <Compile Include="CodeUtils\LoadTypes.cs" />

@@ -63,7 +63,6 @@ namespace O2.Kernel
         public static string sEmailToSendBugReportsTo { get; set; }
         public static string sO2Website { get; set; }
 
-        public static string LogViewerControlName { get; set; }
-                        
+        public static string LogViewerControlName { get; set; }                        
     }
 }

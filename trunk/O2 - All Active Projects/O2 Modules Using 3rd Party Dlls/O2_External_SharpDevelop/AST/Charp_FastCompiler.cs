@@ -254,8 +254,7 @@ namespace O2.External.SharpDevelop.AST
         }               
         
         public object executeFirstMethod()
-        {
-        	
+        {        	
         	var parametersValues = InvocationParameters.valuesArray();
         	return executeFirstMethod(parametersValues);
         }
@@ -267,14 +266,10 @@ namespace O2.External.SharpDevelop.AST
         	{
         		var methods = assembly.methods();
         		if (methods.Count >0)        		
-        		{
-        			this.error("XXXXX");
-        			this.error(" - method: {0}", methods[0].parameters().size());
-        			this.error(" - param: {0}", parameters.size());
+        		{        			        		
         			if (methods[0].parameters().size() == parameters.size())
-        				return methods[0].invoke(parameters);
-        			else
-        				return methods[0].invoke();
+        				return methods[0].invoke(parameters);        			
+        			return methods[0].invoke();
         		}
         	}
         	return null;

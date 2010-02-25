@@ -61,7 +61,7 @@ namespace O2.Tool.XRules
                 O2AscxGUI.addControlToMenu(typeof(ascx_XRules_Execution), O2DockState.Document, "XRules Execution");
                 O2AscxGUI.openAscx(typeof(ascx_XRules_Editor), O2DockState.Document, "XRules Editor");
 
-                O2AscxGUI.openAscx(typeof(ascx_XRules_UnitTests), O2DockState.DockRight, "XRules & UnitTests");
+                O2AscxGUI.addControlToMenu(typeof(ascx_XRules_UnitTests), O2DockState.DockRight, "XRules & UnitTests");
 
                 O2AscxGUI.addControlToMenu(typeof(ascx_AssemblyInvoke), O2DockState.DockRight, "Invoke Assemblies");
                 O2AscxGUI.addControlToMenu(typeof(ascx_O2MdbgShell), O2DockState.DockBottom, "O2 Debugger");

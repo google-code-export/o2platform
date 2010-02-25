@@ -583,6 +583,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             treeView.invokeOnThread(() => treeView.ExpandAll());
         }
 
+        public static void expand(this TreeView treeView, TreeNode treeNode)
+        {
+            treeView.invokeOnThread(() => treeNode.Expand());
+        }
+
         public static void setTextColor(this TreeView treeView, TreeNode treeNode, Color color)
         {
             treeView.invokeOnThread(()

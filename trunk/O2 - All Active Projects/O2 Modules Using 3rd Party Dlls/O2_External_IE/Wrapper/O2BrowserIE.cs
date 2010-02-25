@@ -1,19 +1,21 @@
 ﻿using System;
-using System.Windows.Forms;
-using mshtml;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
+using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Network;
 using O2.External.IE.Interfaces;
 using O2.External.IE.WebObjects;
 using O2.Kernel;
 
-//O2Ref:C:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll
-using O2.External.IE;
-
 namespace O2.External.IE.Wrapper
 {
-    public class O2BrowserIE : ExtendedWebBrowser, IO2Browser
-        //public class O2BrowserIE : WebBrowser, IO2Browser
+    public class O2BrowserIE : ExtendedWebBrowser, IO2Browser        
     {
         public event Action<IO2HtmlPage> onDocumentCompleted;
+        public bool DebugMode;                      // false by default
+        public IO2HtmlPage HtmlPage;
+        public AutoResetEvent documentCompleted;
 
         public O2BrowserIE()
         {
@@ -24,6 +26,7 @@ namespace O2.External.IE.Wrapper
 
             DocumentComplete += O2BrowserIE_DocumentComplete;
             AllowWebBrowserDrop = false;
+            documentCompleted = new AutoResetEvent(false);
             
 
             /*DocumentCompleted +=
@@ -52,13 +55,15 @@ namespace O2.External.IE.Wrapper
 
         void O2BrowserIE_DocumentComplete(object sender, DocumentCompleteEventArgs e)
         {
-            
-            PublicDI.log.debug("in O2BrowserIE_DocumentComplete for:{0}", e.Url); 
-            //var uri = (Uri) e.Url;            
+            documentCompleted.Set();
+            if (DebugMode)
+                PublicDI.log.debug("in O2BrowserIE_DocumentComplete for:{0}", e.Url); 
+            ////var uri = (Uri) e.Url;            
             try
             {
+                HtmlPage = new IE_HtmlPage(e.DocumentClass);
                 if (onDocumentCompleted != null)
-                    onDocumentCompleted(new IE_HtmlPage(e.DocumentClass));//.,.PageSource, e.Url));    
+                    onDocumentCompleted(HtmlPage);
             }
             catch (Exception ex)
             {
@@ -69,9 +74,24 @@ namespace O2.External.IE.Wrapper
                  
         public void open(string url)
         {
-            PublicDI.log.debug("[O2BrowserIE] opening: {0}", url);
+            if (DebugMode)
+                PublicDI.log.debug("[O2BrowserIE] opening: {0}", url);
             Navigate(url);
         }
+        
+        /// <summary>
+        /// _note: this only works well for pages with no frames (since on those cases the returned IO2HtmlPage will be the first one loaded)
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public IO2HtmlPage openSync(string url)
+        {
+            documentCompleted.Reset();
+            O2Thread.mtaThread(() => open(url));
+            documentCompleted.WaitOne();
+            return HtmlPage;
+        }
+
         
         public bool HtmlEditMode
         {
@@ -96,6 +116,46 @@ namespace O2.External.IE.Wrapper
                     PublicDI.log.error("in DesignMode.get Document == null");
             }
         }
+
+        public void submitRequest_POST(string url, string targetFrame, Dictionary<string, string> parameters)
+        {
+            var parametersText = "";
+            if (parameters != null)
+                foreach (var parameter in parameters.Keys)
+                    parametersText += string.Format("{0}={1}&", parameter, WebEncoding.urlEncode(parameters[parameter]));
+            byte[] postData = Encoding.ASCII.GetBytes(parametersText);
+            const string additionalHeaders = "Content-Type: application/x-www-form-urlencoded";
+            Navigate(url, targetFrame, postData, additionalHeaders);
+        }
+
+        public void submitRequest_GET(string url, string targetFrame, Dictionary<string, string> parameters)
+        {
+            var parametersText = "";
+            if (parameters != null)
+            {
+                foreach (var parameter in parameters.Keys)
+                    parametersText += string.Format("{0}={1}&", parameter, WebEncoding.urlEncode(parameters[parameter]));
+                url += "?" + parametersText;
+            }
+            Navigate(url, targetFrame);
+        }
+
+        public IO2HtmlPage submitRequest_POST_Sync(string url, string targetFrame, Dictionary<string, string> parameters)
+        {
+            documentCompleted.Reset();
+            O2Thread.mtaThread(() => submitRequest_POST(url, targetFrame, parameters));
+            documentCompleted.WaitOne();
+            return HtmlPage;
+        }
+
+        public IO2HtmlPage submitRequest_GET_Sync(string url, string targetFrame, Dictionary<string, string> parameters)
+        {
+            documentCompleted.Reset();
+            O2Thread.mtaThread(() => submitRequest_GET(url, targetFrame, parameters));
+            documentCompleted.WaitOne();
+            return HtmlPage;
+        }
+
 
     }
 }

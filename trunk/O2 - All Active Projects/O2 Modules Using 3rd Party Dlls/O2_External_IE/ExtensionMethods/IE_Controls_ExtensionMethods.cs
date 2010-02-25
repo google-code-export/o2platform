@@ -8,7 +8,7 @@ using O2.Kernel.ExtensionMethods;
 
 namespace O2.External.IE.ExtensionMethods
 {
-    public static class IE_ExtensionMethods
+    public static class IE_Controls_ExtensionMethods
     {
         public static IO2Browser add_WebBrowser(this Control control)
         {
@@ -58,7 +58,9 @@ namespace O2.External.IE.ExtensionMethods
                                            //textBox.Multiline = false;
                                            textBox.Dock = DockStyle.Fill;
                                            var webBrowser = splitControl.Panel2.add_WebBrowser();
-
+                                           
+                                           webBrowser.onDocumentCompleted +=
+                                               htmlPage => textBox.set_Text(htmlPage.PageUrl.ToString());
                                            //textBox.TextChanged += (sender, e) => webBrowser.open(textBox.Text);
                                            textBox.KeyUp += (sender, e) => onKeyUp(e.KeyCode, webBrowser, textBox.Text);
                                            textBox.Text = startUrl;
