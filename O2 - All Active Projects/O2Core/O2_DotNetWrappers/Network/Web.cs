@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.IO;
+using System.Windows.Forms;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
@@ -95,7 +96,8 @@ namespace O2.DotNetWrappers.Network
                 PublicDI.log.error("Error in getUrlContents: {0}", ex.Message);
                 return "";
             }
-        }
+        }                 
+
 		public static string downloadBinaryFile(string urlOfFileToFetch)
 		{
 			return downloadBinaryFile(urlOfFileToFetch, true);
