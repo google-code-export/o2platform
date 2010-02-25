@@ -1,6 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 //_O2Tag_OnlyAddReferencedAssemblies
 //O2Ref:System.dll
+//debugSymbols
 using System;
 using System.Reflection;
 using System.Text;
@@ -38,8 +39,7 @@ using O2.DotNetWrappers.H2Scripts;
 namespace O2.XRules.Database
 {
 
-	// Comments: (18 Feb 2010): This was the 2nd pass at building an O2 Command Prompt directlly as an XRule
-	// 							Most of this code will be incorporated into O2's main APIs
+	// Comments: (24 Feb 2010): This was the 4th pass at building an O2 Command Prompt (i.e. simple script editor)	
 	
     public class ascx_Simple_Script_Editor: UserControl
     {    
@@ -48,38 +48,58 @@ namespace O2.XRules.Database
 		public ascx_SourceCodeViewer commandsToExecute;
 		public RichTextBox result_RichTextBox;		
 		public Button executeButton;		
-		
+		public SplitContainer topLevelSplitContainer;
 		public CSharp_FastCompiler csharpCompiler;
 		
         public static void startControl()
     	{
-            typeof(ascx_Simple_Script_Editor).showAsForm("O2 Simple Script Editor", 500, 500);			
+            var defaultCode = "PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
+                               .line("return \"test:\" + testString ;");   			
+    						   
+            //var control = (ascx_Simple_Script_Editor)typeof(ascx_Simple_Script_Editor).showAsForm("O2 Simple Script Editor", 500, 500);			
+            var control = O2Gui.load<ascx_Simple_Script_Editor>("O2 Simple Script Editor", 700, 300);            
+            
+    		control.invokeOnThread(()=>
+    		{    			   		
+    			control.buildGui();	      			
+    			control.commandsToExecute.set_Text(defaultCode);
+    		});
     	}
 
         public ascx_Simple_Script_Editor()
     	{    	    		
-    		setCompilerEnvironment();
-    		buildGui();	     
-    		O2Thread.mtaThread(()=>
-    		commandsToExecute.set_Text(
-    			"PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
-    			.line("return \"test:\" + testString ;")    			
-    			));
-        }
+			setCompilerEnvironment();     		
+        }        	
     
         private void buildGui()
         {
         	// create controls
-        	var groupBoxes = this.add_SplitContainer_2x2("Command To Execute", "Action", "Source Code", "Result",true,40,150,150);        	
-        	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();        	        	        	
-        	sourceCodeViewer = groupBoxes[2].add_SourceCodeViewer();
-        	result_RichTextBox = groupBoxes[3].add_RichTextBox();        	        	
         	
-        	// control's options:
-        	executeButton = groupBoxes[1].add_Button("Execute", 15, -1, 100);        	
-        	executeButton.Enabled = false;        	
-        	executeButton.onClick(execute);        
-        	groupBoxes[1].mapToWidth(executeButton, true);
+
+        	var groupBoxes = this.add_1x1("Command To Execute", "Invoke and Result",false,this.Width-150);   
+        	
+        	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();        	        	        	
+        	
+        	var topPanel = (SplitContainer)groupBoxes[0].Parent.Parent;
+
+            var bottomPanel = this.add_GroupBox("Generated Source Code");
+        	sourceCodeViewer = bottomPanel.add_SourceCodeViewer();
+        	topPanel.insert_Below(bottomPanel, 200);
+        	
+			executeButton = this.add_Button("Execute");        	        	
+        	executeButton.fill(); 
+        	        	        
+        	var outputPanel = groupBoxes[1].add_GroupBox("Output");  
+        	var controls = outputPanel.insert_Above(executeButton,60);
+
+			topLevelSplitContainer = (SplitContainer)this.Controls[0];
+			
+			result_RichTextBox = outputPanel.add_RichTextBox();       						
+        	
+        	executeButton.Enabled = false; 
+        	swapGeneratedCodeViewMode();         	// make it not visible by default        	
+
+        	executeButton.onClick(execute);                	
         	commandsToExecute.onTextChanged(compileCodeSnippet);        	
         	
         	commandsToExecute.vScroolBar_Enabled(false);
@@ -94,7 +114,8 @@ namespace O2.XRules.Database
         	sourceCodeViewer.textEditorControl().remove_ContextMenu();        	
         	var contextMenu = commandsToExecute.textEditorControl().add_ContextMenu();
         	
-        	contextMenu.add("save",(menuitem)=> saveScript());        	        	
+        	contextMenu.add("save",(menuitem)=> saveScript());      
+        	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());          	
      	}        	     	
 	     	
 	    public void setCompilerEnvironment()
@@ -108,7 +129,7 @@ namespace O2.XRules.Database
      		 		};	    	
      		 		
 	    	csharpCompiler.onAstFail = 
-     			()=>{     					
+     			()=>{        					
      					csharpCompiler.AstErrors.runForEachAstParsingError( 
      											  (row,col)=> commandsToExecute.editor().setSelectedText(row,col, true,false));
      					sourceCodeViewer.enabled(false);    	 				
@@ -119,27 +140,21 @@ namespace O2.XRules.Database
 	     			};
 	     			 
 	     	csharpCompiler.onAstOK = 
-	     		()=>{		     				
+	     		()=>{		     		     			
 	     				commandsToExecute.editor().refresh();
 	     				sourceCodeViewer.enabled(true);
 	     				commandsToExecute.invokeOnThread(()=>commandsToExecute.Refresh());;
-						sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
+	     				if (isGeneratedSourceCodeVisible())
+							sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
      		 		};     		      		 
      		 		
      		 csharpCompiler.onCompileFail = 
      		 	()=>{
-     		 			
-     		 			//sourceCodeViewer.editor().invoke("showErrorsInSourceCodeEditor",csharpCompiler.CompilationErrors);
-     		 			//sourceCodeViewer.editor().setSelectedText(1,2, true,false);
+     		 			     		 			
      		 			csharpCompiler.CompilationErrors.runForEachCompilationError( 
      											  (row,col)=> 
      											  	{ 
      											  		sourceCodeViewer.editor().setSelectedText(row,col, true,false);
-     											  		/*if (row > 50)
-     											  		{
-     											  			row -= 5;
-     											  			col -= 2;
-     											  		}*/
      											  		commandsToExecute.editor().setSelectedText(row-6,col-2, true,false);
      											  		
      											  	});
@@ -160,13 +175,13 @@ namespace O2.XRules.Database
 	    }	         	
 
 		public void compileCodeSnippet(string codeSnippet)
-     	{
+     	{     		     		
      		if (codeSnippet.size() > 200)
-     		{
+     		{     			
      			commandsToExecute.vScroolBar_Enabled(true);
         		commandsToExecute.hScroolBar_Enabled(true);
         	}
-     		commandsToExecute.editor().clearBookmarksAndMarkers();
+     		commandsToExecute.editor().clearBookmarksAndMarkers();     		
      		csharpCompiler.compileSnippet(codeSnippet);
      	}     	     	
      	
@@ -189,5 +204,17 @@ namespace O2.XRules.Database
      		}
      		this.info("target: {0}", targetFile);
      	}	
+     	
+     	public void swapGeneratedCodeViewMode()
+     	{
+     		topLevelSplitContainer.Panel2Collapsed = ! topLevelSplitContainer.Panel2Collapsed;
+     		if (isGeneratedSourceCodeVisible())
+     			compileCodeSnippet(commandsToExecute.get_Text()); 
+     	}
+     	
+     	public bool isGeneratedSourceCodeVisible()
+     	{
+     		return  !topLevelSplitContainer.Panel2Collapsed;
+     	}
      }
 }
