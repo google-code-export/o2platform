@@ -31,6 +31,8 @@ using O2.External.SharpDevelop.ExtensionMethods;
 using O2.DotNetWrappers.H2Scripts;
 using O2.DotNetWrappers.Network;
 using O2.Core.XRules.XRulesEngine;
+using O2.Core.XRules._Wizards;
+using O2.Views.ASCX.Ascx.MainGUI;
 
 //O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
 
@@ -92,13 +94,16 @@ namespace O2.XRules.Database
         	mainSplitContainer = topPanel.insert_Below(results_RichTextBox,100)
         							     .get<SplitContainer>();        	         	                
         	        
-        	mainSplitContainer.Panel2Collapsed = true;
+        	mainSplitContainer.panel2Collapsed(true);
         	
         	var contextMenu = pictureBox.add_ContextMenu();        	
         	contextMenu.add("View loaded script source Code", (item)=> showLoadedScriptSourceCode() );
         	contextMenu.add("Execute Again", (item)=> executeCompiledCode() );
         	contextMenu.add("View available scripts", (item)=> showAvailableScripts() );
         	contextMenu.add("Open Simple Script Editor", (item)=> openSimpleScriptEditor() );
+            contextMenu.add("Sync/Download local XRules From O2's Svn", (item) => syncO2ViaSvn());
+            contextMenu.add("Open O2 Log Viewer", (item) => openO2LogViewer());
+            
         	
         	// load data map actions
 			if (pathToPictureBox.fileExists())
@@ -158,9 +163,9 @@ namespace O2.XRules.Database
      	{
      		if (currentScript.fileExists())
      		{
-     			var sourceCodeViewer = (ascx_SourceCodeViewer)typeof(ascx_SourceCodeViewer)
+     			var sourceCodeEditor = (ascx_SourceCodeEditor)typeof(ascx_SourceCodeEditor)
      										.showAsForm("source code for: {0}".format(currentScript), 600,200);
-     			sourceCodeViewer.editor().loadSourceCodeFile(currentScript);							
+                sourceCodeEditor.loadSourceCodeFile(currentScript);							
      		}
      	}
      	
@@ -175,7 +180,7 @@ namespace O2.XRules.Database
                     var folder = treeNode.Tag.ToString();
                     foreach (var dir in folder.dirs())
                         targetTreeView.add_Node(treeNode, dir.fileName(), dir, true)
-                            .ForeColor = Color.DarkOrange;
+                            .ForeColor = Color.SaddleBrown;
                     foreach (var file in folder.files())
                         targetTreeView.add_Node(treeNode, file.fileName(), file, false)
                             .ForeColor = Color.DarkBlue;
@@ -183,18 +188,24 @@ namespace O2.XRules.Database
             //var treeView = new TreeView();
             var treeView = (TreeView)WinForms.showAscxInForm(typeof(TreeView),"O2 - Available scripts");
             treeView.BeforeExpand += (sender, e) => { mapFoldersAndFiles(treeView, e.Node); };
+            treeView.NodeMouseDoubleClick += (sender ,e) =>
+                {  
+                    var target = e.Node.Tag.ToString();
+                    if (target.isFile())
+                        loadH2Script(target);
+                };
             treeView.ItemDrag += (sender, e) =>
-            {
-                var node = (TreeNode)e.Item;
-                treeView.SelectedNode = node;
-                var target = node.Tag.ToString();
-                if (target.isFile())
-                    treeView.DoDragDrop(target, DragDropEffects.Copy);
-            };
+                {
+                    var node = (TreeNode)e.Item;
+                    treeView.SelectedNode = node;
+                    var target = node.Tag.ToString();
+                    if (target.isFile())
+                        treeView.DoDragDrop(target, DragDropEffects.Copy);
+                };
 
             var rootNode = treeView.add_Node("Scripts in: " + path + "", path, true);
             mapFoldersAndFiles(treeView, rootNode);
-            rootNode.Expand();
+            treeView.expand(rootNode);            
      	}
      	
      	public void openSimpleScriptEditor()
@@ -202,13 +213,30 @@ namespace O2.XRules.Database
             ascx_Simple_Script_Editor.startControl();
      		//typeof(ascx_Simple_Script_Editor).showAsForm("Simple Script Editor", 600,400);     		
      	}
-     	
+
+        public void syncO2ViaSvn()
+        {
+            new Wizard_SyncXRulesViaSvn().runWizard();
+        }
+
+        public void openO2LogViewer()
+        {
+            O2Gui.open<ascx_LogViewer>();
+        }
+
      	public object executeCompiledCode()
      	{
-     		if (csharpCompiler != null)
-     			if (csharpCompiler.CompilerResults != null)
-     				if (csharpCompiler.CompilerResults.CompiledAssembly != null)
-     					return csharpCompiler.executeFirstMethod();
+            try
+            {
+     		    if (csharpCompiler != null)
+     			    if (csharpCompiler.CompilerResults != null)
+     				    if (csharpCompiler.CompilerResults.CompiledAssembly != null)
+     					    return csharpCompiler.executeFirstMethod();
+            }
+            catch(Exception ex)
+            {
+                PublicDI.log.ex(ex,"in executeCompiledCode");
+            }
      		return null;
      	}
      	
@@ -216,7 +244,7 @@ namespace O2.XRules.Database
      	{
      		statusLabel.set_Text(errorMessage).textColor(Color.Red);
 			results_RichTextBox.set_Text(errorDetails).textColor(Color.Red);			
-     		mainSplitContainer.Panel2Collapsed = false;
+     		mainSplitContainer.panel2Collapsed(false);
      	}
      	
      	public void showInfo(string infoMessage)
@@ -233,11 +261,11 @@ namespace O2.XRules.Database
      			if (data.valid())
      			{
      				results_RichTextBox.textColor(Color.Black).set_Text(data.ToString());	
-     				mainSplitContainer.Panel2Collapsed = false;
+     				mainSplitContainer.panel2Collapsed(false);
      				return;
      			}     				
      		}
-     		mainSplitContainer.Panel2Collapsed = true;
+     		mainSplitContainer.panel2Collapsed(true);
      	}
     }
     

@@ -10,8 +10,8 @@
 //O2Ref:O2_DotNetWrappers.dll
 //O2Ref:O2_Views_ASCX.dll
 //O2Ref:O2_External_SharpDevelop.dll
-//O2Tag_AddReferenceFile:merlin.dll
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:merlin.dll
+//O2Ref:nunit.framework.dll
 //O2Ref:C:\O2\_O2 - LOCAL SVN - DEV\O2_Binaries\_HostLocalWebsite (O2 Tool).exe
 using System;
 using System.Collections.Generic;

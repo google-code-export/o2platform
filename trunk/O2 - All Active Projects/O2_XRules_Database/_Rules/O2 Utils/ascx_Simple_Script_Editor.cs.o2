@@ -1,7 +1,6 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 //_O2Tag_OnlyAddReferencedAssemblies
 //O2Ref:System.dll
-//debugSymbols
 using System;
 using System.Reflection;
 using System.Text;
@@ -44,34 +43,51 @@ namespace O2.XRules.Database
     public class ascx_Simple_Script_Editor: UserControl
     {    
     	private static IO2Log log = PublicDI.log;
-		public ascx_SourceCodeViewer sourceCodeViewer;
-		public ascx_SourceCodeViewer commandsToExecute;
-		public RichTextBox result_RichTextBox;		
-		public Button executeButton;		
-		public SplitContainer topLevelSplitContainer;
-		public CSharp_FastCompiler csharpCompiler;
+		public ascx_SourceCodeViewer sourceCodeViewer {get ; set;}
+		public ascx_SourceCodeViewer commandsToExecute {get ; set;}
+		public RichTextBox result_RichTextBox {get ; set;}
+		public PropertyGrid result_PropertyGrid {get ; set;}
+		public Button executeButton {get ; set;}
+		public SplitContainer topLevelSplitContainer {get ; set;}
+		public CSharp_FastCompiler csharpCompiler {get ; set;}
+		public string GeneratedCode {get ; set;}
+		public Dictionary<string, object> InvocationParameters {get ; set;}
+		
+		public static int width = 700;
+		public static int height = 300;
+		
 		
         public static void startControl()
     	{
             var defaultCode = "PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
-                               .line("return \"test:\" + testString ;");   			
-    						   
+                               .line("return \"Dynamic Data = \" + testString + \" :: \" + testNumber;");
+    		    		
+    		//var control2 = O2Gui.load<PropertyGrid>();
+    		//return;
             //var control = (ascx_Simple_Script_Editor)typeof(ascx_Simple_Script_Editor).showAsForm("O2 Simple Script Editor", 500, 500);			
-            var control = O2Gui.load<ascx_Simple_Script_Editor>("O2 Simple Script Editor", 700, 300);            
+            var control = O2Gui.load<ascx_Simple_Script_Editor>("O2 Simple Script Editor", width, height);            
             
     		control.invokeOnThread(()=>
-    		{    			   		
-    			control.buildGui();	      			
+    		{   
+    			//control.createGui();
+				//control.configureGui();
+    			control.InvocationParameters.Add("testString", "Hello World");
+    			control.InvocationParameters.Add("testNumber", 42);
     			control.commandsToExecute.set_Text(defaultCode);
     		});
     	}
 
         public ascx_Simple_Script_Editor()
-    	{    	    		
+    	{        	
+    		InvocationParameters = new Dictionary<string, object>();
 			setCompilerEnvironment();     		
+			this.Width = width;
+			this.Height = height;
+			createGui();
+			configureGui();
         }        	
     
-        private void buildGui()
+        private void createGui()
         {
         	// create controls
         	
@@ -96,7 +112,15 @@ namespace O2.XRules.Database
 			
 			result_RichTextBox = outputPanel.add_RichTextBox();       						
         	
-        	executeButton.Enabled = false; 
+        	result_PropertyGrid = outputPanel.add_PropertyGrid();
+        }
+        
+        public void configureGui()
+        {
+        	result_PropertyGrid.visible(false);
+        	executeButton.enabled(false); 
+        	
+        	
         	swapGeneratedCodeViewMode();         	// make it not visible by default        	
 
         	executeButton.onClick(execute);                	
@@ -112,8 +136,10 @@ namespace O2.XRules.Database
         	sourceCodeViewer.astDetails(false);
         	commandsToExecute.astDetails(false);
         	sourceCodeViewer.textEditorControl().remove_ContextMenu();        	
-        	var contextMenu = commandsToExecute.textEditorControl().add_ContextMenu();
+        	var contextMenu = commandsToExecute.textEditorControl().add_ContextMenu();        	
         	
+        	
+        	contextMenu.add("execute",(menuitem)=> execute());      
         	contextMenu.add("save",(menuitem)=> saveScript());      
         	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());          	
      	}        	     	
@@ -121,13 +147,19 @@ namespace O2.XRules.Database
 	    public void setCompilerEnvironment()
 	    {
 	    	csharpCompiler = new CSharp_FastCompiler();     
-
+			
+			//csharpCompiler.InvocationParameters = this.InvocationParameters;
+				
+			//csharpCompiler.InvocationParameters.Add("testNumber",12); 
+			
 			csharpCompiler.beforeSnippetAst = 
      		 	()=>{
-     		 			csharpCompiler.InvocationParameters.Add("testNumber",12); 
-     		 			csharpCompiler.InvocationParameters.Add("testString","Hello World"); 
+     		 			csharpCompiler.InvocationParameters = this.InvocationParameters;
+     		 			//csharpCompiler.InvocationParameters.Add("testNumber",12); 
+     		 			//csharpCompiler.InvocationParameters.Add("testString","Hello World"); 
      		 		};	    	
-     		 		
+     		
+     		
 	    	csharpCompiler.onAstFail = 
      			()=>{        					
      					csharpCompiler.AstErrors.runForEachAstParsingError( 
@@ -144,6 +176,7 @@ namespace O2.XRules.Database
 	     				commandsToExecute.editor().refresh();
 	     				sourceCodeViewer.enabled(true);
 	     				commandsToExecute.invokeOnThread(()=>commandsToExecute.Refresh());;
+	     				GeneratedCode = csharpCompiler.SourceCode;
 	     				if (isGeneratedSourceCodeVisible())
 							sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
      		 		};     		      		 
@@ -175,7 +208,9 @@ namespace O2.XRules.Database
 	    }	         	
 
 		public void compileCodeSnippet(string codeSnippet)
-     	{     		     		
+     	{     		 
+     		result_RichTextBox.visible(true);
+     		result_PropertyGrid.visible(false);
      		if (codeSnippet.size() > 200)
      		{     			
      			commandsToExecute.vScroolBar_Enabled(true);
@@ -187,9 +222,32 @@ namespace O2.XRules.Database
      	
      	public void execute()
      	{     		
-     		var result = csharpCompiler.executeFirstMethod() ?? "[null value]";
-     		result_RichTextBox.textColor(Color.Black)
-     						  .set_Text(result.ToString());
+     		if (executeButton.Enabled)
+     		{
+     			O2Thread.mtaThread(()=> showResult(csharpCompiler.executeFirstMethod()));
+     		}
+     	}
+     	
+     	public void showResult(object result)
+     	{	     	
+     		result_RichTextBox.visible(false);
+     		result_PropertyGrid.visible(false);
+     		if (result == null)
+     			result = "[null value]";
+     		switch(result.typeName())
+     		{
+     			case "String": 
+     			case "Int32":     	
+     				result_RichTextBox.visible(true);
+     				result_RichTextBox.textColor(Color.Black).set_Text(result.ToString());
+     				break;
+     			default:
+     				result_PropertyGrid.visible(true);
+     				result_PropertyGrid.show(result);
+     				break;
+     		}
+     		
+	     	
      	}
      	
      	public void saveScript()
@@ -207,14 +265,36 @@ namespace O2.XRules.Database
      	
      	public void swapGeneratedCodeViewMode()
      	{
-     		topLevelSplitContainer.Panel2Collapsed = ! topLevelSplitContainer.Panel2Collapsed;
-     		if (isGeneratedSourceCodeVisible())
-     			compileCodeSnippet(commandsToExecute.get_Text()); 
+     		this.invokeOnThread(
+     			()=>{
+			     		topLevelSplitContainer.Panel2Collapsed = ! topLevelSplitContainer.Panel2Collapsed;
+			     		if (isGeneratedSourceCodeVisible())
+			     			compileCodeSnippet(commandsToExecute.get_Text()); 
+			     	});
+     	}
+     	
+     	public void showGeneratedSourceCode()
+     	{
+     		if (topLevelSplitContainer.Panel2Collapsed)
+     			swapGeneratedCodeViewMode();
      	}
      	
      	public bool isGeneratedSourceCodeVisible()
      	{
      		return  !topLevelSplitContainer.Panel2Collapsed;
+     	}
+     	
+     	public string Code 
+     	{
+     		get 
+     		{
+     			return commandsToExecute.get_Text();
+     		}
+     		
+     		set
+     		{
+     			commandsToExecute.set_Text(value);
+     		}
      	}
      }
 }
