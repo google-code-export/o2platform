@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.IE.Interfaces;
@@ -60,7 +61,7 @@ namespace O2.External.IE.ExtensionMethods
                                            var webBrowser = splitControl.Panel2.add_WebBrowser();
                                            
                                            webBrowser.onDocumentCompleted +=
-                                               htmlPage => textBox.set_Text(htmlPage.PageUrl.ToString());
+                                               htmlPage => textBox.set_Text(htmlPage.PageUri.ToString());
                                            //textBox.TextChanged += (sender, e) => webBrowser.open(textBox.Text);
                                            textBox.KeyUp += (sender, e) => onKeyUp(e.KeyCode, webBrowser, textBox.Text);
                                            textBox.Text = startUrl;
@@ -97,12 +98,7 @@ namespace O2.External.IE.ExtensionMethods
                            Enabled = enabled
                        };
         }
-
-        public static string Html(this O2BrowserIE o2BrowserIE)
-        {
-            return o2BrowserIE.DocumentText;
-        }
-
+        
         public static void onEditedHtmlChange(this O2BrowserIE o2BrowserIE, Action<string> onHtmlChange)
         {
             if (o2BrowserIE.Document != null)
@@ -111,8 +107,97 @@ namespace O2.External.IE.ExtensionMethods
 
                 uint pdwCookie;
                 markupContainer2.RegisterForDirtyRange(
-                    new IEChangeSink(() => onHtmlChange(o2BrowserIE.Html())), out pdwCookie);
+                    new IEChangeSink(() => onHtmlChange(o2BrowserIE.html())), out pdwCookie);
             }
+        }
+
+        public static HtmlDocument document(this O2BrowserIE o2BrowserIE)
+        {
+            return (HtmlDocument)o2BrowserIE.invokeOnThread(() => o2BrowserIE.Document);
+        }
+
+        public static string html(this O2BrowserIE o2BrowserIE)
+        {
+            return o2BrowserIE.text();
+        }
+
+        public static string text(this O2BrowserIE o2BrowserIE)
+        {
+            return (string)o2BrowserIE.invokeOnThread(() => o2BrowserIE.DocumentText);
+        }
+
+        public static bool contains(this O2BrowserIE o2BrowserIE, string stringToFind)
+        {
+            return o2BrowserIE.text().contains(stringToFind);
+        }
+
+        public static bool contains(this O2BrowserIE o2BrowserIE, List<string> stringsToFind)
+        {
+            foreach (var stringToFind in stringsToFind)
+                if (o2BrowserIE.text().contains(stringToFind))
+                    return true;
+            return false;
+        }
+
+        public static O2BrowserIE silent(this O2BrowserIE o2BrowserIE, bool value)
+        {            
+            return (O2BrowserIE)o2BrowserIE.invokeOnThread(
+                () =>
+                {
+                    o2BrowserIE.ActiveXInstance.prop("Silent", value);
+                    return o2BrowserIE;
+                });
+        }
+
+        public static ExtendedWebBrowser.IWebBrowser2 activeX(this O2BrowserIE o2BrowserIE)
+        {
+            return (ExtendedWebBrowser.IWebBrowser2)o2BrowserIE.ActiveXInstance;
+        }
+
+        public static O2BrowserIE openBlank(this O2BrowserIE o2BrowserIE)
+        {
+            o2BrowserIE.openSync("about:blank");
+            return o2BrowserIE;
+        }
+
+        public static string cookie(this O2BrowserIE o2BrowserIE)
+        {
+            return (string)o2BrowserIE.invokeOnThread(() => o2BrowserIE.document().Cookie);
+        }
+
+        public static O2BrowserIE cookie(this O2BrowserIE o2BrowserIE, string value)
+        {
+            return (O2BrowserIE)o2BrowserIE.invokeOnThread(
+                () =>
+                {
+                    var document = o2BrowserIE.document();
+                    if (document != null)
+                        document.Cookie = value;
+                    return o2BrowserIE;
+                });
+        }
+
+        public static O2BrowserIE clearCookie(this O2BrowserIE o2BrowserIE)
+        {
+            return o2BrowserIE.cookie("");
+        }
+
+        public static void logBeforeNavigate(this O2BrowserIE o2BrowserIE)
+        {            
+            o2BrowserIE.BeforeNavigate +=
+                (URL, flags, postData, headers)
+                    =>
+                    {
+                        "on before Navigate for {0}".format(URL).debug();
+                        if (postData != null)
+                        {
+                            "post flags: {0}".format(flags).info();
+                            "post headers: {0}".format(headers).info();
+                            "post url: {0}".format(URL).info();
+                            "post data: {0}".format(((byte[])postData).ascii()).info();
+                        }
+                    };
+
         }
     }
 }

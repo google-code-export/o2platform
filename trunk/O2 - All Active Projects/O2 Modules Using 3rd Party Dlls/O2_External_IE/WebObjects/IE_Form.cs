@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using mshtml;
 using O2.External.IE.ExtensionMethods;
@@ -9,6 +10,7 @@ namespace O2.External.IE.WebObjects
 {
     public class IE_Form : IO2HtmlForm
     {
+        public Uri PageUri { get; set; }
         public string OuterHtml { get; set; }
         public string Action { get; set; }
         public string Dir { get; set; }

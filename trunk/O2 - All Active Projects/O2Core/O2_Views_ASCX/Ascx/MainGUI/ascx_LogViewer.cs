@@ -21,7 +21,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
                 cbInfoMessages.Checked = true;
                 //DI.log.error("Testing logging: Error Message");
                 DI.log.debug("Testing logging: Debug Message");
-                DI.log.info("Testing logging: Info Message");
+                DI.log.info("Testing logging: Info Message");                  
             }
             //  this.Location = new Point(20,500);            
         }

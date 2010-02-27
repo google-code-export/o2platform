@@ -79,6 +79,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #endregion
 
+        #region Control - get
+
+        public static T get<T>(this List<Control> controls) where T : Control
+        {
+            foreach (Control control in controls)
+                if (control.type() == typeof(T))
+                    return (T)control;
+            return null;
+        }
+
+        #endregion
+
         #region Control - misc
 
         public static Control fill(this Control control)

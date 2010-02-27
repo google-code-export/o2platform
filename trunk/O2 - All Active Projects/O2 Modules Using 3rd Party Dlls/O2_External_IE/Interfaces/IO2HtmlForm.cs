@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 
 namespace O2.External.IE.Interfaces
 {
     public interface IO2HtmlForm
     {
+        Uri PageUri { get; set; }
         string OuterHtml { get; set; }
         string Action { get; set; }
         string Dir { get; set; }

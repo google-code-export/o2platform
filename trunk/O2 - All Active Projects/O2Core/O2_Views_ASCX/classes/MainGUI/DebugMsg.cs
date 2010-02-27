@@ -79,7 +79,7 @@ namespace O2.Views.ASCX.classes.MainGUI
         public static void _Info(String sFormat, params Object[] oArgs)
         {
             if (bShowInfo)
-                insertText("INFO: " + String.Format(sFormat, oArgs), Color.Black);
+                    insertText("INFO: " + String.Format(sFormat, oArgs), Color.Black);
         }
 
         public static void _Debug(String sInfoMessage)
@@ -131,35 +131,42 @@ namespace O2.Views.ASCX.classes.MainGUI
                         return;
                     }
                     string sText1 = sText;
-                    if (targetRichTextBoxes[0].okThread(delegate { insertText(sText1, cColour); }))
-                    {
-                        foreach (RichTextBox richTextBox in targetRichTextBoxes)
-                        {
-                            if (bShowTimeStamp)
-                                sText = "[" + DateTime.Now.ToShortTimeString() + "] " + sText;
-                            if (bLogCache)
-                            {
-                                sbLogCache.Insert(0, sText + Environment.NewLine);
-                            }
 
-                            if (bShowMessages)
-                            {
-                                /* if (bLogCache)
+                    //if (targetRichTextBoxes[0].okThread(delegate { insertText(sText1, cColour); }))
+                    //{
+                        foreach (RichTextBox richTextBoxToUpdate in targetRichTextBoxes)
+                        {
+                            var richTextBox = richTextBoxToUpdate;
+                            richTextBox.invokeOnThread(
+                                () =>
                                 {
-                                    sbLogCache.Insert(0, sText.Replace("INFO: ", "").Replace("DEBUG: ", "").Replace("ERROR: ", "") + Environment.NewLine);
-                                }*/
-                                richTextBox.SelectionStart = 0;
-                                richTextBox.SelectedText = sText + Environment.NewLine + richTextBox.SelectedText;
-                                richTextBox.SelectionStart = 0;
-                                richTextBox.SelectionLength = sText.Length;
-                                richTextBox.SelectionColor = cColour;
-                                Application.DoEvents();
-                                // System.Diagnostics.Debug.WriteLine(sText);                              
-                                //if (bAlsoSendMessageToDebugView)
-                                //    Debug.WriteLine(sText);
-                            }
+                                    if (bShowTimeStamp)
+                                        sText = "[" + DateTime.Now.ToShortTimeString() + "] " + sText;
+                                    if (bLogCache)
+                                    {
+                                        sbLogCache.Insert(0, sText + Environment.NewLine);
+                                    }
+
+                                    if (bShowMessages)
+                                    {
+                                        /* if (bLogCache)
+                            {
+                                sbLogCache.Insert(0, sText.Replace("INFO: ", "").Replace("DEBUG: ", "").Replace("ERROR: ", "") + Environment.NewLine);
+                            }*/
+                                        richTextBox.SelectionStart = 0;
+                                        richTextBox.SelectedText = sText + Environment.NewLine +
+                                                                   richTextBox.SelectedText;
+                                        richTextBox.SelectionStart = 0;
+                                        richTextBox.SelectionLength = sText.Length;
+                                        richTextBox.SelectionColor = cColour;
+                                        Application.DoEvents();
+                                        // System.Diagnostics.Debug.WriteLine(sText);                              
+                                        //if (bAlsoSendMessageToDebugView)
+                                        //    Debug.WriteLine(sText);
+                                    }
+                                });
                         }
-                    }
+                    //}
 
                 }
             }

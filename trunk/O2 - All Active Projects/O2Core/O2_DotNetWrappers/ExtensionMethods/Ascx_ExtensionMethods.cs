@@ -65,6 +65,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                    });
         }
 
+        public static Control add_Button(this Control control, string text, int top, int left, MethodInvoker onClick)
+        {
+            return control.add_Button(text, top, left, -1, -1, onClick);
+        }
+        
         public static Button onClick(this Button button, MethodInvoker onClick)
         {
             if (onClick != null)
@@ -196,11 +201,25 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                             });
         }
 
-        
-        public static Control border3D(this SplitContainer control)
+
+        public static SplitContainer border3D(this SplitContainer control)
         {
-            control.BorderStyle = BorderStyle.Fixed3D;
-            return control;
+            return (SplitContainer)control.invokeOnThread(
+                () =>
+                    {
+                        control.BorderStyle = BorderStyle.Fixed3D;
+                        return control;
+                    });
+        }
+
+        public static void panel2Collapsed(this SplitContainer control, bool value)
+        {
+            control.invokeOnThread(() => control.Panel2Collapsed = value);
+        }
+
+        public static void panel1Collapsed(this SplitContainer control, bool value)
+        {
+            control.invokeOnThread(() => control.Panel2Collapsed = value);
         }
 
         #endregion
@@ -215,6 +234,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static List<Control> add_1x1(this Control control, string title1, string title2, bool align, int distance1)
         {
             return control.add_SplitContainer_1x1(title1, title2, align, distance1);
+        }
+
+        public static List<Control> add_1x1(this Control hostControl, string title_1, string title_2, Control control_1, Control control_2)
+        {
+            var groupBoxes = hostControl.add_1x1(title_1, title_2);
+            groupBoxes[0].Controls.Add(control_1);
+            groupBoxes[1].Controls.Add(control_2);
+            groupBoxes.Add(control_1);		// also add these controls to the list to controls returned
+            groupBoxes.Add(control_2);
+            return groupBoxes;
         }
 
         public static List<Control> add_1x2(this Control control, string title1, string title2, string title3)
@@ -751,7 +780,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             if (pathToImage.fileExists())
             {
-                var image = Bitmap.FromFile(pathToImage);
+                var image = Image.FromFile(pathToImage);
                 pictureBox.load(image);
                 return pictureBox;
             }
@@ -883,7 +912,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             }
             catch (Exception ex)
             {
-                Kernel.PublicDI.log.ex(ex, "in DataGridView.value");
+                PublicDI.log.ex(ex, "in DataGridView.value");
             }            
             return "";			// default to returning "" if data is null
         }
@@ -950,12 +979,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static void showFileContents(this DataGridView dataGridView, string file, Func<byte, string> encoding)
         {
+            showFileContents(dataGridView, file, 16, encoding);   
+        }
+        public static void showFileContents(this DataGridView dataGridView, string file, int splitPoint, Func<byte, string> encoding)
+        {
             dataGridView.invokeOnThread(
                 () =>
                 {
                     dataGridView.Columns.Clear();
                     dataGridView.add_Column("");
-                    for (byte b = 0; b < 16; b++)
+                    for (byte b = 0; b < splitPoint; b++)
                         dataGridView.add_Column(b.hex());
                     dataGridView.column_backColor(0, Color.LightGray);
                     if (!file.fileExists())
@@ -970,11 +1003,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     foreach (var value in bytes)
                     {
                         row.add(encoding(value));
-                        if (row.Count == 16)
+                        if (row.Count == splitPoint)
                         {
                             dataGridView.add_Row(row.ToArray());
                             row.Clear();
-                            row.add((rowId++).hex()); ;
+                            row.add((rowId++).hex());
                         }
                     }
                     dataGridView.add_Row(row.ToArray());
@@ -983,6 +1016,29 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion		
+
+        #region PropertyGrid
+
+        public static PropertyGrid add_PropertyGrid(this Control control)
+        {
+            return control.add_Control<PropertyGrid>();
+        }
+
+        public static void show(this PropertyGrid propertyGrid, Object _object)
+        {
+            propertyGrid.invokeOnThread(() => propertyGrid.SelectedObject = _object);
+        }
+
+        #endregion
+
+        #region Panel
+
+        public static Control add_Panel(this Control control)
+        {
+            return control.add_Control<Panel>();
+        }
+
+        #endregion
 
     }
 }

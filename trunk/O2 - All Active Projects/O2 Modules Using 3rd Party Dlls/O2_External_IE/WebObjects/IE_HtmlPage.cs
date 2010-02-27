@@ -8,7 +8,7 @@ namespace O2.External.IE.WebObjects
 {
     public class IE_HtmlPage : IO2HtmlPage
     {        
-        public Uri PageUrl { get; set; }
+        public Uri PageUri { get; set; }
         public string PageSource { get; set; }
 
         public List<IO2HtmlAnchor> Anchors { get; set; }
@@ -18,8 +18,7 @@ namespace O2.External.IE.WebObjects
         public List<IO2HtmlScript> Scripts { get; set; }
 
         public IE_HtmlPage()
-        {
-            //PageUri = new Uri("");
+        {            
             PageSource = "";
             Anchors = new List<IO2HtmlAnchor>();
             Forms = new List<IO2HtmlForm>();
@@ -32,7 +31,7 @@ namespace O2.External.IE.WebObjects
         public IE_HtmlPage(string pageSource, string rawUrl) : this()
         {
             PageSource = pageSource;
-            PageUrl = new Uri(rawUrl);
+            PageUri = new Uri(rawUrl);
         }
 
         public IE_HtmlPage(HTMLDocumentClass documentClass)
@@ -52,12 +51,13 @@ namespace O2.External.IE.WebObjects
             return targetList;
         }
 
-        private void populateData(HTMLDocumentClass documentClass)
+        private void populateData(DispHTMLDocument documentClass)
         {
             // PageUri
-            PageUrl = new Uri(documentClass.url);
+            PageUri = new Uri(documentClass.url);
             // get PageSource
-            var documentElement = (HTMLHtmlElementClass)documentClass.documentElement;
+            //var documentElement = (HTMLHtmlElementClass)documentClass.documentElement;
+            var documentElement = (DispHTMLHtmlElement)documentClass.documentElement;
             PageSource = documentElement.outerHTML;
 
 
@@ -70,6 +70,10 @@ namespace O2.External.IE.WebObjects
             Links = populateVar<IE_Link, IO2HtmlLink>(documentClass.links); //, new List<IE_Link>()); //"Links");            
             //populateVar<HTMLAnchorElementClass>(documentClass.plugins, "Plugins");                        
             Scripts = populateVar<IE_Script, IO2HtmlScript>(documentClass.scripts);//, "Scripts");
+            
+            // for the forms we need to add a reference to the curent page Uri
+            foreach (var form in Forms)
+                form.PageUri = PageUri;
 
             //populateVar<HTMLAnchorElementClass>(documentClass.frames, "Frames");
             //populateVar<HTMLAnchorElementClass>(documentClass.namespaces, "Namespaces");
@@ -120,7 +124,7 @@ namespace O2.External.IE.WebObjects
      
         public override string ToString()
         {
-            return PageUrl.ToString();
+            return PageUri.ToString();
         }
     }
 }

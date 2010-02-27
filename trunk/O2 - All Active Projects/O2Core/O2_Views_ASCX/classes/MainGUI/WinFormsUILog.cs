@@ -1,11 +1,10 @@
-// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+﻿// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.Drawing;
 using System.Windows.Forms;
 using O2.Interfaces.O2Core;
-using O2.Views.ASCX.classes.MainGUI;
 
-namespace O2.External.WinFormsUI.O2Environment
+namespace O2.Views.ASCX.classes.MainGUI
 {
     public class WinFormsUILog : MarshalByRefObject, IO2Log
     {
@@ -13,7 +12,7 @@ namespace O2.External.WinFormsUI.O2Environment
         public bool alsoShowInConsole { get { return _alsoShowInConsole; } set { _alsoShowInConsole = value; } }
 
         public IO2Log LogRedirectionTarget { get; set; }
-       
+
 
         private readonly string logName;
 
@@ -26,7 +25,7 @@ namespace O2.External.WinFormsUI.O2Environment
             logName = _logName;
         }
 
-        #region IO2Log Members        
+        #region IO2Log Members
 
         public void i(string infoMessage)
         {
@@ -95,7 +94,7 @@ namespace O2.External.WinFormsUI.O2Environment
 
         public void write(string message)
         {
-            DebugMsg.insertText(message,Color.Black);
+            DebugMsg.insertText(message, Color.Black);
         }
 
         public void write(string messageFormat, params object[] variables)
@@ -109,7 +108,7 @@ namespace O2.External.WinFormsUI.O2Environment
         }
 
         public DialogResult showMessageBox(string message, string messageBoxTitle,
-                                                  MessageBoxButtons messageBoxButtons)
+                                           MessageBoxButtons messageBoxButtons)
         {
             return DebugMsg.showMessageBox(message, messageBoxTitle, messageBoxButtons);
         }

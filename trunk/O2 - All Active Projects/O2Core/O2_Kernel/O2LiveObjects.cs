@@ -14,6 +14,11 @@ namespace O2.Kernel
             clear();
         }
 
+        public static void set(string name, object value)
+        {
+            add(name, value);        
+        }
+
         public static void add(string name, object value)
         {
             if (LiveObjects.ContainsKey(name))

@@ -6,10 +6,10 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.Windows;
 using O2.External.WinFormsUI;
-using O2.External.WinFormsUI.O2Environment;
 using O2.Interfaces.Views;
 using O2.Kernel;
 using O2.Views.ASCX.Ascx.MainGUI;
+using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 

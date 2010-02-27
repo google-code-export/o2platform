@@ -476,6 +476,11 @@ namespace O2.External.SharpDevelop.Ascx
             scCodeAndAst.Panel2Collapsed = !scCodeAndAst.Panel2Collapsed;
         }
 
+        private void llPutFilePathInClipboard_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Clipboard.SetText(sPathToFileLoaded);
+        }
+
 
     }
 }

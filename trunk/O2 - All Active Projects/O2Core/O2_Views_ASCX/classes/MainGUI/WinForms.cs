@@ -32,8 +32,10 @@ namespace O2.Views.ASCX.classes.MainGUI
                                              {
                                                  Text = formTitle
                                              };
-                             control.Width = width;
-                             control.Height = height;
+                             if (width > -1)
+                                control.Width = width;
+                             if (height > -1)
+                                control.Height = height;
                              o2Gui.Controls.Add(control);
                              o2Gui.Load += (sender,e) => controlCreation.Set();	
                              o2Gui.showDialog(false);

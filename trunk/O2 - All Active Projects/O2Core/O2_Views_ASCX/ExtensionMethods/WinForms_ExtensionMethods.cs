@@ -90,5 +90,11 @@ namespace O2.Views.ASCX.classes.MainGUI
         {
             return type.showInForm(title, width, height);
         }
+
+        public static void viewProperties(this Object _object)
+        {
+            var propertyGrid = O2Gui.load<PropertyGrid>();
+            propertyGrid.show(_object);                        
+        }
     }
 }

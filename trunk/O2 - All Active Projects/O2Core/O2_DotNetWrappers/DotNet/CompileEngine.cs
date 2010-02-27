@@ -29,6 +29,7 @@ namespace O2.DotNetWrappers.DotNet
         public Assembly compiledAssembly;
         public CompilerResults crCompilerResults;
         public StringBuilder sbErrorMessage;
+        public bool DebugMode;
 
         public List<String> lsGACExtraReferencesToAdd = new List<string>(new []
                                                                                  {
@@ -40,88 +41,7 @@ namespace O2.DotNetWrappers.DotNet
                                                                                      "System.Core.dll",
                                                                                      "System.Xml.Linq.dll",
                                                                                      "System.Xml.dll",
-                                                                                     "System.dll"});
-      /*  public List<String> lsExtraReferenceAssembliesToAdd = new List<string>
-                                                                  {
-                                                                      "O2_Kernel.dll",
-                                                                      "System.Dll",
-                                                                      "System.Core.dll",
-                                                                      "System.Data.dll",
-                                                                      "System.Drawing.dll",
-                                                                      "System.Windows.Forms.dll",
-                                                                      "System.Xml.dll",
-                                                                      "System.Xml.Linq.dll",
-                                                                      "Mono.Cecil.dll",
-                                                                      "Skybound.Gecko.dll",
-                                                                      "System.Configuration.dll",
-                                                                      "nunit.framework.dll",
-                                                                      "WeifenLuo.WinFormsUI.Docking.dll"
-                                                                  };*/
-
-        /*public static List<String> lsExtraReferencesToAdd = new List<string>(new String[] {                    
-                    "System.Windows.Forms.dll",
-                    "System.Drawing.dll",
-                    "System.Data.dll",
-                    "System.Xml.dll",
-                    "System.Web.dll",
-                    "System.dll"
-            //,                                        
-                    //@"C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.Workflow.ComponentModel.dll",
-              //      @"C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.Workflow.Runtime.dll",
-              //      @"C:\Program Files\Reference Assemblies\Microsoft\Framework\v3.0\System.Workflow.Activities.dll"
-                    });
-         */
-        
-
-        /*   public static void compileSourceCodeFile(String sFileToCompile, List<string> lsExtraReferencesToAdd)
-        {
-            String[] asExtraReferencesToAdd = lsExtraReferencesToAdd.ToArray();
-            String sErrorMessages = "";
-            Assembly aCompiledAssembly = null;
-            String sSourceCode = Files.getFileContents(sFileToCompile);
-            var verbose = false;
-            var exeMainClass = "";            
-            var outputAssemblyName = ""; 
-            if ("" != sSourceCode)
-            {
-                if (compileSourceCode(sSourceCode, asExtraReferencesToAdd, ref aCompiledAssembly, ref sErrorMessages, verbose, exeMainClass, outputAssemblyName))
-                {
-                    PublicPublicDI.log.debug("File Compile OK");
-                    // put compiled types into o2GlobalVars
-                    foreach (Type tType in aCompiledAssembly.GetTypes())
-                        vars.set_(tType.Name, tType);
-                }
-                else
-                {
-                    PublicPublicDI.log.error("File Compilation returned the following errors");
-                    foreach (
-                        String sError in
-                            sErrorMessages.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries))
-                        PublicDI.log.error("   {0}", sError);
-                }
-            }
-        }*/
-
-
-        /*  public static bool compileSourceCode(String sSourceCodeToCompile, String[] asExtraReferencesToAdd,
-                                                     ref Assembly aCompiledAssembly, ref String sErrorMessages)
-        {
-            return compileSourceCode(sSourceCodeToCompile, asExtraReferencesToAdd, ref aCompiledAssembly, ref sErrorMessages);
-        }*/
-
-        /* public static bool compileSourceCode(String sSourceCodeToCompile, String[] asExtraReferencesToAdd,
-                                             ref Assembly aCompiledAssembly, ref String sErrorMessages, string mainClass)            
-        {
-            
-
-            //String sSourceCodeToCompile = ascx_SourceCodeEditor1.getSourceCode(); 
-
-
-            //asceSourceCodeEditor.cleanHighLights();
-            return compileSourceCode_CSharp(sSourceCodeToCompile, asExtraReferencesToAdd,
-                                            ref aCompiledAssembly, ref sErrorMessages, false, mainClass, outputAssemblyName );
-        }*/
-
+                                                                                     "System.dll"});     
 
         public void addErrorsListToListBox(ListBox lbSourceCode_CompilationResult)
         {
@@ -288,11 +208,14 @@ namespace O2.DotNetWrappers.DotNet
             var referencedAssemblies = getListOfReferencedAssembliesToUse();
             // see if there are any extra DLL references in the code
             
-            mapReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);            
+            mapReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
 
             if (compileSourceFiles(sourceCodeFiles, referencedAssemblies.ToArray(), ref compiledAssembly, ref errorMessages, false
-                                  /*verbose*/, mainClass, outputAssemblyName))
+                /*verbose*/, mainClass, outputAssemblyName))
+            {
+                PublicDI.log.debug("Compilated OK to: {0}", compiledAssembly.Location);
                 return compiledAssembly;
+            }
             PublicDI.log.error("Compilation failed: {0}", errorMessages);
             return null;
         }
@@ -317,10 +240,11 @@ namespace O2.DotNetWrappers.DotNet
                     PublicDI.log.debug("   {0}", file);
             }
             if (referencedAssemblies.Count > 1)
-            {
+            {                
                 PublicDI.log.debug("There are {0} referencedAssemblies used", referencedAssemblies.Count);
-                foreach (var referencedAssembly in referencedAssemblies)
-                    PublicDI.log.debug("   {0}", referencedAssembly);
+                if (DebugMode)
+                    foreach (var referencedAssembly in referencedAssemblies)
+                        PublicDI.log.debug("   {0}", referencedAssembly);
             }
         }
 

@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using mshtml;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel;
+using O2.Kernel.CodeUtils;
 
 // this file uses code from: http://blogs.artinsoft.net/mrojas/archive/2008/09/18/newwindow2-events-in-the-c-webbrowsercontrol.aspx
 
@@ -173,9 +174,23 @@ namespace O2.External.IE.Wrapper
             }
         }
 
+        //DC
+        // not sure how to make this an event since I want the references be passed to the caller
+        public event Action<object, object, object, object> BeforeNavigate;
+
+        internal void OnBeforeNavigate2(object pDisp, ref object URL, ref object flags, ref object targetFrameName, ref object postData, ref object headers, ref bool cancel)
+        {           
+            var methodParameters = new [] {URL, flags, postData, headers};
+            Callbacks.raiseRegistedCallbacks(BeforeNavigate, methodParameters);            
+        }
+
+        public class BeforeNavigateEventArgs
+        {
+            public object URL;
+        }
 
         //This class will capture events from the WebBrowser
-        public class WebBrowserExtendedEvents : System.Runtime.InteropServices.StandardOleMarshalObject, DWebBrowserEvents2
+        public class WebBrowserExtendedEvents : StandardOleMarshalObject, DWebBrowserEvents2
         {
             ExtendedWebBrowser _Browser;
             public WebBrowserExtendedEvents(ExtendedWebBrowser browser)
@@ -201,12 +216,15 @@ namespace O2.External.IE.Wrapper
 
             public void NavigateComplete2(object pDisp, ref object url)
             {
-                PublicDI.log.debug("***** NavigateComplete2: {0}", url);
-                PublicDI.log.debug("***** type: {0}", PublicDI.reflection.getComObjectTypeName(pDisp));
-                
-                //_Browser.OnDocumentComplete(pDisp, url);
+                //PublicDI.log.debug("***** NavigateComplete2: {0}", url);
+                //PublicDI.log.debug("***** type: {0}", PublicDI.reflection.getComObjectTypeName(pDisp));                                
             }
-            
+
+            public void BeforeNavigate2(object pDisp, ref object URL, ref object flags, ref object targetFrameName, ref object postData,  ref object headers, ref bool cancel)
+            {
+                _Browser.OnBeforeNavigate2(pDisp, ref URL, ref flags, ref targetFrameName, ref postData, ref headers,
+                                           ref cancel);
+            }
         }
         [ComImport, Guid("34A715A0-6587-11D0-924A-0020AFC7AC4D"), InterfaceType(ComInterfaceType.InterfaceIsIDispatch), TypeLibType(TypeLibTypeFlags.FHidden)]
         public interface DWebBrowserEvents2
@@ -222,6 +240,10 @@ namespace O2.External.IE.Wrapper
             [DispId(0xfc)]
             void NavigateComplete2([In, MarshalAs(UnmanagedType.IDispatch)] object pDisp, [In] ref object URL);
 
+            [DispId(250)]
+            void BeforeNavigate2([In, MarshalAs(UnmanagedType.IDispatch)] object pDisp, [In] ref object URL,
+                                 [In] ref object flags, [In] ref object targetFrameName, [In] ref object postData,
+                                 [In] ref object headers, [In, Out] ref bool cancel);
         }
 
         [ComImport, Guid("D30C1661-CDAF-11d0-8A3E-00C04FC9E26E"), TypeLibType(TypeLibTypeFlags.FOleAutomation | TypeLibTypeFlags.FDual | TypeLibTypeFlags.FHidden)]
@@ -317,6 +339,6 @@ namespace O2.External.IE.Wrapper
             bool AddressBar { get; set; }
             [DispId(0x22c)]
             bool Resizable { get; set; }
-        }
+        }        
     }
 }

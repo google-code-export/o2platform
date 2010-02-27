@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
+using O2.Kernel;
 
 namespace O2.Views.ASCX.classes.MainGUI
 {
@@ -28,6 +29,8 @@ namespace O2.Views.ASCX.classes.MainGUI
 
         public O2Gui(int width, int height, bool isMdiContainer)
         {
+            if (PublicDI.log.LogRedirectionTarget == null)
+                PublicDI.log.LogRedirectionTarget = new WinFormsUILog();
             if (width > -1)
         	    Width = width;
             if (height > -1)
@@ -69,6 +72,20 @@ namespace O2.Views.ASCX.classes.MainGUI
         	formLoaded.WaitOne();
         }
 
+        public static T open<T>() where T : Control
+        {
+            return load<T>();
+        }
+
+        public static T open<T>(string title) where T : Control
+        {
+            return load<T>(title);
+        }
+
+        public static T open<T>(string title, int width, int height) where T : Control
+        {
+            return load<T>(title,width,height);
+        }
 
         public static T load<T>() where T : Control
         {
