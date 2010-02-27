@@ -27,6 +27,7 @@ using Merlin;
 using MerlinStepLibrary;
 using System.Threading;
 using O2.Core.XRules.Classes;
+using O2.Core.XRules.XRulesEngine;
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 
 namespace O2.Core.XRules._Wizards
@@ -36,9 +37,9 @@ namespace O2.Core.XRules._Wizards
 	{
 		private static IO2Log log = PublicDI.log;
 
-        public static string testTargetFolder = @"C:\O2\XRulesDatabase"; //PublicDI.config.getTempFolderInTempDirectory("Svn To Sync");
+        public static string testTargetFolder = XRules_Config.PathTo_XRulesDatabase_fromO2; //PublicDI.config.getTempFolderInTempDirectory("Svn To Sync");
 
-        public Thread test_runWizard()
+        public Thread runWizard()
         {
             return runWizard(SvnApi.svnO2DatabaseRulesFolder, testTargetFolder);        	
         }
