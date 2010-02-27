@@ -56,6 +56,7 @@
       <DependentUpon>ascx_AssemblyInvoke.cs</DependentUpon>
     </Compile>
     <Compile Include="AST\Charp_FastCompiler.cs" />
+    <Compile Include="ExtensionMethods\FastCompiler_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\SourceCode_ExtensionMethods.cs" />
     <Compile Include="Ascx\ascx_SourceCodeViewer.Controllers.cs">
       <SubType>UserControl</SubType>

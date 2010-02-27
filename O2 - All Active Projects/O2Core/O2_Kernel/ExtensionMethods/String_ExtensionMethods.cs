@@ -13,6 +13,11 @@ namespace O2.Kernel.ExtensionMethods
         {
             return _object.ToString();
         }
+        
+        public static string str(this bool value, string trueValue, string falseValue)
+        {
+            return value ? trueValue : falseValue;
+        }
 
         public static bool validString(this object _object)
         {
@@ -43,12 +48,23 @@ namespace O2.Kernel.ExtensionMethods
         {
             return (string1 != string2);
         }
-
-        public static bool contains(this string string1, string string2)
+        
+        public static bool contains(this string targetString, string stringToFind)
         {
-            return string1.Contains(string2);
+            return (stringToFind != null)
+                        ? targetString.Contains(stringToFind)
+                        : false;
         }
 
+        public static bool contains(this string targetString, List<string> stringsToFind)
+        {
+            if (stringsToFind != null)
+                foreach (var stringToFind in stringsToFind)
+                    if (targetString.contains(stringToFind))
+                        return true;
+            return false;
+        }
+   
         public static bool starts(this string textToSearch, List<string> stringsToFind)
         {
             foreach(var stringToFind in stringsToFind)
@@ -147,6 +163,7 @@ namespace O2.Kernel.ExtensionMethods
         {
             return _string.Length;
         }
+
         public static string line(this string firstString, string secondString)
         {
             return firstString.line() + secondString;
@@ -226,6 +243,23 @@ namespace O2.Kernel.ExtensionMethods
                 }
             }            
             return extractedStrings;
+        }
+
+        public static void removeLastChar(this StringBuilder stringBuilder)
+        {
+            if (stringBuilder.Length > 0)
+                stringBuilder.Remove(stringBuilder.Length - 1, 1);
+        }
+
+        public static void removeLastChar(this string _string)
+        {
+            if (_string.Length > 0)
+                _string.Remove(_string.Length - 1, 1);
+        }
+
+        public static string appendGuid(this string _string)
+        {
+            return "{0} {1}".format(_string, Guid.NewGuid());
         }
     }
 }

@@ -5,7 +5,7 @@ namespace O2.External.IE.Interfaces
 {
     public interface IO2HtmlPage
     {
-        Uri PageUrl { get; set; }
+        Uri PageUri { get; set; }
         string PageSource { get; set; }
         List<IO2HtmlAnchor> Anchors { get; set; }     
         List<IO2HtmlForm> Forms { get; set; }

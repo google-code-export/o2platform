@@ -14,8 +14,8 @@ namespace O2.Core.XRules.XRulesEngine
         {
             PathTo_XRulesDatabase_fromO2 = @"C:\O2\XRulesDatabase\_Rules";
             PathTo_XRulesDatabase_fromLocalDisk = @"C:\O2\_XRules_Local";
-            PathTo_XRulesTemplates = @"C:\O2\XRulesDatabase\_Templates";
-            PathTo_XRulesCompiledDlls = @"C:\O2\XRulesDatabase\_CompiledDlls";
+            PathTo_XRulesTemplates = PathTo_XRulesDatabase_fromO2 + @"\_Templates";
+            PathTo_XRulesCompiledDlls = PathTo_XRulesDatabase_fromO2 + @"\..\_CompiledDlls";
             Files.checkIfDirectoryExistsAndCreateIfNot(PathTo_XRulesDatabase_fromO2);
             Files.checkIfDirectoryExistsAndCreateIfNot(PathTo_XRulesDatabase_fromLocalDisk);            
             Files.checkIfDirectoryExistsAndCreateIfNot(PathTo_XRulesTemplates);

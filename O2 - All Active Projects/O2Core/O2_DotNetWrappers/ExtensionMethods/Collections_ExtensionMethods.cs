@@ -45,7 +45,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return colection.size() == value;
         }
 
-
         public static List<string> lines(this string targetString)
         {
             return StringsAndLists.fromTextGetLines(targetString);
@@ -93,9 +92,20 @@ namespace O2.DotNetWrappers.ExtensionMethods
             results.AddRange(dictionary.Values);
             return results;
         }
+
         public static object[] valuesArray(this Dictionary<string, object> dictionary)
         {
             return dictionary.values().ToArray();
+        }
+
+        public static string str(this List<String> list)
+        {            
+            return StringsAndLists.fromStringList_getText(list);
+        }
+        
+        public static T[] array<T>(this List<T> list)
+        {
+            return list.ToArray();
         }
     }
 }

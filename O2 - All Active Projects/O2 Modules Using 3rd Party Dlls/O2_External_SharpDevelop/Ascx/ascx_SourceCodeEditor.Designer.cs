@@ -108,6 +108,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tcSourceInfo = new System.Windows.Forms.TabControl();
             this.scCodeAndAst = new System.Windows.Forms.SplitContainer();
+            this.llPutFilePathInClipboard = new System.Windows.Forms.LinkLabel();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -731,6 +732,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             // groupBoxWithFileAndSaveSettings
             // 
+            this.groupBoxWithFileAndSaveSettings.Controls.Add(this.llPutFilePathInClipboard);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.cbAutoTryToFixSourceCodeFileReferences);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.groupBox1);
             this.groupBoxWithFileAndSaveSettings.Controls.Add(this.llReload);
@@ -928,6 +930,17 @@ namespace O2.External.SharpDevelop.Ascx
             this.scCodeAndAst.SplitterDistance = 291;
             this.scCodeAndAst.TabIndex = 53;
             // 
+            // llPutFilePathInClipboard
+            // 
+            this.llPutFilePathInClipboard.AutoSize = true;
+            this.llPutFilePathInClipboard.Location = new System.Drawing.Point(597, 69);
+            this.llPutFilePathInClipboard.Name = "llPutFilePathInClipboard";
+            this.llPutFilePathInClipboard.Size = new System.Drawing.Size(120, 13);
+            this.llPutFilePathInClipboard.TabIndex = 53;
+            this.llPutFilePathInClipboard.TabStop = true;
+            this.llPutFilePathInClipboard.Text = "put file path in Clipboard";
+            this.llPutFilePathInClipboard.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llPutFilePathInClipboard_LinkClicked);
+            // 
             // ascx_SourceCodeEditor
             // 
             this.AllowDrop = true;
@@ -1040,5 +1053,6 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.TabControl tcSourceInfo;
         private System.Windows.Forms.SplitContainer scCodeAndAst;
         private System.Windows.Forms.ToolStripButton btSeachAndViewAst;
+        private System.Windows.Forms.LinkLabel llPutFilePathInClipboard;
     }
 }

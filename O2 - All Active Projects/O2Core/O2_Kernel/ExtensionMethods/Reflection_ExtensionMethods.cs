@@ -58,6 +58,11 @@ namespace O2.Kernel.ExtensionMethods
             return _object.GetType();
         }
 
+        public static List<Type> types(this Assembly assembly)
+        {
+            return PublicDI.reflection.getTypes(assembly);
+        }
+
         public static string typeName(this object _object)
         {
             return _object.type().Name;
@@ -67,7 +72,11 @@ namespace O2.Kernel.ExtensionMethods
         {
             return _object.type().FullName;
         }
-	
+
+        public static string comTypeName(this object _object)
+        {
+            return PublicDI.reflection.getComObjectTypeName(_object);
+        }
 
         #endregion
 
@@ -121,6 +130,14 @@ namespace O2.Kernel.ExtensionMethods
         {
             return PublicDI.reflection.getMethods(assembly);
         }        		
+
+        public static MethodInfo firstMethod(this Assembly assembly)
+    	{    		
+    		foreach(var method in assembly.methods())
+    			if (false == method.IsSpecialName)      // to skip the methods created by properties
+    			    return method;        	
+        	return null;
+    	}
 
         #endregion
 

@@ -160,6 +160,21 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         {
             return sourceCodeViewer.editor().document();
         }
-                
+
+        public static void set_ColorsForCSharp(this ascx_SourceCodeEditor sourceCodeEditor)
+        {
+            sourceCodeEditor.setDocumentHighlightingStrategy("aa.cs");
+        }
+
+        public static void open(this ascx_SourceCodeEditor sourceCodeEditor, string fileToOpen)
+        {
+            sourceCodeEditor.loadSourceCodeFile(fileToOpen);
+        }
+
+        public static void open(this ascx_SourceCodeViewer sourceCodeViewer, string fileToOpen)
+        {
+
+            sourceCodeViewer.editor().loadSourceCodeFile(fileToOpen);
+        }       
     }
 }

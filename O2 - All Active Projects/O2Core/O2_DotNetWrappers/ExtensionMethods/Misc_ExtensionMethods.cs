@@ -1,4 +1,6 @@
-﻿using O2.DotNetWrappers.Windows;
+﻿using System;
+using O2.DotNetWrappers.Network;
+using O2.DotNetWrappers.Windows;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -7,6 +9,31 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static void sleep(this object _object, int miliseconds)
         {
             Processes.Sleep(miliseconds);
+        }
+
+        public static void sleep(this object _object, int miliseconds, bool verbose)
+        {
+            Processes.Sleep(miliseconds, verbose);
+        }
+
+        public static string urlEncode(this String stringToEncode)
+        {
+            return WebEncoding.urlEncode(stringToEncode);
+        }
+
+        public static string urlDecode(this String stringToEncode)
+        {
+            return WebEncoding.urlDecode(stringToEncode);
+        }
+
+        public static string htmlEncode(this String stringToEncode)
+        {
+            return WebEncoding.urlEncode(stringToEncode);
+        }
+
+        public static string htmlDecode(this String stringToEncode)
+        {
+            return WebEncoding.urlEncode(stringToEncode);
         }
     }
 }

@@ -81,6 +81,7 @@
     <Compile Include="Ascx\Web\O2WebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="classes\MainGUI\WinFormsUILog.cs" />
     <Compile Include="ExtensionMethods\CoreControls_ExtensionMethods.cs" />
     <Compile Include="classes\CreateDataTable.cs" />
     <Compile Include="classes\ImagesLists.cs" />

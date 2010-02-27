@@ -49,7 +49,7 @@ namespace O2.External.SharpDevelop.AST
 		
         public CSharp_FastCompiler()
         {        
-        	DebugMode = true;				// set to true to see details about each AstCreation and Compilation stage
+        	DebugMode = false;				// set to true to see details about each AstCreation and Compilation stage
         	InvocationParameters = new Dictionary<string, object>();
         	ReferencedAssemblies = getDefaultReferencedAssemblies();
             default_MethodName = "dynamicMethod";
@@ -93,25 +93,28 @@ namespace O2.External.SharpDevelop.AST
         	compileSnippet();
         }
         public void compileSnippet()
-        {      
-        	if (creatingAst == false && createAstStack.Count > 0)
-       		{
-       			creatingAst = true;
-       			var codeSnippet = createAstStack.Pop();
-       			createAstStack.Clear();	
-       			
-        		O2Thread.mtaThread(
-                	()=>{	
-                			InvocationParameters = getDefaultInvocationParameters();
-                			this.invoke(beforeSnippetAst);
-	                		DebugMode.info("Compiling Source Snippet (Size: {0})", codeSnippet.size());        	
-				            var sourceCode = createCSharpCodeWith_Class_Method_WithMethodText(codeSnippet);
-				            if (sourceCode != null)
-				                compileSourceCode(sourceCode);
-				            creatingAst = false;
-				            compileSnippet();
-				        });
-			}
+        {
+            O2Thread.mtaThread(
+                () =>
+                    {
+                        if (creatingAst == false && createAstStack.Count > 0)
+                        {
+                            creatingAst = true;
+                            this.sleep(500, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
+                            var codeSnippet = createAstStack.Pop();
+                            createAstStack.Clear();
+
+
+                            InvocationParameters = getDefaultInvocationParameters();
+                            this.invoke(beforeSnippetAst);
+                            DebugMode.info("Compiling Source Snippet (Size: {0})", codeSnippet.size());
+                            var sourceCode = createCSharpCodeWith_Class_Method_WithMethodText(codeSnippet);
+                            if (sourceCode != null)
+                                compileSourceCode(sourceCode);
+                            creatingAst = false;
+                            compileSnippet();
+                        }
+                    });
         }
 
 		public void compileSourceCode(string sourceCode)
@@ -121,54 +124,60 @@ namespace O2.External.SharpDevelop.AST
        	}
        	
        	public void compileSourceCode()
-       	{       
-       		if (compiling == false && compileStack.Count > 0)
-       		{
-       			compiling = true;
-       			var sourceCode = compileStack.Pop();
-       			compileStack.Clear();						// remove all previous compile requests (since their source code is now out of date
-            	O2Thread.mtaThread(
-	                ()=>{	  
-	                		//Files.setCurrentDirectoryToExecutableDirectory();                			                		
-	                		Environment.CurrentDirectory = Kernel.PublicDI.config.CurrentExecutableDirectory;;
-	                		this.invoke(beforeCompile);
-	                		DebugMode.info("Compiling Source Code (Size: {0})", sourceCode.size());            
-	                		SourceCode = sourceCode;   
-	                		var providerOptions = new Dictionary<string,string>(); 
-							providerOptions.Add ("CompilerVersion", "v3.5");
-		                    var csharpCodeProvider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);                    
-		                    var compilerParams = new CompilerParameters
-		                                             {
-                                                         GenerateInMemory = ! generateDebugSymbols,
-                                                         IncludeDebugInformation = generateDebugSymbols
-		                                             };	                        
+       	{
+       	    O2Thread.mtaThread(
+       	        () =>
+       	            {
+       	                if (compiling == false && compileStack.Count > 0)
+       	                {
+       	                    compiling = true;
+                            this.sleep(500, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
+       	                    var sourceCode = compileStack.Pop();
+       	                    compileStack.Clear();
+       	                        // remove all previous compile requests (since their source code is now out of date
 
-		                    foreach(var referencedAssembly in ReferencedAssemblies)
-		                        compilerParams.ReferencedAssemblies.Add(referencedAssembly);		                        
-		                        
-		                    CompilerResults = csharpCodeProvider.CompileAssemblyFromSource(compilerParams, sourceCode);	                    		                    		                    
-		                    if (CompilerResults.Errors.Count > 0 || CompilerResults.CompiledAssembly == null)
-							{
-								CompilationErrors = "";
-								foreach(CompilerError error in CompilerResults.Errors)
-								{
-									//CompilationErrors.Add(CompilationErrors.line(error.ToString());
-									CompilationErrors = CompilationErrors.line(String.Format("{0}::{1}::{2}::{3}::{4}", error.Line,
-                                                            error.Column, error.ErrorNumber,
-                                                            error.ErrorText, error.FileName));
-								}
-		                    	DebugMode.error("Compilation failed");
-		                    	this.invoke(onCompileFail);
-		                    }
-		                    else
-		                   	{
-		                   		DebugMode.debug("Compilation was OK");
-		                    	this.invoke(onCompileOK);
-		                    }
-		                    compiling = false;
-		                    compileSourceCode();
-	                	});
-            }
+       	                    //Files.setCurrentDirectoryToExecutableDirectory();                			                		
+       	                    Environment.CurrentDirectory = Kernel.PublicDI.config.CurrentExecutableDirectory;
+       	                    ;
+       	                    this.invoke(beforeCompile);
+       	                    DebugMode.info("Compiling Source Code (Size: {0})", sourceCode.size());
+       	                    SourceCode = sourceCode;
+       	                    var providerOptions = new Dictionary<string, string>();
+       	                    providerOptions.Add("CompilerVersion", "v3.5");
+       	                    var csharpCodeProvider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);
+       	                    var compilerParams = new CompilerParameters
+       	                                             {
+       	                                                 GenerateInMemory = !generateDebugSymbols,
+       	                                                 IncludeDebugInformation = generateDebugSymbols
+       	                                             };
+
+       	                    foreach (var referencedAssembly in ReferencedAssemblies)
+       	                        compilerParams.ReferencedAssemblies.Add(referencedAssembly);
+
+       	                    CompilerResults = csharpCodeProvider.CompileAssemblyFromSource(compilerParams, sourceCode);
+       	                    if (CompilerResults.Errors.Count > 0 || CompilerResults.CompiledAssembly == null)
+       	                    {
+       	                        CompilationErrors = "";
+       	                        foreach (CompilerError error in CompilerResults.Errors)
+       	                        {
+       	                            //CompilationErrors.Add(CompilationErrors.line(error.ToString());
+       	                            CompilationErrors =
+       	                                CompilationErrors.line(String.Format("{0}::{1}::{2}::{3}::{4}", error.Line,
+       	                                                                     error.Column, error.ErrorNumber,
+       	                                                                     error.ErrorText, error.FileName));
+       	                        }
+       	                        DebugMode.error("Compilation failed");
+       	                        this.invoke(onCompileFail);
+       	                    }
+       	                    else
+       	                    {
+       	                        DebugMode.debug("Compilation was OK");
+       	                        this.invoke(onCompileOK);
+       	                    }
+       	                    compiling = false;
+       	                    compileSourceCode();
+       	                }
+       	            });
         }
 
         /*public string getAstErrors(string sourceCode)
@@ -265,12 +274,15 @@ namespace O2.External.SharpDevelop.AST
         	if (assembly != null)
         	{
         		var methods = assembly.methods();
-        		if (methods.Count >0)        		
-        		{        			        		
-        			if (methods[0].parameters().size() == parameters.size())
-        				return methods[0].invoke(parameters);        			
-        			return methods[0].invoke();
-        		}
+                foreach(var method in methods)
+                    if (method.IsSpecialName == false)  // we need to do this since Properties get_ and set_ also look like methods
+        		//if (methods.Count >0)        		
+        		//{
+        		    {	        
+        			    if (method.parameters().size() == parameters.size())
+        				    return method.invoke(parameters);        			
+        			    return method.invoke();
+        		    }
         	}
         	return null;
         }                

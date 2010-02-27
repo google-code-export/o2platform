@@ -78,7 +78,7 @@ namespace O2.DotNetWrappers.DotNet
                                             }
                                             catch (Exception ex)
                                             {
-                                                DI.log.error("in mtaThread: {0}", ex.Message);
+                                                DI.log.ex(ex,"in mtaThread", true);
                                             }
                                         })
                                         // Thread() contructor
