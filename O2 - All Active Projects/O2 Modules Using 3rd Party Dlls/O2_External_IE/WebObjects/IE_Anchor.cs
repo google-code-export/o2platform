@@ -6,7 +6,7 @@ namespace O2.External.IE.WebObjects
     public class IE_Anchor : IO2HtmlAnchor
     {
         public string OuterHtml { get; set; }
-        public IE_Anchor(HTMLAnchorElementClass anchor)
+        public IE_Anchor(DispHTMLAnchorElement anchor)
         {
             OuterHtml = anchor.outerHTML;
         }
