@@ -32,7 +32,8 @@ namespace O2.External.IE.WebObjects
         {
             FormFields = new List<IO2HtmlFormField>();
         }
-        public IE_Form(HTMLFormElementClass form) : this()
+
+        public IE_Form(DispHTMLFormElement form) : this()
         {
             loadData(form);
             /*Elements = new List<HTMLInputElementClass>();
@@ -43,7 +44,7 @@ namespace O2.External.IE.WebObjects
              */
             //PublicDI.log.debug(" --- there are {0} elements loaded", Elements.Count);        
         }
-        private void loadData(HTMLFormElementClass form)
+        private void loadData(DispHTMLFormElement form)
         {            
             Action = ((IHTMLFormElement)form).action;
             Dir = ((IHTMLFormElement)form).dir;

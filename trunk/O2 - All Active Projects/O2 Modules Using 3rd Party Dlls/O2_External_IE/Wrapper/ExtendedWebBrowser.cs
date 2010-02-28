@@ -152,7 +152,7 @@ namespace O2.External.IE.Wrapper
         protected void OnDocumentComplete(object ppDisp, object url)
         {            
             EventHandler<DocumentCompleteEventArgs> h = DocumentComplete;
-            DocumentCompleteEventArgs args = new DocumentCompleteEventArgs(ppDisp, url);
+            var args = new DocumentCompleteEventArgs(ppDisp, url);
             if (null != h)
             {
                 h(this, args);

@@ -34,17 +34,20 @@ namespace O2.External.IE.WebObjects
             PageUri = new Uri(rawUrl);
         }
 
-        public IE_HtmlPage(HTMLDocumentClass documentClass)
+        public IE_HtmlPage(DispHTMLDocument documentClass)
             : this()
         {
             populateData(documentClass);
         }
 
-        private List<T1> populateVar<T, T1>(IHTMLElementCollection elementCollection) //, List<T> targetList) 
+        
+        private static List<T1> populateVar<T, T1>(IHTMLElementCollection elementCollection) //, List<T> targetList) 
         {
+            "in populateVar for: {0} , {1}".format(elementCollection.str(), elementCollection.comTypeName()).info();
             var targetList = new List<T1>();
             foreach (IHTMLElement element in elementCollection)
             {
+                "   element: {0} , {1}".format(element.str(), element.comTypeName()).info();
                 var t = (T1) typeof (T).ctor(element);
                 targetList.Add(t);
             }
@@ -60,12 +63,11 @@ namespace O2.External.IE.WebObjects
             var documentElement = (DispHTMLHtmlElement)documentClass.documentElement;
             PageSource = documentElement.outerHTML;
 
-
-
-            Anchors = populateVar<IE_Anchor,IO2HtmlAnchor>(documentClass.anchors);//, new List<IE_Link>());// "Anchors");
+        
+            Anchors = populateVar<IE_Anchor, IO2HtmlAnchor>(documentClass.anchors);//, new List<IE_Link>());// "Anchors");
             //populateVar<HTMLAnchorElementClass>(documentClass.applets, "Applets");
             //populateVar<HTMLAnchorElementClass>(documentClass.embeds, "Embeds");
-            Forms = populateVar<IE_Form,IO2HtmlForm>(documentClass.forms);//, "Forms");                        
+            Forms = populateVar<IE_Form, IO2HtmlForm>(documentClass.forms);//, "Forms");                        
             Images = populateVar<IE_Img, IO2HtmlImg>(documentClass.images);//, "Images");
             Links = populateVar<IE_Link, IO2HtmlLink>(documentClass.links); //, new List<IE_Link>()); //"Links");            
             //populateVar<HTMLAnchorElementClass>(documentClass.plugins, "Plugins");                        
