@@ -20,6 +20,7 @@ using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.IE.ExtensionMethods;
 using O2.External.IE.Interfaces;
@@ -31,7 +32,7 @@ namespace O2.Script
     public class ascx_Create_Links_From_Clipboard : Control
     {    
     	private static IO2Log log = PublicDI.log;
-		public static TextBox textBox;
+		public static RichTextBox textBox;
 		public static IO2Browser webBrowser;
 		
 		public static void startControl()
@@ -48,7 +49,7 @@ namespace O2.Script
         public void buildGui()
         {
         	var controls = this.add_1x1("Text to convert","converted links",true,200);
-        	textBox = controls[0].add_TextBox(true);
+        	textBox = controls[0].add_RichTextBox();
         	webBrowser = controls[1].add_WebBrowser();        	
         	// events
         	textBox.onDrop(convertFile);
@@ -57,35 +58,41 @@ namespace O2.Script
         
         public void convertFile(string fileToConvert)
         {        	
-        	//fileToConvert.error();
-        	if (fileToConvert.fileExists())            
-                if (fileToConvert.extension(".pdf"))
-                {
-                    textBox.set_Text("...processing pdf file: " + fileToConvert);
-                    var pdfParser = new PDFParser();
-                    var tempFile = PublicDI.config.getTempFileInTempDirectory(".txt");                    
-                    pdfParser.ExtractText(fileToConvert, tempFile);
-                    textBox.set_Text(tempFile.contents());
-                    Files.deleteFile(tempFile);
-                }
-                else
-                    textBox.set_Text(fileToConvert.contents());        	
+        	O2Thread.mtaThread(
+        		()=>{
+			        	//fileToConvert.error();
+			        	if (fileToConvert.fileExists())            
+			                if (fileToConvert.extension(".pdf"))
+			                {
+			                    textBox.set_Text("...processing pdf file: " + fileToConvert);
+			                    var pdfParser = new PDFParser();
+			                    var tempFile = PublicDI.config.getTempFileInTempDirectory(".txt");                    
+			                    pdfParser.ExtractText(fileToConvert, tempFile);
+			                    textBox.set_Text(tempFile.contents());
+			                    Files.deleteFile(tempFile);
+			                }
+			                else
+			                    textBox.set_Text(fileToConvert.contents());        	
+			        });
         }
         
         public void convertText(string textToConvert)
         {
-        	textToConvert.size().str().info();
-        	textToConvert = textToConvert.replace(" ","\"","'",Environment.NewLine); 
-        	var itemsToConvert = new List<String>();        	
-        	foreach(var textSnippet in textToConvert.split_onSpace())
-        		itemsToConvert.Add(textSnippet);
-        	
-        	var htmlCode = "";
-        	foreach(var item in itemsToConvert)
-        		if (item.validUri())
-	        		htmlCode += "<a href=\"{0}\">{0}</a><br/>".format(item).line();
-        		
-        	((O2BrowserIE)webBrowser).DocumentText = htmlCode;
+	        O2Thread.mtaThread(
+        		()=>{
+			        	textToConvert.size().str().info();
+			        	textToConvert = textToConvert.replace(" ","\"","'",Environment.NewLine); 
+			        	var itemsToConvert = new List<String>();        	
+			        	foreach(var textSnippet in textToConvert.split_onSpace())
+			        		itemsToConvert.Add(textSnippet);
+			        	
+			        	var htmlCode = "";
+			        	foreach(var item in itemsToConvert)
+			        		if (item.validUri() && item.ToLower().starts("http"))
+				        		htmlCode += "<a href=\"{0}\">{0}</a><br/>".format(item).line();
+			        		
+			        	((O2BrowserIE)webBrowser).DocumentText = htmlCode;
+			        });
         }
     	    	    	    	    
     }
