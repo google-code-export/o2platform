@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -38,7 +38,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Skybound.Gecko")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("(O2 Platform Version)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Skybound Software (http://www.skybound.ca)")]
 [assembly: AssemblyProduct("GeckoFX")]
@@ -49,9 +49,12 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("2d144611-62c5-4eb8-a0ae-8a1617949dcc")]
 
-#if GECKO_1_9
-[assembly: AssemblyVersion("2.9.1.0")]
-[assembly: AssemblyFileVersion("1.9.0.0")]
+#if GECKO_1_9_1
+[assembly: AssemblyVersion("1.9.1.0")]
+[assembly: AssemblyFileVersion("1.9.1.0")]
+#elif GECKO_1_9
+[assembly: AssemblyVersion("1.9.0.2")]
+[assembly: AssemblyFileVersion("1.9.0.2")]
 #elif GECKO_1_8
 [assembly: AssemblyVersion("1.8.1.5")]
 [assembly: AssemblyFileVersion("1.8.1.5")]
