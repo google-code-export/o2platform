@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -139,8 +139,18 @@ namespace Skybound.Gecko
 				using (AutoJSContext context = new AutoJSContext())
 				{
 					nsIDOMCSSRuleList ret;
-					return (StyleSheet._DomStyleSheet.GetCssRules(out ret) != 0) ? null : ret;
+					int hresult = StyleSheet._DomStyleSheet.GetCssRules(out ret);
+					//return (StyleSheet._DomStyleSheet.GetCssRules(out ret) != 0) ? null : ret;
+					return ret;
 				}
+			}
+			
+			/// <summary>
+			/// Attempts to reload the rule list.
+			/// </summary>
+			public void Reload()
+			{
+				this.List = GetRuleList();
 			}
 			
 			/// <summary>
@@ -185,23 +195,37 @@ namespace Skybound.Gecko
 			}
 			
 			/// <summary>
-			/// Inserts a rule at the specified position in the collection.
+			/// Inserts a rule at the specified position in the collection.  The return value is the index in the list where the item was actually inserted,
+			/// or -1 if the rule contains syntax errors and could not be added to the collection.
 			/// </summary>
 			/// <param name="index"></param>
 			/// <param name="rule"></param>
-			public void Insert(int index, string rule)
+			public int Insert(int index, string rule)
 			{
 				if (IsReadOnly)
 					throw new InvalidOperationException("This collection is read-only.");
 				else if (index < 0 || index > Count)
 					throw new ArgumentOutOfRangeException("index");
 				else if (string.IsNullOrEmpty(rule))
-					return;
+					return -1;
+				
+				const int NS_ERROR_DOM_SYNTAX_ERR = unchecked((int)0x8053000c);
 				
 				using (AutoJSContext context = new AutoJSContext())
 				{
-					StyleSheet._DomStyleSheet.InsertRule(new nsAString(rule), index);
+					int hresult = StyleSheet._DomStyleSheet.InsertRule(new nsAString(rule), index, out index);
+					
+					if (hresult == NS_ERROR_DOM_SYNTAX_ERR)
+					{
+						return -1;
+					}
+					else if (hresult != 0)
+					{
+						throw new COMException("", hresult);
+					}
 				}
+				
+				return index;
 			}
 			
 			/// <summary>

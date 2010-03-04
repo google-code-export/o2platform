@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -40,7 +40,7 @@ using System.Runtime.CompilerServices;
 
 namespace Skybound.Gecko
 {
-	[Guid("00000000-0000-0000-c000-000000000046"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	[Guid("00000000-0000-0000-c000-000000000046"), ComImport]
 	public interface nsISupports
 	{
 		object QueryInterface(ref Guid iid);
@@ -355,11 +355,11 @@ namespace Skybound.Gecko
 	{
 		nsIDOMEvent GetMouseEvent();
 		nsIDOMNode GetTargetNode();
-		void GetAssociatedLink(nsAString aAssociatedLink);
+		[PreserveSig] int GetAssociatedLink(nsAString aAssociatedLink);
 		imgIContainer GetImageContainer();
-		nsIURI GetImageSrc();
+		[PreserveSig] int GetImageSrc(out nsIURI result);
 		imgIContainer GetBackgroundImageContainer();
-		nsIURI GetBackgroundImageSrc(); 
+		[PreserveSig] int GetBackgroundImageSrc(out nsIURI result); 
 	}
 	
 	[Guid("1a6290e6-8285-4e10-963d-d001f8d327b8"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -566,25 +566,25 @@ namespace Skybound.Gecko
 	[Guid("07a22cc0-0ce5-11d3-9331-00104ba0fd40"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	interface nsIURI
 	{
-		void GetSpec(nsACString outSpec);
-		void SetSpec(nsACString inSpec);
-		void GetPrePath(nsACString outPrePath);
-		void GetScheme(nsACString outScheme);
-		void SetScheme(nsACString inScheme);
-		void GetUserPass(nsACString outUserPass);
-		void SetUserPass(nsACString inUserPass);
-		void GetUsername(nsACString outUsername);
-		void SetUsername(nsACString aUsername);
-		void GetPassword(nsACString aUsername);
-		void SetPassword(nsACString aPassword);
-		void GetHostPort(nsACString aHostPort);
-		void SetHostPort(nsACString aHostPort);
-		void GetHost(nsACString aHost);
-		void SetHost(nsACString aHost);
+		void GetSpec(nsAUTF8String outSpec);
+		void SetSpec(nsAUTF8String inSpec);
+		void GetPrePath(nsAUTF8String outPrePath);
+		void GetScheme(nsAUTF8String outScheme);
+		void SetScheme(nsAUTF8String inScheme);
+		void GetUserPass(nsAUTF8String outUserPass);
+		void SetUserPass(nsAUTF8String inUserPass);
+		void GetUsername(nsAUTF8String outUsername);
+		void SetUsername(nsAUTF8String aUsername);
+		void GetPassword(nsAUTF8String aUsername);
+		void SetPassword(nsAUTF8String aPassword);
+		void GetHostPort(nsAUTF8String aHostPort);
+		void SetHostPort(nsAUTF8String aHostPort);
+		void GetHost(nsAUTF8String aHost);
+		void SetHost(nsAUTF8String aHost);
 		int GetPort();
 		void SetPort(int aPort);
-		void GetPath(nsACString aPath);
-		void SetPath(nsACString aPath);
+		void GetPath(nsAUTF8String aPath);
+		void SetPath(nsAUTF8String aPath);
 		bool Equals(nsIURI other);
 		bool SchemeIs([MarshalAs(UnmanagedType.LPStr)] string scheme);
 		nsIURI Clone();
@@ -765,19 +765,48 @@ namespace Skybound.Gecko
 		int GetFocusOffset();
 		bool GetIsCollapsed();
 		int GetRangeCount();
-		IntPtr GetRangeAt(int index); // nsIDOMRange
+		nsIDOMRange GetRangeAt(int index);
 		void Collapse(nsIDOMNode parentNode, int offset);
 		void Extend(nsIDOMNode parentNode, int offset);
 		void CollapseToStart();
 		void CollapseToEnd();
-		bool ContainsNode(nsIDOMNode node, bool entirelyContained);
+		bool ContainsNode(nsIDOMNode node, bool partlyContained);
 		void SelectAllChildren(nsIDOMNode parentNode);
-		void AddRange(IntPtr range);
-		void RemoveRange(IntPtr range);
+		void AddRange(nsIDOMRange range);
+		void RemoveRange(nsIDOMRange range);
 		void RemoveAllRanges();
 		void DeleteFromDocument();
 		void SelectionLanguageChange(bool langRTL);
 		[return: MarshalAs(UnmanagedType.LPWStr)] string ToString();
+	}
+
+	[Guid("a6cf90ce-15b3-11d2-932e-00805f8add32"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	interface nsIDOMRange
+	{
+		nsIDOMNode GetStartContainer();
+		int GetStartOffset();
+		nsIDOMNode GetEndContainer();
+		int GetEndOffset();
+		bool GetCollapsed();
+		nsIDOMNode GetCommonAncestorContainer();
+		void SetStart(nsIDOMNode refNode, int offset);
+		void SetEnd(nsIDOMNode refNode, int offset);
+		void SetStartBefore(nsIDOMNode refNode);
+		void SetStartAfter(nsIDOMNode refNode);
+		void SetEndBefore(nsIDOMNode refNode);
+		void SetEndAfter(nsIDOMNode refNode);
+		void Collapse(bool toStart);
+		void SelectNode(nsIDOMNode refNode);
+		void SelectNodeContents(nsIDOMNode refNode);
+		short CompareBoundaryPoints(ushort how, nsIDOMRange sourceRange);
+		void DeleteContents();
+		nsIDOMNode ExtractContents();
+		nsIDOMNode CloneContents();
+		void InsertNode(nsIDOMNode newNode);
+		void SurroundContents(nsIDOMNode newParent);
+		nsIDOMRange CloneRange();
+		void ToString(nsAString _retval);
+		void Detach();
 	}
 	
 	/* GECKO 1.9
@@ -1136,8 +1165,8 @@ namespace Skybound.Gecko
 		new nsIDOMElement GetElementById(nsAString elementId);
 
 		// nsIDOMHTMLDocument:
-		void GetTitle(nsAString aTitle);
-		void SetTitle(nsAString aTitle);
+		void GetTitle(nsAUTF8String aTitle);
+		void SetTitle(nsAUTF8String aTitle);
 		void GetReferrer(nsAString aReferrer);
 		void GetDomain(nsAString aDomain);
 		void GetURL(nsAString aURL);
@@ -1204,6 +1233,28 @@ namespace Skybound.Gecko
 		nsIDOMNode NamedItem(nsAString name);
 	}
 	
+	#if GECKO_1_9_1
+	[Guid("7F142F9A-FBA7-4949-93D6-CF08A974AC51"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	interface nsIDOMNSHTMLElement
+	{
+		int GetOffsetTop();
+		int GetOffsetLeft();
+		int GetOffsetWidth();
+		int GetOffsetHeight();
+		nsIDOMElement GetOffsetParent();
+		void GetInnerHTML(nsAString aInnerHTML);
+		void SetInnerHTML(nsAString aInnerHTML);
+		int GetTabIndex();
+		void SetTabIndex(int aTabIndex);
+		void GetContentEditable(nsAString aContentEditable);
+		void SetContentEditable(nsAString aContentEditable);
+		void Blur();
+		void Focus();
+		void ScrollIntoView(bool top);
+		bool GetSpellcheck();
+		void SetSpellcheck(bool aSpellcheck);
+	}
+	#else
 	#if GECKO_1_8
 	[Guid("da83b2ec-8264-4410-8496-ada3acd2ae42"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	#elif GECKO_1_9
@@ -1248,6 +1299,7 @@ namespace Skybound.Gecko
 		void SetSpellcheck(bool aSpellcheck);
 		#endif
 	}
+	#endif
 	
 	[Guid("3d9f4973-dd2e-48f5-b5f7-2634e09eadd9"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 	interface nsIDOMDocumentStyle
@@ -1302,7 +1354,7 @@ namespace Skybound.Gecko
 		// nsIDOMCSSStyleSheet:
 		nsIDOMCSSRule GetOwnerRule();
 		[PreserveSig] int GetCssRules(out nsIDOMCSSRuleList ret); // 0x8053000F
-		int InsertRule(nsAString rule, int index);
+		[PreserveSig] int InsertRule(nsAString rule, int index, out int result);
 		void DeleteRule(int index);
 	}
 	
@@ -1817,21 +1869,52 @@ namespace Skybound.Gecko
 		nsIDOMElement ElementFromPoint(int x, int y);
 	}
 	
+	#if GECKO_1_9_1
+	[Guid("f0aef489-18c5-4de6-99d5-58b3758b098c"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	#else
 	[Guid("cea6f919-7fe6-4bdd-9db6-158d9283f8d3"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	#endif
+
 	interface nsIDOMNSElement
 	{
 		nsIDOMNodeList GetElementsByClassName(nsAString classes);
 		nsIDOMClientRectList GetClientRects();
 		nsIDOMClientRect GetBoundingClientRect();
+		#if GECKO_1_9_1
+		int GetScrollTop();
+		void SetScrollTop(int value);
+		int GetScrollLeft();
+		void SetScrollLeft(int value);
+		int GetScrollHeight();
+		int GetScrollWidth();
+		int GetClientTop();
+		int GetClientLeft();
+		int GetClientHeight();
+		int GetClientWidth();
+		nsIDOMElement GetFirstElementChild();
+		nsIDOMElement GetLastElementChild();
+		nsIDOMElement GetPreviousElementSibling();
+		nsIDOMElement GetNextElementSibling();
+		int GetChildElementCount();
+		nsIDOMNodeList GetChildren();
+		#endif
 	}
 	
+	#if GECKO_1_9_1
+	[Guid("B2F824C4-D9D3-499B-8D3B-45C8245497C6"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	#else
 	[Guid("f8583bbc-c6de-4646-b39f-df7e766442e9"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	#endif
 	interface nsIDOMClientRect
 	{
 		float GetLeft();
 		float GetTop();
 		float GetRight();
 		float GetBottom();
+		#if GECKO_1_9_1
+		float GetWidth();
+		float GetHeight();
+		#endif
 	}
 	
 	[Guid("917da19d-62f5-441d-b47e-9e35f05639c9"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -1841,4 +1924,183 @@ namespace Skybound.Gecko
 		nsIDOMClientRect Item(int index);
 	}
 	#endif
+	
+	[Guid("75d1553d-63bf-4b5d-a8f7-e4e4cac21ba4"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	interface nsIPrintingPromptService
+	{
+		void ShowPrintDialog(nsIDOMWindow parent, nsIWebBrowserPrint webBrowserPrint, nsIPrintSettings printSettings);
+		void ShowProgress(nsIDOMWindow parent, nsIWebBrowserPrint webBrowserPrint, nsIPrintSettings printSettings, nsIObserver openDialogObserver, bool isForPrinting, out nsIWebProgressListener webProgressListener, out nsIPrintProgressParams printProgressParams, bool notifyOnOpen);
+		void ShowPageSetup(nsIDOMWindow parent, nsIPrintSettings printSettings, nsIObserver aObs);
+		void ShowPrinterProperties(nsIDOMWindow parent, [MarshalAs(UnmanagedType.LPWStr)] string printerName, nsIPrintSettings printSettings);
+	}
+	
+	[Guid("ca89b55b-6faf-4051-9645-1c03ef5108f8"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	interface nsIPrintProgressParams
+	{
+		[return: MarshalAs(UnmanagedType.LPWStr)] string GetDocTitle();
+		void SetDocTitle([MarshalAs(UnmanagedType.LPWStr)] string aDocTitle);
+		[return: MarshalAs(UnmanagedType.LPWStr)] string GetDocURL();
+		void SetDocURL([MarshalAs(UnmanagedType.LPWStr)] string aDocURL);
+
+	}
+	
+	[Guid("9a7ca4b0-fbba-11d4-a869-00105a183419"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	interface nsIWebBrowserPrint
+	{
+		nsIPrintSettings GetGlobalPrintSettings();
+		nsIPrintSettings GetCurrentPrintSettings();
+		nsIDOMWindow GetCurrentChildDOMWindow();
+		bool GetDoingPrint();
+		bool GetDoingPrintPreview();
+		bool GetIsFramesetDocument();
+		bool GetIsFramesetFrameSelected();
+		bool GetIsIFrameSelected();
+		bool GetIsRangeSelection();
+		int GetPrintPreviewNumPages();
+		void Print(nsIPrintSettings aThePrintSettings, nsIWebProgressListener aWPListener);
+		void PrintPreview(nsIPrintSettings aThePrintSettings, nsIDOMWindow aChildDOMWin, nsIWebProgressListener aWPListener);
+		void PrintPreviewNavigate(short aNavType, int aPageNum);
+		void Cancel();
+		void EnumerateDocumentNames(out uint aCount, IntPtr aResult);
+		void ExitPrintPreview();
+	}
+	
+	[Guid("2f977d52-5485-11d4-87e2-0010a4e75ef2"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	interface nsIPrintSession
+	{
+	}
+	
+	[Guid("5af07661-6477-4235-8814-4a45215855b8"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+	interface nsIPrintSettings
+	{
+		void SetPrintOptions(int aType, bool aTurnOnOff);
+		bool GetPrintOptions(int aType);
+		int GetPrintOptionsBits();
+		void GetEffectivePageSize(out double aWidth, double aHeight);
+		nsIPrintSettings Clone();
+		void Assign(nsIPrintSettings aPS);
+		nsIPrintSession GetPrintSession();
+		void SetPrintSession(nsIPrintSession aPrintSession);
+		int GetStartPageRange();
+		void SetStartPageRange(int aStartPageRange);
+		int GetEndPageRange();
+		void SetEndPageRange(int aEndPageRange);
+		double GetEdgeTop();
+		void SetEdgeTop(double aEdgeTop);
+		double GetEdgeLeft();
+		void SetEdgeLeft(double aEdgeLeft);
+		double GetEdgeBottom();
+		void SetEdgeBottom(double aEdgeBottom);
+		double GetEdgeRight();
+		void SetEdgeRight(double aEdgeRight);
+		double GetMarginTop();
+		void SetMarginTop(double aMarginTop);
+		double GetMarginLeft();
+		void SetMarginLeft(double aMarginLeft);
+		double GetMarginBottom();
+		void SetMarginBottom(double aMarginBottom);
+		double GetMarginRight();
+		void SetMarginRight(double aMarginRight);
+		double GetUnwriteableMarginTop();
+		void SetUnwriteableMarginTop(double aUnwriteableMarginTop);
+		double GetUnwriteableMarginLeft();
+		void SetUnwriteableMarginLeft(double aUnwriteableMarginLeft);
+		double GetUnwriteableMarginBottom();
+		void SetUnwriteableMarginBottom(double aUnwriteableMarginBottom);
+		double GetUnwriteableMarginRight();
+		void SetUnwriteableMarginRight(double aUnwriteableMarginRight);
+		double GetScaling();
+		void SetScaling(double aScaling);
+		bool GetPrintBGColors();
+		void SetPrintBGColors(bool aPrintBGColors);
+		bool GetPrintBGImages();
+		void SetPrintBGImages(bool aPrintBGImages);
+		short GetPrintRange();
+		void SetPrintRange(short aPrintRange);
+		string GetTitle();
+		void SetTitle( string aTitle);
+		 string GetDocURL();
+		void SetDocURL( string aDocURL);
+		 string GetHeaderStrLeft();
+		void SetHeaderStrLeft( string aHeaderStrLeft);
+		 string GetHeaderStrCenter();
+		void SetHeaderStrCenter( string aHeaderStrCenter);
+		 string GetHeaderStrRight();
+		void SetHeaderStrRight( string aHeaderStrRight);
+		 string GetFooterStrLeft();
+		void SetFooterStrLeft( string aFooterStrLeft);
+		 string GetFooterStrCenter();
+		void SetFooterStrCenter( string aFooterStrCenter);
+		 string GetFooterStrRight();
+		void SetFooterStrRight( string aFooterStrRight);
+		short GetHowToEnableFrameUI();
+		void SetHowToEnableFrameUI(short aHowToEnableFrameUI);
+		bool GetIsCancelled();
+		void SetIsCancelled(bool aIsCancelled);
+		short GetPrintFrameTypeUsage();
+		void SetPrintFrameTypeUsage(short aPrintFrameTypeUsage);
+		short GetPrintFrameType();
+		void SetPrintFrameType(short aPrintFrameType);
+		bool GetPrintSilent();
+		void SetPrintSilent(bool aPrintSilent);
+		bool GetShrinkToFit();
+		void SetShrinkToFit(bool aShrinkToFit);
+		bool GetShowPrintProgress();
+		void SetShowPrintProgress(bool aShowPrintProgress);
+		 string GetPaperName();
+		void SetPaperName( string aPaperName);
+		short GetPaperSizeType();
+		void SetPaperSizeType(short aPaperSizeType);
+		short GetPaperData();
+		void SetPaperData(short aPaperData);
+		double GetPaperWidth();
+		void SetPaperWidth(double aPaperWidth);
+		double GetPaperHeight();
+		void SetPaperHeight(double aPaperHeight);
+		short GetPaperSizeUnit();
+		void SetPaperSizeUnit(short aPaperSizeUnit);
+		 string GetPlexName();
+		void SetPlexName( string aPlexName);
+		 string GetColorspace();
+		void SetColorspace( string aColorspace);
+		 string GetResolutionName();
+		void SetResolutionName( string aResolutionName);
+		bool GetDownloadFonts();
+		void SetDownloadFonts(bool aDownloadFonts);
+		bool GetPrintReversed();
+		void SetPrintReversed(bool aPrintReversed);
+		bool GetPrintInColor();
+		void SetPrintInColor(bool aPrintInColor);
+		int GetOrientation();
+		void SetOrientation(int aOrientation);
+		 string GetPrintCommand();
+		void SetPrintCommand( string aPrintCommand);
+		int GetNumCopies();
+		void SetNumCopies(int aNumCopies);
+		 string GetPrinterName();
+		void SetPrinterName( string aPrinterName);
+		bool GetPrintToFile();
+		void SetPrintToFile(bool aPrintToFile);
+		 string GetToFileName();
+		void SetToFileName( string aToFileName);
+		short GetOutputFormat();
+		void SetOutputFormat(short aOutputFormat);
+		int GetPrintPageDelay();
+		void SetPrintPageDelay(int aPrintPageDelay);
+		bool GetIsInitializedFromPrinter();
+		void SetIsInitializedFromPrinter(bool aIsInitializedFromPrinter);
+		bool GetIsInitializedFromPrefs();
+		void SetIsInitializedFromPrefs(bool aIsInitializedFromPrefs);
+		void SetMarginInTwips(ref nsMargin aMargin);
+		void SetEdgeInTwips(ref nsMargin aEdge);
+		void GetMarginInTwips(ref nsMargin aMargin);
+		void GetEdgeInTwips(ref nsMargin aEdge);
+		void SetupSilentPrinting();
+		void SetUnwriteableMarginInTwips(ref nsMargin aEdge);
+		void GetUnwriteableMarginInTwips(ref nsMargin aEdge);
+	}
+	
+	struct nsMargin
+	{
+	}
 }

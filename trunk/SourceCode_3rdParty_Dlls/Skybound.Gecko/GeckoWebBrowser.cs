@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -80,18 +80,21 @@ namespace Skybound.Gecko
 		#region protected override void Dispose(bool disposing)
 		protected override void Dispose(bool disposing)
 		{
-			// make sure the object is still alove before we call a method on it
-			if (Xpcom.QueryInterface<nsIWebNavigation>(WebNav) != null)
+			if (!Environment.HasShutdownStarted && !AppDomain.CurrentDomain.IsFinalizingForUnload())
 			{
-				WebNav.Stop(nsIWebNavigationConstants.STOP_ALL);
+				// make sure the object is still alove before we call a method on it
+				if (Xpcom.QueryInterface<nsIWebNavigation>(WebNav) != null)
+				{
+					WebNav.Stop(nsIWebNavigationConstants.STOP_ALL);
+				}
+				WebNav = null;
+				
+				if (Xpcom.QueryInterface<nsIBaseWindow>(BaseWindow) != null)
+				{
+					BaseWindow.Destroy();
+				}
+				BaseWindow = null;
 			}
-			WebNav = null;
-			
-			if (Xpcom.QueryInterface<nsIBaseWindow>(BaseWindow) != null)
-			{
-				BaseWindow.Destroy();
-			}
-			BaseWindow = null;
 			
 			base.Dispose(disposing);
 		}
@@ -554,6 +557,17 @@ namespace Skybound.Gecko
 		#endregion
 		
 		/// <summary>
+		/// Gets or sets whether all default items are removed from the standard context menu.
+		/// </summary>
+		[DefaultValue(false),Description("Removes default items from the standard context menu.  The ShowContextMenu event is still raised to add custom items.")]
+		public bool NoDefaultContextMenu
+		{
+			get { return _NoDefaultContextMenu; }
+			set { _NoDefaultContextMenu = value; }
+		}
+		bool _NoDefaultContextMenu;
+		
+		/// <summary>
 		/// Gets or sets the text displayed in the status bar.
 		/// </summary>
 		[Browsable(false), DefaultValue("")]
@@ -770,8 +784,16 @@ namespace Skybound.Gecko
 		/// <returns></returns>
 		public bool Reload(GeckoLoadFlags flags)
 		{
+			Uri url = this.Url;
+			if (url != null && url.IsFile && !File.Exists(url.LocalPath))
+			{
+				// can't reload a file which no longer exists--a COM exception will be thrown
+				return false;
+			}
+			
 			if (WebNav != null)
 				WebNav.Reload((uint)flags); 
+			
 			return true;
 		}
 		
@@ -1033,7 +1055,8 @@ namespace Skybound.Gecko
 				nsURI location = WebNav.GetCurrentURI();
 				if (!location.IsNull)
 				{
-					return new Uri(location.Spec);
+					Uri result;
+					return Uri.TryCreate(location.Spec, UriKind.Absolute, out result) ? result : null;
 				}
 				
 				return new Uri("about:blank");
@@ -1336,65 +1359,122 @@ namespace Skybound.Gecko
 			if (info.GetTargetNode() == null)
 				return;
 			
-			List<MenuItem> optionals = new List<MenuItem>();
-			
-			if (this.CanUndo || this.CanRedo)
-			{
-				optionals.Add(new MenuItem("Undo", delegate { Undo(); }));
-				optionals.Add(new MenuItem("Redo", delegate { Redo(); }));
-				
-				optionals[0].Enabled = this.CanUndo;
-				optionals[1].Enabled = this.CanRedo;
-			}
-			else
-			{
-				optionals.Add(new MenuItem("Back", delegate { GoBack(); }));
-				optionals.Add(new MenuItem("Forward", delegate { GoForward(); }));
-				
-				optionals[0].Enabled = this.CanGoBack;
-				optionals[1].Enabled = this.CanGoForward;
-			}
-			
-			optionals.Add(new MenuItem("-"));
-			
-			if (this.CanCopyImageContents)
-				optionals.Add(new MenuItem("Copy Image Contents", delegate { CopyImageContents(); }));
-			
-			if (this.CanCopyImageLocation)
-				optionals.Add(new MenuItem("Copy Image Location", delegate { CopyImageLocation(); }));
-			
-			if (this.CanCopyLinkLocation)
-				optionals.Add(new MenuItem("Copy Link Location", delegate { CopyLinkLocation(); }));
-			
-			if (this.CanCopySelection)
-				optionals.Add(new MenuItem("Copy Selection", delegate { CopySelection(); }));
-			
-			MenuItem mnuSelectAll = new MenuItem("Select All");
-			mnuSelectAll.Click += delegate { SelectAll(); };
-			
-			GeckoDocument doc = GeckoDocument.Create((nsIDOMHTMLDocument)info.GetTargetNode().GetOwnerDocument());
-			
-			string viewSourceUrl = (doc == null) ? null : Convert.ToString(doc.Url);
-			
-			MenuItem mnuViewSource = new MenuItem("View Source");
-			mnuViewSource.Enabled = !string.IsNullOrEmpty(viewSourceUrl);
-			mnuViewSource.Click += delegate { ViewSource(viewSourceUrl); };
-			
-			string properties = (doc != null && doc.Url == Document.Url) ? "Page Properties" : "IFRAME Properties";
-			
-			MenuItem mnuProperties = new MenuItem(properties);
-			mnuProperties.Enabled = doc != null;
-			mnuProperties.Click += delegate { ShowPageProperties(doc); };
-			
 			ContextMenu menu = new ContextMenu();
-			menu.MenuItems.AddRange(optionals.ToArray());
-			menu.MenuItems.Add(mnuSelectAll);
-			menu.MenuItems.Add("-");
-			menu.MenuItems.Add(mnuViewSource);
-			menu.MenuItems.Add(mnuProperties);
 			
-			menu.Show(this, PointToClient(MousePosition));
+			// no default items are added when the context menu is disabled
+			if (!this.NoDefaultContextMenu)
+			{
+				List<MenuItem> optionals = new List<MenuItem>();
+				
+				if (this.CanUndo || this.CanRedo)
+				{
+					optionals.Add(new MenuItem("Undo", delegate { Undo(); }));
+					optionals.Add(new MenuItem("Redo", delegate { Redo(); }));
+					
+					optionals[0].Enabled = this.CanUndo;
+					optionals[1].Enabled = this.CanRedo;
+				}
+				else
+				{
+					optionals.Add(new MenuItem("Back", delegate { GoBack(); }));
+					optionals.Add(new MenuItem("Forward", delegate { GoForward(); }));
+					
+					optionals[0].Enabled = this.CanGoBack;
+					optionals[1].Enabled = this.CanGoForward;
+				}
+				
+				optionals.Add(new MenuItem("-"));
+				
+				if (this.CanCopyImageContents)
+					optionals.Add(new MenuItem("Copy Image Contents", delegate { CopyImageContents(); }));
+				
+				if (this.CanCopyImageLocation)
+					optionals.Add(new MenuItem("Copy Image Location", delegate { CopyImageLocation(); }));
+				
+				if (this.CanCopyLinkLocation)
+					optionals.Add(new MenuItem("Copy Link Location", delegate { CopyLinkLocation(); }));
+				
+				if (this.CanCopySelection)
+					optionals.Add(new MenuItem("Copy Selection", delegate { CopySelection(); }));
+				
+				MenuItem mnuSelectAll = new MenuItem("Select All");
+				mnuSelectAll.Click += delegate { SelectAll(); };
+				
+				GeckoDocument doc = GeckoDocument.Create((nsIDOMHTMLDocument)info.GetTargetNode().GetOwnerDocument());
+				
+				string viewSourceUrl = (doc == null) ? null : Convert.ToString(doc.Url);
+				
+				MenuItem mnuViewSource = new MenuItem("View Source");
+				mnuViewSource.Enabled = !string.IsNullOrEmpty(viewSourceUrl);
+				mnuViewSource.Click += delegate { ViewSource(viewSourceUrl); };
+				
+				string properties = (doc != null && doc.Url == Document.Url) ? "Page Properties" : "IFRAME Properties";
+				
+				MenuItem mnuProperties = new MenuItem(properties);
+				mnuProperties.Enabled = doc != null;
+				mnuProperties.Click += delegate { ShowPageProperties(doc); };
+				
+				menu.MenuItems.AddRange(optionals.ToArray());
+				menu.MenuItems.Add(mnuSelectAll);
+				menu.MenuItems.Add("-");
+				menu.MenuItems.Add(mnuViewSource);
+				menu.MenuItems.Add(mnuProperties);
+			}
+			
+			// get image urls
+			Uri backgroundImageSrc = null, imageSrc = null;
+			nsIURI src;
+			
+			if (info.GetBackgroundImageSrc(out src) == 0)
+			{
+				backgroundImageSrc = new Uri(new nsURI(src).Spec);
+			}
+			
+			if (info.GetImageSrc(out src) == 0)
+			{
+				imageSrc = new Uri(new nsURI(src).Spec);
+			}
+			
+			// get associated link.  note that this needs to be done manually because GetAssociatedLink returns a non-zero
+			// result when no associated link is available, so an exception would be thrown by nsString.Get()
+			string associatedLink = null;
+			using (nsAString str = new nsAString())
+			{
+				if (info.GetAssociatedLink(str) == 0)
+				{
+					associatedLink = str.ToString();
+				}
+			}
+			
+			GeckoContextMenuEventArgs e = new GeckoContextMenuEventArgs(
+				PointToClient(MousePosition), menu, associatedLink, backgroundImageSrc, imageSrc,
+				GeckoNode.Create(Xpcom.QueryInterface<nsIDOMNode>(info.GetTargetNode()))
+				);
+			
+			OnShowContextMenu(e);
+			
+			if (e.ContextMenu != null && e.ContextMenu.MenuItems.Count > 0)
+			{
+				e.ContextMenu.Show(this, e.Location);
+			}
 		}
+		
+		#region public event GeckoContextMenuEventHandler ShowContextMenu
+		public event GeckoContextMenuEventHandler ShowContextMenu
+		{
+			add { this.Events.AddHandler(ShowContextMenuEvent, value); }
+			remove { this.Events.RemoveHandler(ShowContextMenuEvent, value); }
+		}
+		private static object ShowContextMenuEvent = new object();
+
+		/// <summary>Raises the <see cref="ShowContextMenu"/> event.</summary>
+		/// <param name="e">The data for the event.</param>
+		protected virtual void OnShowContextMenu(GeckoContextMenuEventArgs e)
+		{
+			if (((GeckoContextMenuEventHandler)this.Events[ShowContextMenuEvent]) != null)
+				((GeckoContextMenuEventHandler)this.Events[ShowContextMenuEvent])(this, e);
+		}
+		#endregion
 		
 		/// <summary>
 		/// Opens a new window which contains the source code for the current page.
@@ -1551,7 +1631,10 @@ namespace Skybound.Gecko
 		void nsIEmbeddingSiteWindow.SetFocus()
 		{
 			Focus();
-			BaseWindow.SetFocus();
+			if (BaseWindow != null)
+			{
+				BaseWindow.SetFocus();
+			}
 		}
 
 		bool nsIEmbeddingSiteWindow.GetVisibility()
@@ -2457,6 +2540,69 @@ namespace Skybound.Gecko
 		
 		public BoundsSpecified BoundsSpecified { get { return _BoundsSpecified; } }
 		BoundsSpecified _BoundsSpecified;
+	}
+	#endregion
+	
+	#region public delegate void GeckoContextMenuEventHandler(object sender, GeckoContextMenuEventArgs e);
+	public delegate void GeckoContextMenuEventHandler(object sender, GeckoContextMenuEventArgs e);
+
+	/// <summary>Provides data for the <see cref="GeckoContextMenuEventHandler"/> event.</summary>
+	public class GeckoContextMenuEventArgs : System.EventArgs
+	{
+		/// <summary>Creates a new instance of a <see cref="GeckoContextMenuEventArgs"/> object.</summary>
+		public GeckoContextMenuEventArgs(Point location, ContextMenu contextMenu, string associatedLink, Uri backgroundImageSrc, Uri imageSrc, GeckoNode targetNode)
+		{
+			this._Location = location;
+			this._ContextMenu = contextMenu;
+			this._AssociatedLink = associatedLink;
+			this._BackgroundImageSrc = backgroundImageSrc;
+			this._ImageSrc = ImageSrc;
+			this._TargetNode = targetNode;
+		}
+		
+		/// <summary>
+		/// Gets the location where the context menu will be displayed.
+		/// </summary>
+		public Point Location
+		{
+			get { return _Location; }
+		}
+		Point _Location;
+		
+		/// <summary>
+		/// Gets or sets the context menu to be displayed.  Set this property to null to disable
+		/// the context menu.
+		/// </summary>
+		public ContextMenu ContextMenu
+		{
+			get { return _ContextMenu; }
+			set { _ContextMenu = value; }
+		}
+		ContextMenu _ContextMenu;
+
+		public string AssociatedLink
+		{
+			get { return _AssociatedLink; }
+		}
+		string _AssociatedLink;
+
+		public Uri BackgroundImageSrc
+		{
+			get { return _BackgroundImageSrc; }
+		}
+		Uri _BackgroundImageSrc;
+
+		public Uri ImageSrc
+		{
+			get { return _ImageSrc; }
+		}
+		Uri _ImageSrc;
+
+		public GeckoNode TargetNode
+		{
+			get { return _TargetNode; }
+		}
+		GeckoNode _TargetNode;
 	}
 	#endregion
 	

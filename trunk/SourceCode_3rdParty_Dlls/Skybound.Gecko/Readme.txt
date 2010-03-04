@@ -1,7 +1,7 @@
 ﻿
 ==================================================
 GeckoFX
-(C) 2008 Skybound Software. All Rights Reserved.
+(C) 2008-2009 Skybound Software. All Rights Reserved.
 http://www.geckofx.org
 ==================================================
 
@@ -12,13 +12,13 @@ GeckoFX is a .NET wrapper around XULRunner, a runtime based on the same source
 code as Firefox.  You can add the control to your windows forms app and use it much the
 same way as System.Windows.Forms.WebBrowser.
 
-Since GeckoFX is a wrapper, you need to the XULRunner runtime somewhere on your
+Since GeckoFX is a wrapper, you need to have the XULRunner runtime somewhere on your
 development system (and redistribute it with your application).  GeckoFX now works best
-with XULRunner 1.9 (Firefox 3).
+with XULRunner 1.9.1 (Firefox 3.5).
 
-(1) Download XULRunner 1.9 from:
+(1) Download XULRunner 1.9.1 from:
 
-	ftp://ftp.mozilla.org/pub/xulrunner/releases/1.9.0.0/runtimes/xulrunner-1.9.en-US.win32.zip
+	http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.9.1.2/runtimes/xulrunner-1.9.1.2.en-US.win32.zip
 
 (2) In your application startup code, call:
 
@@ -48,22 +48,37 @@ GeckoFX into the "chrome" directory in your XULRunner path.
 The files that need to be copied are "geckofx.jar" and "geckofx.manifest".
 
 
-Notes about XULRunner 1.8
----------------------
-XULRunner 1.8 is based on the same source code as Firefox 2.  If your application
-requires an embedded Firefox 2 browser, rebuild GeckoFX using the "Debug 1.8" build
-configuration.  The generated assembly will be put in it's own directory (bin\Debug 1.8).
+Notes about XULRunner 1.8/1.9.0
+---------------------------
+XULRunner 1.8 is based on the same source code as Firefox 2; 1.9.1 is based on the same
+source as Firefox 3.5.  If your application requires an embedded Firefox 2 or 3.0 browser,
+rebuild GeckoFX using the "Debug 1.8" or "Debug 1.9.0" build configurations.  The generated
+assembly will be put in it's own directory ("bin\Debug 1.8" or "bin\Debug 1.9.0").
 
-You can download XULRunner 1.8.1 from:
+These releases have been tested with GeckoFX:
 
-	ftp://ftp.mozilla.org/pub/xulrunner/releases/1.8.1.3/contrib/win32/
+XULRunner 1.8.1: ftp://ftp.mozilla.org/pub/xulrunner/releases/1.8.1.3/contrib/win32/
+XULRunner 1.9.0: ftp://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.9.0.13/runtimes/xulrunner-1.9.0.13.en-US.win32.zip
 
-Support for XULRunner 1.8 will probably be removed from a future version of GeckoFX.
-
+Support for old versions of XULRunner will probably be removed from a future version of GeckoFX.
 
 Known Bugs
 ----------
 - The right-click menu is still missing some standard features like cut, paste.
+
+Changes in 1.9.1.0
+------------------
+- Support for XULRunner 1.9.1.2 (same engine as Firefox 3.5)
+- Crash in Dispose() when finalizing/shutting down
+- Prevent a file which no longer exists from being reloaded (a COM exception was thrown)
+- StyleRuleCollection.Insert() now returns the index where the rule was inserted, or -1 if the rule contained a syntax error
+- Support for opening unicode domain names / nsURI
+- UTF8 page titles are supported
+
+Changes in 1.9.0.1
+------------------
+- Added GeckoWebBrowser.ShowContextMenu event to modify or suppress the default context menu
+- Added GeckoWebBrowser.NoDefaultContextMenu property to prevent the default items from being included in the standard context menu
 
 Changes in 1.9.0.0/1.8.1.5
 --------------------------

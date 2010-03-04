@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -55,10 +55,12 @@ namespace Skybound.Gecko
 			void Push(IntPtr cx);
 		}
 		
-		#if GECKO_1_8
-		[Guid("f4d74511-2b2d-4a14-a3e4-a392ac5ac3ff"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+		#if GECKO_1_9_1
+		[Guid("f8e350b9-9f31-451a-8c8f-d10fea26b780"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 		#elif GECKO_1_9
 		[Guid("3fffd8e8-3fea-442e-a0ed-2ba81ae197d5"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+		#elif GECKO_1_8
+		[Guid("f4d74511-2b2d-4a14-a3e4-a392ac5ac3ff"), ComImport, InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 		#endif
 		interface nsIScriptSecurityManager
 		{
@@ -124,6 +126,9 @@ namespace Skybound.Gecko
 			nsIPrincipal GetChannelPrincipal(IntPtr aChannel); // nsIChannel
 			bool IsSystemPrincipal(nsIPrincipal aPrincipal);
 			nsIPrincipal GetCxSubjectPrincipal(IntPtr cx); // JSContext
+			#if GECKO_1_9_1
+			nsIPrincipal getCxSubjectPrincipalAndFrame(IntPtr cx, out IntPtr fp);
+			#endif
 			#endif
 		}
 		
@@ -200,6 +205,34 @@ namespace Skybound.Gecko
 			IntPtr dormantNext;   /* next dormant frame chain */
 			IntPtr     xmlNamespace;  /* null or default xml namespace in E4X */
 			IntPtr     blockChain;    /* active compile-time block scopes */
+		}
+		#elif GECKO_1_9_1
+		[StructLayout(LayoutKind.Sequential)]
+		struct JSStackFrame
+		{
+			IntPtr regs;
+			IntPtr imacpc;        /* null or interpreter macro call pc */
+			IntPtr slots;         /* variables, locals and operand stack */
+			IntPtr callobj;       /* lazily created Call object */
+			IntPtr argsobj;       /* lazily created arguments object */
+			IntPtr varobj;        /* variables object, where vars go */
+			IntPtr callee;        /* function or script object */
+			public IntPtr script;        /* script being interpreted */
+			IntPtr fun;           /* function being called or null */
+			IntPtr thisp;         /* "this" pointer if in method */
+			uint argc;           /* actual argument count */
+			IntPtr argv;          /* base of argument stack slots */
+			IntPtr rval;           /* function return value */
+			public IntPtr down;          /* previous frame */
+			IntPtr annotation;    /* used by Java security */
+			IntPtr scopeChain;
+			IntPtr blockChain;
+			uint sharpDepth;     /* array/object initializer depth */
+			IntPtr sharpArray;    /* scope for #n= initializer vars */
+			uint flags;          /* frame flags -- see below */
+			IntPtr dormantNext;   /* next dormant frame chain */
+			IntPtr xmlNamespace;  /* null or default xml namespace in E4X */
+			IntPtr displaySave;   /* previous value of display entry for script->staticLevel */
 		}
 		#elif GECKO_1_9
 		[StructLayout(LayoutKind.Sequential)]
@@ -292,12 +325,14 @@ namespace Skybound.Gecko
 			Marshal.WriteIntPtr(cx, OfsetOfFP, framePtr);
 		}
 		
-		//NOTE: these hard-coded field offsets are based on the unmanaged layour of JSContext objects.  this will
-		// probably not work for versions other than 1.8 and 1.9
-		#if GECKO_1_8
-		const int OfsetOfFP = 0x34;
+		//NOTE: these hard-coded field offsets are based on the unmanaged layout of JSContext objects.  this will
+		// probably not work for versions other than 1.8, 1.9 and 1.9.1
+		#if GECKO_1_9_1
+		const int OfsetOfFP = 0x98;
 		#elif GECKO_1_9
 		const int OfsetOfFP = 0x54;
+		#elif GECKO_1_8
+		const int OfsetOfFP = 0x34;
 		#endif
 		
 		IntPtr cx;
