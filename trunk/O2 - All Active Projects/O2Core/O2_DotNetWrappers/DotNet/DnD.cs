@@ -106,7 +106,7 @@ namespace O2.DotNetWrappers.DotNet
                     {
                         case "String":
                             if (File.Exists(item.ToString()) || Directory.Exists(item.ToString()))
-                                return item.ToString();
+                                return item.ToString();                            
                             if ( item.ToString().ToLower().StartsWith("http"))
                             {
                                 if (downloadIfHttp)
@@ -115,6 +115,7 @@ namespace O2.DotNetWrappers.DotNet
                                     if (savedUrlContents != "" && File.Exists(savedUrlContents))
                                         return savedUrlContents;
                                 }
+                                return item.ToString();
                             }
                             break;
                         case "String[]":

@@ -72,6 +72,7 @@
     <Compile Include="ExtensionMethods\IO_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Misc_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Serialize_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\web_ExtensionMethods.cs" />
     <Compile Include="Filters\FilteredSignature.cs" />
     <Compile Include="Filters\FilteredUrl.cs" />
     <Compile Include="H2Scripts\H2.cs" />

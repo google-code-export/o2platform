@@ -17,6 +17,7 @@ namespace O2.External.SharpDevelop.AST
 {
     public class CSharp_FastCompiler
     {
+        internal int forceAstBuildDelay = 100;
         public string SourceCode { get; set; }						// I think there is a small race condition with the use of this variable
         public List<string> ReferencedAssemblies { get; set; }
         public Dictionary<string, object> InvocationParameters { get; set; }
@@ -26,6 +27,8 @@ namespace O2.External.SharpDevelop.AST
         public bool generateDebugSymbols { get; set; }
         public string CompilationErrors { get; set; }        
         public CompilerResults CompilerResults { get; set; }
+        public bool ExecuteInStaThread { get; set; }
+        public bool ExecuteInMtaThread { get; set; }
         
         //public O2Timer executionTime { get; set; }
         
@@ -100,7 +103,7 @@ namespace O2.External.SharpDevelop.AST
                         if (creatingAst == false && createAstStack.Count > 0)
                         {
                             creatingAst = true;
-                            this.sleep(500, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
+                            this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
                             var codeSnippet = createAstStack.Pop();
                             createAstStack.Clear();
 
@@ -131,7 +134,7 @@ namespace O2.External.SharpDevelop.AST
        	                if (compiling == false && compileStack.Count > 0)
        	                {
        	                    compiling = true;
-                            this.sleep(500, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
+                            this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
        	                    var sourceCode = compileStack.Pop();
        	                    compileStack.Clear();
        	                        // remove all previous compile requests (since their source code is now out of date
@@ -256,7 +259,9 @@ namespace O2.External.SharpDevelop.AST
 
                 comment.Text.starts(new[] {"O2:debugSymbols",
                                         "generateDebugSymbols", 
-                                        "debugSymbols"}, true, (value) => generateDebugSymbols = true);                
+                                        "debugSymbols"}, true, (value) => generateDebugSymbols = true);
+                comment.Text.eq("StaThread", () => { ExecuteInStaThread = true; });
+                comment.Text.eq("MtaThread", () => { ExecuteInMtaThread = true; });  
             }
             // reset the astCSharp.AstDetails object        	
         	astCSharp.mapAstDetails(astCSharp.CompilationUnit);        	        	
@@ -278,13 +283,23 @@ namespace O2.External.SharpDevelop.AST
                     if (method.IsSpecialName == false)  // we need to do this since Properties get_ and set_ also look like methods
         		//if (methods.Count >0)        		
         		//{
-        		    {	        
-        			    if (method.parameters().size() == parameters.size())
-        				    return method.invoke(parameters);        			
-        			    return method.invoke();
+        		    {
+                        if (ExecuteInStaThread)
+                            return O2Thread.staThread(() => executeMethod(method, parameters));
+                        if (ExecuteInMtaThread)
+                            return O2Thread.mtaThread(() => executeMethod(method, parameters));
+                        return executeMethod(method, parameters);
+        			    
         		    }
         	}
         	return null;
-        }                
+        }       
+        
+        public object executeMethod(MethodInfo method, params object[] parameters)
+        {
+            if (method.parameters().size() == parameters.size())
+                return method.invoke(parameters);
+            return method.invoke();
+        }
     }
 }

@@ -1,5 +1,6 @@
 using mshtml;
 using O2.External.IE.Interfaces;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.External.IE.WebObjects
 {
@@ -13,7 +14,20 @@ namespace O2.External.IE.WebObjects
         public string Text { get; set; }
         public string OuterHtml { get; set; }
 
-        public IE_Script(HTMLScriptElementClass script)
+        public IE_Script(object _object)
+        {
+        	if (_object is DispHTMLScriptElement)
+				loadData((DispHTMLScriptElement)_object);
+			else
+				"In IE_Script, not supported type: {0}".format(_object.comTypeName()).error();
+		}
+		
+		public IE_Script(DispHTMLScriptElement script)
+		{
+			loadData(script);
+		}
+
+        public void loadData(DispHTMLScriptElement script)        
         {
             OuterHtml = script.outerHTML;
             CharSet = ((IHTMLScriptElement2)script).charset;

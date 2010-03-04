@@ -29,6 +29,10 @@ namespace O2.Kernel.ExtensionMethods
             return (string1 == string2);
         }
 
+        public static void eq(this string string1, string stringToFind, MethodInvoker onMatch)
+        {
+            string1.eq(new [] {stringToFind}, onMatch);
+        }
         public static void eq(this string string1, List<string> stringsToFind, MethodInvoker onMatch)
         {
             string1.eq(stringsToFind.ToArray(), onMatch);

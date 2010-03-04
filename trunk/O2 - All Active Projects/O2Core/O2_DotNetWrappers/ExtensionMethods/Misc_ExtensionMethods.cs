@@ -16,24 +16,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
             Processes.Sleep(miliseconds, verbose);
         }
 
-        public static string urlEncode(this String stringToEncode)
-        {
-            return WebEncoding.urlEncode(stringToEncode);
-        }
-
-        public static string urlDecode(this String stringToEncode)
-        {
-            return WebEncoding.urlDecode(stringToEncode);
-        }
-
-        public static string htmlEncode(this String stringToEncode)
-        {
-            return WebEncoding.urlEncode(stringToEncode);
-        }
-
-        public static string htmlDecode(this String stringToEncode)
-        {
-            return WebEncoding.urlEncode(stringToEncode);
-        }
+        
     }
 }

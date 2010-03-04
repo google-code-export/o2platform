@@ -98,10 +98,20 @@ namespace O2.External.IE.Wrapper
         /// <returns></returns>
         public IO2HtmlPage openSync(string url)
         {
-            documentCompleted.Reset();
+            /*documentCompleted.Reset();
             O2Thread.mtaThread(() => open(url));
             documentCompleted.WaitOne();
-            return HtmlPage;
+            return HtmlPage;*/
+
+            documentCompleted.Reset();
+            O2Thread.mtaThread(() => open(url));
+            while (documentCompleted.WaitOne())
+            {
+                // hack to handle the case where about:blank was being fired 
+                if (HtmlPage.PageUri.str() != "about:blank" && url != "about:blank")
+                    return HtmlPage;
+            }
+            return null; // I should add a time out to this loop                        
         }
         
         public bool HtmlEditMode

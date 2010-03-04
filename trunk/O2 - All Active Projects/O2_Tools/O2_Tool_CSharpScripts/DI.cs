@@ -4,6 +4,7 @@ using O2.Interfaces.Messages;
 using O2.Interfaces.O2Core;
 using O2.Kernel.Interfaces;
 using O2.Kernel.InterfacesBaseImpl;
+using O2.Views.ASCX.classes.MainGUI;
 
 namespace O2.Tool.CSharpScripts
 {
