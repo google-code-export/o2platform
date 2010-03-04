@@ -399,8 +399,11 @@ namespace ICSharpCode.SharpDevelop.Dom.NRefactoryResolver
 		
 		public ResolveResult ResolveInternal(Expression expr, ExpressionContext context)
 		{
-			if (projectContent == null)
-				throw new InvalidOperationException("Cannot use uninitialized resolver");
+            if (projectContent == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Cannot use uninitialized resolver"); // DC
+                //throw new InvalidOperationException("Cannot use uninitialized resolver");
+            }
 			
 			// we need to special-case this to pass the context to ResolveIdentifier
 			if (expr is IdentifierExpression)

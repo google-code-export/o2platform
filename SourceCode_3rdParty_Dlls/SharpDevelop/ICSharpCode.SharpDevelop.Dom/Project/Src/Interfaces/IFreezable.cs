@@ -68,7 +68,8 @@ namespace ICSharpCode.SharpDevelop.Dom
 		protected void CheckBeforeMutation()
 		{
 			if (isFrozen)
-				throw new InvalidOperationException("Cannot mutate frozen " + GetType().Name);
+                System.Diagnostics.Debug.WriteLine("Cannot mutate frozen " + GetType().Name); // DC
+				//throw new InvalidOperationException("Cannot mutate frozen " + GetType().Name);
 		}
 		
 		protected static IList<T> FreezeList<T>(IList<T> list) where T : IFreezable

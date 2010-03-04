@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):

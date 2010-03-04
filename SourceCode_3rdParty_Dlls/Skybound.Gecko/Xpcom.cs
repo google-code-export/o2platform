@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -98,10 +98,12 @@ namespace Skybound.Gecko
 						"If you do not have XULRunner installed, click Yes to open the download page.  Otherwise, click No, and update your application startup code.",
 							"XULRunner Not Found", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
 					{
-						#if GECKO_1_8
-						Process.Start("http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.8.1.3/contrib/win32");
+						#if GECKO_1_9_1
+						Process.Start("http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.9.1.2/runtimes/xulrunner-1.9.1.2.en-US.win32.zip");
 						#elif GECKO_1_9
-						Process.Start("http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.9.0.0/runtimes/xulrunner-1.9.en-US.win32.zip");
+						Process.Start("http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.9.0.13/runtimes/xulrunner-1.9.0.13.en-US.win32.zip");
+						#elif GECKO_1_8
+						Process.Start("http://releases.mozilla.org/pub/mozilla.org/xulrunner/releases/1.8.1.3/contrib/win32");
 						#endif
 					}
 					

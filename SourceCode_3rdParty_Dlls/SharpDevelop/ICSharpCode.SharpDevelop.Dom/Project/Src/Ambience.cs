@@ -114,10 +114,11 @@ namespace ICSharpCode.SharpDevelop.Dom
 		[System.Diagnostics.Conditional("DEBUG")]
 		protected void CheckThread()
 		{
-			#if DEBUG
-			if (ownerThread != System.Threading.Thread.CurrentThread.ManagedThreadId)
-				throw new InvalidOperationException("Ambience may only be used by the thread that created it");
-			#endif
+			//#if DEBUG // DC
+            if (ownerThread != System.Threading.Thread.CurrentThread.ManagedThreadId)
+                System.Diagnostics.Debug.WriteLine("Ambience may only be used by the thread that created it");
+				//throw new InvalidOperationException("Ambience may only be used by the thread that created it");
+			//#endif    // DC
 		}
 		
 		ConversionFlags conversionFlags = ConversionFlags.StandardConversionFlags;

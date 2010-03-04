@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -243,10 +243,12 @@ namespace Skybound.Gecko
 		internal GeckoElement(nsIDOMHTMLElement element) : base(element)
 		{
 			this.DomElement = element;
-			this.DomNSElement = (nsIDOMNSHTMLElement)element;
+			this.DomNSElement = (nsIDOMNSElement)element;
+			this.DomNSHTMLElement = (nsIDOMNSHTMLElement)element;
 			
-			// since a reference is stored in the base class, we only need a weak reference here
+			// since a reference is stored in the base class, we only need weak references here
 			Marshal.ChangeWrapperHandleStrength(DomNSElement, true);
+			Marshal.ChangeWrapperHandleStrength(DomNSHTMLElement, true);
 		}
 		
 		internal static GeckoElement Create(nsIDOMHTMLElement element)
@@ -255,7 +257,8 @@ namespace Skybound.Gecko
 		}
 		
 		nsIDOMHTMLElement DomElement;
-		nsIDOMNSHTMLElement DomNSElement;
+		nsIDOMNSElement DomNSElement;
+		nsIDOMNSHTMLElement DomNSHTMLElement;
 		
 		/// <summary>
 		/// Gets the parent element of this one.
@@ -390,47 +393,56 @@ namespace Skybound.Gecko
 			DomElement.RemoveAttribute(new nsAString(attributeName));
 		}
 		
+		#if GECKO_1_9_1
 		public int ScrollLeft { get { return DomNSElement.GetScrollLeft(); } set { DomNSElement.SetScrollLeft(value); } }
 		public int ScrollTop { get { return DomNSElement.GetScrollTop(); } set { DomNSElement.SetScrollTop(value); } }
 		public int ScrollWidth { get { return DomNSElement.GetScrollWidth(); } }
 		public int ScrollHeight { get { return DomNSElement.GetScrollHeight(); } }
-		public int OffsetLeft { get { return DomNSElement.GetOffsetLeft(); } }
-		public int OffsetTop { get { return DomNSElement.GetOffsetTop(); } }
-		public int OffsetWidth { get { return DomNSElement.GetOffsetWidth(); } }
-		public int OffsetHeight { get { return DomNSElement.GetOffsetHeight(); } }
 		public int ClientWidth { get { return DomNSElement.GetClientWidth(); } }
 		public int ClientHeight { get { return DomNSElement.GetClientHeight(); } }
+		#else
+		public int ScrollLeft { get { return DomNSHTMLElement.GetScrollLeft(); } set { DomNSHTMLElement.SetScrollLeft(value); } }
+		public int ScrollTop { get { return DomNSHTMLElement.GetScrollTop(); } set { DomNSHTMLElement.SetScrollTop(value); } }
+		public int ScrollWidth { get { return DomNSHTMLElement.GetScrollWidth(); } }
+		public int ScrollHeight { get { return DomNSHTMLElement.GetScrollHeight(); } }
+		public int ClientWidth { get { return DomNSHTMLElement.GetClientWidth(); } }
+		public int ClientHeight { get { return DomNSHTMLElement.GetClientHeight(); } }
+		#endif
+		public int OffsetLeft { get { return DomNSHTMLElement.GetOffsetLeft(); } }
+		public int OffsetTop { get { return DomNSHTMLElement.GetOffsetTop(); } }
+		public int OffsetWidth { get { return DomNSHTMLElement.GetOffsetWidth(); } }
+		public int OffsetHeight { get { return DomNSHTMLElement.GetOffsetHeight(); } }
 		
 		public GeckoElement OffsetParent
 		{
-			get { return GeckoElement.Create((nsIDOMHTMLElement)DomNSElement.GetOffsetParent()); }
+			get { return GeckoElement.Create((nsIDOMHTMLElement)DomNSHTMLElement.GetOffsetParent()); }
 		}
 		
 		public void ScrollIntoView(bool top)
 		{
-			DomNSElement.ScrollIntoView(top);
+			DomNSHTMLElement.ScrollIntoView(top);
 		}
 		
 		public string InnerHtml
 		{
-			get { return nsString.Get(DomNSElement.GetInnerHTML); }
-			set { nsString.Set(DomNSElement.SetInnerHTML, value); }
+			get { return nsString.Get(DomNSHTMLElement.GetInnerHTML); }
+			set { nsString.Set(DomNSHTMLElement.SetInnerHTML, value); }
 		}
 		
 		public void Focus()
 		{
-			DomNSElement.Focus();
+			DomNSHTMLElement.Focus();
 		}
 		
 		public void Blur()
 		{
-			DomNSElement.Blur();
+			DomNSHTMLElement.Blur();
 		}
 
 		public int TabIndex
 		{
-			get { return DomNSElement.GetTabIndex(); }
-			set { DomNSElement.SetTabIndex(value); }
+			get { return DomNSHTMLElement.GetTabIndex(); }
+			set { DomNSHTMLElement.SetTabIndex(value); }
 		}
 		
 		#if GECKO_1_9
@@ -891,6 +903,30 @@ namespace Skybound.Gecko
 			get { return nsString.Get(_DomWindow.GetName); }
 			set { nsString.Set(_DomWindow.SetName, value); }
 		}
+		
+		public void Print()
+		{
+			nsIWebBrowserPrint print = Xpcom.QueryInterface<nsIWebBrowserPrint>(this.DomWindow);
+			
+			print.Print(null, null);
+		}
+		
+		public GeckoSelection Selection
+		{
+			get { return _Selection ?? (_Selection = new GeckoSelection(this._DomWindow.GetSelection())); }
+		}
+		GeckoSelection _Selection;
+		
+		//public void Print()
+		//{
+		//      if (_PrintPromptService == null)
+		//      {
+		//            _PrintPromptService = Xpcom.CreateInstance<nsIPrintingPromptService>("@mozilla.org/embedcomp/printingprompt-service;1");
+		//      }
+			
+		//      _PrintPromptService.ShowPrintDialog((nsIDOMWindow)this.DomWindow, null, null);
+		//}
+		//static nsIPrintingPromptService _PrintPromptService;
 	}
 	
 	/// <summary>

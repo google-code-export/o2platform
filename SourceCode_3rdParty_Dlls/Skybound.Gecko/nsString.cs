@@ -14,7 +14,7 @@
  * The Original Code is Skybound Software code.
  *
  * The Initial Developer of the Original Code is Skybound Software.
- * Portions created by the Initial Developer are Copyright (C) 2008
+ * Portions created by the Initial Developer are Copyright (C) 2008-2009
  * the Initial Developer. All Rights Reserved.
  *
  * Contributor(s):
@@ -35,6 +35,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Skybound.Gecko
 {
@@ -43,6 +44,28 @@ namespace Skybound.Gecko
 	/// </summary>
 	public static class nsString
 	{
+		public delegate void StringAttributeUtf8(nsAUTF8String str);
+		
+		public static string Get(StringAttributeUtf8 getter)
+		{
+			using (nsAUTF8String str = new nsAUTF8String())
+			{
+				getter(str);
+				return str.ToString();
+			}
+		}
+		
+		public static void Set(StringAttributeUtf8 setter, string value)
+		{
+			using (nsAUTF8String str = new nsAUTF8String())
+			{
+				if (!string.IsNullOrEmpty(value))
+					str.SetData(value);
+				
+				setter(str);
+			}
+		}
+		
 		public delegate void StringAttributeAnsi(nsACString str);
 		
 		public static string Get(StringAttributeAnsi getter)
@@ -89,6 +112,67 @@ namespace Skybound.Gecko
 	}
 	
 	[StructLayout(LayoutKind.Explicit, Size=16)]
+	public class nsAUTF8String : IDisposable
+	{
+		[DllImport("xpcom", CharSet = CharSet.Ansi)]
+		static extern int NS_CStringContainerInit(nsAUTF8String container);
+		
+		[DllImport("xpcom", CharSet = CharSet.Ansi)]
+		static extern int NS_CStringSetData(nsAUTF8String str, byte [] data, int length);
+		
+		[DllImport("xpcom", CharSet = CharSet.Ansi)]
+		static extern int NS_CStringGetData(nsAUTF8String str, out IntPtr data, IntPtr nullTerm);
+		
+		[DllImport("xpcom", CharSet = CharSet.Ansi)]
+		static extern int NS_CStringContainerFinish(nsAUTF8String container);
+		
+		public nsAUTF8String()
+		{
+			NS_CStringContainerInit(this);
+		}
+		
+		public nsAUTF8String(string value) : this()
+		{
+			if (value != null)
+			{
+				SetData(value);
+			}
+		}
+		
+		~nsAUTF8String()
+		{
+			Dispose();
+		}
+		
+		public void Dispose()
+		{
+			NS_CStringContainerFinish(this);
+			GC.SuppressFinalize(this);
+		}
+		
+		public virtual void SetData(string value)
+		{
+			byte [] utf8 = Encoding.UTF8.GetBytes(value ?? "");
+			
+			NS_CStringSetData(this, utf8, utf8.Length);
+		}
+		
+		public override string ToString()
+		{
+			IntPtr data;
+			int length = NS_CStringGetData(this, out data, IntPtr.Zero);
+			
+			if (length > 0)
+			{
+				byte [] result = new byte[length];
+				Marshal.Copy(data, result, 0, length);
+				return Encoding.UTF8.GetString(result);
+			}
+			return "";
+		}
+	}
+	
+	[StructLayout(LayoutKind.Explicit, Size=16)]
 	public class nsACString : IDisposable
 	{
 		[DllImport("xpcom", CharSet = CharSet.Ansi)]
@@ -98,7 +182,7 @@ namespace Skybound.Gecko
 		static extern int NS_CStringSetData(nsACString str, string data, int length);
 		
 		[DllImport("xpcom", CharSet = CharSet.Ansi)]
-		static extern int NS_CStringGetData(nsACString str, out IntPtr data, IntPtr nullTerm);
+		internal static extern int NS_CStringGetData(nsACString str, out IntPtr data, IntPtr nullTerm);
 		
 		[DllImport("xpcom", CharSet = CharSet.Ansi)]
 		static extern int NS_CStringContainerFinish(nsACString container);
@@ -127,7 +211,7 @@ namespace Skybound.Gecko
 			GC.SuppressFinalize(this);
 		}
 		
-		public void SetData(string value)
+		public virtual void SetData(string value)
 		{
 			NS_CStringSetData(this, value, (value == null) ? 0 : value.Length);
 		}
