@@ -15,13 +15,26 @@ namespace O2.DotNetWrappers.Network
     {
 
         public static string saveUrlContents(string urlToFetch)
-        {   
-            // first try to save the file using the original name
-            var targetFile = Path.Combine(PublicDI.config.O2TempDir, Path.GetFileName(urlToFetch));
-            if (File.Exists(targetFile)) // but give it a unique name if that file alredy exists
-                targetFile = string.Format("{0}_{1}", PublicDI.config.TempFileNameInTempDirectory, Path.GetFileName(urlToFetch));
-                //PublicDI.config.getTempFileInTempDirectory(Path.GetExtension(urlToFetch));
-            return saveUrlContents(urlToFetch, targetFile);
+        {
+            if (urlToFetch.validUri())
+            {
+                var uri = urlToFetch.uri();
+                // first try to save the file using the original name
+                urlToFetch = urlToFetch.Replace(uri.Query, "");
+                var targetFile = "";
+                if (uri.Segments.Length >0 && uri.Segments[uri.Segments.Length -1 ] == "/")
+                    targetFile = PublicDI.config.TempFileNameInTempDirectory + ".html";
+                else
+                {
+                    targetFile = Path.Combine(PublicDI.config.O2TempDir, Path.GetFileName(urlToFetch));
+                    if (File.Exists(targetFile)) // but give it a unique name if that file alredy exists
+                        targetFile = string.Format("{0}_{1}", PublicDI.config.TempFileNameInTempDirectory,
+                                                   Path.GetFileName(urlToFetch));
+                }
+                //PublicDI.config.getTempFileInTempDirectory(Path.GetExtension(urlToFetch));                
+                return saveUrlContents(urlToFetch, targetFile);
+            }
+            return "";
         }
         public static string saveUrlContents(string urlToFetch, string targetFile)
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using O2.Interfaces.O2Core;
 using O2.Kernel.CodeUtils;
+using O2.Kernel.ExtensionMethods;
 using O2.Kernel.Objects;
 
 namespace O2.Kernel.InterfacesBaseImpl
@@ -967,7 +968,26 @@ namespace O2.Kernel.InterfacesBaseImpl
 
         public object createObject(Type type, params object[] constructorArguments)
         {
-            try
+            try 
+            {
+            	if (type == null)
+            	{
+            		"in createObject, type provided was null".error();
+            		return null;
+            	}
+                var constructorArgumentTypes = new List<Type>();
+                if (constructorArguments != null)
+                    foreach (object argument in constructorArguments)
+                        constructorArgumentTypes.Add(argument.GetType());                                            
+                ConstructorInfo constructor = type.GetConstructor(constructorArgumentTypes.ToArray());
+                if (constructor == null)
+                {                	
+                	"In createObject, could not find constructor for type: {0}"
+                		.format(type.Name).error();
+                	return null;
+                }
+                return constructor.Invoke(constructorArguments ?? new object[0]);
+            /*try
             {
                 var constructorArgumentTypes = new List<Type>();
                 if (constructorArguments != null)
@@ -975,7 +995,7 @@ namespace O2.Kernel.InterfacesBaseImpl
                         constructorArgumentTypes.Add(argument.GetType());
                 ConstructorInfo constructor = type.GetConstructor(constructorArgumentTypes.ToArray());
                 return constructor.Invoke(constructorArguments ?? new object[0]);
-
+            */
                 // this only really works for types derived from marshal by object
                 //var wrappedObject = Activator.CreateInstanceFrom(assemblyToLoad, typeToCreateObject, arguments); 
                 //return (wrappedObject != null) ? wrappedObject.Unwrap() : null;            

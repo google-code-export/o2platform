@@ -141,6 +141,7 @@ namespace O2.XRules.Database
         	
         	contextMenu.add("execute",(menuitem)=> execute());      
         	contextMenu.add("save",(menuitem)=> saveScript());      
+        	contextMenu.add("force compilation",(menuitem)=> forceCompilation());     
         	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());          	
      	}        	     	
 	     	
@@ -218,7 +219,21 @@ namespace O2.XRules.Database
         	}
      		commandsToExecute.editor().clearBookmarksAndMarkers();     		
      		csharpCompiler.compileSnippet(codeSnippet);
-     	}     	     	
+     	}     	
+     	
+     	public void forceCompilation()
+     	{
+     		var dummyclass = "public class test".line() + 
+     						 "{".line() +
+     						 "	public void testMethod()".line() +
+     						 "	{".line() +
+     						 commandsToExecute.get_Text().line() + 
+     						 "	}".line() +
+     						 "}".line();
+     		sourceCodeViewer.enabled(true);
+			sourceCodeViewer.set_Text(dummyclass);
+     		csharpCompiler.compileSourceCode(dummyclass);
+     	}
      	
      	public void execute()
      	{     		

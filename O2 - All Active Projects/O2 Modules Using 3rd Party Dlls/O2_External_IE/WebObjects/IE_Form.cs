@@ -33,6 +33,15 @@ namespace O2.External.IE.WebObjects
             FormFields = new List<IO2HtmlFormField>();
         }
 
+        public IE_Form(object _object)
+            : this()
+        {
+            if (_object is DispHTMLFormElement)
+                loadData((DispHTMLFormElement)_object);
+            else
+                "In IE_Form, not supported type: {0}".format(_object.comTypeName()).error();
+        }
+
         public IE_Form(DispHTMLFormElement form) : this()
         {
             loadData(form);
@@ -61,16 +70,17 @@ namespace O2.External.IE.WebObjects
 
             foreach (var element in ((IHTMLFormElement)form))
             {
-                switch (element.type().Name)
+                switch (element.comTypeName())
                 {
                     case "HTMLInputElementClass":
                     case "HTMLTextAreaElementClass":
                     case "HTMLSelectElementClass":
+                    case "DispHTMLInputElement": 
                         //case "HTMLFieldSetElementClass":  //todo: need to solve this issue that shows up in news.bbc.co.uk                        
                         FormFields.Add(this.formField(element));                        
                         break;                                                    
                     default:
-                        PublicDI.log.error("In IE_Form. loadData, unhandled Form type :{0}", element.type().Name);
+                        PublicDI.log.error("In IE_Form. loadData, unhandled Form type :{0}", element.comTypeName());
                         break;
                 }
                 //PublicDI.log.debug(element.type().Name);

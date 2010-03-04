@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using mshtml;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.IE.Interfaces;
 using O2.External.IE.WebObjects;
@@ -73,18 +74,35 @@ namespace O2.External.IE.ExtensionMethods
 
         public static IO2HtmlFormField formField(this IO2HtmlForm form, object data)
         {
-            object name = data.prop("name");
-            object type = data.prop("type");
-            object value = data.prop("value");
-            object enabled = data.prop("enabled");
+            /*"form field type: {0}".format(data.comTypeName()).error();
+            foreach(var prop in data.type().properties())
+                "  p: {0}".format(prop.Name).debug();\*/
+            object name = null;
+            object type = null;
+            object value = null;
+            object enabled = null;
+            if (data is DispHTMLInputElement)
+            {
+                name = ((DispHTMLInputElement)data).name;
+                type = ((DispHTMLInputElement)data).type;
+                value = ((DispHTMLInputElement)data).value;
+                enabled = !((DispHTMLInputElement)data).disabled;
+            }
+            else
+            {
+                name = data.prop("name");
+                type = data.prop("type");
+                value = data.prop("value");
+                enabled = data.prop("enabled");
+            }
             return new IE_Form_Field
-                       {
-                           Form = form,
-                           Name = (name != null) ? name.ToString() : "",
-                           Type = (type != null) ? type.ToString() : "",
-                           Value = (value != null) ? value.ToString() : "",
-                           Enabled = (enabled != null) ? bool.Parse(enabled.ToString()) : false
-                       };
+            {
+                Form = form,
+                Name = (name != null) ? name.ToString() : "",
+                Type = (type != null) ? type.ToString() : "",
+                Value = (value != null) ? value.ToString() : "",
+                Enabled = (enabled != null) ? bool.Parse(enabled.ToString()) : false
+            };
         }
 
         public static IO2HtmlFormField formField(this IO2HtmlForm form, string name, string type, string value, bool enabled)

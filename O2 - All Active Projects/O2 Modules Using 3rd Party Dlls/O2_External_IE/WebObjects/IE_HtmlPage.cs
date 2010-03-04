@@ -42,16 +42,23 @@ namespace O2.External.IE.WebObjects
 
         
         private static List<T1> populateVar<T, T1>(IHTMLElementCollection elementCollection) //, List<T> targetList) 
-        {
-            "in populateVar for: {0} , {1}".format(elementCollection.str(), elementCollection.comTypeName()).info();
+        {            
             var targetList = new List<T1>();
-            foreach (IHTMLElement element in elementCollection)
+            try
             {
-                "   element: {0} , {1}".format(element.str(), element.comTypeName()).info();
-                var t = (T1) typeof (T).ctor(element);
-                targetList.Add(t);
+                foreach (IHTMLElement element in elementCollection)
+                {
+                    var t = (T1) typeof (T).ctor(element);
+                    if (t != null)
+                        targetList.Add(t);
+                }
+                return targetList;
             }
-            return targetList;
+            catch(Exception ex)
+            {
+                "ex: {0}".format(ex.Message).error();
+                return null;
+            }
         }
 
         private void populateData(DispHTMLDocument documentClass)
