@@ -498,6 +498,7 @@ namespace O2.DotNetWrappers.DotNet
                 //cpCompilerParameters.ReferencedAssemblies.AddRange(sReferenceAssembliesToAdd);                
                 //CompilerResults crCompilerResults =
                 //    cscpCSharpCodeProvider.CompileAssemblyFromSource(cpCompilerParameters, sSourceCode);
+                //cpCompilerParameters.LinkedResources.Add(@"C:\O2\_XRules_Local\CodeCompletion\O2CodeComplete.resx");                
                 crCompilerResults = cscpCSharpCodeProvider.CompileAssemblyFromFile(cpCompilerParameters, sourceCodeFiles.ToArray());
                 
 

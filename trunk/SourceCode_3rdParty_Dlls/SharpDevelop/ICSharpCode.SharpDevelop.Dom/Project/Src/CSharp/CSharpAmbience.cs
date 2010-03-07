@@ -72,7 +72,10 @@ namespace ICSharpCode.SharpDevelop.Dom.CSharp
 		
 		public override string Convert(IClass c)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			
@@ -226,7 +229,10 @@ namespace ICSharpCode.SharpDevelop.Dom.CSharp
 		
 		public override string Convert(IField field)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			
@@ -282,7 +288,10 @@ namespace ICSharpCode.SharpDevelop.Dom.CSharp
 		
 		public override string Convert(IProperty property)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			
@@ -345,7 +354,10 @@ namespace ICSharpCode.SharpDevelop.Dom.CSharp
 		
 		public override string Convert(IEvent e)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			
@@ -383,7 +395,10 @@ namespace ICSharpCode.SharpDevelop.Dom.CSharp
 		
 		public override string Convert(IMethod m)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			builder.Append(ConvertAccessibility(m.Modifiers));
@@ -558,7 +573,10 @@ namespace ICSharpCode.SharpDevelop.Dom.CSharp
 		
 		public override string Convert(IParameter param)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ascx\DataViewers\ascx_ShowInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Ascx\MainGUI\ascx_LogViewer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -287,9 +290,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ascx\DataViewers\ascx_TableList.resx">
       <DependentUpon>ascx_TableList.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\O2_Main_GUI.resx">
       <DependentUpon>O2_Main_GUI.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Ascx\O2Findings\ascx_FindingEditor.resx">
       <DependentUpon>ascx_FindingEditor.cs</DependentUpon>

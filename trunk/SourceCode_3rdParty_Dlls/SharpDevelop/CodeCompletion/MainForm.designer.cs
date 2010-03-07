@@ -27,7 +27,7 @@
 		/// not be able to load this method if it was changed manually.
 		/// </summary>
 		private void InitializeComponent()
-		{
+		{            
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();

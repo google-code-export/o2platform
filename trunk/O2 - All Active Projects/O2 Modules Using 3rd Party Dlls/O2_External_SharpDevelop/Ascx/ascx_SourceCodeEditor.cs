@@ -400,6 +400,7 @@ namespace O2.External.SharpDevelop.Ascx
                         var form = new O2SharpDevelop.CodeCompletion.form_O2EditorWithCodeComplete(sPathToFileLoaded);
                         form.setSaveMenuItemSaveState(true);
                         form.ShowDialog();
+                        form.Dispose();
                     });
             }
         }

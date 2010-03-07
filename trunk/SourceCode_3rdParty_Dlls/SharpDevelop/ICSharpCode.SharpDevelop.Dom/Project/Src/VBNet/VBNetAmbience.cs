@@ -72,7 +72,10 @@ namespace ICSharpCode.SharpDevelop.Dom.VBNet
 		
 		public override string Convert(IClass c)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			
@@ -260,7 +263,10 @@ namespace ICSharpCode.SharpDevelop.Dom.VBNet
 		
 		public override string Convert(IField field)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			if (field == null)
 				throw new ArgumentNullException("field");
@@ -307,7 +313,10 @@ namespace ICSharpCode.SharpDevelop.Dom.VBNet
 		
 		public override string Convert(IProperty property)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			
@@ -369,7 +378,10 @@ namespace ICSharpCode.SharpDevelop.Dom.VBNet
 		
 		public override string Convert(IEvent e)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			if (e == null)
 				throw new ArgumentNullException("e");
@@ -408,7 +420,10 @@ namespace ICSharpCode.SharpDevelop.Dom.VBNet
 		
 		public override string Convert(IMethod m)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			StringBuilder builder = new StringBuilder();
 			if (ShowModifiers && m.IsExtensionMethod) {
@@ -495,7 +510,10 @@ namespace ICSharpCode.SharpDevelop.Dom.VBNet
 		
 		public override string Convert(IReturnType returnType)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			if (returnType == null) {
 				return String.Empty;
@@ -576,7 +594,10 @@ namespace ICSharpCode.SharpDevelop.Dom.VBNet
 		
 		public override string Convert(IParameter param)
 		{
-			CheckThread();
+            //DC 
+            //CheckThread();                
+            if (false == CheckThread())
+                return "";      // this could have some weird side effects
 			
 			if (param == null)
 				throw new ArgumentNullException("param");

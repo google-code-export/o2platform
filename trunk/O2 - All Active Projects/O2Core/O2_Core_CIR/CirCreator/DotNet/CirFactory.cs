@@ -259,9 +259,7 @@ namespace O2.Core.CIR.CirCreator.DotNet
                 DI.log.ex(ex, "in CirFactory.processMethodDefinition", true);
                 return null;
             }            
-        }
-
-        
+        }        
 
         public ICirClass processTypeDefinition(ICirData cirData, TypeDefinition typeDefinition)
         {
@@ -415,7 +413,7 @@ namespace O2.Core.CIR.CirCreator.DotNet
                 DI.log.error("in processAssemblyDefinition, either cirData or assemblyDefinition was null");
         }
 
-        private void mapTypeInterfaces(ICirData cirData, TypeDefinition typeToMap)
+        public void mapTypeInterfaces(ICirData cirData, TypeDefinition typeToMap)
         {
             var classSignature = CirFactoryUtils.getTypeUniqueSignatureFromTypeReference(typeToMap);
             var cirClass = getCirClass(cirData, classSignature);
@@ -448,7 +446,7 @@ namespace O2.Core.CIR.CirCreator.DotNet
                             DI.log.error("in mapTypeInterfaces, unsupported interface type: {0}", interfaceType.GetType().FullName);
                             break;
                         }
-                }
+                }        
                 if (typeReference != null)
                 {
                     // typeReference = (TypeReference)interfaceType;
@@ -456,6 +454,12 @@ namespace O2.Core.CIR.CirCreator.DotNet
                     var typeReferenceCirClass = getCirClass(cirData, typeReferenceSignature);
                     cirClass.dSuperClasses.Add(typeReferenceCirClass.Signature, typeReferenceCirClass);
                 }
+            }
+            if (typeToMap.BaseType != null)
+            {
+                var baseTypeSignature = CirFactoryUtils.getTypeUniqueSignatureFromTypeReference(typeToMap.BaseType);
+                var baseCirClass = getCirClass(cirData, baseTypeSignature);
+                cirClass.dSuperClasses.Add(baseCirClass.Signature, baseCirClass);
             }
         }
         

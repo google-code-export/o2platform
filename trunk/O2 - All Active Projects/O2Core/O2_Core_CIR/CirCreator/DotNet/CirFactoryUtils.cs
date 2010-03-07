@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mono.Cecil;
+using O2.Kernel.ExtensionMethods;
 using O2.Interfaces.CIR;
+using O2.Core.CIR.CirObjects;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.External.O2Mono.MonoCecil;
 
 namespace O2.Core.CIR.CirCreator.DotNet
 {
@@ -65,6 +69,21 @@ namespace O2.Core.CIR.CirCreator.DotNet
             DI.log.debug("   {0} Classes", cirData.dClasses_bySignature.Count);
             DI.log.debug("   {0} Functions", cirData.dFunctions_bySignature.Count);
         }
+
+        // use for mapping a single class
+        public static ICirClass processType(Type type)
+        {
+            var cirData = new CirData();
+            var assemblyLocation = type.assemblyLocation();
+            var assembly = CecilUtils.getAssembly(assemblyLocation);
+            var cirFactory = new CirFactory();
+            cirFactory.loadAndMapSymbols(assembly, assemblyLocation, false, "");
+            var typeDefinition = CecilUtils.getType(assembly, type.Name);
+            var cirClass = cirFactory.processTypeDefinition(cirData, typeDefinition);
+            cirFactory.mapTypeInterfaces(cirData, typeDefinition);
+            cirData.remapXRefs();
+            return cirClass;
+        }        
     }
 }
     

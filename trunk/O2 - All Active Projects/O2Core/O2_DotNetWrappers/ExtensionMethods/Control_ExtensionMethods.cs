@@ -122,6 +122,20 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return control;
         }
 
+        public static void close(this Control control)
+        {
+            control.invokeOnThread(
+                () =>
+                {
+                    if (control is UserControl)
+                    {
+                        var userControl = (UserControl)control;
+                        if (userControl.ParentForm != null)
+                            userControl.ParentForm.Close();
+                    }
+                });
+        }
+
         #endregion
 
         #region Control - events
