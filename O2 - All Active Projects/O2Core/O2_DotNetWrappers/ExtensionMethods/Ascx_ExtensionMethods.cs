@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
+using System.Collections;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -481,6 +482,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                        });
         }
 
+        public static TextBox onTextChange(this TextBox textBox, Action<string> callback)
+        {
+            return (TextBox)textBox.invokeOnThread(
+                () =>
+                {
+                    textBox.TextChanged += (sender, e) => callback(textBox.Text);
+                    return textBox;
+                });
+        }
+
         #endregion
 
         #region TreeView
@@ -492,6 +503,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                       {
                                           var treeView = new TreeView {Dock = DockStyle.Fill};
                                           control.Controls.Add(treeView);
+                                          //change the default dehaviour of treeviews of not selecting on mouse click (big problem when using right click) 
+                                          treeView.NodeMouseClick += (sender, e) => { treeView.SelectedNode = e.Node; };
                                           return treeView;
                                       });
         }
@@ -623,7 +636,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                     => { treeNode.ForeColor = color; });
         }
 
-
         public static void afterSelect<T>(this TreeView treeView, Action<T> callback)
         {
             treeView.AfterSelect += (sender, e)
@@ -633,6 +645,60 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
                                                 callback((T)e.Node.Tag);
                                         };
+        }
+
+        public static void beforeExpand<T>(this TreeView treeView, Action<T> callback)
+        {
+            treeView.BeforeExpand += (sender, e)
+                                    =>
+            {
+                treeView.SelectedNode = e.Node;
+                if (e.Node.Tag is T)
+
+                    callback((T)e.Node.Tag);
+            };
+        }
+
+
+        public static TreeView add_Nodes(this TreeView treeView, IEnumerable collection)
+        {
+            return treeView.add_Nodes(collection, false, "");
+        }
+
+        public static TreeView add_Nodes(this TreeView treeView, IEnumerable collection, bool clearTreeView)
+        {
+            return treeView.add_Nodes(collection, clearTreeView, "");
+        }
+
+        public static TreeView add_Nodes(this TreeView treeView, IEnumerable collection, bool clearTreeView, string filter)
+        {
+            return (TreeView)treeView.invokeOnThread(
+                () =>
+                {
+                    if (clearTreeView)
+                        treeView.clear();
+                    foreach (var item in collection)
+                        if (filter == "" || item.str().regEx(filter))
+                            treeView.add_Node(item.str(), item);
+                    return treeView;
+                });
+        }
+
+        public static TreeView add_Nodes(this TreeView treeView, IDictionary dictionary, bool clearTreeView, string filter)
+        {
+            return (TreeView)treeView.invokeOnThread(
+                () =>
+                {
+                    if (clearTreeView)
+                        treeView.clear();
+                    foreach (var key in dictionary.Keys)
+                    {
+                        var text = key.str();
+                        if (filter == "" || text.regEx(filter))
+                            treeView.add_Node(text, dictionary[key]);
+                    }
+                    return treeView;
+                });
         }
         #endregion
 

@@ -275,7 +275,7 @@ namespace O2.Core.CIR.CirUtils
                 var mappedLineNumber = lineNumber > 0  ? lineNumber : 1;
                 while (mappedLineNumber > 0  && mappedLineNumber < Files.getFileSize(fileName))
                 {
-                    var lineContents = Files.getLineFromSourceCode(fileName, (uint) mappedLineNumber);
+                    var lineContents = Files.getLineFromSourceCode(fileName, (uint) mappedLineNumber, false /*useFileCacheIfPossible*/);
                     if (lineContents.IndexOf(textToFind) == -1)
                         if (ascendingSearch)
                             mappedLineNumber++;

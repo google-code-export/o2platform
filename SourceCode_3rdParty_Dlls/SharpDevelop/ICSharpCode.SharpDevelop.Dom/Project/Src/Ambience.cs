@@ -111,13 +111,17 @@ namespace ICSharpCode.SharpDevelop.Dom
 		int ownerThread = System.Threading.Thread.CurrentThread.ManagedThreadId;
 		#endif
 		
-		[System.Diagnostics.Conditional("DEBUG")]
-		protected void CheckThread()
-		{
+		//[System.Diagnostics.Conditional("DEBUG")]
+		protected bool CheckThread()    // DC
+		{   
 			//#if DEBUG // DC
             if (ownerThread != System.Threading.Thread.CurrentThread.ManagedThreadId)
+            {
                 System.Diagnostics.Debug.WriteLine("Ambience may only be used by the thread that created it");
-				//throw new InvalidOperationException("Ambience may only be used by the thread that created it");
+                return false;
+            }
+            return true;
+			//	throw new InvalidOperationException("Ambience may only be used by the thread that created it");
 			//#endif    // DC
 		}
 		
@@ -128,7 +132,8 @@ namespace ICSharpCode.SharpDevelop.Dom
 				return conversionFlags;
 			}
 			set {
-				CheckThread();
+                if (false == CheckThread())
+                    return;
 				conversionFlags = value;
 			}
 		}

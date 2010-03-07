@@ -38,6 +38,11 @@ namespace O2.Kernel.ExtensionMethods
         {
             return PublicDI.reflection.getAssembly(assemblyName);
         }
+
+        public static string assemblyLocation(this Type type)
+        {
+            return type.Assembly.Location;
+        }
     
         #endregion
 
@@ -61,6 +66,11 @@ namespace O2.Kernel.ExtensionMethods
         public static List<Type> types(this Assembly assembly)
         {
             return PublicDI.reflection.getTypes(assembly);
+        }
+
+        public static List<Type> types(this Type type)
+        {
+            return PublicDI.reflection.getTypes(type);
         }
 
         public static string typeName(this object _object)
@@ -129,7 +139,32 @@ namespace O2.Kernel.ExtensionMethods
         public static List<MethodInfo> methods(this Assembly assembly)
         {
             return PublicDI.reflection.getMethods(assembly);
-        }        		
+        }
+
+        public static List<MethodInfo> methods_public(this Type type)
+        {
+            return PublicDI.reflection.getMethods(type, BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Static | BindingFlags.Instance);
+        }
+
+        public static List<MethodInfo> methods_private(this Type type)
+        {
+            return PublicDI.reflection.getMethods(type, BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Static | BindingFlags.Instance);
+        }
+
+        public static List<MethodInfo> methods_declared(this Type type)
+        {
+            return PublicDI.reflection.getMethods(type, BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance);
+        }
+
+        public static List<MethodInfo> methods_static(this Type type)
+        {
+            return PublicDI.reflection.getMethods(type, BindingFlags.Static | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic);
+        }
+
+        public static List<MethodInfo> methods_instance(this Type type)
+        {
+            return PublicDI.reflection.getMethods(type, BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic);
+        }
 
         public static MethodInfo firstMethod(this Assembly assembly)
     	{    		
@@ -208,5 +243,9 @@ namespace O2.Kernel.ExtensionMethods
         }
 
         #endregion
+
+
+        
+                
     }
 }

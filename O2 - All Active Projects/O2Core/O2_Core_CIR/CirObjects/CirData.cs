@@ -90,12 +90,18 @@ namespace O2.Core.CIR.CirObjects
         /// </summary>
         public void remapXRefs()
         {
-            var tempCirDataAnalysis = new CirDataAnalysis(this);            
-            foreach (var cirClass in dClasses_bySignature.Values)
-                foreach (var cirFunction in cirClass.dFunctions.Values)
-                    if (false == dClasses_bySignature.ContainsKey(cirFunction.FunctionSignature))
-                        dFunctions_bySignature.Add(cirFunction.FunctionSignature, cirFunction);
-
+            var tempCirDataAnalysis = new CirDataAnalysis(this);
+            try
+            {                
+                foreach (var cirClass in dClasses_bySignature.Values)
+                    foreach (var cirFunction in cirClass.dFunctions.Values)
+                        if (false == dFunctions_bySignature.ContainsKey(cirFunction.FunctionSignature))
+                            dFunctions_bySignature.Add(cirFunction.FunctionSignature, cirFunction);
+            }
+            catch (Exception ex)
+            {
+                O2.Kernel.PublicDI.log.error("in remapXRefs: {0}", ex.Message);
+            }
             CirDataAnalysisUtils.remapIsCalledByXrefs(tempCirDataAnalysis);
         }        
     }

@@ -22,6 +22,10 @@ namespace O2.Views.ASCX.classes.MainGUI
         {            
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
 
         public O2Gui(int width, int height) : this(width, height, false)
         {

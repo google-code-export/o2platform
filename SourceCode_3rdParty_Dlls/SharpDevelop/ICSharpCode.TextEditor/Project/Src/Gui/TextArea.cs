@@ -487,6 +487,10 @@ namespace ICSharpCode.TextEditor
 		
 		protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
 		{
+            // DC
+            if (this.InvokeRequired)
+            { 
+            }
 			int currentXPos = 0;
 			int currentYPos = 0;
 			bool adjustScrollBars = false;

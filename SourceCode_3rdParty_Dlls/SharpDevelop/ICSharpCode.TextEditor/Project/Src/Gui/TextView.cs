@@ -559,7 +559,7 @@ namespace ICSharpCode.TextEditor
 		}
 		
 		int DrawDocumentWord(Graphics g, string word, Point position, Font font, Color foreColor, Brush backBrush)
-		{
+		{            
 			if (word == null || word.Length == 0) {
 				return 0;
 			}
@@ -578,17 +578,23 @@ namespace ICSharpCode.TextEditor
 			}
 			
 			int wordWidth = MeasureStringWidth(g, word, font);
-			
-			//num = ++num % 3;
-			g.FillRectangle(backBrush, //num == 0 ? Brushes.LightBlue : num == 1 ? Brushes.LightGreen : Brushes.Yellow,
-			                new RectangleF(position.X, position.Y, wordWidth + 1, FontHeight));
-			
-			DrawString(g,
-			           word,
-			           font,
-			           foreColor,
-			           position.X,
-			           position.Y);
+            try
+            {
+                //num = ++num % 3;
+                g.FillRectangle(backBrush, //num == 0 ? Brushes.LightBlue : num == 1 ? Brushes.LightGreen : Brushes.Yellow,
+                                new RectangleF(position.X, position.Y, wordWidth + 1, FontHeight));
+
+                DrawString(g,
+                           word,
+                           font,
+                           foreColor,
+                           position.X,
+                           position.Y);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("in SharpDevelop DrawDocumentWord: " + ex.Message);
+            }
 			return wordWidth;
 		}
 		
