@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TweetSharp.Model.TwitterUser">
+    <Position X="6.5" Y="2.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>QAAQAAAAAiIEQwBQAAAKBAAUIBAAOAICQgAAAABQAAA=</HashCode>
+      <FileName>Model\Twitter\TwitterUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TweetSharp.Model.TwitterStatus">
+    <Position X="0.5" Y="3" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQADAAAAAkAAAAQAgABAAAgAQAAAgIAIAgCACABYAiA=</HashCode>
+      <FileName>Model\Twitter\TwitterStatus.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="User" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TweetSharp.Model.TwitterDirectMessage">
+    <Position X="3.5" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAEwACAAgAQAgAhIQAAAAAABAIBKAgAACABIAiA=</HashCode>
+      <FileName>Model\Twitter\TwitterDirectMessage.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Recipient" />
+      <Property Name="Sender" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TweetSharp.Model.TwitterRateLimitStatus" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAMAAAwAACAAAAAIAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Model\Twitter\TwitterRateLimitStatus.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TweetSharp.Model.TwitterError" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Twitter\TwitterError.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TweetSharp.Model.TwitterSearchResult">
+    <Position X="15.25" Y="5.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAgASEAAEAAAAABAAAAAAQAgABAAAgACCAAA=</HashCode>
+      <FileName>Model\Twitter\TwitterSearchResult.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Statuses" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TweetSharp.Model.TwitterSearchStatus">
+    <Position X="11.5" Y="3.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAASwAAAAkKAAAQAgAJAAAAAAAAEAIYKDiAACEAIkiI=</HashCode>
+      <FileName>Model\Twitter\TwitterSearchStatus.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TweetSharp.Model.TwitterDateTime" Collapsed="true">
+    <Position X="18" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAIAAAAAEAAAAAAAAAAgAAAYAAEAAAgAAAAA=</HashCode>
+      <FileName>Model\Twitter\TwitterDateTime.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TweetSharp.Model.Twitter.TwitterSearchTrend" Collapsed="true">
+    <Position X="18" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Twitter\TwitterSearchTrend.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TweetSharp.Model.Twitter.TwitterSearchTrends" Collapsed="true">
+    <Position X="19.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAgA=</HashCode>
+      <FileName>Model\Twitter\TwitterSearchTrends.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TweetSharp.Model.TwitterUserSummary">
+    <Position X="9.25" Y="2.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AEASYAAEAAIhAAQEiAJAAAQAAAQAAIAACCAAAAAAEiA=</HashCode>
+      <FileName>Model\Twitter\TwitterUserSummary.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.305" />
+  </Class>
+  <Enum Name="TweetSharp.Model.TwitterDeliveryDevice" Collapsed="true">
+    <Position X="18" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Model\Twitter\TwitterDeliveryDevice.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

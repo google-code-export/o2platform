@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <name>TweetSharp</name>
+  <shortname>tweetsharp</shortname>
+  <summary>A productivity library for micro-blogging.</summary>
+  <version>1.0</version>
+  <url>http://tweetsharp.com</url>
+  <license>MIT X11</license>
+  <type>Library</type>
+  <description>A productivity library for micro-blogging.</description>
+  <createdesktopfile>false</createdesktopfile>
+  <icon />
+  <categories />
+  <group>Development/Libraries/Other</group>
+  <needsprepopulate>false</needsprepopulate>
+  <dependencies>
+    <dependency>mono(mscorlib) = 2.0.0.0</dependency>
+    <dependency>mono(System) = 2.0.0.0</dependency>
+    <dependency>mono(System.Core) = 3.5.0.0</dependency>
+    <dependency>mono(System.Data) = 2.0.0.0</dependency>
+    <dependency>mono(System.Data.Linq) = 3.5.0.0</dependency>
+    <dependency>mono(System.Drawing) = 2.0.0.0</dependency>
+    <dependency>mono(System.Runtime.Serialization) = 3.0.0.0</dependency>
+    <dependency>mono(System.Web) = 2.0.0.0</dependency>
+    <dependency>mono(System.Xml) = 2.0.0.0</dependency>
+    <dependency>mono(System.Xml.Linq) = 3.5.0.0</dependency>
+  </dependencies>
+  <provides />
+  <filetree name="Application Root" writable="false">
+    <directories />
+    <files>
+      <file name="TweetSharp.dll" source="C:\Users\Dimebrain\Desktop\tweetsharp\src\TweetSharp\bin\Mono\TweetSharp.dll" startup="false" writeable="false" />
+      <file name="TweetSharp.xml" source="C:\Users\Dimebrain\Desktop\tweetsharp\src\TweetSharp\bin\Mono\TweetSharp.xml" startup="false" writeable="false" />
+      <file name="Newtonsoft.Json.dll" source="C:\Users\Dimebrain\Desktop\tweetsharp\src\TweetSharp\bin\Mono\Newtonsoft.Json.dll" startup="false" writeable="false" />
+    </files>
+  </filetree>
+  <autogeneraterelease>true</autogeneraterelease>
+  <release />
+  <preinstallscript />
+  <postinstallscript />
+  <preuninstallscript />
+  <postuninstallscript />
+  <useiomap>true</useiomap>
+  <minimummono>2.4.2</minimummono>
+  <leaveonserver>false</leaveonserver>
+  <serverlocation />
+  <targetplatform>monorpm</targetplatform>
+</package>
