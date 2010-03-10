@@ -33,9 +33,8 @@ using O2.External.SharpDevelop.ExtensionMethods;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;   
 using O2.DotNetWrappers.H2Scripts;
-//O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\AST\Charp_FastCompiler.cs
 
-namespace O2.XRules.Database
+namespace O2.XRules.Database.O2Utils
 {
 
 	// Comments: (24 Feb 2010): This was the 4th pass at building an O2 Command Prompt (i.e. simple script editor)	
@@ -90,14 +89,15 @@ namespace O2.XRules.Database
         private void createGui()
         {
         	// create controls
-        	
 
-        	var groupBoxes = this.add_1x1("Command To Execute", "Invoke and Result",false,this.Width-150);   
+
+            var groupBoxes = this.add_1x1("Command To Execute", "Invoke and Result", false, this.Width - 150);   
         	
         	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();        	        	        	
         	
         	var topPanel = (SplitContainer)groupBoxes[0].Parent.Parent;
-
+            topPanel.Panel2MinSize = 110;
+            topPanel.FixedPanel = FixedPanel.Panel2;
             var bottomPanel = this.add_GroupBox("Generated Source Code");
         	sourceCodeViewer = bottomPanel.add_SourceCodeViewer();
         	topPanel.insert_Below(bottomPanel, 200);
@@ -142,9 +142,11 @@ namespace O2.XRules.Database
         	contextMenu.add("execute",(menuitem)=> execute());      
         	contextMenu.add("save",(menuitem)=> saveScript());      
         	contextMenu.add("force compilation",(menuitem)=> forceCompilation());     
-        	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());          	
+        	contextMenu.add("replace with generated source code",(menuitem)=> replaceMainCodeWithGeneratedSource());
+        	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());
+            contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());          	
      	}        	     	
-	     	
+	     		     	
 	    public void setCompilerEnvironment()
 	    {
 	    	csharpCompiler = new CSharp_FastCompiler();     
@@ -178,8 +180,8 @@ namespace O2.XRules.Database
 	     				sourceCodeViewer.enabled(true);
 	     				commandsToExecute.invokeOnThread(()=>commandsToExecute.Refresh());;
 	     				GeneratedCode = csharpCompiler.SourceCode;
-	     				if (isGeneratedSourceCodeVisible())
-							sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
+	     				//if (isGeneratedSourceCodeVisible())
+						sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
      		 		};     		      		 
      		 		
      		 csharpCompiler.onCompileFail = 
@@ -234,6 +236,11 @@ namespace O2.XRules.Database
 			sourceCodeViewer.set_Text(dummyclass);
      		csharpCompiler.compileSourceCode(dummyclass);
      	}
+     	
+     	public void replaceMainCodeWithGeneratedSource()
+     	{
+	     	commandsToExecute.set_Text(sourceCodeViewer.get_Text());
+	    }
      	
      	public void execute()
      	{     		

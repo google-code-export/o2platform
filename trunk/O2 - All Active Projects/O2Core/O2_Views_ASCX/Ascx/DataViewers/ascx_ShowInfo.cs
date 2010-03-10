@@ -33,52 +33,56 @@ namespace O2.Views.ASCX.DataViewers
     		buildGui();
     	}
     	
-    	public void buildGui()
+    	public PropertyGrid buildGui()
     	{
-    		this.clear();
-    		propertyGrid = this.add_Control<PropertyGrid>();    		
-    	}
-    	
-    	public void show(object _object)
-    	{    		
-    		this.invokeOnThread(
+            return (PropertyGrid)this.invokeOnThread(
     			()=>{
-	    		buildGui();
-	    		if (_object is IEnumerable)
-	    		{    			
-	    			var treeView = this.add_TreeView();
-	    			propertyGrid.insert_Left(treeView,200);	    			
-	    			var textBox = this.add_TextBox(true);
-	    			treeView.insert_Above(textBox,20);
-	    			//config
-	    			textBox.ScrollBars = ScrollBars.None;
-	    			textBox.Multiline = false;
-	    			
-	    			((SplitContainer)textBox.Parent.Parent).Panel1MinSize = 20;
-	    			((SplitContainer)textBox.Parent.Parent).SplitterDistance = 20;
-	    			
-	    			//events
-	    			treeView.afterSelect<object>((tag) => showInPropertyGrid(tag));	
-	    			textBox.onTextChange(
-	    				(text) => treeView.add_Nodes((IEnumerable)_object, true,text) );
-	    			// populate treeview
-	    			var contextMenu = treeView.add_ContextMenu();
-	    			contextMenu.add("Copy To Clipboard: Selected Node Text", (item)=>{ treeView.SelectedNode.Text.toClipboard();}); 
-	    			treeView.add_Nodes((IEnumerable)_object);
-	    		}
-	    		else
-	    		{    			
-	    			showInPropertyGrid(_object);
-	    		}
-	    	});
+    		            this.clear();
+    		            propertyGrid = this.add_Control<PropertyGrid>();    		
+                        return propertyGrid;
+                });
     	}
-    	    	
-    	
+
+        public void show(object _object)
+        {
+            buildGui();
+            if (_object is IEnumerable)
+            {
+                this.invokeOnThread(
+                () =>
+                {
+                    var treeView = this.add_TreeView();
+                    propertyGrid.insert_Left(treeView, 200);
+                    var textBox = this.add_TextBox(true);
+                    treeView.insert_Above(textBox, 20);
+                    //config
+                    textBox.ScrollBars = ScrollBars.None;
+                    textBox.Multiline = false;
+
+                    ((SplitContainer)textBox.Parent.Parent).Panel1MinSize = 20;
+                    ((SplitContainer)textBox.Parent.Parent).SplitterDistance = 20;
+
+                    //events
+                    treeView.afterSelect<object>((tag) => showInPropertyGrid(tag));
+                    textBox.onTextChange(
+                        (text) => treeView.add_Nodes((IEnumerable)_object, true, text));
+                    // populate treeview
+                    var contextMenu = treeView.add_ContextMenu();
+                    contextMenu.add("Copy To Clipboard: Selected Node Text", (item) => { treeView.SelectedNode.Text.toClipboard(); });
+                    treeView.add_Nodes((IEnumerable)_object);
+                });
+            }
+            else
+            {
+                showInPropertyGrid(_object);
+            }
+        }
+    	    	    	
     	public void showInPropertyGrid(object _object)
     	{
-    		if (_object is Control)
-    			((Control)_object).invokeOnThread(()=> propertyGrid.show(_object));
-    		else
+    	//	if (_object is Control)
+    	//		((Control)_object).invokeOnThread(()=> propertyGrid.show(_object));
+    	//	else                
     			propertyGrid.show(_object);
     	}
     	

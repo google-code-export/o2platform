@@ -13,9 +13,11 @@ namespace O2.Kernel.InterfacesBaseImpl
 {
     public class KO2Config : IO2Config
     {   
+        const string  defaultO2LocalTempFolder = @"C:\O2\_tempDir\";
+
         public KO2Config()
-        {            
-            hardCodedO2LocalTempFolder = @"C:\O2\_tempDir\";
+        {
+            hardCodedO2LocalTempFolder = defaultO2LocalTempFolder;
             O2TempDir = hardCodedO2LocalTempFolder;                 // default to this one since there are a couple cases where in Visual Studio the loading of o2.config files causes a problem
             hardCodedO2LocalBuildDir = @"E:\O2\_Bin_(O2_Binaries)\";
             hardCodedO2LocalSourceCodeDir = @"E:\O2\_SourceCode_O2";
@@ -52,7 +54,14 @@ namespace O2.Kernel.InterfacesBaseImpl
                 O2Kernel_Files.checkIfDirectoryExistsAndCreateIfNot(hardCodedO2LocalTempFolder);
                 return hardCodedO2LocalTempFolder;
             }
-            set { hardCodedO2LocalTempFolder = value; }
+            set {
+                //note: need to find a better solution for making today's data part of the temp folder 
+                if (value.StartsWith(defaultO2LocalTempFolder))
+                    hardCodedO2LocalTempFolder = Path.Combine(defaultO2LocalTempFolder, DateTime.Today.ToShortDateString().Replace("/", "-"));
+                else
+                    hardCodedO2LocalTempFolder = value; 
+
+            }
         }
 
         public string Version 

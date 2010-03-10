@@ -58,7 +58,19 @@ namespace ICSharpCode.TextEditor
 		//public Point selectionStartPos = new Point(0,0);
 
 		bool disposed;
-		
+
+        int ownerThread = System.Threading.Thread.CurrentThread.ManagedThreadId;  //DC added to solve the 'Object is currently in use elsewhere problem'        
+
+        protected bool CheckThread()    // DC
+        {
+            if (ownerThread != System.Threading.Thread.CurrentThread.ManagedThreadId)
+            {
+                System.Diagnostics.Debug.WriteLine("Ambience may only be used by the thread that created it");
+                return false;
+            }
+            return true;
+        }
+
 		[Browsable(false)]
 		public IList<AbstractMargin> LeftMargins {
 			get {
@@ -339,27 +351,54 @@ namespace ICSharpCode.TextEditor
 		
 		void SetToolTip(string text, int lineNumber)
 		{
-			if (toolTip == null || toolTip.IsDisposed)
-				toolTip = new DeclarationViewWindow(this.FindForm());
-			if (oldToolTip == text)
-				return;
-			if (text == null) {
-				toolTip.Hide();
-			} else {
-				Point p = Control.MousePosition;
-				Point cp = PointToClient(p);
-				if (lineNumber >= 0) {
-					lineNumber = this.Document.GetVisibleLine(lineNumber);
-					p.Y = (p.Y - cp.Y) + (lineNumber * this.TextView.FontHeight) - this.virtualTop.Y;
-				}
-				p.Offset(3, 3);
-				toolTip.Owner = this.FindForm();
-				toolTip.Location = p;
-				toolTip.Description = text;
-				toolTip.HideOnClick = true;
-				toolTip.Show();
-			}
-			oldToolTip = text;
+            try
+            {
+                if (toolTip.Owner == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("in TextArea.SetToolTip, toolTip.Owner  was null");
+                }
+                else if (toolTip.Owner.InvokeRequired)
+                    System.Diagnostics.Debug.WriteLine("in TextArea.SetToolTip, aborting method due to CrossThread Problem");
+                else
+                {
+                    if (toolTip == null || toolTip.IsDisposed)
+                        toolTip = new DeclarationViewWindow(this.FindForm());
+                    if (oldToolTip == text)
+                        return;
+                    if (text == null)
+                    {
+                        toolTip.Hide();
+                    }
+                    else
+                    {
+                        Point p = Control.MousePosition;
+                        Point cp = PointToClient(p);
+                        if (lineNumber >= 0)
+                        {
+                            lineNumber = this.Document.GetVisibleLine(lineNumber);
+                            p.Y = (p.Y - cp.Y) + (lineNumber * this.TextView.FontHeight) - this.virtualTop.Y;
+                        }
+                        p.Offset(3, 3);
+                        var form = this.FindForm(); // DC
+                        if (form.InvokeRequired || toolTip.Owner.InvokeRequired)
+                            System.Diagnostics.Debug.WriteLine("in TextArea.SetToolTip, aborting method due to CrossThread Problem");
+                        else
+                        {
+
+                            toolTip.Owner = form; // this.FindForm();
+                            toolTip.Location = p;
+                            toolTip.Description = text;
+                            toolTip.HideOnClick = true;
+                            toolTip.Show();
+                        }
+                    }
+                    oldToolTip = text;
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception in TextArea.SetToolTip: {0}" + ex.Message);
+            }
 		}
 		
 		public event ToolTipRequestEventHandler ToolTipRequest;
@@ -487,6 +526,8 @@ namespace ICSharpCode.TextEditor
 		
 		protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
 		{
+            if (false == this.CheckThread())
+                return;
             // DC
             if (this.InvokeRequired)
             { 

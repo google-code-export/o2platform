@@ -142,7 +142,7 @@ namespace O2.DotNetWrappers.Windows
             }
             catch(Exception ex)
             {
-                DI.log.error("in startProcessAsConsoleApplicationAndReturnConsoleOutput failed stating process {0} with parameters {1} . The error was: {1} ",processToStart, arguments, ex.Message);
+                DI.log.error("in startProcessAsConsoleApplicationAndReturnConsoleOutput failed stating process {0} with parameters {1} . The error was: {1} ",processToStart, ex.Message);
                 return "";
             }
         }

@@ -77,5 +77,18 @@ namespace O2.Kernel.ExtensionMethods
             "could not create control type: {0}".format(controlType).error();
             return null;
         }
+
+        public static Control createAndAddControl(this Control hostControl, string assemblyName, string typeName)
+        {
+            return createAndAddControl(hostControl,assemblyName.type(typeName));
+        }
+
+        public static Control createAndAddControl(this Control hostControl, Type controlToCreate)
+        {
+            if (controlToCreate == null)
+                return null;            
+            var ascxExtensioMethods = "O2_DotNetWrappers.dll".type("Control_ExtensionMethods");
+            return (Control)ascxExtensioMethods.invokeStatic("add_Control", hostControl, controlToCreate);        
+        }
     }
 }

@@ -27,7 +27,20 @@ namespace ICSharpCode.TextEditor
 		protected Rectangle drawingPosition = new Rectangle(0, 0, 0, 0);
 		[CLSCompliant(false)]
 		protected TextArea textArea;
-		
+
+        
+        int ownerThread = System.Threading.Thread.CurrentThread.ManagedThreadId;  //DC added to solve the 'Object is currently in use elsewhere problem'        
+        
+        protected bool CheckThread()    // DC
+        {            
+            if (ownerThread != System.Threading.Thread.CurrentThread.ManagedThreadId)
+            {
+                System.Diagnostics.Debug.WriteLine("Ambience may only be used by the thread that created it");
+                return false;
+            }
+            return true;      
+        }
+
 		public Rectangle DrawingPosition {
 			get {
 				return drawingPosition;

@@ -22,6 +22,7 @@ namespace O2.External.SharpDevelop.AST
         public List<string> ReferencedAssemblies { get; set; }
         public Dictionary<string, object> InvocationParameters { get; set; }
         public CompilationUnit CompilationUnit { get; set; }
+        public List<string> ExtraSourceCodeFilesToCompile { get; set; }
         //public AstDetails AstDetails { get; set; }
         public string AstErrors { get; set; }
         public bool generateDebugSymbols { get; set; }
@@ -54,6 +55,7 @@ namespace O2.External.SharpDevelop.AST
         {        
         	DebugMode = false;				// set to true to see details about each AstCreation and Compilation stage
         	InvocationParameters = new Dictionary<string, object>();
+            ExtraSourceCodeFilesToCompile = new List<String>();
         	ReferencedAssemblies = getDefaultReferencedAssemblies();
             default_MethodName = "dynamicMethod";
             default_TypeName = "DynamicType";
@@ -134,6 +136,7 @@ namespace O2.External.SharpDevelop.AST
        	                if (compiling == false && compileStack.Count > 0)
        	                {
        	                    compiling = true;
+                            compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies();
                             this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
        	                    var sourceCode = compileStack.Pop();
        	                    compileStack.Clear();
@@ -183,12 +186,70 @@ namespace O2.External.SharpDevelop.AST
        	            });
         }
 
+        // we need to use CompileEngine (which is slower but supports multiple file compilation 
+        public void compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies()
+        {             
+            if (ExtraSourceCodeFilesToCompile.size() > 0)
+            {
+                var assembly = new CompileEngine().compileSourceFiles(ExtraSourceCodeFilesToCompile);
+                if (assembly != null)
+                    ReferencedAssemblies.Add(assembly.Location);
+            }
+        }
         /*public string getAstErrors(string sourceCode)
         {
             return new Ast_CSharp(sourceCode).Errors;
         }*/
-
         public string createCSharpCodeWith_Class_Method_WithMethodText(string code)
+        {
+            // this code does multiple passes in creating and ast from the code (in an attempt to make it more user friendly to the user
+            // eventually move all this to an external module and add a lot of extra funcionality/behaviour
+            string parsedCode = null;
+            string tempCode = null;
+            // first see if the code provide is a predefined command
+            code = code.eq("notepad") ?  "exec.cmd (\"notepad\");" : code;
+            code = code.eq("cmd") ? "exec.cmd (\"cmd\");" : code;
+            code = (code.starts("dir ") && code .lines().size() == 1) ? "exec.cmdViaConsole (\"cmd\",\"/c {0}\");".format(code) : code;
+            // some for fun :)
+            code = code.ToLower().Trim().eq("hello") || code.ToLower().Trim().eq("hi") ? "\"Hi, Welcome to O2\"" : code;
+            code = code.ToLower().Trim().eq("how are you?") || code.ToLower().Trim().eq("how are you doing") ? "\"I'm fine thanks\"" : code;
+            code = code.ToLower().Trim().eq("good morning") || code.ToLower().Trim().eq("good afternoon") ? "\"Hello there, {0} to you too\"".format(code) : code;
+            //code.ToLower().eq(new string[] { "hello", "hi" }, () => code = "Hi, Welcome to O2");
+            //code = code.ToLower().eq(new []{"how are you?" ,"how are you doing" }) ? "I'm fine thanks" : code;            
+            // first try with the code provided
+            parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(code);
+            //if it failed:
+            if (parsedCode == null)
+                // and it has one line, wrap it around a return statement;
+                if (code.lines().size() == 1)
+                {                    
+                    tempCode = "return {0};".format(code);
+                    parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
+                    if (parsedCode == null)
+                    {
+                        tempCode = "{0};".format(code);
+                        parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
+                        if (parsedCode == null)
+                        {
+                            var firstSpace = code.IndexOf(' ');
+                            if (firstSpace > 0)
+                            {
+                                tempCode = code.Insert(firstSpace, "(");
+                                tempCode = "{0});".format(tempCode);
+                                parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
+                            }                           
+                        }
+                    }                    
+                }
+            if (parsedCode == null)
+            {
+                DebugMode.error("Ast parsing Failed");
+                this.invoke(onAstFail);
+            }
+            return parsedCode;
+        }
+
+        public string tryToCreateCSharpCodeWith_Class_Method_WithMethodText(string code)
         {
             if (code.empty())
                 return null;
@@ -231,15 +292,14 @@ namespace O2.External.SharpDevelop.AST
             catch (Exception ex)
             {                            	
 				DebugMode.error("in createCSharpCodeWith_Class_Method_WithMethodText:{0}", ex.Message);                
-            }      
-			DebugMode.error("Ast parsing Failed");
-			this.invoke(onAstFail);
+            }      			
 			return null;                
         }                
         
         public void mapCodeO2References(Ast_CSharp astCSharp)
         {
             generateDebugSymbols = false; // default to not generating debug symbols and creating the assembly only in memory
+            ExtraSourceCodeFilesToCompile = new List<string>();
         	ReferencedAssemblies = getDefaultReferencedAssemblies();
         	var compilationUnit = astCSharp.CompilationUnit;
         	
@@ -255,8 +315,9 @@ namespace O2.External.SharpDevelop.AST
             foreach (var comment in astCSharp.AstDetails.Comments)
             {
                 comment.Text.starts("using ", false, value => astCSharp.CompilationUnit.add_Using(value));
-                comment.Text.starts(new [] {"ref ", "O2Ref:"}, false,  value => ReferencedAssemblies.Add(value));                
-
+                comment.Text.starts(new [] {"ref ", "O2Ref:"}, false,  value => ReferencedAssemblies.Add(value));
+                comment.Text.starts(new[] { "file ", "O2File:" }, false, value => ExtraSourceCodeFilesToCompile.Add(value)); 
+               
                 comment.Text.starts(new[] {"O2:debugSymbols",
                                         "generateDebugSymbols", 
                                         "debugSymbols"}, true, (value) => generateDebugSymbols = true);

@@ -265,10 +265,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 verticalSplit, //setOrientationToHorizontal
                 true, // setDockStyleoFill
                 true); // setBorderStyleTo3D
-            splitControl_1.SplitterDistance = spliterDistance;
-            GroupBox groupBox_1 = splitControl_1.Panel1.add_GroupBox(title_1);
-            GroupBox groupBox_2 = splitControl_1.Panel2.add_GroupBox(title_2);
-            return new List<Control> {groupBox_1, groupBox_2};
+            return (List<Control>)splitControl_1.invokeOnThread(
+                () =>
+                {
+                    splitControl_1.SplitterDistance = spliterDistance;
+                    GroupBox groupBox_1 = splitControl_1.Panel1.add_GroupBox(title_1);
+                    GroupBox groupBox_2 = splitControl_1.Panel2.add_GroupBox(title_2);
+                    return new List<Control> { groupBox_1, groupBox_2 };
+                });
         }
 
         public static Control add_SplitContainer_1x1(this Control control, Control childControl_1, string title_2,
@@ -1102,6 +1106,51 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static Control add_Panel(this Control control)
         {
             return control.add_Control<Panel>();
+        }
+
+        #endregion
+
+        #region ToolStripStatus
+
+        public static ToolStripStatusLabel add_StatusStrip(this UserControl _control)
+        {
+            return (ToolStripStatusLabel)_control.invokeOnThread(
+                () =>
+                {
+                    if (_control.ParentForm == null)
+                    {
+                        "could not add Status Strip since there is no Parent Form for this control".error();
+                        return null;
+                    }
+                    return _control.ParentForm.add_StatusStrip();
+                });
+        }
+
+        public static ToolStripStatusLabel add_StatusStrip(this Form form)
+        {
+            return (ToolStripStatusLabel)form.invokeOnThread(
+                () =>
+                {
+                    var label = new ToolStripStatusLabel();
+                    var statusStrip = new StatusStrip();
+                    statusStrip.Items.Add(label);
+                    form.Controls.Add(statusStrip);
+                    return label;
+                });
+        }
+
+        public static ToolStripStatusLabel set_Text(this ToolStripStatusLabel label, string message)
+        {
+            //return (ToolStripStatusLabel)label.invokeOnThread(
+            //	()=>{
+            label.Text = message;
+            return label;
+            //		});
+        }
+
+        public static string get_Text(this ToolStripStatusLabel label)
+        {
+            return label.Text;
         }
 
         #endregion

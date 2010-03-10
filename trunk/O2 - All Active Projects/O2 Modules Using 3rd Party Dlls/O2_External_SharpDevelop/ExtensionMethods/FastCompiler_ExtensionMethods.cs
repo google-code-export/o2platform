@@ -9,9 +9,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         public static Assembly compile(this string pathToFileToCompile)
         {
             var csharpCompiler = new CSharp_FastCompiler();
-
             var compileProcess = new System.Threading.AutoResetEvent(false);
-
             csharpCompiler.compileSourceCode(pathToFileToCompile.contents());
             csharpCompiler.onCompileFail = () => compileProcess.Set();
             csharpCompiler.onCompileOK = () => compileProcess.Set();

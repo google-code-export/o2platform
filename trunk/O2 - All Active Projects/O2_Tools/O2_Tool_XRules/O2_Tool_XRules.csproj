@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1F4DA91C-EF77-4552-AA2A-1159C7032FCD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -18,6 +18,7 @@
     <ManifestKeyFile>O2_Tool_XRules_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
     <SignManifests>true</SignManifests>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <PublishUrl>C:\O2\_O2 - LOCAL SVN - DEV\O2_ClickOnce_Installers\O2_Tool_XRules\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -36,7 +37,6 @@
     <ApplicationRevision>47</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -156,17 +156,20 @@
       <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
       <Name>O2_Views_ASCX</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\O2_APIs\O2_API_Visualization\O2_API_Visualization.csproj">
+      <Project>{7226283F-7C31-4EBB-9940-97AB0F676319}</Project>
+      <Name>O2_API_Visualization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2_Cmd\O2_Cmd_XRules\O2_Cmd_XRules.csproj">
       <Project>{B10305CD-A47E-41C7-8116-CA34180F6C6F}</Project>
       <Name>O2_Cmd_XRules</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\O2_XRules_Database\O2_XRules_Database.csproj">
+      <Project>{83957D55-86AB-4C26-9F82-6182999F09E8}</Project>
+      <Name>O2_XRules_Database</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
@@ -181,11 +184,6 @@
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
       <Visible>False</Visible>
@@ -209,7 +207,6 @@
       <TargetPath>
       </TargetPath>
       <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.mshtml">
@@ -219,7 +216,6 @@
       <TargetPath>
       </TargetPath>
       <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>

@@ -131,7 +131,8 @@ namespace O2.Views.ASCX.classes.MainGUI
                         return;
                     }
                     string sText1 = sText;
-
+                    if (bShowTimeStamp)
+                        sText = "[" + DateTime.Now.ToShortTimeString() + "] " + sText;
                     //if (targetRichTextBoxes[0].okThread(delegate { insertText(sText1, cColour); }))
                     //{
                         foreach (RichTextBox richTextBoxToUpdate in targetRichTextBoxes)
@@ -139,9 +140,7 @@ namespace O2.Views.ASCX.classes.MainGUI
                             var richTextBox = richTextBoxToUpdate;
                             richTextBox.invokeOnThread(
                                 () =>
-                                {
-                                    if (bShowTimeStamp)
-                                        sText = "[" + DateTime.Now.ToShortTimeString() + "] " + sText;
+                                {                                    
                                     if (bLogCache)
                                     {
                                         sbLogCache.Insert(0, sText + Environment.NewLine);

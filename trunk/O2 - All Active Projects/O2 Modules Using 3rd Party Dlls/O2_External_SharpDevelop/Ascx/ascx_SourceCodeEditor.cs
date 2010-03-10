@@ -34,6 +34,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         private bool TextArea_KeyEventHandler(char ch)
         {
+            //O2.Kernel.PublicDI.log.debug("KeyEventHandler: " + ch.ToString()); ;
             if (ch == '\n')
             {
                 if (tecSourceCode.ActiveTextAreaControl.TextArea.SelectionManager.HasSomethingSelected)
@@ -482,6 +483,11 @@ namespace O2.External.SharpDevelop.Ascx
             Clipboard.SetText(sPathToFileLoaded);
         }
 
+        private void enableCodeCompleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            enableCodeComplete();
+        }
+        
 
     }
 }

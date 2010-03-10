@@ -22,6 +22,7 @@ using O2.Views.ASCX.CoreControls;
 using System.Threading;
 using O2.DotNetWrappers.ViewObjects;
 using O2.DotNetWrappers.H2Scripts;
+using O2.Views.ASCX.Ascx.MainGUI;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -69,6 +70,9 @@ namespace O2.External.SharpDevelop.Ascx
                 //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseMove += new MarginMouseEventHandler(IconBarMargin_MouseMove);
                 //        tecSourceCode.ActiveTextAreaControl.TextArea.IconBarMargin.MouseLeave += new EventHandler(IconBarMargin_MouseLeave);
                 //        tecSourceCode.ActiveTextAreaControl.TextArea.KeyPress += TextArea_KeyPress;
+                tecSourceCode.ActiveTextAreaControl.TextArea.KeyDown += new System.Windows.Forms.KeyEventHandler(TextArea_KeyDown);
+                tecSourceCode.ActiveTextAreaControl.TextArea.KeyPress += new KeyPressEventHandler(TextArea_KeyPress);
+                tecSourceCode.ActiveTextAreaControl.TextArea.KeyUp += new System.Windows.Forms.KeyEventHandler(TextArea_KeyUp);
                 tecSourceCode.ActiveTextAreaControl.TextArea.KeyEventHandler += TextArea_KeyEventHandler;
                 tecSourceCode.ActiveTextAreaControl.TextArea.DragEnter += new DragEventHandler(TextArea_DragEnter);
                 tecSourceCode.ActiveTextAreaControl.TextArea.DragOver += new DragEventHandler(TextArea_DragOver);
@@ -81,6 +85,35 @@ namespace O2.External.SharpDevelop.Ascx
                 mapExternalExecutionEngines();
                 runOnLoad = false;
             }
+        }
+
+        void TextArea_KeyUp(object sender, KeyEventArgs e)
+        {
+            handlePressedKeys(e);
+        }
+
+        private void handlePressedKeys(KeyEventArgs e)
+        {
+            //O2.Kernel.PublicDI.log.debug("KeyUp: " + e.KeyValue.ToString()); ;                
+            if (e.Modifiers == Keys.Control && e.KeyValue == 'B')           // Ctrl+B compiles code
+            {
+                compileSourceCode();
+                O2.Kernel.PublicDI.log.debug("Control B was pressed"); ;
+            }
+            else if (e.KeyValue == 116)                                     // F5 (key 116) executes it
+            {
+                executeMethod();
+            }            
+        }
+
+        void TextArea_KeyDown(object sender, KeyEventArgs e)
+        {
+            //O2.Kernel.PublicDI.log.debug("KeyDown: " + e.KeyValue.ToString()); ;
+        }
+
+        void TextArea_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //O2.Kernel.PublicDI.log.debug("KeyPress: " + e.KeyChar.ToString()); ;
         }
         
 
@@ -879,7 +912,10 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void showLogViewerControl()
         {
-            O2Messages.setAscxDockStateAndOpenIfNotAvailable("ascx_LogViewer", O2DockState.DockBottom, "O2 Logs");
+            int splitterLocation = (int)(this.Width * .20);
+            var logViewer = this.add_Control<ascx_LogViewer>();
+            this.insert_Right(logViewer, splitterLocation);
+            //O2Messages.setAscxDockStateAndOpenIfNotAvailable("ascx_LogViewer", O2DockState.DockBottom, "O2 Logs");
         }
 
 
@@ -1175,5 +1211,11 @@ namespace O2.External.SharpDevelop.Ascx
         {
             PublicDI.log.debug(StringsAndLists.fromStringList_getText(new CompileEngine().getListOfReferencedAssembliesToUse()));
         }
+
+
+        public O2CodeCompletion enableCodeComplete()
+        {
+            return new O2CodeCompletion(tecSourceCode);	
+        }        
     }
 }

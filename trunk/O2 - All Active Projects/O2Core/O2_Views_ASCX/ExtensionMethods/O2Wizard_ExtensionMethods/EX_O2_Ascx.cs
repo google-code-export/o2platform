@@ -189,7 +189,10 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
                 var openFileDialog = new OpenFileDialog();
                 openFileDialog.InitialDirectory = defaultFolder;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
                     textBox.Text = openFileDialog.FileName;
+                    openFileDialog.Dispose();
+                }
             };
 
             // panel
@@ -230,7 +233,10 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
                 var folderBrowserDialog = new FolderBrowserDialog();
                 folderBrowserDialog.SelectedPath = defaultFolder;
                 if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                {
                     textBox.Text = folderBrowserDialog.SelectedPath;
+                    folderBrowserDialog.Dispose();
+                }
             };
 
             // panel
