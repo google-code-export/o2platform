@@ -41,7 +41,8 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             var newMethod = new MethodDeclaration
             {
                 Name = methodName,
-                Modifier = Modifiers.None | Modifiers.Public | Modifiers.Static,
+                //Modifier = Modifiers.None | Modifiers.Public | Modifiers.Static,
+                Modifier = Modifiers.None | Modifiers.Public,
                 Body = body
             };
             newMethod.setReturnType();

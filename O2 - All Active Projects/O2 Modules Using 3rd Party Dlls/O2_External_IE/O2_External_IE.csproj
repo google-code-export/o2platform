@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F6942664-5E64-4182-B3EB-11F481F461FB}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -61,8 +61,8 @@
     <Compile Include="ExtensionMethods\Html_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\IEChangeSink.cs" />
     <Compile Include="ExtensionMethods\IE_Http_ExtensionMethods.cs" />
-    <Compile Include="open.cs" />
-    <Compile Include="show.cs" />
+    <Content Include="open.cs.txt" />
+    <Content Include="show.cs.txt" />
     <Compile Include="Wrapper\ExtendedWebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>

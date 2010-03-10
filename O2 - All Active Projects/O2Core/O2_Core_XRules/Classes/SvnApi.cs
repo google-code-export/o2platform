@@ -5,6 +5,7 @@ using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
+using O2.DotNetWrappers.ExtensionMethods;
 using HTMLparserLibDotNet20.O2ExtraCode;
 using System.Xml.Linq;
 
@@ -70,7 +71,7 @@ namespace O2.Core.XRules.Classes
         	Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);
         	if (svnMappedUrl.IsFile)
         	{
-        		var localfile = targetFolder +  localVirtualPath;
+        		var localfile = targetFolder.pathCombine(localVirtualPath);
         		
         		//var fileContents = Web.getUrlContents(svnMappedUrl.FullPath);
         		//Files.WriteFileContent(localfile,fileContents);
@@ -84,7 +85,7 @@ namespace O2.Core.XRules.Classes
         	}
         	else
         	{
-        		var localfolder = targetFolder +  localVirtualPath;
+                var localfolder = targetFolder.pathCombine(localVirtualPath);
         		log.debug("   ... remote target was a folder, so creating local folder: {0}", localfolder);
         		Files.checkIfDirectoryExistsAndCreateIfNot(localfolder);        		
         	}

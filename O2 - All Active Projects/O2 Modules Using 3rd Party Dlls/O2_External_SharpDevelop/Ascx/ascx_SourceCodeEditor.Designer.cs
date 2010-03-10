@@ -44,6 +44,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compileSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableCodeCompleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cboxVRuler = new System.Windows.Forms.CheckBox();
             this.cboxInvalidLines = new System.Windows.Forms.CheckBox();
             this.cboxHRuler = new System.Windows.Forms.CheckBox();
@@ -95,6 +96,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.btOpenFile = new System.Windows.Forms.ToolStripButton();
             this.groupBoxWithFileAndSaveSettings = new System.Windows.Forms.GroupBox();
+            this.llPutFilePathInClipboard = new System.Windows.Forms.LinkLabel();
             this.cbAutoTryToFixSourceCodeFileReferences = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.llReload = new System.Windows.Forms.LinkLabel();
@@ -108,7 +110,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tcSourceInfo = new System.Windows.Forms.TabControl();
             this.scCodeAndAst = new System.Windows.Forms.SplitContainer();
-            this.llPutFilePathInClipboard = new System.Windows.Forms.LinkLabel();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -132,50 +133,51 @@ namespace O2.External.SharpDevelop.Ascx
             this.settingsToolStripMenuItem,
             this.addBreakpointOnCurrentLineToolStripMenuItem,
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem,
-            this.compileSettingsToolStripMenuItem});
+            this.compileSettingsToolStripMenuItem,
+            this.enableCodeCompleteToolStripMenuItem});
             this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(343, 224);
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(354, 246);
             this.menuStripForSourceEdition.Opening += new System.ComponentModel.CancelEventHandler(this.menuStripForSourceEdition_Opening);
             // 
             // compileToolStripMenuItem
             // 
             this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
-            this.compileToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.compileToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.compileToolStripMenuItem.Text = "Compile";
             this.compileToolStripMenuItem.Click += new System.EventHandler(this.compileToolStripMenuItem_Click);
             // 
             // executeSelectedMethodToolStripMenuItem
             // 
             this.executeSelectedMethodToolStripMenuItem.Name = "executeSelectedMethodToolStripMenuItem";
-            this.executeSelectedMethodToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.executeSelectedMethodToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.executeSelectedMethodToolStripMenuItem.Text = "Execute Selected Method";
             this.executeSelectedMethodToolStripMenuItem.Click += new System.EventHandler(this.executeSelectedMethodToolStripMenuItem_Click);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.pasteToolStripMenuItem.Text = "Paste";
             this.pasteToolStripMenuItem.Click += new System.EventHandler(this.pasteToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.openFileToolStripMenuItem.Text = "Open File";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
@@ -184,28 +186,28 @@ namespace O2.External.SharpDevelop.Ascx
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autoCompileEvery10SecondsToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // autoCompileEvery10SecondsToolStripMenuItem
             // 
             this.autoCompileEvery10SecondsToolStripMenuItem.CheckOnClick = true;
             this.autoCompileEvery10SecondsToolStripMenuItem.Name = "autoCompileEvery10SecondsToolStripMenuItem";
-            this.autoCompileEvery10SecondsToolStripMenuItem.Size = new System.Drawing.Size(225, 22);
+            this.autoCompileEvery10SecondsToolStripMenuItem.Size = new System.Drawing.Size(236, 22);
             this.autoCompileEvery10SecondsToolStripMenuItem.Text = "Auto Compile every 10 seconds";
             this.autoCompileEvery10SecondsToolStripMenuItem.CheckedChanged += new System.EventHandler(this.autoCompileEvery10SecondsToolStripMenuItem_CheckedChanged);
             // 
             // addBreakpointOnCurrentLineToolStripMenuItem
             // 
             this.addBreakpointOnCurrentLineToolStripMenuItem.Name = "addBreakpointOnCurrentLineToolStripMenuItem";
-            this.addBreakpointOnCurrentLineToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.addBreakpointOnCurrentLineToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.addBreakpointOnCurrentLineToolStripMenuItem.Text = "Add Breakpoint on current line";
             this.addBreakpointOnCurrentLineToolStripMenuItem.Click += new System.EventHandler(this.addBreakpointOnCurrentLineToolStripMenuItem_Click);
             // 
             // openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem
             // 
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Name = "openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem";
-            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Text = "Open Current file in editor with \'Code Complete\' support";
             this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem.Click += new System.EventHandler(this.openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem_Click);
             // 
@@ -214,15 +216,22 @@ namespace O2.External.SharpDevelop.Ascx
             this.compileSettingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem});
             this.compileSettingsToolStripMenuItem.Name = "compileSettingsToolStripMenuItem";
-            this.compileSettingsToolStripMenuItem.Size = new System.Drawing.Size(342, 22);
+            this.compileSettingsToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.compileSettingsToolStripMenuItem.Text = "Compile Settings";
             // 
             // listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem
             // 
             this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Name = "listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem";
-            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Size = new System.Drawing.Size(409, 22);
+            this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Size = new System.Drawing.Size(420, 22);
             this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Text = "List (in LogView) the current assembly references automatically added";
             this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem.Click += new System.EventHandler(this.listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem_Click);
+            // 
+            // enableCodeCompleteToolStripMenuItem
+            // 
+            this.enableCodeCompleteToolStripMenuItem.Name = "enableCodeCompleteToolStripMenuItem";
+            this.enableCodeCompleteToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
+            this.enableCodeCompleteToolStripMenuItem.Text = "Enable Code Complete";
+            this.enableCodeCompleteToolStripMenuItem.Click += new System.EventHandler(this.enableCodeCompleteToolStripMenuItem_Click);
             // 
             // cboxVRuler
             // 
@@ -681,7 +690,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btSelectedLineHistory.Image = ((System.Drawing.Image)(resources.GetObject("btSelectedLineHistory.Image")));
             this.btSelectedLineHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btSelectedLineHistory.Name = "btSelectedLineHistory";
-            this.btSelectedLineHistory.Size = new System.Drawing.Size(23, 22);
+            this.btSelectedLineHistory.Size = new System.Drawing.Size(23, 20);
             this.btSelectedLineHistory.Text = "View Selected Line History";
             this.btSelectedLineHistory.Click += new System.EventHandler(this.btSelectedLineHistory_Click);
             // 
@@ -696,14 +705,14 @@ namespace O2.External.SharpDevelop.Ascx
             this.btShowLogs.Image = ((System.Drawing.Image)(resources.GetObject("btShowLogs.Image")));
             this.btShowLogs.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btShowLogs.Name = "btShowLogs";
-            this.btShowLogs.Size = new System.Drawing.Size(23, 22);
+            this.btShowLogs.Size = new System.Drawing.Size(23, 20);
             this.btShowLogs.Text = "Show Logs";
             this.btShowLogs.Click += new System.EventHandler(this.showLogs_Click);
             // 
             // lbSampleScripts
             // 
             this.lbSampleScripts.Name = "lbSampleScripts";
-            this.lbSampleScripts.Size = new System.Drawing.Size(74, 22);
+            this.lbSampleScripts.Size = new System.Drawing.Size(74, 13);
             this.lbSampleScripts.Text = "sample scripts";
             this.lbSampleScripts.Visible = false;
             // 
@@ -711,7 +720,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.cBoxSampleScripts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxSampleScripts.Name = "cBoxSampleScripts";
-            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 25);
+            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 21);
             this.cBoxSampleScripts.Visible = false;
             this.cBoxSampleScripts.SelectedIndexChanged += new System.EventHandler(this.cBoxSampleScripts_SelectedIndexChanged);
             // 
@@ -726,7 +735,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btOpenFile.Image")));
             this.btOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btOpenFile.Name = "btOpenFile";
-            this.btOpenFile.Size = new System.Drawing.Size(23, 22);
+            this.btOpenFile.Size = new System.Drawing.Size(23, 20);
             this.btOpenFile.Text = "Open File";
             this.btOpenFile.Click += new System.EventHandler(this.btOpenFile_Click);
             // 
@@ -753,6 +762,17 @@ namespace O2.External.SharpDevelop.Ascx
             this.groupBoxWithFileAndSaveSettings.TabStop = false;
             this.groupBoxWithFileAndSaveSettings.Text = "Settings, loaded file details and save into another file";
             this.groupBoxWithFileAndSaveSettings.Visible = false;
+            // 
+            // llPutFilePathInClipboard
+            // 
+            this.llPutFilePathInClipboard.AutoSize = true;
+            this.llPutFilePathInClipboard.Location = new System.Drawing.Point(597, 69);
+            this.llPutFilePathInClipboard.Name = "llPutFilePathInClipboard";
+            this.llPutFilePathInClipboard.Size = new System.Drawing.Size(120, 13);
+            this.llPutFilePathInClipboard.TabIndex = 53;
+            this.llPutFilePathInClipboard.TabStop = true;
+            this.llPutFilePathInClipboard.Text = "put file path in Clipboard";
+            this.llPutFilePathInClipboard.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llPutFilePathInClipboard_LinkClicked);
             // 
             // cbAutoTryToFixSourceCodeFileReferences
             // 
@@ -930,17 +950,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.scCodeAndAst.SplitterDistance = 291;
             this.scCodeAndAst.TabIndex = 53;
             // 
-            // llPutFilePathInClipboard
-            // 
-            this.llPutFilePathInClipboard.AutoSize = true;
-            this.llPutFilePathInClipboard.Location = new System.Drawing.Point(597, 69);
-            this.llPutFilePathInClipboard.Name = "llPutFilePathInClipboard";
-            this.llPutFilePathInClipboard.Size = new System.Drawing.Size(120, 13);
-            this.llPutFilePathInClipboard.TabIndex = 53;
-            this.llPutFilePathInClipboard.TabStop = true;
-            this.llPutFilePathInClipboard.Text = "put file path in Clipboard";
-            this.llPutFilePathInClipboard.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llPutFilePathInClipboard_LinkClicked);
-            // 
             // ascx_SourceCodeEditor
             // 
             this.AllowDrop = true;
@@ -1054,5 +1063,6 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.SplitContainer scCodeAndAst;
         private System.Windows.Forms.ToolStripButton btSeachAndViewAst;
         private System.Windows.Forms.LinkLabel llPutFilePathInClipboard;
+        private System.Windows.Forms.ToolStripMenuItem enableCodeCompleteToolStripMenuItem;
     }
 }

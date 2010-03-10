@@ -68,29 +68,40 @@ namespace ICSharpCode.TextEditor
 		
 		public override void Paint(Graphics g, Rectangle rect)
 		{
-			if (rect.Width <= 0 || rect.Height <= 0) {
-				return;
-			}
-			HighlightColor lineNumberPainterColor = textArea.Document.HighlightingStrategy.GetColorFor("LineNumbers");
-			int fontHeight = textArea.TextView.FontHeight;
-			Brush fillBrush = textArea.Enabled ? BrushRegistry.GetBrush(lineNumberPainterColor.BackgroundColor) : SystemBrushes.InactiveBorder;
-			Brush drawBrush = BrushRegistry.GetBrush(lineNumberPainterColor.Color);
-			for (int y = 0; y < (DrawingPosition.Height + textArea.TextView.VisibleLineDrawingRemainder) / fontHeight + 1; ++y) {
-				int ypos = drawingPosition.Y + fontHeight * y  - textArea.TextView.VisibleLineDrawingRemainder;
-				Rectangle backgroundRectangle = new Rectangle(drawingPosition.X, ypos, drawingPosition.Width, fontHeight);
-				if (rect.IntersectsWith(backgroundRectangle)) {
-					g.FillRectangle(fillBrush, backgroundRectangle);
-					int curLine = textArea.Document.GetFirstLogicalLine(textArea.Document.GetVisibleLine(textArea.TextView.FirstVisibleLine) + y);
-					
-					if (curLine < textArea.Document.TotalNumberOfLines) {
-						g.DrawString((curLine + 1).ToString(),
-						             lineNumberPainterColor.GetFont(TextEditorProperties.FontContainer),
-						             drawBrush,
-						             backgroundRectangle,
-						             numberStringFormat);
-					}
-				}
-			}
+            try
+            {
+                if (rect.Width <= 0 || rect.Height <= 0)
+                {
+                    return;
+                }
+                HighlightColor lineNumberPainterColor = textArea.Document.HighlightingStrategy.GetColorFor("LineNumbers");
+                int fontHeight = textArea.TextView.FontHeight;
+                Brush fillBrush = textArea.Enabled ? BrushRegistry.GetBrush(lineNumberPainterColor.BackgroundColor) : SystemBrushes.InactiveBorder;
+                Brush drawBrush = BrushRegistry.GetBrush(lineNumberPainterColor.Color);
+                for (int y = 0; y < (DrawingPosition.Height + textArea.TextView.VisibleLineDrawingRemainder) / fontHeight + 1; ++y)
+                {
+                    int ypos = drawingPosition.Y + fontHeight * y - textArea.TextView.VisibleLineDrawingRemainder;
+                    Rectangle backgroundRectangle = new Rectangle(drawingPosition.X, ypos, drawingPosition.Width, fontHeight);
+                    if (rect.IntersectsWith(backgroundRectangle))
+                    {
+                        g.FillRectangle(fillBrush, backgroundRectangle);
+                        int curLine = textArea.Document.GetFirstLogicalLine(textArea.Document.GetVisibleLine(textArea.TextView.FirstVisibleLine) + y);
+
+                        if (curLine < textArea.Document.TotalNumberOfLines)
+                        {
+                            g.DrawString((curLine + 1).ToString(),
+                                         lineNumberPainterColor.GetFont(TextEditorProperties.FontContainer),
+                                         drawBrush,
+                                         backgroundRectangle,
+                                         numberStringFormat);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("In GutterMargin: " + ex.Message);
+            }
 		}
 
 		public override void HandleMouseDown(Point mousepos, MouseButtons mouseButtons)

@@ -10,6 +10,9 @@
 //O2Ref:O2_Views_ASCX.dll
 //O2Ref:O2_External_SharpDevelop.dll
 //O2Ref:O2_Core_XRules.dll
+//O2File:ascx_Simple_Script_Editor.cs.o2
+//O2File:Wizard - Sync XRules Via Svn.cs.o2
+
 using System;
 using System.Drawing;
 using System.Collections.Generic;
@@ -33,8 +36,6 @@ using O2.DotNetWrappers.Network;
 using O2.Core.XRules.XRulesEngine;
 using O2.Core.XRules._Wizards;
 using O2.Views.ASCX.Ascx.MainGUI;
-
-//O2File:C:\O2\_O2 - LOCAL SVN - DEV\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Web.cs
 
 namespace O2.XRules.Database
 { 
@@ -186,7 +187,7 @@ namespace O2.XRules.Database
                             .ForeColor = Color.DarkBlue;
                 };
             //var treeView = new TreeView();
-            var treeView = (TreeView)WinForms.showAscxInForm(typeof(TreeView),"O2 - Available scripts");
+            var treeView = (TreeView)WinForms.showAscxInForm(typeof(TreeView),"O2 - Available scripts",300,300);
             treeView.BeforeExpand += (sender, e) => { mapFoldersAndFiles(treeView, e.Node); };
             treeView.NodeMouseDoubleClick += (sender ,e) =>
                 {  
@@ -210,7 +211,7 @@ namespace O2.XRules.Database
      	
      	public void openSimpleScriptEditor()
      	{
-            ascx_Simple_Script_Editor.startControl();
+            O2Utils.ascx_Simple_Script_Editor.startControl();
      		//typeof(ascx_Simple_Script_Editor).showAsForm("Simple Script Editor", 600,400);     		
      	}
 
@@ -268,59 +269,5 @@ namespace O2.XRules.Database
      		mainSplitContainer.panel2Collapsed(true);
      	}
     }
-    
-    
-    
-    public static class extra
-    {
-    	public static Control add_Panel(this Control control)
-    	{
-    		return control.add_Control<Panel>();
-    	}
-    	
-    	public static T get<T>(this List<Control> controls) where T : Control
-    	{
-    		foreach(Control control in controls)
-    			if (control.type() == typeof(T))
-    				return (T)control;
-    		return null;
-    	}
-    	
-    	//reflection
-    	
-    	public static List<Type> types(this Assembly assembly)
-    	{
-    		return PublicDI.reflection.getTypes(assembly);
-    	}
-    	
-    	public static Assembly compile(this string pathToFileToCompile)
-    	{
-    		var csharpCompiler = new CSharp_FastCompiler();
-    		
-    		var compileProcess = new System.Threading.AutoResetEvent(false);
-    		
-    		csharpCompiler.compileSourceCode(pathToFileToCompile.contents());    		
-    		csharpCompiler.onCompileFail= ()=> compileProcess.Set();
-    		csharpCompiler.onCompileOK = ()=> compileProcess.Set();
-    		compileProcess.WaitOne();
-    		return csharpCompiler.assembly();    		    	
-    	}
-    	
-    	public static Assembly assembly(this CSharp_FastCompiler csharpCompiler)
-    	{
-    		if (csharpCompiler != null)
-     			if (csharpCompiler.CompilerResults != null)
-     				if (csharpCompiler.CompilerResults.CompiledAssembly != null)
-     					return csharpCompiler.CompilerResults.CompiledAssembly;
-     		return null;
-    	}
-    	
-    	public static MethodInfo firstMethod(this Assembly assembly)
-    	{
-    		var methods = assembly.methods();
-        	if (methods.Count >0)          
-        		return methods[0];
-        	return null;
-    	}
-    }
+
 }

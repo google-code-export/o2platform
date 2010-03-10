@@ -499,10 +499,23 @@ namespace O2.Views.ASCX.CoreControls
 
         private void tvDirectory_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            tvDirectory.SelectedNode = (TreeNode) e.Item;
-            if (DragDropEffects.Copy == DoDragDrop(tvDirectory.SelectedNode.Tag.ToString(), DragDropEffects.Copy))
-                if (cbMoveOnDrag.Checked)
-                    Files.deleteFile(tvDirectory.SelectedNode.Tag.ToString());
+            tvDirectory.invokeOnThread(
+                () =>
+                {
+                    tvDirectory.SelectedNode = (TreeNode)e.Item;
+                    var dragData = tvDirectory.SelectedNode.Tag.ToString();
+
+                    //Note: see if there is a way to make this work since I have had a couple race condition with treeview Drag& Drops
+                    //O2Thread.mtaThread(
+                    //    () =>
+                    //    {
+                            if (DragDropEffects.Copy == DoDragDrop(dragData, DragDropEffects.Copy))
+                                if (cbMoveOnDrag.Checked)
+                                    Files.deleteFile(tvDirectory.SelectedNode.Tag.ToString());
+                        //});
+                });
+            
+
         }
 
         private void tvDirectory_DragEnter(object sender, DragEventArgs e)

@@ -138,5 +138,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 ? Files.getListOfAllDirectoriesFromDirectory(path, recursive)
                 : new List<string>();
         }
+
+        public static string pathCombine(this string folder, string file)
+        {
+            return Path.Combine(folder, file);
+        }
     }
 }

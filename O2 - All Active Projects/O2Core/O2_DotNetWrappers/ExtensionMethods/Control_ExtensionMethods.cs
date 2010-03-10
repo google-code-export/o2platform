@@ -419,47 +419,51 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             try
             {
-                var parentControl = controlToWrap.Parent;
-                parentControl.clear();
-                var controls = new List<Control>();
-                SplitContainer splitContainer = parentControl.add_SplitContainer();
-                splitContainer.fill();
-                if (border3D)
-                    splitContainer.border3D();
-                switch (location)
-                {
-                    case AnchorStyles.Top:
-                    case AnchorStyles.Left:
-                        splitContainer.Panel1.add(controlToInject);
-                        splitContainer.Panel2.add(controlToWrap);
-                        splitContainer.FixedPanel = FixedPanel.Panel1;
-                        if (splitterDistance > -1)
-                            splitContainer.SplitterDistance = splitterDistance;
-                        splitContainer.Orientation = (location == AnchorStyles.Top) ? Orientation.Horizontal : Orientation.Vertical;
-                        break;
+                return (List<Control>)controlToWrap.invokeOnThread(
+                    () =>
+                    {
+                        var parentControl = controlToWrap.Parent;
+                        parentControl.clear();
+                        var controls = new List<Control>();
+                        SplitContainer splitContainer = parentControl.add_SplitContainer();
+                        splitContainer.fill();
+                        if (border3D)
+                            splitContainer.border3D();
+                        switch (location)
+                        {
+                            case AnchorStyles.Top:
+                            case AnchorStyles.Left:
+                                splitContainer.Panel1.add(controlToInject);
+                                splitContainer.Panel2.add(controlToWrap);
+                                splitContainer.FixedPanel = FixedPanel.Panel1;
+                                if (splitterDistance > -1)
+                                    splitContainer.SplitterDistance = splitterDistance;
+                                splitContainer.Orientation = (location == AnchorStyles.Top) ? Orientation.Horizontal : Orientation.Vertical;
+                                break;
 
-                    case AnchorStyles.Bottom:
-                    case AnchorStyles.Right:
-                        splitContainer.Panel1.add(controlToWrap);
-                        splitContainer.Panel2.add(controlToInject);
-                        splitContainer.FixedPanel = FixedPanel.Panel2;
+                            case AnchorStyles.Bottom:
+                            case AnchorStyles.Right:
+                                splitContainer.Panel1.add(controlToWrap);
+                                splitContainer.Panel2.add(controlToInject);
+                                splitContainer.FixedPanel = FixedPanel.Panel2;
 
-                        if (splitterDistance > -1)
-                            splitContainer.SplitterDistance = (location == AnchorStyles.Bottom)
-                                                                ? splitContainer.Height - splitterDistance
-                                                                : splitContainer.Width - splitterDistance;
+                                if (splitterDistance > -1)
+                                    splitContainer.SplitterDistance = (location == AnchorStyles.Bottom)
+                                                                        ? splitContainer.Height - splitterDistance
+                                                                        : splitContainer.Width - splitterDistance;
 
-                        splitContainer.Orientation = (location == AnchorStyles.Bottom) ? Orientation.Horizontal : Orientation.Vertical;
-                        break;
-                    case AnchorStyles.None:
-                        PublicDI.log.error("in injectControl the location provided was AnchorStyles.None");
-                        break;
-                }
-                controls.add(splitContainer)
-                        .add(controlToWrap)
-                        .add(controlToInject);
+                                splitContainer.Orientation = (location == AnchorStyles.Bottom) ? Orientation.Horizontal : Orientation.Vertical;
+                                break;
+                            case AnchorStyles.None:
+                                PublicDI.log.error("in injectControl the location provided was AnchorStyles.None");
+                                break;
+                        }
+                        controls.add(splitContainer)
+                                .add(controlToWrap)
+                                .add(controlToInject);
 
-                return controls;
+                        return controls;
+                    });
             }
             catch (Exception ex)
             {

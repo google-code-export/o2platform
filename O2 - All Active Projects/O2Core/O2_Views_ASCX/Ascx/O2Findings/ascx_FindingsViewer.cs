@@ -258,6 +258,7 @@ namespace O2.Views.ASCX.O2Findings
             {
                 DI.log.info("Loading file: {0}", openFileDialog.FileName);
                 loadO2Assessment(openFileDialog.FileName);
+                openFileDialog.Dispose();
             }
             //var fileOrFolder = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
             //loadO2Assessment(fileOrFolder);

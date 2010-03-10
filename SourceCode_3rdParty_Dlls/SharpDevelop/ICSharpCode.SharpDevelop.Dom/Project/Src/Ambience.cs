@@ -107,9 +107,9 @@ namespace ICSharpCode.SharpDevelop.Dom
 	
 	public abstract class AbstractAmbience : IAmbience
 	{
-		#if DEBUG
+		//#if DEBUG
 		int ownerThread = System.Threading.Thread.CurrentThread.ManagedThreadId;
-		#endif
+		//#endif
 		
 		//[System.Diagnostics.Conditional("DEBUG")]
 		protected bool CheckThread()    // DC

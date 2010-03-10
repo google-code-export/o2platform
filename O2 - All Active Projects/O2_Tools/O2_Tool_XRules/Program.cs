@@ -18,6 +18,8 @@ using O2.Kernel.InterfacesBaseImpl;
 using O2.Tool.XRules.classes;
 using O2.Views.ASCX.O2Findings;
 using O2.Core.CIR.Ascx;
+using O2.XRules.Database.O2Utils;
+
 using System;
 
 namespace O2.Tool.XRules
@@ -41,6 +43,7 @@ namespace O2.Tool.XRules
                 HandleO2MessageOnMdbg.setO2MessageMdbgListener();       // be able to handle Debugger events             
                 HandleO2MessageOnSD.setO2MessageFileEventListener();    // be able to handle open file events
 
+                O2AscxGUI.addControlToMenu("Simple Script Editor", () => ascx_Simple_Script_Editor.startControl());
                 O2AscxGUI.addControlToMenu(typeof(ascx_TilesDefinition_xml));
                 O2AscxGUI.addControlToMenu(typeof(ascx_J2EE_web_xml));
                 O2AscxGUI.addControlToMenu(typeof(ascx_Validation_xml));

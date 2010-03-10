@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using O2.Core.XRules.XRulesEngine;
 using O2.External.SharpDevelop.Ascx;
 using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
 using O2.Kernel.CodeUtils;
 using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX._Wizards;
@@ -114,7 +115,8 @@ namespace O2.Core.XRules.Ascx
         private void btBrowseSVN_Click(object sender, EventArgs e)
         {
             O2Thread.mtaThread(
-                () => ascx_SvnBrowser.openInFloatWindow(DI.SvnXRulesDatabaseUrl));
+                () => 
+                    "O2_XRules_Database.exe".type("ascx_SvnBrowser").invokeStatic("openInFloatWindow",DI.SvnXRulesDatabaseUrl));
         }
 
         private void toolStripLabel3_Click(object sender, EventArgs e)

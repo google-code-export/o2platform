@@ -44,6 +44,7 @@ namespace O2.Views.ASCX.classes.MainGUI
 
             Closed += (sender, e) => formClosed.Set();
             Load += (sender, e) => formLoaded.Set();
+            Closed += (sender,e) => this.Dispose();
             
         }
         		

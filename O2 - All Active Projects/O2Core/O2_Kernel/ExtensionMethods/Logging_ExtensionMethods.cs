@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace O2.Kernel.ExtensionMethods
 {
@@ -73,6 +74,21 @@ namespace O2.Kernel.ExtensionMethods
         public static void error(this string _string)
         {
             PublicDI.log.error(_string);
+        }
+
+        public static void log(this Exception ex, string textFormat, params object[] parameters)
+        {
+            ex.log(textFormat.format(parameters));
+        }
+
+        public static void log(this Exception ex, string text)
+        {
+            PublicDI.log.ex(ex, text, false);
+        }
+
+        public static void logWithStackTrace(this Exception ex, string text)
+        {
+            PublicDI.log.ex(ex, text, true);
         }
     }
 }

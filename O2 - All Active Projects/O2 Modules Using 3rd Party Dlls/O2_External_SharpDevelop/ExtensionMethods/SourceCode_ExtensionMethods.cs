@@ -176,5 +176,21 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
             sourceCodeViewer.editor().loadSourceCodeFile(fileToOpen);
         }       
+        
+        public static void enableCodeComplete(this ascx_SourceCodeViewer sourceCodeViewer)
+        {
+            sourceCodeViewer.editor().enableCodeComplete();
+        }
+
+        // this wasn't working as expected
+        /*public static void enableCodeComplete(this ascx_SourceCodeEditor sourceCodeEditor, ascx_SourceCodeEditor sourceCodeEditorToGrabCodeFrom)
+        {
+            var o2CodeComplete = sourceCodeEditor.enableCodeComplete();
+            o2CodeComplete.textEditorToGrabCodeFrom = sourceCodeEditorToGrabCodeFrom.getObject_TextEditorControl();
+        }
+        public static void enableCodeComplete(this ascx_SourceCodeViewer sourceCodeViewer, ascx_SourceCodeViewer sourceCodeViewerToGrabCodeFrom)
+        {
+            sourceCodeViewer.editor().enableCodeComplete(sourceCodeViewerToGrabCodeFrom.editor());
+        }*/
     }
 }
