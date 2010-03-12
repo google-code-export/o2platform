@@ -4,7 +4,7 @@ using O2.Kernel.ExtensionMethods;
 //O2Ref:WindowsBase.dll
 //O2Ref:System.Core.dll
 
-namespace O2.Script
+namespace O2.API.Visualization.ExtensionMethods
 {
     public static class WPF_Threading_ExtensionMethods
     {    

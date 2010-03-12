@@ -108,6 +108,7 @@ namespace O2.XRules.Database
         	contextMenu.add("View available scripts", (item)=> showAvailableScripts() );
         	contextMenu.add("Open Simple Script Editor", (item)=> openSimpleScriptEditor() );
             contextMenu.add("Sync/Download local XRules From O2's Svn", (item) => syncO2ViaSvn());
+            contextMenu.add("Open quick development gui", (menuitem) => open.dev());          	
             contextMenu.add("Open O2 Log Viewer", (item) => openO2LogViewer());
             
         	

@@ -21,7 +21,7 @@ using System.Windows.Controls;
 //O2File:WPF_Threading_ExtensionMethods.cs
 //O2File:GraphFactory.cs
 
-namespace O2.Script
+namespace O2.API.Visualization.ExtensionMethods
 {
     public static class GraphLayout_WPF_ExtensionMethods
     {   

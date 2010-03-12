@@ -68,22 +68,39 @@ namespace O2.External.SharpDevelop.AST
         {
             return new List<string>().add("System")
                                      .add("System.Windows.Forms")
+                                     .add("System.Drawing")
                                      .add("O2.Interfaces")
                                      .add("O2.Kernel")
                                      .add("O2.Kernel.ExtensionMethods")
                                      .add("O2.Views.ASCX.CoreControls")
                                      .add("O2.Views.ASCX.classes.MainGUI")
-                                     .add("O2.DotNetWrappers.ExtensionMethods");                                    
+                                     .add("O2.DotNetWrappers.ExtensionMethods")
+                //GraphSharp related
+                                     .add("O2.Script")
+                                     .add("GraphSharp.Controls")
+                                     .add("O2.API.Visualization.ExtensionMethods")
+                                     .add("WPF=System.Windows.Controls");
         }
 		public List<string> getDefaultReferencedAssemblies()
         {
             return new List<string>().add("System.dll")
+                                     .add("System.Drawing.dll")                                        
                                      .add("System.Core.dll")
                                      .add("System.Windows.Forms.dll")
                                      .add("O2_Kernel.dll")
                                      .add("O2_Interfaces.dll")
                                      .add("O2_DotNetWrappers.dll")
-                                     .add("O2_Views_Ascx.dll");                                     
+                                     .add("O2_Views_Ascx.dll")
+                                     .add("O2_XRules_Database.exe")
+                                     //GraphSharp related
+                                     .add("O2_Api_Visualization.dll")
+                                     .add("QuickGraph.dll")
+                                     .add("GraphSharp.dll")
+                                     .add("GraphSharp.Controls.dll")
+                                     .add("PresentationCore.dll")
+                                     .add("PresentationFramework.dll")
+                                     .add("WindowsBase.dll")
+                                     .add("WindowsFormsIntegration.dll");
         }
 
 		public Dictionary<string,object> getDefaultInvocationParameters()
@@ -93,9 +110,18 @@ namespace O2.External.SharpDevelop.AST
               
         public void compileSnippet(string codeSnippet)
         {
-        	createAstStack.Clear();	
-        	createAstStack.Push(codeSnippet);
-        	compileSnippet();
+            try
+            {
+                createAstStack.Clear();
+                if (createAstStack.Count == 0)
+                    creatingAst = false;
+                createAstStack.Push(codeSnippet);
+                compileSnippet();
+            }
+            catch (Exception ex)
+            {
+                ex.log("in compileSnippet");
+            }
         }
         public void compileSnippet()
         {
@@ -103,10 +129,13 @@ namespace O2.External.SharpDevelop.AST
                 () =>
                     {
                         if (creatingAst == false && createAstStack.Count > 0)
-                        {
-                            creatingAst = true;
-                            this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
+                        {   
+                            creatingAst = true;                            
                             var codeSnippet = createAstStack.Pop();
+                            this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
+                            if (createAstStack.Count > 0)
+                                codeSnippet = createAstStack.Pop();
+
                             createAstStack.Clear();
 
 
@@ -205,6 +234,7 @@ namespace O2.External.SharpDevelop.AST
         }*/
         public string createCSharpCodeWith_Class_Method_WithMethodText(string code)
         {
+            code = code.trim();
             // this code does multiple passes in creating and ast from the code (in an attempt to make it more user friendly to the user
             // eventually move all this to an external module and add a lot of extra funcionality/behaviour
             string parsedCode = null;
@@ -221,16 +251,24 @@ namespace O2.External.SharpDevelop.AST
             //code = code.ToLower().eq(new []{"how are you?" ,"how are you doing" }) ? "I'm fine thanks" : code;            
             // first try with the code provided
             parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(code);
+
+            // todo: move logic below to a more optimized and refactored code :)
             //if it failed:
+            tempCode = code;
             if (parsedCode == null)
                 // and it has one line, wrap it around a return statement;
                 if (code.lines().size() == 1)
-                {                    
-                    tempCode = "return {0};".format(code);
-                    parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
+                {
+                    if (tempCode.contains("\"").isFalse())
+                    {
+                        tempCode = tempCode.contains("()")
+                                ? "{0};".format(code)
+                                : "{0}();".format(code);
+                        parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
+                    }
                     if (parsedCode == null)
                     {
-                        tempCode = "{0};".format(code);
+                        tempCode = "return {0};".format(code);
                         parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
                         if (parsedCode == null)
                         {
@@ -240,10 +278,11 @@ namespace O2.External.SharpDevelop.AST
                                 tempCode = code.Insert(firstSpace, "(");
                                 tempCode = "{0});".format(tempCode);
                                 parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
-                            }                           
+                            }
                         }
-                    }                    
+                    }
                 }
+        
             if (parsedCode == null)
             {
                 DebugMode.error("Ast parsing Failed");

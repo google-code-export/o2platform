@@ -12,7 +12,7 @@ using System.Windows.Controls.Primitives;
 
 //O2File:WPF_Threading_ExtensionMethods.cs
 
-namespace O2.Script
+namespace O2.API.Visualization.ExtensionMethods
 {
     public static class WPF_Controls_ExtensionMethods
     {    

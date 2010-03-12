@@ -14,7 +14,7 @@ using QuickGraph;
 //O2File:GraphSharp_ExtensionMethods.cs
 using O2.DotNetWrappers.ExtensionMethods;
 
-namespace O2.Script
+namespace O2.API.Visualization.ExtensionMethods
 {
     public static class VerticesAndEdges_ExtensionMethods
     {    
