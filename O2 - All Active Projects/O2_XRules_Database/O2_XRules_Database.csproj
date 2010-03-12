@@ -35,7 +35,7 @@
     <PublisherName>O2 - Ounce Open</PublisherName>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>38</ApplicationRevision>
+    <ApplicationRevision>39</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -339,6 +339,7 @@
     <Content Include="H2Logo.ico" />
     <Content Include="Images\O2Logo_Medium.gif" />
     <Content Include="O2Logo.ico" />
+    <Content Include="_Rules\Graphs_and_Visualization\Wpf.inc" />
   </ItemGroup>
   <ItemGroup>
     <FileAssociation Include=".h2">

@@ -44,7 +44,7 @@ namespace O2.Script
 						  "graph.edge(100,\"F\");" 
 						  .line()
 						  .line()
-						  .add(@"//include C:\O2\_XRules_Local\_ScriptIncludes\Wpf.txt")));
+                          .add(@"//include C:\O2\XRulesDatabase\_Rules\Graphs_and_Visualization\Wpf.inc")));
 			script.InvocationParameters.Add("graph", graph);
 			script.InvocationParameters.Add("elementHost", xamlHost.element());			
         }
