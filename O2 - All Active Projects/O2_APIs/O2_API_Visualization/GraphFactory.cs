@@ -3,7 +3,7 @@
 //O2Ref:QuickGraph.dll
 using QuickGraph;
 
-namespace O2.Script
+namespace O2.API.Visualization
 {    
 	public class GraphFactory
     {

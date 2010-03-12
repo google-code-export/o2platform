@@ -42,12 +42,28 @@ using O2.External.IE.Wrapper;
 //O2File:GraphSharp_ExtensionMethods.cs
 //O2File:GraphLayout_WPF_ExtensionMethods.cs
 
-namespace O2.Script
+namespace O2.API.Visualization.ExtensionMethods
 {
     public static class WPF_WinFormIntegration_ExtensionMethods
     {   
     	#region generic 
     	
+        public static ElementHost add_Wpf(this System.Windows.Forms.Control winFormsControl)
+        {
+            return winFormsControl.add_WPF_Host();
+        }
+
+        public static ElementHost add_WpfHost(this System.Windows.Forms.Control winFormsControl)
+        {
+            return winFormsControl.add_WPF_Host();
+        }
+
+        public static ElementHost add_WPF_Host(this System.Windows.Forms.Control winFormsControl)
+        {
+            var xamlHost = winFormsControl.add_Control<ascx_Xaml_Host>();
+            return xamlHost.element();
+        }
+
     	public static T add_WPF_Control<T>(this System.Windows.Forms.Control winFormsControl) where T : UIElement
     	{
     		var xamlHost = winFormsControl.add_Control<ascx_Xaml_Host>();

@@ -34,6 +34,10 @@
     <Reference Include="GraphSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GraphSharp.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GraphSharp.Controls, Version=1.0.3438.42543, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="ICSharpCode.AvalonEdit, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -79,6 +83,7 @@
     <Compile Include="ExtensionMethods\GraphSharp_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\VerticesAndEdges_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\WPF_Controls_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\WPF_TextEditor_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\WPF_Threading_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\WPF_WinFormIntegration_ExtensionMethods.cs" />
     <Compile Include="GraphFactory.cs" />

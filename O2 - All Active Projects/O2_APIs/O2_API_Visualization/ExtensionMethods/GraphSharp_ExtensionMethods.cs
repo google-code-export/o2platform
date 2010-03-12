@@ -17,7 +17,7 @@ using System.Windows.Controls;
 //O2File:WPF_Threading_ExtensionMethods.cs
 //O2File:GraphFactory.cs
 
-namespace O2.Script
+namespace O2.API.Visualization.ExtensionMethods
 {
     public static class GraphSharp_ExtensionMethods
     {    
@@ -32,10 +32,10 @@ namespace O2.Script
 		}  
 		
     	#endregion
-    	
-    	#region GraphLayout 
-    	
-    	public static BidirectionalGraph<object, IEdge<object>> get_Graph(this GraphLayout graphLayout)
+        
+        #region GraphLayout
+
+        public static BidirectionalGraph<object, IEdge<object>> get_Graph(this GraphLayout graphLayout)
     	{
     		return (BidirectionalGraph<object, IEdge<object>>)
     			graphLayout.wpfInvoke(

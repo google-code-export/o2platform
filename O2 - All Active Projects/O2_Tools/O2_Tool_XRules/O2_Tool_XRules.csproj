@@ -164,10 +164,6 @@
       <Project>{B10305CD-A47E-41C7-8116-CA34180F6C6F}</Project>
       <Name>O2_Cmd_XRules</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\O2_XRules_Database\O2_XRules_Database.csproj">
-      <Project>{83957D55-86AB-4C26-9F82-6182999F09E8}</Project>
-      <Name>O2_XRules_Database</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

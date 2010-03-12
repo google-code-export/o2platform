@@ -20,6 +20,7 @@ using System;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.API.Visualization.Ascx;
+using O2.API.Visualization.ExtensionMethods;
 using System.Windows.Forms;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.ExtensionMethods;
@@ -30,6 +31,7 @@ using GraphSharp.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows;
+using O2.XRules.Database.ExtensionMethods;
 
 namespace O2.Script
 {
@@ -55,7 +57,7 @@ namespace O2.Script
 			
 			//graph.testGraph();
 			var xamlHost = (ascx_Xaml_Host)(controls[0].Controls[0]);
-			var script = controls[1].add_Script().cast<ascx_Simple_Script_Editor>();  
+            var script = controls[1].add_Script();
 			
 			script.Code = "graph.add(100);"
 						  .line().add(

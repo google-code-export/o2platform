@@ -158,7 +158,7 @@ namespace O2.XRules.Database.O2Utils
             contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
             contextMenu.add("show Log Viewer", (menuitem) => showLogViewer());
             contextMenu.add("disable Auto Compile on code change", (menuitem) => AutoCompileOnCodeChange = false);
-            contextMenu.add("enable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = true);          	
+            contextMenu.add("enable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = true);            
      	}        	     	
 	     		     	
 	    public void setCompilerEnvironment()
@@ -283,12 +283,13 @@ namespace O2.XRules.Database.O2Utils
                 compileCodeSnippet(Code);
                 
             }
-            else if (e.KeyValue == 116 ||                                     // F5 (key 116) and 
-                (e.Modifiers == Keys.Control && e.KeyValue == 'R'))          // Ctrl+R  executes it
+            else if (e.KeyValue == 116 ||                                       // F5 (key 116) and 
+                (e.Modifiers == Keys.Control && e.KeyValue == 'R') ||           // Ctrl+R  executes it
+                (e.Modifiers == Keys.Control && e.KeyValue == 13))              // Ctrl+Enter  executes it
             {
                 "Executing method".debug();
                 execute();
-            }
+            }            
         }
 
      	public void execute()

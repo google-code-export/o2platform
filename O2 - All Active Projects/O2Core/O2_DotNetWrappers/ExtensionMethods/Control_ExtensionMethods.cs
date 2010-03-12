@@ -22,7 +22,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     });
         }
 
-        public static T add<T>(this Control hostControl, params int[] position)
+        public static T add<T>(this Control hostControl, params int[] position) where T : Control
         {
             return hostControl.add_Control<T>(position);
         }
@@ -45,7 +45,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                  });
         }
            
-        public static T add_Control<T>(this Control hostControl, params int[] position)
+        public static T add_Control<T>(this Control hostControl, params int[] position) where T : Control
         {
             var values = new[] { -1, -1, -1, -1 };
             for (int i = 0; i < position.Length; i++)
@@ -53,28 +53,32 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return hostControl.add_Control<T>(values[0], values[1], values[2], values[3]);
         }
 
-        public static T add_Control<T>(this Control hostControl, int top, int left, int width, int height)
+        public static T add_Control<T>(this Control hostControl, int top, int left, int width, int height) where T : Control
         {
             return (T)hostControl.invokeOnThread(
                 () =>
                 {
                     var newControl = (Control)typeof(T).ctor();
-                    if (top == -1 && left == -1 && width == -1 && height == -1)
-                        newControl.fill();
-                    else
+                    if (newControl != null)
                     {
-                        if (top > -1)
-                            newControl.Top = top;
-                        if (left > -1)
-                            newControl.Left = left;
-                        if (width > -1)
-                            newControl.Width = width;
-                        if (height > -1)
-                            newControl.Height = height;
+                        if (top == -1 && left == -1 && width == -1 && height == -1)
+                            newControl.fill();
+                        else
+                        {
+                            if (top > -1)
+                                newControl.Top = top;
+                            if (left > -1)
+                                newControl.Left = left;
+                            if (width > -1)
+                                newControl.Width = width;
+                            if (height > -1)
+                                newControl.Height = height;
+                        }
+                        hostControl.Controls.Add(newControl);
+                        return newControl;
                     }
-                    hostControl.Controls.Add(newControl);
-                    return newControl;
-                });
+                    return null;
+                });            
         }
 
         #endregion

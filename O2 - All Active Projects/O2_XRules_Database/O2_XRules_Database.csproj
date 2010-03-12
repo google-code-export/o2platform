@@ -24,7 +24,7 @@
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
+    <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
@@ -45,7 +45,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>..\..\O2_Binaries\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -287,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
+    <Compile Include="ExtensionMethods\Scripts_ExecutionMethods.cs" />
     <Compile Include="_Rules\Graphs_and_Visualization\ascx_GraphWithInspector.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -295,6 +296,9 @@
     </Compile>
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Rules\O2 Utils\ascx_Panel_With_Inspector.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="_Rules\O2 Utils\ascx_Simple_Script_Editor.cs.o2">
       <SubType>UserControl</SubType>
