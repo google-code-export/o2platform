@@ -192,5 +192,13 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         {
             sourceCodeViewer.editor().enableCodeComplete(sourceCodeViewerToGrabCodeFrom.editor());
         }*/
+        public static TextArea textArea(this ascx_SourceCodeViewer sourceCodeViewer)
+        {
+            return sourceCodeViewer.editor().textArea();
+        }
+        public static TextArea textArea(this ascx_SourceCodeEditor sourceCodeEditor)
+        {
+            return sourceCodeEditor.textEditorControl().ActiveTextAreaControl.TextArea;
+        }
     }
 }

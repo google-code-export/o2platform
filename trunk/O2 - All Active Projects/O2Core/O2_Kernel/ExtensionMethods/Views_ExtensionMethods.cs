@@ -90,5 +90,24 @@ namespace O2.Kernel.ExtensionMethods
             var ascxExtensioMethods = "O2_DotNetWrappers.dll".type("Control_ExtensionMethods");
             return (Control)ascxExtensioMethods.invokeStatic("add_Control", hostControl, controlToCreate);        
         }
+
+        public static T openControlAsForm<T>(this string title, int width, int height, string ctorMethod,object ctorData, string setMethod, object setData) where T : Control
+        {
+            var panel = typeof(Panel).openControlAsForm(title, width, height);
+            var ascxExtensioMethods = "O2_DotNetWrappers.dll".type("Ascx_ExtensionMethods");            
+            var control = (ctorData != null) 
+                           ? (T)ascxExtensioMethods.invokeStatic(ctorMethod, panel, ctorData)
+                           : (T)ascxExtensioMethods.invokeStatic(ctorMethod, panel);
+                        
+            ascxExtensioMethods.invokeStatic(setMethod, control, setData);
+            return control;
+        }
+
+        public static T cast<T>(this object _object) where T : Control
+        {
+            if (_object is T)
+                return (T)_object;
+            return null;
+        }
     }
 }

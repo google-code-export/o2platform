@@ -39,7 +39,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 System.Diagnostics.Debug.WriteLine(ex.Message);
                 return null;
             }         
-        }
+        }        
+
         /// <summary>
         /// ASync execution of code on the the Control thread unless we are on the correct thread
         /// and the execution will be sync

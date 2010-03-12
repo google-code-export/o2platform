@@ -28,7 +28,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static string get_Text(this TextEditorControl textEditorControl)
         {
-            return (string)textEditorControl.invokeOnThread(() => textEditorControl.Text);
+            return (string)textEditorControl.ActiveTextAreaControl.TextArea.invokeOnThread(() => textEditorControl.Text);
         }
     }
 }

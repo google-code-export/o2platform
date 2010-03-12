@@ -13,7 +13,7 @@ namespace O2.External.IE.ExtensionMethods
     public static class IE_Controls_ExtensionMethods
     {
         public static IO2Browser add_WebBrowser(this Control control)
-        {
+        {            
             return (IO2Browser) control.invokeOnThread(
                                     () =>
                                         {
@@ -77,32 +77,47 @@ namespace O2.External.IE.ExtensionMethods
             /*"form field type: {0}".format(data.comTypeName()).error();
             foreach(var prop in data.type().properties())
                 "  p: {0}".format(prop.Name).debug();\*/
-            object name = null;
-            object type = null;
-            object value = null;
-            object enabled = null;
-            if (data is DispHTMLInputElement)
+            try
             {
-                name = ((DispHTMLInputElement)data).name;
-                type = ((DispHTMLInputElement)data).type;
-                value = ((DispHTMLInputElement)data).value;
-                enabled = !((DispHTMLInputElement)data).disabled;
+                object name = null;
+                object type = null;
+                object value = null;
+                object disabled = null;
+                if (data is HTMLSelectElementClass)
+                {
+                    name = data.prop("name");
+                    type = data.prop("type");
+                    value = data.prop("value");
+                    disabled = data.prop("disabled");
+                }
+                else if (data is DispHTMLInputElement)
+                {
+                    name = ((DispHTMLInputElement)data).name;
+                    type = ((DispHTMLInputElement)data).type;
+                    value = ((DispHTMLInputElement)data).value;
+                    disabled = !((DispHTMLInputElement)data).disabled;
+                }
+                else
+                {
+                    name = data.prop("name");
+                    type = data.prop("type");
+                    value = data.prop("value");
+                    disabled = data.prop("disabled");
+                }
+                return new IE_Form_Field
+                {
+                    Form = form,
+                    Name = (name != null) ? name.ToString() : "",
+                    Type = (type != null) ? type.ToString() : "",
+                    Value = (value != null) ? value.ToString() : "",
+                    Enabled = (disabled != null) ? ! bool.Parse(disabled.ToString()) : false
+                };
             }
-            else
+            catch (Exception ex)
             {
-                name = data.prop("name");
-                type = data.prop("type");
-                value = data.prop("value");
-                enabled = data.prop("enabled");
+                ex.error("in formField");
+                return null;
             }
-            return new IE_Form_Field
-            {
-                Form = form,
-                Name = (name != null) ? name.ToString() : "",
-                Type = (type != null) ? type.ToString() : "",
-                Value = (value != null) ? value.ToString() : "",
-                Enabled = (enabled != null) ? bool.Parse(enabled.ToString()) : false
-            };
         }
 
         public static IO2HtmlFormField formField(this IO2HtmlForm form, string name, string type, string value, bool enabled)
@@ -215,7 +230,12 @@ namespace O2.External.IE.ExtensionMethods
                             "post data: {0}".format(((byte[])postData).ascii()).info();
                         }
                     };
+        }
 
+        public static IO2HtmlPage open(this Uri uri)
+        {
+            var browser = (O2BrowserIE)O2.Kernel.open.webBrowser();
+            return browser.openSync(uri);
         }
     }
 }

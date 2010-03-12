@@ -8,7 +8,7 @@ using O2.Interfaces.O2Core;
 using O2.Interfaces.XRules;
 using O2.Kernel;
 using O2.XRules.Database.Interfaces;
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework;
 
 namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows

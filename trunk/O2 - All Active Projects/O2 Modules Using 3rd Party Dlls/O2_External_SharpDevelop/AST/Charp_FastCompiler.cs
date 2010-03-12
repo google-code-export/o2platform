@@ -190,10 +190,13 @@ namespace O2.External.SharpDevelop.AST
         public void compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies()
         {             
             if (ExtraSourceCodeFilesToCompile.size() > 0)
-            {
-                var assembly = new CompileEngine().compileSourceFiles(ExtraSourceCodeFilesToCompile);
+            {                
+                var assembly = new CompileEngine().compileSourceFiles(ExtraSourceCodeFilesToCompile);                
                 if (assembly != null)
+                {
                     ReferencedAssemblies.Add(assembly.Location);
+                    generateDebugSymbols = true;                // if there are extra assemblies we can't generate the assembly in memory                    
+                }
             }
         }
         /*public string getAstErrors(string sourceCode)
@@ -257,6 +260,13 @@ namespace O2.External.SharpDevelop.AST
                       
             try
             {
+                // handle special incudes in source code
+                foreach(var originalLine in code.lines())
+                    originalLine.starts("//include", (includeText) => 
+                        {
+                            if (includeText.fileExists())
+                                code = code.Replace(originalLine, originalLine.line().add(includeText.contents()));
+                        });  
             	var snippetParser = new SnippetParser(SupportedLanguage.CSharp);
                 var parsedCode = snippetParser.Parse(code);                
 				AstErrors = snippetParser.errors();
@@ -358,9 +368,17 @@ namespace O2.External.SharpDevelop.AST
         
         public object executeMethod(MethodInfo method, params object[] parameters)
         {
-            if (method.parameters().size() == parameters.size())
-                return method.invoke(parameters);
-            return method.invoke();
+            try
+            {
+                if (method.parameters().size() == parameters.size())
+                    return method.invoke(parameters);
+                return method.invoke();
+            }
+            catch (Exception ex)
+            {
+                ex.log("in CSharp_FastCompiler.executeMethod");
+                return null;
+            }
         }
     }
 }

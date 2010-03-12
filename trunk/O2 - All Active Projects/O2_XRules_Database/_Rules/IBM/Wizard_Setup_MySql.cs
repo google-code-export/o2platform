@@ -12,10 +12,10 @@ using O2.Views.ASCX;
 using O2.Rules.OunceLabs.DataLayer_OunceV6;
 using O2.Views.ASCX.MerlinWizard;
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
-//O2Tag_AddReferenceFile:merlin.dll
+//O2Ref:merlin.dll
 using Merlin;
 using MerlinStepLibrary;
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework; 
 
 

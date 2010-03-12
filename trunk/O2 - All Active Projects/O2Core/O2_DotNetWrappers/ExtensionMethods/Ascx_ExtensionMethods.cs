@@ -268,7 +268,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (List<Control>)splitControl_1.invokeOnThread(
                 () =>
                 {
-                    splitControl_1.SplitterDistance = spliterDistance;
+                    if (spliterDistance > splitControl_1.Panel1MinSize && spliterDistance < splitControl_1.Width - splitControl_1.Panel2MinSize)
+                        splitControl_1.SplitterDistance = spliterDistance;
+                    else
+                        "In add_SplitContainer_1x1, could not set the spliterDistance value of: {0}".format(spliterDistance).error();
+
                     GroupBox groupBox_1 = splitControl_1.Panel1.add_GroupBox(title_1);
                     GroupBox groupBox_2 = splitControl_1.Panel2.add_GroupBox(title_2);
                     return new List<Control> { groupBox_1, groupBox_2 };
@@ -496,6 +500,20 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static TextBox multiLine(this TextBox textBox)
+        {
+            return textBox.multiLine(true);
+        }
+
+        public static TextBox multiLine(this TextBox textBox, bool value)
+        {
+            return (TextBox)textBox.invokeOnThread(() =>
+            {
+                textBox.Multiline = value;
+                return textBox;
+            });
+        }
+
         #endregion
 
         #region TreeView
@@ -683,7 +701,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         treeView.clear();
                     foreach (var item in collection)
                         if (filter == "" || item.str().regEx(filter))
-                            treeView.add_Node(item.str(), item);
+                            treeView.add_Node(item.str(), item);                    
                     return treeView;
                 });
         }
@@ -733,6 +751,24 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         return richTextBox;
                     });
             
+        }
+
+        public static RichTextBox set_Rtf(this RichTextBox richTextBox, string contents)
+        {
+            return (RichTextBox)richTextBox.invokeOnThread(
+                () =>
+                {
+                    try
+                    {
+                        richTextBox.Rtf = contents;
+                    }
+                    catch
+                    {
+                        richTextBox.Text = contents;
+                    }
+                    return richTextBox;
+                });
+
         }
 
         public static RichTextBox append_Line(this RichTextBox richTextBox, string contents)
@@ -806,6 +842,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
         #endregion
 
         #region PictureBox
+
+        public static PictureBox add_Image(this Control control)
+        {
+            return control.add_PictureBox();
+        }
+
+        public static PictureBox add_Image(this Control control, string pathToImage)
+        {
+            return control.add_PictureBox(pathToImage);
+        }
 
         public static PictureBox add_PictureBox(this Control control)
         {
@@ -1103,7 +1149,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region Panel
 
-        public static Control add_Panel(this Control control)
+        public static Panel add_Panel(this Control control)
         {
             return control.add_Control<Panel>();
         }
@@ -1114,6 +1160,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static ToolStripStatusLabel add_StatusStrip(this UserControl _control)
         {
+            return _control.add_StatusStrip(Color.LightGray);
+        }
+
+        public static ToolStripStatusLabel add_StatusStrip(this UserControl _control, Color backColor)
+        {
             return (ToolStripStatusLabel)_control.invokeOnThread(
                 () =>
                 {
@@ -1122,17 +1173,20 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         "could not add Status Strip since there is no Parent Form for this control".error();
                         return null;
                     }
-                    return _control.ParentForm.add_StatusStrip();
+                    return _control.ParentForm.add_StatusStrip(backColor);
                 });
-        }
+        }        
 
-        public static ToolStripStatusLabel add_StatusStrip(this Form form)
+        public static ToolStripStatusLabel add_StatusStrip(this Form form, Color backColor)
         {
             return (ToolStripStatusLabel)form.invokeOnThread(
                 () =>
                 {
                     var label = new ToolStripStatusLabel();
+                    label.Spring = true;
                     var statusStrip = new StatusStrip();
+                    if (backColor != null)
+                        statusStrip.BackColor = backColor;
                     statusStrip.Items.Add(label);
                     form.Controls.Add(statusStrip);
                     return label;
@@ -1142,15 +1196,29 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static ToolStripStatusLabel set_Text(this ToolStripStatusLabel label, string message)
         {
             //return (ToolStripStatusLabel)label.invokeOnThread(
-            //	()=>{
-            label.Text = message;
-            return label;
+            // 	()=>{
+                        label.Text = message;
+                        return label;
             //		});
         }
 
         public static string get_Text(this ToolStripStatusLabel label)
         {
             return label.Text;
+        }
+
+        // I have to provide an hostControl so that I can get the running Thread since ForeColor doesn't seem to be Thread safe
+        public static ToolStripStatusLabel textColor(this ToolStripStatusLabel label,Control hostControl, Color color)
+        {
+            return (ToolStripStatusLabel)hostControl.invokeOnThread(
+                    () =>
+                    {
+                        if (label.IsLink)
+                            label.LinkColor = color;
+                        else
+                            label.ForeColor = color;
+                        return label;
+                    });
         }
 
         #endregion

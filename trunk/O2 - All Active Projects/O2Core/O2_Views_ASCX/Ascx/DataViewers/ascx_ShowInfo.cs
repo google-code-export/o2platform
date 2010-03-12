@@ -65,11 +65,11 @@ namespace O2.Views.ASCX.DataViewers
                     //events
                     treeView.afterSelect<object>((tag) => showInPropertyGrid(tag));
                     textBox.onTextChange(
-                        (text) => treeView.add_Nodes((IEnumerable)_object, true, text));
+                        (text) => treeView.add_Nodes((IEnumerable)_object, true, text).Sort());
                     // populate treeview
                     var contextMenu = treeView.add_ContextMenu();
                     contextMenu.add("Copy To Clipboard: Selected Node Text", (item) => { treeView.SelectedNode.Text.toClipboard(); });
-                    treeView.add_Nodes((IEnumerable)_object);
+                    treeView.add_Nodes((IEnumerable)_object).Sort();
                 });
             }
             else

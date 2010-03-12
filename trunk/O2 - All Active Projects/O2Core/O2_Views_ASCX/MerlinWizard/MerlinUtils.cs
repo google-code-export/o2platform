@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-//O2Tag_AddReferenceFile:Merlin.dll
+//O2Ref:Merlin.dll
 using Merlin;
 using MerlinStepLibrary;
 using O2.DotNetWrappers.DotNet;

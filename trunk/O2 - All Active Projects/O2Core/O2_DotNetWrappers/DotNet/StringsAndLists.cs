@@ -31,8 +31,12 @@ namespace O2.DotNetWrappers.DotNet
 
         public static List<String> fromTextGetLines(String sText)
         {
-            String[] asSplittedLines = sText.Split(new[] {Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
-            return new List<String>(asSplittedLines);
+            if (O2.Kernel.ExtensionMethods.String_ExtensionMethods.valid(sText))
+            {
+                String[] asSplittedLines = sText.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                return new List<String>(asSplittedLines);
+            }
+            return new List<String>();
         }
 
         public static List<String> getStringListFromList(object listToConvert)

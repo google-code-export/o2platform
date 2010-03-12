@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -58,6 +58,7 @@
     <Compile Include="ExtensionMethods\H2_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Objects_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\RegEx_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\SavingData_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Threads_ExtensionMethods.cs" />
     <Compile Include="DotNet\GacUtils.cs" />
     <Compile Include="DotNet\Loop.cs" />

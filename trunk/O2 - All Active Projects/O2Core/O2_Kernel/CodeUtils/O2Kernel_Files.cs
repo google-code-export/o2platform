@@ -8,7 +8,7 @@ namespace O2.Kernel.CodeUtils
     public class O2Kernel_Files
     {        
 
-        // also on O2_CoreLib
+        // also on O2_DotNetWrappers.Windows.Files
         public static String Copy(String sSourceFile, String sTargetFileOrFolder)
         {
             string sTargetFile = sTargetFileOrFolder;
@@ -54,6 +54,30 @@ namespace O2.Kernel.CodeUtils
             String sTempFileName = Path.GetTempFileName();
             File.Delete(sTempFileName);
             return Path.GetFileName(sTempFileName);
+        }
+
+        public static string getFileContents(string sFileToOpen)
+        {
+            if (false == File.Exists(sFileToOpen))
+                return "";
+            FileStream fs = null;
+            StreamReader sr = null;
+            string strContent = "";
+            try
+            {
+                fs = File.OpenRead(sFileToOpen);
+                sr = new StreamReader(fs);
+                strContent = sr.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                PublicDI.log.error("Error GetFileContent {0}", ex.Message);
+            }
+            if (sr != null)
+                sr.Close();
+            if (fs != null)
+                fs.Close();
+            return strContent;
         }
     }
 }

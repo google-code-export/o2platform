@@ -7,7 +7,7 @@ using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;
 using O2.XRules.Database._Rules.J2EE.Struts;
 using O2.XRules.Database.Interfaces;
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework;
 
 //O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\IAnalysisArtifacts.cs

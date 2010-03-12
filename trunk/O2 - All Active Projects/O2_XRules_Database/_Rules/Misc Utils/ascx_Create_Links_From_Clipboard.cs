@@ -81,7 +81,7 @@ namespace O2.Script
 	        O2Thread.mtaThread(
         		()=>{
 			        	textToConvert.size().str().info();
-			        	textToConvert = textToConvert.replace(" ","\"","'",Environment.NewLine); 
+			        	textToConvert = textToConvert.replaceAllWith(" ","\"","'",Environment.NewLine); 
 			        	var itemsToConvert = new List<String>();        	
 			        	foreach(var textSnippet in textToConvert.split_onSpace())
 			        		itemsToConvert.Add(textSnippet);

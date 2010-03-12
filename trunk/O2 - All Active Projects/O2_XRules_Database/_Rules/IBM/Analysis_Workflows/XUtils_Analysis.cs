@@ -7,7 +7,7 @@ using System.IO;
 //O2Ref:System.Core.dll
 using System.Linq;
 using System.Text;
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework;
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.O2Findings;

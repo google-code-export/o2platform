@@ -11,7 +11,7 @@ using O2.DotNetWrappers.Windows;
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
 
 using O2.XRules.Database._Rules;
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework;
 
 namespace O2.XRules.v0_1

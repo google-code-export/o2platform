@@ -48,6 +48,44 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return path.fileExists();
         }
 
+        public static bool isImage(this string path)
+        {
+            switch (path.extension())
+            { 
+                case ".gif":
+                case ".jpg":
+                case ".jpeg":
+                case ".bmp":
+                case ".png":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static bool isText(this string path)
+        {
+            switch (path.extension())
+            {
+                case ".txt":                
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        public static bool isDocument(this string path)
+        {
+            switch (path.extension())
+            {
+                case ".rtf":
+                case ".doc":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public static bool fileExists(this string file)
         {
             if (file.valid())
@@ -73,6 +111,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 Files.WriteFileContent(file, fileContents);            
         }
 
+        public static string fileContents(this string file)
+        {
+            return file.contents();
+        }
+
         public static string contents(this string file)
         {
             if (file.valid())
@@ -85,6 +128,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             if (file.fileExists())
                 return Files.getFileContentsAsByteArray(file);
             return null;
+        }
+
+        public static bool fileWrite(this string file, string fileContents)
+        {
+            return Files.WriteFileContent(file, fileContents);
         }
 
         public static List<T> wrapOnList<T>(this T item)
@@ -141,7 +189,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string pathCombine(this string folder, string file)
         {
-            return Path.Combine(folder, file);
+            return Path.Combine(folder, file).fullPath();
+        }
+
+        public static string fullPath(this string path)
+        {
+            return Path.GetFullPath(path);
+        }
+        public static void createDir(this string directory)
+        {
+            Files.checkIfDirectoryExistsAndCreateIfNot(directory);
+        }
+
+        public static void createFolder(this string folder)
+        {
+            folder.createDir();
         }
     }
 }

@@ -10,7 +10,7 @@ using O2.External.O2Mono.MonoCecil;
 using O2.Interfaces.XRules;
 using O2.Kernel.Interfaces.XRules;
 using O2.Kernel;
-//O2Tag_AddReferenceFile:mono.cecil.dll
+//O2Ref:mono.cecil.dll
 
 namespace O2.Core.XRules.Classes
 {
