@@ -14,7 +14,7 @@ namespace O2.External.IE.ExtensionMethods
     	
         public void Notify()
         {
-        	onChange();        	
+        	onChange();        	            
             //PublicDI.log.debug("in changeSink.Notify()");
         }
     }

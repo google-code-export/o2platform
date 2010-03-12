@@ -9,6 +9,7 @@ namespace O2.External.IE.Interfaces
         event Action<IO2HtmlPage> onDocumentCompleted;
         bool HtmlEditMode { get; set; }
         void open(string url);
+        void open(Uri uri);
         IO2HtmlPage openSync(string url);
 
         void submitRequest_GET(string url);

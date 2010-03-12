@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-//O2Tag_AddReferenceFile:c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.ServiceProcess.dll
+//O2Ref:c:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.ServiceProcess.dll
 using System.ServiceProcess;
 
 namespace O2.DotNetWrappers.Windows

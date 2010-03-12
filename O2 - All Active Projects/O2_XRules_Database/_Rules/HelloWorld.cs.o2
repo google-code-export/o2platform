@@ -1,5 +1,5 @@
 using O2.Kernel;
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework;
 
 namespace O2.XRules.Database._Rules._Samples

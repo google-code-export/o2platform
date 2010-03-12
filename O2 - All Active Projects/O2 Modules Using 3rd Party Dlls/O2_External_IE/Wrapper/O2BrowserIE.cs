@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Network;
 using O2.External.IE.Interfaces;
+using O2.External.IE.ExtensionMethods;
 using O2.External.IE.WebObjects;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
+using O2.Views.ASCX.classes.MainGUI;
 
 namespace O2.External.IE.Wrapper
 {
@@ -41,6 +44,11 @@ namespace O2.External.IE.Wrapper
             
         }
 
+        public static O2BrowserIE openAsForm()
+        {
+            var panel = O2Gui.open<System.Windows.Forms.Panel>("Web Browser", 600, 500);
+            return (O2BrowserIE)panel.add_WebBrowserWithLocationBar();
+        }
        
 
         /* void O2BrowserIE_Navigating(object sender, WebBrowserNavigatingEventArgs e)
@@ -73,22 +81,30 @@ namespace O2.External.IE.Wrapper
                 documentCompleted.Set();
             }                        
         }
-                 
+
         public void open(string url)
+        {            
+           open(url.uri());            
+        }
+
+        public void open(Uri uri)
         {
-            try
+            if (uri != null)
             {
-                var uri = new Uri(url);
-                if (DebugMode)
-                    PublicDI.log.debug("[O2BrowserIE] opening: {0}", url);
-                Navigate(uri);
+                try
+                {
+                    if (DebugMode)
+                        PublicDI.log.debug("[O2BrowserIE] opening: {0}", uri.ToString());
+                    Navigate(uri);
+                }
+                catch (Exception ex)
+                {
+                    DI.log.error("in O2BrowserIE.open: {0}", ex.Message);
+                    documentCompleted.Set();
+
+                }
             }
-            catch (Exception ex)
-            {
-                DI.log.error("in O2BrowserIE.open: {0}", ex.Message);
-                documentCompleted.Set();
-                HtmlPage = null; 
-            }                        
+            HtmlPage = null; 
         }
         
         /// <summary>
@@ -96,7 +112,13 @@ namespace O2.External.IE.Wrapper
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
+        /// 
         public IO2HtmlPage openSync(string url)
+        {
+            return openSync(url.uri());
+        }
+
+        public IO2HtmlPage openSync(Uri uri)
         {
             /*documentCompleted.Reset();
             O2Thread.mtaThread(() => open(url));
@@ -104,11 +126,11 @@ namespace O2.External.IE.Wrapper
             return HtmlPage;*/
 
             documentCompleted.Reset();
-            O2Thread.mtaThread(() => open(url));
+            O2Thread.mtaThread(() => open(uri));
             while (documentCompleted.WaitOne())
             {
                 // hack to handle the case where about:blank was being fired 
-                if (HtmlPage.PageUri.str() != "about:blank" && url != "about:blank")
+                if (HtmlPage.PageUri.str() != "about:blank" && uri.ToString() != "about:blank")
                     return HtmlPage;
             }
             return null; // I should add a time out to this loop                        

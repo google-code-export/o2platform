@@ -100,6 +100,10 @@ namespace O2.External.SharpDevelop.Ascx
                 compileSourceCode();
                 O2.Kernel.PublicDI.log.debug("Control B was pressed"); ;
             }
+            else if (e.Modifiers == Keys.Control && e.KeyValue == 'S')           // Ctrl+B saves code
+            {
+                saveSourceCode();
+            }
             else if (e.KeyValue == 116)                                     // F5 (key 116) executes it
             {
                 executeMethod();
@@ -457,12 +461,12 @@ namespace O2.External.SharpDevelop.Ascx
         }
 
         /// <summary>
-        /// Thread sage way to get value of tecSourceCode
+        /// Thread safe way to get value of tecSourceCode
         /// </summary>
         /// <returns></returns>
         public String getSourceCode()
         {
-            return (string)this.invokeOnThread(() => tecSourceCode.Text);
+            return (string)this.tecSourceCode.ActiveTextAreaControl.TextArea.invokeOnThread(() => tecSourceCode.Text);
 
             /*try
             {
@@ -1056,7 +1060,8 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void setDocumentContents(string documentContents, string fileNameOrExtension, bool clearFileLocationValues)
         {
-            this.invokeOnThread(
+
+            tecSourceCode.ActiveTextAreaControl.TextArea.invokeOnThread(
                     () =>
                     {
                         try

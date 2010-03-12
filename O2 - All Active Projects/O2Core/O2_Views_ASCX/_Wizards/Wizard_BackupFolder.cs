@@ -19,7 +19,7 @@ using O2.Views.ASCX.classes;
 using O2.Views.ASCX.MerlinWizard;
 using O2.DotNetWrappers.Zip;
 // extra references and the namespaces they import
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 using Merlin;
 using MerlinStepLibrary;

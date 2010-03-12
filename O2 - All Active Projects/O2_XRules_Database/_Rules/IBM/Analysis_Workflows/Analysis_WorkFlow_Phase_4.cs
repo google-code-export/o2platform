@@ -9,7 +9,7 @@ using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;
 using O2.XRules.Database._Rules;
 using O2.XRules.Database.Interfaces;
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework;
 
 namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows

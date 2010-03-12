@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
-//O2Tag_AddReferenceFile:Merlin.dll
+//O2Ref:Merlin.dll
 using Merlin;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;

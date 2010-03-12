@@ -14,10 +14,10 @@ using O2.Core.CIR.Ascx.DotNet;
 using O2.Views.ASCX;
 using O2.Views.ASCX.MerlinWizard;
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
-//O2Tag_AddReferenceFile:merlin.dll
+//O2Ref:merlin.dll
 using Merlin;
 using MerlinStepLibrary;
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework; 
 //O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\DotNet\GacUtils.cs
 //O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\DI.cs

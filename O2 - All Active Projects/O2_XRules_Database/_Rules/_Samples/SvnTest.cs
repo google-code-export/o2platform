@@ -12,8 +12,8 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
 using O2.External.WinFormsUI.Forms;
-//O2Tag_AddReferenceFile:HTMLparserLibDotNet20.dll
-//O2Tag_AddReferenceFile:nunit.framework.dll
+//O2Ref:HTMLparserLibDotNet20.dll
+//O2Ref:nunit.framework.dll
 using NUnit.Framework; 
 using O2.Views.ASCX.classes;
 using O2.DotNetWrappers.Network;

@@ -33,6 +33,10 @@ using O2.External.SharpDevelop.ExtensionMethods;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;   
 using O2.DotNetWrappers.H2Scripts;
+using O2.Views.ASCX.Ascx.MainGUI;
+//O2Ref:O2_External_IE.dll
+using O2.External.IE.ExtensionMethods;
+using O2.Views.ASCX.DataViewers;
 
 namespace O2.XRules.Database.O2Utils
 {
@@ -40,31 +44,35 @@ namespace O2.XRules.Database.O2Utils
 	// Comments: (24 Feb 2010): This was the 4th pass at building an O2 Command Prompt (i.e. simple script editor)	
 	
     public class ascx_Simple_Script_Editor: UserControl
-    {    
+    {            
     	private static IO2Log log = PublicDI.log;
 		public ascx_SourceCodeViewer sourceCodeViewer {get ; set;}
 		public ascx_SourceCodeViewer commandsToExecute {get ; set;}
 		public RichTextBox result_RichTextBox {get ; set;}
-		public PropertyGrid result_PropertyGrid {get ; set;}
+		public Panel result_Panel{get ; set;}
 		public Button executeButton {get ; set;}
 		public SplitContainer topLevelSplitContainer {get ; set;}
 		public CSharp_FastCompiler csharpCompiler {get ; set;}
 		public string GeneratedCode {get ; set;}
 		public Dictionary<string, object> InvocationParameters {get ; set;}
-		
-		public static int width = 700;
-		public static int height = 300;
+        public bool AutoCompileOnCodeChange { get; set; }
+        public bool AutoSaveOnCompileSuccess { get; set; }
+        public string AutoSaveDir { get; set; }
+		public int width = 300;
+		public int height = 100;
 		
 		
         public static void startControl()
     	{
+            //width = 700;    // make it bigger
+            //height = 300;
             var defaultCode = "PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
                                .line("return \"Dynamic Data = \" + testString + \" :: \" + testNumber;");
     		    		
     		//var control2 = O2Gui.load<PropertyGrid>();
     		//return;
             //var control = (ascx_Simple_Script_Editor)typeof(ascx_Simple_Script_Editor).showAsForm("O2 Simple Script Editor", 500, 500);			
-            var control = O2Gui.load<ascx_Simple_Script_Editor>("O2 Simple Script Editor", width, height);            
+            var control = O2Gui.load<ascx_Simple_Script_Editor>("O2 Simple Script Editor", 700, 300);            
             
     		control.invokeOnThread(()=>
     		{   
@@ -79,17 +87,20 @@ namespace O2.XRules.Database.O2Utils
         public ascx_Simple_Script_Editor()
     	{        	
     		InvocationParameters = new Dictionary<string, object>();
-			setCompilerEnvironment();     		
-			this.Width = width;
+            AutoCompileOnCodeChange = true;
+            AutoSaveOnCompileSuccess = true; //  false;  // for now default to true
+            AutoSaveDir = this.tempO2Dir().pathCombine("_AutoSavedScripts");
+			setCompilerEnvironment();
+            this.Width = width;
 			this.Height = height;
 			createGui();
 			configureGui();
+            this.Refresh();
         }        	
     
         private void createGui()
         {
         	// create controls
-
 
             var groupBoxes = this.add_1x1("Command To Execute", "Invoke and Result", false, this.Width - 150);   
         	
@@ -112,20 +123,20 @@ namespace O2.XRules.Database.O2Utils
 			
 			result_RichTextBox = outputPanel.add_RichTextBox();       						
         	
-        	result_PropertyGrid = outputPanel.add_PropertyGrid();
+        	result_Panel = outputPanel.add_Panel();
         }
         
         public void configureGui()
         {
-        	result_PropertyGrid.visible(false);
+        	result_Panel.visible(false);
         	executeButton.enabled(false); 
         	
         	
         	swapGeneratedCodeViewMode();         	// make it not visible by default        	
 
         	executeButton.onClick(execute);                	
-        	commandsToExecute.onTextChanged(compileCodeSnippet);        	
-        	
+        	commandsToExecute.onTextChanged(onTextChanged);        	
+            
         	commandsToExecute.vScroolBar_Enabled(false);
         	commandsToExecute.hScroolBar_Enabled(false);
         	commandsToExecute.set_ColorsForCSharp();
@@ -138,13 +149,16 @@ namespace O2.XRules.Database.O2Utils
         	sourceCodeViewer.textEditorControl().remove_ContextMenu();        	
         	var contextMenu = commandsToExecute.textEditorControl().add_ContextMenu();        	
         	
-        	
+        	commandsToExecute.textArea().KeyUp+= (sender,e) => handlePressedKeys(e);
         	contextMenu.add("execute",(menuitem)=> execute());      
         	contextMenu.add("save",(menuitem)=> saveScript());      
         	contextMenu.add("force compilation",(menuitem)=> forceCompilation());     
         	contextMenu.add("replace with generated source code",(menuitem)=> replaceMainCodeWithGeneratedSource());
         	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());
-            contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());          	
+            contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
+            contextMenu.add("show Log Viewer", (menuitem) => showLogViewer());
+            contextMenu.add("disable Auto Compile on code change", (menuitem) => AutoCompileOnCodeChange = false);
+            contextMenu.add("enable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = true);          	
      	}        	     	
 	     		     	
 	    public void setCompilerEnvironment()
@@ -205,15 +219,27 @@ namespace O2.XRules.Database.O2Utils
      		 			sourceCodeViewer.editor().refresh();
      		 			result_RichTextBox.set_Text("Compilation OK:\r\n\r\n")
 										  .textColor(Color.Green);
-						executeButton.enabled(true);										 
+						executeButton.enabled(true);
+                        if (AutoSaveOnCompileSuccess)
+                        {
+                            AutoSaveDir.createDir();    // make sure it exits
+                            var targetFile = AutoSaveDir.pathCombine(Files.getFileSaveDateTime_Now().trim() + ".cs");
+                            targetFile.fileWrite(Code);
+                        }
 					};
      		 		 
 	    }	         	
 
+        public void onTextChanged(string newText)
+        {
+            if (AutoCompileOnCodeChange)
+                compileCodeSnippet(newText);
+        }
+
 		public void compileCodeSnippet(string codeSnippet)
      	{     		 
      		result_RichTextBox.visible(true);
-     		result_PropertyGrid.visible(false);
+     		result_Panel.visible(false);
      		if (codeSnippet.size() > 200)
      		{     			
      			commandsToExecute.vScroolBar_Enabled(true);
@@ -241,7 +267,30 @@ namespace O2.XRules.Database.O2Utils
      	{
 	     	commandsToExecute.set_Text(sourceCodeViewer.get_Text());
 	    }
-     	
+
+        public void showLogViewer()
+        { 
+            var logViewer = this.add_Control<ascx_LogViewer>();
+            this.insert_Below(logViewer,100);
+        }
+
+        private void handlePressedKeys(KeyEventArgs e)
+        {
+            //O2.Kernel.PublicDI.log.debug("KeyUp: " + e.KeyValue.ToString()); ;                
+            if (e.Modifiers == Keys.Control && e.KeyValue == 'B')           // Ctrl+B compiles code
+            {
+                "Compiling code".debug();
+                compileCodeSnippet(Code);
+                
+            }
+            else if (e.KeyValue == 116 ||                                     // F5 (key 116) and 
+                (e.Modifiers == Keys.Control && e.KeyValue == 'R'))          // Ctrl+R  executes it
+            {
+                "Executing method".debug();
+                execute();
+            }
+        }
+
      	public void execute()
      	{     		
      		if (executeButton.Enabled)
@@ -253,19 +302,44 @@ namespace O2.XRules.Database.O2Utils
      	public void showResult(object result)
      	{	     	
      		result_RichTextBox.visible(false);
-     		result_PropertyGrid.visible(false);
+     		result_Panel.visible(false);
+            result_Panel.clear();
+
      		if (result == null)
      			result = "[null value]";
+            else if (result is string && false == result.str().isFile() && result.str().isUri())
+            {
+                result_Panel.visible(true);
+                result_Panel.add_WebBrowser().open(result.str().uri());
+                return;
+            }
+            else if (result.str().isText())
+            {
+                result_Panel.visible(true);
+                result_Panel.add_TextBox(true).set_Text(result.str().fileContents());
+                return;
+            }            
+            
      		switch(result.typeName())
      		{
-     			case "String": 
-     			case "Int32":     	
+                case "Boolean":
+     			case "String":
+                case "Int64":
+                case "Int32":
+                case "Int16":
+                case "Byte":
      				result_RichTextBox.visible(true);
      				result_RichTextBox.textColor(Color.Black).set_Text(result.ToString());
      				break;
+                case "Bitmap":
+                    result_Panel.visible(true);
+                    result_Panel.add_PictureBox().load((Bitmap)result);
+                    break;
      			default:
-     				result_PropertyGrid.visible(true);
-     				result_PropertyGrid.show(result);
+                    result_Panel.visible(true);
+                    var showInfo = result_Panel.add_Control <ascx_ShowInfo>();
+     				//result_PropertyGrid.visible(true);
+                    showInfo.show(result);
      				break;
      		}
      		

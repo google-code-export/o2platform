@@ -148,19 +148,27 @@ namespace O2.Kernel.ExtensionMethods
 
         public static string remove(this string _string, params string[] stringsToRemove)
         {
-            return _string.replace("", stringsToRemove);
+            return _string.replaceAllWith("", stringsToRemove);
         }
 
         public static string toSpace(this string _string, params string[] stringsToChange)
         {
-            return _string.replace(" ", stringsToChange);
+            return _string.replaceAllWith(" ", stringsToChange);
         }
 
-        public static string replace(this string _string, string replaceString, params string[] stringsToProcess)
+        public static string replace(this string targetString, string stringToFind, string stringToReplaceWith)
         {
-            foreach (var stringToProcess in stringsToProcess)
-                _string = _string.Replace(stringToProcess, replaceString);
-            return _string;
+            targetString = targetString.Replace(stringToFind, stringToReplaceWith);
+            targetString = targetString.Replace(stringToFind.lower(), stringToReplaceWith);
+            targetString = targetString.Replace(stringToFind.upper(), stringToReplaceWith);
+            return targetString;
+        }
+
+        public static string replaceAllWith(this string targetString, string stringToReplaceWith, params string[] stringsToFind)
+        {
+            foreach (var stringToFind in stringsToFind)
+                targetString = targetString.Replace(stringToFind, stringToReplaceWith);
+            return targetString;
         }
 
         public static int size(this string _string)
@@ -264,6 +272,51 @@ namespace O2.Kernel.ExtensionMethods
         public static string appendGuid(this string _string)
         {
             return "{0} {1}".format(_string, Guid.NewGuid());
+        }
+
+        public static string lower(this string _string)
+        {
+            return _string.ToLower();
+        }
+
+        public static string upper(this string _string)
+        {
+            return _string.ToUpper();
+        }
+
+        public static string trim(this string _string)
+        {           
+            return _string.Trim();
+        }
+
+        public static int index(this string targetString, string stringToFind)
+        {
+            return targetString.IndexOf(stringToFind);
+        }
+
+        public static int indexLast(this string targetString, string stringToFind)
+        {
+            return targetString.LastIndexOf(stringToFind);
+        }
+
+        public static string pad(this string targetString, int totalWidth)
+        {
+            return targetString.PadLeft(totalWidth);
+        }
+
+        public static string add(this string targetString, string stringToAdd)
+        {
+            return targetString + stringToAdd;
+        }
+
+        public static string insertAfter(this string targetString, string stringToAdd)
+        {
+            return targetString + stringToAdd;
+        }
+
+        public static string insertBefore(this string targetString, string stringToAdd)
+        {
+            return stringToAdd + targetString;
         }
     }
 }
