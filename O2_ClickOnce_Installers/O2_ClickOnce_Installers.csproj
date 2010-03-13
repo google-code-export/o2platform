@@ -16,6 +16,22 @@
     <SccLocalPath>Svn</SccLocalPath>
     <SccAuxPath>Svn</SccAuxPath>
     <SccProvider>SubversionScc</SccProvider>
+    <PublishUrl>http://localhost/ClickOnce_Installers/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1199,6 +1215,82 @@
     <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_39\_HostLocalWebsite %28O2 Tool%29.exe.deploy" />
     <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_39\_Rules\Graphs_and_Visualization\Wpf.inc.deploy" />
     <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_39\_SearchEngine %28O2 Tool%29.exe.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Cecil.Decompiler.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\GraphSharp.Contracts.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\GraphSharp.Controls.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\GraphSharp.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\H2Logo.ico.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\HTMLparserLibDotNet20.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\ICSharpCode.AvalonEdit.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Images\O2Logo_Medium.gif.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Ionic.Zip.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\itextsharp.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Jayrock.Json.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\log4net.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Merlin.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Microsoft.Contracts.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Microsoft.mshtml.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Mono.Cecil.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\Mono.Cecil.Pdb.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\MySql.Data.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\nunit.framework.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2Logo.ico.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2SharpDevelop.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_API_Visualization.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_Core_CIR.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_Core_FileViewers.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_Core_XRules.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_DotNetWrappers.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_External_IE.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_External_O2Mono.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_External_SharpDevelop.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_External_WinFormsUI.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_ImportExport_OunceLabs.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_Interfaces.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_Kernel.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_Rules_OunceLabs.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_Views_ASCX.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_XRules_Database.application" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_XRules_Database.exe.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\O2_XRules_Database.exe.manifest" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\QuickGraph.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\WeifenLuo.WinFormsUI.Docking.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\WPFExtensions.dll.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\_HostLocalWebsite %28O2 Tool%29.exe.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\_Rules\Graphs_and_Visualization\Wpf.inc.deploy" />
+    <None Include="O2_XRules_Database\Application Files\O2_XRules_Database_1_0_0_40\_SearchEngine %28O2 Tool%29.exe.deploy" />
     <None Include="O2_XRules_Database\O2_XRules_Database.application" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
 </Project>
