@@ -18,7 +18,7 @@ namespace O2.XRules.Database._Rules._Samples
     public class SampleScripts : KXRule
     {    
         private static IO2Log log = PublicDI.log;    	    	    	    	
-        private static List<IO2Finding> multipleO2Findings;
+        //private static List<IO2Finding> multipleO2Findings;
         private static string pathToOzastmFilesToLoad = @"E:\O2\Demodata\O2 demo Pack - 25 Nov\SavedAssessmentFiles";
         private static string sampleOzamtFile = @"E:\O2\Demodata\O2 demo Pack - 25 Nov\SavedAssessmentFiles\WebGoat 6.0.ozasmt";
     	

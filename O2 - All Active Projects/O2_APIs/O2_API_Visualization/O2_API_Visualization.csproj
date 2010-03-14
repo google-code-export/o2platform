@@ -94,6 +94,7 @@
     <Compile Include="Xaml\maLabel.xaml.cs">
       <DependentUpon>maLabel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Xaml\WpfTextEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="_externalDlls\GraphSharp.Contracts.dll" />
@@ -120,10 +121,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SourceCode_3rdParty_Dlls\SharpDevelop\O2SharpDevelop.csproj">
-      <Project>{2483564D-4343-4624-A0C6-63ABC932544A}</Project>
-      <Name>O2SharpDevelop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_IE\O2_External_IE.csproj">
       <Project>{F6942664-5E64-4182-B3EB-11F481F461FB}</Project>
       <Name>O2_External_IE</Name>

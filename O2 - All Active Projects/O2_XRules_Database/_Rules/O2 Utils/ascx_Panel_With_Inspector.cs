@@ -36,6 +36,7 @@ namespace O2.XRules.Database._Rules.O2_Utils
                              "textBox.set_Text(\"hello world\");";
             inspector.InvocationParameters.Add("panel", panel);
             inspector.InvocationParameters.Add("inspector", inspector);
+            inspector.enableCodeComplete();
         }
     }
 

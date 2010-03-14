@@ -299,10 +299,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 verticalSplit, //setOrientationToHorizontal
                 true, // setDockStyleoFill
                 true); // setBorderStyleTo3D
-            splitControl_1.SplitterDistance = spliterDistance;
-            GroupBox groupBox_1 = splitControl_1.Panel1.add_GroupBox(title_1);
-            splitControl_1.Panel2.Controls.Add(childControl_2);
-            return groupBox_1;
+            return (Control)splitControl_1.invokeOnThread(
+                () =>
+                {
+                    splitControl_1.SplitterDistance = spliterDistance;
+                    GroupBox groupBox_1 = splitControl_1.Panel1.add_GroupBox(title_1);
+                    splitControl_1.Panel2.Controls.Add(childControl_2);
+                    return groupBox_1;
+                });
         }
 
         public static Control add_SplitContainer_1x1(this Control control, Control childControl_1,

@@ -68,7 +68,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(dummyFileName);
         }
 
-        public static void showAstValueInSourceCode(this TextEditorControl textEditorControl, AstValue astValue)
+        public static void showAstValueInSourceCode(this TextEditorControl textEditorControl, AstValue<object> astValue)
         {
 
             PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
@@ -173,7 +173,6 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static void open(this ascx_SourceCodeViewer sourceCodeViewer, string fileToOpen)
         {
-
             sourceCodeViewer.editor().loadSourceCodeFile(fileToOpen);
         }       
         
@@ -199,6 +198,30 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         public static TextArea textArea(this ascx_SourceCodeEditor sourceCodeEditor)
         {
             return sourceCodeEditor.textEditorControl().ActiveTextAreaControl.TextArea;
+        }
+
+        public static O2CodeCompletion updateCodeComplete(this ascx_SourceCodeViewer sourceCodeViewer, CSharp_FastCompiler csharpFastCompiler)
+        { 
+            return sourceCodeViewer.editor().updateCodeComplete(csharpFastCompiler);
+        }
+
+        public static O2CodeCompletion updateCodeComplete(this ascx_SourceCodeEditor sourceCodeEditor, CSharp_FastCompiler csharpFastCompiler)
+        {
+            if (sourceCodeEditor.o2CodeCompletion != null)
+            {
+                foreach (var extraReference in csharpFastCompiler.ExtraSourceCodeFilesToCompile)
+                    sourceCodeEditor.o2CodeCompletion.parseFile(extraReference);
+                //var currentCode = csharpFastCompiler.processedCode();
+               var currentCode = csharpFastCompiler.SourceCode;
+                sourceCodeEditor.o2CodeCompletion.parseSourceCode(currentCode);
+                sourceCodeEditor.o2CodeCompletion.CodeCompleteCaretLocationOffset = csharpFastCompiler.getGeneratedSourceCodeMethodLineOffset();
+                
+                sourceCodeEditor.o2CodeCompletion.CodeCompleteTargetText = currentCode;
+                // i might not need these
+                sourceCodeEditor.textArea().CodeCompleteCaretLocationOffset = csharpFastCompiler.getGeneratedSourceCodeMethodLineOffset();
+
+            }
+            return sourceCodeEditor.o2CodeCompletion;
         }
     }
 }

@@ -110,6 +110,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tcSourceInfo = new System.Windows.Forms.TabControl();
             this.scCodeAndAst = new System.Windows.Forms.SplitContainer();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -690,7 +691,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btSelectedLineHistory.Image = ((System.Drawing.Image)(resources.GetObject("btSelectedLineHistory.Image")));
             this.btSelectedLineHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btSelectedLineHistory.Name = "btSelectedLineHistory";
-            this.btSelectedLineHistory.Size = new System.Drawing.Size(23, 20);
+            this.btSelectedLineHistory.Size = new System.Drawing.Size(23, 22);
             this.btSelectedLineHistory.Text = "View Selected Line History";
             this.btSelectedLineHistory.Click += new System.EventHandler(this.btSelectedLineHistory_Click);
             // 
@@ -705,14 +706,14 @@ namespace O2.External.SharpDevelop.Ascx
             this.btShowLogs.Image = ((System.Drawing.Image)(resources.GetObject("btShowLogs.Image")));
             this.btShowLogs.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btShowLogs.Name = "btShowLogs";
-            this.btShowLogs.Size = new System.Drawing.Size(23, 20);
+            this.btShowLogs.Size = new System.Drawing.Size(23, 22);
             this.btShowLogs.Text = "Show Logs";
             this.btShowLogs.Click += new System.EventHandler(this.showLogs_Click);
             // 
             // lbSampleScripts
             // 
             this.lbSampleScripts.Name = "lbSampleScripts";
-            this.lbSampleScripts.Size = new System.Drawing.Size(74, 13);
+            this.lbSampleScripts.Size = new System.Drawing.Size(74, 22);
             this.lbSampleScripts.Text = "sample scripts";
             this.lbSampleScripts.Visible = false;
             // 
@@ -720,7 +721,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.cBoxSampleScripts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxSampleScripts.Name = "cBoxSampleScripts";
-            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 21);
+            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 25);
             this.cBoxSampleScripts.Visible = false;
             this.cBoxSampleScripts.SelectedIndexChanged += new System.EventHandler(this.cBoxSampleScripts_SelectedIndexChanged);
             // 
@@ -735,7 +736,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btOpenFile.Image")));
             this.btOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btOpenFile.Name = "btOpenFile";
-            this.btOpenFile.Size = new System.Drawing.Size(23, 20);
+            this.btOpenFile.Size = new System.Drawing.Size(23, 22);
             this.btOpenFile.Text = "Open File";
             this.btOpenFile.Click += new System.EventHandler(this.btOpenFile_Click);
             // 
@@ -896,6 +897,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.ShowTabs = true;
             this.tecSourceCode.Size = new System.Drawing.Size(956, 403);
             this.tecSourceCode.TabIndex = 17;
+            this.toolTip1.SetToolTip(this.tecSourceCode, "Source Code Editor");
             this.tecSourceCode.Load += new System.EventHandler(this.tecSourceCode_Load);
             this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
             this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
@@ -1064,5 +1066,6 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripButton btSeachAndViewAst;
         private System.Windows.Forms.LinkLabel llPutFilePathInClipboard;
         private System.Windows.Forms.ToolStripMenuItem enableCodeCompleteToolStripMenuItem;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

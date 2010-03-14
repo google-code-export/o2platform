@@ -128,6 +128,10 @@ namespace O2.Kernel.ExtensionMethods
             return string1.EndsWith(string2);
         }
 
+        public static bool inValid(this string _string)
+        {
+            return !_string.valid();
+        }
         public static bool valid(this string _string)
         {
             if (false == string.IsNullOrEmpty(_string))

@@ -57,6 +57,7 @@
     </Compile>
     <Compile Include="Ascx\O2CodeCompletion.cs" />
     <Compile Include="AST\Charp_FastCompiler.cs" />
+    <Compile Include="AST\TextToCodeMappings.cs" />
     <Compile Include="ExtensionMethods\FastCompiler_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\SourceCode_ExtensionMethods.cs" />
     <Compile Include="Ascx\ascx_SourceCodeViewer.Controllers.cs">

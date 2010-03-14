@@ -86,9 +86,9 @@ namespace O2.External.SharpDevelop.AST
         private void showInSourceCode(object sender, TreeViewEventArgs e)
         {
             var treeNoteTag = e.Node.Tag;
-            if (treeNoteTag is AstValue)
+            if (treeNoteTag is AstValue<object>)
             {
-                var astValue = (AstValue)treeNoteTag;
+                var astValue = (AstValue<object>)treeNoteTag;
                 //var textEditorControl = sourceCodeEditor.getObject_TextEditorControl();
                 textEditorControl.showAstValueInSourceCode(astValue);
             }

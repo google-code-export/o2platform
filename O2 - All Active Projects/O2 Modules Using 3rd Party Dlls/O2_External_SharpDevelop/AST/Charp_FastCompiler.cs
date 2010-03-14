@@ -19,11 +19,13 @@ namespace O2.External.SharpDevelop.AST
     {
         internal int forceAstBuildDelay = 100;
         public string SourceCode { get; set; }						// I think there is a small race condition with the use of this variable
+        //public string OriginalCodeSnippet { get; set; }	
+        public bool CreatedFromSnipptet { get; set; }
         public List<string> ReferencedAssemblies { get; set; }
         public Dictionary<string, object> InvocationParameters { get; set; }
         public CompilationUnit CompilationUnit { get; set; }
         public List<string> ExtraSourceCodeFilesToCompile { get; set; }
-        //public AstDetails AstDetails { get; set; }
+        public AstDetails AstDetails { get; set; }
         public string AstErrors { get; set; }
         public bool generateDebugSymbols { get; set; }
         public string CompilationErrors { get; set; }        
@@ -58,8 +60,10 @@ namespace O2.External.SharpDevelop.AST
             ExtraSourceCodeFilesToCompile = new List<String>();
         	ReferencedAssemblies = getDefaultReferencedAssemblies();
             default_MethodName = "dynamicMethod";
-            default_TypeName = "DynamicType";
+            default_TypeName = "DynamicType";            
             generateDebugSymbols = false;
+            //OriginalCodeSnippet = "";
+            SourceCode = "";
             // defaults
 
         }
@@ -75,6 +79,8 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.Views.ASCX.CoreControls")
                                      .add("O2.Views.ASCX.classes.MainGUI")
                                      .add("O2.DotNetWrappers.ExtensionMethods")
+                                     .add("O2.External.IE.ExtensionMethods")
+                                     .add("O2.XRules.Database.ExtensionMethods")
                 //GraphSharp related
                                      .add("O2.Script")
                                      .add("GraphSharp.Controls")
@@ -91,6 +97,7 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2_Interfaces.dll")
                                      .add("O2_DotNetWrappers.dll")
                                      .add("O2_Views_Ascx.dll")
+                                     .add("O2_External_IE.dll")
                                      .add("O2_XRules_Database.exe")
                                      //GraphSharp related
                                      .add("O2_Api_Visualization.dll")
@@ -100,7 +107,8 @@ namespace O2.External.SharpDevelop.AST
                                      .add("PresentationCore.dll")
                                      .add("PresentationFramework.dll")
                                      .add("WindowsBase.dll")
-                                     .add("WindowsFormsIntegration.dll");
+                                     .add("WindowsFormsIntegration.dll")
+                                     .add("ICSharpCode.AvalonEdit.dll");
         }
 
 		public Dictionary<string,object> getDefaultInvocationParameters()
@@ -111,7 +119,7 @@ namespace O2.External.SharpDevelop.AST
         public void compileSnippet(string codeSnippet)
         {
             try
-            {
+            {                
                 createAstStack.Clear();
                 if (createAstStack.Count == 0)
                     creatingAst = false;
@@ -127,34 +135,39 @@ namespace O2.External.SharpDevelop.AST
         {
             O2Thread.mtaThread(
                 () =>
+                {
+                    if (creatingAst == false && createAstStack.Count > 0)
                     {
-                        if (creatingAst == false && createAstStack.Count > 0)
-                        {   
-                            creatingAst = true;                            
-                            var codeSnippet = createAstStack.Pop();
-                            this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
-                            if (createAstStack.Count > 0)
-                                codeSnippet = createAstStack.Pop();
+                        creatingAst = true;
+                        var codeSnippet = createAstStack.Pop();
+                        this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
+                        if (createAstStack.Count > 0)
+                            codeSnippet = createAstStack.Pop();
 
-                            createAstStack.Clear();
+                        createAstStack.Clear();
 
+                        InvocationParameters = getDefaultInvocationParameters();
+                        this.invoke(beforeSnippetAst);
+                        DebugMode.info("Compiling Source Snippet (Size: {0})", codeSnippet.size());
+                        var sourceCode = createCSharpCodeWith_Class_Method_WithMethodText(codeSnippet);
+                        if (sourceCode != null)
+                            compileSourceCode(sourceCode, CreatedFromSnipptet);
+                        creatingAst = false;
+                        compileSnippet();
+                    }
+                });
+        }
 
-                            InvocationParameters = getDefaultInvocationParameters();
-                            this.invoke(beforeSnippetAst);
-                            DebugMode.info("Compiling Source Snippet (Size: {0})", codeSnippet.size());
-                            var sourceCode = createCSharpCodeWith_Class_Method_WithMethodText(codeSnippet);
-                            if (sourceCode != null)
-                                compileSourceCode(sourceCode);
-                            creatingAst = false;
-                            compileSnippet();
-                        }
-                    });
+        private void compileSourceCode(string sourceCode, bool compiledFromSnipptet)
+        {
+            compiledFromSnipptet = compiledFromSnipptet;
+            compileStack.Push(sourceCode);
+            compileSourceCode();
         }
 
 		public void compileSourceCode(string sourceCode)
         {
-        	compileStack.Push(sourceCode);
-        	compileSourceCode();
+            compileSourceCode(sourceCode, false);
        	}
        	
        	public void compileSourceCode()
@@ -167,7 +180,7 @@ namespace O2.External.SharpDevelop.AST
        	                    compiling = true;
                             compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies();
                             this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
-       	                    var sourceCode = compileStack.Pop();
+       	                    var sourceCode = compileStack.Pop();                            
        	                    compileStack.Clear();
        	                        // remove all previous compile requests (since their source code is now out of date
 
@@ -233,55 +246,8 @@ namespace O2.External.SharpDevelop.AST
             return new Ast_CSharp(sourceCode).Errors;
         }*/
         public string createCSharpCodeWith_Class_Method_WithMethodText(string code)
-        {
-            code = code.trim();
-            // this code does multiple passes in creating and ast from the code (in an attempt to make it more user friendly to the user
-            // eventually move all this to an external module and add a lot of extra funcionality/behaviour
-            string parsedCode = null;
-            string tempCode = null;
-            // first see if the code provide is a predefined command
-            code = code.eq("notepad") ?  "exec.cmd (\"notepad\");" : code;
-            code = code.eq("cmd") ? "exec.cmd (\"cmd\");" : code;
-            code = (code.starts("dir ") && code .lines().size() == 1) ? "exec.cmdViaConsole (\"cmd\",\"/c {0}\");".format(code) : code;
-            // some for fun :)
-            code = code.ToLower().Trim().eq("hello") || code.ToLower().Trim().eq("hi") ? "\"Hi, Welcome to O2\"" : code;
-            code = code.ToLower().Trim().eq("how are you?") || code.ToLower().Trim().eq("how are you doing") ? "\"I'm fine thanks\"" : code;
-            code = code.ToLower().Trim().eq("good morning") || code.ToLower().Trim().eq("good afternoon") ? "\"Hello there, {0} to you too\"".format(code) : code;
-            //code.ToLower().eq(new string[] { "hello", "hi" }, () => code = "Hi, Welcome to O2");
-            //code = code.ToLower().eq(new []{"how are you?" ,"how are you doing" }) ? "I'm fine thanks" : code;            
-            // first try with the code provided
-            parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(code);
-
-            // todo: move logic below to a more optimized and refactored code :)
-            //if it failed:
-            tempCode = code;
-            if (parsedCode == null)
-                // and it has one line, wrap it around a return statement;
-                if (code.lines().size() == 1)
-                {
-                    if (tempCode.contains("\"").isFalse())
-                    {
-                        tempCode = tempCode.contains("()")
-                                ? "{0};".format(code)
-                                : "{0}();".format(code);
-                        parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
-                    }
-                    if (parsedCode == null)
-                    {
-                        tempCode = "return {0};".format(code);
-                        parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
-                        if (parsedCode == null)
-                        {
-                            var firstSpace = code.IndexOf(' ');
-                            if (firstSpace > 0)
-                            {
-                                tempCode = code.Insert(firstSpace, "(");
-                                tempCode = "{0});".format(tempCode);
-                                parsedCode = tryToCreateCSharpCodeWith_Class_Method_WithMethodText(tempCode);
-                            }
-                        }
-                    }
-                }
+        {                        
+            var parsedCode = TextToCodeMappings.tryToFixRawCode(code, tryToCreateCSharpCodeWith_Class_Method_WithMethodText);            
         
             if (parsedCode == null)
             {
@@ -307,11 +273,14 @@ namespace O2.External.SharpDevelop.AST
                                 code = code.Replace(originalLine, originalLine.line().add(includeText.contents()));
                         });  
             	var snippetParser = new SnippetParser(SupportedLanguage.CSharp);
-                var parsedCode = snippetParser.Parse(code);                
+                
+                var parsedCode = snippetParser.Parse(code);
 				AstErrors = snippetParser.errors();
                 CompilationUnit = new CompilationUnit();
+
                 if (parsedCode is BlockStatement || parsedCode is CompilationUnit)
                 {
+                    Ast_CSharp astCSharp;
                     if (parsedCode is BlockStatement)
                     {
                         // map parsedCode into a new type and method 
@@ -319,19 +288,34 @@ namespace O2.External.SharpDevelop.AST
                         var blockStatement = (BlockStatement) parsedCode;
                         CompilationUnit.add_Type(default_TypeName)
                             .add_Method(default_MethodName, InvocationParameters, blockStatement);
+                        
+                        astCSharp = new Ast_CSharp(CompilationUnit);
+                        astCSharp.AstDetails.mapSpecials(snippetParser.Specials);
+                        // add references included in the original source code file
+                        mapCodeO2References(astCSharp);
+                        CreatedFromSnipptet = true;
                     }
                     else
-                        CompilationUnit = (CompilationUnit) parsedCode;
+                    {
+                        CompilationUnit = (CompilationUnit)parsedCode;
+                        astCSharp = new Ast_CSharp(CompilationUnit);
+                        CreatedFromSnipptet = false;
+                    }
+
+                    // create sourceCode using Ast_CSharp & AstDetails		
                     if(CompilationUnit.Children.Count > 0)
                     {
-	                    // create sourceCode using Ast_CSharp & AstDetails		
-	                    var astCSharp = new Ast_CSharp(CompilationUnit);
-	                    astCSharp.AstDetails.mapSpecials(snippetParser.Specials);
-	                    // // keep this so that we can process the instructions included as comments  	                        
-	
-	                    // add references included in the original source code file
-	                    mapCodeO2References(astCSharp);
+                        // add the comments from the original code
+                        astCSharp.extraSpecials.AddRange(snippetParser.Specials);	                 
+                        // reset the astCSharp.AstDetails object        	
+                        astCSharp.mapAstDetails();        	        	
+                        
 	                    SourceCode = astCSharp.AstDetails.CSharpCode;
+
+                        //once we have the created SourceCode we need to create a new AST with it
+                        var tempAstDetails = new Ast_CSharp(SourceCode).AstDetails;
+                        //note we should try to add back the specials here (so that comments make it to the generated code
+                        AstDetails = tempAstDetails;
 	                    DebugMode.debug("Ast parsing was OK");
 	                    this.invoke(onAstOK);
 	                    return SourceCode;
@@ -343,8 +327,8 @@ namespace O2.External.SharpDevelop.AST
 				DebugMode.error("in createCSharpCodeWith_Class_Method_WithMethodText:{0}", ex.Message);                
             }      			
 			return null;                
-        }                
-        
+        }        
+
         public void mapCodeO2References(Ast_CSharp astCSharp)
         {
             generateDebugSymbols = false; // default to not generating debug symbols and creating the assembly only in memory
@@ -372,9 +356,7 @@ namespace O2.External.SharpDevelop.AST
                                         "debugSymbols"}, true, (value) => generateDebugSymbols = true);
                 comment.Text.eq("StaThread", () => { ExecuteInStaThread = true; });
                 comment.Text.eq("MtaThread", () => { ExecuteInMtaThread = true; });  
-            }
-            // reset the astCSharp.AstDetails object        	
-        	astCSharp.mapAstDetails(astCSharp.CompilationUnit);        	        	
+            }            
         }               
         
         public object executeFirstMethod()
@@ -418,6 +400,38 @@ namespace O2.External.SharpDevelop.AST
                 ex.log("in CSharp_FastCompiler.executeMethod");
                 return null;
             }
+        }
+
+        /*public string processedCode()
+        {
+            //if (OriginalCodeSnippet.valid())
+            //    return OriginalCodeSnippet;
+            return SourceCode;                    
+        }*/
+
+        public Location getGeneratedSourceCodeMethodLineOffset()
+        {
+            if (CreatedFromSnipptet == true && SourceCode.valid())
+                //if (OriginalCodeSnippet != SourceCode)      // if they are the same it means that there is no offset                    
+                    if (AstDetails.Methods.size() > 0)
+                    {
+                        return AstDetails.Methods[0].OriginalObject.firstLineOfCode();
+
+                        /*var firstMethod = AstDetails.Methods.first<AstValue>();
+                        if (firstMethod.StartLocation.Line != 0)
+                        {
+
+//                            var methodDeclaration = AstDetails.Methods.first<AstValue>().OriginalObject.cast<MethodDeclaration>();
+                            var methodDeclaration = (MethodDeclaration)AstDetails.Methods[0].OriginalObject;
+                            var firstInstruction = methodDeclaration.Body.Children[0].StartLocation; ;
+//                            methodDeclaration.
+                            //var aa = aaa.typeFullName();
+                         //   return AstDetails.Methods.first<AstValue>().StartLocation;
+                            //var location = AstDetails.Methods.first<AstValue>().StartLocation;
+                            return new Location(firstInstruction.Column - 1, firstInstruction.Line - 1);
+                        }*/
+                    }
+            return new Location(0, 0) ;
         }
     }
 }

@@ -83,9 +83,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
             if (setMethod != null)
                 type.invokeStatic(setMethod, newControl, setData);
-            return newControl;
-
-            return null;
+            return newControl;            
         }
     }
 }

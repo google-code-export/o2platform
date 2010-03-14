@@ -12,7 +12,8 @@ using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
 
 using ICSharpCode.NRefactory;
-using ICSharpCode.NRefactory.Ast;   
+using ICSharpCode.NRefactory.Ast;
+using System.Collections.Generic;   
 
 namespace O2.External.SharpDevelop.AST
 {            
@@ -25,17 +26,25 @@ namespace O2.External.SharpDevelop.AST
         public string SourceCodeFile {get ; set;}
         public AstDetails AstDetails {get; set;}
         public string Errors  {get; set;}
+        public List<ISpecial> extraSpecials { get; set; }
 		
         SupportedLanguage language = SupportedLanguage.CSharp;
-		
-        public Ast_CSharp(string _sourceCodeFile)
+
+        public Ast_CSharp()
+        {
+            extraSpecials = new List<ISpecial>();
+        }
+
+        public Ast_CSharp(string _sourceCodeFile) 
+            : this()
         {    	
             createAst(_sourceCodeFile);
             mapAstDetails(Parser.CompilationUnit);   
         }
-    
+
 
         public Ast_CSharp(CompilationUnit unit)
+            : this()
         {
             createAst("");
             mapAstDetails(unit);
@@ -57,7 +66,7 @@ namespace O2.External.SharpDevelop.AST
 
 	            AstDetails = new AstDetails();	            
 	            var specials = Parser.Lexer.SpecialTracker.RetrieveSpecials();
-
+                specials.AddRange(extraSpecials);
                 AstDetails.mapSpecials(specials);
                 AstDetails.rewriteCode_CSharp(CompilationUnit, specials);
                 AstDetails.rewriteCode_VBNet(CompilationUnit, specials);	            
@@ -83,6 +92,11 @@ namespace O2.External.SharpDevelop.AST
     		
     		}
     	}*/
-    	    	    	    	    
+
+
+        public void mapAstDetails()
+        {
+            mapAstDetails(this.CompilationUnit);
+        }
     }
 }

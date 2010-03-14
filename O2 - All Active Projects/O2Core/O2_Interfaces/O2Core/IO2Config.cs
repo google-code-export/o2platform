@@ -25,6 +25,8 @@ namespace O2.Interfaces.O2Core
         string getTempFileInTempDirectory(string extension);
         string getTempFolderInTempDirectory(string stringToAddToTempDirectoryName);
 
+        void closeO2Process();            
+
         // DI helper
         bool setDI(Type typeToInjectDependency, string propertyToInject, Object dependencyObject);
         bool setDI(string assemblyName, string typeToInjectDependency, string propertyToInject, Object dependencyObject);

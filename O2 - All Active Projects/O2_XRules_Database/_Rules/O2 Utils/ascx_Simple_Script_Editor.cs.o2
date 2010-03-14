@@ -37,6 +37,7 @@ using O2.Views.ASCX.Ascx.MainGUI;
 //O2Ref:O2_External_IE.dll
 using O2.External.IE.ExtensionMethods;
 using O2.Views.ASCX.DataViewers;
+using O2.Views.ASCX.CoreControls;
 
 namespace O2.XRules.Database.O2Utils
 {
@@ -60,7 +61,7 @@ namespace O2.XRules.Database.O2Utils
         public string AutoSaveDir { get; set; }
 		public int width = 300;
 		public int height = 100;
-		
+        public bool ExecuteOnEnter { get; set; }
 		
         public static void startControl()
     	{
@@ -72,7 +73,7 @@ namespace O2.XRules.Database.O2Utils
     		//var control2 = O2Gui.load<PropertyGrid>();
     		//return;
             //var control = (ascx_Simple_Script_Editor)typeof(ascx_Simple_Script_Editor).showAsForm("O2 Simple Script Editor", 500, 500);			
-            var control = O2Gui.load<ascx_Simple_Script_Editor>("O2 Simple Script Editor", 700, 300);            
+            var control = O2Gui.load<ascx_Simple_Script_Editor>("O2 Simple Script Editor", 700, 300);
             
     		control.invokeOnThread(()=>
     		{   
@@ -85,16 +86,20 @@ namespace O2.XRules.Database.O2Utils
     	}
 
         public ascx_Simple_Script_Editor()
-    	{        	
+    	{            
     		InvocationParameters = new Dictionary<string, object>();
             AutoCompileOnCodeChange = true;
             AutoSaveOnCompileSuccess = true; //  false;  // for now default to true
             AutoSaveDir = this.tempO2Dir().pathCombine("_AutoSavedScripts");
-			setCompilerEnvironment();
+			setCompilerEnvironment();            
             this.Width = width;
 			this.Height = height;
 			createGui();
 			configureGui();
+
+            //enabled code complete
+            ExecuteOnEnter = false;
+            commandsToExecute.enableCodeComplete();
             this.Refresh();
         }        	
     
@@ -150,15 +155,19 @@ namespace O2.XRules.Database.O2Utils
         	var contextMenu = commandsToExecute.textEditorControl().add_ContextMenu();        	
         	
         	commandsToExecute.textArea().KeyUp+= (sender,e) => handlePressedKeys(e);
+            commandsToExecute.textArea().KeyEventHandler += handleKeyEventHandler;
         	contextMenu.add("execute",(menuitem)=> execute());      
         	contextMenu.add("save",(menuitem)=> saveScript());      
         	contextMenu.add("force compilation",(menuitem)=> forceCompilation());     
         	contextMenu.add("replace with generated source code",(menuitem)=> replaceMainCodeWithGeneratedSource());
         	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());
-            contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
+            //contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
+            contextMenu.add("set/disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter );
             contextMenu.add("show Log Viewer", (menuitem) => showLogViewer());
             contextMenu.add("disable Auto Compile on code change", (menuitem) => AutoCompileOnCodeChange = false);
-            contextMenu.add("enable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = true);            
+            contextMenu.add("enable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = true);
+            contextMenu.add("show auto saved scripts", (menuitem) => showAutoSavedScripts());   
+
      	}        	     	
 	     		     	
 	    public void setCompilerEnvironment()
@@ -179,8 +188,8 @@ namespace O2.XRules.Database.O2Utils
      		
 	    	csharpCompiler.onAstFail = 
      			()=>{        					
-     					csharpCompiler.AstErrors.runForEachAstParsingError( 
-     											  (row,col)=> commandsToExecute.editor().setSelectedText(row,col, true,false));
+     					//csharpCompiler.AstErrors.runForEachAstParsingError( 
+     					//						  (row,col)=> commandsToExecute.editor().setSelectedText(row,col, true,false));
      					sourceCodeViewer.enabled(false);    	 				
 	     				executeButton.enabled(false);
     	 				result_RichTextBox.textColor(Color.Red)
@@ -193,19 +202,26 @@ namespace O2.XRules.Database.O2Utils
 	     				commandsToExecute.editor().refresh();
 	     				sourceCodeViewer.enabled(true);
 	     				commandsToExecute.invokeOnThread(()=>commandsToExecute.Refresh());;
-	     				GeneratedCode = csharpCompiler.SourceCode;
+	     				GeneratedCode = csharpCompiler.SourceCode;                        
+                        commandsToExecute.updateCodeComplete(csharpCompiler);
 	     				//if (isGeneratedSourceCodeVisible())
 						sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
      		 		};     		      		 
      		 		
      		 csharpCompiler.onCompileFail = 
      		 	()=>{
-     		 			     		 			
+                        executeButton.enabled(false);
+                        Location codeOffset = csharpCompiler.getGeneratedSourceCodeMethodLineOffset();
      		 			csharpCompiler.CompilationErrors.runForEachCompilationError( 
      											  (row,col)=> 
      											  	{ 
-     											  		sourceCodeViewer.editor().setSelectedText(row,col, true,false);
-     											  		commandsToExecute.editor().setSelectedText(row-6,col-2, true,false);
+     											  		sourceCodeViewer.editor().setSelectedText(row,col, true,false);                                                        
+                                                        commandsToExecute.editor().setSelectedText(
+                                                            row - codeOffset.Line, 
+                                                            col - codeOffset.Column,
+                                                            true, /*showAsError*/ 
+                                                            false, /*showAsBookMark*/ 
+                                                            false); /*decrementLineAndColumn*/
      											  		
      											  	});
      		 			result_RichTextBox.textColor(Color.Red)
@@ -233,7 +249,9 @@ namespace O2.XRules.Database.O2Utils
         public void onTextChanged(string newText)
         {
             if (AutoCompileOnCodeChange)
+            {
                 compileCodeSnippet(newText);
+            }
         }
 
 		public void compileCodeSnippet(string codeSnippet)
@@ -274,8 +292,27 @@ namespace O2.XRules.Database.O2Utils
             this.insert_Below(logViewer,100);
         }
 
+        public void showAutoSavedScripts()
+        {
+            var directory = (ascx_Directory)open.directory();
+            directory.openDirectory(AutoSaveDir);
+        }
+
+        public bool handleKeyEventHandler(char key)
+        {
+            if (ExecuteOnEnter && key == 10)
+            {
+                "Executing method".debug();
+                execute();
+                return true;
+            }
+            return false;
+        }
         private void handlePressedKeys(KeyEventArgs e)
         {
+            //var currentOffset = commandsToExecute.textArea().Document.PositionToOffset(commandsToExecute.editor().caretLine);
+            //commandsToExecute.textArea().Document.Remove(currentOffset, 1);
+            //e.KeyCode.str().info();
             //O2.Kernel.PublicDI.log.debug("KeyUp: " + e.KeyValue.ToString()); ;                
             if (e.Modifiers == Keys.Control && e.KeyValue == 'B')           // Ctrl+B compiles code
             {
@@ -380,7 +417,12 @@ namespace O2.XRules.Database.O2Utils
      	{
      		return  !topLevelSplitContainer.Panel2Collapsed;
      	}
-     	
+
+        public void enableCodeComplete()
+        {
+            commandsToExecute.enableCodeComplete();
+        }
+
      	public string Code 
      	{
      		get 
@@ -392,6 +434,6 @@ namespace O2.XRules.Database.O2Utils
      		{
      			commandsToExecute.set_Text(value);
      		}
-     	}
-     }
+     	}        
+    }
 }

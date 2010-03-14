@@ -16,6 +16,7 @@ namespace O2.External.SharpDevelop.Ascx
         public ascx_SourceCodeEditor()
         {
             InitializeComponent();
+            
             showAstDetails = new Ast_CSharp_ShowDetailsInViewer(tecSourceCode, tcSourceInfo);                
         }
 

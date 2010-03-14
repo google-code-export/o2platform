@@ -37,10 +37,13 @@ namespace O2.External.SharpDevelop.Ascx
 		public ProjectContentRegistry pcRegistry;
         public DefaultProjectContent myProjectContent;
 		public ParseInformation parseInformation = new ParseInformation();
-		public ICompilationUnit lastCompilationUnit;
+        public Dictionary<string, ICompilationUnit> mappedCompilationUnits { get; set; } // so that we support dynamic CodeCompletion from multiple files
+		//public ICompilationUnit lastCompilationUnit;
 		public string DummyFileName = "edited.cs";
 		public ImageList SmallIcons;
     	public Form HostForm { get; set; }
+        public Location CodeCompleteCaretLocationOffset { get; set; }
+        public string CodeCompleteTargetText { get; set; }
     	public CodeCompletionWindow codeCompletionWindow;
     	public Action<string> statusMessage;
     	
@@ -55,8 +58,8 @@ namespace O2.External.SharpDevelop.Ascx
 			    		textEditor = _textEditor;
                         //textEditorToGrabCodeFrom = _textEditor; // (wasn't working) by default these are the same
                         extraSourceCodeToProcess = new List<string>();
-			    		//if (statusMessage!=null)
-				    	statusMessage = status ; // (text)=>{ text.info();};		
+                        mappedCompilationUnits = new Dictionary<string, ICompilationUnit>();
+                        statusMessage = status;
 				    	statusMessage("Loading Icons");
 			    		loadIcons();
 			    		statusMessage("Settinp Environment");
@@ -67,7 +70,8 @@ namespace O2.External.SharpDevelop.Ascx
     	
     	public void setupEnvironment()
     	{
-    		textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += TextAreaKeyEventHandler;						
+    		textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += TextAreaKeyEventHandler;
+            textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += Caret_PositionChanged;
 			textEditor.Disposed += CloseCodeCompletionWindow;  // When the editor is disposed, close the code completion window
 			
 			//set up the ToolTipRequest event
@@ -84,6 +88,13 @@ namespace O2.External.SharpDevelop.Ascx
 			
 			startAddReferencesThread();         	
     	}
+
+        void Caret_PositionChanged(object sender, EventArgs e)
+        {
+            var caret = (Caret)sender;
+           // "Current Offset: {0}".format(caret.Offset).info();
+           // showLocationDetails(caret.Position);           
+        }
     	
     	void loadIcons()    	
     	{    	
@@ -117,6 +128,14 @@ namespace O2.External.SharpDevelop.Ascx
                     addReference("System.Drawing");
                     addReference("System.Xml");
                     addReference("Microsoft.VisualBasic");
+                    addReference("ICSharpCode.AvalonEdit.dll");
+                    addReference("PresentationCore.dll");
+                    addReference("PresentationFramework.dll");
+                    addReference("WindowsBase.dll");
+                    addReference("WindowsFormsIntegration.dll");
+                    addReference("GraphSharp.dll");
+                    addReference("QuickGraph.dll");
+                    addReference("GraphSharp.Controls.dll");
                     
                     //this.myProjectContent.AddReferencedContent(this.pcRegistry.SystemWindowsForms);
                     foreach (var reference in CompileEngine.getListOfO2AssembliesInExecutionDir())
@@ -150,10 +169,10 @@ namespace O2.External.SharpDevelop.Ascx
 						while (!textEditor.IsDisposed)
 			                {
 			                    //this.parseSourceCode(this.textEditorToGrabCodeFrom.get_Text());
-                                this.parseSourceCode(this.textEditor.get_Text());
+                                this.parseSourceCode(DummyFileName, this.textEditor.get_Text());
                                 foreach (var codeOrFile in extraSourceCodeToProcess)
                                     if (codeOrFile.isFile())
-                                        this.parseSourceCode(codeOrFile.contents());
+                                        this.parseSourceCode(codeOrFile,codeOrFile.contents());
                                     else
                                         this.parseSourceCode(codeOrFile);
 			                    this.sleep(2000,false);
@@ -162,29 +181,46 @@ namespace O2.External.SharpDevelop.Ascx
 			                "LEAVING  parseCodeThread".debug();
 			         });
 		}
-		
-		
-    	public void parseSourceCode(string code)
-		{	
-			if (false == code.valid())
-				return;            
-			 var textReader = new StringReader(code);
-			 ICompilationUnit newCompilationUnit;
-			 var supportedLanguage = SupportedLanguage.CSharp;
-			 using (IParser p = ParserFactory.CreateParser(supportedLanguage, textReader))
-                {
-                    // we only need to parse types and method definitions, no method bodies
-                    // so speed up the parser and make it more resistent to syntax
-                    // errors in methods
-                    p.ParseMethodBodies = false;                    
-                    p.Parse();
-                    newCompilationUnit = ConvertCompilationUnit(p.CompilationUnit);
-                }
+
+        public void parseFile(string fileToParse)
+        {
+            parseSourceCode(fileToParse, fileToParse.fileContents());
+        }
+
+        public void parseSourceCode(string code)
+        {
+            parseSourceCode(DummyFileName, code);
+        }
+
+
+        public void parseSourceCode(string file, string code)
+        {
+            if (false == code.valid())
+                return;
+
+            if (false == mappedCompilationUnits.ContainsKey(file))
+                mappedCompilationUnits.Add(file, null);
+
+            var lastCompilationUnit = mappedCompilationUnits[file];
+
+            var textReader = new StringReader(code);
+            ICompilationUnit newCompilationUnit;
+            var supportedLanguage = SupportedLanguage.CSharp;
+            using (IParser p = ParserFactory.CreateParser(supportedLanguage, textReader))
+            {
+                // we only need to parse types and method definitions, no method bodies
+                // so speed up the parser and make it more resistent to syntax
+                // errors in methods
+                p.ParseMethodBodies = false;
+                p.Parse();
+                newCompilationUnit = ConvertCompilationUnit(p.CompilationUnit);
+            }
             // Remove information from lastCompilationUnit and add information from newCompilationUnit.
             myProjectContent.UpdateCompilationUnit(lastCompilationUnit, newCompilationUnit, DummyFileName);
-            lastCompilationUnit = newCompilationUnit;
-            parseInformation.SetCompilationUnit(newCompilationUnit);                
-		}
+            mappedCompilationUnits[file] = newCompilationUnit;
+            //            lastCompilationUnit = newCompilationUnit;
+            parseInformation.SetCompilationUnit(newCompilationUnit);
+        }
 		
 		public ICompilationUnit ConvertCompilationUnit(CompilationUnit compilationUnit)
         {
@@ -202,14 +238,15 @@ namespace O2.External.SharpDevelop.Ascx
 		/// Return true to handle the keypress, return false to let the text area handle the keypress
 		/// </summary>
 		public bool TextAreaKeyEventHandler(char key)
-		{
+		{            
 			if (codeCompletionWindow != null) {
 				// If completion window is open and wants to handle the key, don't let the text area
 				// handle it
 				if (codeCompletionWindow.ProcessKeyEvent(key))
-					return true;
+					return true;            
 			}
-			if (key == '.') {
+			if (key == '.')
+            {
 				ICompletionDataProvider completionDataProvider = this;//new CodeCompletionProvider(this);
 				
 				codeCompletionWindow = CodeCompletionWindow.ShowCompletionWindow(
@@ -223,7 +260,7 @@ namespace O2.External.SharpDevelop.Ascx
 				if (codeCompletionWindow != null) {
 					// ShowCompletionWindow can return null when the provider returns an empty list
 					codeCompletionWindow.Closed += new EventHandler(CloseCodeCompletionWindow);
-				}
+				}                
 			}
 			return false;
 		}
@@ -246,26 +283,18 @@ namespace O2.External.SharpDevelop.Ascx
             {
                 if (e.InDocument && !e.ToolTipShown)
                 {
-                    IExpressionFinder expressionFinder;
-                    expressionFinder = new CSharpExpressionFinder(this.parseInformation);
-                    ExpressionResult expression = expressionFinder.FindFullExpression(
-                        textEditor.Text,
-                        textEditor.Document.PositionToOffset(e.LogicalPosition));
-                    if (expression.Region.IsEmpty)
-                    {
-                        expression.Region = new DomRegion(e.LogicalPosition.Line + 1, e.LogicalPosition.Column + 1);
-                    }
+                    var logicalPosition = e.LogicalPosition;
 
-                    var textArea = textEditor.ActiveTextAreaControl.TextArea;
-                    NRefactoryResolver resolver = new NRefactoryResolver(this.myProjectContent.Language);
-                    ResolveResult rr = resolver.Resolve(expression,
-                                                        this.parseInformation,
-                                                        textArea.MotherTextEditorControl.Text);
+                   // parseSourceCode(CodeCompleteTargetText);
+                    ResolveResult rr = resolveLocation(logicalPosition);
                     string toolTipText = GetText(rr);
                     if (toolTipText != null)
                     {
                         e.ShowToolTip(toolTipText);
-                    }
+                    }                    
+                   // if (toolTipText.valid())
+                   //     "ToolTipText: {0}".format(toolTipText).info();
+
                 }
             }
             catch (Exception ex)
@@ -273,6 +302,94 @@ namespace O2.External.SharpDevelop.Ascx
                 ex.log("in OnToolTipRequest");
             }
 		}
+
+        public void showLocationDetails(TextLocation location)
+        {
+            try
+            {
+                if (location == null)
+                    return;
+                "Line: {0}".format(textEditor.Text.lines()[location.Line]).debug();
+                ResolveResult rr = resolveLocation(location);
+                if (rr == null)
+                    return;
+                if (rr is MemberResolveResult)
+                {
+                    var memberResolved = (MemberResolveResult)rr;
+                    if (memberResolved.CallingMember != null)
+                        "   CallingMember: {0}".format(memberResolved.CallingMember.DotNetName).info();
+                    if (memberResolved.ResolvedMember != null)
+                        "   ResolvedMember: {0}".format(memberResolved.ResolvedMember.DotNetName).info();
+                    if (memberResolved.ResolvedType != null)
+                        "   ResolvedType: {0}".format(rr.ResolvedType.DotNetName).info();
+                }
+                else if (rr is UnknownIdentifierResolveResult)
+                {
+                    var unknonwResult = (UnknownIdentifierResolveResult)rr;
+                    "   Identifier: {0}".format(unknonwResult.Identifier).info();
+                    "   IsValid: {0}".format(unknonwResult.IsValid).info();
+                }
+                else
+                {
+                    string toolTipText = GetText(rr);
+                    if (toolTipText.valid())
+                        "    ToolTipText: {0}".format(toolTipText).info();
+                    else
+                    {
+                        if (rr.CallingMember != null)
+                            "   CallingMember: {0}".format(rr.CallingMember.DotNetName).info();
+                        if (rr.ResolvedType != null)
+                            "   ResolvedType: {0}".format(rr.ResolvedType.DotNetName).info();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in showLocationDetails");
+            }
+        }
+        private ResolveResult resolveLocation(TextLocation logicalPosition)
+        {
+            var textArea = textEditor.ActiveTextAreaControl.TextArea;
+            var targetText = "";
+            var targetOffset = 0;
+            if (CodeCompleteCaretLocationOffset.Line == 0)
+            {
+                targetText = textEditor.Text;
+                targetOffset = textEditor.Document.PositionToOffset(logicalPosition);
+            }
+            else
+            {
+                var firstMethodOffset = calculateFirstMethodOffset();
+                targetText = getAdjustedSnippetText(textArea, firstMethodOffset);
+                targetOffset = firstMethodOffset + textArea.Caret.Offset;
+            }
+              ExpressionResult expression;
+              
+              //getExpressionFromTextArea(textArea);
+              IExpressionFinder expressionFinder;
+              expressionFinder = new CSharpExpressionFinder(this.parseInformation);
+              expression = expressionFinder.FindFullExpression(targetText,targetOffset);              
+
+            /*IExpressionFinder expressionFinder;
+            expressionFinder = new CSharpExpressionFinder(this.parseInformation);
+            ExpressionResult expression = expressionFinder.FindFullExpression(
+                textEditor.Text,
+                textEditor.Document.PositionToOffset(logicalPosition));
+             */
+            if (expression.Region.IsEmpty)
+            {
+                expression.Region = new DomRegion(logicalPosition.Line + 1, logicalPosition.Column + 1);
+            }
+            
+            NRefactoryResolver resolver = new NRefactoryResolver(this.myProjectContent.Language);
+            ResolveResult rr = resolver.Resolve(expression,
+                                                this.parseInformation,
+                                                targetText);
+                                                //textArea.MotherTextEditorControl.Text);
+
+            return rr;
+        }
 		
 		static string GetText(ResolveResult result)
 		{
@@ -389,11 +506,20 @@ namespace O2.External.SharpDevelop.Ascx
 			//return new ICompletionData[] {
 			//	new DefaultCompletionData("Text", "Description", 1)
 			//};
-			
+            var targetText = "";
+            if (CodeCompleteCaretLocationOffset.Line == 0)
+            {
+                targetText = textArea.MotherTextEditorControl.Text;                
+            }
+            else
+            {
+                var firstMethodOffset = calculateFirstMethodOffset();
+                targetText = getAdjustedSnippetText(textArea, firstMethodOffset);
+            }
 			NRefactoryResolver resolver = new NRefactoryResolver(this.myProjectContent.Language);
 			ResolveResult rr = resolver.Resolve(FindExpression(textArea),
 			                                        this.parseInformation,
-			                                        textArea.MotherTextEditorControl.Text);
+                                                    targetText);
 			List<ICompletionData> resultList = new List<ICompletionData>();
 			if (rr != null) {
 				ArrayList completionData = rr.GetCompletionData(this.myProjectContent);
@@ -411,15 +537,73 @@ namespace O2.External.SharpDevelop.Ascx
 		/// </summary>
 		ExpressionResult FindExpression(TextArea textArea)
 		{
-			IExpressionFinder finder;
-			finder = new CSharpExpressionFinder(this.parseInformation);			
-			ExpressionResult expression = finder.FindExpression(textArea.Document.TextContent, textArea.Caret.Offset);
-			if (expression.Region.IsEmpty) {
-				expression.Region = new DomRegion(textArea.Caret.Line + 1, textArea.Caret.Column + 1);
-			}
-			return expression;
+            try
+            {                
+                var expression = (CodeCompleteCaretLocationOffset.Line == 0)
+                    ? getExpressionFromTextArea(textArea)
+                    : getExpressionFromCodeSnippet(textArea);
+                                                
+                if (expression.Region.IsEmpty)
+                {
+                    expression.Region = new DomRegion(textArea.Caret.Line + 1, textArea.Caret.Column + 1);
+                }
+                return expression;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in FindExpression");
+                return new ExpressionResult(); ;
+            }
 		}
-		
+
+        public ExpressionResult getExpressionFromTextArea(TextArea textArea)
+        {
+            IExpressionFinder finder = new CSharpExpressionFinder(this.parseInformation);
+            return finder.FindExpression(textArea.Document.TextContent, textArea.Caret.Offset);            
+        }
+
+        public ExpressionResult getExpressionFromCodeSnippet(TextArea textArea)
+        {
+            IExpressionFinder finder = new CSharpExpressionFinder(this.parseInformation);
+            var firstMethodOffset = calculateFirstMethodOffset();
+            var adjustedSnippeetText = getAdjustedSnippetText(textArea, firstMethodOffset);
+
+            var offset = firstMethodOffset + textArea.Caret.Offset;
+
+            var expression = finder.FindExpression(adjustedSnippeetText, offset);
+            return expression;
+        }
+
+        public int calculateFirstMethodOffset()
+        {
+            var offset = 0;            
+            var lines = CodeCompleteTargetText.lines();
+            var linesToRemove = lines.size() - CodeCompleteCaretLocationOffset.Line +1;
+            lines.RemoveRange(CodeCompleteCaretLocationOffset.Line -1, linesToRemove);            
+            var topText = StringsAndLists.fromStringList_getText(lines);
+            //for (int i = 0; i < CodeCompleteCaretLocationOffset.Line; i++)
+            //    offset += lines[i].Length + 1;
+        //    offset--;
+           // var test = CodeCompleteTargetText.Substring(offset);
+            return topText.Length;
+        }
+
+        public string getAdjustedSnippetText(TextArea textArea, int firstMethodOffset)
+        {            
+            var currentText = textArea.Document.TextContent;
+            var size = CodeCompleteTargetText.size();
+            if (firstMethodOffset < size)
+            {
+                var adjustedSnippeetText = CodeCompleteTargetText.Substring(0, firstMethodOffset);
+                adjustedSnippeetText += currentText.line();
+                adjustedSnippeetText += "\t}".line() +
+                                          "}".line();
+                return adjustedSnippeetText;
+            }
+            else
+                return currentText;
+        }
+
 		void AddCompletionData(List<ICompletionData> resultList, ArrayList completionData)
 		{
 			// used to store the method names for grouping overloads

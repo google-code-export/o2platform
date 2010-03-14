@@ -203,7 +203,7 @@ namespace O2.API.Visualization.ExtensionMethods
     	
     	#endregion
     	
-    	#region WinForms to WPF host - SharpDevelop
+/*    	#region WinForms to WPF host - SharpDevelop
     	
     	public static ICSharpCode.TextEditor.TextEditorControl add_CodeEditor(this GraphLayout graphLayout, string fileToOpen , int width, int height)
     	{
@@ -221,6 +221,7 @@ namespace O2.API.Visualization.ExtensionMethods
     	}
     	
     	#endregion
+ * */
     	
     	
     	#region WinForms to WPF host - Web Browser

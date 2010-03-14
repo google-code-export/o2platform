@@ -122,9 +122,9 @@ namespace O2.Script
         public void showInSourceCode(Object sender, TreeViewEventArgs e)
         {
             var treeNoteTag = e.Node.Tag;
-            if (treeNoteTag is AstValue)
+            if (treeNoteTag is AstValue<object>)
             {
-                var astValue = (AstValue)treeNoteTag;
+                var astValue = (AstValue<object>)treeNoteTag;
                 PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
 
                 var textEditorControl = sourceCodeEditor.getObject_TextEditorControl();
