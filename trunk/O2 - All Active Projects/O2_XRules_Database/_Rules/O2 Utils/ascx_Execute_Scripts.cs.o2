@@ -53,7 +53,7 @@ namespace O2.XRules.Database
 
         public static void startControl()
     	{   
-    		var executeScripts = (ascx_Execute_Scripts)typeof(ascx_Execute_Scripts).showAsForm("O2 XRules Database",240, 180);		    		
+    		var executeScripts = (ascx_Execute_Scripts)typeof(ascx_Execute_Scripts).showAsForm("O2 XRules Database",240, 200);		    		
     		executeScripts.invokeOnThread(
     			()=>{
     					executeScripts.buildGui();
@@ -110,6 +110,7 @@ namespace O2.XRules.Database
             contextMenu.add("Sync/Download local XRules From O2's Svn", (item) => syncO2ViaSvn());
             contextMenu.add("Open quick development gui", (menuitem) => open.dev());          	
             contextMenu.add("Open O2 Log Viewer", (item) => openO2LogViewer());
+            contextMenu.add("Exit Application (and close all windows)", (item) => PublicDI.config.closeO2Process());
             
         	
         	// load data map actions

@@ -315,7 +315,7 @@ namespace ICSharpCode.SharpDevelop.Dom.NRefactoryResolver
 		
 		public CompilationUnit ParseCurrentMemberAsCompilationUnit(string fileContent)
 		{
-			System.IO.TextReader content = ExtractCurrentMethod(fileContent);
+			System.IO.TextReader content = ExtractCurrentMethod(fileContent);            
 			if (content != null) {
 				NR.IParser p = NR.ParserFactory.CreateParser(language, content);
 				p.Parse();
@@ -482,8 +482,12 @@ namespace ICSharpCode.SharpDevelop.Dom.NRefactoryResolver
 				classDecl = "class A {";
 				endClassDecl = "}\n";
 			}
+            //startOffset++;                  // DC to fix extra { which was breaking parser
 			System.Text.StringBuilder b = new System.Text.StringBuilder(classDecl, length + classDecl.Length + endClassDecl.Length + startLine - 1);
 			b.Append('\n', startLine - 1);
+            System.Diagnostics.Debug.WriteLine("O2:DC:Applying ExtractMethod Patch");
+            b.Append("public void test()\n");       // DC
+            var text = fileContent.Substring(startOffset, length);
 			b.Append(fileContent, startOffset, length);
 			b.Append(endClassDecl);
 			return new System.IO.StringReader(b.ToString());
@@ -561,7 +565,7 @@ namespace ICSharpCode.SharpDevelop.Dom.NRefactoryResolver
 			NR.Location position = identifierExpression.StartLocation;
 			string identifier = identifierExpression.Identifier;
 			if (callingMember != null) { // LocalResolveResult requires callingMember to be set
-				LocalLookupVariable var = SearchVariable(identifier, position);
+			    LocalLookupVariable var = SearchVariable(identifier, position);
 				if (var != null) {
 					return new LocalResolveResult(callingMember, CreateLocalVariableField(var));
 				}

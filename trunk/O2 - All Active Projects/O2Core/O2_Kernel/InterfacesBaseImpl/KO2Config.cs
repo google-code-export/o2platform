@@ -172,7 +172,14 @@ namespace O2.Kernel.InterfacesBaseImpl
                 String sUpdatedPathValue = String.Format("{0};{1}", sCurrentEnvironmentPath, sPathToAdd);
                 Environment.SetEnvironmentVariable("Path", sUpdatedPathValue);
             }
-        }        
+        }
+
+
+        public void closeO2Process()
+        {
+            PublicDI.log.info("Received request to close down current O2 Process");
+            System.Windows.Forms.Application.Exit();
+        }
     }
 
     [Serializable]

@@ -17,6 +17,7 @@ using System.Windows.Forms;
 using ICSharpCode.TextEditor.Actions;
 using ICSharpCode.TextEditor.Document;
 using ICSharpCode.TextEditor.Gui.CompletionWindow;
+using ICSharpCode.NRefactory;
 
 namespace ICSharpCode.TextEditor
 {
@@ -29,6 +30,12 @@ namespace ICSharpCode.TextEditor
 	[ToolboxItem(false)]
 	public class TextArea : Control
 	{
+        // DC
+        public bool UseAlternativeCodeCompleteText { get; set; }
+        public Location CodeCompleteCaretLocationOffset { get; set; } // used to support code complete on the simple script editor environments
+        public string CodeCompleteTargetText { get; set; }
+        // DC
+
 		bool hiddenMouseCursor = false;
 		/// <summary>
 		/// The position where the mouse cursor was when it was hidden. Sometimes the text editor gets MouseMove
@@ -353,6 +360,8 @@ namespace ICSharpCode.TextEditor
 		{
             try
             {
+                if (toolTip == null || toolTip.IsDisposed)
+                    toolTip = new DeclarationViewWindow(this.FindForm());
                 if (toolTip.Owner == null)
                 {
                     System.Diagnostics.Debug.WriteLine("in TextArea.SetToolTip, toolTip.Owner  was null");
@@ -360,9 +369,7 @@ namespace ICSharpCode.TextEditor
                 else if (toolTip.Owner.InvokeRequired)
                     System.Diagnostics.Debug.WriteLine("in TextArea.SetToolTip, aborting method due to CrossThread Problem");
                 else
-                {
-                    if (toolTip == null || toolTip.IsDisposed)
-                        toolTip = new DeclarationViewWindow(this.FindForm());
+                {               
                     if (oldToolTip == text)
                         return;
                     if (text == null)
@@ -614,9 +621,15 @@ namespace ICSharpCode.TextEditor
 		/// </returns>
 		protected internal virtual bool HandleKeyPress(char ch)
 		{
-			if (KeyEventHandler != null) {
-				return KeyEventHandler(ch);
-			}
+			if (KeyEventHandler != null)             
+                //DC: modified the code below to be able to handle multiple invocations (one of which might have handled the key)
+                foreach(var eventHandler in KeyEventHandler.GetInvocationList())
+                {
+                    var handledByEventHandler = (bool)eventHandler.DynamicInvoke(ch);
+                    if (handledByEventHandler)
+                        return true;
+				//return KeyEventHandler(ch);
+                }
 			return false;
 		}
 		

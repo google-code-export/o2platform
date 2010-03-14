@@ -51,6 +51,7 @@ namespace O2.External.SharpDevelop.Ascx
         public Assembly compiledAssembly;
         Thread autoCompileThread;
         public bool allowCodeCompilation = true;
+        public O2CodeCompletion o2CodeCompletion;
 
         public void onLoad()
         {
@@ -1090,11 +1091,18 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void setSelectedText(int line, int column, bool showAsError, bool showAsBookMark)
         {
+            setSelectedText(line, column, showAsError, showAsBookMark, true);
+        }
+        public void setSelectedText(int line, int column, bool showAsError, bool showAsBookMark, bool decrementLineAndColumn)
+        {
             this.invokeOnThread(
                 () =>
                     {
-                        line--; // since the first line is at 0
-                        column--; // same for column
+                        if (decrementLineAndColumn)
+                        {
+                            line--; // since the first line is at 0
+                            column--; // same for column
+                        }
                         var text = tecSourceCode.ActiveTextAreaControl.TextArea.Text;
                         var location = new TextLocation(column, line);
                         var bookmark = new Bookmark(tecSourceCode.Document, location);
@@ -1216,11 +1224,11 @@ namespace O2.External.SharpDevelop.Ascx
         {
             PublicDI.log.debug(StringsAndLists.fromStringList_getText(new CompileEngine().getListOfReferencedAssembliesToUse()));
         }
-
-
+        
         public O2CodeCompletion enableCodeComplete()
         {
-            return new O2CodeCompletion(tecSourceCode);	
+            o2CodeCompletion = new O2CodeCompletion(tecSourceCode);
+            return o2CodeCompletion;
         }        
     }
 }

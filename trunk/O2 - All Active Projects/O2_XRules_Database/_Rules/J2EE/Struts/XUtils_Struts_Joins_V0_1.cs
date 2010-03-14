@@ -289,8 +289,8 @@ namespace O2.XRules.Database._Rules
         ascx_FindingsViewer findingsViewer_FinalFindings
         )*/
         {
-            const string controlTypePrefixString = "Controller Type: ";
-            const string viewPrefixString = "view: ";
+            //const string controlTypePrefixString = "Controller Type: ";
+            //const string viewPrefixString = "view: ";
 
             var results = new List<IO2Finding>();
 

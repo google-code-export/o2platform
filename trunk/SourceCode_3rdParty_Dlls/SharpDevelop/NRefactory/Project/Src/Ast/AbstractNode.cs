@@ -43,8 +43,11 @@ namespace ICSharpCode.NRefactory.Ast
 		public virtual object AcceptChildren(IAstVisitor visitor, object data)
 		{
 			foreach (INode child in children) {
-				Debug.Assert(child != null);
-				child.AcceptVisitor(visitor, data);
+                if (child != null)
+                    //Debug.Assert(child != null);
+                    child.AcceptVisitor(visitor, data);
+                else
+                    System.Diagnostics.Debug.WriteLine("In AcceptChildren child == null");
 			}
 			return data;
 		}

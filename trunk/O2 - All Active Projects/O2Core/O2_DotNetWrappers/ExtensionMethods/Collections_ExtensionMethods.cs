@@ -40,6 +40,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return colection.Count;
         }
 
+        public static T first<T>(this ICollection<T> collection)
+        {
+            //collection.GetEnumerator().Reset();
+            var enumerator = collection.GetEnumerator();
+            enumerator.Reset();
+            if (enumerator.MoveNext())            
+                return enumerator.Current;
+            return default(T);
+        }
+        
+
         public static bool size(this ICollection colection, int value)
         {
             return colection.size() == value;

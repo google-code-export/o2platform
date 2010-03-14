@@ -26,7 +26,7 @@ namespace O2.XRules.Database._Rules
     {
         private readonly IO2Log log = PublicDI.log;
 
-        bool openOnNewWindow = true;
+        //bool openOnNewWindow = true;
 
         [XRule(Name = "Open.Findings.In.New.O2.GUI.Window")]
         public void openInNewWindow(List<IO2Finding> o2Findings)

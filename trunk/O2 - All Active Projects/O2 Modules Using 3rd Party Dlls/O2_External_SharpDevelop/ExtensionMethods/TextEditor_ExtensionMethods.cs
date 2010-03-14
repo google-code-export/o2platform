@@ -25,10 +25,14 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                     return textEditorControl;
                 });
         }
+        public static TextArea textArea(this TextEditorControl textEditorControl)
+        {
+            return textEditorControl.ActiveTextAreaControl.TextArea;
+        }
 
         public static string get_Text(this TextEditorControl textEditorControl)
-        {
-            return (string)textEditorControl.ActiveTextAreaControl.TextArea.invokeOnThread(() => textEditorControl.Text);
+        {            
+            return (string)textEditorControl.textArea().invokeOnThread(() => textEditorControl.textArea().Text);
         }
     }
 }

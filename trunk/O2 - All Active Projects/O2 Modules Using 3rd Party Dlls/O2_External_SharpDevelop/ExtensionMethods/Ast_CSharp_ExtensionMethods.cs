@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
+using O2.External.SharpDevelop.AST;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -137,6 +139,20 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                     runOnError(items[2].toInt(), items[4].toInt());
                 }
         }
+
+        #region AstValue
+
+        public static bool validBody(this MethodDeclaration methodDeclaration)
+        {
+            return (methodDeclaration.Body != null && methodDeclaration.Body.Children != null && methodDeclaration.Body.Children.Count > 0);
+        }
+        public static Location firstLineOfCode(this MethodDeclaration methodDeclaration)        
+        {
+            if (methodDeclaration.validBody())
+                return methodDeclaration.Body.Children[0].StartLocation;
+            return new Location(0, 0);
+        }
+        #endregion
 
     }
 }
