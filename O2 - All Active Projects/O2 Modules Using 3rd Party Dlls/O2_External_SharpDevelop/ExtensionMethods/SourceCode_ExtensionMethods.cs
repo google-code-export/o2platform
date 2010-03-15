@@ -46,6 +46,16 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return (ascx_SourceCodeViewer)control.add_Control(typeof(ascx_SourceCodeViewer));
         }
 
+        public static TextEditorControl textEditor(this ascx_SourceCodeEditor sourceCodeEditor)
+        {
+            return sourceCodeEditor.textEditorControl();
+        }
+
+        public static TextEditorControl textEditor(this ascx_SourceCodeViewer sourceCodeViewer)
+        {
+            return sourceCodeViewer.textEditorControl();
+        }
+
         public static TextEditorControl textEditorControl(this ascx_SourceCodeEditor sourceCodeEditor)
         {
             return sourceCodeEditor.getObject_TextEditorControl();
@@ -214,7 +224,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 //var currentCode = csharpFastCompiler.processedCode();
                var currentCode = csharpFastCompiler.SourceCode;
                 sourceCodeEditor.o2CodeCompletion.parseSourceCode(currentCode);
-                sourceCodeEditor.o2CodeCompletion.CodeCompleteCaretLocationOffset = csharpFastCompiler.getGeneratedSourceCodeMethodLineOffset();
+               sourceCodeEditor.o2CodeCompletion.CodeCompleteCaretLocationOffset = csharpFastCompiler.getGeneratedSourceCodeMethodLineOffset();
                 
                 sourceCodeEditor.o2CodeCompletion.CodeCompleteTargetText = currentCode;
                 // i might not need these

@@ -213,16 +213,40 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     });
         }
 
-        public static void panel2Collapsed(this SplitContainer control, bool value)
+        public static SplitContainer panel2Collapsed(this SplitContainer control, bool value)
         {
-            control.invokeOnThread(() => control.Panel2Collapsed = value);
+            return (SplitContainer)control.invokeOnThread(
+                () =>
+                {
+                    control.Panel2Collapsed = value;
+                    return control;
+                });
         }
 
-        public static void panel1Collapsed(this SplitContainer control, bool value)
+        public static SplitContainer panel1Collapsed(this SplitContainer control, bool value)
         {
-            control.invokeOnThread(() => control.Panel2Collapsed = value);
+            return (SplitContainer)control.invokeOnThread(
+                () =>
+                {
+                    control.Panel1Collapsed = value;
+                    return control;
+                });
         }
 
+        public static SplitContainer distance(this SplitContainer control, int value)
+        {
+            return control.splitterDistance(value);
+        }
+
+        public static SplitContainer splitterDistance(this SplitContainer control, int value)
+        {
+            return (SplitContainer)control.invokeOnThread(
+                () =>
+                {   
+                    control.SplitterDistance = value;
+                    return control;
+                });
+        }
         #endregion
 
         #region SplitContainer_nxn

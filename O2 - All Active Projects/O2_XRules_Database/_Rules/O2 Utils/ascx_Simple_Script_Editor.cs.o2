@@ -42,7 +42,7 @@ using O2.Views.ASCX.CoreControls;
 namespace O2.XRules.Database.O2Utils
 {
 
-	// Comments: (24 Feb 2010): This was the 4th pass at building an O2 Command Prompt (i.e. simple script editor)	
+	// Comments: (24 Feb 2010): This was the 6th pass at building an O2 Command Prompt (i.e. simple script editor)	
 	
     public class ascx_Simple_Script_Editor: UserControl
     {            
@@ -52,7 +52,11 @@ namespace O2.XRules.Database.O2Utils
 		public RichTextBox result_RichTextBox {get ; set;}
 		public Panel result_Panel{get ; set;}
 		public Button executeButton {get ; set;}
-		public SplitContainer topLevelSplitContainer {get ; set;}
+		//public SplitContainer topLevelSplitContainer {get ; set;}
+        public SplitContainer splitContainer_CommandBox {get ; set;}
+        public SplitContainer splitContainer_TopLevel {get ; set;}
+        public SplitContainer splitContainer_Results { get; set; }
+
 		public CSharp_FastCompiler csharpCompiler {get ; set;}
 		public string GeneratedCode {get ; set;}
 		public Dictionary<string, object> InvocationParameters {get ; set;}
@@ -62,6 +66,8 @@ namespace O2.XRules.Database.O2Utils
 		public int width = 300;
 		public int height = 100;
         public bool ExecuteOnEnter { get; set; }
+        public object ReturnData { get; set; }
+		public MethodInvoker onCompilationOk {get ;set;}
 		
         public static void startControl()
     	{
@@ -88,6 +94,7 @@ namespace O2.XRules.Database.O2Utils
         public ascx_Simple_Script_Editor()
     	{            
     		InvocationParameters = new Dictionary<string, object>();
+            InvocationParameters.Add("ReturnData", ReturnData); // add the (previous script) execute return data 
             AutoCompileOnCodeChange = true;
             AutoSaveOnCompileSuccess = true; //  false;  // for now default to true
             AutoSaveDir = this.tempO2Dir().pathCombine("_AutoSavedScripts");
@@ -100,23 +107,28 @@ namespace O2.XRules.Database.O2Utils
             //enabled code complete
             ExecuteOnEnter = false;
             commandsToExecute.enableCodeComplete();
+            commandsToExecute.editor().o2CodeCompletion.UseParseCodeThread = false;
+
             this.Refresh();
-        }        	
-    
+        }
+        
         private void createGui()
         {
         	// create controls
 
             var groupBoxes = this.add_1x1("Command To Execute", "Invoke and Result", false, this.Width - 150);   
         	
-        	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();        	        	        	
-        	
-        	var topPanel = (SplitContainer)groupBoxes[0].Parent.Parent;
-            topPanel.Panel2MinSize = 110;
-            topPanel.FixedPanel = FixedPanel.Panel2;
+        	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();
+            
+
+            splitContainer_CommandBox = (SplitContainer)groupBoxes[0].Parent.Parent;
+            splitContainer_CommandBox.Panel2MinSize = 110;
+            splitContainer_CommandBox.FixedPanel = FixedPanel.Panel2;
             var bottomPanel = this.add_GroupBox("Generated Source Code");
-        	sourceCodeViewer = bottomPanel.add_SourceCodeViewer();
-        	topPanel.insert_Below(bottomPanel, 200);
+
+        	sourceCodeViewer = bottomPanel.add_SourceCodeViewer();            
+
+            splitContainer_CommandBox.insert_Below(bottomPanel, 200);
         	
 			executeButton = this.add_Button("Execute");        	        	
         	executeButton.fill(); 
@@ -124,8 +136,9 @@ namespace O2.XRules.Database.O2Utils
         	var outputPanel = groupBoxes[1].add_GroupBox("Output");  
         	var controls = outputPanel.insert_Above(executeButton,60);
 
-			topLevelSplitContainer = (SplitContainer)this.Controls[0];
-			
+			splitContainer_TopLevel = (SplitContainer)this.Controls[0];
+            splitContainer_Results = (SplitContainer)controls[0];
+
 			result_RichTextBox = outputPanel.add_RichTextBox();       						
         	
         	result_Panel = outputPanel.add_Panel();
@@ -134,8 +147,8 @@ namespace O2.XRules.Database.O2Utils
         public void configureGui()
         {
         	result_Panel.visible(false);
-        	executeButton.enabled(false); 
-        	
+        	executeButton.enabled(false);
+            commandsToExecute.textEditor().showInvalidLines(false);
         	
         	swapGeneratedCodeViewMode();         	// make it not visible by default        	
 
@@ -162,12 +175,12 @@ namespace O2.XRules.Database.O2Utils
         	contextMenu.add("replace with generated source code",(menuitem)=> replaceMainCodeWithGeneratedSource());
         	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());
             //contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
-            contextMenu.add("set/disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter );
+            contextMenu.add("enable /disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter );
             contextMenu.add("show Log Viewer", (menuitem) => showLogViewer());
-            contextMenu.add("disable Auto Compile on code change", (menuitem) => AutoCompileOnCodeChange = false);
-            contextMenu.add("enable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = true);
-            contextMenu.add("show auto saved scripts", (menuitem) => showAutoSavedScripts());   
-
+            contextMenu.add("disable / enabled Auto compile on code change", (menuitem) => AutoCompileOnCodeChange = !AutoCompileOnCodeChange);
+            contextMenu.add("enable / disable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = ! AutoSaveOnCompileSuccess);
+            contextMenu.add("show auto saved scripts", (menuitem) => showAutoSavedScripts());
+            contextMenu.add("disable / enable 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = !commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace);
      	}        	     	
 	     		     	
 	    public void setCompilerEnvironment()
@@ -242,6 +255,8 @@ namespace O2.XRules.Database.O2Utils
                             var targetFile = AutoSaveDir.pathCombine(Files.getFileSaveDateTime_Now().trim() + ".cs");
                             targetFile.fileWrite(Code);
                         }
+                        if (onCompilationOk != null)
+                        	onCompilationOk();
 					};
      		 		 
 	    }	         	
@@ -338,7 +353,8 @@ namespace O2.XRules.Database.O2Utils
      	}
      	
      	public void showResult(object result)
-     	{	     	
+     	{
+            csharpCompiler.InvocationParameters["ReturnData"] = result;
      		result_RichTextBox.visible(false);
      		result_Panel.visible(false);
             result_Panel.clear();
@@ -395,27 +411,28 @@ namespace O2.XRules.Database.O2Utils
      			h2Script.save(targetFile);
      		}
      		this.info("target: {0}", targetFile);
-     	}	
-     	
-     	public void swapGeneratedCodeViewMode()
-     	{
-     		this.invokeOnThread(
-     			()=>{
-			     		topLevelSplitContainer.Panel2Collapsed = ! topLevelSplitContainer.Panel2Collapsed;
-			     		if (isGeneratedSourceCodeVisible())
-			     			compileCodeSnippet(commandsToExecute.get_Text()); 
-			     	});
      	}
+
+        public void swapGeneratedCodeViewMode()
+        {
+            this.invokeOnThread(
+                () =>
+                {
+                    splitContainer_TopLevel.Panel2Collapsed = !splitContainer_TopLevel.Panel2Collapsed;
+                    if (isGeneratedSourceCodeVisible())
+                        compileCodeSnippet(commandsToExecute.get_Text());
+                });
+        }
      	
      	public void showGeneratedSourceCode()
      	{
-     		if (topLevelSplitContainer.Panel2Collapsed)
+            if (splitContainer_TopLevel.Panel2Collapsed)
      			swapGeneratedCodeViewMode();
      	}
      	
      	public bool isGeneratedSourceCodeVisible()
      	{
-     		return  !topLevelSplitContainer.Panel2Collapsed;
+            return !splitContainer_TopLevel.Panel2Collapsed;
      	}
 
         public void enableCodeComplete()

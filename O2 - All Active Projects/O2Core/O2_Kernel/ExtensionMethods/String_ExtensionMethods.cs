@@ -123,6 +123,11 @@ namespace O2.Kernel.ExtensionMethods
             return false;
         }
 
+        public static bool nstarts(this string stringToSearch, string stringToFind)
+        {
+            return ! starts(stringToSearch, stringToFind);
+        }
+
         public static bool ends(this string string1, string string2)
         {
             return string1.EndsWith(string2);

@@ -13,7 +13,7 @@ namespace O2.External.SharpDevelop.AST
         //(in an attempt to make it more user friendly to the user
         public static string tryToFixRawCode(string originalCode, Func<string,string> codeCreationEngine)
         {
-            var code = originalCode.trim();
+            var code = originalCode;//.trim();
             string parsedCode = null;
             string tempCode = null;
             // first see if the code provide is a predefined command
@@ -47,7 +47,12 @@ namespace O2.External.SharpDevelop.AST
                                 ? "{0};".format(code)
                                 : "{0}();".format(code);
                         parsedCode = codeCreationEngine(tempCode);
-                    }                 
+                    }
+                    if (parsedCode == null)
+                    {
+                        tempCode = "return {0};".format(code);
+                        parsedCode = codeCreationEngine(tempCode);
+                    }
                     if (parsedCode == null)
                     {
                         var firstSpace = code.IndexOf(' ');

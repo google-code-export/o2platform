@@ -8,6 +8,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class RegEx_ExtensionMethods
     {
+        public static bool nregEx(this string targetString, string regEx)
+        {
+            return !targetString.regEx(regEx);
+        }
+
         public static bool regEx(this string targetString, string regEx)
         {
             return RegEx.findStringInString(targetString, regEx);

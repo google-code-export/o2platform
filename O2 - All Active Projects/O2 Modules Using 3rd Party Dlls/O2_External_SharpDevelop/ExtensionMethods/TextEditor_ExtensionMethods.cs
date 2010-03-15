@@ -32,7 +32,102 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static string get_Text(this TextEditorControl textEditorControl)
         {            
-            return (string)textEditorControl.textArea().invokeOnThread(() => textEditorControl.textArea().Text);
+            return (string)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    var text = textEditorControl.Text; ;//textEditorControl.textArea().Text
+                    return text;
+                });
         }
+
+        public static string get_Text(this TextEditorControl textEditorControl, int offset, int lenght)
+        {
+            return (string)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    var text = textEditorControl.textArea().Document.GetText(offset, lenght);
+                    return text;
+                });
+        }
+
+        public static int currentOffset(this TextEditorControl textEditorControl)
+        {
+            return (int)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    return textEditorControl.textArea().Caret.Offset;                    
+                });
+        }
+
+        public static TextEditorControl showLineNumbers(this TextEditorControl textEditorControl, bool value)
+        {
+            return (TextEditorControl)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    textEditorControl.ShowLineNumbers = value;
+                    return textEditorControl;
+                });
+        }
+
+        public static TextEditorControl showTabs(this TextEditorControl textEditorControl, bool value)
+        {
+            return (TextEditorControl)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    textEditorControl.ShowTabs = value;
+                    return textEditorControl;
+                });
+        }
+
+        public static TextEditorControl showSpaces(this TextEditorControl textEditorControl, bool value)
+        {
+            return (TextEditorControl)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    textEditorControl.ShowSpaces = value;
+                    return textEditorControl;
+                });
+        }
+
+        public static TextEditorControl showInvalidLines(this TextEditorControl textEditorControl, bool value)
+        {
+            return (TextEditorControl)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    textEditorControl.ShowInvalidLines = value;
+                    return textEditorControl;
+                });
+        }
+
+        public static TextEditorControl showEOLMarkers(this TextEditorControl textEditorControl, bool value)
+        {
+            return (TextEditorControl)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    textEditorControl.ShowEOLMarkers = value;
+                    return textEditorControl;
+                });
+        }
+
+        public static TextEditorControl showHRuler(this TextEditorControl textEditorControl, bool value)
+        {
+            return (TextEditorControl)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    textEditorControl.ShowHRuler = value;
+                    return textEditorControl;
+                });
+        }
+
+        public static TextEditorControl showVRuler(this TextEditorControl textEditorControl, bool value)
+        {
+            return (TextEditorControl)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    textEditorControl.ShowVRuler = value;
+                    return textEditorControl;
+                });
+        }
+
     }
 }

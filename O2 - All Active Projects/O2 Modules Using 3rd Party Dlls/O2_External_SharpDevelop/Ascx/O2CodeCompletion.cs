@@ -40,25 +40,31 @@ namespace O2.External.SharpDevelop.Ascx
         public Dictionary<string, ICompilationUnit> mappedCompilationUnits { get; set; } // so that we support dynamic CodeCompletion from multiple files
 		//public ICompilationUnit lastCompilationUnit;
 		public string DummyFileName = "edited.cs";
+        public int startOffset = 0;
 		public ImageList SmallIcons;
     	public Form HostForm { get; set; }
         public Location CodeCompleteCaretLocationOffset { get; set; }
         public string CodeCompleteTargetText { get; set; }
     	public CodeCompletionWindow codeCompletionWindow;
     	public Action<string> statusMessage;
-    	
+        public bool OnlyShowCodeCompleteResulstFromO2Namespace { get; set; }
+        public bool UseParseCodeThread { get; set; }
+
     	public O2CodeCompletion(TextEditorControl _textEditor)
     		: this(_textEditor,(text)=>text.info())
     	{
     	}
+
     	public O2CodeCompletion(TextEditorControl _textEditor, Action<string> status)
-    	{    	
+    	{
+            OnlyShowCodeCompleteResulstFromO2Namespace = true;
+            UseParseCodeThread = true;
+            extraSourceCodeToProcess = new List<string>();
+            mappedCompilationUnits = new Dictionary<string, ICompilationUnit>();
+
     		_textEditor.invokeOnThread(
     			()=>{
 			    		textEditor = _textEditor;
-                        //textEditorToGrabCodeFrom = _textEditor; // (wasn't working) by default these are the same
-                        extraSourceCodeToProcess = new List<string>();
-                        mappedCompilationUnits = new Dictionary<string, ICompilationUnit>();
                         statusMessage = status;
 				    	statusMessage("Loading Icons");
 			    		loadIcons();
@@ -83,10 +89,11 @@ namespace O2.External.SharpDevelop.Ascx
             pcRegistry.ActivatePersistence(Path.Combine(PublicDI.config.O2TempDir,
                                                         "CSharpCodeCompletion"));
 			// static parse current code thread
-			startParseCodeThread();
+			//startParseCodeThread();
 			// add references
 			
-			startAddReferencesThread();         	
+			startAddReferencesThread();
+            startParseCodeThread();
     	}
 
         void Caret_PositionChanged(object sender, EventArgs e)
@@ -114,42 +121,42 @@ namespace O2.External.SharpDevelop.Ascx
     		textEditor.open(fileToOpen);
     		//DummyFileName = fileToOpen;				// DC  - check if this makes the diference
     	}
-    	
+
+        public void mapDotNetReferencesForCodeComplete()
+        {
+            statusMessage("Loading MsCorlib");
+            this.myProjectContent.AddReferencedContent(this.pcRegistry.Mscorlib);
+            addReference("System.Windows.Forms");
+            addReference("System");
+            addReference("System.Data");
+            addReference("System.Drawing");
+            addReference("System.Xml");
+            addReference("Microsoft.VisualBasic");
+            addReference("PresentationCore");
+            addReference("PresentationFramework");
+            addReference("WindowsBase");
+            addReference("WindowsFormsIntegration");
+        }
+
     	public void startAddReferencesThread()
     	{
             O2Thread.mtaThread(
                 () =>
                 {
-                    statusMessage("Loading MsCorlib");
-                    this.myProjectContent.AddReferencedContent(this.pcRegistry.Mscorlib);
-                    addReference("System.Windows.Forms");    
-                    addReference("System");
-                    addReference("System.Data");
-                    addReference("System.Drawing");
-                    addReference("System.Xml");
-                    addReference("Microsoft.VisualBasic");
+                    O2Thread.setPriority_Lowest();                    
+                    mapDotNetReferencesForCodeComplete();
+
+                    // for GraphSharp
                     addReference("ICSharpCode.AvalonEdit.dll");
-                    addReference("PresentationCore.dll");
-                    addReference("PresentationFramework.dll");
-                    addReference("WindowsBase.dll");
-                    addReference("WindowsFormsIntegration.dll");
                     addReference("GraphSharp.dll");
                     addReference("QuickGraph.dll");
                     addReference("GraphSharp.Controls.dll");
-                    
-                    //this.myProjectContent.AddReferencedContent(this.pcRegistry.SystemWindowsForms);
+                    // for twitter
+                    addReference("Newtonsoft.Json.dll");
+                    addReference("Dimebrain.TweetSharp.dll");
+                                        
                     foreach (var reference in CompileEngine.getListOfO2AssembliesInExecutionDir())
                         addReference(reference);
-                    /*addReference("O2SharpDevelop.dll");
-                    addReference("O2_Kernel.dll");
-                    addReference("O2_Views_ASCX.dll");
-                    addReference("O2_Views_ASCX.dll");						
-                    addReference("O2_External_IE.dll");
-                    addReference("O2_DotNetWrappers.dll");
-                    addReference("O2_Core_XRules.dll");
-                    addReference("O2_Core_CIR.dll");
-                    addReference("O2_External_SharpDevelop.dll");
-                    addReference("O2_External_O2Mono.dll");*/
                                    
                     statusMessage("Dependencies loaded");
                 });
@@ -166,7 +173,7 @@ namespace O2.External.SharpDevelop.Ascx
 			O2Thread.mtaThread(
 				()=>{
 						//"starting parseCodeThread".debug();
-						while (!textEditor.IsDisposed)
+						while (!textEditor.IsDisposed && UseParseCodeThread)
 			                {
 			                    //this.parseSourceCode(this.textEditorToGrabCodeFrom.get_Text());
                                 this.parseSourceCode(DummyFileName, this.textEditor.get_Text());
@@ -180,7 +187,7 @@ namespace O2.External.SharpDevelop.Ascx
 			                }
 			                "LEAVING  parseCodeThread".debug();
 			         });
-		}
+		}        
 
         public void parseFile(string fileToParse)
         {
@@ -195,6 +202,8 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void parseSourceCode(string file, string code)
         {
+            var text = textEditor.get_Text();
+            //textEditor.set(")
             if (false == code.valid())
                 return;
 
@@ -214,7 +223,7 @@ namespace O2.External.SharpDevelop.Ascx
                 p.ParseMethodBodies = false;
                 p.Parse();
                 newCompilationUnit = ConvertCompilationUnit(p.CompilationUnit);
-            }
+            }            
             // Remove information from lastCompilationUnit and add information from newCompilationUnit.
             myProjectContent.UpdateCompilationUnit(lastCompilationUnit, newCompilationUnit, DummyFileName);
             mappedCompilationUnits[file] = newCompilationUnit;
@@ -242,11 +251,14 @@ namespace O2.External.SharpDevelop.Ascx
 			if (codeCompletionWindow != null) {
 				// If completion window is open and wants to handle the key, don't let the text area
 				// handle it
-				if (codeCompletionWindow.ProcessKeyEvent(key))
-					return true;            
+				                
+                if (codeCompletionWindow != null) 
+                    if (codeCompletionWindow.ProcessKeyEvent(key))
+                        return true;
 			}
 			if (key == '.')
             {
+                startOffset = textEditor.currentOffset() + 1;
 				ICompletionDataProvider completionDataProvider = this;//new CodeCompletionProvider(this);
 				
 				codeCompletionWindow = CodeCompletionWindow.ShowCompletionWindow(
@@ -261,7 +273,7 @@ namespace O2.External.SharpDevelop.Ascx
 					// ShowCompletionWindow can return null when the provider returns an empty list
 					codeCompletionWindow.Closed += new EventHandler(CloseCodeCompletionWindow);
 				}                
-			}
+			}          
 			return false;
 		}
 		
@@ -350,7 +362,7 @@ namespace O2.External.SharpDevelop.Ascx
         }
         private ResolveResult resolveLocation(TextLocation logicalPosition)
         {
-            var textArea = textEditor.ActiveTextAreaControl.TextArea;
+           var textArea = textEditor.ActiveTextAreaControl.TextArea;
             var targetText = "";
             var targetOffset = 0;
             if (CodeCompleteCaretLocationOffset.Line == 0)
@@ -516,6 +528,7 @@ namespace O2.External.SharpDevelop.Ascx
                 var firstMethodOffset = calculateFirstMethodOffset();
                 targetText = getAdjustedSnippetText(textArea, firstMethodOffset);
             }
+
 			NRefactoryResolver resolver = new NRefactoryResolver(this.myProjectContent.Language);
 			ResolveResult rr = resolver.Resolve(FindExpression(textArea),
 			                                        this.parseInformation,
@@ -606,6 +619,12 @@ namespace O2.External.SharpDevelop.Ascx
 
 		void AddCompletionData(List<ICompletionData> resultList, ArrayList completionData)
 		{
+         //   var currentCodeCompleteText = "";
+         //   var lenght = textEditor.currentOffset() - startOffset;
+         //   if (lenght >0)
+         //       currentCodeCompleteText = textEditor.get_Text(startOffset,lenght);
+         //   "{0}:{1}  = {2}".format(startOffset,lenght , currentCodeCompleteText).debug();
+
 			// used to store the method names for grouping overloads
 			Dictionary<string, CodeCompletionData> nameDictionary = new Dictionary<string, CodeCompletionData>();
 			
@@ -624,9 +643,16 @@ namespace O2.External.SharpDevelop.Ascx
 						// Skip constructors
 						continue;
 					}
+                    // if OnlyShowCodeCompleteResulstFromO2Namespace filter for only O2.* namepace
+                    if (OnlyShowCodeCompleteResulstFromO2Namespace &&  m.DeclaringType.Namespace.starts("O2") == false)
+                        continue;
+
+                    // NOT WORKING only show items that match currentCodeCompleteText regex
+            //        if (currentCodeCompleteText != "" && m.DotNetName.nregEx(currentCodeCompleteText))
+            //            continue;
+                    //if 
 					// Group results by name and add "(x Overloads)" to the
-					// description if there are multiple results with the same name.
-					
+					// description if there are multiple results with the same name.                    
 					CodeCompletionData data;
 					if (nameDictionary.TryGetValue(m.Name, out data)) {
 						data.AddOverload();

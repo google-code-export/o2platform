@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var panel = O2Gui.open&lt;Panel&gt;("File Search", 800,600);
+var fileMappings = panel.add_Control&lt;ascx_FileMappings&gt;();
+var searchTargets = panel.add_Control&lt;ascx_SearchTargets&gt;();
+var searchResults = panel.add_Control&lt;ascx_SearchResults&gt;();
+//searchResults.insert_Left(fileMappings,100); 
+fileMappings.insert_Below(searchResults,300);
+fileMappings.insert_Right(searchTargets,500); 
+
+
+//ref _SearchEngine (O2 Tool).exe
+//using O2.Tool.SearchEngine.Ascx</SourceCode>
+  <ReferencedAssemblies />
+</H2>

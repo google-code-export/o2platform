@@ -5,6 +5,7 @@ using System.Text;
 using O2.XRules.Database.O2Utils;
 using System.Windows.Forms;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.External.SharpDevelop.ExtensionMethods;
 
 namespace O2.XRules.Database.ExtensionMethods
 {
@@ -20,5 +21,14 @@ namespace O2.XRules.Database.ExtensionMethods
             return hostControl.add<ascx_Simple_Script_Editor>();           
         }
 
+        public static ascx_Simple_Script_Editor set_Command(this ascx_Simple_Script_Editor scriptEditor, string commandText)
+        {
+            return (ascx_Simple_Script_Editor)scriptEditor.invokeOnThread(
+                () =>
+                {
+                    scriptEditor.commandsToExecute.set_Text(commandText);
+                    return scriptEditor;
+                });
+        }
     }
 }

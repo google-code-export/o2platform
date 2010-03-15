@@ -114,5 +114,30 @@ namespace O2.DotNetWrappers.DotNet
         {
             return new System.Diagnostics.StackTrace().ToString();
         }
+
+        public static void setPriority_Lowest()
+        {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Lowest;
+        }
+
+        public static void setPriority_BelowNormal()
+        {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.BelowNormal;
+        }
+
+        public static void setPriority_Normal()
+        {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Normal;
+        }
+
+        public static void setPriority_AboveNormal()
+        {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.AboveNormal;
+        }
+
+        public static void setPriority_Highest()
+        {
+            System.Threading.Thread.CurrentThread.Priority = System.Threading.ThreadPriority.Highest;
+        }               
     }
 }
