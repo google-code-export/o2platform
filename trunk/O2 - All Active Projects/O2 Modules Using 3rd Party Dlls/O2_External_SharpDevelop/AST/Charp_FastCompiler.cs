@@ -81,11 +81,16 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.DotNetWrappers.ExtensionMethods")
                                      .add("O2.External.IE.ExtensionMethods")
                                      .add("O2.XRules.Database.ExtensionMethods")
+                                     .add(" O2.XRules.Database.O2Utils")
+                                     .add("O2.External.SharpDevelop.ExtensionMethods")
+                                     .add("O2.External.SharpDevelop.Ascx")
                 //GraphSharp related
                                      .add("O2.Script")
                                      .add("GraphSharp.Controls")
                                      .add("O2.API.Visualization.ExtensionMethods")
-                                     .add("WPF=System.Windows.Controls");
+                                     .add("WPF=System.Windows.Controls")
+                //Twitter related
+                                     .add("O2.API.Visualization.Twitter");
         }
 		public List<string> getDefaultReferencedAssemblies()
         {
@@ -99,6 +104,8 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2_Views_Ascx.dll")
                                      .add("O2_External_IE.dll")
                                      .add("O2_XRules_Database.exe")
+                                     .add("O2_External_SharpDevelop.dll")
+                                     .add("O2SharpDevelop.dll")
                                      //GraphSharp related
                                      .add("O2_Api_Visualization.dll")
                                      .add("QuickGraph.dll")
@@ -108,7 +115,10 @@ namespace O2.External.SharpDevelop.AST
                                      .add("PresentationFramework.dll")
                                      .add("WindowsBase.dll")
                                      .add("WindowsFormsIntegration.dll")
-                                     .add("ICSharpCode.AvalonEdit.dll");
+                                     .add("ICSharpCode.AvalonEdit.dll")
+                                     // twitter related
+                                     .add("Newtonsoft.Json.dll")
+                                     .add("Dimebrain.TweetSharp.dll");                    
         }
 
 		public Dictionary<string,object> getDefaultInvocationParameters()
@@ -285,10 +295,10 @@ namespace O2.External.SharpDevelop.AST
                     {
                         // map parsedCode into a new type and method 
 
-                        var blockStatement = (BlockStatement) parsedCode;
+                        var blockStatement = (BlockStatement)parsedCode;
                         CompilationUnit.add_Type(default_TypeName)
                             .add_Method(default_MethodName, InvocationParameters, blockStatement);
-                        
+
                         astCSharp = new Ast_CSharp(CompilationUnit);
                         astCSharp.AstDetails.mapSpecials(snippetParser.Specials);
                         // add references included in the original source code file
@@ -298,10 +308,13 @@ namespace O2.External.SharpDevelop.AST
                     else
                     {
                         CompilationUnit = (CompilationUnit)parsedCode;
+                        if (CompilationUnit.Children.Count == 0)
+                            return null;
+                        
                         astCSharp = new Ast_CSharp(CompilationUnit);
                         CreatedFromSnipptet = false;
                     }
-
+                    
                     // create sourceCode using Ast_CSharp & AstDetails		
                     if(CompilationUnit.Children.Count > 0)
                     {

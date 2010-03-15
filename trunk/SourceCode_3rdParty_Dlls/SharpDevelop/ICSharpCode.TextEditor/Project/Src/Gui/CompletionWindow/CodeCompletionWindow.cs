@@ -25,8 +25,9 @@ namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 		const int ScrollbarWidth = 16;
 		const int MaxListLength = 10;
 
-		int startOffset;
-		int endOffset;
+		public int startOffset;         //DC: Made these public
+		public int endOffset;           //DC: Made these public
+
 		DeclarationViewWindow declarationViewWindow = null;
 		Rectangle workingScreen;
 		
@@ -238,7 +239,7 @@ namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 			} else {
 				codeCompletionListView.SelectItemWithStart(control.Document.GetText(startOffset, offset - startOffset));
 			}
-		}
+		}       
 		
 		protected override bool ProcessTextAreaKey(Keys keyData)
 		{

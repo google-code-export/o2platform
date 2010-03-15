@@ -86,12 +86,24 @@ namespace O2.External.SharpDevelop.AST
         private void showInSourceCode(object sender, TreeViewEventArgs e)
         {
             var treeNoteTag = e.Node.Tag;
-            if (treeNoteTag is AstValue<object>)
+            var endLocation = (ICSharpCode.NRefactory.Location)O2.Kernel.PublicDI.reflection.getProperty("EndLocation",treeNoteTag);
+            var startLocation = (ICSharpCode.NRefactory.Location)O2.Kernel.PublicDI.reflection.getProperty("StartLocation", treeNoteTag);
+            var originalObject = O2.Kernel.PublicDI.reflection.getProperty("OriginalObject", treeNoteTag);
+            var text = (string)O2.Kernel.PublicDI.reflection.getProperty("Text", treeNoteTag);
+            var astValue = new AstValue<object>(text,originalObject,startLocation,endLocation);
+            textEditorControl.showAstValueInSourceCode(astValue);
+            
+            //astValue.EndLocation = 
+
+            /*if (treeNoteTag is AstValue<ICSharpCode.NRefactory.Ast.MethodDeclaration>)
+                textEditorControl.showAstValueInSourceCode((AstValue<ICSharpCode.NRefactory.Ast.MethodDeclaration>)treeNoteTag);
+
+            else if (treeNoteTag is AstValue<object>)
             {
                 var astValue = (AstValue<object>)treeNoteTag;
                 //var textEditorControl = sourceCodeEditor.getObject_TextEditorControl();
                 textEditorControl.showAstValueInSourceCode(astValue);
-            }
+            }*/
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
+using System.Drawing;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -44,7 +45,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                      return null;
                                  });
         }
-           
+
         public static T add_Control<T>(this Control hostControl, params int[] position) where T : Control
         {
             var values = new[] { -1, -1, -1, -1 };
@@ -78,12 +79,26 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         return newControl;
                     }
                     return null;
-                });            
+                });
         }
 
         #endregion
 
         #region Control - get
+
+        public static T get<T>(this Control controlToSearch) where T : Control
+        {
+            foreach (var control in controlToSearch.controls())
+                if (control is T)
+                    return (T)control;
+                else
+                {
+                    var childMatch = control.get<T>();
+                    if (childMatch != null)
+                        return childMatch;
+                }
+            return null;
+        }
 
         public static T get<T>(this List<Control> controls) where T : Control
         {
@@ -92,6 +107,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return (T)control;
             return null;
         }
+
+        public static T castOrCreate<T>(this Control control, object objectToCheck, Func<T> createFunction)
+        {
+            if (objectToCheck != null && objectToCheck is T)
+                return (T)objectToCheck;
+            control.clear();
+            return createFunction();
+        }        
 
         #endregion
 
@@ -140,6 +163,42 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static Control backColor(this Control control, Color color)
+        {
+            return (Control)control.invokeOnThread(
+                () =>
+                {
+                    control.BackColor = color;
+                    return control;
+                });
+        }
+
+        public static List<Control> controls(this Control control)
+        {
+            return control.controls(false);
+        }
+
+        public static List<Control> controls(this Control control, bool recursiveSearch)
+        {
+            if (recursiveSearch)
+            {    
+                var allControls = control.controls();
+                foreach(var childControl in control.controls())
+                    allControls.AddRange(childControl.controls(true));
+                return allControls;
+            }
+            else
+                return control.Controls.list();
+        }
+
+        public static List<Control> list(this Control.ControlCollection controlCollection)
+        {
+            var controls = new List<Control>();
+            foreach (Control control in controlCollection)
+                controls.Add(control);
+            return controls;
+        }
+
         #endregion
 
         #region Control - events
@@ -158,7 +217,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             //
         }
         //		
-        
+
 
         #endregion
 
@@ -174,11 +233,36 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (Control)control.invokeOnThread(
                 () =>
                 {
-                    control.Controls.Clear();
+                    if (control.Controls.IsReadOnly)
+                        "cannot clear control list for type {0} since it is marked as read only".format(control.typeName()).error();
+                        control.Controls.Clear();                    
                     return control;
                 });
         }
 
+        public static T removeOthers<T>(this Control hostControl, T controlToKeep) where T : Control
+        {
+            return (T)hostControl.invokeOnThread(
+                () =>
+                {
+                    foreach (var control in hostControl.controls())
+                        if (control != controlToKeep)
+                            hostControl.Controls.Remove(control);
+                    return controlToKeep;
+                });
+        }
+             
+        public static T remove<T>(this T hostControl, Control controlToRemove) where T : Control
+        {
+            return (T)hostControl.invokeOnThread(
+                () =>
+                {
+                    foreach (var control in hostControl.controls(true))
+                        if (control != controlToRemove)
+                            hostControl.Controls.Remove(controlToRemove);
+                    return hostControl;
+                });
+        }
         #endregion
 
         #region Control - location
@@ -495,6 +579,9 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return controlToWrap.injectControl_Bottom(controlToInject, splitterDistance, false);
         }
+
+
         #endregion
+       
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.Kernel.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
@@ -21,8 +22,14 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         {
             if (csharpCompiler != null)
                 if (csharpCompiler.CompilerResults != null)
-                    if (csharpCompiler.CompilerResults.CompiledAssembly != null)
-                        return csharpCompiler.CompilerResults.CompiledAssembly;
+                    if (csharpCompiler.CompilerResults.Errors.HasErrors == false)
+                    {
+                        if (csharpCompiler.CompilerResults.CompiledAssembly != null)
+                            return csharpCompiler.CompilerResults.CompiledAssembly;
+                    }
+                    else
+                        "CompilationErrors:".line().add(csharpCompiler.CompilationErrors).error();
+
             return null;
         }
     }

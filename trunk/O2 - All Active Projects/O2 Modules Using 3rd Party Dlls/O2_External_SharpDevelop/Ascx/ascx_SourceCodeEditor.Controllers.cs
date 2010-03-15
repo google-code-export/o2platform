@@ -1227,7 +1227,12 @@ namespace O2.External.SharpDevelop.Ascx
         
         public O2CodeCompletion enableCodeComplete()
         {
-            o2CodeCompletion = new O2CodeCompletion(tecSourceCode);
+            if (o2CodeCompletion == null)
+                o2CodeCompletion = new O2CodeCompletion(tecSourceCode);
+            else
+            {
+                o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = false;
+            }
             return o2CodeCompletion;
         }        
     }

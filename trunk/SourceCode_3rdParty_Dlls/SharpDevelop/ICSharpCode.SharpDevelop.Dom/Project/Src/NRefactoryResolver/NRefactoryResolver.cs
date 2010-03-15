@@ -185,7 +185,7 @@ namespace ICSharpCode.SharpDevelop.Dom.NRefactoryResolver
 			this.ProjectContent = cu.ProjectContent;
 			
 			callingClass = cu.GetInnermostClass(caretLine, caretColumn);
-			callingMember = GetCallingMember();
+		    callingMember = GetCallingMember();
 			return true;
 		}
 		

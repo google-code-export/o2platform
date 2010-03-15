@@ -102,7 +102,8 @@ namespace O2.XRules.Database
         	        
         	mainSplitContainer.panel2Collapsed(true);
         	
-        	var contextMenu = pictureBox.add_ContextMenu();        	
+        	var contextMenu = pictureBox.add_ContextMenu();
+            contextMenu.add("Open O2 Command Prompt", (item) => openO2CommandPromt());
         	contextMenu.add("View loaded script source Code", (item)=> showLoadedScriptSourceCode() );
         	contextMenu.add("Execute Again", (item)=> executeCompiledCode() );
         	contextMenu.add("View available scripts", (item)=> showAvailableScripts() );
@@ -241,7 +242,12 @@ namespace O2.XRules.Database
             mapFoldersAndFiles(treeView, rootNode);
             treeView.expand(rootNode);            
      	}
-     	
+
+        public void openO2CommandPromt()
+        {
+            O2Utils.O2CommandPrompt.run();
+        }
+
      	public void openSimpleScriptEditor()
      	{
             O2Utils.ascx_Simple_Script_Editor.startControl();

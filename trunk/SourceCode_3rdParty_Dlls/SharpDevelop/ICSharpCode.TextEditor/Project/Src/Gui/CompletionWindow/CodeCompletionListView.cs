@@ -154,7 +154,7 @@ namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 		}
 		
 		public void SelectItemWithStart(string startText)
-		{
+		{           
 			if (startText == null || startText.Length == 0) return;
 			string originalStartText = startText;
 			startText = startText.ToLower();
