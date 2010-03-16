@@ -31,10 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Engine" />
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v3.5">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -45,8 +52,244 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\AppDomain.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\AppDomainEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Assembly.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\AssemblyEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Breakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\BreakpointEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ChainEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Class.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Constants.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Controller.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\CorMetadata.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\CorPublish.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Debugger.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ErrorInfoEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Eval.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\FunctionBreakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\HResults.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymBinder2.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymConstant.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymEncMethod.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymENCUpdate.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymReader2.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymScope2.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymSearchInfo.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ISymWriter2.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\MetadataFieldInfo.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\MetadataParameterInfo.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\MetadataType.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Module.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ModuleBreakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ModuleEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ObjectEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Process.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ProcessEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\RegisterSet.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Stepper.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\StepperEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymAccess.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\symbinder.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymConstant.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymDocument.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymDocumentWriter.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\symmethod.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymNamespace.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymReader.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymScope.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymSearchInfo.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymSearchPolicyAttributes.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\symvariable.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\SymWriter.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Thread.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ThreadEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Type.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\TypeEnumerator.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\Value.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\ValueBreakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\corapi\WrapperBase.cs" />
+    <Compile Include="OriginalMdbgCode\enc\enc.cs" />
+    <Compile Include="OriginalMdbgCode\gui\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\AttachProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\AttachProcess.Designer.cs">
+      <DependentUpon>AttachProcess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\AutoWatchWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\AutoWatchWindow.Designer.cs">
+      <DependentUpon>AutoWatchWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\Callstack.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\Callstack.Designer.cs">
+      <DependentUpon>Callstack.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\gui.cs" />
+    <Compile Include="OriginalMdbgCode\gui\GUIMainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\LaunchProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\LaunchProcess.Designer.cs">
+      <DependentUpon>LaunchProcess.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ModuleWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ModuleWindow.Designer.cs">
+      <DependentUpon>ModuleWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\QuickViewWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\QuickViewWindow.Designer.cs">
+      <DependentUpon>QuickViewWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\SourceViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ThreadWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ThreadWindow.Designer.cs">
+      <DependentUpon>ThreadWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\ToolWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\gui\VirtualSourceViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\ildasm\ilcode.cs" />
+    <Compile Include="OriginalMdbgCode\ildasm\ildasm.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Appdomain.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Breakpoint.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\DebuggerVar.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Engine.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Exception.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\FrameFactory.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Function.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\InternalUtil.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\MdbgEngAssemblyAttributes.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Module.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Process.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\StopReason.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Thread.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\Value.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgeng\WrapperWrapperBase.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgext\ArgumentParser.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgext\AttributeDefinedCommand.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgext\MDbgExt.cs" />
+    <Compile Include="OriginalMdbgCode\mdbgext\StopOptionPolicy.cs" />
+    <Compile Include="OriginalMdbgCode\mdbg\Mdbg.cs" />
+    <Compile Include="OriginalMdbgCode\mdbg\mdbgCommands.cs" />
+    <Compile Include="OriginalMdbgCode\mdbg\mdbgCommands.Designer.cs">
+      <DependentUpon>mdbgCommands.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OriginalMdbgCode\mdbg\SourceFile.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\context.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\NativeDbgModule.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\NativeDbgProcess.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\NativeDebugEvents.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\NativeImports.cs" />
+    <Compile Include="OriginalMdbgCode\NativeDebugWrappers\pipeline.cs" />
+    <Compile Include="OriginalMdbgCode\pdb2xml\pdb2xml.cs" />
+    <Compile Include="OriginalMdbgCode\pdb2xml\pefile.cs" />
+    <Compile Include="OriginalMdbgCode\raw\ICorDebugWrappers.cs" />
+    <Compile Include="OriginalMdbgCode\raw\ICorPublishWrappers.cs" />
+    <Compile Include="OriginalMdbgCode\raw\IMetadataImport.cs" />
+    <Compile Include="OriginalMdbgCode\raw\WindowsImports.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XObjects\Cmdline\Properties\AssemblyInfo.cs" />
+    <Compile Include="XObjects\Cmdline\update.cs" />
+    <Compile Include="XObjects\Cmdline\XObjectsGenerator.cs" />
+    <Compile Include="XObjects\Properties\AssemblyInfo.cs" />
+    <Compile Include="XObjects\Src\API\ContentModel.cs" />
+    <Compile Include="XObjects\Src\API\FsmXObjects.cs" />
+    <Compile Include="XObjects\Src\API\Interfaces.cs" />
+    <Compile Include="XObjects\Src\API\XObjects.cs" />
+    <Compile Include="XObjects\Src\API\XObjectsQueryExtension.cs" />
+    <Compile Include="XObjects\Src\API\XObjectsSimpleType.cs" />
+    <Compile Include="XObjects\Src\ClrAnnotation.cs" />
+    <Compile Include="XObjects\Src\ClrPropertyInfo.cs" />
+    <Compile Include="XObjects\Src\ClrSimpleTypeInfo.cs" />
+    <Compile Include="XObjects\Src\ClrTypeInfo.cs" />
+    <Compile Include="XObjects\Src\CodeDomHelper.cs" />
+    <Compile Include="XObjects\Src\CompiledFacets.cs" />
+    <Compile Include="XObjects\Src\Constants.cs" />
+    <Compile Include="XObjects\Src\Enums.cs" />
+    <Compile Include="XObjects\Src\FacetChecker.cs" />
+    <Compile Include="XObjects\Src\FSM.cs" />
+    <Compile Include="XObjects\Src\FSMGenerator.cs" />
+    <Compile Include="XObjects\Src\FXT\Base.cs" />
+    <Compile Include="XObjects\Src\FXT\Deanonymize.cs" />
+    <Compile Include="XObjects\Src\FXT\DmlExtensions.cs" />
+    <Compile Include="XObjects\Src\FXT\Linq2Xsd.cs" />
+    <Compile Include="XObjects\Src\FXT\QueryExtensions.cs" />
+    <Compile Include="XObjects\Src\NameMangler.cs" />
+    <Compile Include="XObjects\Src\NamespaceList.cs" />
+    <Compile Include="XObjects\Src\PropertyBuilder.cs" />
+    <Compile Include="XObjects\Src\SimpleTypeCodeDomHelper.cs" />
+    <Compile Include="XObjects\Src\SimpleTypeValidator.cs" />
+    <Compile Include="XObjects\Src\SOMQueryExtensions.cs" />
+    <Compile Include="XObjects\Src\TypeBuilder.cs" />
+    <Compile Include="XObjects\Src\TypesToCodeDom.cs" />
+    <Compile Include="XObjects\Src\XmlComplianceUtil.cs" />
+    <Compile Include="XObjects\Src\XmlConvert.cs" />
+    <Compile Include="XObjects\Src\XObjectException.cs" />
+    <Compile Include="XObjects\Src\XObjectsSettings.cs" />
+    <Compile Include="XObjects\Src\XsdToTypesConverter.cs" />
+    <Compile Include="XObjects\XOTask\LinqToXsdTask.cs" />
+    <Compile Include="XObjects\XOTask\Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="OriginalMdbgCode\corapi\ReadMe.txt" />
+    <Content Include="OriginalMdbgCode\enc\ReadMe.txt" />
+    <Content Include="OriginalMdbgCode\gui\Breakpoint.bmp" />
+    <Content Include="OriginalMdbgCode\gui\CurrentLineArrow.bmp" />
+    <Content Include="OriginalMdbgCode\gui\NotCurrentLineArrow.bmp" />
+    <Content Include="OriginalMdbgCode\gui\ReadMe.txt" />
+    <Content Include="OriginalMdbgCode\gui\UnboundBreakpoint.bmp" />
+    <Content Include="OriginalMdbgCode\ildasm\readme.txt" />
+    <Content Include="OriginalMdbgCode\mdbgeng\ReadMe.txt" />
+    <Content Include="OriginalMdbgCode\mdbgext\ReadMe.txt" />
+    <Content Include="OriginalMdbgCode\mdbg\Bootstrap.cs.txt" />
+    <Content Include="OriginalMdbgCode\mdbg\ReadMe.txt" />
+    <Content Include="OriginalMdbgCode\raw\ReadMe.txt" />
+    <Content Include="XObjects\Cmdline\Cmdline.csproj" />
+    <Content Include="XObjects\XObjects.csproj" />
+    <Content Include="XObjects\XObjects.sln" />
+    <Content Include="XObjects\XOTask\XOTask.csproj" />
+    <Content Include="XObjects\XOTask\XOTask.sln" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="OriginalMdbgCode\gui\GUIMainForm.resx">
+      <DependentUpon>GUIMainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OriginalMdbgCode\gui\SourceViewerForm.resx">
+      <DependentUpon>SourceViewerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OriginalMdbgCode\mdbg\mdbgCommands.resx">
+      <DependentUpon>mdbgCommands.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\O2 - All Active Projects\O2Core\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\O2 - All Active Projects\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
