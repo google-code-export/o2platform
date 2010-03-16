@@ -47,7 +47,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             try
             {
-                _string = _string.StartsWith("http") ? _string : @"http://" + _string;
+                if (_string.isFile().isFalse())                    
+                    _string = _string.StartsWith("http") ? _string : @"http://" + _string;
                 return new Uri(_string);
             }
             catch (Exception)

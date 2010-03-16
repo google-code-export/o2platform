@@ -44,12 +44,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         public static bool isFile(this string path)
-        {
+        {            
             return path.fileExists();
         }
 
         public static bool isImage(this string path)
         {
+            if (path.isFile().isFalse())
+                return false;
             switch (path.extension())
             { 
                 case ".gif":
@@ -65,6 +67,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static bool isText(this string path)
         {
+            if (path.isFile().isFalse())
+                return false;
             switch (path.extension())
             {
                 case ".txt":                
@@ -76,6 +80,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static bool isDocument(this string path)
         {
+            if (path.isFile().isFalse())
+                return false;
             switch (path.extension())
             {
                 case ".rtf":

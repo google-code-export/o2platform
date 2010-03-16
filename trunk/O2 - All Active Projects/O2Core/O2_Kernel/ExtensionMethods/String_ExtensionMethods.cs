@@ -272,10 +272,11 @@ namespace O2.Kernel.ExtensionMethods
                 stringBuilder.Remove(stringBuilder.Length - 1, 1);
         }
 
-        public static void removeLastChar(this string _string)
+        public static string removeLastChar(this string _string)
         {
             if (_string.Length > 0)
-                _string.Remove(_string.Length - 1, 1);
+                return _string.Remove(_string.Length - 1, 1);
+            return _string;
         }
 
         public static string appendGuid(this string _string)
