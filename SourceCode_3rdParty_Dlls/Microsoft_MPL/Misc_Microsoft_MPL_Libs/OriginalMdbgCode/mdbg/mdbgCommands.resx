@@ -1,0 +1,679 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="next_ShortHelp" xml:space="preserve">
+    <value>Step Over</value>
+  </data>
+  <data name="ignore_LongHelp" xml:space="preserve">
+    <value>Usage: ignore [event]
+    Opposite of catch. ("help catch" for more info)
+See Also:
+    catch</value>
+  </data>
+  <data name="quit_ShortHelp" xml:space="preserve">
+    <value>Quits the program</value>
+  </data>
+  <data name="newobj_ShortHelp" xml:space="preserve">
+    <value>Creates new object of type typeName</value>
+  </data>
+  <data name="foreach_ShortHelp" xml:space="preserve">
+    <value>Executes other command on all threads</value>
+  </data>
+  <data name="help_LongHelp" xml:space="preserve">
+    <value>Usage: help
+    Prints this help screen.
+</value>
+  </data>
+  <data name="go_ShortHelp" xml:space="preserve">
+    <value>Continues program execution</value>
+  </data>
+  <data name="echo_ShortHelp" xml:space="preserve">
+    <value>Echoes a message to the console</value>
+  </data>
+  <data name="log_ShortHelp" xml:space="preserve">
+    <value>Set or display what events will be logged</value>
+  </data>
+  <data name="set_ShortHelp" xml:space="preserve">
+    <value>Sets a variable to a new value</value>
+  </data>
+  <data name="intercept_LongHelp" xml:space="preserve">
+    <value>Usage: intercept FrameNumber
+    If the debugger has stopped because of an exception, you may use this
+    command to roll things back to the given frame number, potentially change
+    something using "set" for example, and continue with "go" hoping to avoid
+    the exception the second time around.
+</value>
+  </data>
+  <data name="intercept_ShortHelp" xml:space="preserve">
+    <value>Intercepts the current exception at the given frame on the stack</value>
+  </data>
+  <data name="step_LongHelp" xml:space="preserve">
+    <value>Usage: step
+    Debugger will bring execution into the next function on the current line or
+    move to the next line if there is no function to step into.
+See Also:
+    out
+    next</value>
+  </data>
+  <data name="thread_LongHelp" xml:space="preserve">
+    <value>Usage: thread -nick name
+    Assigns 'name' as Nickname to the currently active thread.  Nickname can be
+    used instead of thread name.  Nicknames cannot be numbers. If the current
+    thread already has some nickname assigned, old nickname is replaced with
+    new one. If the new nickname is "", the nickname for current thread is
+    deleted and no new nickname is assigned to the thread.  "thread newThread"
+    Sets the active thread to newThread. newThread can be either nickname for
+    the thread or thread number.  "thread" Displays all managed threads in the
+    current process.  Threads are identified by their thread number; if the
+    thread has assigned nick name, the nickname is displayed instead.
+See Also:
+    suspend
+    resume</value>
+  </data>
+  <data name="x_ShortHelp" xml:space="preserve">
+    <value>Displays functions in a module</value>
+  </data>
+  <data name="uwgchandle_ShortHelp" xml:space="preserve">
+    <value>Prints the object tracked by a GC handle</value>
+  </data>
+  <data name="out_LongHelp" xml:space="preserve">
+    <value>Usage: out
+    Debugger will bring execution to the end of the current function and leave
+    you in the calling function.
+See Also:
+    next
+    step</value>
+  </data>
+  <data name="config_ShortHelp" xml:space="preserve">
+    <value>Sets or Displays debugger configurable options</value>
+  </data>
+  <data name="foreach_LongHelp" xml:space="preserve">
+    <value>Usage: foreach [OtherCommand]
+    Where "OtherCommand" is a valid command that operates on one thread,
+    "foreach OtherCommand" will do the same thing to all threads.
+</value>
+  </data>
+  <data name="mode_ShortHelp" xml:space="preserve">
+    <value>Set/Query different debugger options</value>
+  </data>
+  <data name="help_ShortHelp" xml:space="preserve">
+    <value>Prints this help screen.</value>
+  </data>
+  <data name="out_ShortHelp" xml:space="preserve">
+    <value>Steps Out of function</value>
+  </data>
+  <data name="suspend_LongHelp" xml:space="preserve">
+    <value>Usage: suspend [*|[~]threadNumber]
+    Suspends current thread or thread specified by threadNumber.  If
+    threadNumber is specified as "*" then command applies to all threads.  If
+    thread number starts with "~", then the command applies to all threads
+    except one specified by number.  Suspended threads are excluded from
+    running when the process is let run by either "go", or "step" command.  If
+    there is no non-suspended thread in the process and the user issues "go"
+    command, the process doesn't continue.  In that case user has to issue
+    Ctrl-C to break into process and resume some threads by resume command.
+See Also:
+    resume
+    thread</value>
+  </data>
+  <data name="when_ShortHelp" xml:space="preserve">
+    <value>Execute commands based on debugger event</value>
+  </data>
+  <data name="runr_LongHelp" xml:space="preserve">
+    <value>Usage: runr
+    Runs a program remotely
+See Also:
+    connect
+    server</value>
+  </data>
+  <data name="catch_LongHelp" xml:space="preserve">
+    <value>Usage: catch [exceptionType]
+    Example: catch ex    
+    This causes the debugger to break on all exceptions (Not just the unhandled
+    ones)
+    Use log command to log an event without stopping.
+See Also:
+    ignore, log</value>
+  </data>
+  <data name="server_ShortHelp" xml:space="preserve">
+    <value>Makes a debugging session available to others</value>
+  </data>
+  <data name="attach_LongHelp" xml:space="preserve">
+    <value>Usage: attach [pid]
+    Attaches to a process or prints available processes
+See Also:
+    detach
+    processenum</value>
+  </data>
+  <data name="step_ShortHelp" xml:space="preserve">
+    <value>Step Into</value>
+  </data>
+  <data name="where_LongHelp" xml:space="preserve">
+    <value>Usage: where [-v] [-c depth] [threadID]
+    The -v switch provides verbose information about each displayed
+    stack-frame.  If you specify a number for the depth, this limits how many
+    frames are displayed.  Use "all" to get all frames.  The default is 100. 
+    If you specify the threadID, you can control which thread the stack is for.
+     Default is current frame only.  "all" will display for all threads.
+</value>
+  </data>
+  <data name="uwgchandle_LongHelp" xml:space="preserve">
+    <value>Usage: uwgchandle [var] | [address]
+    Prints the variable tracked by a handle. The handle can be specified by
+    name or address.
+</value>
+  </data>
+  <data name="when_LongHelp" xml:space="preserve">
+    <value>Usage: when
+    when    
+        displays currently active when statements    
+        
+    when delete all | num [num [num ...]]    
+        deletes when statement specified by number (or all if "all"
+    specified)    
+        
+    when stopReason [specific_condition] do cmd [cmd [cmd ...] ]    
+        stopReason can be:    
+    StepComplete, ProcessExited, ThreadCreated, BreakpointHit, ModuleLoaded,
+    ClassLoaded, AssemblyLoaded, AssemblyUnloaded, ControlCTrapped,
+    ExceptionThrown, UnhandledExceptionThrown, AsyncStop, AttachComplete,
+    UserBreak, EvalComplete, EvalException, RemapOpportunityReached,
+    NativeStop    
+        
+        specific_condition can be:    
+    number - for ThreadCreated,BreakpointHit event triggers action only when
+    stopped by thread Id/breakpoint number with same value.    
+    [!]name for ModuleLoaded,ClassLoaded,AssemblyLoaded,
+    AssemblyUnloaded,ExceptionThrown, UnhandledExceptionThrown trigger action
+    only when name matches (not matches if prefix !) with the name of the
+    StopReason    
+        
+        specific_condition has to be empty for other stopReasons.
+        
+        
+    Examples:    
+        when ExceptionThrown !System.SystemException do go Continues on every
+    1st exception, unless that exception is SystemException.  (note you have to
+    have "catch ex" to enable exception notifications)    
+        
+when ProcessExited do quit    
+    Exits mdbg when debugged process quits
+</value>
+  </data>
+  <data name="next_LongHelp" xml:space="preserve">
+    <value>Usage: next
+    Debugger will execute whatever it needs to end up on the next line (even if
+    this includes many function calls).
+See Also:
+    out
+    step</value>
+  </data>
+  <data name="processenum_LongHelp" xml:space="preserve">
+    <value>Usage: processenum
+    Displays active processes
+See Also:
+    attach</value>
+  </data>
+  <data name="load_LongHelp" xml:space="preserve">
+    <value>Usage: load assemblyName
+    Extension is loaded in this way; we load specified assembly and try to
+    execute the static method LoadExtension from type
+    Microsoft.Tools.Mdbg.Extension.Extension.    
+Try "load gui" for example.
+</value>
+  </data>
+  <data name="setip_ShortHelp" xml:space="preserve">
+    <value>Sets an ip into new position in the current function</value>
+  </data>
+  <data name="print_ShortHelp" xml:space="preserve">
+    <value>prints local or debug variables</value>
+  </data>
+  <data name="config_LongHelp" xml:space="preserve">
+    <value>Usage: config [option value]
+    When invoked without arguments the command displays all configurable
+    options and how they are set. If the option is specified, it is set to
+    value.    
+    Currently available options are:
+    extpath:  set path where extensions are searched for when load command is
+    used.
+    extpath+: adds path to the existing paths where extensions can be loaded
+    from.
+See Also:
+    symbol
+    path</value>
+  </data>
+  <data name="down_LongHelp" xml:space="preserve">
+    <value>Usage: down [frames]
+    Moves the active stack frame down
+See Also:
+    up</value>
+  </data>
+  <data name="echo_LongHelp" xml:space="preserve">
+    <value>Usage: echo message
+    Echoes a message to the console
+</value>
+  </data>
+  <data name="funceval_ShortHelp" xml:space="preserve">
+    <value>Evaluates a given function outside normal program flow</value>
+  </data>
+  <data name="aprocess_ShortHelp" xml:space="preserve">
+    <value>Switches to another debugged process or prints available ones</value>
+  </data>
+  <data name="connect_ShortHelp" xml:space="preserve">
+    <value>Connects to a remote debugging session</value>
+  </data>
+  <data name="down_ShortHelp" xml:space="preserve">
+    <value>Moves the active stack frame down</value>
+  </data>
+  <data name="detach_ShortHelp" xml:space="preserve">
+    <value>Detaches from debugged process</value>
+  </data>
+  <data name="up_ShortHelp" xml:space="preserve">
+    <value>Moves the active stack frame up</value>
+  </data>
+  <data name="server_LongHelp" xml:space="preserve">
+    <value>Usage: server sessionName
+    Makes a debugging session available to others
+See Also:
+    connect
+    runr</value>
+  </data>
+  <data name="list_ShortHelp" xml:space="preserve">
+    <value>Displays loaded modules appdomains or assemblies</value>
+  </data>
+  <data name="suspend_ShortHelp" xml:space="preserve">
+    <value>Prevents thread from running</value>
+  </data>
+  <data name="break_ShortHelp" xml:space="preserve">
+    <value>Sets or displays breakpoints</value>
+  </data>
+  <data name="runr_ShortHelp" xml:space="preserve">
+    <value>Runs a program remotely</value>
+  </data>
+  <data name="thread_ShortHelp" xml:space="preserve">
+    <value>Displays active threads or switches to a specified thread</value>
+  </data>
+  <data name="catch_ShortHelp" xml:space="preserve">
+    <value>Set or display what events will be stopped on</value>
+  </data>
+  <data name="newobj_LongHelp" xml:space="preserve">
+    <value>Usage: newobj typeName [arguments...]
+    Creates a new object of type typeName.
+See Also:
+    funceval</value>
+  </data>
+  <data name="mode_LongHelp" xml:space="preserve">
+    <value>Usage: mode [option on/off]
+    Set/Query different debugger options.  "option" should be a two-letter pair
+    from inside the (parentheses).    
+Example: mode nc on
+</value>
+  </data>
+  <data name="quit_LongHelp" xml:space="preserve">
+    <value>Usage: quit [exitcode]
+    Exits the mdbg shell, optionally specifying the process exit code.
+</value>
+  </data>
+  <data name="print_LongHelp" xml:space="preserve">
+    <value>Usage: print [var] | [-d]
+    Either prints all variables in scope "print", the specified one "print
+    var", or debugger variables "print -d".
+See Also:
+    set</value>
+  </data>
+  <data name="connect_LongHelp" xml:space="preserve">
+    <value>Usage: connect computerName sessionName
+    Connects to a remote debugging session
+See Also:
+    server
+    runr</value>
+  </data>
+  <data name="set_LongHelp" xml:space="preserve">
+    <value>Usage: set variable=value
+    You may alter the value of any in scope variable.  You may also create your
+    own "debugger" variables and assign to them reference values from within
+    your application.  These values will act as handles to the original value,
+    even when the real one is out of scope.  All such "debugger" variables must
+    begin with "$", for example "$var".  Clear these handles by setting them to
+    nothing, like this: "set $var="
+See Also:
+    print</value>
+  </data>
+  <data name="delete_LongHelp" xml:space="preserve">
+    <value>Usage: delete [#]
+    Deletes a breakpoint
+See Also:
+    break</value>
+  </data>
+  <data name="load_ShortHelp" xml:space="preserve">
+    <value>Loads an extension from some assembly</value>
+  </data>
+  <data name="funceval_LongHelp" xml:space="preserve">
+    <value>Usage: funceval [-ad Num] functionName [args ... ]
+    Performs a function evaluation on the current active thread.  The function
+    to evaluate is functionName.  Function needs to be	fully qualified
+    including namespaces.  Optional -ad parameter can specify what appdomain
+    space should be used for resolution of the function.  If the -ad switch is
+    not specified it is assumed that the appdomain for resolution is same as
+    where the thread that is used for function evaluation is located.  If the
+    function that is being evaluated is not static, the first parameter passed
+    in should be "this".  Arguments to the function evaluation are looked-up
+    through all appdomains.  If you request some value from a certain
+    appdomain, the variable should be prefixed with module and appdomain
+    name.    
+    Example: funceval -ad 0 System.Object.ToString
+    hello.exe#0!MyClass.g_rootRef    
+    The command above will evaluate function System.Object.ToString in the
+    application domain 0. Since ToString is instance function, the first
+    parameter needs to be a this pointer -- in the example above we used
+    MyClass.g_rootRef. In more user friendly debugger this funceval command
+    could be executed by typing:	MyClass.g_rootRef.ToString();
+</value>
+  </data>
+  <data name="symbol_LongHelp" xml:space="preserve">
+    <value>Usage: symbol commandName [commandParameters]
+    symbol path [path_value]
+        Displays or sets current symbol path to path_value.
+
+    symbol addpath path_value 
+        Adds an extra path to the current symbol path.
+
+    symbol reload [moduleName] 
+        Reloads symbols for all modules (if none is specified) or
+        just for the module moduleName.
+
+    symbol list [moduleName] 
+        Shows currently loaded symbols for either all modules
+        or the module moduleName if specified.
+
+See Also:
+    path
+</value>
+  </data>
+  <data name="delete_ShortHelp" xml:space="preserve">
+    <value>Deletes a breakpoint</value>
+  </data>
+  <data name="go_LongHelp" xml:space="preserve">
+    <value>Usage: go
+    The program will continue until either a breakpoint is hit, the program
+    exits, or an event causes it to stop (for example an unhandled exception.)
+</value>
+  </data>
+  <data name="show_LongHelp" xml:space="preserve">
+    <value>Usage: show [lines]
+    Optional "lines" specifies how far above and below the current line it will
+    show.
+</value>
+  </data>
+  <data name="symbol_ShortHelp" xml:space="preserve">
+    <value>Sets/Displays path or Reloads/Lists symbols</value>
+  </data>
+  <data name="resume_ShortHelp" xml:space="preserve">
+    <value>Resumes suspended thread</value>
+  </data>
+  <data name="path_ShortHelp" xml:space="preserve">
+    <value>Sets or displays current source path</value>
+  </data>
+  <data name="up_LongHelp" xml:space="preserve">
+    <value>Usage: up [frames]
+    Moves the active stack frame up
+See Also:
+    down</value>
+  </data>
+  <data name="aprocess_LongHelp" xml:space="preserve">
+    <value>Usage: aprocess [number]
+    Switches to another debugged process or prints available processes.  The
+    numbers are not real PIDs but a 0-indexed list.
+</value>
+  </data>
+  <data name="path_LongHelp" xml:space="preserve">
+    <value>Usage: path [pathName]
+    This path will be searched for the source files if the location in the
+    binaries is not available.
+See Also:
+    symbol</value>
+  </data>
+  <data name="log_LongHelp" xml:space="preserve">
+    <value>Debugger will log the given event type but continue to run.
+This uses the same event types as the catch and ignore commands.
+Use ignore command to clear log status.
+    
+Usage: log [event type]
+    Example: log ml    
+    This causes the debugger to log all module loads
+
+See Also:
+    catch, ignore</value>
+  </data>
+  <data name="kill_LongHelp" xml:space="preserve">
+    <value>Usage: kill
+    Kills the active process
+See Also:
+    run</value>
+  </data>
+  <data name="x_LongHelp" xml:space="preserve">
+    <value>Usage: x [-c numSymbols] [module[!pattern]]
+    Displays functions matching [pattern] for a module.  If numSymbols is
+    provided, the output is limited to the given number.  If !regex is not
+    provided, all functions are displayed.  If module is not provided either,
+    all loaded modules are displayed.  Symbols (~#) may be used to set
+    breakpoints using the "break" command.    
+Example: x mscorlib!*String*
+See Also:
+    break</value>
+  </data>
+  <data name="attach_ShortHelp" xml:space="preserve">
+    <value>Attaches to a process or prints available processes</value>
+  </data>
+  <data name="break_LongHelp" xml:space="preserve">
+    <value>Usage: break [ClassName.Method | FileName:LineNo]
+    Sets a breakpoint at the specified Method.  Modules are scanned
+    sequentially.  "break FileName:LineNo" sets a breakpoint at location in the
+    source.  "break ~number" sets a breakpoint on a symbol recently displayed
+    with 'x' command.  "break module!ClassName.Method+IlOffset" sets a
+    breakpoint on the fully qualified location.
+See Also:
+    delete
+    x</value>
+  </data>
+  <data name="detach_LongHelp" xml:space="preserve">
+    <value>Usage: detach
+    Detaches from debugged process
+See Also:
+    attach</value>
+  </data>
+  <data name="run_ShortHelp" xml:space="preserve">
+    <value>Runs a program under the debugger</value>
+  </data>
+  <data name="processenum_ShortHelp" xml:space="preserve">
+    <value>Displays active processes</value>
+  </data>
+  <data name="where_ShortHelp" xml:space="preserve">
+    <value>Prints a stack trace</value>
+  </data>
+  <data name="ignore_ShortHelp" xml:space="preserve">
+    <value>Set or display what events will be ignored</value>
+  </data>
+  <data name="run_LongHelp" xml:space="preserve">
+    <value>Usage: run [debug_flag] [-ver version_string] [[path_to_exe] [args_to_exe]]
+    Kills the current process (if there is one) and starts a new one. If no
+    executable argument is passed, this command runs the program that was
+    previously executed with the run command. If the executable argument is
+    provided, the specified program is run using the optionally supplied args. 
+    If class load, module load, and thread start events are being ignored (as
+    they are by default), then the program will stop on the first executable
+    instruction of the main thread.    
+    debug_flag parameter can be optionally passed in as a way to control how
+    the managed code executed will be optimized. It can be one of the following
+    values:
+      -d(ebug)
+          Causes all the code to be executed in debug mode so the debugging
+          experience is best. This is the default value if no debug_falg is
+          specified.
+      -o(ptimize)
+          Causes all the code to be executed in optimized mode. Debugger won't
+          necessary display all locals and function parameters. Debugger
+          stepping might be affected as well. 
+      -enc
+          Causes all the code to be executed in "Edit &amp; Continue" mode. Mode
+          is similar to -debug mode but also allows debugger to modify the
+          executed code at runtime.
+      -default
+          This flag causes the debugged program run in the way as if it were
+          run without debugger.
+    
+    The -ver flag allows to explicitly specify version string that used to
+    load correct debugger implementation. When the string is not entered it
+    is deducted from the debugged program.
+See Also:
+    kill
+</value>
+  </data>
+  <data name="list_LongHelp" xml:space="preserve">
+    <value>Usage: list [modules|appdomains|assemblies]
+    Displays loaded modules appdomains or assemblies
+</value>
+  </data>
+  <data name="show_ShortHelp" xml:space="preserve">
+    <value>Show sources around the current location</value>
+  </data>
+  <data name="setip_LongHelp" xml:space="preserve">
+    <value>Usage: setip [-il] number
+    Sets current Instruction Pointer (ip) in the file to the position as
+    specified.  If -il optional switch is specified than the number represents
+    an IL (Intermediate Language) offset in the method. Otherwise the number
+    represents a source line number.
+</value>
+  </data>
+  <data name="resume_LongHelp" xml:space="preserve">
+    <value>Usage: resume [*|[~]threadNumber]
+    Resumes current thread or thread specified by threadNumber.  If
+    threadNumber is specified as "*" then command applies to all threads.  If
+    thread number starts with "~", then the command applies to all threads
+    except one specified by number.  Resumed thread is let run freely when the
+    user calls "go".  Current suspension status of the threads can be seen by
+    "thread" command.  Resuming non-suspended thread has no effect.
+See Also:
+    suspend
+    thread</value>
+  </data>
+  <data name="kill_ShortHelp" xml:space="preserve">
+    <value>Kills the active process</value>
+  </data>
+</root>
