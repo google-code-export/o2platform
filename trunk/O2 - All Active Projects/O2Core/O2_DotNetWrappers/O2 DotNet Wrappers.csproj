@@ -77,7 +77,7 @@
     <Compile Include="ExtensionMethods\IO_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Misc_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Serialize_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\Web_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\W_eb_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Xml_ExtensionMethods.cs" />
     <Compile Include="Filters\FilteredSignature.cs" />
     <Compile Include="Filters\FilteredUrl.cs" />
