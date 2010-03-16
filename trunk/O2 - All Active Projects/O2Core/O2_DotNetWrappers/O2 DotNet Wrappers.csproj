@@ -77,7 +77,8 @@
     <Compile Include="ExtensionMethods\IO_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Misc_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Serialize_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\web_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Web_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Xml_ExtensionMethods.cs" />
     <Compile Include="Filters\FilteredSignature.cs" />
     <Compile Include="Filters\FilteredUrl.cs" />
     <Compile Include="H2Scripts\H2.cs" />
@@ -138,6 +139,10 @@
     <Content Include="Windows\RemoteThreadInjection.cs.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SourceCode_3rdParty_Dlls\Microsoft_MPL\Misc_Microsoft_MPL_Libs\O2_Misc_Microsoft_MPL_Libs.csproj">
+      <Project>{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}</Project>
+      <Name>O2_Misc_Microsoft_MPL_Libs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\O2_Interfaces\O2_Interfaces.csproj">
       <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
       <Name>O2_Interfaces</Name>

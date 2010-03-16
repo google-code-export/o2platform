@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_XRules_Database", "..\..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_API_Visualization", "..\..\O2_APIs\O2_API_Visualization\O2_API_Visualization.csproj", "{7226283F-7C31-4EBB-9940-97AB0F676319}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Misc_Microsoft_MPL_Libs", "..\..\..\SourceCode_3rdParty_Dlls\Microsoft_MPL\Misc_Microsoft_MPL_Libs\Misc_Microsoft_MPL_Libs.csproj", "{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Misc_Microsoft_MPL_Libs", "..\..\..\SourceCode_3rdParty_Dlls\Microsoft_MPL\Misc_Microsoft_MPL_Libs\O2_Misc_Microsoft_MPL_Libs.csproj", "{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution

@@ -8,8 +8,8 @@
     <ProjectGuid>{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Misc_Microsoft_MPL_Libs</RootNamespace>
-    <AssemblyName>Misc_Microsoft_MPL_Libs</AssemblyName>
+    <RootNamespace>O2_Misc_Microsoft_MPL_Libs</RootNamespace>
+    <AssemblyName>O2_Misc_Microsoft_MPL_Libs</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\O2 - All Active Projects\_3rdPartyDlls\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -49,12 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="O2DebuggerWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XObjects\Cmdline\Properties\AssemblyInfo.cs" />
     <Compile Include="XObjects\Cmdline\update.cs" />
     <Compile Include="XObjects\Cmdline\XObjectsGenerator.cs" />
-    <Compile Include="XObjects\Properties\AssemblyInfo.cs" />
     <Compile Include="XObjects\Src\API\ContentModel.cs" />
     <Compile Include="XObjects\Src\API\FsmXObjects.cs" />
     <Compile Include="XObjects\Src\API\Interfaces.cs" />
@@ -91,7 +88,6 @@
     <Compile Include="XObjects\Src\XObjectsSettings.cs" />
     <Compile Include="XObjects\Src\XsdToTypesConverter.cs" />
     <Compile Include="XObjects\XOTask\LinqToXsdTask.cs" />
-    <Compile Include="XObjects\XOTask\Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="XObjects\Cmdline\Cmdline.csproj" />
@@ -99,16 +95,6 @@
     <Content Include="XObjects\XObjects.sln" />
     <Content Include="XObjects\XOTask\XOTask.csproj" />
     <Content Include="XObjects\XOTask\XOTask.sln" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\O2 - All Active Projects\O2Core\O2_Interfaces\O2_Interfaces.csproj">
-      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
-      <Name>O2_Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\O2 - All Active Projects\O2Core\O2_Kernel\O2 Kernel.csproj">
-      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
-      <Name>O2 Kernel</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
