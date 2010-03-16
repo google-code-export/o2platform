@@ -367,7 +367,7 @@ namespace O2.XRules.Database.O2Utils
                 result_Panel.add_WebBrowser().open(result.str().uri());
                 return;
             }
-            else if (result.str().isText())
+            else if (result is string && result.str().isText())
             {
                 result_Panel.visible(true);
                 result_Panel.add_TextBox(true).set_Text(result.str().fileContents());
