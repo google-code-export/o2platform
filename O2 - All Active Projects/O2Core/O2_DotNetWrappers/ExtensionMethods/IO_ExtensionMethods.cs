@@ -3,11 +3,39 @@ using System.Collections.Generic;
 using System.IO;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.ExtensionMethods;
+using O2.Kernel;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class IO_ExtensionMethods
     {
+        #region save
+        public static string save(this string contents)
+        {
+            return contents.saveAs(PublicDI.config.TempFileNameInTempDirectory);
+        }
+
+        public static string saveWithExtension(this string contents, string extension)
+        {
+            if (extension.starts("."))
+                extension = extension.removeFirstChar();
+            return contents.saveAs(PublicDI.config.getTempFileInTempDirectory(extension));
+        }
+
+        public static string saveWithName(this string contents, string fileName)
+        {
+            return contents.saveAs(PublicDI.config.O2TempDir.pathCombine(fileName));
+        }
+
+        public static string saveAs(this string contents, string targetFileName)
+        {
+            Files.WriteFileContent(targetFileName, contents);
+            if (targetFileName.fileExists())
+                return targetFileName;
+            return "";
+        }
+        #endregion
+
         public static string fileName(this string file)
         {
             if (file.valid())

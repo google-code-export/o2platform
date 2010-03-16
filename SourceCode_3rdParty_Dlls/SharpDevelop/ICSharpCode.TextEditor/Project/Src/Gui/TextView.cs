@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using ICSharpCode.TextEditor.Document;
-using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
 
 namespace ICSharpCode.TextEditor
 {
@@ -294,7 +294,7 @@ namespace ICSharpCode.TextEditor
             }
             catch (Exception ex)
             {
-                PublicDI.log.ex("In ICSharpCode PaintDocumentLine");
+                ex.log("In ICSharpCode PaintDocumentLine");
             }
 		}
 		

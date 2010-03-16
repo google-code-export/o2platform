@@ -279,6 +279,14 @@ namespace O2.Kernel.ExtensionMethods
             return _string;
         }
 
+        public static string removeFirstChar(this string _string)
+        {
+            return (_string.Length > 0)
+                ? _string.Substring(1)
+                : _string;
+
+        }
+
         public static string appendGuid(this string _string)
         {
             return "{0} {1}".format(_string, Guid.NewGuid());
