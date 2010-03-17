@@ -26,13 +26,13 @@ namespace O2.External.SharpDevelop.AST
         public string SourceCodeFile {get ; set;}
         public AstDetails AstDetails {get; set;}
         public string Errors  {get; set;}
-        public List<ISpecial> extraSpecials { get; set; }
+        public List<ISpecial> ExtraSpecials { get; set; }
 		
         SupportedLanguage language = SupportedLanguage.CSharp;
 
         public Ast_CSharp()
         {
-            extraSpecials = new List<ISpecial>();
+            ExtraSpecials = new List<ISpecial>();
         }
 
         public Ast_CSharp(string _sourceCodeFile) 
@@ -41,13 +41,20 @@ namespace O2.External.SharpDevelop.AST
             createAst(_sourceCodeFile);
             mapAstDetails(Parser.CompilationUnit);   
         }
-
+        
 
         public Ast_CSharp(CompilationUnit unit)
-            : this()
+            : this(unit, new List<ISpecial>())
+        {            
+        }
+
+        public Ast_CSharp(CompilationUnit unit, List<ISpecial> extraSpecials)
         {
             createAst("");
+            ExtraSpecials = extraSpecials;
             mapAstDetails(unit);
+            
+            //mapAstDetails(Parser.CompilationUnit);   
         }
     
         public void createAst(string _sourceCodeFile)
@@ -66,7 +73,7 @@ namespace O2.External.SharpDevelop.AST
 
 	            AstDetails = new AstDetails();	            
 	            var specials = Parser.Lexer.SpecialTracker.RetrieveSpecials();
-                specials.AddRange(extraSpecials);
+                specials.AddRange(ExtraSpecials);
                 AstDetails.mapSpecials(specials);
                 AstDetails.rewriteCode_CSharp(CompilationUnit, specials);
                 AstDetails.rewriteCode_VBNet(CompilationUnit, specials);	            

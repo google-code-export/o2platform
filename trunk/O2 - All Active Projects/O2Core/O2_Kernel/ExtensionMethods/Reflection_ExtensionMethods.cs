@@ -193,6 +193,11 @@ namespace O2.Kernel.ExtensionMethods
             return PublicDI.reflection.getField(type, fieldName);
         }
 
+        public static void field(this object liveObject, string fieldName, object value)
+        {
+            PublicDI.reflection.setField(fieldName, liveObject, value);
+        }
+
         public static object fieldValue(this Type type, string fieldName)
         {
             var fieldInfo = (FieldInfo)type.field(fieldName);

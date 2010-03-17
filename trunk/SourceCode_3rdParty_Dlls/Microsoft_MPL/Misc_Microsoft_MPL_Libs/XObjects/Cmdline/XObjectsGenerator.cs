@@ -117,8 +117,9 @@ namespace XObjectsGenerator
 
             CodeDomTypesGenerator codeGenerator = new CodeDomTypesGenerator(configSettings);
             CodeCompileUnit ccu = new CodeCompileUnit();
-            foreach(CodeNamespace codeNs in codeGenerator.GenerateTypes(mapping)) {
-                ccu.Namespaces.Add(codeNs);
+         //   if (mapping != null)                            //DC
+                foreach(CodeNamespace codeNs in codeGenerator.GenerateTypes(mapping)) {
+                    ccu.Namespaces.Add(codeNs);
             }
             //Write to file
             CSharpCodeProvider provider = new CSharpCodeProvider();
@@ -135,7 +136,7 @@ namespace XObjectsGenerator
                 {
                     provider.GenerateCodeFromCompileUnit(
                         ccu, update.Writer, new CodeGeneratorOptions());
-                }
+                }                
                 PrintMessage(csFileName);
             }
             if(assemblyName != string.Empty)
@@ -148,7 +149,7 @@ namespace XObjectsGenerator
                 options.ReferencedAssemblies.Add("System.Core.dll");
                 options.ReferencedAssemblies.Add("System.Xml.dll");
                 options.ReferencedAssemblies.Add("System.Xml.Linq.dll");
-                options.ReferencedAssemblies.Add("Xml.Schema.Linq.dll");
+                options.ReferencedAssemblies.Add("O2_Misc_Microsoft_MPL_Libs.dll");
                 CompilerResults results = provider.CompileAssemblyFromDom(options, ccu);
                 if (results.Errors.Count > 0)
                 {
@@ -171,7 +172,7 @@ namespace XObjectsGenerator
         
         private static void PrintMessage(string csFileName) {
             PrintHeader();
-            Console.WriteLine("Generated " + csFileName + "...");
+            //Console.WriteLine("Generated " + csFileName + "...");
         }
 
         private static void PrintErrorMessage(String e)
@@ -191,7 +192,7 @@ namespace XObjectsGenerator
         }
 
         private static void PrintHeader() {
-            Console.WriteLine(String.Format(CultureInfo.CurrentCulture, "[Microsoft (R) .NET Framework, Version {0}]", ThisAssembly.ImageRuntimeVersion));
+            //Console.WriteLine(String.Format(CultureInfo.CurrentCulture, "[Microsoft (R) .NET Framework, Version {0}]", ThisAssembly.ImageRuntimeVersion));
         }
         private static void PrintHelp() {
             PrintHeader();

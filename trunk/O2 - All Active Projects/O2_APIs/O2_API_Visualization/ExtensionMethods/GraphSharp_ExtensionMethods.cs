@@ -45,7 +45,9 @@ namespace O2.API.Visualization.ExtensionMethods
     	}
     	
     	public static GraphLayout add(this GraphLayout graphLayout,object vertexToAdd)
-    	{    		
+    	{
+            if (graphLayout == vertexToAdd)     // can add graphLayout as an Node
+                return graphLayout;
     		var graph = graphLayout.get_Graph();
     		if (graph == null)
     		{
@@ -61,6 +63,8 @@ namespace O2.API.Visualization.ExtensionMethods
     	
     	public static GraphLayout edge(this GraphLayout graphLayout,object fromVertex, object toVertex)
     	{
+            if (graphLayout == fromVertex || graphLayout == toVertex)  // can add graphLayout as an edge
+                return graphLayout;
     		var graph = graphLayout.get_Graph();
     		return (GraphLayout)graphLayout.wpfInvoke(
     			()=>{

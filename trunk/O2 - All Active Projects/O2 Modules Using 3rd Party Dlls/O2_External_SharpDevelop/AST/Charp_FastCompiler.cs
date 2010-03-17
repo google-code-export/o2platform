@@ -118,7 +118,11 @@ namespace O2.External.SharpDevelop.AST
                                      .add("ICSharpCode.AvalonEdit.dll")
                                      // twitter related
                                      .add("Newtonsoft.Json.dll")
-                                     .add("Dimebrain.TweetSharp.dll");                    
+                                     .add("Dimebrain.TweetSharp.dll")
+                                     //Linq to Xsd
+                                     .add("System.Xml.dll")
+                                     .add("System.Xml.Linq.dll")
+                                     .add("O2_Misc_Microsoft_MPL_Libs.dll");
         }
 
 		public Dictionary<string,object> getDefaultInvocationParameters()
@@ -177,6 +181,9 @@ namespace O2.External.SharpDevelop.AST
 
 		public void compileSourceCode(string sourceCode)
         {
+            // we need to do make sure we include any extra references included in the code
+            var astCSharp = new Ast_CSharp(sourceCode);            
+            mapCodeO2References(astCSharp);
             compileSourceCode(sourceCode, false);
        	}
        	
@@ -301,8 +308,10 @@ namespace O2.External.SharpDevelop.AST
 
                         astCSharp = new Ast_CSharp(CompilationUnit);
                         astCSharp.AstDetails.mapSpecials(snippetParser.Specials);
+
                         // add references included in the original source code file
                         mapCodeO2References(astCSharp);
+
                         CreatedFromSnipptet = true;
                     }
                     else
@@ -310,19 +319,22 @@ namespace O2.External.SharpDevelop.AST
                         CompilationUnit = (CompilationUnit)parsedCode;
                         if (CompilationUnit.Children.Count == 0)
                             return null;
-                        
-                        astCSharp = new Ast_CSharp(CompilationUnit);
+
+                        astCSharp = new Ast_CSharp(CompilationUnit, snippetParser.Specials);
+                        // add the comments from the original code                        
+
+                        mapCodeO2References(astCSharp);
                         CreatedFromSnipptet = false;
                     }
                     
                     // create sourceCode using Ast_CSharp & AstDetails		
                     if(CompilationUnit.Children.Count > 0)
-                    {
-                        // add the comments from the original code
-                        astCSharp.extraSpecials.AddRange(snippetParser.Specials);	                 
+                    {                        
                         // reset the astCSharp.AstDetails object        	
-                        astCSharp.mapAstDetails();        	        	
-                        
+                        astCSharp.mapAstDetails();
+                        // add the comments from the original code
+                        astCSharp.ExtraSpecials.AddRange(snippetParser.Specials);	                 
+
 	                    SourceCode = astCSharp.AstDetails.CSharpCode;
 
                         //once we have the created SourceCode we need to create a new AST with it
