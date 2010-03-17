@@ -485,7 +485,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static TextBox set_Text(this TextBox textBox, string text)
         {
-            textBox.invokeOnThread(() => textBox.Text = text);
+            textBox.invokeOnThread(
+                () =>
+                {
+                    textBox.SuspendLayout();
+                    textBox.Text = text;
+                    textBox.ResumeLayout();
+                });
             return textBox;
         }
 
@@ -775,7 +781,9 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (RichTextBox)richTextBox.invokeOnThread(
                 () =>
                     {
+                        richTextBox.SuspendLayout();
                         richTextBox.Text = contents;
+                        richTextBox.ResumeLayout();
                         return richTextBox;
                     });
             
@@ -1173,6 +1181,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
             propertyGrid.invokeOnThread(() => propertyGrid.SelectedObject = _object);
         }
 
+
+        public static PropertyGrid loadInPropertyGrid(this object objectToLoad)
+        {
+            var propertyGrid = new PropertyGrid();
+            propertyGrid.show(objectToLoad);
+            return propertyGrid;
+        }
         #endregion
 
         #region Panel

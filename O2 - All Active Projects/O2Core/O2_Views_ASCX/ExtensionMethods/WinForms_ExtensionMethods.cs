@@ -75,6 +75,15 @@ namespace O2.Views.ASCX.classes.MainGUI
             return type.showAsForm(-1, -1);
         }
 
+        public static T openAsForm<T>(this T control) where T : Control
+        {
+            var title = control.str();
+            var panel = O2Gui.open<Panel>(title, 300, 400);
+            control.fill();
+            panel.add(control);
+            return control;
+        }
+
         public static object showAsForm(this Type type, string title)
         {
             return type.showAsForm(title, -1, -1);
@@ -96,5 +105,6 @@ namespace O2.Views.ASCX.classes.MainGUI
             var propertyGrid = O2Gui.load<PropertyGrid>();
             propertyGrid.show(_object);                        
         }
+      
     }
 }

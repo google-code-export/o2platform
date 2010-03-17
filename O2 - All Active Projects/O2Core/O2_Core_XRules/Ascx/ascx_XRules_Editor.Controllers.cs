@@ -97,7 +97,7 @@ namespace O2.Core.XRules.Ascx
         {
             var sourceCodeEditor = new ascx_SourceCodeEditor {Dock = DockStyle.Fill};
             tabPage.Controls.Add(sourceCodeEditor);
-            sourceCodeEditor.loadSourceCodeFile(fileToOpen);
+            sourceCodeEditor.loadSourceCodeFile(fileToOpen.Trim());
             if (compileLoadedFile)
                 sourceCodeEditor.compileSourceCode();
         }

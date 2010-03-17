@@ -66,7 +66,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             try
             {                           
                 var uri  = new Uri(_string);
-                return (uri != null);
+                return (uri != null && uri.IsAbsoluteUri && uri.IsFile.isFalse());
             }
             catch (Exception)
             {
