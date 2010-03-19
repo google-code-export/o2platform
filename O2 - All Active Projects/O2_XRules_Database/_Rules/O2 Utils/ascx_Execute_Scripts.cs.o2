@@ -36,6 +36,7 @@ using O2.DotNetWrappers.Network;
 using O2.Core.XRules.XRulesEngine;
 using O2.Core.XRules._Wizards;
 using O2.Views.ASCX.Ascx.MainGUI;
+using O2.Views.ASCX.ExtensionMethods;
 
 namespace O2.XRules.Database
 { 

@@ -6,6 +6,7 @@ using O2.Interfaces.O2Core;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes;
 using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX.ExtensionMethods;
 using O2.External.IE.ExtensionMethods;
 using O2.External.IE.Interfaces;
 //O2File:extra.cs

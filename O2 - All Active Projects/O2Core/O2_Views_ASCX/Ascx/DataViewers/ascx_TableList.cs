@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.CodeUtils;
+using System.Collections;
 
 namespace O2.Views.ASCX.DataViewers
 {
@@ -23,6 +24,7 @@ namespace O2.Views.ASCX.DataViewers
         public ascx_TableList()
         {
             InitializeComponent();
+            setUpColumnSort();
         }
 
         public void setDataTable(DataTable dataTable)
@@ -96,10 +98,10 @@ namespace O2.Views.ASCX.DataViewers
                     });
         }        
 
-        public void loadList(object filters)
-        {
-            setDataTable(null);
-        }
+        //public void loadList(object filters)
+        //{
+        //    setDataTable(null);
+        //}
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         [EditorBrowsable(EditorBrowsableState.Always)]
@@ -180,6 +182,37 @@ namespace O2.Views.ASCX.DataViewers
         private void handleDrop(DragEventArgs e)
         {
             Callbacks.raiseRegistedCallbacks(_onTableListDrop, new object[] {e});
+        }
+        
+        public void setUpColumnSort()
+        {            
+            lvData.ColumnClick +=
+                (sender, e) =>
+                {
+                    if (lvData.Sorting == SortOrder.Ascending)
+                        lvData.Sorting = SortOrder.Descending;
+                    else
+                        lvData.Sorting = SortOrder.Ascending;
+                    lvData.ListViewItemSorter = new ListViewItemComparer(e.Column, lvData.Sorting);
+                };
+            
+        }
+    }
+
+    class ListViewItemComparer : IComparer
+    {
+        private int column;
+        private SortOrder sortOrder;
+        public ListViewItemComparer(int _column, SortOrder _sortOrder)
+        {
+            column = _column;
+            sortOrder = _sortOrder;
+        }
+        public int Compare(object x, object y)
+        {
+            if (sortOrder == SortOrder.Ascending)
+                return String.Compare(((ListViewItem)x).SubItems[column].Text, ((ListViewItem)y).SubItems[column].Text);
+            return String.Compare(((ListViewItem)y).SubItems[column].Text, ((ListViewItem)x).SubItems[column].Text);
         }
     }
 }

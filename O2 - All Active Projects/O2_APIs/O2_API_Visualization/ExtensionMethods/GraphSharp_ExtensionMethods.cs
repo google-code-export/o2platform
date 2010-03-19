@@ -252,8 +252,7 @@ namespace O2.API.Visualization.ExtensionMethods
     	public static void add(this BidirectionalGraph<object, IEdge<object>> graph,object vertexToAdd)
     	{
     		graph.AddVertex(vertexToAdd);
-    	}
-    	
+    	}    	
     	
     	public static void edge(this BidirectionalGraph<object, IEdge<object>> graph,object fromVertex, object toVertex)
     	{
@@ -266,8 +265,7 @@ namespace O2.API.Visualization.ExtensionMethods
     		catch(System.Exception ex) 
     		{ex.log("in edge");}
     	}
-    	
-    	
+    	  	
     	public static void edges(this BidirectionalGraph<object, IEdge<object>> bidirectionalGraph,  List<IEdge<object>> edges)
     	{
     		try
@@ -277,7 +275,13 @@ namespace O2.API.Visualization.ExtensionMethods
     		catch(System.Exception ex)
     		{ex.log("in edges");}
     	}
-    	    	
+
+        public static void addList<T>(this BidirectionalGraph<object, IEdge<object>> graph, IEnumerable<T> list, string nodeText)
+        {
+            foreach (var item in list)
+                graph.edge(nodeText, item.str());
+        }
+
     	#endregion
     	
     }

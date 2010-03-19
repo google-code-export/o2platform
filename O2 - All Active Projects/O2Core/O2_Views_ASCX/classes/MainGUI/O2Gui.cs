@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel;
+using O2.Views.ASCX.ExtensionMethods;
 
 namespace O2.Views.ASCX.classes.MainGUI
 {

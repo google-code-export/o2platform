@@ -9,8 +9,8 @@ using O2.Kernel;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
+using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
-//O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\classes\MainGUI\O2Gui.cs
 
 namespace O2.Script
 {

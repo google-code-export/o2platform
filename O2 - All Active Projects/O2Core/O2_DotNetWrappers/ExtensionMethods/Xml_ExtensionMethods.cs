@@ -6,30 +6,67 @@ using System.Xml;
 using System.IO;
 using System.Data;
 using O2.Kernel.ExtensionMethods;
+using System.Reflection;
+using System.Xml.Schema;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class Xml_ExtensionMethods
     {
-        public static string formatXml(this string xmlFileOrText)
+        #region XML load
+        public static XmlReader xmlReader(this string xml)
         {
-            return (xmlFileOrText.isFile()) ? xmlFileOrText.formatXmlFile() : xmlFileOrText.formatXmlText();
+            var xmlToLoad = xml.fileExists() ? xml.fileContents() : xml;
+            XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+            xmlReaderSettings.XmlResolver = null;
+            xmlReaderSettings.ProhibitDtd = false;
+            var stringReader = new StringReader(xmlToLoad);
+            return XmlReader.Create(stringReader, xmlReaderSettings);
         }
 
-        public static string formatXmlFile(this string xmlFile)
+        public static XmlDocument xmlDocument(this string xml)
         {
-            return xmlFile.contents().formatXmlText();
+            try
+            {
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.Load(xml.xmlReader());
+                return xmlDocument;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in xmlDocument");
+                return null;
+            }
         }
 
-        public static string formatXmlText(this string xmlText)
+        public static string xmlDocumentElement(this string xml)
         {
-            return xmlText.formatXmlText(2, ' ');
+            try
+            {
+                var xmlDocument = new XmlDocument();
+                xmlDocument.Load(xml.xmlReader());
+                return xmlDocument.DocumentElement.Name;
+            }
+            catch (Exception ex)
+            {
+                ex.info("in xmlDocumentElement");
+                return "";
+            }
         }
 
-        public static string formatXmlText(this string xmlText, int indentation, char indentChar)
+        #endregion
+
+        #region XML format
+
+        public static string xmlFormat(this string xml)
+        {
+            return xml.xmlFormat(2, ' ');
+        }
+
+        public static string xmlFormat(this string xml, int indentation, char indentChar)
         {
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlText);
+            doc.Load(xml.xmlReader());
             var stringWriter = new StringWriter();
             var xmlWriter = new XmlTextWriter(stringWriter);
             xmlWriter.Formatting = Formatting.Indented;
@@ -40,27 +77,9 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return stringWriter.str();
         }
 
-        public static string createXSDfromXmlFile(this string xmlFile)
-        {
-            try
-            {
-                var dataSet = new DataSet();
-                dataSet.ReadXml(xmlFile);
-                var stringWriter = new StringWriter();
-                XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter);
-                xmlTextWriter.Formatting = Formatting.Indented;
-                xmlTextWriter.field("encoding", new UTF8Encoding());	//DC: is there another to set this
-                //xmlTextWriter.WriteStartDocument();
-                dataSet.WriteXmlSchema(xmlTextWriter);                
-                xmlTextWriter.Close();
-                stringWriter.Close();
-                return stringWriter.ToString();
-            }
-            catch (Exception ex)
-            {
-                ex.log("in createXSDfromXmlFile");
-                return "";
-            }
-        }
+        #endregion
+
+        
+
     }
 }

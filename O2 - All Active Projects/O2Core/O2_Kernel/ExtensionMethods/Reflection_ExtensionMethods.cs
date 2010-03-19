@@ -83,6 +83,16 @@ namespace O2.Kernel.ExtensionMethods
             return _object.type().FullName;
         }
 
+        public static string name(this Type type)
+        {
+            return type.Name;
+        }
+
+        public static string fullName(this Type type)
+        {
+            return type.FullName;
+        }
+
         public static string comTypeName(this object _object)
         {
             return PublicDI.reflection.getComObjectTypeName(_object);
@@ -97,9 +107,24 @@ namespace O2.Kernel.ExtensionMethods
             return PublicDI.reflection.getProperties(type);
         }
         
+        public static List<PropertyInfo> properties_public_declared(this Type type, BindingFlags bindingFlags)
+        { 
+            return type.properties(BindingFlags.Public | BindingFlags.DeclaredOnly);
+        }
+
+        public static List<PropertyInfo> properties(this Type type, BindingFlags bindingFlags)
+        {            
+            return new List<PropertyInfo>(type.GetProperties(bindingFlags));
+        }
+        
         public static object property(this Type type, string propertyName)
         {
             return type.prop(propertyName);
+        }
+
+        public static Type propertyType(this PropertyInfo propertyInfo)
+        {
+            return propertyInfo.PropertyType;
         }
 
         public static object prop(this Type type, string propertyName)
@@ -249,8 +274,15 @@ namespace O2.Kernel.ExtensionMethods
 
         #endregion
 
+        #region interfaces
 
-        
-                
+        public static List<Type> interfaces(this Type type)
+        {
+            return new List<Type>( type.GetInterfaces() );
+        }
+
+        #endregion
+
+
     }
 }

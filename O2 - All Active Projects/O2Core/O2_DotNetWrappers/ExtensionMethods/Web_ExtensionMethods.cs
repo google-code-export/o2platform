@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using O2.DotNetWrappers.Network;
+using O2.DotNetWrappers.Windows;
+using O2.Kernel.ExtensionMethods;
+
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -72,6 +75,37 @@ namespace O2.DotNetWrappers.ExtensionMethods
             {
                 return false;
             }
+        }
+
+        public static string getUrlContents(this Uri uri)
+        {
+            return Web.getUrlContents(uri.str());
+        }
+
+        public static string getHtml(this Uri uri)
+        {
+            return uri.getUrlContents();
+        }
+
+        public static string fileNameFriendly(this Uri uri)
+        {
+            return Files.getSafeFileNameString(uri.str());
+        }
+
+        public static string getHtmlAndSave(this Uri uri)
+        {
+            return uri.getHtmlAndSaveOnFolder(uri.o2Temp2Dir());
+        }
+
+        public static string getHtmlAndSaveOnFolder(this Uri uri, string targetFolder)
+        {            
+            var html = uri.getHtml();
+            if (html.valid())
+            {
+                var targeFileName = targetFolder.pathCombine(uri.fileNameFriendly());
+                return html.save(targeFileName);
+            }
+            return "";
         }
     }
 }

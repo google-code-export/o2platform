@@ -118,5 +118,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return list.ToArray();
         }
+
+        public static void forEach<T>(this IEnumerable collection, Action<T> action)
+        {
+            foreach (var item in collection)
+                if (item is T)
+                    action((T)item);
+        } 
     }
 }

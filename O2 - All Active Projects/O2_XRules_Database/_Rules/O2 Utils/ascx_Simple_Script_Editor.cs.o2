@@ -155,8 +155,8 @@ namespace O2.XRules.Database.O2Utils
         	executeButton.onClick(execute);                	
         	commandsToExecute.onTextChanged(onTextChanged);        	
             
-        	commandsToExecute.vScroolBar_Enabled(false);
-        	commandsToExecute.hScroolBar_Enabled(false);
+        	commandsToExecute.editor().vScroolBar_Enabled(false);
+            commandsToExecute.editor().hScroolBar_Enabled(false);
         	commandsToExecute.set_ColorsForCSharp();
         	
         	commandsToExecute.allowCompile(false);
@@ -274,9 +274,9 @@ namespace O2.XRules.Database.O2Utils
      		result_RichTextBox.visible(true);
      		result_Panel.visible(false);
      		if (codeSnippet.size() > 200)
-     		{     			
-     			commandsToExecute.vScroolBar_Enabled(true);
-        		commandsToExecute.hScroolBar_Enabled(true);
+     		{
+                commandsToExecute.editor().vScroolBar_Enabled(true);
+                commandsToExecute.editor().hScroolBar_Enabled(true);
         	}
      		commandsToExecute.editor().clearBookmarksAndMarkers();     		
      		csharpCompiler.compileSnippet(codeSnippet);
@@ -348,6 +348,7 @@ namespace O2.XRules.Database.O2Utils
      	{     		
      		if (executeButton.Enabled)
      		{
+                result_RichTextBox.textColor(Color.Black).set_Text("Executing code");	  
      			O2Thread.mtaThread(()=> showResult(csharpCompiler.executeFirstMethod()));
      		}
      	}
