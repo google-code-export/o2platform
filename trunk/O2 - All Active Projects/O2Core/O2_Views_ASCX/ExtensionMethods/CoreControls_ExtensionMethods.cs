@@ -5,7 +5,7 @@ using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
 using O2.Views.ASCX.DataViewers;
 
-namespace O2.Views.ASCX.classes
+namespace O2.Views.ASCX.ExtensionMethods
 {
     public static class CoreControls_ExtensionMethods
     {
@@ -38,7 +38,26 @@ namespace O2.Views.ASCX.classes
         {
             return control.add_TableList("");
         }
-        public static ascx_TableList add_TableList(this Control control, string tableTitle)
+
+        public static ascx_TableList add_TableList<T>(this Control control, IEnumerable<T> collection)
+        {
+            return control.add_TableList("", collection);
+        }
+        public static ascx_TableList add_TableList<T>(this Control control, string title, IEnumerable<T> collection)
+        {
+            return control.add_TableList(title).show<T>(collection);
+        }
+
+        public static ascx_TableList show<T>(this ascx_TableList tableList, IEnumerable<T> collection, params string[] columnsToShow)
+        {
+            tableList.setDataTable(collection.dataTable(columnsToShow));
+            return tableList;
+        }
+
+        
+        
+
+        /*public static ascx_TableList add_TableList(this Control control, string tableTitle)
         {
             return (ascx_TableList) control.invokeOnThread(
                                         () =>
@@ -49,7 +68,7 @@ namespace O2.Views.ASCX.classes
                                                 control.Controls.Add(tableList);
                                                 return tableList;
                                             });
-        }
+        }*/
 
         public static void add_Columns(this ascx_TableList tableList, List<string> columnNames)
         {
@@ -83,12 +102,12 @@ namespace O2.Views.ASCX.classes
                     });
         }
 
-        public static ascx_TableList add_TableList<T>(this Control control, List<T> contents)
+        /*public static ascx_TableList add_TableList<T>(this Control control, List<T> contents)
         {
             return control.add_TableList("", contents);
-        }
+        }*/
 
-        public static ascx_TableList add_TableList<T>(this Control control, string name, List<T> contents)
+        /*public static ascx_TableList add_TableList<T>(this Control control, string name, List<T> contents)
         {
             var tableList = control.add_TableList(name);
             var dataTable = CreateDataTable.from_List<T>(contents);
@@ -97,7 +116,7 @@ namespace O2.Views.ASCX.classes
             //var ascx_TableList = 
             //return ascx_TableList;
             return null;
-        }
+        }*/
 
         public static void add_Tab_IfListHasData<T>(this TabControl tabControl, string tabName, List<T> list)
         {

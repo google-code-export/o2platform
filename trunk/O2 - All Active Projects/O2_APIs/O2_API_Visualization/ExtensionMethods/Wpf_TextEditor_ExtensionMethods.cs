@@ -61,9 +61,15 @@ namespace O2.API.Visualization.ExtensionMethods
 
         #region gui options
 
+        public static WpfTextEditor xml(this WpfTextEditor wpfTextEditor)
+        {
+            wpfTextEditor.SyntaxHighlighting = "XML";
+            return wpfTextEditor;
+        }
+
         public static WpfTextEditor html(this WpfTextEditor wpfTextEditor)
         {
-            wpfTextEditor.SyntaxHighlighting = "Html";
+            wpfTextEditor.SyntaxHighlighting = "HTML";
             return wpfTextEditor;
         }
 

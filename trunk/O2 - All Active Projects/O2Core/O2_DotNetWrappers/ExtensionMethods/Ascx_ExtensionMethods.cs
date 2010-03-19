@@ -651,6 +651,38 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return treeView.add_Node(tag.ToString(), tag);
         }
 
+        public static TreeNode add_Node(this TreeNode treeNode, object textAndTag)
+        {
+            return treeNode.add_Node(textAndTag.str(), textAndTag);
+        }
+
+        public static TreeNode add_Node(this TreeNode treeNode, string text, object tag)
+        {
+            return treeNode.TreeView.add_Node(treeNode, text, tag, false);
+        }
+
+        public static TreeNode add_Node(this TreeNode treeNode, string text, object tag, bool addDummyChildNode)
+        {
+            return treeNode.TreeView.add_Node(treeNode, text, tag, addDummyChildNode);
+        }
+
+        public static TreeNode clear(this TreeNode treeNode)
+        {
+            treeNode.TreeView.clear(treeNode);
+            return treeNode;
+        }
+
+        public static TreeNode current(this TreeView treeView)
+        {
+            return treeView.SelectedNode;
+        }
+
+        public static TreeView expand(this TreeView treeView)
+        {
+            treeView.Nodes.forEach<TreeNode>((node) => treeView.expand(node));
+            return treeView;
+        }
+        
         public static void selectNode(this TreeView treeView, int nodeToSelect)
         {
             treeView.invokeOnThread(
@@ -715,7 +747,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
             };
         }
 
-
         public static TreeView add_Nodes(this TreeView treeView, IEnumerable collection)
         {
             return treeView.add_Nodes(collection, false, "");
@@ -756,6 +787,23 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return treeView;
                 });
         }
+
+        public static Delegate[] getEventHandlers(this TreeView treeView, string eventName)
+        {
+            var eventDelegate = (MulticastDelegate)treeView.field(eventName);
+            if (eventDelegate != null)
+                return eventDelegate.GetInvocationList();
+            if (eventName.starts("on").isFalse())
+                return treeView.getEventHandlers("on" + eventName);
+            return null;
+        }
+
+        public static bool hasEventHandler(this TreeView treeView, string eventName)
+        {
+            var eventDelegate = treeView.getEventHandlers(eventName);
+            return (eventDelegate != null && eventDelegate.size() > 0);
+        }
+
         #endregion
 
         #region RichTextBox

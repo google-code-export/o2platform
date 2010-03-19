@@ -2,6 +2,7 @@
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
+using O2.DotNetWrappers.Windows;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -31,6 +32,22 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                         "CompilationErrors:".line().add(csharpCompiler.CompilationErrors).error();
 
             return null;
+        }
+
+        public static Assembly compile(this string pathToFileToCompile, string targetAssembly)
+        {
+            var assembly = pathToFileToCompile.compile(true);
+            Files.Copy(assembly.Location, targetAssembly);
+            return assembly;
+        }
+
+        public static Assembly compile(this string pathToFileToCompile, bool compileToFileAndWithDebugSymbols)
+        {
+            string generateDebugSymbolsTag = @"//debugSymbols".line();
+            if (pathToFileToCompile.fileContains(generateDebugSymbolsTag).isFalse())
+                pathToFileToCompile.fileInsertAt(0, generateDebugSymbolsTag);
+            return pathToFileToCompile.compile();
+
         }
     }
 }

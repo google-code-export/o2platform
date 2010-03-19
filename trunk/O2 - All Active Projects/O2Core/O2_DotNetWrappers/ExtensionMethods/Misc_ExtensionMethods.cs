@@ -43,6 +43,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return value == true;
         }
 
+        public static bool and(this bool leftOperand, bool rightOperand)
+        {
+            return leftOperand && rightOperand;
+        }
+
+        public static bool or(this bool leftOperand, bool rightOperand)
+        {
+            return leftOperand || rightOperand;
+        }
+
+        public static bool not(this bool value)
+        {
+            return !value;
+        }
+
         public static Bitmap bitmap(this string file)
         {
             if (file.fileExists())

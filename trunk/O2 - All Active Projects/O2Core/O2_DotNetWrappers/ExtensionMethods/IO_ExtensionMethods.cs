@@ -15,6 +15,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return contents.saveAs(PublicDI.config.TempFileNameInTempDirectory);
         }
 
+        public static string save(this string fileContents, string targeFileName)
+        {
+            return fileContents.saveAs(targeFileName);
+        }        
+
         public static string saveWithExtension(this string contents, string extension)
         {
             if (extension.starts("."))
@@ -33,6 +38,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             if (targetFileName.fileExists())
                 return targetFileName;
             return "";
+        }
+
+        public static string fileTrimContents(this string filePath)
+        {
+            var fileContents = filePath.fileContents();
+            if (fileContents.valid())
+                fileContents.trim().save(filePath);
+            return filePath;
         }
         #endregion
 
@@ -62,6 +75,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
             if (file.valid())
                 return file.extension() == extension;
             return false;
+        }
+
+        public static string extensionChange(this string file, string newExtension)
+        {
+            if (file.isFile())
+                return Path.ChangeExtension(file, newExtension);
+            return file;
         }
 
         public static bool exists(this string file)
@@ -241,5 +261,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             folder.createDir();
         }
+
+        public static bool fileContains(this string pathToFileToCompile, string textToFind)
+        {
+            var fileContents = pathToFileToCompile.fileContents();
+            return fileContents.contains(textToFind);
+        }
+
+        public static string fileInsertAt(this string filePath, int location, string textToInsert)
+        {
+            var fileContents = filePath.fileContents();
+            return fileContents.Insert(location, textToInsert).saveAs(filePath);
+        }
+
     }
 }

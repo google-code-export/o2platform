@@ -24,19 +24,45 @@ using System.Windows.Controls;
 namespace O2.API.Visualization.ExtensionMethods
 {
     public static class GraphLayout_WPF_ExtensionMethods
-    {   
-    
-    	// generic one
-    	public static T add<T>(this GraphLayout graphLayout) where T : UIElement
+    {
+
+        #region adding and creating
+
+        public static T add<T>(this GraphLayout graphLayout) where T : UIElement
 		{
 			var uiElement = graphLayout.newInThread<T>();			
 			graphLayout.add(uiElement);
 			return uiElement;
 		}
-    	
-    	#region TextBox
-    	
-    	public static TextBox add_TextBox(this GraphLayout graphLayout)
+        
+
+        public static GraphLayout loadGraph(this GraphLayout graphLayout, IBidirectionalGraph<object, IEdge<object>> graphToLoad)
+        {
+            return graphLayout.set_Graph(graphToLoad);
+        }
+
+        public static GraphLayout set_Graph(this GraphLayout graphLayout, IBidirectionalGraph<object, IEdge<object>> graphToLoad)
+        {
+            return (GraphLayout)graphLayout.wpfInvoke(
+                () =>
+                {
+                    try
+                    {
+                        graphLayout.Graph = graphToLoad;
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.log("in set_Graph");
+                    }
+                    return graphLayout;
+                });
+        }
+
+        #endregion
+
+        #region TextBox
+
+        public static TextBox add_TextBox(this GraphLayout graphLayout)
     	{
     		return graphLayout.add_TextBox("");
     	}

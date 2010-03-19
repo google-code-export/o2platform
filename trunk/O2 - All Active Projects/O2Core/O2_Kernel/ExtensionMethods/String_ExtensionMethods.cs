@@ -336,5 +336,7 @@ namespace O2.Kernel.ExtensionMethods
         {
             return stringToAdd + targetString;
         }
+
+        
     }
 }

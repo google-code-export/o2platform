@@ -7,6 +7,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.SharpDevelop.AST;
 using O2.Kernel;
+using O2.Views.ASCX.classes.MainGUI;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -73,9 +74,13 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static void colorCodeForExtension(this ascx_SourceCodeEditor sourceCodeEditor, string extension)
         {
-            var tecSourceCode = sourceCodeEditor.textEditorControl();
-            var dummyFileName = string.Format("aaa.{0}", extension);
-            tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(dummyFileName);
+            sourceCodeEditor.invokeOnThread(() =>
+            {
+
+                var tecSourceCode = sourceCodeEditor.textEditorControl();
+                var dummyFileName = string.Format("aaa.{0}", extension);
+                tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(dummyFileName);
+            });
         }
 
         public static void showAstValueInSourceCode(this TextEditorControl textEditorControl, AstValue<object> astValue)
@@ -126,9 +131,10 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return sourceCodeViewer.editor().getSourceCode();
         }
 
-        public static void onTextChanged(this ascx_SourceCodeViewer sourceCodeViewer, Action<string> textChanged)
+        public static ascx_SourceCodeViewer onTextChanged(this ascx_SourceCodeViewer sourceCodeViewer, Action<string> textChanged)
         {
             sourceCodeViewer.editor().eDocumentDataChanged += textChanged;
+            return sourceCodeViewer;
         }
 
         public static ascx_SourceCodeEditor editor(this ascx_SourceCodeViewer sourceCodeViewer)
@@ -146,15 +152,26 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             sourceCodeViewer.editor()._ShowSearchAndAstDetails = value;
         }
 
-        public static void vScroolBar_Enabled(this ascx_SourceCodeViewer sourceCodeViewer, bool value)
+        public static void vScroolBar_Enabled(this ascx_SourceCodeEditor sourceCodeViewer, bool value)
         {
-            sourceCodeViewer.editor().getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Enabled = value;
+            sourceCodeViewer.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Enabled = value;
         }
 
-        public static void hScroolBar_Enabled(this ascx_SourceCodeViewer sourceCodeViewer, bool value)
+        public static void vScroolBar_Visible(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
-            sourceCodeViewer.editor().getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Enabled = value;
+            sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Visible = value;
         }
+
+        public static void hScroolBar_Enabled(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
+        {
+            sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Enabled = value;
+        }
+
+        public static void hScroolBar_Visible(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
+        {
+            sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Visible = value;
+        }        
+
 
         public static void set_ColorsForCSharp(this ascx_SourceCodeViewer sourceCodeViewer)
         {
@@ -232,6 +249,64 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
             }
             return sourceCodeEditor.o2CodeCompletion;
+        }
+
+
+        public static ascx_SourceCodeEditor showInCodeEditor(this string fileOrCode)
+        {
+            if (fileOrCode.fileExists())
+                return fileOrCode.showInCodeEditor(fileOrCode.extension());
+            else
+                return fileOrCode.showInCodeEditor(".cs");
+        }
+
+        public static ascx_SourceCodeEditor showInCodeEditor(this string fileOrCode, string mapAsExtension)
+        {
+            var codeEditor = O2Gui.open<ascx_SourceCodeEditor>();
+            if (fileOrCode.fileExists())
+                codeEditor.open(fileOrCode);
+            else
+                codeEditor.setDocumentContents(fileOrCode);
+            codeEditor.setDocumentHighlightingStrategy(mapAsExtension);
+            return codeEditor;
+        }
+
+        public static ascx_SourceCodeViewer showInCodeViewer(this string fileOrCode)
+        {
+            if (fileOrCode.fileExists())
+                return fileOrCode.showInCodeViewer(fileOrCode.extension());
+            else
+                return fileOrCode.showInCodeViewer(".cs");
+        }
+
+        public static ascx_SourceCodeViewer showInCodeViewer(this string fileOrCode, string mapAsExtension)
+        {
+            var codeViewer = O2Gui.open<ascx_SourceCodeViewer>();
+            if (fileOrCode.fileExists())
+                codeViewer.open(fileOrCode);
+            else
+                codeViewer.setDocumentContents(fileOrCode);
+            codeViewer.editor().setDocumentHighlightingStrategy(mapAsExtension);
+            return codeViewer;
+        }
+
+        public static ascx_SourceCodeViewer set_Text(this ascx_SourceCodeViewer codeViewer, string text, string highlightForExtension)
+        {
+            codeViewer.editor().set_Text(text, highlightForExtension);
+            return codeViewer;
+        }
+
+        public static ascx_SourceCodeEditor set_Text(this ascx_SourceCodeEditor codeEditor, string text, string highlightForExtension)
+        {
+            codeEditor.set_Text(text);
+            codeEditor.setDocumentHighlightingStrategy(highlightForExtension);
+            return codeEditor;
+        }
+
+        public static ascx_SourceCodeEditor set_Text(this ascx_SourceCodeEditor codeEditor, string text)
+        {
+            codeEditor.setDocumentContents(text);
+            return codeEditor;
         }
     }
 }

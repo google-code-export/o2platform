@@ -44,6 +44,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Ascx\ascx_AssemblyInvoke.Controllers.cs">
@@ -59,6 +62,7 @@
     <Compile Include="AST\Charp_FastCompiler.cs" />
     <Compile Include="AST\TextToCodeMappings.cs" />
     <Compile Include="ExtensionMethods\FastCompiler_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Linq_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\SourceCode_ExtensionMethods.cs" />
     <Compile Include="Ascx\ascx_SourceCodeViewer.Controllers.cs">
       <SubType>UserControl</SubType>
@@ -77,6 +81,7 @@
     <Compile Include="AST\Ast_CSharp_ShowDetailsInViewer.cs" />
     <Compile Include="DI.cs" />
     <Compile Include="ExtensionMethods\TextEditor_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\XmlToXsd_ExtensionMethods.cs" />
     <Compile Include="HandleO2MessageOnSD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -121,6 +126,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SourceCode_3rdParty_Dlls\Microsoft_MPL\Misc_Microsoft_MPL_Libs\O2_Misc_Microsoft_MPL_Libs.csproj">
+      <Project>{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}</Project>
+      <Name>O2_Misc_Microsoft_MPL_Libs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>
