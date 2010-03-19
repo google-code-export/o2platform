@@ -1,7 +1,4 @@
-﻿using WPF=System.Windows.Controls;
-using O2.API.Visualization.ExtensionMethods;
-using GraphSharp.Controls;
-using O2.Script;
+﻿using O2.Script;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.XRules.Database.O2Utils;
 using O2.XRules.Database.ExtensionMethods;
@@ -22,7 +19,7 @@ namespace O2.XRules.Database.O2Utils
 	{
 		public static void run()
 		{ 
-			var script = O2Gui.open<ascx_Simple_Script_Editor>("O2 Command Prompt", 700, 70);
+			var script = O2Gui.open<ascx_Simple_Script_Editor>("O2 Command Prompt (press enter to execute the command)", 700, 70);
 			script.splitContainer_CommandBox.distance(400);
 			script.splitContainer_CommandBox.Panel2.clear();
 			var groupBox = script.splitContainer_Results.controls(true).@get<GroupBox>();

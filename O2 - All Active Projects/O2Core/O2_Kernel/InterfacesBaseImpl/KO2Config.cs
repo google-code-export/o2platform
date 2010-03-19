@@ -127,7 +127,8 @@ namespace O2.Kernel.InterfacesBaseImpl
         /// <returns></returns>
         public string getTempFileInTempDirectory(string extension)
         {
-            return TempFileNameInTempDirectory + "." + extension;
+            return TempFileNameInTempDirectory +
+                   (extension.StartsWith(".") ? extension : ("." + extension));
         }
 
         public string getTempFolderInTempDirectory(string stringToAddToTempDirectoryName)

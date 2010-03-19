@@ -12,7 +12,7 @@
 //O2Ref:O2_External_SharpDevelop.dll
 //O2Ref:merlin.dll
 //O2Ref:nunit.framework.dll
-//O2Ref:C:\O2\_O2 - LOCAL SVN - DEV\O2_Binaries\_HostLocalWebsite (O2 Tool).exe
+//O2Ref:_HostLocalWebsite (O2 Tool).exe
 using System;
 using System.Collections.Generic;
 using System.Linq;

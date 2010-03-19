@@ -13,6 +13,7 @@ using QuickGraph;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
+using System;
 
 //O2File:WPF_Threading_ExtensionMethods.cs
 //O2File:GraphFactory.cs
@@ -126,32 +127,53 @@ namespace O2.API.Visualization.ExtensionMethods
     	public static GraphLayout defaultLayout(this GraphLayout graphLayout)
     	{
     		return (GraphLayout)graphLayout.wpfInvoke(
-    			()=>{   
-			    		graphLayout.LayoutAlgorithmType = "Circular";
-						//graphLayout.OverlapRemovalConstraint = GraphSharp.Controls.AlgorithmConstraints.Must; //Automatic;
-						// this one was throwing an error on new graphs
-						//graphLayout.OverlapRemovalAlgorithmType="FSA";					
-			            graphLayout.HighlightAlgorithmType="Simple";  
-			            //graphLayout.background(Brushes.White);
+    			()=>{
+                        try
+                        {
+                            graphLayout.LayoutAlgorithmType = "Circular";
+                            graphLayout.OverlapRemovalAlgorithmType = "FSA";
+                            graphLayout.HighlightAlgorithmType = "Simple";
+                            // this one was throwing an error on new graphs when there is not graph loaded (but the value seems to be set)
+                            graphLayout.OverlapRemovalConstraint = GraphSharp.Controls.AlgorithmConstraints.Must; //Automatic;
+                            
+                        }
+                        catch (Exception ex)
+                        {
+                            "in defaultLayout: {0}".format(ex.Message).debug();
+                        }
 			           	return graphLayout;
 			         });
         }
+
+        public static GraphLayout overlapRemovalParameters(this GraphLayout graphLayout, float horizontalGap, float verticalGap)
+        {
+            return (GraphLayout)graphLayout.wpfInvoke(
+                () =>
+                {
+                    var overlapRemovalParameters = new GraphSharp.Algorithms.OverlapRemoval.OverlapRemovalParameters();
+                    overlapRemovalParameters.HorizontalGap = horizontalGap;
+                    overlapRemovalParameters.VerticalGap = verticalGap;
+                    graphLayout.OverlapRemovalParameters = overlapRemovalParameters;
+                    return graphLayout;
+                });
+        }
         
-        
-    	public static GraphLayout betertLayout(this GraphLayout graphLayout)
+/*    	public static GraphLayout betterLayout(this GraphLayout graphLayout)
     	{
     		return (GraphLayout)graphLayout.wpfInvoke(
-    			()=>{   
-			    		graphLayout.LayoutAlgorithmType = "Circular";
-						graphLayout.OverlapRemovalConstraint = GraphSharp.Controls.AlgorithmConstraints.Must; //Automatic;
-						// this one was throwing an error on new graphs
-						graphLayout.OverlapRemovalAlgorithmType="FSA";
-					
-			            graphLayout.HighlightAlgorithmType="Simple";  
-			            graphLayout.background(Brushes.White);
+    			()=>{
+                        try
+                        {                            
+                            // this one was throwing an error on new graphs
+                            
+                        }
+                        catch(Exception ex)
+                        {
+                            ex.log("in betterLayout");
+                        }
 			           	return graphLayout;
 			         });
-        }
+        }*/
         
        	public static GraphLayout testGraph(this GraphLayout graphLayout)
     	{    	 	        

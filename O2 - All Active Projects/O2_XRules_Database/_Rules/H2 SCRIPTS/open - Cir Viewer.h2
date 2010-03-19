@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var panel = open.asForm&lt;ascx_CirDataViewer&gt;();
+return "ok"; 
+//using O2.Core.CIR.Ascx
+//using O2.Core.CIR.ExtensionMethods
+//O2Ref:O2_Core_Cir.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>

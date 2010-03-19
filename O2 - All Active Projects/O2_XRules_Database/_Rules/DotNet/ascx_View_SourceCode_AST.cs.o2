@@ -33,7 +33,7 @@ namespace O2.Script
 		private static string testFileToUse()
 		{
 		    //var testFile = @"http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/O2_XRules_Database/_Rules/_Samples/HelloWorld.cs";
-		    const string testFile = @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules/_Samples/Windows Controls (ascx)/ascx_View_SourceCode_AST.cs";
+		    const string testFile = @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules/DotNet/ascx_View_SourceCode_AST.cs.o2";
             return Web.checkIfFileExistsAndDownloadIfNot(Path.GetFileName(testFile), testFile);
 		}
     }
@@ -122,18 +122,24 @@ namespace O2.Script
         public void showInSourceCode(Object sender, TreeViewEventArgs e)
         {
             var treeNoteTag = e.Node.Tag;
-            if (treeNoteTag is AstValue<object>)
-            {
-                var astValue = (AstValue<object>)treeNoteTag;
-                PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
+            // temp Hack to handle the fact that AstValue<obTject> is current using  AstValue<object>           
+            var endLocation = (ICSharpCode.NRefactory.Location)O2.Kernel.PublicDI.reflection.getProperty("EndLocation",treeNoteTag);
+            var startLocation = (ICSharpCode.NRefactory.Location)O2.Kernel.PublicDI.reflection.getProperty("StartLocation", treeNoteTag);
+            var originalObject = O2.Kernel.PublicDI.reflection.getProperty("OriginalObject", treeNoteTag);
+            var text = (string)O2.Kernel.PublicDI.reflection.getProperty("Text", treeNoteTag);
+            var astValue = new AstValue<object>(text,originalObject,startLocation,endLocation);
 
-                var textEditorControl = sourceCodeEditor.getObject_TextEditorControl();
-                var start = new ICSharpCode.TextEditor.TextLocation(astValue.StartLocation.X - 1, astValue.StartLocation.Y - 1);
-                var end = new ICSharpCode.TextEditor.TextLocation(astValue.EndLocation.X - 1, astValue.EndLocation.Y - 1);
-                var selection = new ICSharpCode.TextEditor.Document.DefaultSelection(textEditorControl.Document, start, end);
-                textEditorControl.ActiveTextAreaControl.SelectionManager.SetSelection(selection);
-                setCaretToCurrentSelection(textEditorControl);
-            }
+            //if (treeNoteTag is AstValue<object>)
+            //{
+            //var astValue = (AstValue<object>)treeNoteTag;            
+
+            var textEditorControl = sourceCodeEditor.getObject_TextEditorControl();
+            var start = new ICSharpCode.TextEditor.TextLocation(astValue.StartLocation.X - 1, astValue.StartLocation.Y - 1);
+            var end = new ICSharpCode.TextEditor.TextLocation(astValue.EndLocation.X - 1, astValue.EndLocation.Y - 1);
+            var selection = new ICSharpCode.TextEditor.Document.DefaultSelection(textEditorControl.Document, start, end);
+            textEditorControl.ActiveTextAreaControl.SelectionManager.SetSelection(selection);
+            setCaretToCurrentSelection(textEditorControl);
+            //}
         }
 
         public void setCaretToCurrentSelection(ICSharpCode.TextEditor.TextEditorControl textEditorControl)

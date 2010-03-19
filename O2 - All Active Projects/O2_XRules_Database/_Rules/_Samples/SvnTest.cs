@@ -7,11 +7,11 @@ using System.Text;
 using O2.Interfaces.O2Core;
 using O2.Interfaces.Views;
 using O2.Kernel;
-using System.Windows.Forms;
+using System.Windows.Forms; 
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX;
-using O2.External.WinFormsUI.Forms;
 //O2Ref:HTMLparserLibDotNet20.dll
 //O2Ref:nunit.framework.dll
 using NUnit.Framework; 
@@ -38,7 +38,7 @@ namespace O2.Script
     	[Test] 
     	public bool browseSvnArchive()
     	{    		
-    		var svnBrowser = (ascx_SvnBrowser)O2AscxGUI.openAscx(typeof(ascx_SvnBrowser),  O2DockState.Float, "Svn Browser");
+    		var svnBrowser = O2Gui.open<ascx_SvnBrowser>("Svn Browser");
     		//svnBrowser.openSvnUrl(svnServer);
     		return true;
     	}

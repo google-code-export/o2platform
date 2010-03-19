@@ -11,6 +11,7 @@ using O2.Interfaces.DotNet;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Core.CIR.Ascx.DotNet;
+//O2Ref:O2_Core_CIR.dll
 using O2.Views.ASCX;
 using O2.Views.ASCX.MerlinWizard;
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
@@ -19,10 +20,6 @@ using Merlin;
 using MerlinStepLibrary;
 //O2Ref:nunit.framework.dll
 using NUnit.Framework; 
-//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\DotNet\GacUtils.cs
-//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\DI.cs
-
-//O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\MerlinWizard_ExtensionMethods_2.cs
 
 namespace O2.Script
 {
@@ -46,7 +43,8 @@ namespace O2.Script
 			o2Wizard.Steps.add_Action("Confirm GAC Dlls to Copy", showListOfAssembliesToCopy);
 			// step 3
 			var selectFolderStep = o2Wizard.Steps.add_SelectFolder("Select folder to copy files", targetFolder, (newValue) => targetFolder = newValue);
-			selectFolderStep.add_CheckBox("Delete files from target folder?", deleteFilesFromTargetFolder, (newValue)=> deleteFilesFromTargetFolder = newValue);			
+			
+			//selectFolderStep.add_CheckBox("Delete files from target folder?", deleteFilesFromTargetFolder, (newValue)=> deleteFilesFromTargetFolder = newValue);			
 			// step 4
 			o2Wizard.Steps.add_Action("Copying files to target folder", copyFilesToTargetFolder);
 			// step 5

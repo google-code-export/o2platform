@@ -176,14 +176,16 @@ namespace O2.DotNetWrappers.Network
         {
         	if (File.Exists(file))
         		return file;
-        	var localTempFile = Path.Combine(PublicDI.config.O2TempDir, file);
+            var localTempFile = urlToDownloadFile.extension(".zip") 
+                ? PublicDI.config.getTempFileInTempDirectory(".zip")
+                : Path.Combine(PublicDI.config.O2TempDir, file);
         	if (File.Exists(localTempFile))
         		return localTempFile;
             downloadBinaryFile(urlToDownloadFile, localTempFile);
         	//var downloadedFile = downloadBinaryFile(urlToDownloadFile, false /*saveUsingTempFileName*/);
             if (File.Exists(localTempFile))
         	{
-                if (Path.GetExtension(localTempFile) != ".zip")
+                if (Path.GetExtension(localTempFile) != ".zip" && urlToDownloadFile.fileName().extension(".zip").isFalse())
                     return localTempFile;
 
                 List<string> extractedFiles = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(localTempFile, PublicDI.config.O2TempDir);

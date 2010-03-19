@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var panel = (Panel)typeof(Panel).showAsForm("Web Browser", 850,500);
-panel.add_WebBrowserWithLocationBar(@"o2-platform.com");
+  <SourceCode>var panel = O2Gui.open&lt;Panel&gt;("Web Browser", 850,500);
+var browser = (O2BrowserIE)panel.add_WebBrowserWithLocationBar(@"o2-platform.com");
+browser.silent(true);
 
 //ref O2_External_IE.dll
 //using O2.External.IE.Wrapper
