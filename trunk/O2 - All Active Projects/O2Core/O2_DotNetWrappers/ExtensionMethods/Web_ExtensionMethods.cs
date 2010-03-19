@@ -67,14 +67,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static bool validUri(this string _string)
         {
             try
-            {                           
-                var uri  = new Uri(_string);
-                return (uri != null && uri.IsAbsoluteUri && uri.IsFile.isFalse());
+            {
+                if (_string.valid())
+                {
+                    var uri = new Uri(_string);
+                    return (uri != null && uri.IsAbsoluteUri && uri.IsFile.isFalse());
+                }
             }
             catch (Exception)
             {
-                return false;
+                
             }
+            return false;
         }
 
         public static string getUrlContents(this Uri uri)

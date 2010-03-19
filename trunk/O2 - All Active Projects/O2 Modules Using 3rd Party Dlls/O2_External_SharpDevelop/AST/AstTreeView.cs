@@ -29,6 +29,7 @@ namespace O2.External.SharpDevelop.AST
                                                  "' parameter in object of type: " + item.ToString();
                             treeView.add_Node(nodeText, item);
                         }
+                        treeView.Sort();
                     });
         }
         public static void show_List(this TreeView treeView, List<string> list)
@@ -39,6 +40,7 @@ namespace O2.External.SharpDevelop.AST
                         treeView.clear();
                         foreach (var item in list)
                             treeView.add_Node(item);
+                        treeView.Sort();
                     });
         }
 	

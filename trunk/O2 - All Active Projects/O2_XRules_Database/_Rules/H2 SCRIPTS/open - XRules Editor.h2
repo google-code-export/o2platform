@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>typeof(ascx_XRules_Editor).showAsForm("XRules Editor", 900,400);
+  <SourceCode>O2Gui.open&lt;ascx_XRules_Editor&gt;("XRules Editor", 900,400);
 //using O2.Core.XRules.Ascx
 //ref O2_Core_XRules.dll</SourceCode>
   <ReferencedAssemblies />

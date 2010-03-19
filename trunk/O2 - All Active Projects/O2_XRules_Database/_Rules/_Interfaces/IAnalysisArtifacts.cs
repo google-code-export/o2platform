@@ -1,8 +1,11 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+//O2Tag_OnlyAddReferencedAssemblies
 using System;
 using System.Collections;
 using System.Collections.Generic;
+//O2Ref:System.Core.dll
 using System.Linq;
+//O2File:C:\O2\XRulesDatabase\_Rules\_Interfaces\KAnalysisArtifacts.cs
 
 namespace O2.XRules.Database.Interfaces
 {

@@ -60,7 +60,7 @@ namespace O2.API.Visualization.ExtensionMethods
     	public static GraphLayout  edgeFromLast(this GraphLayout graphLayout, object vertexToLink)
     	{
     		var vertices = graphLayout.vertices();
-    		graphLayout.edge(vertices[vertices.size()-2],vertexToLink);
+    		graphLayout.edge(vertices[vertices.size()-1],vertexToLink);
     		return graphLayout;    		
     	}
     	    	    		    

@@ -133,8 +133,9 @@ namespace O2.External.SharpDevelop.AST
         public void compileSnippet(string codeSnippet)
         {
             try
-            {                
-                createAstStack.Clear();
+            {
+                createAstStack = new Stack<string>();
+          //      createAstStack.Clear();
                 if (createAstStack.Count == 0)
                     creatingAst = false;
                 createAstStack.Push(codeSnippet);
@@ -247,7 +248,7 @@ namespace O2.External.SharpDevelop.AST
 
         // we need to use CompileEngine (which is slower but supports multiple file compilation 
         public void compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies()
-        {             
+        {            
             if (ExtraSourceCodeFilesToCompile.size() > 0)
             {                
                 var assembly = new CompileEngine().compileSourceFiles(ExtraSourceCodeFilesToCompile);                
@@ -306,8 +307,8 @@ namespace O2.External.SharpDevelop.AST
                         CompilationUnit.add_Type(default_TypeName)
                             .add_Method(default_MethodName, InvocationParameters, blockStatement);
 
-                        astCSharp = new Ast_CSharp(CompilationUnit);
-                        astCSharp.AstDetails.mapSpecials(snippetParser.Specials);
+                        astCSharp = new Ast_CSharp(CompilationUnit, snippetParser.Specials);
+                        //astCSharp.AstDetails.mapSpecials();
 
                         // add references included in the original source code file
                         mapCodeO2References(astCSharp);
@@ -355,23 +356,21 @@ namespace O2.External.SharpDevelop.AST
         }        
 
         public void mapCodeO2References(Ast_CSharp astCSharp)
-        {
+        {            
+            bool onlyAddReferencedAssemblies = false;
             generateDebugSymbols = false; // default to not generating debug symbols and creating the assembly only in memory
-            ExtraSourceCodeFilesToCompile = new List<string>();
-        	ReferencedAssemblies = getDefaultReferencedAssemblies();
+            ExtraSourceCodeFilesToCompile = new List<string>();        	
         	var compilationUnit = astCSharp.CompilationUnit;
-        	
+            ReferencedAssemblies = new List<string>();
+
         	var currentUsingDeclarations = new List<string>();
         	foreach(var usingDeclaration in astCSharp.AstDetails.UsingDeclarations)
         		currentUsingDeclarations.Add(usingDeclaration.Text);
         	
-        	var defaultUsingStatements = getDefaultUsingStatements();
-        	foreach(var usingStatement in defaultUsingStatements)
-        		if (false == currentUsingDeclarations.Contains(usingStatement))
-        			compilationUnit.add_Using(usingStatement);
-
+        	
             foreach (var comment in astCSharp.AstDetails.Comments)
             {
+                comment.Text.eq("O2Tag_OnlyAddReferencedAssemblies", () => onlyAddReferencedAssemblies = true);                
                 comment.Text.starts("using ", false, value => astCSharp.CompilationUnit.add_Using(value));
                 comment.Text.starts(new [] {"ref ", "O2Ref:"}, false,  value => ReferencedAssemblies.Add(value));
                 comment.Text.starts(new[] { "file ", "O2File:" }, false, value => ExtraSourceCodeFilesToCompile.Add(value)); 
@@ -381,7 +380,18 @@ namespace O2.External.SharpDevelop.AST
                                         "debugSymbols"}, true, (value) => generateDebugSymbols = true);
                 comment.Text.eq("StaThread", () => { ExecuteInStaThread = true; });
                 comment.Text.eq("MtaThread", () => { ExecuteInMtaThread = true; });  
-            }            
+            }
+
+            if (onlyAddReferencedAssemblies.isFalse())
+            {
+                foreach (var defaultRefAssembly in getDefaultReferencedAssemblies())
+                    if (ReferencedAssemblies.Contains(defaultRefAssembly).isFalse())
+                        ReferencedAssemblies.add(defaultRefAssembly);            
+                foreach (var usingStatement in getDefaultUsingStatements())
+                    if (false == currentUsingDeclarations.Contains(usingStatement))
+                        compilationUnit.add_Using(usingStatement);
+            }
+
         }               
         
         public object executeFirstMethod()

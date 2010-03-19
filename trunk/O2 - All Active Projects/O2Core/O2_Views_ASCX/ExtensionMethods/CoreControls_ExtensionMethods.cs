@@ -53,11 +53,8 @@ namespace O2.Views.ASCX.ExtensionMethods
             tableList.setDataTable(collection.dataTable(columnsToShow));
             return tableList;
         }
-
-        
-        
-
-        /*public static ascx_TableList add_TableList(this Control control, string tableTitle)
+                
+        public static ascx_TableList add_TableList(this Control control, string tableTitle)
         {
             return (ascx_TableList) control.invokeOnThread(
                                         () =>
@@ -68,7 +65,7 @@ namespace O2.Views.ASCX.ExtensionMethods
                                                 control.Controls.Add(tableList);
                                                 return tableList;
                                             });
-        }*/
+        }
 
         public static void add_Columns(this ascx_TableList tableList, List<string> columnNames)
         {

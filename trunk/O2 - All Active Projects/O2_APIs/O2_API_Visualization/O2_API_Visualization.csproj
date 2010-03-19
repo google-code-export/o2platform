@@ -36,7 +36,6 @@
       <HintPath>..\..\_3rdPartyDlls\Dimebrain.TweetSharp.dll</HintPath>
     </Reference>
     <Reference Include="GraphSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
-    <Reference Include="GraphSharp.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="GraphSharp.Controls, Version=1.0.3438.42543, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="ICSharpCode.AvalonEdit, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

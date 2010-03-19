@@ -94,28 +94,35 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static string xsdCreateCSharpFile(this string xsdFile, string targetCsFile)
         {
-            if (xsdFile.fileExists().isFalse())
-                xsdFile = xsdFile.save();
-            if (xsdFile.fileExists().isFalse())
-                return "";
-            "Creating CSharp from XSD: {0}".format(xsdFile).info();
-            XmlSchemaSet xmlSchemaSet = new XmlSchemaSet();
-            XmlReaderSettings settings = new XmlReaderSettings();
-            settings.XmlResolver = null;
-            settings.ProhibitDtd = true;
-            var xmlReader = XmlReader.Create(xsdFile, settings);
-            xmlSchemaSet.Add(null, xmlReader);
-            string csFileName = targetCsFile;
-            string targetAssembly = String.Empty;  // don't use their compile method
-            string configFileName = null;
-            bool xmlSerializable = false;
-            bool nameMangler2 = false;
-            var xObjects = "O2_Misc_Microsoft_MPL_Libs.dll".type("XObjectsGenerator");
-            xObjects.invokeStatic("GenerateXObjects", xmlSchemaSet, csFileName, configFileName, targetAssembly, xmlSerializable, nameMangler2);
-            //xsdFile.fromXsdCreateCSFileAndAssembly(targetCsFile,string.Empty);
+            try
+            {
+                if (xsdFile.fileExists().isFalse())
+                    xsdFile = xsdFile.save();
+                if (xsdFile.fileExists().isFalse())
+                    return "";
+                "Creating CSharp from XSD: {0}".format(xsdFile).info();
+                XmlSchemaSet xmlSchemaSet = new XmlSchemaSet();
+                //XmlReaderSettings settings = new XmlReaderSettings();
+                //settings.XmlResolver = null;
+                //ettings.ProhibitDtd = true;
+                //var xmlReader = XmlReader.Create(xsdFile, settings);
+                xmlSchemaSet.Add(null, xsdFile.xmlReader());
+                string csFileName = targetCsFile;
+                string targetAssembly = String.Empty;  // don't use their compile method
+                string configFileName = null;
+                bool xmlSerializable = false;
+                bool nameMangler2 = false;
+                var xObjects = "O2_Misc_Microsoft_MPL_Libs.dll".type("XObjectsGenerator");
+                xObjects.invokeStatic("GenerateXObjects", xmlSchemaSet, csFileName, configFileName, targetAssembly, xmlSerializable, nameMangler2);
+                //xsdFile.fromXsdCreateCSFileAndAssembly(targetCsFile,string.Empty);
 
-            if (targetCsFile.fileExists())
-                return targetCsFile;
+                if (targetCsFile.fileExists())
+                    return targetCsFile;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in xsdCreateCSharpFile");
+            }
             return "";
         }
 
