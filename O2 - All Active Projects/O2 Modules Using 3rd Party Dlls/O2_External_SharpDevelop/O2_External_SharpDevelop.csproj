@@ -191,6 +191,7 @@
     <Content Include="ScriptSamples\IronPython_CreateFindingManually_py.py" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="AstCSharp\" />
     <Folder Include="WPF\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O2.API.AST</RootNamespace>
+    <AssemblyName>O2_API_AST</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\O2_Binaries\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CSharp\AstVisitors.cs" />
+    <Compile Include="ExtensionMethods\CSharp\Attribute_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\CSharpSourceCode_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\NamespaceDeclaration_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\ParameterDeclarationExpression_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\Parser_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\TypeDeclaration_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\TypeReference_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\UsingDeclaration_ExtensionMethods.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SourceCode_3rdParty_Dlls\SharpDevelop\O2SharpDevelop.csproj">
+      <Project>{2483564D-4343-4624-A0C6-63ABC932544A}</Project>
+      <Name>O2SharpDevelop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CSharp\FindLocationInAst.cs" />
+    <Compile Include="CSharp\O2AstResolver.cs" />
+    <Compile Include="CSharp\O2AstVisitor.cs" />
+    <Compile Include="ExtensionMethods\BidirectionalGraph_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\AstResolve_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\LocalVariableDeclaration_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\MethodDeclaration_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\O2GraphNode_ExtensionMethods.cs" />
+    <Compile Include="Graph\AstMethodFinder.cs" />
+    <Compile Include="Graph\GraphAstVisitor.cs" />
+    <Compile Include="Graph\O2GraphNode.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

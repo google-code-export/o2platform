@@ -67,6 +67,11 @@ namespace O2.Kernel.ExtensionMethods
 
         public static Control openControlAsForm(this Type controlType, string title, int width, int height)
         {
+            if (controlType == null)
+            {
+                "in openControlAsForm, provided controlType variable was null".error();
+                return null;
+            }    
             var winFormsType = "O2_Views_Ascx.dll".type("WinForms");
             if (winFormsType != null)
             {

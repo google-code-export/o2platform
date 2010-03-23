@@ -114,7 +114,32 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return (T)objectToCheck;
             control.clear();
             return createFunction();
-        }        
+        }
+
+        public static T parent<T>(this List<Control> controls) where T : Control
+        {
+            foreach (var control in controls)
+            {
+                var match = control.parent<T>();
+                if (match != null)
+                    return (T)match;
+            }
+            return null;
+        }
+
+        public static T parent<T>(this Control control) where T : Control
+        {
+            if (control != null && control.Parent != null)
+            {
+                var parent = control.Parent;
+                if (parent is T)
+                    return (T)parent;
+                var match = parent.parent<T>();
+                if (match != null)
+                    return (T)match;
+            }
+            return null;
+        }
 
         #endregion
 
@@ -197,6 +222,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             foreach (Control control in controlCollection)
                 controls.Add(control);
             return controls;
+        }
+
+        public static T focus<T>(this T control) where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.Focus();
+                    return control;
+                });
         }
 
         #endregion
@@ -580,6 +615,73 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return controlToWrap.injectControl_Bottom(controlToInject, splitterDistance, false);
         }
 
+        public static T insert_Above<T>(this Control control) where T : Control
+        {
+            return control.insert_Above<T>(-1);
+        }
+
+        public static T insert_Above<T>(this Control control, int distance) where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    var newControl = control.add_Control<T>();
+                    newControl.fill();
+                    control.insert_Above(newControl, distance);
+                    return newControl;
+                });
+        }
+
+        public static T insert_Below<T>(this Control control) where T : Control
+        {
+            return control.insert_Below<T>(-1);
+        }
+
+        public static T insert_Below<T>(this Control control, int distance) where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    var newControl = control.add_Control<T>();
+                    newControl.fill();
+                    control.insert_Below(newControl, distance);
+                    return newControl;
+                });
+        }
+
+        public static T insert_Left<T>(this Control control) where T : Control
+        {
+            return control.insert_Left<T>(-1);
+        }
+
+        public static T insert_Left<T>(this Control control, int distance) where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    var newControl = control.add_Control<T>();
+                    newControl.fill();
+                    control.insert_Left(newControl, distance);
+                    return newControl;
+                });
+        }
+
+        public static T insert_Right<T>(this Control control) where T : Control
+        {
+            return control.insert_Right<T>(-1);
+        }
+
+        public static T insert_Right<T>(this Control control, int distance) where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    var newControl = control.add_Control<T>();
+                    newControl.fill();
+                    control.insert_Right(newControl, distance);
+                    return newControl;
+                });
+        }
 
         #endregion
        

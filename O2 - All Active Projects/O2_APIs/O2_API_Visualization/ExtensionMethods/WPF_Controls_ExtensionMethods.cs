@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System;
+using System.Windows.Markup;
 
 //O2File:WPF_Threading_ExtensionMethods.cs
 
@@ -105,13 +106,10 @@ namespace O2.API.Visualization.ExtensionMethods
     	}
     	
     	#endregion
-    	
-    	#region FrameworkElement
-    	
-    	
-    	
-    	
-    	// this is the generic one
+               
+        #region FrameworkElement
+
+        // this is the generic one
     	public static T prop<T>(this T frameworkElement, string propertyName, object value) where T : FrameworkElement
     	{    		
     		frameworkElement.wpfInvoke(

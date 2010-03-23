@@ -25,6 +25,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                     return textEditorControl;
                 });
         }
+     
         public static TextArea textArea(this TextEditorControl textEditorControl)
         {
             return textEditorControl.ActiveTextAreaControl.TextArea;

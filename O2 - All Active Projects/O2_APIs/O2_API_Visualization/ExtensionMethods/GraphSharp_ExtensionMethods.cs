@@ -14,7 +14,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System;
-
+using O2.API.AST.ExtensionMethods;
 //O2File:WPF_Threading_ExtensionMethods.cs
 //O2File:GraphFactory.cs
 
@@ -117,8 +117,15 @@ namespace O2.API.Visualization.ExtensionMethods
     	public static GraphLayout newGraph(this GraphLayout graphLayout)
     	{
     		return (GraphLayout)graphLayout.wpfInvoke(
-    			()=>{   
-    					graphLayout.Graph = new BidirectionalGraph<object, IEdge<object>>();
+    			()=>{
+                        try
+                        {
+                            graphLayout.Graph = new BidirectionalGraph<object, IEdge<object>>();
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.log("in GraphLayout.newGraph");
+                        }
 			    		return graphLayout;
 			    	});
     	}
@@ -268,43 +275,41 @@ namespace O2.API.Visualization.ExtensionMethods
     	}
     	
     	#endregion
-    	
-    	#region BidirectionalGraph
-    	
-    	public static void add(this BidirectionalGraph<object, IEdge<object>> graph,object vertexToAdd)
-    	{
-    		graph.AddVertex(vertexToAdd);
-    	}    	
-    	
-    	public static void edge(this BidirectionalGraph<object, IEdge<object>> graph,object fromVertex, object toVertex)
-    	{
-    		try
-    		{
-    			graph.AddVertex(fromVertex);
-    			graph.AddVertex(toVertex);
-    			graph.AddEdge(new Edge<object>(fromVertex,toVertex) );
-    		}
-    		catch(System.Exception ex) 
-    		{ex.log("in edge");}
-    	}
-    	  	
-    	public static void edges(this BidirectionalGraph<object, IEdge<object>> bidirectionalGraph,  List<IEdge<object>> edges)
-    	{
-    		try
-    		{
-    			bidirectionalGraph.AddVerticesAndEdgeRange(edges.ToArray());
-    		}
-    		catch(System.Exception ex)
-    		{ex.log("in edges");}
-    	}
 
-        public static void addList<T>(this BidirectionalGraph<object, IEdge<object>> graph, IEnumerable<T> list, string nodeText)
+
+        #region using TreeView
+
+        public static BidirectionalGraph<object, IEdge<object>> getGraph(this System.Windows.Forms.TreeView treeView, bool recursive)
         {
-            foreach (var item in list)
-                graph.edge(nodeText, item.str());
+            var graph = new BidirectionalGraph<object, IEdge<object>>();
+            treeView.Nodes.forEach<System.Windows.Forms.TreeNode>(
+                (childNode) => graph.addFromTreeNode(childNode, recursive));
+
+            return graph;
         }
 
-    	#endregion
-    	
+        public static BidirectionalGraph<object, IEdge<object>> getGraph(this System.Windows.Forms.TreeNode treeNode, bool recursive)
+        {
+            var graph = new BidirectionalGraph<object, IEdge<object>>();
+            graph.addFromTreeNode(treeNode, recursive);
+            return graph;
+        }
+
+        public static object addFromTreeNode(this BidirectionalGraph<object, IEdge<object>> graph, System.Windows.Forms.TreeNode treeNode, bool recursive)
+        {
+            var vertex = treeNode.Text;
+            graph.add(vertex);
+            if (recursive)
+                treeNode.Nodes.forEach<System.Windows.Forms.TreeNode>(
+                    (childNode) =>
+                    {
+                        var childVertex = graph.addFromTreeNode(childNode, true);
+                        graph.edge(vertex, childVertex);
+                    });
+
+            return vertex;
+        }
+
+        #endregion
     }
 }

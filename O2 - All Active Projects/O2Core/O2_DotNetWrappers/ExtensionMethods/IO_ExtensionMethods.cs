@@ -4,6 +4,7 @@ using System.IO;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.ExtensionMethods;
 using O2.Kernel;
+using O2.DotNetWrappers.DotNet;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -170,6 +171,31 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return file.contents();
         }
 
+        public static string fileSnippet(this string file, int startLine, int endLine)
+        {
+            if (file.fileExists().isFalse())
+            {
+                "in fileSnippet, request file didn't exist: {0}".format(file).error();
+                return "";
+            }
+            if (startLine == endLine)
+            {
+                "in fileSnippet, provided start line is equal to end end line: {0}".format(startLine).error();
+                return "";
+            }
+            var fileLines = file.fileContents().split_onLines();
+            var numberOfLines = fileLines.size();
+            if (startLine > endLine || numberOfLines < endLine)
+            {
+                "in fileSnippet, problem with the provided start line ({0}), end line ({1}) or file lines ({2}) values"
+                    .format(startLine, endLine, numberOfLines).error();
+                return "";
+            }
+            var snippet = fileLines.GetRange(startLine, endLine - startLine);
+            "snippet size : {0}".format(snippet.size()).debug();
+            return StringsAndLists.fromStringList_getText(snippet).trim();
+        }
+
         public static string contents(this string file)
         {
             if (file.valid())
@@ -223,6 +249,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 : new List<string>();
         }
 
+        public static List<string> files(this string folder, bool recursiveSearch)
+        {
+            return folder.files(recursiveSearch, "");
+        }
+
+        public static List<string> files(this string folder, bool recursiveSearch, string filter)
+        {
+            return Files.getFilesFromDir_returnFullPath(folder, filter, recursiveSearch);
+        }
+
 
         public static List<string> dirs(this string path)
         {
@@ -273,6 +309,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
             var fileContents = filePath.fileContents();
             return fileContents.Insert(location, textToInsert).saveAs(filePath);
         }
+
+        
 
     }
 }

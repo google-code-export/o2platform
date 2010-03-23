@@ -308,5 +308,59 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             codeEditor.setDocumentContents(text);
             return codeEditor;
         }
+
+
+        public static ascx_SourceCodeViewer load(this ascx_SourceCodeViewer codeViewer, string fileOrCode)
+        {
+            codeViewer.editor().load(fileOrCode);
+            return codeViewer;
+        }
+
+        public static ascx_SourceCodeEditor load(this ascx_SourceCodeEditor codeEditor, string fileOrCode)
+        {
+            if (fileOrCode.fileExists())
+            {
+                codeEditor.open(fileOrCode);
+            }
+            else
+            {
+                codeEditor.set_ColorsForCSharp();
+                codeEditor.setDocumentContents(fileOrCode);
+            }
+            return codeEditor;
+        }
+
+        public static Caret caret(this ascx_SourceCodeEditor codeEditor)
+        {
+            return codeEditor.textArea().Caret;
+        }
+
+        public static ascx_SourceCodeEditor caret_Line(this ascx_SourceCodeEditor codeEditor, int value)
+        {
+            return codeEditor.caret_Line(value, 3);
+        }
+
+        public static ascx_SourceCodeEditor caret_Line(this ascx_SourceCodeEditor codeEditor, int value, int viewOffset)
+        {
+            return (ascx_SourceCodeEditor)codeEditor.invokeOnThread(
+                () =>
+                {
+                    codeEditor.caret().Line = value + viewOffset;  // so that the selected line is not at the bottom of the screen
+                    codeEditor.caret().Line = value;
+                    return codeEditor;
+                });
+        }
+
+        public static ascx_SourceCodeViewer onCaretMove(this ascx_SourceCodeViewer codeViewer, Action<Caret> callback)
+        {
+            codeViewer.editor().onCaretMove(callback);
+            return codeViewer;
+        }
+
+        public static ascx_SourceCodeEditor onCaretMove(this ascx_SourceCodeEditor codeEditor, Action<Caret> callback)
+        {
+            codeEditor.textArea().Caret.PositionChanged += (sender, e) => callback(codeEditor.caret());
+            return codeEditor;
+        }
     }
 }

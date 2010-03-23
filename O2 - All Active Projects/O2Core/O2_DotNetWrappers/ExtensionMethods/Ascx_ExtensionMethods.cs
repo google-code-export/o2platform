@@ -247,6 +247,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return control;
                 });
         }
+
+        public static SplitContainer verticalOrientation(this SplitContainer splitContainer)
+        {
+            splitContainer.invokeOnThread(() => splitContainer.Orientation = Orientation.Vertical);
+            return splitContainer;
+        }
+
+        public static SplitContainer horizontalOrientation(this SplitContainer splitContainer)
+        {
+            splitContainer.invokeOnThread(() => splitContainer.Orientation = Orientation.Horizontal);
+            return splitContainer;
+        }
+
         #endregion
 
         #region SplitContainer_nxn
@@ -281,6 +294,43 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return control.add_SplitContainer_1x2(title1, title2, title3, align, distance1, distance2);
         }
 
+        public static List<Control> add_1x1<T1, T2>(this Control control, string title1, string title2)
+            where T1 : Control
+            where T2 : Control
+        {
+            var controls = control.add_1x1(title1, title2);
+            controls[0].add_Control<T1>();
+            controls[1].add_Control<T2>();
+            return controls;
+        }
+
+        public static List<Control> add_1x1(this Control control, string title1, string title2, Action<Control> host1Callback, Action<Control> host2Callback)
+        {
+            var controls = control.add_1x1(title1, title2);
+            host1Callback(controls[0]);
+            host2Callback(controls[1]);
+            return controls;
+        }
+
+        public static List<Control> add_1x1(this Control control, string title1, string title2, bool verticalSplit, int splitterDistance, Action<Control> host1Callback, Action<Control> host2Callback)
+        {
+            var controls = control.add_1x1(title1, title2, verticalSplit, splitterDistance);
+            host1Callback(controls[0]);
+            host2Callback(controls[1]);
+            return controls;
+        }
+    
+        public static List<Control> add_1x1(this Control control, string title1, string title2, bool verticalSplit)
+        {
+            var controls = control.add_1x1(title1, title2);
+            var splitContainer = controls.parent<SplitContainer>();
+            if (verticalSplit)
+                splitContainer.verticalOrientation();
+            else
+                splitContainer.horizontalOrientation();
+            controls.Add(splitContainer);
+            return controls;
+        }        
 
         public static List<Control> add_SplitContainer_1x1(this Control control, string title_1, string title_2,
                                                            bool verticalSplit, int spliterDistance)
@@ -682,7 +732,43 @@ namespace O2.DotNetWrappers.ExtensionMethods
             treeView.Nodes.forEach<TreeNode>((node) => treeView.expand(node));
             return treeView;
         }
-        
+
+        public static TreeView expand(this TreeView treeView, TreeNode treeNode)
+        {
+            treeView.invokeOnThread(() => treeNode.Expand());
+            return treeView;
+        }
+
+        public static List<TreeNode> expand(this List<TreeNode> treeNodes)
+        {
+            treeNodes.forEach<TreeNode>((node) => node.expand());
+            return treeNodes;
+        }
+
+        public static TreeNode expand(this TreeNode treeNode)
+        {
+            return (TreeNode)treeNode.TreeView.invokeOnThread(
+                () =>
+                {
+                    treeNode.Expand();
+                    return treeNode;
+                });
+        }
+
+        public static TreeView expandAll(this TreeView treeView, bool selectFirst)
+        {
+            treeView.expandAll();
+            if (selectFirst)
+                treeView.selectFirst().showSelection();
+            return treeView;
+        }
+
+        public static TreeView expandAll(this TreeView treeView)
+        {
+            treeView.invokeOnThread(() => treeView.ExpandAll());
+            return treeView;
+        }
+
         public static void selectNode(this TreeView treeView, int nodeToSelect)
         {
             treeView.invokeOnThread(
@@ -707,24 +793,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                             return; // makes this Sync call
                                         });
         }
-
-        public static void expandAll(this TreeView treeView)
+                
+        public static TreeNode setTextColor(this TreeNode treeNode, Color color)
         {
-            treeView.invokeOnThread(() => treeView.ExpandAll());
+            treeNode.TreeView.invokeOnThread(() => { treeNode.ForeColor = color; });
+            return treeNode;
         }
 
-        public static void expand(this TreeView treeView, TreeNode treeNode)
-        {
-            treeView.invokeOnThread(() => treeNode.Expand());
-        }
-
-        public static void setTextColor(this TreeView treeView, TreeNode treeNode, Color color)
-        {
-            treeView.invokeOnThread(()
-                                    => { treeNode.ForeColor = color; });
-        }
-
-        public static void afterSelect<T>(this TreeView treeView, Action<T> callback)
+        public static TreeView afterSelect<T>(this TreeView treeView, Action<T> callback)
         {
             treeView.AfterSelect += (sender, e)
                                     =>
@@ -733,9 +809,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
                                                 callback((T)e.Node.Tag);
                                         };
+            return treeView;
         }
 
-        public static void beforeExpand<T>(this TreeView treeView, Action<T> callback)
+        public static TreeView beforeExpand<T>(this TreeView treeView, Action<T> callback)
         {
             treeView.BeforeExpand += (sender, e)
                                     =>
@@ -745,6 +822,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
                     callback((T)e.Node.Tag);
             };
+            return treeView;
         }
 
         public static TreeView add_Nodes(this TreeView treeView, IEnumerable collection)
@@ -802,6 +880,117 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             var eventDelegate = treeView.getEventHandlers(eventName);
             return (eventDelegate != null && eventDelegate.size() > 0);
+        }
+
+        public static TreeView selectFirst(this TreeView treeView)
+        {
+            var nodes = treeView.nodes();
+            if (nodes.size() > 0)
+                treeView.selectedNode(nodes[0]);
+            return treeView;
+        }
+
+        public static TreeView selectedNode(this TreeView treeView, TreeNode treeNode)
+        {
+            return (TreeView)treeView.invokeOnThread(
+                () =>
+                {
+                    treeView.SelectedNode = treeNode;
+                    return treeView;
+                });
+        }
+
+        public static TreeView showSelection(this TreeView treeView)
+        {
+            return (TreeView)treeView.invokeOnThread(
+                () =>
+                {
+                    treeView.HideSelection = false;
+                    return treeView;
+                });
+        }
+
+        public static TreeNode selected(this TreeNode treeNode)
+        {
+            return (TreeNode)treeNode.TreeView.invokeOnThread(
+                () =>
+                {
+                    treeNode.TreeView.SelectedNode = treeNode;
+                    return treeNode;
+                });
+        }
+
+        public static List<TreeNode> nodes(this TreeView treeView)
+        {
+            var nodes = new List<TreeNode>();
+            treeView.Nodes.forEach<TreeNode>((node) => nodes.Add(node));
+            return nodes;
+        }
+
+        public static List<TreeNode> nodes(this TreeNode treeNode)
+        {
+            var nodes = new List<TreeNode>();
+            treeNode.Nodes.forEach<TreeNode>((node) => nodes.Add(node));
+            return nodes;
+        }
+
+        public static List<TreeNode> nodes(this List<TreeNode> treeNodes)
+        {
+            var results = new List<TreeNode>();
+            treeNodes.forEach<TreeNode>((node) => results.AddRange(node.nodes()));
+            return results;
+        }
+
+        public static TreeView treeView(this List<TreeNode> treeNodes)
+        {
+            if (treeNodes.size() > 0)
+                return treeNodes[0].TreeView;
+            return null;					 // this could cause problems 
+        }
+        
+        public static object tag<T>(this TreeNode treeNode)
+        {
+            if (treeNode.Tag != null && treeNode.Tag is T)
+                return (T)treeNode.Tag;
+            return null;
+        }
+
+        public static TreeView onDrag<T>(this TreeView treeView)
+        {
+            return treeView.onDrag<T, object>(null);         
+        }
+
+        public static TreeView onDrag<T, T1>(this TreeView treeView, Func<T, T1> getDragData)
+        {
+            treeView.ItemDrag += (sender, e) =>
+            {
+                ((TreeNode)e.Item).selected();
+                var tag = (T)treeView.current().tag<T>();
+                if (tag != null)
+                    if (getDragData != null)
+                        treeView.DoDragDrop(getDragData(tag), DragDropEffects.Copy);
+                    else
+                        treeView.DoDragDrop(tag, DragDropEffects.Copy);
+            };
+            return treeView;
+        }
+
+        public static TreeView onDoubleClick<T>(this TreeView treeView, Action<T> callback)
+        {
+            treeView.NodeMouseDoubleClick +=
+                (sender, e) =>
+                {
+                    var tag = (T)treeView.current().tag<T>();
+                    if (tag != null && callback != null)
+                        callback(tag);
+                };
+            return treeView;
+        }
+
+        public static TreeView afterSelect(this TreeView treeView, Action<TreeNode> callback)
+        {
+            treeView.AfterSelect += (sender, e) => callback(treeView.current());
+            return treeView;
         }
 
         #endregion
@@ -871,7 +1060,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (RichTextBox)richTextBox.invokeOnThread(
                 () =>
                     {
-                        richTextBox.AppendText(contents);
+                        if (contents!= null)
+                            richTextBox.AppendText(contents);
                         return richTextBox;
                     });            
         }

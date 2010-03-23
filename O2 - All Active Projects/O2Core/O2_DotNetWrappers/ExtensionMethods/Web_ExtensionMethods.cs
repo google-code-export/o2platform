@@ -59,6 +59,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return null;
             }
         }
+
         public static bool isUri(this string _string)
         {
             return _string.validUri();
@@ -110,6 +111,37 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return html.save(targeFileName);
             }
             return "";
+        }
+
+        public static byte[] asciiBytes(this string stringToConvert)
+        {
+            return System.Text.ASCIIEncoding.ASCII.GetBytes(stringToConvert);
+        }
+
+        public static string base64Encode(this string stringToEncode)
+        {
+            try
+            {
+                return System.Convert.ToBase64String(stringToEncode.asciiBytes());
+            }
+            catch (Exception ex)
+            {
+                ex.log("in base64Encode");
+                return "";
+            }
+        }
+
+        public static string base64Decode(this string stringToDecode)
+        {
+            try
+            {
+                return System.Convert.FromBase64String(stringToDecode).ascii(); ;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in base64Decode");
+                return "";
+            }
         }
     }
 }

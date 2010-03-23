@@ -36,7 +36,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>46</ApplicationRevision>
+    <ApplicationRevision>47</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -311,6 +311,7 @@
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
+    <None Include="_Rules\Graphs_and_Visualization\O2 Xaml Editor %28PoC%29.h2" />
     <None Include="_Rules\O2 Utils\ascx_Panel_With_Inspector.cs.o2">
       <SubType>Component</SubType>
     </None>
@@ -361,6 +362,7 @@
     <Content Include="H2Logo.ico" />
     <Content Include="Images\O2Logo_Medium.gif" />
     <Content Include="O2Logo.ico" />
+    <Content Include="_Rules\Graphs_and_Visualization\KaxamlSnippets.xml" />
   </ItemGroup>
   <ItemGroup>
     <FileAssociation Include=".h2">
