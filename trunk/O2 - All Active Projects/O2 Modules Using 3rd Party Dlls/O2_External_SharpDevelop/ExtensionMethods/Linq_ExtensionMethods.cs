@@ -19,20 +19,27 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static XDocument xDocument(this string xml)
         {
             var xmlToLoad = xml.fileExists() ? xml.fileContents() : xml;
-            XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
-            xmlReaderSettings.XmlResolver = null;
-            xmlReaderSettings.ProhibitDtd = false;
-            using (StringReader stringReader = new StringReader(xmlToLoad))
-            using (XmlReader xmlReader = XmlReader.Create(stringReader, xmlReaderSettings))
-                return XDocument.Load(xmlReader);
+            if (xmlToLoad.valid())
+            {
+                XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+                xmlReaderSettings.XmlResolver = null;
+                xmlReaderSettings.ProhibitDtd = false;
+                using (StringReader stringReader = new StringReader(xmlToLoad))
+                using (XmlReader xmlReader = XmlReader.Create(stringReader, xmlReaderSettings))
+                    return XDocument.Load(xmlReader);
+            }
+            return null;
 
         }
 
         public static XElement xRoot(this string xml)
         {
-            var xDocument = xml.xDocument();
-            if (xDocument != null)
-                return xDocument.Root;
+            if (xml.valid())
+            {
+                var xDocument = xml.xDocument();
+                if (xDocument != null)
+                    return xDocument.Root;
+            }
             return null;
         }
 
@@ -62,6 +69,137 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return xTypedElement.xElement().Name.str();
         }
+
+        public static XName xName(this string name)
+        {
+            return XName.Get(name);
+        }
+
+        // Descendants returns all child xElements
+        public static List<XElement> elementsAll(this XElement xElement)
+        {
+            return xElement.Descendants().ToList();
+        }
+
+        public static List<XElement> elementsAll(this XElement xElement, string name)
+        {
+            return xElement.Descendants(name.xName()).ToList();
+        }
+
+        public static List<XElement> elements(this XElement xElement)
+        {
+            return xElement.elements(false);
+        }
+
+
+        public static List<XElement> elements(this XElement xElement, string elementName)
+        {
+            return xElement.elements(elementName, false);
+        }
+
+        public static List<XElement> elements(this XElement xElement, bool includeSelf)
+        {
+            return xElement.elements("", includeSelf);
+        }
+
+        // Elements returns just the direct childs    	    	
+        public static List<XElement> elements(this XElement xElement, string elementName, bool includeSelf)
+        {
+            var xElements = (elementName.valid())
+                                ? xElement.Elements(elementName).ToList()
+                                : xElement.Elements().ToList();
+            if (includeSelf)
+                xElements.Add(xElement);
+            return xElements;
+        }
+
+        public static List<XElement> elements(this IEnumerable<XElement> xElements)
+        {
+            return xElements.elements(false);
+        }
+
+        public static List<XElement> elements(this IEnumerable<XElement> xElements, string elementName)
+        {
+            return xElements.elements(elementName, false);
+        }
+        public static List<XElement> elements(this IEnumerable<XElement> xElements, bool includeSelf)
+        {
+            return xElements.elements("", includeSelf);
+        }
+
+        public static List<XElement> elements(this IEnumerable<XElement> xElements, string elementName, bool includeSelf)
+        {
+            var childXElements = new List<XElement>();
+            xElements.forEach<XElement>((xElement) => childXElements.AddRange(xElement.elements(elementName, includeSelf)));
+            return childXElements;
+        }
+
+        public static XAttribute attribute(this XElement xElement, string name)
+        {
+            return xElement.Attribute(name);
+        }
+
+        public static string attributeValue(this XElement xElement, string name)
+        {
+            return xElement.attribute(name).value();
+        }
+
+        public static string value(this XAttribute xAttribute)
+        {
+            return xAttribute.Value;
+        }
+
+        public static List<XAttribute> attributes(this XElement xElement)
+        {
+            return xElement.attributes("");
+        }
+        public static List<XAttribute> attributes(this XElement xElement, string attributeName)
+        {
+            return attributeName.valid()
+                ? xElement.Attributes(attributeName.xName()).ToList()
+                : xElement.Attributes().ToList();
+        }
+
+        public static List<XAttribute> attributes(this IEnumerable<XElement> xElements)
+        {
+            return xElements.attributes("");
+        }
+
+        public static List<XAttribute> attributes(this IEnumerable<XElement> xElements, string attributeName)
+        {
+            var attributes = new List<XAttribute>();
+            xElements.forEach<XElement>((xElement) => attributes.AddRange(xElement.attributes(attributeName)));
+            return attributes;
+        }
+
+        public static List<string> values(this IEnumerable<XAttribute> xAttributes)
+        {
+            return xAttributes.stringList();
+        }
+        public static List<string> stringList(this IEnumerable<XAttribute> xAttributes)
+        {
+            var stringList = new List<String>();
+            xAttributes.forEach<XAttribute>((xAttribute) => stringList.Add(xAttribute.Value));
+            return stringList;
+        }
+
+        public static string value(this XElement xElement)
+        {
+            return xElement.Value;
+        }
+
+        public static List<string> values(this IEnumerable<XElement> xElements)
+        {
+            var values = new List<string>();
+            xElements.forEach<XElement>((xElement) => values.Add(xElement.value()));
+            return values;
+        }
+
+        public static bool name(this XElement xElement, string name)
+        {
+            return xElement.name() == name;
+        }
+
         #endregion
 
         #region Controls - TreeView

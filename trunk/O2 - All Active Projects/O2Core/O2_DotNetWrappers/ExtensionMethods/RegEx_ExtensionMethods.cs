@@ -30,5 +30,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return (RegEx.createRegEx(_string) != null);
         }
+
+        public static List<string> filterOnRegEx(this List<string> collection, string regEx)
+        {
+            return (from item in collection
+                    where item.regEx(regEx)
+                    select item).ToList(); ;
+        }
     }
 }

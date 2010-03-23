@@ -22,11 +22,12 @@ using O2.DotNetWrappers.Windows;
 //O2Ref:O2_Views_ASCX.dll
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX;
-using O2.Views.ASCX.classes;
+using O2.Views.ASCX.ExtensionMethods;
 
 //O2Ref:O2_External_IE.dll
 using O2.External.IE.ExtensionMethods;
 using O2.External.IE.Interfaces;
+using O2.External.IE.Wrapper;
 using O2.External.IE.WebObjects;
 //O2Ref:System.Drawing.dll
 
@@ -70,48 +71,18 @@ namespace O2.Script
 			
         	groupBoxes = this.add_SplitContainer_1x2("Browser","Pages Loaded","WebPage Info", true, 100,100);        	        	        	
         	webBrowser = groupBoxes[0].add_WebBrowserWithLocationBar(startUrl);        	        	
+        	((O2BrowserIE)webBrowser).silent(true);
         	htmlPages_TreeView = groupBoxes[1].add_TreeView();
         	htmlPages_TreeView.HideSelection = false;
-//        	if (webBrowser != null)
+
         	webBrowser.onDocumentCompleted += pageLoaded;
         	        	
         	htmlPages_TreeView.afterSelect<IO2HtmlPage>(showPageDetails);
         	
-        	
-        	/*htmlPages_TreeView.AfterSelect (sender,e) 
-        		=> {
-        			try
-        			{
-        				PublicDI.log.info("TAG :::  {0}", e.Node.Tag.GetType());
-        				if (e.Node.Tag is IHtmlPage)
-        				{        					
-        					showPageDetails((IHtmlPage)e.Node.Tag);
-        				}        				        			
-        			}
-        			catch(Exception ex)
-        			{
-        				PublicDI.log.ex(ex,"prob", true);
-        			}
-        			 };
-        	*/
-        	//webBrowser.open("http://www.google.co.uk");
-	        	
-	        
-        
         	        	
         	        	
      	}        	     	     
-    	    	  
-    	/* NOT WORKING
-    	public void openWebPage(string urlToOpen)
-    	{
-    		groupBoxes[0].invokeOnThread(
-    			()=> {
-    					if (webBrowser!= null)
-    						webBrowser.open(urlToOpen);
-    				});
-    	}*/
-    	
+    	    	      	
     	public void pageLoaded(IO2HtmlPage htmlPage)
     	{
     		 htmlPages_TreeView.add_Node(htmlPage);

@@ -28,6 +28,7 @@ using O2.Views.ASCX;
 using O2.Views.ASCX.classes;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.CoreControls;
+using O2.Views.ASCX.ExtensionMethods;
 
 using O2.External.IE;
 using O2.External.IE.Wrapper;
@@ -57,7 +58,7 @@ namespace O2.Script
 
         public static void startControl()
     	{       		
-    		typeof(ascx_Html_Editor).showInForm("Html Editor", 700,500);
+    		O2Gui.open<ascx_Html_Editor>("Html Editor", 700,500);
     	}    	
     	
     	public ascx_Html_Editor()
@@ -166,7 +167,7 @@ namespace O2.Script
 		public void updateHtmlPage()
 		{
 			var o2BrowserIE = (O2BrowserIE)browser;
-			updateHtmlPage(o2BrowserIE.Html());		
+			updateHtmlPage(o2BrowserIE.html());		
 		}
 		public void updateHtmlPage(string html)
 		{

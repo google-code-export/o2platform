@@ -75,7 +75,9 @@ namespace O2.Kernel.ExtensionMethods
 
         public static string typeName(this object _object)
         {
-            return _object.type().Name;
+            if (_object != null)
+                return _object.type().Name;
+            return "";
         }
 
         public static string typeFullName(this object _object)

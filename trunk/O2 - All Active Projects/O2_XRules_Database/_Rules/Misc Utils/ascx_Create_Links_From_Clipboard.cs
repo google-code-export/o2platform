@@ -80,12 +80,12 @@ namespace O2.Script
         {
 	        O2Thread.mtaThread(
         		()=>{
-			        	textToConvert.size().str().info();
-			        	textToConvert = textToConvert.replaceAllWith(" ","\"","'",Environment.NewLine); 
+			        	//textToConvert.size().str().info();
+			        	textToConvert = textToConvert.replaceAllWith(" ","\"","'",Environment.NewLine,"\n"); 
 			        	var itemsToConvert = new List<String>();        	
 			        	foreach(var textSnippet in textToConvert.split_onSpace())
 			        		itemsToConvert.Add(textSnippet);
-			        	
+			        	textToConvert.info();
 			        	var htmlCode = "";
 			        	foreach(var item in itemsToConvert)
 			        		if (item.validUri() && item.ToLower().starts("http"))

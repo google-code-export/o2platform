@@ -89,6 +89,7 @@
     <Compile Include="ExtensionMethods\WPF_TextEditor_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\WPF_Threading_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\WPF_WinFormIntegration_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Xaml_ExtensionMethods.cs" />
     <Compile Include="GraphFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Twitter\O2TwitterAPI.cs" />
@@ -148,6 +149,10 @@
     <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
       <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
       <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_API_AST\O2_API_AST.csproj">
+      <Project>{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}</Project>
+      <Name>O2_API_AST</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

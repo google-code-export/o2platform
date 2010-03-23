@@ -3,6 +3,8 @@ using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel;
 using System.Drawing;
+using O2.DotNetWrappers.DotNet;
+using System.Windows.Forms;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -16,6 +18,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static void sleep(this object _object, int miliseconds, bool verbose)
         {
             Processes.Sleep(miliseconds, verbose);
+        }
+
+        public static void sleep(this object _object, int miliSeconds, MethodInvoker toInvokeAfterSleep)
+        {
+            _object.sleep(miliSeconds, false, toInvokeAfterSleep);
+        }
+
+        public static void sleep(this object _object, int miliSeconds, bool verbose, MethodInvoker toInvokeAfterSleep)
+        {
+            O2Thread.mtaThread(
+                () =>
+                {
+                    _object.sleep(miliSeconds, verbose);
+                    toInvokeAfterSleep();
+                });
         }
 
         public static string o2Temp2Dir(this object _object)

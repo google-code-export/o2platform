@@ -185,12 +185,12 @@ namespace O2.Script
     	    	    	    	    
     }
     
-    public static class AST_Writing_ExtensionMethods
+    /*public static class AST_Writing_ExtensionMethods
     {
     	public static void add_Using(this CompilationUnit compilationUnit, string usingNamespace)
     	{
     		var usingText = new UsingDeclaration(usingNamespace);
      		compilationUnit.AddChild(usingText);
     	}
-    }
+    }*/
 }

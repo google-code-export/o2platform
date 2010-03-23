@@ -10,6 +10,7 @@ using System.Linq;
 //O2Ref:O2_ImportExport_OunceLabs.dll
 using O2.ImportExport.OunceLabs.Ozasmt_OunceV6;
 //O2Ref:O2_Kernel.dll
+//O2Ref:O2_Interfaces.dll
 using O2.Interfaces.O2Core;
 using O2.Interfaces.O2Findings;
 using O2.Interfaces.XRules;
@@ -18,7 +19,8 @@ using O2.Kernel;
 using O2.DotNetWrappers.O2Findings;
 //O2Ref:O2_Views_ASCX.dll
 using O2.Views.ASCX.O2Findings;
-//O2File:xUtils_Findings_v0_1.cs
+//O2Ref:O2_XRules_Database.exe
+//O2_File:xUtils_Findings_v0_1.cs
 
 namespace O2.XRules.Database._Rules
 {

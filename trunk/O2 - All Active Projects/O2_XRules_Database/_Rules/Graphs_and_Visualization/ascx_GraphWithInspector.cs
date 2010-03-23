@@ -59,14 +59,18 @@ namespace O2.Script
 			var xamlHost = (ascx_Xaml_Host)(controls[0].Controls[0]);
             var script = controls[1].add_Script();
 			
-			script.Code = "graph.add(100);"
-						  .line().add(
+			script.Code = "graph.testGraph();"
+						  .line() +
+						  "graph.add(100);"
+						  .line() + 
 						  "graph.edge(100,\"A\");"
-						  .line().add(
+						  .line() + 
 						  "graph.edge(100,\"F\");" 
 						  .line()
-						  .line()
-                          .add(@"//include C:\O2\XRulesDatabase\_Rules\Graphs_and_Visualization\Wpf.inc")));
+						  .line() + 
+						  "graph.showAllLayouts(2000);"
+						  .line() + 
+						  "graph.circular();";
 			script.InvocationParameters.Add("graph", graph);
 			script.InvocationParameters.Add("elementHost", xamlHost.element());			
         }

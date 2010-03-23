@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_API_Visualization", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Misc_Microsoft_MPL_Libs", "..\..\..\SourceCode_3rdParty_Dlls\Microsoft_MPL\Misc_Microsoft_MPL_Libs\O2_Misc_Microsoft_MPL_Libs.csproj", "{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_API_AST", "..\..\O2_APIs\O2_API_AST\O2_API_AST.csproj", "{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -195,6 +197,12 @@ Global
 		{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
 		{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
