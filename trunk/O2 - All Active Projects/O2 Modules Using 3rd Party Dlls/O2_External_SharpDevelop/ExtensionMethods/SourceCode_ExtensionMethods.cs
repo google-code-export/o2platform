@@ -13,6 +13,9 @@ using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.NRefactory;
 using System.Collections.Generic;
 using System.Drawing;
+using O2.API.AST.CSharp;
+using System.CodeDom;
+using ICSharpCode.SharpDevelop.Dom;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -468,6 +471,8 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             codeEditor.refresh();
             return codeEditor;
         }
+
+      
 
     }
 }

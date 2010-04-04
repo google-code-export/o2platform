@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>panel.clear();
+var autoSaveDir = this.tempO2Dir().pathCombine("_AutoSavedScripts");
+var controls = panel.add_1x1("Files","Content",false,300);
+var sourceViewer = controls[1].add_SourceCodeViewer();
+controls[0].add_TreeView().add_Nodes(autoSaveDir.files()).afterSelect&lt;string&gt;((file)=&gt;sourceViewer.open(file));
+</SourceCode>
+  <ReferencedAssemblies />
+</H2>

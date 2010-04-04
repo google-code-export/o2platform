@@ -36,7 +36,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>47</ApplicationRevision>
+    <ApplicationRevision>48</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -302,6 +302,15 @@
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
     <Compile Include="ExtensionMethods\Scripts_ExecutionMethods.cs" />
+    <Compile Include="_Rules\APIs\CmdExeAPI.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="_Rules\APIs\O2MediaWikiAPI.cs" />
+    <Compile Include="_Rules\APIs\O2PlatformWikiAPI.cs" />
+    <Compile Include="_Rules\APIs\OwaspAPI.cs" />
+    <Compile Include="_Rules\APIs\SunOfStrikeApi.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="_Rules\Graphs_and_Visualization\ascx_GraphWithInspector.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -311,6 +320,7 @@
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
+    <None Include="_Rules\APIs\O2_API_Cmd_exe.cs.o2" />
     <None Include="_Rules\Graphs_and_Visualization\O2 Xaml Editor %28PoC%29.h2" />
     <Compile Include="_Rules\O2 Utils\ascx_Panel_With_Inspector.cs.o2">
       <SubType>Component</SubType>
@@ -345,6 +355,23 @@
     <None Include="_Rules\Windows Utils\ascx_Services_Stop.cs.o2">
       <SubType>UserControl</SubType>
     </None>
+    <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method.h2" />
+    <None Include="_Rules\_UnderDev\PoCs\view code in AST with code expantion.h2" />
+    <None Include="_Rules\_UnderDev\PoCs\view code in AST with code usage %281 level down%29.h2" />
+    <None Include="_Rules\_UnderDev\PoC_Add textbox to graph.h2" />
+    <None Include="_Rules\_UnderDev\PoC_GraphWithInspector.h2" />
+    <None Include="_Rules\_UnderDev\To Blog about\Irony Parser - First Test.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\backup folders.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\create PDF with text and Image.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\Graph and Script - Dev environment.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\Graph development environment.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\search files and filter by name.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\show today%27s AutoSavedScripts.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\show type details and methods.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\Stop services after startup.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\View Code AST In Graph.h2" />
+    <None Include="_Rules\_UnderDev\Visualization Tests\visualizing assembly properties.h2" />
+    <None Include="_Rules\_UnderDev\Visualization Tests\visualizing xml to object path.h2" />
     <Compile Include="_Rules\Windows Utils\ascx_Start_Tools.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
@@ -357,12 +384,19 @@
     <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\SqlCommand.cs" />
     <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\HttpContext.cs" />
     <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\HttpRequest.cs" />
+    <Compile Include="_Rules\_UnderDev\Develop_Visualization_API.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="_Rules\_UnderDev\To Blog about\FirstTest.cs" />
+    <Compile Include="_Rules\_UnderDev\To Blog about\Irony Parser - CmdExe_Dir.cs" />
+    <Compile Include="_Rules\_UnderDev\Twitter_ExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="H2Logo.ico" />
     <Content Include="Images\O2Logo_Medium.gif" />
     <Content Include="O2Logo.ico" />
     <Content Include="_Rules\Graphs_and_Visualization\KaxamlSnippets.xml" />
+    <Content Include="_Rules\_UnderDev\PoCs\SosAPI and GUI %28with script with loop%29.txt" />
   </ItemGroup>
   <ItemGroup>
     <FileAssociation Include=".h2">

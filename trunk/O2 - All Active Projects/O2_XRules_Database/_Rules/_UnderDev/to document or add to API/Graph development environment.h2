@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var panel = O2Gui.open&lt;Panel&gt;("Graph Development environment",1200,600); 
+var controls = panel.add_1x1("Code","Graph",true,200); 
+var script = controls[0].add_Script();
+var graph = controls[1].add_Graph();
+
+script.InvocationParameters.Clear();
+script.InvocationParameters.Add("graph",graph);
+
+return "ok"; 
+
+
+//O2File:C:\O2\_XRules_Local\WebAutomation\extra.cs
+//O2File:C:\O2\_XRules_Local\VisualizationAPI\Extra.cs </SourceCode>
+  <ReferencedAssemblies />
+</H2>

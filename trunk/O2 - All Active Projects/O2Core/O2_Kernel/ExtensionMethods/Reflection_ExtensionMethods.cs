@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using O2.Interfaces.O2Core;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.Kernel.ExtensionMethods
 {
@@ -200,6 +203,12 @@ namespace O2.Kernel.ExtensionMethods
     			    return method;        	
         	return null;
     	}
+
+        public static List<String> names(this List<MethodInfo> methods)
+        {
+            var names = from method in methods select method.Name;
+            return names.ToList();
+        }
 
         #endregion
 

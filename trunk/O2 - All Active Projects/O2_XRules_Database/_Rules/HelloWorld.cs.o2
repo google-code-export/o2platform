@@ -3,26 +3,13 @@ using O2.Kernel;
 using NUnit.Framework;
 
 namespace O2.XRules.Database._Rules._Samples
-{
-    public class HelloWorld2
-    {
-    	public HelloWorld2()
-    	{}
-    	
-    	public HelloWorld2(string aa)
-    	{}
-	}
-	
+{	
     [TestFixture]
     public class HelloWorld
     {    	
         [Test]
         public void sayHello()
         {
-        	var aa = new HelloWorld2();
-        	var bb = new HelloWorld2("aaa");  
-        	//var test = new O2.Kernel.InterfacesBaseImpl.KO2GenericMessage("");
-        	//var test2 = new O2.Kernel.InterfacesBaseImpl.KO2GenericMessage();
         	PublicDI.log.info("test","asd");
             PublicDI.log.showMessageBox("Hello O2 World!");
             

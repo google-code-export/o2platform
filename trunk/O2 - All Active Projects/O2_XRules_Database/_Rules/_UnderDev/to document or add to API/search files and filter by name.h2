@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>panel.clear();
+var targetFiles = @"C:\O2\_XRules_Local".files(true);
+var controls = panel.add_1x1("Files","Content",false,300);
+var sourceViewer = controls[1].add_SourceCodeViewer();   
+var treeView = controls[0].add_TreeView().add_Nodes(targetFiles); 
+treeView.afterSelect&lt;string&gt;((file)=&gt;sourceViewer.open(file)); 
+var textBox = treeView.insert_Above&lt;TextBox&gt;(10)
+	    .multiLine()	    
+	    .onTextChange(
+	    	(text)=&gt;{  
+	    				treeView.clear(); 
+	    				treeView.add_Nodes(targetFiles.filterOnRegEx(text)); 
+	    			});
+
+   
+//O2File:C:\O2\_XRules_Local\WebAutomation\extra.cs</SourceCode>
+  <ReferencedAssemblies />
+</H2>

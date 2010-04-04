@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>"calculating Files To copy".debug();
+var sourceFolder = @"C:\O2\";
+var targetFolder = @"Z:\_DinisWork\O2\";
+var filesToCopy = Files.getFilesFromDir_returnFullPath(sourceFolder,"*.*",true);
+"there are {0} files to copy".format(filesToCopy.size()).debug();
+var filesCopied = 0;
+var filesCount = filesToCopy.size();
+foreach(var file in filesToCopy)
+{
+//for(int i=0;i &lt;10; i++)
+//{
+	//var file = filesToCopy[i];
+	var targetFile = Path.Combine(targetFolder, file.Replace(sourceFolder,""));
+	if (targetFile.fileExists())
+		"skipping {0}    -&gt;     {1}".format(file,targetFile).info();
+	else
+	{ 
+		"copying {0}    -&gt;     {1}".format(file,targetFile).debug();
+		Files.checkIfDirectoryExistsAndCreateIfNot(targetFile.directoryName());
+		Files.Copy(file, targetFile);
+		if ((filesCopied++) % 100 == 0)
+			"[{0} / {1}]".format(filesCopied, filesCount).info();
+	}
+}
+
+("".line().line()+ "Copy Completed").line().info();
+("".line().line()+ "total : [{0} / {1}]").format(filesCopied, filesCount).line().info();
+return "done";
+//open.logViewer();
+
+//using System.IO
+//using O2.DotNetWrappers.Windows
+//using O2.Script
+//ref O2_External_IE.dll
+</SourceCode>
+  <ReferencedAssemblies />
+</H2>
