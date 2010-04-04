@@ -21,6 +21,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
             var xmlToLoad = xml.fileExists() ? xml.fileContents() : xml;
             if (xmlToLoad.valid())
             {
+                if (xmlToLoad.starts("\n"))       // checks for the cases where there the text starts with \n (which will prevent the document to be loaded
+                    xmlToLoad = xmlToLoad.trim();
                 XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
                 xmlReaderSettings.XmlResolver = null;
                 xmlReaderSettings.ProhibitDtd = false;
@@ -34,8 +36,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static XElement xRoot(this string xml)
         {
-            if (xml.valid())
-            {
+            if (xml.valid())    // checks if the string is not empty
+            {                
                 var xDocument = xml.xDocument();
                 if (xDocument != null)
                     return xDocument.Root;
@@ -176,6 +178,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return xAttributes.stringList();
         }
+    
         public static List<string> stringList(this IEnumerable<XAttribute> xAttributes)
         {
             var stringList = new List<String>();
@@ -200,6 +203,31 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return xElement.name() == name;
         }
 
+        public static XElement element(this XElement xElement, string elementName)
+        {
+            if (xElement != null)
+                foreach (var childElement in xElement.elements())
+                    if (childElement.name() == elementName)
+                        return childElement;
+            return null;
+        }
+
+        public static XElement element(this IEnumerable<XElement> xElements, string elementName)
+        {
+            if (xElements != null)
+            {
+                // first search in the current list
+                foreach (var xElement in xElements)
+                    if (xElement.name() == elementName)
+                        return xElement;
+                // then search in the current list childs
+                foreach (var childElement in xElements.elements())
+                    if (childElement.name() == elementName)
+                        return childElement;
+            }
+            return null;
+        }
+  
         #endregion
 
         #region Controls - TreeView
@@ -278,8 +306,57 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 ex.log(ex.Message);
             }
             return treeView;
-        }        
-        
+        }
+
+        public static TreeView showXml(this TreeView treeView, XElement xElement)
+        {
+            treeView.clear();
+            treeView.autoExpandXElementData();
+            treeView.add_Node(xElement);
+            treeView.expand();
+            return treeView;
+        }
+
+        public static TreeNode showXml(this TreeNode treeNode, List<XElement> xElements)
+        {
+            foreach (var xElement in xElements)
+                treeNode.showXml(xElement);
+            return treeNode;
+        }
+
+        public static TreeNode showXml(this TreeNode treeNode, XElement xElement)
+        {
+            if (treeNode.TreeView != null)
+                treeNode.TreeView.autoExpandXElementData();
+            treeNode.add_Node(xElement);
+            treeNode.expand();
+            return treeNode;
+        }
+
+        public static TreeNode showXml(this TreeNode treeNode, object dataToLoad)
+        {
+            try
+            {
+                XElement xElement = null;
+                if (dataToLoad is string)
+                    xElement = ((string)dataToLoad).xRoot();
+                else if (dataToLoad is XTypedElement)
+                    xElement = ((XTypedElement)dataToLoad).xElement();
+
+                if (xElement != null)
+                {
+                    if (treeNode.TreeView != null)
+                        treeNode.TreeView.autoExpandXElementData();
+                    treeNode.add_Node(xElement);
+                    treeNode.expand();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log(ex.Message);
+            }
+            return treeNode;
+        }
 
         #endregion
     }

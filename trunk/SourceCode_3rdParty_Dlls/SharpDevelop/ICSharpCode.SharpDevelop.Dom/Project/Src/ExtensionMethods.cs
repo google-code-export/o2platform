@@ -15,7 +15,7 @@ namespace ICSharpCode.SharpDevelop.Dom
 	/// <summary>
 	/// Description of ExtensionMethods.
 	/// </summary>
-	static class ExtensionMethods
+	public static class ExtensionMethods
 	{
 		public static void AddRange(this ArrayList arrayList, IEnumerable elements)
 		{

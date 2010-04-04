@@ -30,7 +30,7 @@ namespace ICSharpCode.TextEditor
 	[ToolboxItem(false)]
 	public class TextArea : Control
 	{
-        // DC
+        // DC  (TO DELETE SINCE IT IS NOT USED)
         public bool UseAlternativeCodeCompleteText { get; set; }
         public Location CodeCompleteCaretLocationOffset { get; set; } // used to support code complete on the simple script editor environments
         public string CodeCompleteTargetText { get; set; }

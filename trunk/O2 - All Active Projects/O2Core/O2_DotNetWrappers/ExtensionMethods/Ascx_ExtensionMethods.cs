@@ -264,14 +264,28 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region SplitContainer_nxn
 
-        public static List<Control> add_1x1(this Control control, string title1, string title2)
+        public static List<Control> add_1x1(this Control control)
         {
-            return control.add_1x1(title1, title2, true, 100);
+            return control.add_1x1("", "");
         }
 
-        public static List<Control> add_1x1(this Control control, string title1, string title2, bool align, int distance1)
+        public static List<Control> add_1x1(this Control control, bool verticalSplit)
         {
-            return control.add_SplitContainer_1x1(title1, title2, align, distance1);
+            var splitterDistance = (verticalSplit)                                        
+                                        ? control.Width / 2
+                                        : control.Height / 2;
+
+            return control.add_1x1("", "", verticalSplit, splitterDistance);
+        }
+
+        public static List<Control> add_1x1(this Control control, string title1, string title2)
+        {
+            return control.add_1x1(title1, title2, true, control.Height / 2);
+        }
+
+        public static List<Control> add_1x1(this Control control, string title1, string title2, bool verticalSplit, int distance1)
+        {
+            return control.add_SplitContainer_1x1(title1, title2, verticalSplit, distance1);
         }
 
         public static List<Control> add_1x1(this Control hostControl, string title_1, string title_2, Control control_1, Control control_2)
@@ -286,7 +300,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static List<Control> add_1x2(this Control control, string title1, string title2, string title3)
         {
-            return control.add_1x2(title1, title2, title3, true, 100, 100);
+            return control.add_1x2(title1, title2, title3, true, control.Height / 2, control.Width / 2);
         }
 
         public static List<Control> add_1x2(this Control control, string title1, string title2, string title3, bool align, int distance1, int distance2)
@@ -319,15 +333,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
             host2Callback(controls[1]);
             return controls;
         }
-    
+
         public static List<Control> add_1x1(this Control control, string title1, string title2, bool verticalSplit)
         {
             var controls = control.add_1x1(title1, title2);
             var splitContainer = controls.parent<SplitContainer>();
-            if (verticalSplit)
+            if (verticalSplit)                            
                 splitContainer.verticalOrientation();
             else
                 splitContainer.horizontalOrientation();
+
+            var splitterDistance = (verticalSplit)
+                                        ? control.Width / 2
+                                        : control.Height / 2;
+            splitContainer.splitterDistance(splitterDistance);
+
             controls.Add(splitContainer);
             return controls;
         }        
@@ -698,33 +718,68 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static TreeNode add_Node(this TreeView treeView, object tag)
         {
-            return treeView.add_Node(tag.ToString(), tag);
+            if (treeView != null)
+                return treeView.add_Node((tag != null) ? tag.ToString() : "" ,tag);
+            return null;
         }
 
         public static TreeNode add_Node(this TreeNode treeNode, object textAndTag)
         {
-            return treeNode.add_Node(textAndTag.str(), textAndTag);
+            if (treeNode != null)
+                return treeNode.add_Node(textAndTag.str(), textAndTag);
+            return null;
         }
 
         public static TreeNode add_Node(this TreeNode treeNode, string text, object tag)
         {
-            return treeNode.TreeView.add_Node(treeNode, text, tag, false);
+            if (treeNode != null)
+                return treeNode.TreeView.add_Node(treeNode, text, tag, false);
+            return null;
         }
 
         public static TreeNode add_Node(this TreeNode treeNode, string text, object tag, bool addDummyChildNode)
         {
-            return treeNode.TreeView.add_Node(treeNode, text, tag, addDummyChildNode);
+            if (treeNode != null)
+                return treeNode.TreeView.add_Node(treeNode, text, tag, addDummyChildNode);
+            return null;
+        }
+
+        public static TreeNode add_Node(this TreeNodeCollection treeNodeCollection, string nodeText, object tag)
+        {
+            if (treeNodeCollection != null)
+                return treeNodeCollection.parentTreeNode().add_Node(nodeText, tag);
+            return null;
+        }
+
+        public static TreeNode add_Nodes(this TreeNode treeNode, IEnumerable collection)
+        {
+            if (treeNode != null)            
+                foreach (var item in collection)
+                    treeNode.add_Node(item);
+            return treeNode;
+        }
+
+        public static TreeNode add_Nodes<T, T1>(this TreeNode treeNode, Dictionary<T, List<T1>> dictionary)
+        {
+            foreach (var item in dictionary)
+            {
+                var keyNode = treeNode.add_Node(item.Key);
+                foreach (var listItem in item.Value)
+                    keyNode.add_Node(listItem);
+            }
+            return treeNode;
         }
 
         public static TreeNode clear(this TreeNode treeNode)
         {
-            treeNode.TreeView.clear(treeNode);
+            if (treeNode != null)
+                treeNode.TreeView.clear(treeNode);
             return treeNode;
         }
 
         public static TreeNode current(this TreeView treeView)
         {
-            return treeView.SelectedNode;
+            return (TreeNode)treeView.invokeOnThread(() => { return treeView.SelectedNode; });
         }
 
         public static TreeView expand(this TreeView treeView)
@@ -800,14 +855,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return treeNode;
         }
 
-        public static TreeView afterSelect<T>(this TreeView treeView, Action<T> callback)
+        public static TreeView afterSelect<T>(this TreeView treeView, Action<T> callback)            
         {
             treeView.AfterSelect += (sender, e)
                                     =>
                                         {
-                                            if (e.Node.Tag is T)
-
-                                                callback((T)e.Node.Tag);
+                                            if (e.Node != null)
+                                            {
+                                                if (e.Node.Tag is T)
+                                                    callback((T)e.Node.Tag);
+                                                else
+                                                    if (e.Node is T)
+                                                        callback((T)(object)e.Node);    // it is weird that I have to first cast to object and then to T
+                                            }
                                         };
             return treeView;
         }
@@ -817,10 +877,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             treeView.BeforeExpand += (sender, e)
                                     =>
             {
-                treeView.SelectedNode = e.Node;
-                if (e.Node.Tag is T)
-
+                if (e.Node != null && e.Node.Tag != null && e.Node.Tag is T)
+                {
+                    treeView.SelectedNode = e.Node;
                     callback((T)e.Node.Tag);
+                }
             };
             return treeView;
         }
@@ -991,6 +1052,79 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             treeView.AfterSelect += (sender, e) => callback(treeView.current());
             return treeView;
+        }
+
+        public static TreeView sort(this TreeView treeView)
+        {
+            treeView.invokeOnThread(() => treeView.Sort());
+            return treeView;
+        }
+
+        public static TreeNode parentTreeNode(this TreeNodeCollection treeNodeCollection)
+        {
+            return (TreeNode)treeNodeCollection.field("owner");
+        }
+
+        public static TreeView parentTreeView(this TreeNodeCollection treeNodeCollection)
+        {
+            return treeNodeCollection.parentTreeNode().TreeView;
+        }
+
+        public static TreeNode rootNode(this TreeView treeView)
+        {
+            return treeView.Nodes.parentTreeNode();
+        }
+       
+        public static TreeView add_Nodes_WithPropertiesAsChildNodes<T>(this TreeView treeView, object data)
+        {
+            treeView.rootNode().add_Nodes_WithPropertiesAsChildNodes<T>(data);
+            return treeView;
+        }
+
+        public static TreeNode add_Nodes_WithPropertiesAsChildNodes<T>(this TreeNode treeNode, object data)
+        {
+            return treeNode.add_Nodes_WithPropertiesAsChildNodes<T>(data, true);
+        }
+
+        public static TreeNode add_Nodes_WithPropertiesAsChildNodes<T>(this TreeNode treeNode, object data, bool hideWhenNoDataIsAvailable)
+        {
+            if (data is ICollection)
+            {
+                foreach (var item in (data as ICollection))
+                    treeNode.add_Nodes_WithPropertiesAsChildNodes<T>(item, hideWhenNoDataIsAvailable);
+                return treeNode;
+            }
+
+            if (treeNode.Tag != data)							// protection agaist recusively adding the same node
+                treeNode = treeNode.add_Node(data.typeName(), data);
+
+            foreach (var prop in data.type().properties())
+            {
+                bool addNode = true;
+                var name = prop.Name;
+                var tag = data.prop(name);
+                var hasChildNodes = false;
+                if ((tag is string || tag is Int32).isFalse() &&
+                    (tag is T || tag is ICollection))
+                {
+                    if (tag is T)
+                        hasChildNodes = (tag != null && tag.type().properties().size() > 0);
+                    else if (tag is ICollection)
+                        hasChildNodes = (tag as ICollection).Count > 0;
+
+                    if (hideWhenNoDataIsAvailable && hasChildNodes == false)
+                        addNode = false;
+                }
+                else
+                {
+                    name = "{0}: {1}".format(name, tag ?? "[null]");
+                    if (hideWhenNoDataIsAvailable && tag == null)
+                        addNode = false;
+                }
+                if (addNode)
+                    treeNode.add_Node(name, tag, hasChildNodes);
+            }
+            return treeNode;
         }
 
         #endregion

@@ -10,15 +10,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
     // these are controls created via reflection (only available if the target dll is locally available
     public static class O2Controls_ExtensioMethods
     {
-        public static Control add_Browser(this Control hostControl)
-        {
-            var browserType = "O2_External_IE.dll".type("O2BrowserIE");
-            return hostControl.add_Control(browserType);             
-        }
-
-        //public static Control add_WebBrowser(this Control hostControl)
+        //moved to IE_Controls_ExtensionMethods so that we get strongly typed object    
+        //public static IO2Browser add_Browser(this Control hostControl)
         //{
-        //
+        //    //var browserType = "O2_External_IE.dll".type("O2BrowserIE");
+        //    //return hostControl.add_Control(browserType);          
         //}
 
         /*public static object add_Graph(this Control hostControl)

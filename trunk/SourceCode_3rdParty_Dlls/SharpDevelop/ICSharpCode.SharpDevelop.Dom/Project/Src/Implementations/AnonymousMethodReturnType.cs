@@ -103,7 +103,7 @@ namespace ICSharpCode.SharpDevelop.Dom
 			return c;
 		}
 		
-		internal static void AddDefaultDelegateMethod(DefaultClass c, IReturnType returnType, IList<IParameter> parameters)
+		public static void AddDefaultDelegateMethod(DefaultClass c, IReturnType returnType, IList<IParameter> parameters)
 		{
 			ModifierEnum modifiers = ModifierEnum.Public | ModifierEnum.Synthetic;
 			DefaultMethod invokeMethod = new DefaultMethod("Invoke", returnType, modifiers, c.Region, DomRegion.Empty, c);

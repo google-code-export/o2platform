@@ -7,6 +7,8 @@ using System.Reflection;
 using System.Text;
 using O2.Interfaces.O2Core;
 using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
@@ -23,7 +25,7 @@ namespace O2.External.SharpDevelop.AST
     	
         public CompilationUnit CompilationUnit {get; set;}
         public IParser Parser {get; set;}
-        public string SourceCodeFile {get ; set;}
+        public string SourceCode {get ; set;}
         public AstDetails AstDetails {get; set;}
         public string Errors  {get; set;}
         public List<ISpecial> ExtraSpecials { get; set; }
@@ -35,10 +37,10 @@ namespace O2.External.SharpDevelop.AST
             ExtraSpecials = new List<ISpecial>();
         }
 
-        public Ast_CSharp(string _sourceCodeFile) 
+        public Ast_CSharp(string _sourceCode) 
             : this()
         {    	
-            createAst(_sourceCodeFile);
+            createAst(_sourceCode);
             mapAstDetails(Parser.CompilationUnit);   
         }
         
@@ -57,10 +59,10 @@ namespace O2.External.SharpDevelop.AST
             //mapAstDetails(Parser.CompilationUnit);   
         }
     
-        public void createAst(string _sourceCodeFile)
+        public void createAst(string _sourceCode)
         {
-            SourceCodeFile = _sourceCodeFile;    		
-            Parser = ParserFactory.CreateParser(language, new StringReader(SourceCodeFile));
+            SourceCode = (_sourceCode.fileExists()) ? _sourceCode.fileContents() : _sourceCode;    		
+            Parser = ParserFactory.CreateParser(language, new StringReader(SourceCode));
             Parser.Parse();
             Errors = (Parser.Errors.Count > 0) ?  Parser.Errors.ErrorOutput : "";                                     
         }

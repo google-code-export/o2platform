@@ -21,6 +21,18 @@ namespace O2.XRules.Database.ExtensionMethods
             return hostControl.add<ascx_Simple_Script_Editor>();           
         }
 
+        public static ascx_Simple_Script_Editor add_Script(this Control hostControl, bool codeCompleteSupport)
+        {
+            return (ascx_Simple_Script_Editor)hostControl.invokeOnThread(
+                () =>
+                {
+                    var scriptControl = new ascx_Simple_Script_Editor(codeCompleteSupport);
+                    scriptControl.fill();
+                    hostControl.add(scriptControl);
+                    return scriptControl;
+                });
+        }
+
         public static ascx_Simple_Script_Editor set_Command(this ascx_Simple_Script_Editor scriptEditor, string commandText)
         {
             return (ascx_Simple_Script_Editor)scriptEditor.invokeOnThread(

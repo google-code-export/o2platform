@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using O2.DotNetWrappers.DotNet;
@@ -27,7 +28,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 action(item);
         }
 
-        public static void add<T>(this List<T> sequence, params object[] values)
+        public static void createTypeAndAddToList<T>(this List<T> sequence, params object[] values)
         {
             var t = (T)typeof(T).ctor();
             var properties = t.type().properties();
@@ -50,7 +51,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return default(T);
         }
         
-
         public static bool size(this ICollection colection, int value)
         {
             return colection.size() == value;
@@ -83,19 +83,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return list.split(" ");
         }
+  
         public static List<List<string>> split(this List<string> list, string splitString)
         {
             var result = new List<List<string>>();
             foreach (var item in list)
                 result.Add(item.split(splitString));
             return result;
-        }
-
-        public static List<T> add<T>(this List<T> list, T item)
-        {
-            list.Add(item);
-            return list;
-        }
+        }        
 
         public static List<object> values(this Dictionary<string, object> dictionary)
         {
@@ -124,6 +119,47 @@ namespace O2.DotNetWrappers.ExtensionMethods
             foreach (var item in collection)
                 if (item is T)
                     action((T)item);
-        } 
+        }
+
+        public static bool hasKey<T, T1>(this Dictionary<T, T1> dictionary, T key)
+        {
+            return dictionary.ContainsKey(key);
+        }
+
+        public static List<T> add<T>(this List<T> list, T item)
+        {
+            list.Add(item);
+            return list;
+        }
+
+        public static List<T> add<T, T1>(this List<T> targetList, List<T1> sourceList) where T1 : T
+        {
+            foreach (var item in sourceList)
+                targetList.Add(item);
+            return targetList;
+        }
+
+        public static Dictionary<T, T1> add<T, T1>(this Dictionary<T, T1> dictionary, T key, T1 value)
+        {
+            if (dictionary.hasKey(key))
+                dictionary[key] = value;
+            else
+                dictionary.Add(key, value);
+            return dictionary;
+        }
+
+        public static Dictionary<T, List<T1>> add<T, T1>(this Dictionary<T, List<T1>> dictionary, T key, T1 value)
+        {
+            if (dictionary.hasKey(key).isFalse())
+                dictionary[key] = new List<T1>();
+
+            dictionary[key].Add(value);
+            return dictionary;
+        }
+
+        public static List<T> toList<T>(this IEnumerable<T> collection)
+        {
+            return collection.ToList();
+        }
     }
 }

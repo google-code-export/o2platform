@@ -84,7 +84,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string getUrlContents(this Uri uri)
         {
-            return Web.getUrlContents(uri.str());
+            return uri.getUrlContents(null);
+        }
+
+        public static string getUrlContents(this Uri uri, string cookies)
+        {
+            return Web.getUrlContents(uri.str(), cookies,false);
         }
 
         public static string getHtml(this Uri uri)

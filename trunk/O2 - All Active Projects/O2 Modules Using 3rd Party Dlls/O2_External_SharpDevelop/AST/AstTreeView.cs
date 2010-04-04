@@ -6,8 +6,11 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel;
-
+using O2.Kernel.ExtensionMethods;
 using ICSharpCode.NRefactory.Ast;
+using O2.External.SharpDevelop.Ascx;
+using O2.External.SharpDevelop.ExtensionMethods;
+
 // This code contains a bunch of code snippets from the SharpDevelop_3.1.1.5327_Source\samples\NRefactoryDemo sample app
 
 namespace O2.External.SharpDevelop.AST
@@ -32,6 +35,7 @@ namespace O2.External.SharpDevelop.AST
                         treeView.Sort();
                     });
         }
+        
         public static void show_List(this TreeView treeView, List<string> list)
         {
             treeView.invokeOnThread(
@@ -55,7 +59,25 @@ namespace O2.External.SharpDevelop.AST
             treeView.invokeOnThread(
                 () => treeView.show_SourceCode_Ast_InTreeView(ast.CompilationUnit));
         }
-		
+
+        public static TreeNode show_Asts<T>(this TreeNode treeNode, List<T> astNodes)
+            where T : INode
+        {
+            foreach (var astNode in astNodes)
+                treeNode.show_Ast(astNode);
+            return treeNode;
+        }
+
+        public static TreeNode show_Ast<T>(this TreeNode treeNode, T astNode)
+            where T : INode
+        {
+            treeNode.TreeView.invokeOnThread(() =>
+            {
+                treeNode.Nodes.Add(new AstTreeView.ElementNode(astNode));
+            });
+            return treeNode;
+        }
+        
         public static void show_SourceCode_Ast_InTreeView(this TreeView treeView, string sourceCodeFile)
         {
             treeView.invokeOnThread(
@@ -86,7 +108,24 @@ namespace O2.External.SharpDevelop.AST
                 return new TreeNode(child.ToString());
             }
         }
-		
+
+        public static TreeView afterSelect_ShowAstInSourceCodeEditor(this TreeView treeView, ascx_SourceCodeEditor codeEditor)
+        {
+            return (TreeView)codeEditor.invokeOnThread(() =>
+            {
+                treeView.afterSelect<AstTreeView.ElementNode>((node) =>
+                {
+                    var element = (INode)node.field("element");
+                    codeEditor.setSelectionText(element.StartLocation, element.EndLocation);
+                });
+                treeView.afterSelect<INode>((node) =>
+                {
+                    codeEditor.setSelectionText(node.StartLocation, node.EndLocation);
+                });
+                return treeView;
+            });
+        }
+
         public class CollectionNode : TreeNode
         {
             internal IList collection;
@@ -118,7 +157,7 @@ namespace O2.External.SharpDevelop.AST
 		
         public class ElementNode : TreeNode
         {
-            internal INode element;
+            public INode element;
 			
             public ElementNode(INode node)
             {
@@ -152,15 +191,26 @@ namespace O2.External.SharpDevelop.AST
                     if (pi.Name == "IsNull")
                         continue;
                     object value = pi.GetValue(node, null);
-                    if (value is IList) {
-                        Nodes.Add(new CollectionNode(pi.Name, (IList)value));
-                    } else if (value is string) {
-                        Text += " " + pi.Name + "='" + value + "'";
-                    } else {
-                        TreeNode treeNode = CreateNode(value);
-                        treeNode.Text = pi.Name + " = " + treeNode.Text;
-                        treeNode.Tag = pi.Name;
-                        Nodes.Add(treeNode);
+                    if (value != node)          // to prevent stack overflow (since we would be adding the current value recursively (happened with CompilationUnit.CurrentBock)
+                        if (value is IList)
+                        {
+                            Nodes.Add(new CollectionNode(pi.Name, (IList)value));
+                        }
+                      //  else if (value is string)
+                        //{
+                         //   Text += " " + pi.Name + "='" + value + "'";
+                            //Nodes.Add(pi.Name + "='" + value 
+                        //}
+                        else
+                        {
+                            TreeNode treeNode = CreateNode(value);
+                            treeNode.Text = pi.Name + " = " + treeNode.Text;
+                            treeNode.Tag = pi.Name;
+                            Nodes.Add(treeNode);
+                        }
+                    else
+                    {
+                        PublicDI.log.info("skipping recursive property add for: {0}",pi.Name);
                     }
                 }
                 AddProperties(type.BaseType, node);

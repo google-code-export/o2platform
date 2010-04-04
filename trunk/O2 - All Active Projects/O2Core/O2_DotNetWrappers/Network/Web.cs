@@ -4,6 +4,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 using System.Windows.Forms;
+using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
@@ -53,12 +54,19 @@ namespace O2.DotNetWrappers.Network
         }
 
         public static String getUrlContents(String urlToFetch, bool verbose)
+        {
+            return getUrlContents(urlToFetch, null, verbose);
+        }
+
+        public static String getUrlContents(String urlToFetch, string cookies, bool verbose)
         {        
             try
             {
                 if (verbose)
                     PublicDI.log.info("Fetching url: {0}", urlToFetch);
-                WebRequest webRequest = WebRequest.Create(urlToFetch);                
+                WebRequest webRequest = WebRequest.Create(urlToFetch);
+                if (cookies!= null && cookies.valid())
+                    webRequest.Headers.Add("Cookie", cookies);
                 WebResponse rResponse = webRequest.GetResponse();
                 Stream sStream = rResponse.GetResponseStream();
                 var srStreamReader = new StreamReader(sStream);
@@ -74,20 +82,32 @@ namespace O2.DotNetWrappers.Network
                 return "";
             }
         }
-        
+
         public static String getUrlContents_POST(String urlToFetch, string postData)
         {
-            return getUrlContents_POST(urlToFetch, Encoding.ASCII.GetBytes(postData));
+            return getUrlContents_POST(urlToFetch, null, postData);
+        }  
+        
+
+        public static String getUrlContents_POST(String urlToFetch, string cookies, string postData)
+        {
+            return getUrlContents_POST(urlToFetch, cookies,  Encoding.ASCII.GetBytes(postData));
         }
 
         public static String getUrlContents_POST(String urlToFetch, byte[] postData)
+        {
+            return getUrlContents_POST(urlToFetch, null, postData);
+        }
+
+        public static String getUrlContents_POST(String urlToFetch, string cookies, byte[] postData)
         {        
             try
             {   
                 
                 WebRequest webRequest = WebRequest.Create(urlToFetch);                
                 // setup POST details:
-
+                if (cookies != null && cookies.valid())
+                    webRequest.Headers.Add("Cookie", cookies);
                 webRequest.Method = "POST";
                 webRequest.ContentLength = postData.Length;
                 webRequest.ContentType = "application/x-www-form-urlencoded";

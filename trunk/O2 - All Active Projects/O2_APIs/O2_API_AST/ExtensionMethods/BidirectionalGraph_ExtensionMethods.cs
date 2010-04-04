@@ -8,22 +8,36 @@ using O2.Kernel.ExtensionMethods;
 namespace O2.API.AST.ExtensionMethods
 {
     public static class BidirectionalGraph_ExtensionMethods
-    {        
-        public static void add(this BidirectionalGraph<object, IEdge<object>> graph, object vertexToAdd)
+    {
+        public static BidirectionalGraph<object, IEdge<object>> vertex(this BidirectionalGraph<object, IEdge<object>> graph, object vertexToAdd)
         {
-            graph.AddVertex(vertexToAdd);
+            return graph.add_Node(vertexToAdd);           
         }
 
-        public static void edge(this BidirectionalGraph<object, IEdge<object>> graph, object fromVertex, object toVertex)
+        public static BidirectionalGraph<object, IEdge<object>> node(this BidirectionalGraph<object, IEdge<object>> graph, object vertexToAdd)
+        {
+            return graph.add_Node(vertexToAdd);
+        }
+
+        public static BidirectionalGraph<object, IEdge<object>> add_Node(this BidirectionalGraph<object, IEdge<object>> graph, object vertexToAdd)
+        {
+            graph.AddVertex(vertexToAdd);
+            return graph;
+        }
+
+        public static BidirectionalGraph<object, IEdge<object>> edge(this BidirectionalGraph<object, IEdge<object>> graph, object fromVertex, object toVertex)
         {
             try
             {
                 graph.AddVertex(fromVertex);
                 graph.AddVertex(toVertex);
-                graph.AddEdge(new Edge<object>(fromVertex, toVertex));
+                graph.AddEdge(new Edge<object>(fromVertex, toVertex));                
             }
             catch (System.Exception ex)
-            { ex.log("in edge"); }
+            { 
+                ex.log("in edge"); 
+            }
+            return graph;
         }
 
         public static void edges(this BidirectionalGraph<object, IEdge<object>> bidirectionalGraph, List<IEdge<object>> edges)

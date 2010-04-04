@@ -58,6 +58,7 @@
     <Compile Include="ExtensionMethods\Crypto_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Data_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\H2_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\NamedPipes_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2Controls_ExtensioMethods.cs" />
     <Compile Include="ExtensionMethods\Objects_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\RegEx_ExtensionMethods.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="ExtensionMethods\Ascx_ExtensionMethods.cs" />
     <Compile Include="Windows\Controls.cs" />
     <Compile Include="Network\Netsh.cs" />
+    <Compile Include="Windows\NamePipes.cs" />
     <Compile Include="Windows\O2Forms_ThreadSafe_FlowLayoutPanel.cs" />
     <Compile Include="Windows\Files.cs" />
     <Compile Include="Windows\FillTreeViewWithlSerializedObjectData.cs" />

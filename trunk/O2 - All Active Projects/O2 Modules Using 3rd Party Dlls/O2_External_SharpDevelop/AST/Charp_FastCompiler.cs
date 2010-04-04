@@ -75,20 +75,28 @@ namespace O2.External.SharpDevelop.AST
                                      .add("System.Drawing")
                                      .add("O2.Interfaces")
                                      .add("O2.Kernel")
-                                     .add("O2.Kernel.ExtensionMethods")
+                                     .add("O2.Kernel.ExtensionMethods")                                     
                                      .add("O2.Views.ASCX.CoreControls")
                                      .add("O2.Views.ASCX.classes.MainGUI")
                                      .add("O2.DotNetWrappers.ExtensionMethods")
+                                     .add("O2.DotNetWrappers.Windows")
+                                     .add("O2.DotNetWrappers.DotNet")
+                                     .add("O2.DotNetWrappers.Network")
                                      .add("O2.External.IE.ExtensionMethods")
                                      .add("O2.XRules.Database.ExtensionMethods")
-                                     .add(" O2.XRules.Database.O2Utils")
+                                     .add("O2.XRules.Database.O2Utils")
                                      .add("O2.External.SharpDevelop.ExtensionMethods")
                                      .add("O2.External.SharpDevelop.Ascx")
                 //GraphSharp related
                                      .add("O2.Script")
                                      .add("GraphSharp.Controls")
                                      .add("O2.API.Visualization.ExtensionMethods")
+                                     .add("O2.API.AST.Graph")
+                                     .add("O2.API.AST.CSharp")
+                                     .add("O2.API.AST.ExtensionMethods.CSharp")
+                                     .add("O2.API.AST.ExtensionMethods")          
                                      .add("WPF=System.Windows.Controls")
+                                     .add("Media=System.Windows.Media")
                 //Twitter related
                                      .add("O2.API.Visualization.Twitter");
         }
@@ -108,6 +116,7 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2SharpDevelop.dll")
                                      //GraphSharp related
                                      .add("O2_Api_Visualization.dll")
+                                     .add("O2_Api_AST.dll")
                                      .add("QuickGraph.dll")
                                      .add("GraphSharp.dll")
                                      .add("GraphSharp.Controls.dll")

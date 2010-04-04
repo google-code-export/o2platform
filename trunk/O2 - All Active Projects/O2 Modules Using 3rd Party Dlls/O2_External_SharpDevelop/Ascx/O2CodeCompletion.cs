@@ -246,36 +246,55 @@ namespace O2.External.SharpDevelop.Ascx
 		/// <summary>
 		/// Return true to handle the keypress, return false to let the text area handle the keypress
 		/// </summary>
-		public bool TextAreaKeyEventHandler(char key)
-		{            
-			if (codeCompletionWindow != null) {
-				// If completion window is open and wants to handle the key, don't let the text area
-				// handle it
-				                
-                if (codeCompletionWindow != null) 
+        public bool TextAreaKeyEventHandler(char key)
+        {
+
+            if (codeCompletionWindow != null)
+            {
+                // If completion window is open and wants to handle the key, don't let the text area
+                // handle it
+
+                if (codeCompletionWindow != null)
                     if (codeCompletionWindow.ProcessKeyEvent(key))
                         return true;
-			}
-			if (key == '.')
+            }
+            if (key == '.')
             {
-                startOffset = textEditor.currentOffset() + 1;
-				ICompletionDataProvider completionDataProvider = this;//new CodeCompletionProvider(this);
-				
-				codeCompletionWindow = CodeCompletionWindow.ShowCompletionWindow(
-					textEditor.ParentForm,					// The parent window for the completion window
-					textEditor, 							// The text editor to show the window for
-					DummyFileName,							// Filename - will be passed back to the provider
-					completionDataProvider,					// Provider to get the list of possible completions
-					key										// Key pressed - will be passed to the provider
-				);
-				
-				if (codeCompletionWindow != null) {
-					// ShowCompletionWindow can return null when the provider returns an empty list
-					codeCompletionWindow.Closed += new EventHandler(CloseCodeCompletionWindow);
-				}                
-			}          
-			return false;
-		}
+                //O2Thread.mtaThread(   //I really want to run this on a separate thread but It is causing a weird problem where the codecomplete only happens after the 2nd char
+                //() =>
+                //{
+                var o2Timer = new O2Timer("Code Completion").start();
+                    //textEditor.invokeOnThread(()=> textEditor.textArea().Caret.Column ++ );
+                    try
+                    {
+                        startOffset = textEditor.currentOffset() + 1;   // it was +1 before we made this run on an mta thread
+                        ICompletionDataProvider completionDataProvider = this;//new CodeCompletionProvider(this);
+
+                        codeCompletionWindow = CodeCompletionWindow.ShowCompletionWindow(
+                            textEditor.ParentForm,					// The parent window for the completion window
+                            textEditor, 							// The text editor to show the window for
+                            DummyFileName,							// Filename - will be passed back to the provider
+                            completionDataProvider,					// Provider to get the list of possible completions
+                            key										// Key pressed - will be passed to the provider
+                        );
+
+                        if (codeCompletionWindow != null)
+                        {
+                            // ShowCompletionWindow can return null when the provider returns an empty list
+                            codeCompletionWindow.Closed += new EventHandler(CloseCodeCompletionWindow);
+                        }
+                        //textEditor.insertTextAtCurrentCaretLocation(".");
+                    }
+                    catch (Exception ex)
+                    {
+                        "in O2CodeCompletion.TextAreaKeyEventHandler".log();
+                    }
+                    o2Timer.stop();
+                //});
+//                return true;
+            }
+            return false;
+        }
 		
 		void CloseCodeCompletionWindow(object sender, EventArgs e)
 		{
@@ -291,28 +310,32 @@ namespace O2.External.SharpDevelop.Ascx
 		
 		void OnToolTipRequest(object sender, ToolTipRequestEventArgs e)
 		{
-            try
+            O2Thread.mtaThread(
+            () =>
             {
-                if (e.InDocument && !e.ToolTipShown)
+                try
                 {
-                    var logicalPosition = e.LogicalPosition;
-
-                   // parseSourceCode(CodeCompleteTargetText);
-                    ResolveResult rr = resolveLocation(logicalPosition);
-                    string toolTipText = GetText(rr);
-                    if (toolTipText != null)
+                    if (e.InDocument && !e.ToolTipShown)
                     {
-                        e.ShowToolTip(toolTipText);
-                    }                    
-                   // if (toolTipText.valid())
-                   //     "ToolTipText: {0}".format(toolTipText).info();
+                        var logicalPosition = e.LogicalPosition;
 
+                        // parseSourceCode(CodeCompleteTargetText);
+                        ResolveResult rr = resolveLocation(logicalPosition);
+                        string toolTipText = GetText(rr);
+                        if (toolTipText != null)
+                        {
+                            e.ShowToolTip(toolTipText);
+                        }
+                        // if (toolTipText.valid())
+                        //     "ToolTipText: {0}".format(toolTipText).info();
+
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                ex.log("in OnToolTipRequest");
-            }
+                catch (Exception ex)
+                {
+                    ex.log("in OnToolTipRequest");
+                }
+            });
 		}
 
         public void showLocationDetails(TextLocation location)
@@ -367,7 +390,7 @@ namespace O2.External.SharpDevelop.Ascx
             var targetOffset = 0;
             if (CodeCompleteCaretLocationOffset.Line == 0)
             {
-                targetText = textEditor.Text;
+                targetText = textEditor.get_Text();//.Text;
                 targetOffset = textEditor.Document.PositionToOffset(logicalPosition);
             }
             else
@@ -540,6 +563,7 @@ namespace O2.External.SharpDevelop.Ascx
 					AddCompletionData(resultList, completionData);
 				}
 			}
+            "In generate completion Data, There were {0} results found".format(resultList.Count).debug();
 			return resultList.ToArray();
 		}
 		
@@ -602,8 +626,8 @@ namespace O2.External.SharpDevelop.Ascx
         }
 
         public string getAdjustedSnippetText(TextArea textArea, int firstMethodOffset)
-        {            
-            var currentText = textArea.Document.TextContent;
+        {
+            var currentText = textArea.get_Text(); ;
             var size = CodeCompleteTargetText.size();
             if (firstMethodOffset < size)
             {

@@ -12,6 +12,13 @@ namespace O2.External.IE.ExtensionMethods
 {
     public static class IE_Controls_ExtensionMethods
     {
+        public static O2BrowserIE add_Browser(this Control control)
+        {
+            //var browserType = "O2_External_IE.dll".type("O2BrowserIE");
+            //return hostControl.add_Control(browserType);
+            return (O2BrowserIE)control.add_WebBrowser();
+        }
+
         public static IO2Browser add_WebBrowser(this Control control)
         {            
             return (IO2Browser) control.invokeOnThread(

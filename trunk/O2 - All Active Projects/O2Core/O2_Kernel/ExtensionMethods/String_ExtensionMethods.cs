@@ -137,9 +137,10 @@ namespace O2.Kernel.ExtensionMethods
         {
             return !_string.valid();
         }
+
         public static bool valid(this string _string)
         {
-            if (false == string.IsNullOrEmpty(_string))
+            if (_string != null && false == string.IsNullOrEmpty(_string))
                 if (_string.Trim() != "")
                     return true;
             return false;
@@ -167,9 +168,11 @@ namespace O2.Kernel.ExtensionMethods
 
         public static string replace(this string targetString, string stringToFind, string stringToReplaceWith)
         {
-            targetString = targetString.Replace(stringToFind, stringToReplaceWith);
-            targetString = targetString.Replace(stringToFind.lower(), stringToReplaceWith);
-            targetString = targetString.Replace(stringToFind.upper(), stringToReplaceWith);
+            if (stringToFind.valid())
+                targetString = targetString.Replace(stringToFind, stringToReplaceWith);
+            // need to find a better way to do this replace (maybe using regex) since this pattern was causing some nasty side effects (for example when replacing \n with Environment.NewLine)
+            //targetString = targetString.Replace(stringToFind.lower(), stringToReplaceWith);
+            //targetString = targetString.Replace(stringToFind.upper(), stringToReplaceWith);
             return targetString;
         }
 

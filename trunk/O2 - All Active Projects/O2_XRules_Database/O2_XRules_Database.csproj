@@ -24,7 +24,7 @@
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
+    <UpdateMode>Background</UpdateMode>
     <UpdateInterval>7</UpdateInterval>
     <UpdateIntervalUnits>Days</UpdateIntervalUnits>
     <UpdatePeriodically>false</UpdatePeriodically>
@@ -312,9 +312,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <None Include="_Rules\Graphs_and_Visualization\O2 Xaml Editor %28PoC%29.h2" />
-    <None Include="_Rules\O2 Utils\ascx_Panel_With_Inspector.cs.o2">
+    <Compile Include="_Rules\O2 Utils\ascx_Panel_With_Inspector.cs.o2">
       <SubType>Component</SubType>
-    </None>
+    </Compile>
     <Compile Include="_Rules\O2 Utils\ascx_Simple_Script_Editor.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>

@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Misc_Microsoft_MPL_Libs"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_API_AST", "..\..\O2_APIs\O2_API_AST\O2_API_AST.csproj", "{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "010.Irony", "..\..\..\..\..\_Downloads\irony-47261\irony-47261\Irony\010.Irony.csproj", "{D81F5C91-D7DB-46E5-BC99-49488FB6814C}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -203,6 +205,12 @@ Global
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
+		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
+		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

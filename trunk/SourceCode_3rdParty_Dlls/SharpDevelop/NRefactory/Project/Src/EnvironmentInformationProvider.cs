@@ -13,10 +13,11 @@ namespace ICSharpCode.NRefactory
 	{
 		bool HasField(string fullTypeName, int typeParameterCount, string fieldName);
 	}
-	
-	sealed class DummyEnvironmentInformationProvider : IEnvironmentInformationProvider
+
+	//DC had to make this class public so that it could be consumed from O2's version of CodeDOMOutputVisitor
+	public class DummyEnvironmentInformationProvider : IEnvironmentInformationProvider
 	{
-		internal static readonly IEnvironmentInformationProvider Instance = new DummyEnvironmentInformationProvider();
+		public static readonly IEnvironmentInformationProvider Instance = new DummyEnvironmentInformationProvider();
 		
 		public bool HasField(string fullTypeName, int typeParameterCount, string fieldName)
 		{
