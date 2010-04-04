@@ -33,6 +33,7 @@ namespace O2.Kernel.ExtensionMethods
         {
             string1.eq(new [] {stringToFind}, onMatch);
         }
+        
         public static void eq(this string string1, List<string> stringsToFind, MethodInvoker onMatch)
         {
             string1.eq(stringsToFind.ToArray(), onMatch);
@@ -198,6 +199,16 @@ namespace O2.Kernel.ExtensionMethods
             return firstString + Environment.NewLine;
         }
 
+        public static string lineBefore(this string targetString)
+        {
+            return Environment.NewLine + targetString;
+        }
+
+        public static string lineBeforeAndAfter(this string targetString)
+        {
+            return Environment.NewLine + targetString + Environment.NewLine;
+        }
+
         public static int toInt(this string _string)
         {
             Int32 value;
@@ -220,6 +231,22 @@ namespace O2.Kernel.ExtensionMethods
             return value.ToUpper();
         }
 
+        public static string lowerCaseFirstLetter(this string targetString)
+        {
+            if (targetString.valid())
+                return targetString[0].str().lower() + targetString.removeFirstChar();
+            return targetString;
+        }
+
+        public static string fixCRLF(this string stringToFix)
+        {
+            if (stringToFix.contains(Environment.NewLine))
+                return stringToFix;
+            if (stringToFix.contains("\n"))
+                return stringToFix.replace("\n", Environment.NewLine);
+            return stringToFix;
+        }
+    
         public static string ascii(this byte value)
         {
             return Encoding.ASCII.GetString(new[] { value });
@@ -338,8 +365,20 @@ namespace O2.Kernel.ExtensionMethods
         public static string insertBefore(this string targetString, string stringToAdd)
         {
             return stringToAdd + targetString;
-        }
+        }      
 
+        public static int toIntFromHex(this string hexValue)
+        {
+            try
+            {
+                return Convert.ToInt32(hexValue, 16);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in toIntFromHex when converting string: {0}".format(hexValue));
+                return -1;
+            }
+        }
         
     }
 }

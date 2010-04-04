@@ -1,0 +1,167 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>//treeView1.add_Node("right"); 
+//treeView2.add_Node("left");  
+var code = codeViewer.get_Text();  
+ 
+var mapAst = new O2MappedAstData();   
+"before".info();
+mapAst.loadCode(code);            
+"after".debug();
+mapAst.O2AstResolver.addReference("O2_Kernel.dll");
+mapAst.O2AstResolver.addReference("O2_Interfaces.dll");
+
+//treeView1.configureTreeViewForCodeDomViewAndNRefactoryDom();
+//mapAst.showInTreeView(treeView1,codeViewer.editor()); 
+treeView1.clear();
+var allINodes = new GetAllINodes();    
+allINodes.loadCode(code); 
+ 
+treeView1.add_Node("all ast nodes").add_Nodes(allINodes.NodesByType);  
+mapAst.afterSelect_ShowInSourceCodeEditor(treeView1,codeViewer.editor()); 
+treeView1.expand();
+
+//var memberReferences = allINodes.allByType&lt;MemberReferenceExpression&gt;();
+//var memberReferences = allINodes.allByType&lt;InvocationExpression&gt;();
+var memberReferences = allINodes.allByType&lt;ObjectCreateExpression&gt;(); 
+//var memberReference = memberReferences[0];
+var results = new List&lt;IMethod&gt;();
+treeView2.clear();
+foreach(var memberReference in memberReferences)
+{ 
+	
+	var result = mapAst.O2AstResolver.resolve(memberReference);
+	treeView2.add_Nodes_WithPropertiesAsChildNodes&lt;IFreezable&gt;(result); 
+	if (result is MemberResolveResult)
+	{
+		var resolvedMember = (result as MemberResolveResult).ResolvedMember;
+		if (resolvedMember is IMethod)   
+			results.Add(resolvedMember as IMethod); 
+	}
+}
+mapAst.afterSelect_ShowInSourceCodeEditor(treeView2,codeViewer.editor()); 
+var targetType = mapAst.typeDeclarations()[1];
+targetType.Name += "___O2"; 
+foreach(var result in results)  
+{ 
+	ParametrizedNode match = mapAst.getMethodDeclaration(result);
+	if (match == null)
+		match = mapAst.getConstructorDeclaration(result); 
+	//if (mapAst.MapAstToNRefactory.IMethodToMethodDeclaration.ContainsKey((IMethod)result))     
+	if (match != null)
+	{
+		targetType.Children.Add(match);
+		treeView2.add_Nodes_WithPropertiesAsChildNodes&lt;INode&gt;(match); 
+		"WE have a match__!!!".error();
+	}
+}
+
+
+return mapAst.compilationUnits()[0].csharpCode();  
+
+treeView2.configureTreeViewForCodeDomViewAndNRefactoryDom(); 
+treeView2.add_Nodes_WithPropertiesAsChildNodes&lt;IFreezable&gt;(results); 
+//return results;
+treeView1.clear();
+//treeView1.configureTreeViewForCodeDomViewAndNRefactoryDom();
+/*treeView1.add_Node("NRefactory").show_NRefactoryDom(mapAst.iCompilationUnits())
+								.show_NRefactoryDom(mapAst.iClasses())
+								.show_NRefactoryDom(mapAst.iMethods()); 
+		 */
+
+//treeView1.sort(); 
+
+//return "done"; //mapAst.iMethods()[2].Parameters;
+//	codeViewer.editor().selectTextWithColor(10,1,10,20);    
+	    
+//	codeViewer.editor().selectTextWithColor(12,12,17,12); 
+//	
+
+
+         
+treeView1.clear();      
+  
+//treeView1.add_Node("ast").show_Asts(mapAst.methodDeclarations()[2].Parameters); 
+//return null; 
+mapAst.showInTreeView(treeView1,codeViewer.editor());  
+return "done";
+//var matches = allINodes.getINodesWithIdentifier("cmdText");
+
+//codeViewer.editor().colorINodes(matches);
+  
+//"there were {0}  matches".format(matches.size()).debug();
+//treeView2.clear(); 
+//treeView2.add_Nodes(matches);
+//mapAst.afterSelect_ShowInSourceCodeEditor(treeView2,codeViewer.editor()); 
+//return "ok";  
+codeViewer.onCaretMove((caret) =&gt; {
+//	treeView2.clear();	
+//	treeView2.add_Node("all").add_Nodes(allINodes.getINodesAt(caret.Line + 1, caret.Column +1));	
+	var iNode = allINodes.getINodeAt(caret.Line + 1, caret.Column +1); 
+	if (iNode != null) 
+	{
+//		treeView2.add_Node(iNode);
+//		treeView2.add_Node(iNode.Parent); 
+		//using System.Collections.Generic
+		var matches = new List&lt;INode&gt;();
+		if (iNode.Parent is ParameterDeclarationExpression)
+		{ 
+			var parameter = (ParameterDeclarationExpression)(iNode.Parent);
+//			treeView2.add_Node(parameter.ParameterName);
+			matches = allINodes.getINodesWithIdentifier(parameter.ParameterName);			
+		}
+		if (iNode is VariableDeclaration)
+			matches = allINodes.getINodesWithIdentifier((iNode as VariableDeclaration).Name);			
+		codeViewer.editor().colorINodes(matches);
+	}
+	
+	
+	treeView2.expandAll();
+	 //var currentINode = ;
+	// caret.str().info(); 
+	 }); 
+codeViewer.focus();   
+codeViewer.editor().caret(22,34);  
+ 
+return "done";
+return treeView1.rootNode();      
+
+//treeView1.configureTreeViewForCodeDomView(); 
+//treeView1.add_Node("ast").show_Ast(mapAst.methodDeclarations()[0].Body); 
+//treeView1.add_Node("dom").show_CodeDom(mapAst.codeMemberMethods());
+//treeView1.add_Node("dom").
+//treeView1.show_CodeDom(mapAst.codeTypeDeclarations()[0]);
+//mapAst.afterSelect_ShowInSourceCodeEditor(treeView1,codeViewer.editor()); 
+
+
+//var methods = mapAst.codeMemberMethods();   
+treeView1.afterSelect_ShowAstInSourceCodeEditor(codeViewer.editor()); 
+//mapAst.codeMemberMethods().showInTreeView(treeView1);
+treeView1.add_Node("CodeNamespaces").show_CodeDom(mapAst.codeNamespaces());
+treeView1.add_Node("CodeTypeDeclarations").show_CodeDom(mapAst.codeTypeDeclarations());
+treeView1.add_Node("CodeMemberMethods").show_CodeDom(mapAst.codeMemberMethods());
+//treeView1.expand();
+   
+return mapAst.codeMemberMethods()[1].Statements[0];//.prop("Expression");
+
+//return domType.Statements[0].prop("Expression");
+ 
+var astNode = treeView1.add_Node("ast"); 
+astNode.show_Asts(mapAst.compilationUnits()); 
+astNode.show_Asts(mapAst.typeDeclarations());   
+astNode.show_Asts(mapAst.methodDeclarations());
+treeView1.expand();  
+
+treeView1.configureTreeViewForCodeDomView();
+//treeView1.afterSelect((tag) =&gt; {if (tag!=null) tag.typeFullName().info();});
+return mapAst;
+
+//using System.Collections
+//using ICSharpCode.NRefactory.Ast
+//using O2.API.AST.Visitors
+//using O2.External.SharpDevelop.AST
+//using ICSharpCode.SharpDevelop.Dom
+//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_VisualizationAPI.cs
+//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_WebAutomation.cs </SourceCode>
+  <ReferencedAssemblies />
+</H2>

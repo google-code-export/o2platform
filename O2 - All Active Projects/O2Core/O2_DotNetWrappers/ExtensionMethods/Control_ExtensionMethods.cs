@@ -691,6 +691,96 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion
-       
+
+        #region Control - KeyUp
+
+        public static T onKeyPress<T>(this T control, Action<Keys> callback)
+            where T : Control
+        {
+            control.KeyUp += (sender, e) => callback(e.KeyData);
+            return control;
+        }
+
+        public static T onKeyPress<T>(this T control, Action<Keys, String> callback)
+            where T : Control
+        {
+            control.KeyUp += (sender, e) => callback(e.KeyData, control.Text);
+            return control;
+        }
+
+        public static T onKeyPress<T>(this T control, Keys onlyFireOnKey, MethodInvoker callback)
+            where T : Control
+        {
+            control.KeyUp += (sender, e) =>
+            {
+                if (e.KeyData == onlyFireOnKey)
+                    callback();
+            };
+            return control;
+        }
+
+        public static T onKeyPress<T>(this T control, Keys onlyFireOnKey, Action<String> callback)
+            where T : Control
+        {
+            control.KeyUp += (sender, e) =>
+            {
+                if (e.KeyData == onlyFireOnKey)
+                    callback(control.Text);
+            };
+            return control;
+        }
+
+        #endregion
+
+        #region Control - Sync
+
+        public static T syncTextBoxWithControl<T>(this T control, Action<string> onTextChanged)
+            where T : Control
+        {
+            return control.syncTextBoxWithControl(true, onTextChanged);
+        }
+
+        public static T syncTextBoxWithControl<T>(this T control, bool onlyFireOnEnter, Action<string> onTextChanged)
+            where T : Control
+        {
+            var textBox = control.insert_Above<TextBox>(20);
+            textBox.KeyUp += (sender, e) =>
+            {
+                if (onlyFireOnEnter.isFalse() || e.KeyCode == Keys.Enter)
+                    onTextChanged(textBox.get_Text());
+            };
+            return control;
+        }
+
+        public static T syncComboBoxWithControl<T>(this T control, Action<string> onTextChanged)
+            where T : Control
+        {
+            return control.syncComboBoxWithControl(true, true, onTextChanged);
+        }
+
+        public static T syncComboBoxWithControl<T>(this T control, bool onlyFireOnEnter, bool addToHistory, Action<string> onTextChanged)
+            where T : Control
+        {
+            var comboBox = control.insert_Above<ComboBox>(20);
+            comboBox.KeyUp += (sender, e) =>
+            {
+                //	comboBox.invokeOnThread(
+                //		()=>{
+                var text = comboBox.Text;
+                if (onlyFireOnEnter.isFalse() || e.KeyCode == Keys.Enter)
+                {
+                    onTextChanged(text);
+                    if (addToHistory)
+                    {
+                        comboBox.Items.Insert(0, text);
+                        comboBox.Text = "";
+                    }
+                }
+                //			});					
+            };
+            return control;
+        }
+
+        #endregion
     }
 }

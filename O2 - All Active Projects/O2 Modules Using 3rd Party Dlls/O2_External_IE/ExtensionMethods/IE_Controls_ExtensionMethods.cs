@@ -244,5 +244,16 @@ namespace O2.External.IE.ExtensionMethods
             var browser = (O2BrowserIE)O2.Kernel.open.webBrowser();
             return browser.openSync(uri);
         }
+
+        public static O2BrowserIE set_Text(this O2BrowserIE o2BrowserIE, string text)
+        {
+            return (O2BrowserIE)o2BrowserIE.invokeOnThread(
+                () =>
+                {
+                    o2BrowserIE.DocumentText = text;
+                    return o2BrowserIE;
+                });
+
+        }
     }
 }

@@ -36,6 +36,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
     </Reference>
+    <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\_3rdPartyDlls\QuickGraph.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -63,6 +67,7 @@
     <Compile Include="AST\TextToCodeMappings.cs" />
     <Compile Include="ExtensionMethods\FastCompiler_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Linq_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\O2MappedAstData_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\SourceCode_ExtensionMethods.cs" />
     <Compile Include="Ascx\ascx_SourceCodeViewer.Controllers.cs">
       <SubType>UserControl</SubType>
@@ -145,6 +150,10 @@
     <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
       <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
       <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2_APIs\O2_API_AST\O2_API_AST.csproj">
+      <Project>{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}</Project>
+      <Name>O2_API_AST</Name>
     </ProjectReference>
     <ProjectReference Include="..\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj">
       <Project>{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}</Project>

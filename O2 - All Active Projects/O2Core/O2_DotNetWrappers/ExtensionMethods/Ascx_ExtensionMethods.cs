@@ -78,6 +78,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return button;
         }
 
+        public static Button set_Text(this Button button, string text)
+        {
+            return (Button)button.invokeOnThread(
+                () =>
+                {
+                    button.Text = text;
+                    return button;
+                });
+
+        }
         #endregion
 
         #region Label
@@ -526,6 +536,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return control.add_TextBox(-1, -1, multiLine);
         }
+
         public static TextBox add_TextBox(this Control control,int top, int left, bool multiLine)
         {
             return (TextBox) control.invokeOnThread(
@@ -565,6 +576,15 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return textBox;
         }
 
+        public static string get_Text(this TextBox textBox)
+        {
+            return (string)textBox.invokeOnThread(
+                () =>
+                {
+                    return textBox.Text;
+                });
+        }    	    	
+        
         public static void append_Line(this TextBox textBox, string textFormat, params object[] parameters)
         {
             textBox.append_Line(string.Format(textFormat, parameters));
@@ -614,6 +634,24 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (TextBox)textBox.invokeOnThread(() =>
             {
                 textBox.Multiline = value;
+                return textBox;
+            });
+        }
+
+        public static TextBox wordWrap(this TextBox textBox, bool value)
+        {
+            return (TextBox)textBox.invokeOnThread(() =>
+            {
+                textBox.WordWrap = value;
+                return textBox;
+            });
+        }
+
+        public static TextBox scrollBars(this TextBox textBox)
+        {
+            return (TextBox)textBox.invokeOnThread(() =>
+            {
+                textBox.ScrollBars = ScrollBars.Both;
                 return textBox;
             });
         }
@@ -1127,6 +1165,154 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return treeNode;
         }
 
+        public static TreeView show_Object(this TreeView treeView, object objectToShow)
+        {
+            if (objectToShow != null)
+            {
+                treeView.autoExpandObjects();
+                treeView.add_Node(objectToShow.str(), objectToShow, true);
+            }
+            return treeView;
+        }
+
+        public static TreeView autoExpandObjects(this TreeView treeView)
+        {
+            return treeView.autoExpandObjects<System.Object>();
+        }
+
+        public static TreeView autoExpandObjects<T>(this TreeView treeView)
+        {
+            // remove any previous BeforeExpand event handlers for type T
+            var eventHandlers = treeView.getEventHandlers("BeforeExpand");
+            if (eventHandlers != null)
+                foreach (TreeViewCancelEventHandler eventHandler in eventHandlers)
+                    if (eventHandler.Target.typeFullName().contains(typeof(T).FullName))
+                        treeView.BeforeExpand -= eventHandler;
+
+            treeView.beforeExpand<IEnumerable<T>>((collection) =>
+            {
+                var currentNode = treeView.current();
+                currentNode.clear();
+                foreach (var item in collection)
+                {
+                    if (item != null)
+                    {
+                        if (item is T)
+                        {
+                            currentNode.add_Node(item)
+                                       .add_Nodes_WithPropertiesAsChildNodes<T>(item)
+                                       .add_Nodes_WithFieldsAsChildNodes<T>(item);
+                        }
+                        else
+                            currentNode.add_Node("value" + item.str(), item);
+                    }
+                }
+            });
+
+            treeView.beforeExpand<T>((value) =>
+            {
+                var currentNode = treeView.current();
+                currentNode.clear();
+                currentNode.add_Nodes_WithPropertiesAsChildNodes<T>(value)
+                           .add_Nodes_WithFieldsAsChildNodes<T>(value);
+            });
+            "{0} BeforeExpand events".format(treeView.getEventHandlers("BeforeExpand").size()).debug();
+            return treeView;
+        }
+
+        public static TreeNode add_Nodes_WithFieldsAsChildNodes(this TreeNode treeNode, object data)
+        {
+            return treeNode.add_Nodes_WithFieldsAsChildNodes<System.Object>(data);
+        }
+
+        public static TreeNode add_Nodes_WithFieldsAsChildNodes<T>(this TreeNode treeNode, object data)
+        {
+            return treeNode.add_Nodes_WithFieldsAsChildNodes<T>(data, true);
+        }
+
+        public static TreeNode add_Nodes_WithFieldsAsChildNodes<T>(this TreeNode treeNode, object data, bool hideWhenNoDataIsAvailable)
+        {
+            //if (true)
+            //	return treeNode;
+            if (data is ICollection)
+            {
+                foreach (var item in (data as ICollection))
+                    treeNode.add_Nodes_WithFieldsAsChildNodes<T>(item, hideWhenNoDataIsAvailable);
+                return treeNode;
+            }
+
+            if (treeNode.Tag != data)							// protection agaist recusively adding the same node
+                treeNode = treeNode.add_Node(data.typeName(), data);
+
+            foreach (var field in data.type().fields())
+            {
+                if (field.Name.contains("k__BackingField").isFalse())
+                {
+                    bool addNode = true;
+                    var name = field.Name;
+                    var tag = data.field(name);
+                    var hasChildNodes = false;
+                    if (tag is String || tag is Int32)
+                    {
+                        name = "{0}: {1}".format(name, tag ?? "[null]");
+                    }
+                    else if (tag is T || tag is ICollection)
+                    {
+                        if (tag is T)
+                            hasChildNodes = (tag != null && tag.type().fields().size() > 0);// || tag.type().properties().size() > 0));
+                        else if (tag is ICollection)
+                            hasChildNodes = (tag as ICollection).Count > 0;
+                        if (hideWhenNoDataIsAvailable && hasChildNodes == false)
+                            addNode = false;
+                    }
+                    else
+                    {
+                        name = "{0}: {1}".format(name, tag ?? "[null]");
+                        if (hideWhenNoDataIsAvailable && tag == null)
+                            addNode = false;
+                    }
+                    /*"name:{0} has ChildNodes:{1} tag type: :    {2}  ".format(
+                            field.Name, 
+                            hasChildNodes,
+                            typeof(T).FullName).info();*/
+                    if (addNode)
+                        treeNode.add_Node(name, tag, hasChildNodes);
+                }
+            }
+            return treeNode;
+        }
+
+        public static TreeView removeEventHandlers_BeforeExpand(this TreeView treeView)
+        {
+            return treeView.removeEventHandlers("BeforeExpand");
+        }
+        
+        public static TreeView removeEventHandlers(this TreeView treeView, string eventHandlerToRemove)
+        {
+            var eventHandlers = treeView.getEventHandlers(eventHandlerToRemove);
+            if (eventHandlers != null)
+                foreach (TreeViewCancelEventHandler eventHandler in eventHandlers)
+                    treeView.BeforeExpand -= eventHandler;
+            return treeView;
+        }
+
+        public static TreeView removeEventHandlers<T>(this TreeView treeView, string eventHandlerToRemove)
+        {
+            var eventHandlers = treeView.getEventHandlers(eventHandlerToRemove);
+            if (eventHandlers != null)
+            {
+                foreach (TreeViewCancelEventHandler eventHandler in eventHandlers)
+                    if (eventHandler.Target.typeFullName().contains(typeof(T).FullName))
+                        treeView.BeforeExpand -= eventHandler;
+            }
+            eventHandlers = treeView.getEventHandlers(eventHandlerToRemove);
+            "After remove, there are {0} '{1}' events mapped".format(
+                (eventHandlers != null) ? eventHandlers.Length : 0,
+                eventHandlerToRemove).debug();
+            return treeView;
+        }
+
+
         #endregion
 
         #region RichTextBox
@@ -1634,6 +1820,39 @@ namespace O2.DotNetWrappers.ExtensionMethods
                             label.ForeColor = color;
                         return label;
                     });
+        }
+
+        #endregion
+
+        #region ComboBox
+
+        public static string get_Text(this ComboBox comboBox)
+        {
+            return (string)comboBox.invokeOnThread(
+                () =>
+                {
+                    return comboBox.Text;
+                });
+        }
+
+        public static ComboBox set_Text(this ComboBox comboBox, string text)
+        {
+            return (ComboBox)comboBox.invokeOnThread(
+                () =>
+                {
+                    comboBox.Text = text;
+                    return comboBox;
+                });
+        }
+
+        public static ComboBox insert_Item(this ComboBox comboBox, object itemToInsert)
+        {
+            return (ComboBox)comboBox.invokeOnThread(
+                () =>
+                {
+                    comboBox.Items.Insert(0, itemToInsert);
+                    return comboBox;
+                });
         }
 
         #endregion
