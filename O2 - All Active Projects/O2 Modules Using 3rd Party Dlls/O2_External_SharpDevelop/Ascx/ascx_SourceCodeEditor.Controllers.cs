@@ -1133,11 +1133,21 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void clearBookmarksAndMarkers()
         {
-            tecSourceCode.Document.BookmarkManager.Clear();            
-            var textMarkers = new List<TextMarker>(tecSourceCode.Document.MarkerStrategy.TextMarker);
-            foreach (var textMarker in textMarkers)
-                tecSourceCode.Document.MarkerStrategy.RemoveMarker(textMarker);
-            refresh();
+            tecSourceCode.invokeOnThread(() =>
+            {
+                tecSourceCode.Document.BookmarkManager.Clear();
+                clearMarkers();
+            });
+        }
+        public void clearMarkers()
+        {
+            tecSourceCode.invokeOnThread(() =>
+            {
+                var textMarkers = new List<TextMarker>(tecSourceCode.Document.MarkerStrategy.TextMarker);
+                foreach (var textMarker in textMarkers)
+                    tecSourceCode.Document.MarkerStrategy.RemoveMarker(textMarker);
+                refresh();
+            });
         }
 
         public void openO2ObjectModel()

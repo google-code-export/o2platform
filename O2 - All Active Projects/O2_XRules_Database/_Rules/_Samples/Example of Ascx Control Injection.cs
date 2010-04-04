@@ -37,10 +37,10 @@ namespace O2.Script
         	var textBox = this.add_TextBox(true);        	        	        	
         	var distance = 100;
         	var border3D = false;        	
-        	textBox.injectControl_Top(new Label().set_Text("Top"), distance, border3D);
-        	textBox.injectControl_Bottom(new Label().set_Text("Bottom") , distance,border3D);
-			textBox.injectControl_Left(new Label().set_Text("Left"), distance , border3D);
-        	textBox.injectControl_Right(new Label().set_Text("Right"), distance , border3D);
+        	textBox.insert_Above(new Label().set_Text("Top"), distance, border3D);
+        	textBox.insert_Below(new Label().set_Text("Bottom") , distance,border3D);
+			textBox.insert_Left(new Label().set_Text("Left"), distance , border3D);
+        	textBox.insert_Right(new Label().set_Text("Right"), distance , border3D);
         	textBox.Select();
      	}   
     	    	    	    	    

@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using System;
 using O2.API.AST.ExtensionMethods;
+using GraphSharp.Algorithms.Layout.Simple.Tree;
+using GraphSharp.Algorithms.Layout;
 //O2File:WPF_Threading_ExtensionMethods.cs
 //O2File:GraphFactory.cs
 
@@ -44,10 +46,20 @@ namespace O2.API.Visualization.ExtensionMethods
     								return graphLayout.Graph; 
     							 });
     	}
-    	
+
+        public static Label add(this GraphLayout graphLayout, Int32 nodeValue)
+        {
+            return graphLayout.add<Label>().set_Text(nodeValue.str());
+        }
+
+        public static Label add(this GraphLayout graphLayout, string nodeText)
+        {
+            return graphLayout.add<Label>().set_Text(nodeText);
+        }
+
     	public static GraphLayout add(this GraphLayout graphLayout,object vertexToAdd)
     	{
-            if (graphLayout == vertexToAdd)     // can add graphLayout as an Node
+            if (graphLayout == vertexToAdd)     // can't add graphLayout as an Node
                 return graphLayout;
     		var graph = graphLayout.get_Graph();
     		if (graph == null)
@@ -57,7 +69,7 @@ namespace O2.API.Visualization.ExtensionMethods
     		}
     		return (GraphLayout)graphLayout.wpfInvoke(
     			()=>{
-    					graph.add(vertexToAdd);
+    					graph.add_Node(vertexToAdd);
     					return graphLayout;
     				});
     	}
@@ -209,11 +221,27 @@ namespace O2.API.Visualization.ExtensionMethods
 				         //   "EfficientSugiyama"
 				        });
     	}
-    	    	
-    	public static GraphLayout tree(this GraphLayout graphLayout)
+        public static GraphLayout tree(this GraphLayout graphLayout)
+        {
+            return graphLayout.tree(false);
+        }
+
+    	public static GraphLayout tree(this GraphLayout graphLayout, bool horizontalLayout)
     	{
-    		return graphLayout.layout("Tree");
+            graphLayout.wpfInvoke(
+                () =>
+                {
+                    graphLayout.layout("Tree");                    
+                    if (horizontalLayout)
+                        if (graphLayout.LayoutParameters is SimpleTreeLayoutParameters)
+                        {
+                            var treeParameters = (SimpleTreeLayoutParameters)graphLayout.LayoutParameters;
+                            treeParameters.Direction = LayoutDirection.LeftToRight;
+                        }
+                });
+            return graphLayout;
     	}
+        
     	
     	public static GraphLayout circular(this GraphLayout graphLayout)
     	{
@@ -276,7 +304,6 @@ namespace O2.API.Visualization.ExtensionMethods
     	
     	#endregion
 
-
         #region using TreeView
 
         public static BidirectionalGraph<object, IEdge<object>> getGraph(this System.Windows.Forms.TreeView treeView, bool recursive)
@@ -298,7 +325,7 @@ namespace O2.API.Visualization.ExtensionMethods
         public static object addFromTreeNode(this BidirectionalGraph<object, IEdge<object>> graph, System.Windows.Forms.TreeNode treeNode, bool recursive)
         {
             var vertex = treeNode.Text;
-            graph.add(vertex);
+            graph.add_Node(vertex);
             if (recursive)
                 treeNode.Nodes.forEach<System.Windows.Forms.TreeNode>(
                     (childNode) =>

@@ -40,9 +40,9 @@ namespace O2.Script
         public static void startControl()
     	{   			
     	 	processDetails = new List<ProcessDetail>(); 
-    		processDetails.add<ProcessDetail>("Reflector",@"C:\_DinisTest\tools\reflector\reflector.exe");
-    		processDetails.add<ProcessDetail>("Notepad",@"Notepad.exe","test");
-    		processDetails.add<ProcessDetail>("Cmd",@"Cmd.exe");
+    		processDetails.createTypeAndAddToList<ProcessDetail>("Reflector",@"C:\_DinisTest\tools\reflector\reflector.exe");
+            processDetails.createTypeAndAddToList<ProcessDetail>("Notepad", @"Notepad.exe", "test");
+            processDetails.createTypeAndAddToList<ProcessDetail>("Cmd", @"Cmd.exe");
     
     		O2Gui.open<ascx_Start_Tools>("Start Tools v1.1",400,200);    		
     	}    	
@@ -111,7 +111,7 @@ namespace O2.Script
 				if (row[0].validString() && row[1].validString())
 				{
 					this.info(row.toString());
-					processDetails.add<ProcessDetail>(row[0],row[1],row[2]);
+                    processDetails.createTypeAndAddToList<ProcessDetail>(row[0], row[1], row[2]);
 				}
 			}
 		}			

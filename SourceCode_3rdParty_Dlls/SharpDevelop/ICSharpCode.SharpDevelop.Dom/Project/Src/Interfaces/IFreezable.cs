@@ -100,7 +100,7 @@ namespace ICSharpCode.SharpDevelop.Dom
 		}
 	}
 	
-	static class EmptyList<T>
+	public static class EmptyList<T>
 	{
 		public static readonly System.Collections.ObjectModel.ReadOnlyCollection<T> Instance = new List<T>().AsReadOnly();
 	}

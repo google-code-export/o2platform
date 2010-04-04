@@ -454,7 +454,16 @@ namespace O2.Kernel.InterfacesBaseImpl
 
         public List<PropertyInfo> getProperties(Type type)
         {
-            return (type!=null) ? new List<PropertyInfo>(type.GetProperties()) :  new List<PropertyInfo>();
+            var properties = new List<PropertyInfo>();
+            if (type!=null)
+                foreach (var property in type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
+                {
+                    //if (property.IsSpecialName == false)
+                        properties.Add(property);
+                }
+            return properties;
+            //return (type!=null) ? new List<PropertyInfo>(
+            //    ) :  new List<PropertyInfo>();
         }
 
         public Dictionary<string, List<Type>> getDictionaryWithTypesMappedToNamespaces(Module module)

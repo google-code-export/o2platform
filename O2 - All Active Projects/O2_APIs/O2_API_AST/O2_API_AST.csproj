@@ -45,6 +45,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -90,16 +91,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSharp\FindLocationInAst.cs" />
+    <Compile Include="CSharp\O2MappedAstData.cs" />
     <Compile Include="CSharp\O2AstResolver.cs" />
     <Compile Include="CSharp\O2AstVisitor.cs" />
     <Compile Include="ExtensionMethods\BidirectionalGraph_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CodeDom_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CSharp\AstResolve_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CSharp\LocalVariableDeclaration_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CSharp\MethodDeclaration_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\IAstVisitor_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2GraphNode_ExtensionMethods.cs" />
     <Compile Include="Graph\AstMethodFinder.cs" />
     <Compile Include="Graph\GraphAstVisitor.cs" />
     <Compile Include="Graph\O2GraphNode.cs" />
+    <Compile Include="Visitors\GetAllINodes.cs" />
+    <Compile Include="Visitors\MapAstToDom.cs" />
+    <Compile Include="Visitors\MapAstToNRefactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

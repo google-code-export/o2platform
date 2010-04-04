@@ -7,7 +7,12 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.SharpDevelop.AST;
 using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
+using ICSharpCode.NRefactory.Ast;
+using ICSharpCode.NRefactory;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -72,18 +77,19 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return sourceCodeEditor.textEditorControl().ActiveTextAreaControl.Caret.Line;
         }
 
-        public static void colorCodeForExtension(this ascx_SourceCodeEditor sourceCodeEditor, string extension)
+        public static ascx_SourceCodeEditor colorCodeForExtension(this ascx_SourceCodeEditor sourceCodeEditor, string extension)
         {
-            sourceCodeEditor.invokeOnThread(() =>
+            return (ascx_SourceCodeEditor)sourceCodeEditor.invokeOnThread(() =>
             {
 
                 var tecSourceCode = sourceCodeEditor.textEditorControl();
                 var dummyFileName = string.Format("aaa.{0}", extension);
                 tecSourceCode.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategyForFile(dummyFileName);
+                return sourceCodeEditor;
             });
         }
 
-        public static void showAstValueInSourceCode(this TextEditorControl textEditorControl, AstValue<object> astValue)
+        public static TextEditorControl showAstValueInSourceCode(this TextEditorControl textEditorControl, AstValue<object> astValue)
         {
 
             PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
@@ -94,10 +100,10 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             var selection = new DefaultSelection(textEditorControl.Document, start, end);
             textEditorControl.ActiveTextAreaControl.SelectionManager.SetSelection(selection);
             setCaretToCurrentSelection(textEditorControl);
-
+            return textEditorControl;
         }
 
-        public static void setCaretToCurrentSelection(this TextEditorControl textEditorControl)
+        public static TextEditorControl setCaretToCurrentSelection(this TextEditorControl textEditorControl)
         {
             var finalCaretPosition = textEditorControl.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection[0].StartPosition;
             var tempCaretPosition = new TextLocation
@@ -109,6 +115,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
             textEditorControl.ActiveTextAreaControl.Caret.Position = finalCaretPosition;
             textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
+            return textEditorControl;
         }
 
         public static ascx_SourceCodeViewer set_Text(this ascx_SourceCodeViewer sourceCodeViewer, string text)
@@ -142,40 +149,45 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return sourceCodeViewer.getSourceCodeEditor();
         }
 
-        public static void allowCompile(this ascx_SourceCodeViewer sourceCodeViewer, bool value)
+        public static ascx_SourceCodeViewer allowCompile(this ascx_SourceCodeViewer sourceCodeViewer, bool value)
         {
             sourceCodeViewer.editor().allowCodeCompilation = value;
+            return sourceCodeViewer;
         }
 
-        public static void astDetails(this ascx_SourceCodeViewer sourceCodeViewer, bool value)
+        public static ascx_SourceCodeViewer astDetails(this ascx_SourceCodeViewer sourceCodeViewer, bool value)
         {
             sourceCodeViewer.editor()._ShowSearchAndAstDetails = value;
+            return sourceCodeViewer;
         }
 
-        public static void vScroolBar_Enabled(this ascx_SourceCodeEditor sourceCodeViewer, bool value)
+        public static ascx_SourceCodeEditor vScroolBar_Enabled(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
-            sourceCodeViewer.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Enabled = value;
+            sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Enabled = value;
+            return sourceCodeEditor;
         }
 
-        public static void vScroolBar_Visible(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
+        public static ascx_SourceCodeEditor vScroolBar_Visible(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
             sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Visible = value;
+            return sourceCodeEditor;
         }
 
-        public static void hScroolBar_Enabled(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
+        public static ascx_SourceCodeEditor hScroolBar_Enabled(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
             sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Enabled = value;
+            return sourceCodeEditor;
         }
 
-        public static void hScroolBar_Visible(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
+        public static ascx_SourceCodeEditor hScroolBar_Visible(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
             sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Visible = value;
-        }        
-
-
-        public static void set_ColorsForCSharp(this ascx_SourceCodeViewer sourceCodeViewer)
+            return sourceCodeEditor;
+        }
+        public static ascx_SourceCodeViewer set_ColorsForCSharp(this ascx_SourceCodeViewer sourceCodeViewer)
         {
             sourceCodeViewer.editor().setDocumentHighlightingStrategy("aa.cs");
+            return sourceCodeViewer;
         }
 
         public static IDocument document(this ascx_SourceCodeEditor sourceCodeEditor)
@@ -188,24 +200,28 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return sourceCodeViewer.editor().document();
         }
 
-        public static void set_ColorsForCSharp(this ascx_SourceCodeEditor sourceCodeEditor)
+        public static ascx_SourceCodeEditor set_ColorsForCSharp(this ascx_SourceCodeEditor sourceCodeEditor)
         {
             sourceCodeEditor.setDocumentHighlightingStrategy("aa.cs");
+            return sourceCodeEditor;
         }
 
-        public static void open(this ascx_SourceCodeEditor sourceCodeEditor, string fileToOpen)
+        public static ascx_SourceCodeEditor open(this ascx_SourceCodeEditor sourceCodeEditor, string fileToOpen)
         {
             sourceCodeEditor.loadSourceCodeFile(fileToOpen);
+            return sourceCodeEditor;
         }
 
-        public static void open(this ascx_SourceCodeViewer sourceCodeViewer, string fileToOpen)
+        public static ascx_SourceCodeViewer open(this ascx_SourceCodeViewer sourceCodeViewer, string fileToOpen)
         {
             sourceCodeViewer.editor().loadSourceCodeFile(fileToOpen);
-        }       
-        
-        public static void enableCodeComplete(this ascx_SourceCodeViewer sourceCodeViewer)
+            return sourceCodeViewer;
+        }
+
+        public static ascx_SourceCodeViewer enableCodeComplete(this ascx_SourceCodeViewer sourceCodeViewer)
         {
             sourceCodeViewer.editor().enableCodeComplete();
+            return sourceCodeViewer;
         }
 
         // this wasn't working as expected
@@ -335,6 +351,23 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return codeEditor.textArea().Caret;
         }
 
+        public static ascx_SourceCodeEditor caret(this ascx_SourceCodeEditor codeEditor, int line, int column)
+        {
+            return codeEditor.caret(line, column, 3);
+        }
+
+        public static ascx_SourceCodeEditor caret(this ascx_SourceCodeEditor codeEditor, int line, int column, int viewOffset)
+        {
+            return (ascx_SourceCodeEditor)codeEditor.invokeOnThread(
+                () =>
+                {
+                    codeEditor.caret().Line = line - 1 + viewOffset;  // so that the selected line is not at the bottom of the screen
+                    codeEditor.caret().Line = line - 1;
+                    codeEditor.caret().Column = column - 1;
+                    return codeEditor;
+                });
+        }
+
         public static ascx_SourceCodeEditor caret_Line(this ascx_SourceCodeEditor codeEditor, int value)
         {
             return codeEditor.caret_Line(value, 3);
@@ -362,5 +395,79 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             codeEditor.textArea().Caret.PositionChanged += (sender, e) => callback(codeEditor.caret());
             return codeEditor;
         }
+
+        public static ascx_SourceCodeEditor setSelectionText(this ascx_SourceCodeEditor codeEditor, Location startLocation, Location endLocation)
+        {
+            return (ascx_SourceCodeEditor)codeEditor.invokeOnThread(() =>
+            {
+                var start = new ICSharpCode.TextEditor.TextLocation(startLocation.X - 1, startLocation.Y - 1);
+                var end = new ICSharpCode.TextEditor.TextLocation(endLocation.X - 1, endLocation.Y - 1);
+                var selection = new ICSharpCode.TextEditor.Document.DefaultSelection(codeEditor.document(), start, end);
+                codeEditor.textArea().SelectionManager.SetSelection(selection);
+                codeEditor.caret_Line(start.Line);
+                return codeEditor;
+            });
+        }
+
+        public static ascx_SourceCodeEditor selectTextWithColor(this ascx_SourceCodeEditor codeEditor, int startLine, int startColumn, int endLine, int endColumn)
+        {
+            return codeEditor.selectTextWithColor(new TextLocation(startColumn - 1, startLine - 1), new TextLocation(endColumn - 1, endLine - 1));
+        }
+
+        public static ascx_SourceCodeEditor selectTextWithColor(this ascx_SourceCodeEditor codeEditor, TextLocation startLocation, TextLocation endLocation)
+        {
+            if (startLocation > endLocation)
+            {
+                "in ascx_SourceCodeEditor.selectTextWithColor startLocation > endLocation".error();
+                return codeEditor;
+            }
+            return codeEditor.selectTextWithColor(new DefaultSelection(codeEditor.document(), startLocation, endLocation));
+        }
+
+        public static ascx_SourceCodeEditor selectTextWithColor(this ascx_SourceCodeEditor codeEditor, DefaultSelection selection)
+        {
+            return codeEditor.selectTextWithColor(selection, TextMarkerType.SolidBlock, Color.LightBlue);
+        }
+
+        public static ascx_SourceCodeEditor selectTextWithColor(this ascx_SourceCodeEditor codeEditor, DefaultSelection selection, TextMarkerType textMarkerType, Color color)
+        {
+            if (selection.Length < 0)
+            {
+                "in ascx_SourceCodeEditor.selectTextWithColor selection.Length was <  0".error();
+                return codeEditor;
+            }
+            "offset: {0} : lenght {1}".format(selection.Offset, selection.Length).info();
+            return (ascx_SourceCodeEditor)codeEditor.invokeOnThread(
+            () =>
+            {
+                "offset: {0} : lenght {1}".format(selection.Offset, selection.Length).info();
+                var newMarker = new TextMarker(
+                                        selection.Offset,
+                                        selection.Length,
+                                        textMarkerType, color);
+                codeEditor.document().MarkerStrategy.AddMarker(newMarker);
+                return codeEditor;
+            });
+        }
+
+        public static TextLocation textLocation(this Location location)
+        {
+            return new TextLocation(location.Column - 1, location.Line - 1);
+        }
+
+        public static ascx_SourceCodeEditor selectTextWithColor(this ascx_SourceCodeEditor codeEditor, INode node)
+        {
+            return codeEditor.selectTextWithColor(node.StartLocation.textLocation(), node.EndLocation.textLocation());
+        }
+
+        public static ascx_SourceCodeEditor colorINodes(this ascx_SourceCodeEditor codeEditor, List<INode> nodes)
+        {
+            codeEditor.clearMarkers();
+            foreach (var node in nodes)
+                codeEditor.selectTextWithColor(node);
+            codeEditor.refresh();
+            return codeEditor;
+        }
+
     }
 }

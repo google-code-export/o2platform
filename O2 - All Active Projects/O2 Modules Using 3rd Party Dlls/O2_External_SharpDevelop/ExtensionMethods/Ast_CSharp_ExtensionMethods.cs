@@ -53,7 +53,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 foreach (var invocationParameter in invocationParameters)
                 {                    
                     var parameterType = new TypeReference(
-                        (invocationParameter.Value != null && invocationParameter.Key != "ReturnData") 
+                        (invocationParameter.Value != null && invocationParameter.Key != "returnData") 
                         ? invocationParameter.Value.typeFullName()
                         : "System.Object", true);
                     var parameter = new ParameterDeclarationExpression(parameterType, invocationParameter.Key);

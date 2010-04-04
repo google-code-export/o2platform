@@ -487,46 +487,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #endregion
 
-        #region Control - inject control
-        public static List<Control> injectControl_Top(this Control controlToWrap, Control controlToInject)
-        {
-            return controlToWrap.injectControl(controlToInject, AnchorStyles.Top);
-        }
-
-        public static List<Control> injectControl_Top(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
-        {
-            return controlToWrap.injectControl(controlToInject, AnchorStyles.Top, splitterDistance, border3D);
-        }
-
-        public static List<Control> injectControl_Bottom(this Control controlToWrap, Control controlToInject)
-        {
-            return controlToWrap.injectControl(controlToInject, AnchorStyles.Bottom);
-        }
-
-        public static List<Control> injectControl_Bottom(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
-        {
-            return controlToWrap.injectControl(controlToInject, AnchorStyles.Bottom, splitterDistance, border3D);
-        }
-
-        public static List<Control> injectControl_Left(this Control controlToWrap, Control controlToInject)
-        {
-            return controlToWrap.injectControl(controlToInject, AnchorStyles.Left);
-        }
-
-        public static List<Control> injectControl_Left(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
-        {
-            return controlToWrap.injectControl(controlToInject, AnchorStyles.Left, splitterDistance, border3D);
-        }
-
-        public static List<Control> injectControl_Right(this Control controlToWrap, Control controlToInject)
-        {
-            return controlToWrap.injectControl(controlToInject, AnchorStyles.Right);
-        }
-
-        public static List<Control> injectControl_Right(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
-        {
-            return controlToWrap.injectControl(controlToInject, AnchorStyles.Right, splitterDistance, border3D);
-        }
+        #region Control - inject control                                
 
         public static List<Control> injectControl(this Control controlToWrap, Control controlToInject, AnchorStyles location)
         {
@@ -571,10 +532,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                 splitContainer.FixedPanel = FixedPanel.Panel2;
 
                                 if (splitterDistance > -1)
-                                    splitContainer.SplitterDistance = (location == AnchorStyles.Bottom)
+                                {
+
+                                    var newSplitterDistance = (location == AnchorStyles.Bottom)
                                                                         ? splitContainer.Height - splitterDistance
                                                                         : splitContainer.Width - splitterDistance;
-
+                                    if (newSplitterDistance > 0)
+                                        splitContainer.SplitterDistance = newSplitterDistance;
+                                    else                                        
+                                        "Could not set Splitter Distance since it was a negative value: {0}".format(newSplitterDistance).error();
+                                }
                                 splitContainer.Orientation = (location == AnchorStyles.Bottom) ? Orientation.Horizontal : Orientation.Vertical;
                                 break;
                             case AnchorStyles.None:
@@ -597,23 +564,33 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static List<Control> insert_Right(this Control controlToWrap, Control controlToInject, int splitterDistance)
         {
-            return controlToWrap.injectControl_Right(controlToInject, splitterDistance, false);
+            return controlToWrap.insert_Right(controlToInject, splitterDistance, false);
         }
 
         public static List<Control> insert_Left(this Control controlToWrap, Control controlToInject, int splitterDistance)
         {
-            return controlToWrap.injectControl_Left(controlToInject, splitterDistance, false);
+            return controlToWrap.insert_Left(controlToInject, splitterDistance, false);
         }
 
         public static List<Control> insert_Above(this Control controlToWrap, Control controlToInject, int splitterDistance)
         {
-            return controlToWrap.injectControl_Top(controlToInject, splitterDistance, false);
+            return controlToWrap.insert_Above(controlToInject, splitterDistance, false);
         }
 
         public static List<Control> insert_Below(this Control controlToWrap, Control controlToInject, int splitterDistance)
         {
-            return controlToWrap.injectControl_Bottom(controlToInject, splitterDistance, false);
+            return controlToWrap.insert_Below(controlToInject, splitterDistance, false);
         }
+
+        public static List<Control> insert_Above(this Control controlToWrap, Control controlToInject)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Top);
+        }
+
+        public static List<Control> insert_Above(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Top, splitterDistance, border3D);
+        }        
 
         public static T insert_Above<T>(this Control control) where T : Control
         {
@@ -630,6 +607,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     control.insert_Above(newControl, distance);
                     return newControl;
                 });
+        }
+
+        public static List<Control> insert_Below(this Control controlToWrap, Control controlToInject)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Bottom);
+        }
+
+        public static List<Control> insert_Below(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Bottom, splitterDistance, border3D);
         }
 
         public static T insert_Below<T>(this Control control) where T : Control
@@ -649,6 +636,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static List<Control> insert_Left(this Control controlToWrap, Control controlToInject)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Left);
+        }
+
+        public static List<Control> insert_Left(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Left, splitterDistance, border3D);
+        }
+
         public static T insert_Left<T>(this Control control) where T : Control
         {
             return control.insert_Left<T>(-1);
@@ -664,6 +661,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     control.insert_Left(newControl, distance);
                     return newControl;
                 });
+        }
+
+        public static List<Control> insert_Right(this Control controlToWrap, Control controlToInject)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Right);
+        }
+
+        public static List<Control> insert_Right(this Control controlToWrap, Control controlToInject, int splitterDistance, bool border3D)
+        {
+            return controlToWrap.injectControl(controlToInject, AnchorStyles.Right, splitterDistance, border3D);
         }
 
         public static T insert_Right<T>(this Control control) where T : Control

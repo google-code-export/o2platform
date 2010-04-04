@@ -30,6 +30,10 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         {
             return textEditorControl.ActiveTextAreaControl.TextArea;
         }
+        public static string get_Text(this TextArea textArea)
+        {
+            return (string)textArea.invokeOnThread(() => { return textArea.Document.TextContent; });
+        }        
 
         public static string get_Text(this TextEditorControl textEditorControl)
         {            
@@ -57,6 +61,18 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 () =>
                 {
                     return textEditorControl.textArea().Caret.Offset;                    
+                });
+        }
+
+        public static TextEditorControl insertTextAtCurrentCaretLocation(this TextEditorControl textEditorControl, string textToInsert)
+        {
+            return (TextEditorControl)textEditorControl.textArea().invokeOnThread(
+                () =>
+                {
+                    var caret = textEditorControl.textArea().Caret;
+                    textEditorControl.ActiveTextAreaControl.Document.Insert(caret.Offset, textToInsert);
+                    //caret.Offset += textToInsert.Length;
+                    return textEditorControl;
                 });
         }
 

@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor.Document;
+using O2.DotNetWrappers.ExtensionMethods;
 
 namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 {
@@ -38,14 +39,21 @@ namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 		
 		public static CodeCompletionWindow ShowCompletionWindow(Form parent, TextEditorControl control, string fileName, ICompletionDataProvider completionDataProvider, char firstChar, bool showDeclarationWindow, bool fixedListViewWidth)
 		{
-			ICompletionData[] completionData = completionDataProvider.GenerateCompletionData(fileName, control.ActiveTextAreaControl.TextArea, firstChar);
-			if (completionData == null || completionData.Length == 0) {
-				return null;
-			}
-			CodeCompletionWindow codeCompletionWindow = new CodeCompletionWindow(completionDataProvider, completionData, parent, control, showDeclarationWindow, fixedListViewWidth);
-			codeCompletionWindow.CloseWhenCaretAtBeginning = firstChar == '\0';
-			codeCompletionWindow.ShowCompletionWindow();
-			return codeCompletionWindow;
+			
+            return (CodeCompletionWindow) parent.invokeOnThread(
+                () =>
+                {
+                    ICompletionData[] completionData = completionDataProvider.GenerateCompletionData(fileName, control.ActiveTextAreaControl.TextArea, firstChar);
+                    if (completionData == null || completionData.Length == 0)
+                    {
+                        return null;
+                    }
+
+                    CodeCompletionWindow codeCompletionWindow = new CodeCompletionWindow(completionDataProvider, completionData, parent, control, showDeclarationWindow, fixedListViewWidth);
+                    codeCompletionWindow.CloseWhenCaretAtBeginning = firstChar == '\0';
+                    codeCompletionWindow.ShowCompletionWindow();
+                    return codeCompletionWindow;
+                });			
 		}
 		
 		CodeCompletionWindow(ICompletionDataProvider completionDataProvider, ICompletionData[] completionData, Form parentForm, TextEditorControl control, bool showDeclarationWindow, bool fixedListViewWidth) : base(parentForm, control)

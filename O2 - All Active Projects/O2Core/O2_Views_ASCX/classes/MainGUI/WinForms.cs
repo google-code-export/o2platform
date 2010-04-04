@@ -25,13 +25,14 @@ namespace O2.Views.ASCX.classes.MainGUI
         	Control control = null;
             O2Thread.staThread(
                 ()=> {
+                    O2Gui o2Gui = null;
                     try
                     {
                         control = (Control)PublicDI.reflection.createObjectUsingDefaultConstructor(controlType);
                         if (control != null)
                         {
                             control.Dock = DockStyle.Fill;
-                            var o2Gui = new O2Gui(width, height, false)         // I might need to adjust these width, height so that the control is the one with this size (and not the hosting form)
+                            o2Gui = new O2Gui(width, height, false)         // I might need to adjust these width, height so that the control is the one with this size (and not the hosting form)
                                             {
                                                 Text = formTitle
                                             };
@@ -57,6 +58,11 @@ namespace O2.Views.ASCX.classes.MainGUI
                     {
                         "in showAscxInForm: {0}".format(ex).error();
                         controlCreation.Set();
+                    }
+                    finally
+                    {
+                        if (o2Gui != null)
+                            o2Gui.Dispose();
                     }
                 });
             controlCreation.WaitOne();

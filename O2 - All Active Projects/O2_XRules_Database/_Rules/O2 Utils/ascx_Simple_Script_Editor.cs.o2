@@ -61,7 +61,7 @@ namespace O2.XRules.Database.O2Utils
 		public string GeneratedCode {get ; set;}
 		public Dictionary<string, object> InvocationParameters {get ; set;}
         public bool AutoCompileOnCodeChange { get; set; }
-        public bool AutoSaveOnCompileSuccess { get; set; }
+        public bool AutoSaveOnCompileSuccess { get; set; }        
         public string AutoSaveDir { get; set; }
 		public int width = 300;
 		public int height = 100;
@@ -91,24 +91,32 @@ namespace O2.XRules.Database.O2Utils
     		});
     	}
 
-        public ascx_Simple_Script_Editor()
-    	{            
+        public ascx_Simple_Script_Editor() : this (true)
+        {
+
+        }
+
+        public ascx_Simple_Script_Editor(bool codeCompleteSupport)        
+    	{
+            this.Width = width;
+            this.Height = height;                        
     		InvocationParameters = new Dictionary<string, object>();
-            InvocationParameters.Add("ReturnData", ReturnData); // add the (previous script) execute return data 
+            InvocationParameters.Add("returnData", ReturnData); // add the (previous script) execute return data 
             AutoCompileOnCodeChange = true;
             AutoSaveOnCompileSuccess = true; //  false;  // for now default to true
             AutoSaveDir = this.tempO2Dir().pathCombine("_AutoSavedScripts");
 			setCompilerEnvironment();            
-            this.Width = width;
-			this.Height = height;
+            
 			createGui();
 			configureGui();
 
             //enabled code complete
             ExecuteOnEnter = false;
-            commandsToExecute.enableCodeComplete();
-            commandsToExecute.editor().o2CodeCompletion.UseParseCodeThread = false;
-
+            if (codeCompleteSupport)
+            {
+                commandsToExecute.enableCodeComplete();
+                commandsToExecute.editor().o2CodeCompletion.UseParseCodeThread = false;
+            }
             this.Refresh();
         }
         
@@ -128,7 +136,7 @@ namespace O2.XRules.Database.O2Utils
 
         	sourceCodeViewer = bottomPanel.add_SourceCodeViewer();            
 
-            splitContainer_CommandBox.insert_Below(bottomPanel, 200);
+            splitContainer_CommandBox.insert_Below(bottomPanel,200);//, 200);
         	
 			executeButton = this.add_Button("Execute");        	        	
         	executeButton.fill(); 
@@ -173,18 +181,18 @@ namespace O2.XRules.Database.O2Utils
         	contextMenu.add("save",(menuitem)=> saveScript());      
         	contextMenu.add("force compilation",(menuitem)=> forceCompilation());     
         	contextMenu.add("replace with generated source code",(menuitem)=> replaceMainCodeWithGeneratedSource());
-        	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());
-            //contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
+        	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());            
             contextMenu.add("enable /disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter );
             contextMenu.add("show Log Viewer", (menuitem) => showLogViewer());
             contextMenu.add("disable / enabled Auto compile on code change", (menuitem) => AutoCompileOnCodeChange = !AutoCompileOnCodeChange);
             contextMenu.add("enable / disable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = ! AutoSaveOnCompileSuccess);
             contextMenu.add("show auto saved scripts", (menuitem) => showAutoSavedScripts());
+            contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
             contextMenu.add("disable / enable 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = !commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace);
      	}        	     	
 	     		     	
 	    public void setCompilerEnvironment()
-	    {
+	    {                     
 	    	csharpCompiler = new CSharp_FastCompiler();     
 			
 			//csharpCompiler.InvocationParameters = this.InvocationParameters;
@@ -355,7 +363,8 @@ namespace O2.XRules.Database.O2Utils
      	
      	public void showResult(object result)
      	{
-            csharpCompiler.InvocationParameters["ReturnData"] = result;
+            ReturnData = result;
+            csharpCompiler.InvocationParameters["returnData"] = ReturnData;
      		result_RichTextBox.visible(false);
      		result_Panel.visible(false);
             result_Panel.clear();
@@ -440,8 +449,9 @@ namespace O2.XRules.Database.O2Utils
      	}
 
         public void enableCodeComplete()
-        {
+        {            
             commandsToExecute.enableCodeComplete();
+            commandsToExecute.editor().o2CodeCompletion.UseParseCodeThread = false;
         }
 
      	public string Code 
