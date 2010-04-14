@@ -8,6 +8,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.Kernel;
 
 namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 {
@@ -19,7 +21,7 @@ namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 		protected TextEditorControl control;
 		protected Size              drawingSize;
 		Rectangle workingScreen;
-		Form parentForm;
+		public Form parentForm;
 		
 		protected AbstractCompletionWindow(Form parentForm, TextEditorControl control)
 		{
@@ -37,39 +39,56 @@ namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 		}
 		
 		protected virtual void SetLocation()
-		{
-			TextArea textArea = control.ActiveTextAreaControl.TextArea;
-			TextLocation caretPos  = textArea.Caret.Position;
-			
-			int xpos = textArea.TextView.GetDrawingXPos(caretPos.Y, caretPos.X);
-			int rulerHeight = textArea.TextEditorProperties.ShowHorizontalRuler ? textArea.TextView.FontHeight : 0;
-			Point pos = new Point(textArea.TextView.DrawingPosition.X + xpos,
-			                      textArea.TextView.DrawingPosition.Y + (textArea.Document.GetVisibleLine(caretPos.Y)) * textArea.TextView.FontHeight 
-			                      - textArea.TextView.TextArea.VirtualTop.Y + textArea.TextView.FontHeight + rulerHeight);
-			
-			Point location = control.ActiveTextAreaControl.PointToScreen(pos);
-			
-			// set bounds
-			Rectangle bounds = new Rectangle(location, drawingSize);
-			
-			if (!workingScreen.Contains(bounds)) {
-				if (bounds.Right > workingScreen.Right) {
-					bounds.X = workingScreen.Right - bounds.Width;
-				}
-				if (bounds.Left < workingScreen.Left) {
-					bounds.X = workingScreen.Left;
-				}
-				if (bounds.Top < workingScreen.Top) {
-					bounds.Y = workingScreen.Top;
-				}
-				if (bounds.Bottom > workingScreen.Bottom) {
-					bounds.Y = bounds.Y - bounds.Height - control.ActiveTextAreaControl.TextArea.TextView.FontHeight;
-					if (bounds.Bottom > workingScreen.Bottom) {
-						bounds.Y = workingScreen.Bottom - bounds.Height;
-					}
-				}
-			}
-			Bounds = bounds;
+		{            
+            control.invokeOnThread(
+                () =>
+                {
+                    try
+                    {
+                        TextArea textArea = control.ActiveTextAreaControl.TextArea;
+                        TextLocation caretPos = textArea.Caret.Position;
+
+                        int xpos = textArea.TextView.GetDrawingXPos(caretPos.Y, caretPos.X);
+                        int rulerHeight = textArea.TextEditorProperties.ShowHorizontalRuler ? textArea.TextView.FontHeight : 0;
+                        Point pos = new Point(textArea.TextView.DrawingPosition.X + xpos,
+                                              textArea.TextView.DrawingPosition.Y + (textArea.Document.GetVisibleLine(caretPos.Y)) * textArea.TextView.FontHeight
+                                              - textArea.TextView.TextArea.VirtualTop.Y + textArea.TextView.FontHeight + rulerHeight);
+
+                        Point location = control.ActiveTextAreaControl.PointToScreen(pos);
+
+                        // set bounds
+                        Rectangle bounds = new Rectangle(location, drawingSize);
+
+                        if (!workingScreen.Contains(bounds))
+                        {
+                            if (bounds.Right > workingScreen.Right)
+                            {
+                                bounds.X = workingScreen.Right - bounds.Width;
+                            }
+                            if (bounds.Left < workingScreen.Left)
+                            {
+                                bounds.X = workingScreen.Left;
+                            }
+                            if (bounds.Top < workingScreen.Top)
+                            {
+                                bounds.Y = workingScreen.Top;
+                            }
+                            if (bounds.Bottom > workingScreen.Bottom)
+                            {
+                                bounds.Y = bounds.Y - bounds.Height - control.ActiveTextAreaControl.TextArea.TextView.FontHeight;
+                                if (bounds.Bottom > workingScreen.Bottom)
+                                {
+                                    bounds.Y = workingScreen.Bottom - bounds.Height;
+                                }
+                            }
+                        }
+                        Bounds = bounds;
+                    }
+                    catch (Exception ex)
+                    {
+                        PublicDI.log.ex(ex,"in AbstractCompletionWindow.SetLocation");
+                    }
+                });
 		}
 		
 		protected override CreateParams CreateParams {

@@ -30,7 +30,8 @@ using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 //O2Ref:O2SharpDevelop.dll
 using ICSharpCode.NRefactory;
-using ICSharpCode.NRefactory.Ast;   
+using ICSharpCode.NRefactory.Ast;
+using O2.API.AST.ExtensionMethods.CSharp;
 
 // Comments: (17 Feb 2010): This was the first pass at building an O2 Command Prompt directlly as an XRule
 // 							Most of this code will be incorporated into O2's main APIs

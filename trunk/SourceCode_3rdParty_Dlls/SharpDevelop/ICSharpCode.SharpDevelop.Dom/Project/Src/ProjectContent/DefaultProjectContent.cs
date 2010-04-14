@@ -503,6 +503,13 @@ namespace ICSharpCode.SharpDevelop.Dom
 		
 		public void UpdateCompilationUnit(ICompilationUnit oldUnit, ICompilationUnit parserOutput, string fileName)
 		{
+
+
+            // DC: Since we need to update the compilation units with more data, the Freeze below makes the classes to be ReadOnly (which prevent adding new ones)
+            // so for now I'm commenting out this line (and need to figure out what are its side effects)
+
+            // maybe I need this after all
+
 			parserOutput.Freeze();
 			lock (namespaces) {
 				if (oldUnit != null) {

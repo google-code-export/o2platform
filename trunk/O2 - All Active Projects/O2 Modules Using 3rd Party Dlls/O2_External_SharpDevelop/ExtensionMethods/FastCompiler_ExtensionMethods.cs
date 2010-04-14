@@ -3,6 +3,8 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
 using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.DotNet;
+using System;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -48,6 +50,63 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 pathToFileToCompile.fileInsertAt(0, generateDebugSymbolsTag);
             return pathToFileToCompile.compile();
 
+        }        
+
+        public static object executeFirstMethod(this string pathToFileToCompileAndExecute)
+        {
+            return pathToFileToCompileAndExecute.executeFirstMethod(new object[] { });
+        }
+
+        public static object executeFirstMethod(this string pathToFileToCompileAndExecute, object[] parameters)
+        {
+            var assembly = pathToFileToCompileAndExecute.compile();
+            return assembly.executeFirstMethod(parameters);
+        }
+
+        public static object executeFirstMethod(this Assembly assembly)
+        {
+            return assembly.executeFirstMethod(false, false, new object[] {});
+        }
+
+        public static object executeFirstMethod(this Assembly assembly ,  object[] parameters)
+        {
+            return assembly.executeFirstMethod(false, false, parameters);
+        }
+
+        public static object executeFirstMethod(this Assembly assembly ,  bool executeInStaThread, bool executeInMtaThread, object[] parameters)
+        {            
+            if (assembly != null)
+            {
+                var methods = assembly.methods();
+                foreach (var method in methods)
+                    if (method.IsSpecialName == false)  // we need to do this since Properties get_ and set_ also look like methods
+                    //if (methods.Count >0)        		
+                    //{
+                    {
+                        if (executeInStaThread)
+                            return O2Thread.staThread(() => method.executeMethod(parameters));
+                        if (executeInMtaThread)
+                            return O2Thread.mtaThread(() => method.executeMethod(parameters));
+
+                        return method.executeMethod(parameters);
+                    }
+            }
+            return null;
+        }
+
+        public static object executeMethod(this MethodInfo method, params object[] parameters)
+        {
+            try
+            {
+                if (method.parameters().size() == parameters.size())
+                    return method.invoke(parameters);
+                return method.invoke();
+            }
+            catch (Exception ex)
+            {
+                ex.log("in CSharp_FastCompiler.executeMethod");
+                return null;
+            }
         }
     }
 }

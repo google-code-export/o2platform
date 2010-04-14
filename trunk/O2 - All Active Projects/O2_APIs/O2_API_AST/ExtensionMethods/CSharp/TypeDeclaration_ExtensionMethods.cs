@@ -8,7 +8,24 @@ using ICSharpCode.NRefactory;
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
     public static class TypeDeclaration_ExtensionMethods
-    {        
+    {
+        #region create
+        
+        public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, string typeName)
+        {
+            const Modifiers modifiers = Modifiers.None | Modifiers.Public;
+            var newType = new TypeDeclaration(modifiers, new List<AttributeSection>())
+            {
+                Name = typeName
+            };
+            compilationUnit.AddChild(newType);
+            return newType;
+        }
+
+        #endregion
+
+        #region query
+
         public static List<TypeDeclaration> types(this IParser parser)
         {
             return parser.CompilationUnit.types(false);
@@ -102,6 +119,8 @@ namespace O2.API.AST.ExtensionMethods.CSharp
         {
             return typeDeclaration.Name;
         }
+
+        #endregion
         
     }
 }

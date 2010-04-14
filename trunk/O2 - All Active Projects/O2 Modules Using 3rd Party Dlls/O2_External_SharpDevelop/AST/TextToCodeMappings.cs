@@ -23,7 +23,7 @@ namespace O2.External.SharpDevelop.AST
             // some for fun :)
             code = code.ToLower().Trim().eq("hello") || code.ToLower().Trim().eq("hi") ? "\"Hi, Welcome to O2\"" : code;
             code = code.ToLower().Trim().eq("how are you?") || code.ToLower().Trim().eq("how are you doing") ? "\"I'm fine thanks\"" : code;
-            code = code.ToLower().Trim().eq("good morning") || code.ToLower().Trim().eq("good afternoon") ? "\"Hello there, {0} to you too\"".format(code) : code;
+            code = code.ToLower().Trim().eq("good morning") || code.ToLower().Trim().eq("good afternoon") ? "\"Hello there, {0} to you too\"".format(code.trim()) : code;
             //code.ToLower().eq(new string[] { "hello", "hi" }, () => code = "Hi, Welcome to O2");
             //code = code.ToLower().eq(new []{"how are you?" ,"how are you doing" }) ? "I'm fine thanks" : code;            
             // first try with the code provided

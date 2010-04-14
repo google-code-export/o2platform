@@ -49,6 +49,7 @@ namespace O2.External.SharpDevelop.Ascx
     	public Action<string> statusMessage;
         public bool OnlyShowCodeCompleteResulstFromO2Namespace { get; set; }
         public bool UseParseCodeThread { get; set; }
+        public ExpressionResult currentExpression; 
 
     	public O2CodeCompletion(TextEditorControl _textEditor)
     		: this(_textEditor,(text)=>text.info())
@@ -258,16 +259,18 @@ namespace O2.External.SharpDevelop.Ascx
                     if (codeCompletionWindow.ProcessKeyEvent(key))
                         return true;
             }
+   //         "key pressed:{0}".format(key).info();
             if (key == '.')
             {
                 //O2Thread.mtaThread(   //I really want to run this on a separate thread but It is causing a weird problem where the codecomplete only happens after the 2nd char
                 //() =>
                 //{
-                var o2Timer = new O2Timer("Code Completion").start();
+                currentExpression = FindExpression();
+                //var o2Timer = new O2Timer("Code Completion").start();
                     //textEditor.invokeOnThread(()=> textEditor.textArea().Caret.Column ++ );
                     try
                     {
-                        startOffset = textEditor.currentOffset() + 1;   // it was +1 before we made this run on an mta thread
+                        //startOffset = textEditor.currentOffset() + 1;   // it was +1 before we made this run on an mta thread
                         ICompletionDataProvider completionDataProvider = this;//new CodeCompletionProvider(this);
 
                         codeCompletionWindow = CodeCompletionWindow.ShowCompletionWindow(
@@ -277,7 +280,7 @@ namespace O2.External.SharpDevelop.Ascx
                             completionDataProvider,					// Provider to get the list of possible completions
                             key										// Key pressed - will be passed to the provider
                         );
-
+                        
                         if (codeCompletionWindow != null)
                         {
                             // ShowCompletionWindow can return null when the provider returns an empty list
@@ -289,7 +292,7 @@ namespace O2.External.SharpDevelop.Ascx
                     {
                         "in O2CodeCompletion.TextAreaKeyEventHandler".log();
                     }
-                    o2Timer.stop();
+                  //  o2Timer.stop();
                 //});
 //                return true;
             }
@@ -544,7 +547,8 @@ namespace O2.External.SharpDevelop.Ascx
             var targetText = "";
             if (CodeCompleteCaretLocationOffset.Line == 0)
             {
-                targetText = textArea.MotherTextEditorControl.Text;                
+
+                targetText = textArea.get_Text(); // textArea.MotherTextEditorControl.Text;                
             }
             else
             {
@@ -553,7 +557,8 @@ namespace O2.External.SharpDevelop.Ascx
             }
 
 			NRefactoryResolver resolver = new NRefactoryResolver(this.myProjectContent.Language);
-			ResolveResult rr = resolver.Resolve(FindExpression(textArea),
+			//ResolveResult rr = resolver.Resolve(FindExpression(textArea),
+            ResolveResult rr = resolver.Resolve(currentExpression,
 			                                        this.parseInformation,
                                                     targetText);
 			List<ICompletionData> resultList = new List<ICompletionData>();
@@ -563,7 +568,7 @@ namespace O2.External.SharpDevelop.Ascx
 					AddCompletionData(resultList, completionData);
 				}
 			}
-            "In generate completion Data, There were {0} results found".format(resultList.Count).debug();
+           // "In generate completion Data, There were {0} results found".format(resultList.Count).debug();
 			return resultList.ToArray();
 		}
 		
@@ -572,8 +577,9 @@ namespace O2.External.SharpDevelop.Ascx
 		/// Also determines the context (using statement, "new"-expression etc.) the
 		/// cursor is at.
 		/// </summary>
-		ExpressionResult FindExpression(TextArea textArea)
+		ExpressionResult FindExpression()//TextArea textArea)
 		{
+            var textArea = textEditor.textArea();
             try
             {                
                 var expression = (CodeCompleteCaretLocationOffset.Line == 0)

@@ -104,15 +104,20 @@ namespace O2.XRules.Database
         	mainSplitContainer.panel2Collapsed(true);
         	
         	var contextMenu = pictureBox.add_ContextMenu();
-            contextMenu.add("Open O2 Command Prompt", (item) => openO2CommandPromt());
-        	contextMenu.add("View loaded script source Code", (item)=> showLoadedScriptSourceCode() );
-        	contextMenu.add("Execute Again", (item)=> executeCompiledCode() );
-        	contextMenu.add("View available scripts", (item)=> showAvailableScripts() );
-        	contextMenu.add("Open Simple Script Editor", (item)=> openSimpleScriptEditor() );
-            contextMenu.add("Sync/Download local XRules From O2's Svn", (item) => syncO2ViaSvn());
-            contextMenu.add("Open quick development gui", (menuitem) => open.dev());          	
-            contextMenu.add("Open O2 Log Viewer", (item) => openO2LogViewer());
-            contextMenu.add("Exit Application (and close all windows)", (item) => PublicDI.config.closeO2Process());
+            contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());
+            contextMenu.add_MenuItem("View available scripts", () => showAvailableScripts());
+            contextMenu.add_MenuItem("Sync/Download local XRules From O2's Svn", () => syncO2ViaSvn());                       
+
+            contextMenu.add_MenuItem("O2 Script Development &&  Debug")
+                       .add_MenuItem("Open Simple Script Editor", () => openSimpleScriptEditor())
+                       .add_MenuItem("Open quick development gui", () => open.devEnvironment())
+                       .add_MenuItem("Open 'Graph' development gui", () => open.graphEditor())
+                       .add_MenuItem("Open XRules/Script Editor", () => open.scriptEditor())                       
+                       .add_MenuItem("Current Script",false)
+        	                        .add_MenuItem("View loaded script source Code", ()=> showLoadedScriptSourceCode() )
+        	                        .add_MenuItem("Execute Again", ()=> executeCompiledCode() );
+            contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());            
+            contextMenu.add_MenuItem("Exit Application (and close all windows)", () => PublicDI.config.closeO2Process());
             
         	
         	// load data map actions

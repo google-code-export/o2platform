@@ -52,9 +52,12 @@ namespace O2.Views.ASCX.DataViewers
                 () =>
                 {
                     var treeView = this.add_TreeView();
-                    propertyGrid.insert_Left(treeView, 200);
+                    var sliderDistance = propertyGrid.Width /2;
+                    if (sliderDistance > 200)
+                        sliderDistance = 200;
+                    propertyGrid.insert_Left(treeView, sliderDistance);
                     var textBox = this.add_TextBox(true);
-                    treeView.insert_Above(textBox, 20);
+                    treeView.insert_Above(textBox, 25);
                     //config
                     textBox.ScrollBars = ScrollBars.None;
                     textBox.Multiline = false;
@@ -68,7 +71,7 @@ namespace O2.Views.ASCX.DataViewers
                         (text) => treeView.add_Nodes((IEnumerable)_object, true, text).Sort());
                     // populate treeview
                     var contextMenu = treeView.add_ContextMenu();
-                    contextMenu.add("Copy To Clipboard: Selected Node Text", (item) => { treeView.SelectedNode.Text.toClipboard(); });
+                    contextMenu.add_MenuItem("Copy To Clipboard: Selected Node Text", (item) => { treeView.SelectedNode.Text.toClipboard(); });
                     treeView.add_Nodes((IEnumerable)_object).Sort();
                 });
             }

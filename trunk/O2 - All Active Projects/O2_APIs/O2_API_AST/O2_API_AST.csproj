@@ -91,19 +91,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CSharp\FindLocationInAst.cs" />
+    <Compile Include="CSharp\O2MethodStream.cs" />
     <Compile Include="CSharp\O2MappedAstData.cs" />
     <Compile Include="CSharp\O2AstResolver.cs" />
     <Compile Include="CSharp\O2AstVisitor.cs" />
     <Compile Include="ExtensionMethods\BidirectionalGraph_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CodeDom_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\CSharp\AstResolve_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\AstResolve_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\AbstractNode_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\CompilationUnit_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CSharp\LocalVariableDeclaration_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CSharp\MethodDeclaration_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CSharp\MemberReferenceExpression_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\IAstVisitor_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2GraphNode_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\O2MappedAstData_ExtensionMethods.cs" />
     <Compile Include="Graph\AstMethodFinder.cs" />
     <Compile Include="Graph\GraphAstVisitor.cs" />
     <Compile Include="Graph\O2GraphNode.cs" />
+    <Compile Include="Visitors\FindIdentifierUsage.cs" />
     <Compile Include="Visitors\GetAllINodes.cs" />
     <Compile Include="Visitors\MapAstToDom.cs" />
     <Compile Include="Visitors\MapAstToNRefactory.cs" />

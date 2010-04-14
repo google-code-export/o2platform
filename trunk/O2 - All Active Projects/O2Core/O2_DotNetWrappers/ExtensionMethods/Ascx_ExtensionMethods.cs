@@ -6,6 +6,7 @@ using O2.DotNetWrappers.Windows;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using System.Collections;
+using O2.DotNetWrappers.DotNet;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -186,12 +187,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return add_SplitContainer(control, false, false, false);
         }
 
-        public static SplitContainer add_SplitContainer(this Control control, bool setOrientationToHorizontal,
+        public static SplitContainer add_SplitContainer(this Control control, bool setOrientationToVertical,
                                                         bool setDockStyleoFill, bool setBorderStyleTo3D)
         {
             return add_SplitContainer(
                 control,
-                (setOrientationToHorizontal) ? Orientation.Horizontal : Orientation.Vertical,
+                (setOrientationToVertical) ? Orientation.Vertical : Orientation.Horizontal,
                 setDockStyleoFill,
                 setBorderStyleTo3D);
         }
@@ -323,8 +324,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
             where T2 : Control
         {
             var controls = control.add_1x1(title1, title2);
-            controls[0].add_Control<T1>();
-            controls[1].add_Control<T2>();
+            controls[0] = controls[0].add_Control<T1>();
+            controls[1] = controls[1].add_Control<T2>();
             return controls;
         }
 
@@ -430,20 +431,26 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                                            string title_3, bool verticalSplit, int spliterDistance_1,
                                                            int spliterDistance_2)
         {
-            var tempPanel = new Panel();
-            SplitContainer splitControl_2 = tempPanel.add_SplitContainer(
-                !verticalSplit, //setOrientationToHorizontal
-                true, // setDockStyleoFill
-                true); // setBorderStyleTo3D			
-            splitControl_2.SplitterDistance = spliterDistance_2;
-            GroupBox groupBox_2 = splitControl_2.Panel1.add_GroupBox(title_2);
-            GroupBox groupBox_3 = splitControl_2.Panel2.add_GroupBox(title_3);
+            return (List<Control> )control.invokeOnThread(
+                () =>
+                {
+                    var tempPanel = new Panel();
+                    tempPanel.Width = control.Width;
+                    tempPanel.Height = control.Height;
+                    SplitContainer splitControl_2 = tempPanel.add_SplitContainer(
+                        !verticalSplit, //setOrientationToHorizontal
+                        true, // setDockStyleoFill
+                        true); // setBorderStyleTo3D			
+                    splitControl_2.SplitterDistance = spliterDistance_2;
+                    GroupBox groupBox_2 = splitControl_2.Panel1.add_GroupBox(title_2);
+                    GroupBox groupBox_3 = splitControl_2.Panel2.add_GroupBox(title_3);
 
-            Control groupBox_1 = control.add_SplitContainer_1x1(title_1, splitControl_2, verticalSplit,
-                                                                spliterDistance_1);
+                    Control groupBox_1 = control.add_SplitContainer_1x1(title_1, splitControl_2, verticalSplit,
+                                                                        spliterDistance_1);
 
-            var controls = new List<Control> {groupBox_1, groupBox_2, groupBox_3};
-            return controls;
+                    var controls = new List<Control> { groupBox_1, groupBox_2, groupBox_3 };
+                    return controls;
+                });
         }
 
         public static List<Control> add_SplitContainer_2x2(this Control control, string title_1, string title_2,
@@ -763,7 +770,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static TreeNode add_Node(this TreeNode treeNode, object textAndTag)
         {
-            if (treeNode != null)
+            if (treeNode != null && textAndTag != null)
                 return treeNode.add_Node(textAndTag.str(), textAndTag);
             return null;
         }
@@ -973,7 +980,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             if (eventName.starts("on").isFalse())
                 return treeView.getEventHandlers("on" + eventName);
             return null;
-        }
+        }        
 
         public static bool hasEventHandler(this TreeView treeView, string eventName)
         {
@@ -1289,26 +1296,65 @@ namespace O2.DotNetWrappers.ExtensionMethods
         
         public static TreeView removeEventHandlers(this TreeView treeView, string eventHandlerToRemove)
         {
-            var eventHandlers = treeView.getEventHandlers(eventHandlerToRemove);
-            if (eventHandlers != null)
-                foreach (TreeViewCancelEventHandler eventHandler in eventHandlers)
-                    treeView.BeforeExpand -= eventHandler;
-            return treeView;
+            if (treeView == null)
+                return null;
+            var eventHandlers = treeView.getEventHandlers(eventHandlerToRemove);            
+            return treeView.removeEventHandlers(eventHandlerToRemove, eventHandlers.toList());                        
         }
-
+       
         public static TreeView removeEventHandlers<T>(this TreeView treeView, string eventHandlerToRemove)
         {
             var eventHandlers = treeView.getEventHandlers(eventHandlerToRemove);
             if (eventHandlers != null)
             {
-                foreach (TreeViewCancelEventHandler eventHandler in eventHandlers)
+                var eventsToRemove = new List<Delegate>();
+                foreach (MulticastDelegate eventHandler in eventHandlers)
                     if (eventHandler.Target.typeFullName().contains(typeof(T).FullName))
-                        treeView.BeforeExpand -= eventHandler;
+                        eventsToRemove.add(eventHandler);
+                treeView.removeEventHandlers(eventHandlerToRemove,eventsToRemove);
+                //treeView.BeforeExpand -= eventHandler;                    
             }
             eventHandlers = treeView.getEventHandlers(eventHandlerToRemove);
             "After remove, there are {0} '{1}' events mapped".format(
                 (eventHandlers != null) ? eventHandlers.Length : 0,
                 eventHandlerToRemove).debug();
+            return treeView;
+        }
+
+        private static TreeView removeEventHandlers(this TreeView treeView, string eventHandlerToRemove, List<Delegate> eventsToRemove)
+        {
+            if (eventsToRemove != null)
+                foreach (var eventHandler in eventsToRemove)
+                {
+                    var eventDelegate = (MulticastDelegate)treeView.field(eventHandlerToRemove);
+                    if (eventDelegate == null)
+                        eventDelegate = (MulticastDelegate)treeView.field("on" + eventHandlerToRemove);
+                    if (eventDelegate == null)
+                        "in removeEventHandlers could not find MulticastDelegate for: {0}".format(eventHandlerToRemove).error();
+                    else
+                    {
+                        var newList = Delegate.Remove(eventDelegate, eventHandler);
+                        treeView.setEventHandlers(eventHandlerToRemove, newList);
+                        //   var eventDelegate = (MulticastDelegate)treeView.field(eventName);
+                        //   eventDelegate.invoke("RemoveImpl", eventHandler);
+                        //var currentEvents = treeView.getEventHandlers(eventHandlerToRemove);
+                        //treeView.BeforeExpand -= eventHandler;                    
+                    }
+                }
+            return treeView;
+        }
+
+        public static TreeView setEventHandlers(this TreeView treeView, string eventName, Delegate newValue)
+        {
+            var fieldInfo = PublicDI.reflection.getField(typeof(TreeView), eventName);
+            if (fieldInfo == null)
+                fieldInfo = PublicDI.reflection.getField(typeof(TreeView), "on" + eventName);
+            if (fieldInfo != null)
+            {
+                PublicDI.reflection.setField(fieldInfo, treeView, newValue);
+            }
+            else
+                "could not find event name: {0}".format(eventName).error();
             return treeView;
         }
 
@@ -1426,12 +1472,58 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return contextMenu;
         }
 
-        public static ToolStripMenuItem add(this ContextMenuStrip contextMenu, string text, Action<ToolStripMenuItem> onClick)
+        public static ToolStripMenuItem add_MenuItem(this ContextMenuStrip contextMenu, string text)
+        {
+            return contextMenu.add_MenuItem(text, () => { });
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this ContextMenuStrip contextMenu, string text, MethodInvoker onClick)
+        {
+            return contextMenu.add_MenuItem(text, (item) => onClick());
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this ContextMenuStrip contextMenu, string text, Action<ToolStripMenuItem> onClick)
         {
             var menuItem = new ToolStripMenuItem {Text = text};
             contextMenu.Items.Add(menuItem);
-            menuItem.Click += (sender, e) => onClick(menuItem);
+            menuItem.Click += (sender, e) => O2Thread.mtaThread(() => onClick(menuItem));
             return menuItem;
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this ToolStripMenuItem menuItem, string text)
+        {
+            return menuItem.add_MenuItem(text, true);
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this ToolStripMenuItem menuItem, string text, bool returnParentMenuItem)
+        {
+            return menuItem.add_MenuItem(text, returnParentMenuItem, () => { });
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this ToolStripMenuItem menuItem, string text, MethodInvoker onClick)
+        {
+            return menuItem.add_MenuItem(text, true, onClick);
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this ToolStripMenuItem menuItem, string text, bool returnParentMenuItem, MethodInvoker onClick)
+        {
+            return menuItem.add_MenuItem(text, returnParentMenuItem, (item) => onClick());
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this ToolStripMenuItem menuItem, string text, Action<ToolStripMenuItem> onClick)
+        {
+            return menuItem.add_MenuItem(text, true, onClick);
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this ToolStripMenuItem menuItem, string text, bool returnParentMenuItem, Action<ToolStripMenuItem> onClick)
+        {
+            var clildMenuItem = new ToolStripMenuItem { Text = text };            
+            clildMenuItem.Click += 
+                (sender, e) => O2Thread.mtaThread(()=> onClick(menuItem)); 
+            menuItem.DropDownItems.Add(clildMenuItem);
+            if (returnParentMenuItem)
+                return menuItem;
+            return clildMenuItem;
         }
         #endregion
 

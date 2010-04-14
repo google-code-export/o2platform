@@ -38,6 +38,7 @@ using O2.Views.ASCX.Ascx.MainGUI;
 using O2.External.IE.ExtensionMethods;
 using O2.Views.ASCX.DataViewers;
 using O2.Views.ASCX.CoreControls;
+using O2.API.AST.ExtensionMethods.CSharp;
 
 namespace O2.XRules.Database.O2Utils
 {
@@ -64,7 +65,7 @@ namespace O2.XRules.Database.O2Utils
         public bool AutoSaveOnCompileSuccess { get; set; }        
         public string AutoSaveDir { get; set; }
 		public int width = 300;
-		public int height = 100;
+		public int height = 300;
         public bool ExecuteOnEnter { get; set; }
         public object ReturnData { get; set; }
 		public MethodInvoker onCompilationOk {get ;set;}
@@ -124,7 +125,7 @@ namespace O2.XRules.Database.O2Utils
         {
         	// create controls
 
-            var groupBoxes = this.add_1x1("Command To Execute", "Invoke and Result", false, this.Width - 150);   
+            var groupBoxes = this.add_1x1("Command To Execute", "Invoke and Result", true, this.Width - 150);   
         	
         	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();
             
@@ -177,18 +178,18 @@ namespace O2.XRules.Database.O2Utils
         	
         	commandsToExecute.textArea().KeyUp+= (sender,e) => handlePressedKeys(e);
             commandsToExecute.textArea().KeyEventHandler += handleKeyEventHandler;
-        	contextMenu.add("execute",(menuitem)=> execute());      
-        	contextMenu.add("save",(menuitem)=> saveScript());      
-        	contextMenu.add("force compilation",(menuitem)=> forceCompilation());     
-        	contextMenu.add("replace with generated source code",(menuitem)=> replaceMainCodeWithGeneratedSource());
-        	contextMenu.add("show/hide generated source code",(menuitem)=> swapGeneratedCodeViewMode());            
-            contextMenu.add("enable /disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter );
-            contextMenu.add("show Log Viewer", (menuitem) => showLogViewer());
-            contextMenu.add("disable / enabled Auto compile on code change", (menuitem) => AutoCompileOnCodeChange = !AutoCompileOnCodeChange);
-            contextMenu.add("enable / disable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = ! AutoSaveOnCompileSuccess);
-            contextMenu.add("show auto saved scripts", (menuitem) => showAutoSavedScripts());
-            contextMenu.add("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
-            contextMenu.add("disable / enable 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = !commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace);
+            contextMenu.add_MenuItem("execute", (menuitem) => execute());
+            contextMenu.add_MenuItem("save", (menuitem) => saveScript());
+            contextMenu.add_MenuItem("force compilation", (menuitem) => forceCompilation());
+            contextMenu.add_MenuItem("replace with generated source code", (menuitem) => replaceMainCodeWithGeneratedSource());
+            contextMenu.add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode());
+            contextMenu.add_MenuItem("enable /disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter);
+            contextMenu.add_MenuItem("show Log Viewer", (menuitem) => showLogViewer());
+            contextMenu.add_MenuItem("disable / enabled Auto compile on code change", (menuitem) => AutoCompileOnCodeChange = !AutoCompileOnCodeChange);
+            contextMenu.add_MenuItem("enable / disable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = !AutoSaveOnCompileSuccess);
+            contextMenu.add_MenuItem("show auto saved scripts", (menuitem) => showAutoSavedScripts());
+            contextMenu.add_MenuItem("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
+            contextMenu.add_MenuItem("disable / enable 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = !commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace);
      	}        	     	
 	     		     	
 	    public void setCompilerEnvironment()
@@ -415,15 +416,19 @@ namespace O2.XRules.Database.O2Utils
      	
      	public void saveScript()
      	{
-     		var defaultH2ScriptFolder = @"C:\O2\_XRules_Local\H2Scripts";
-     		Files.checkIfDirectoryExistsAndCreateIfNot(defaultH2ScriptFolder);
-     		var targetFile = O2Forms.askUserForFileToSave(defaultH2ScriptFolder,".h2");
-     		if (targetFile.valid())
-     		{
-     			var h2Script = new H2(commandsToExecute.get_Text());
-     			h2Script.save(targetFile);
-     		}
-     		this.info("target: {0}", targetFile);
+            this.invokeOnThread(
+                () =>
+                {
+                    var defaultH2ScriptFolder = @"C:\O2\_XRules_Local\H2Scripts";
+                    Files.checkIfDirectoryExistsAndCreateIfNot(defaultH2ScriptFolder);
+                    var targetFile = O2Forms.askUserForFileToSave(defaultH2ScriptFolder, ".h2");
+                    if (targetFile.valid())
+                    {
+                        var h2Script = new H2(commandsToExecute.get_Text());
+                        h2Script.save(targetFile);
+                    }
+                    this.info("target: {0}", targetFile);
+                });
      	}
 
         public void swapGeneratedCodeViewMode()

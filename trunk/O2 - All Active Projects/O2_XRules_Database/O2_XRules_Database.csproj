@@ -355,6 +355,7 @@
     <None Include="_Rules\Windows Utils\ascx_Services_Stop.cs.o2">
       <SubType>UserControl</SubType>
     </None>
+    <None Include="_Rules\_UnderDev\PoCs\Load CSharp files and show methods declarations and references.h2" />
     <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method.h2" />
     <None Include="_Rules\_UnderDev\PoCs\view code in AST with code expantion.h2" />
     <None Include="_Rules\_UnderDev\PoCs\view code in AST with code usage %281 level down%29.h2" />
@@ -428,6 +429,10 @@
     <ProjectReference Include="..\..\SourceCode_3rdParty_Dlls\Microsoft_MPL\Misc_Microsoft_MPL_Libs\O2_Misc_Microsoft_MPL_Libs.csproj">
       <Project>{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}</Project>
       <Name>O2_Misc_Microsoft_MPL_Libs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_APIs\O2_API_AST\O2_API_AST.csproj">
+      <Project>{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}</Project>
+      <Name>O2_API_AST</Name>
     </ProjectReference>
     <ProjectReference Include="..\O2_APIs\O2_API_Visualization\O2_API_Visualization.csproj">
       <Project>{7226283F-7C31-4EBB-9940-97AB0F676319}</Project>

@@ -8,7 +8,7 @@ using ICSharpCode.SharpDevelop.Dom;
 using O2.Kernel.ExtensionMethods;
 using O2.API.AST.CSharp;
 
-namespace O2.API.AST.ExtensionMethods.CSharp
+namespace O2.API.AST.ExtensionMethods
 {
     public static class AstResolve_ExtensionMethods
     {
