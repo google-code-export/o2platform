@@ -59,7 +59,7 @@ namespace O2.Tool.SearchEngine.Ascx
                         
             this.invokeOnThread(
                 () => lbSearchResultsStats.Text =
-                        String.Format("{0} and returned {1} matches", timer.timeSpanString, tsrSearchResults.Count));
+                        String.Format("{0} and returned {1} matches", timer.TimeSpanString, tsrSearchResults.Count));
 
             // show Results
             showResults(tsrSearchResults);

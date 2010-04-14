@@ -19,6 +19,11 @@ namespace O2.API.AST.Visitors
             AllNodes = new List<INode>();
             NodesByType = new Dictionary<string, List<INode>>();
         }
+        
+        public GetAllINodes(CompilationUnit compilationUnit) : this()
+        {
+        	compilationUnit.AcceptVisitor(this,null);
+        }
 
         protected override void BeginVisit(INode node)
         {

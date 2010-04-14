@@ -8,6 +8,7 @@ using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
@@ -39,14 +40,14 @@ namespace O2.Script
     	
     	public static void addMenu(O2Gui targetGui)
     	{
-    		var menu = targetGui.add_Menu();
+    		var menu = targetGui.add_ContextMenu();
     		
     		// create top level menus
-    		var fileMenu = menu.add_MenuItem("File");
-    		var editMenu = menu.add_MenuItem("Edit");
-    		var wizardsMenu = menu.add_MenuItem("Wizards");
-    		var modulesMenu = menu.add_MenuItem("Modules");
-    		var helpMenu = menu.add_MenuItem("Help");
+            var fileMenu = menu.add_MenuItem("File");
+            var editMenu = menu.add_MenuItem("Edit");
+            var wizardsMenu = menu.add_MenuItem("Wizards");
+            var modulesMenu = menu.add_MenuItem("Modules");
+            var helpMenu = menu.add_MenuItem("Help");
     		
     		// fileMenu menu items
     		fileMenu.add_MenuItem("New");

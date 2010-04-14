@@ -159,7 +159,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static List<T> toList<T>(this IEnumerable<T> collection)
         {
-            return collection.ToList();
+            return (collection != null) ? collection.ToList() : null;
         }
     }
 }

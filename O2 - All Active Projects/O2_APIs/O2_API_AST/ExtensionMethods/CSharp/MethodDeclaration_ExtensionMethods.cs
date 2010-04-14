@@ -11,7 +11,56 @@ using O2.DotNetWrappers.ExtensionMethods;
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
 	public static class MethodDeclaration_ExtensionMethods
-	{     
+    {
+        #region create
+
+        public static MethodDeclaration add_Method(this TypeDeclaration typeDeclaration, string methodName, BlockStatement body)
+        {
+            return typeDeclaration.add_Method(null, body);
+        }
+
+        public static MethodDeclaration add_Method(this TypeDeclaration typeDeclaration, string methodName, Dictionary<string, object> invocationParameters, BlockStatement body)
+        {
+            var newMethod = new MethodDeclaration
+            {
+                Name = methodName,
+                //Modifier = Modifiers.None | Modifiers.Public | Modifiers.Static,
+                Modifier = Modifiers.None | Modifiers.Public,
+                Body = body
+            };
+            newMethod.setReturnType();
+            if (invocationParameters != null)
+
+                foreach (var invocationParameter in invocationParameters)
+                {
+                    var parameterType = new TypeReference(
+                        (invocationParameter.Value != null && invocationParameter.Key != "returnData")
+                        ? invocationParameter.Value.typeFullName()
+                        : "System.Object", true);
+                    var parameter = new ParameterDeclarationExpression(parameterType, invocationParameter.Key);
+                    newMethod.Parameters.Add(parameter);
+
+                }
+            typeDeclaration.AddChild(newMethod);
+            return newMethod;
+        }
+
+        public static TypeReference setReturnType(this MethodDeclaration methodDeclaration)
+        {
+            var blockStatement = methodDeclaration.Body;
+            if (false == blockStatement.hasReturnStatement())
+                methodDeclaration.TypeReference = new TypeReference("void", true);
+            else
+            {
+                var returnValue = blockStatement.getLastReturnValue() ?? new object();
+                methodDeclaration.TypeReference = new TypeReference(returnValue.typeFullName(), true);
+            }
+            return methodDeclaration.TypeReference;
+        }
+
+        #endregion
+
+        #region query
 
         public static List<MethodDeclaration> methods(this TypeDeclaration typeDeclaration)
         {
@@ -113,8 +162,17 @@ namespace O2.API.AST.ExtensionMethods.CSharp
         {
             var astVisitors = new AstVisitors();
             methodDeclaration.AcceptVisitor(astVisitors, null);
-            return astVisitors.invocationExpressions; 
+            return astVisitors.invocationExpressions;
         }
+
+        public static bool validBody(this MethodDeclaration methodDeclaration)
+        {
+            return (methodDeclaration.Body != null && methodDeclaration.Body.Children != null && methodDeclaration.Body.Children.Count > 0);
+        }
+
+        #endregion
+
+        #region sourcecode
 
         public static string sourceCode(this MethodDeclaration methodDeclaration, string sourceCodeFile)
         {
@@ -124,5 +182,14 @@ namespace O2.API.AST.ExtensionMethods.CSharp
                             : startLine + 1;
             return sourceCodeFile.fileSnippet(startLine - 1, endLine);
         }
-	}
+
+        
+        public static Location firstLineOfCode(this MethodDeclaration methodDeclaration)
+        {
+            if (methodDeclaration.validBody())
+                return methodDeclaration.Body.Children[0].StartLocation;
+            return new Location(0, 0);
+        }
+        #endregion
+    }
 }

@@ -275,7 +275,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
-        public static T removeOthers<T>(this Control hostControl, T controlToKeep) where T : Control
+        public static T removeOtherControls<T>(this Control hostControl, T controlToKeep) where T : Control
         {
             return (T)hostControl.invokeOnThread(
                 () =>
@@ -520,8 +520,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                 splitContainer.Panel1.add(controlToInject);
                                 splitContainer.Panel2.add(controlToWrap);
                                 splitContainer.FixedPanel = FixedPanel.Panel1;
-                                if (splitterDistance > -1)
+                                try
+                                {
+                                    //if (splitterDistance > -1 && splitterDistance > splitContainer.Panel1MinSize && 
+                                    //                             splitterDistance < ( splitContainer.Width -  splitContainer.Panel2MinSize))                                    
                                     splitContainer.SplitterDistance = splitterDistance;
+                                }
+                                catch (Exception ex)
+                                {
+                                    "Could not set Splitter Distance to value {0} : {1}".format(splitterDistance,ex.Message).error();
+                                }
                                 splitContainer.Orientation = (location == AnchorStyles.Top) ? Orientation.Horizontal : Orientation.Vertical;
                                 break;
 

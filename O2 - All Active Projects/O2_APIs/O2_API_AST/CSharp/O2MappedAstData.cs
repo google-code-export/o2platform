@@ -9,15 +9,20 @@ using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
 using O2.DotNetWrappers.ExtensionMethods;
 using ICSharpCode.SharpDevelop.Dom;
+using O2.API.AST.CSharp;
+
 
 namespace O2.API.AST.CSharp
 {
     public class O2MappedAstData
-    {
+    {    	
         public O2AstResolver O2AstResolver { get; set; }
         public MapAstToDom MapAstToDom { get; set; }
         public MapAstToNRefactory MapAstToNRefactory { get; set; }
-
+        
+		public Dictionary<string, GetAllINodes> FileToINodes { get; set; }
+		public Dictionary<string, CompilationUnit> FileToCompilationUnit { get; set; }
+		
         /*//from MapAstToDom
         public Dictionary<CompilationUnit, List<CodeNamespace>> CompilationUnitToNameSpaces { get; set; }
         public Dictionary<MethodDeclaration, CodeMemberMethod> MethodsAstToDom { get; set; }
@@ -39,20 +44,52 @@ namespace O2.API.AST.CSharp
             O2AstResolver = new O2AstResolver();
             MapAstToDom = new MapAstToDom();
             MapAstToNRefactory = new MapAstToNRefactory(O2AstResolver.myProjectContent);
+			FileToINodes = new Dictionary<string, GetAllINodes>();            
+			FileToCompilationUnit = new Dictionary<string,CompilationUnit>();            
         }
 
-        public void loadCode(string code)
-        {            
-            code = (code.fileExists()) ? code.fileContents() : code;
-            var parser = code.csharpAst();
-            loadCompilationUnit(parser.CompilationUnit);
-        }
-
-        public void loadCompilationUnit(CompilationUnit compilationUnit)
+        public void loadFile(string fileOrCode)
         {
-            O2AstResolver.setCurrentCompilationUnit(compilationUnit);            
+            var codeToLoad = "";
+            var filePath = "";
+            try
+            {
+                // resolve filename and get code to process                
+                if (fileOrCode.fileExists())
+                {
+                    codeToLoad = fileOrCode.fileContents();
+                    filePath = fileOrCode;
+                }
+                else
+                {
+                    codeToLoad = fileOrCode;
+                    filePath = fileOrCode.save();
+                }
+                // get compilation unit
+                var parser = codeToLoad.csharpAst();
+                var compilationUnit = parser.CompilationUnit;
+                //processCompilationUnit
+                loadCompilationUnit(filePath, compilationUnit);
+            }
+            catch (Exception ex)
+            {
+                O2.Kernel.PublicDI.log.ex(ex,"in O2MappedAstData.LoadFile: " + filePath);
+            }
+		}                            
+        
+
+        public void loadCompilationUnit(string filePath, CompilationUnit compilationUnit)
+        {        	
+        	// map all INodes
+	        FileToINodes.add(filePath,new GetAllINodes(compilationUnit));
+            FileToCompilationUnit.add(filePath,compilationUnit);
+            //Map AsT to DOM (System.DOM classes)
             MapAstToDom.loadCompilationUnit(compilationUnit);
+            //Map AST to NRefactory (ICompilationUnit, IClass, IMethod)
             MapAstToNRefactory.loadCompilationUnit(compilationUnit);
+
+			// update variable for CodeComplete
+			O2AstResolver.setCurrentCompilationUnit(compilationUnit);                        
             var iCompilationUnit = MapAstToNRefactory.CompilationUnitToICompilationUnit[compilationUnit];            
             O2AstResolver.myProjectContent.UpdateCompilationUnit(null, iCompilationUnit, "");
         }

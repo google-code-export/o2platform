@@ -21,12 +21,13 @@ namespace O2.API.AST.CSharp
         public Dictionary<string, CompilationUnit> parsedCompilationUnits = new Dictionary<string, CompilationUnit>();
 
         public O2AstResolver()
-        {
-            myProjectContent.AddReferencedContent(pcRegistry.Mscorlib);
+        {            
         }
 
         public void addReference(string assemblyToLoad)
         {
+            if (myProjectContent.NamespaceExists("System").isFalse())
+                myProjectContent.AddReferencedContent(pcRegistry.Mscorlib);
             IProjectContent referenceProjectContent = pcRegistry.GetProjectContentForReference(assemblyToLoad, assemblyToLoad);
             if (referenceProjectContent == null)
                 "referenceProjectContent was null".error();

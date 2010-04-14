@@ -137,7 +137,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.compileSettingsToolStripMenuItem,
             this.enableCodeCompleteToolStripMenuItem});
             this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(354, 246);
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(354, 268);
             this.menuStripForSourceEdition.Opening += new System.ComponentModel.CancelEventHandler(this.menuStripForSourceEdition_Opening);
             // 
             // compileToolStripMenuItem

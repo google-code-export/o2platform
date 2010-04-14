@@ -11,7 +11,7 @@ namespace O2.Kernel.ExtensionMethods
 
         public static string str(this object _object)
         {
-            return _object.ToString();
+            return (_object != null) ? _object.ToString() : "[null value]";
         }
         
         public static string str(this bool value, string trueValue, string falseValue)

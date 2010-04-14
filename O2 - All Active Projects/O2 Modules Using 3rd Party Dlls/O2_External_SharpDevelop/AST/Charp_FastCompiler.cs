@@ -12,6 +12,7 @@ using ICSharpCode.NRefactory;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
+using O2.API.AST.ExtensionMethods.CSharp;
 
 namespace O2.External.SharpDevelop.AST
 {
@@ -406,45 +407,11 @@ namespace O2.External.SharpDevelop.AST
         public object executeFirstMethod()
         {        	
         	var parametersValues = InvocationParameters.valuesArray();
-        	return executeFirstMethod(parametersValues);
-        }
+            var assembly = CompilerResults.CompiledAssembly;
+            return assembly.executeFirstMethod(ExecuteInStaThread, ExecuteInMtaThread, parametersValues);        	
+        }                       
         
-        public object executeFirstMethod(params object[] parameters)
-        {
-        	var assembly = CompilerResults.CompiledAssembly;
-        	if (assembly != null)
-        	{
-        		var methods = assembly.methods();
-                foreach(var method in methods)
-                    if (method.IsSpecialName == false)  // we need to do this since Properties get_ and set_ also look like methods
-        		//if (methods.Count >0)        		
-        		//{
-        		    {
-                        if (ExecuteInStaThread)
-                            return O2Thread.staThread(() => executeMethod(method, parameters));
-                        if (ExecuteInMtaThread)
-                            return O2Thread.mtaThread(() => executeMethod(method, parameters));
-                        return executeMethod(method, parameters);
-        			    
-        		    }
-        	}
-        	return null;
-        }       
         
-        public object executeMethod(MethodInfo method, params object[] parameters)
-        {
-            try
-            {
-                if (method.parameters().size() == parameters.size())
-                    return method.invoke(parameters);
-                return method.invoke();
-            }
-            catch (Exception ex)
-            {
-                ex.log("in CSharp_FastCompiler.executeMethod");
-                return null;
-            }
-        }
 
         /*public string processedCode()
         {

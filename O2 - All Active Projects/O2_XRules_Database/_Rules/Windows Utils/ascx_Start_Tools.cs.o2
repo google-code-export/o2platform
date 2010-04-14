@@ -58,7 +58,7 @@ namespace O2.Script
     		dataGridView.onDrop(loadFile);
     		
     		var menu  = dataGridView.add_ContextMenu();
-    		menu.add("save", (menuItem) => saveCurrentList());
+            menu.add_MenuItem("save", (menuItem) => saveCurrentList());
     		loadList();    		
      	}   
 		

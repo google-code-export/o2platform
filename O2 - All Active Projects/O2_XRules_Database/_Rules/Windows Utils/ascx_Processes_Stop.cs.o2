@@ -53,7 +53,7 @@ namespace O2.Script
 						 dataGridView.Columns.Clear();
 
                          var menu = dataGridView.add_ContextMenu();
-                         menu.add("refresh", (menuItem) => loadProcessData());
+                         menu.add_MenuItem("refresh", (menuItem) => loadProcessData());
                          //menu.add("close", (menuItem) => ParentForm.Close());
 
 			        	 //dataGridView.SelectionChanged+=(sender,e)=> dataGridView.ClearSelection();

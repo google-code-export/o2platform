@@ -43,6 +43,7 @@ namespace O2.API.AST.Visitors
         public Dictionary<IMethod, NRefactoryAST.ConstructorDeclaration> IMethodToConstructorDeclaration  { get; set; } 
 
         //internal variables
+        IProjectContent defaultProjectContent;
 		DefaultCompilationUnit cu;
 		DefaultUsingScope currentNamespace;
 		Stack<DefaultClass> currentClass = new Stack<DefaultClass>();
@@ -55,7 +56,7 @@ namespace O2.API.AST.Visitors
 		}
 
         private MapAstToNRefactory()
-        {
+        {                    
             CompilationUnitToICompilationUnit = new Dictionary<NRefactoryAST.CompilationUnit, ICompilationUnit>();            
             TypeDeclarationToIClass = new Dictionary<NRefactoryAST.TypeDeclaration, IClass>();
             IClassToTypeDeclaration = new Dictionary<IClass, NRefactoryAST.TypeDeclaration>();
@@ -65,10 +66,10 @@ namespace O2.API.AST.Visitors
             IMethodToConstructorDeclaration = new Dictionary<IMethod, NRefactoryAST.ConstructorDeclaration>();
             
         }
-
-        public MapAstToNRefactory(IProjectContent projectContent) : this()
+        
+        public MapAstToNRefactory(IProjectContent projectContent): this()
 		{
-			cu = new DefaultCompilationUnit(projectContent);
+            defaultProjectContent = projectContent;
 		}
 		
         // DC
@@ -82,9 +83,11 @@ namespace O2.API.AST.Visitors
         }*/
         //DC
         public void loadCompilationUnit(NRefactoryAST.CompilationUnit compilationUnit)
-        {            
+        {
+            cu = new DefaultCompilationUnit(defaultProjectContent);            
             compilationUnit.AcceptVisitor(this, null);
         }
+
         //DC
         public void mapCompilationUnit(NRefactoryAST.CompilationUnit compilationUnit, ICompilationUnit iCompilationUnit)
         {

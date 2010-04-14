@@ -24,7 +24,7 @@ namespace O2.XRules.Database._Rules.O2_Utils
 			this.Width = 600;
 			this.Height = 400;
 		
-			var controls = this.add_1x1("Panel","Inspector",true,200);
+			var controls = this.add_1x1("Panel","Inspector",false,200);
 			
 			panel = controls[0].add_Panel();
 			

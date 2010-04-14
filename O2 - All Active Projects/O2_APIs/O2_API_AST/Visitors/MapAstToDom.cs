@@ -1131,81 +1131,91 @@ namespace O2.API.AST.Visitors // was ICSharpCode.NRefactory.Visitors
 		
 		public override object VisitBinaryOperatorExpression(BinaryOperatorExpression binaryOperatorExpression, object data)
 		{
-			CodeBinaryOperatorType op = CodeBinaryOperatorType.Add;
-			switch (binaryOperatorExpression.Op) {
-				case BinaryOperatorType.Add:
-					op = CodeBinaryOperatorType.Add;
-					break;
-				case BinaryOperatorType.BitwiseAnd:
-					op = CodeBinaryOperatorType.BitwiseAnd;
-					break;
-				case BinaryOperatorType.BitwiseOr:
-					op = CodeBinaryOperatorType.BitwiseOr;
-					break;
-				case BinaryOperatorType.LogicalAnd:
-					op = CodeBinaryOperatorType.BooleanAnd;
-					break;
-				case BinaryOperatorType.LogicalOr:
-					op = CodeBinaryOperatorType.BooleanOr;
-					break;
-				case BinaryOperatorType.Divide:
-				case BinaryOperatorType.DivideInteger:
-					op = CodeBinaryOperatorType.Divide;
-					break;
-				case BinaryOperatorType.GreaterThan:
-					op = CodeBinaryOperatorType.GreaterThan;
-					break;
-				case BinaryOperatorType.GreaterThanOrEqual:
-					op = CodeBinaryOperatorType.GreaterThanOrEqual;
-					break;
-				case BinaryOperatorType.Equality:
-				case BinaryOperatorType.InEquality:
-					op = CodeBinaryOperatorType.ValueEquality;
-					break;
-				case BinaryOperatorType.LessThan:
-					op = CodeBinaryOperatorType.LessThan;
-					break;
-				case BinaryOperatorType.LessThanOrEqual:
-					op = CodeBinaryOperatorType.LessThanOrEqual;
-					break;
-				case BinaryOperatorType.Modulus:
-					op = CodeBinaryOperatorType.Modulus;
-					break;
-				case BinaryOperatorType.Multiply:
-					op = CodeBinaryOperatorType.Multiply;
-					break;
-				case BinaryOperatorType.Subtract:
-					op = CodeBinaryOperatorType.Subtract;
-					break;
-				case BinaryOperatorType.ShiftLeft:
-				case BinaryOperatorType.ShiftRight:
-					// CodeDOM suxx
-					op = CodeBinaryOperatorType.Multiply;
-					break;
-				case BinaryOperatorType.ReferenceEquality:
-					op = CodeBinaryOperatorType.IdentityEquality;
-					break;
-				case BinaryOperatorType.ReferenceInequality:
-					op = CodeBinaryOperatorType.IdentityInequality;
-					break;
-					
-				case BinaryOperatorType.ExclusiveOr:
-					// CodeDom doesn't support ExclusiveOr
-					op = CodeBinaryOperatorType.BitwiseAnd;
-					break;
-			}
+            try
+            {
+                CodeBinaryOperatorType op = CodeBinaryOperatorType.Add;
+                switch (binaryOperatorExpression.Op)
+                {
+                    case BinaryOperatorType.Add:
+                        op = CodeBinaryOperatorType.Add;
+                        break;
+                    case BinaryOperatorType.BitwiseAnd:
+                        op = CodeBinaryOperatorType.BitwiseAnd;
+                        break;
+                    case BinaryOperatorType.BitwiseOr:
+                        op = CodeBinaryOperatorType.BitwiseOr;
+                        break;
+                    case BinaryOperatorType.LogicalAnd:
+                        op = CodeBinaryOperatorType.BooleanAnd;
+                        break;
+                    case BinaryOperatorType.LogicalOr:
+                        op = CodeBinaryOperatorType.BooleanOr;
+                        break;
+                    case BinaryOperatorType.Divide:
+                    case BinaryOperatorType.DivideInteger:
+                        op = CodeBinaryOperatorType.Divide;
+                        break;
+                    case BinaryOperatorType.GreaterThan:
+                        op = CodeBinaryOperatorType.GreaterThan;
+                        break;
+                    case BinaryOperatorType.GreaterThanOrEqual:
+                        op = CodeBinaryOperatorType.GreaterThanOrEqual;
+                        break;
+                    case BinaryOperatorType.Equality:
+                    case BinaryOperatorType.InEquality:
+                        op = CodeBinaryOperatorType.ValueEquality;
+                        break;
+                    case BinaryOperatorType.LessThan:
+                        op = CodeBinaryOperatorType.LessThan;
+                        break;
+                    case BinaryOperatorType.LessThanOrEqual:
+                        op = CodeBinaryOperatorType.LessThanOrEqual;
+                        break;
+                    case BinaryOperatorType.Modulus:
+                        op = CodeBinaryOperatorType.Modulus;
+                        break;
+                    case BinaryOperatorType.Multiply:
+                        op = CodeBinaryOperatorType.Multiply;
+                        break;
+                    case BinaryOperatorType.Subtract:
+                        op = CodeBinaryOperatorType.Subtract;
+                        break;
+                    case BinaryOperatorType.ShiftLeft:
+                    case BinaryOperatorType.ShiftRight:
+                        // CodeDOM suxx
+                        op = CodeBinaryOperatorType.Multiply;
+                        break;
+                    case BinaryOperatorType.ReferenceEquality:
+                        op = CodeBinaryOperatorType.IdentityEquality;
+                        break;
+                    case BinaryOperatorType.ReferenceInequality:
+                        op = CodeBinaryOperatorType.IdentityInequality;
+                        break;
 
-			System.Diagnostics.Debug.Assert(!binaryOperatorExpression.Left.IsNull);
-			System.Diagnostics.Debug.Assert(!binaryOperatorExpression.Right.IsNull);
+                    case BinaryOperatorType.ExclusiveOr:
+                        // CodeDom doesn't support ExclusiveOr
+                        op = CodeBinaryOperatorType.BitwiseAnd;
+                        break;
+                }
 
-			var cboe = new CodeBinaryOperatorExpression(
-				(CodeExpression)binaryOperatorExpression.Left.AcceptVisitor(this, data),
-				op,
-				(CodeExpression)binaryOperatorExpression.Right.AcceptVisitor(this, data));
-			if (binaryOperatorExpression.Op == BinaryOperatorType.InEquality) {
-				cboe = new CodeBinaryOperatorExpression(cboe, CodeBinaryOperatorType.ValueEquality, new CodePrimitiveExpression(false));
-			}
-			return cboe;
+                System.Diagnostics.Debug.Assert(!binaryOperatorExpression.Left.IsNull);
+                System.Diagnostics.Debug.Assert(!binaryOperatorExpression.Right.IsNull);
+
+                var cboe = new CodeBinaryOperatorExpression(
+                    (CodeExpression)binaryOperatorExpression.Left.AcceptVisitor(this, data),
+                    op,
+                    (CodeExpression)binaryOperatorExpression.Right.AcceptVisitor(this, data));
+                if (binaryOperatorExpression.Op == BinaryOperatorType.InEquality)
+                {
+                    cboe = new CodeBinaryOperatorExpression(cboe, CodeBinaryOperatorType.ValueEquality, new CodePrimitiveExpression(false));
+                }
+                return cboe;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in MapAstToDom.VisitBinaryOperatorExpression");
+                return null;
+            }
 		}
 		
 		public override object VisitParenthesizedExpression(ParenthesizedExpression parenthesizedExpression, object data)
@@ -1406,19 +1416,28 @@ namespace O2.API.AST.Visitors // was ICSharpCode.NRefactory.Visitors
 			methodReference = true;
 			CodeExpression methodInvoker = (CodeExpression)handler.AcceptVisitor(this, data);
 			methodReference = false;
-			if (!(methodInvoker is CodeObjectCreateExpression)) {
-				// we need to create an event handler here
-				methodInvoker = new CodeObjectCreateExpression(new CodeTypeReference("System.EventHandler"), methodInvoker);
-			}
-			
-			if (eventExpr is IdentifierExpression) {
-				AddStmt(new CodeAttachEventStatement(new CodeEventReferenceExpression(new CodeThisReferenceExpression(), ((IdentifierExpression)eventExpr).Identifier),
-				                                     methodInvoker));
-			} else {
-				MemberReferenceExpression fr = (MemberReferenceExpression)eventExpr;
-				AddStmt(new CodeAttachEventStatement(new CodeEventReferenceExpression((CodeExpression)fr.TargetObject.AcceptVisitor(this, data), fr.MemberName),
-				                                     methodInvoker));
-			}
+            if (methodInvoker == null)  // DC (error in 1416 when methodInvoker was null
+                "in MapAstToDom.AddEventHandler, methodInvoker == null".error();
+            else
+            {
+                if (!(methodInvoker is CodeObjectCreateExpression))
+                {
+                    // we need to create an event handler here
+                    methodInvoker = new CodeObjectCreateExpression(new CodeTypeReference("System.EventHandler"), methodInvoker);
+                }
+
+                if (eventExpr is IdentifierExpression)
+                {
+                    AddStmt(new CodeAttachEventStatement(new CodeEventReferenceExpression(new CodeThisReferenceExpression(), ((IdentifierExpression)eventExpr).Identifier),
+                                                         methodInvoker));
+                }
+                else
+                {
+                    MemberReferenceExpression fr = (MemberReferenceExpression)eventExpr;
+                    AddStmt(new CodeAttachEventStatement(new CodeEventReferenceExpression((CodeExpression)fr.TargetObject.AcceptVisitor(this, data), fr.MemberName),
+                                                         methodInvoker));
+                }
+            }
 		}
 		
 		public override object VisitAssignmentExpression(AssignmentExpression assignmentExpression, object data)
@@ -1771,14 +1790,24 @@ namespace O2.API.AST.Visitors // was ICSharpCode.NRefactory.Visitors
 			if (expressionList == null) {
 				return new CodeExpression[0];
 			}
-			CodeExpression[] list = new CodeExpression[expressionList.Count];
-			for (int i = 0; i < expressionList.Count; ++i) {
-				list[i] = (CodeExpression)((Expression)expressionList[i]).AcceptVisitor(this, null);
-				if (list[i] == null) {
-					list[i] = new CodePrimitiveExpression(0);
-				}
-			}
-			return list;
+            try
+            {
+                CodeExpression[] list = new CodeExpression[expressionList.Count];
+                for (int i = 0; i < expressionList.Count; ++i)
+                {
+                    list[i] = (CodeExpression)((Expression)expressionList[i]).AcceptVisitor(this, null);
+                    if (list[i] == null)
+                    {
+                        list[i] = new CodePrimitiveExpression(0);
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in MapAstToDom.GetExpressionList");
+                return new CodeExpression[0]; ;
+            }
 		}
 		
 		

@@ -9,7 +9,9 @@ namespace O2.Views.ASCX.ExtensionMethods
 {
     public static class WinForms_ExtensionMethods
     {
-		public static MenuStrip add_Menu(this Form form)
+        /*
+        #region MenuStrip and ToolStripMenuItem
+        public static MenuStrip add_Menu(this Form form)
 		{
 			var menuStrip = new MenuStrip();
 			form.Controls.Add(menuStrip);            
@@ -29,9 +31,13 @@ namespace O2.Views.ASCX.ExtensionMethods
 		    var clildMenuItem = new ToolStripMenuItem {Text = text};
 		    menuItem.DropDownItems.Add(clildMenuItem);
             return clildMenuItem;
-		}
-		
-		public static Control add_Ascx(this O2Gui o2Gui, Type controlType)
+        }
+        
+        #endregion
+        */
+        #region add Ascx
+
+        public static Control add_Ascx(this O2Gui o2Gui, Type controlType)
 		{
 			return (Control)(o2Gui.invokeOnThread(
 				()=> {
@@ -53,7 +59,11 @@ namespace O2.Views.ASCX.ExtensionMethods
 		public static void add_Ascx(this O2Gui o2Gui, Control control)
 		{
 			o2Gui.Controls.Add(control);
-		}
+        }
+
+        #endregion
+
+        #region show ascx in/as form
 
         public static Control showInForm(this string typeName, string name, int width, int height)
         {
@@ -100,11 +110,15 @@ namespace O2.Views.ASCX.ExtensionMethods
             return type.showInForm(title, width, height);
         }
 
+        #endregion
+
+/*        
+
         public static void viewProperties(this Object _object)
         {
             var propertyGrid = O2Gui.load<PropertyGrid>();
             propertyGrid.show(_object);                        
         }
-      
+  */    
     }
 }

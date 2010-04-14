@@ -155,26 +155,35 @@ namespace ICSharpCode.SharpDevelop.Dom
 		
 		public static ResolveResult GetResultFromDeclarationLine(IClass callingClass, IMethodOrProperty callingMember, int caretLine, int caretColumn, ExpressionResult expressionResult)
 		{
-			string expression = expressionResult.Expression;
-			if (callingClass == null) return null;
-			int pos = expression.IndexOf('(');
-			if (pos >= 0) {
-				expression = expression.Substring(0, pos);
-			}
-			expression = expression.Trim();
-//			if (!callingClass.BodyRegion.IsInside(caretLine, caretColumn)
-//			    && callingClass.ProjectContent.Language.NameComparer.Equals(expression, callingClass.Name))
-//			{
-//				return new TypeResolveResult(callingClass, callingMember, callingClass);
-//			}
-			if (expressionResult.Context != ExpressionContext.Type) {
-				if (callingMember != null
-				    && !callingMember.BodyRegion.IsInside(caretLine, caretColumn)
-				    && callingClass.ProjectContent.Language.NameComparer.Equals(expression, callingMember.Name))
-				{
-					return new MemberResolveResult(callingClass, callingMember, callingMember);
-				}
-			}
+            try
+            {
+                string expression = expressionResult.Expression;
+                if (callingClass == null) return null;
+                int pos = expression.IndexOf('(');
+                if (pos >= 0)
+                {
+                    expression = expression.Substring(0, pos);
+                }
+                expression = expression.Trim();
+                //			if (!callingClass.BodyRegion.IsInside(caretLine, caretColumn)
+                //			    && callingClass.ProjectContent.Language.NameComparer.Equals(expression, callingClass.Name))
+                //			{
+                //				return new TypeResolveResult(callingClass, callingMember, callingClass);
+                //			}
+                if (expressionResult.Context != ExpressionContext.Type)
+                {
+                    if (callingMember != null
+                        && !callingMember.BodyRegion.IsInside(caretLine, caretColumn)
+                        && callingClass.ProjectContent.Language.NameComparer.Equals(expression, callingMember.Name))
+                    {
+                        return new MemberResolveResult(callingClass, callingMember, callingMember);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                O2.Kernel.PublicDI.log.ex(ex, "in CtrlSpaceResolverHelper.GetResultFromDeclarationLine");
+            }
 			return null;
 		}
 		

@@ -8,7 +8,28 @@ using ICSharpCode.NRefactory;
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
     public static class UsingDeclaration_ExtensionMethods
-    {        
+    {
+        #region create        
+
+        public static UsingDeclaration add_Using(this CompilationUnit compilationUnit, string @namespace)
+        {
+            var newUsing = new UsingDeclaration(@namespace);
+            //compilationUnit.Children.add(newUsing);
+            //compilationUnit.Children.Insert(0, newUsing);
+            compilationUnit.insert(newUsing);
+            return newUsing;
+        }
+
+        /*public static CompilationUnit add_Using(this CompilationUnit compilationUnit, string usingNamespace)
+        {
+            var usingDeclaration = new UsingDeclaration(usingNamespace);
+            compilationUnit.insert(usingDeclaration);
+            return compilationUnit;
+        }*/
+
+        #endregion
+
+        #region query
         public static List<Using> usings(this IParser parser)
         {
             return parser.CompilationUnit.usings();
@@ -43,18 +64,6 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return null;
         }
 
-        public static IParser add_Using(this IParser parser, string @namespace)
-        {
-            parser.CompilationUnit.add_Using(@namespace);
-            return parser;
-        }
-
-        public static CompilationUnit add_Using(this CompilationUnit compilationUnit, string @namespace)
-        {
-            var newUsing = new UsingDeclaration(@namespace);
-            //compilationUnit.Children.add(newUsing);
-            compilationUnit.Children.Insert(0, newUsing);
-            return compilationUnit;
-        }        
+        #endregion
     }
 }

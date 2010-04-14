@@ -27,7 +27,8 @@ namespace O2.XRules.Database.O2Utils
 			script.commandsToExecute.textEditor().showInvalidLines(false);
 			//script.commandsToExecute.textEditor().showLineNumbers(false);
 			script.ExecuteOnEnter = true;
-			script.commandsToExecute.set_Text("hello");
+            script.onCompileExecuteOnce();
+			script.commandsToExecute.set_Text("hello".line());            
 		}
 	}
 }

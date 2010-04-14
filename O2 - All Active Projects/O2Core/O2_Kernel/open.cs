@@ -74,22 +74,35 @@ namespace O2.Kernel
             return browser;
         }
 
-        public static object graph()
+        public static object graphEditor()
         {
             var graphControlType = "O2_XRules_Database.exe".type("ascx_GraphWithInspector");
             return graphControlType.openControlAsForm("Graph with inspector", 1024, 600);
         }
 
-        public static object dev()
+        public static object devEnvironment()
         {
             var graphControlType = "O2_XRules_Database.exe".type("ascx_Panel_With_Inspector");
             return graphControlType.openControlAsForm("Panel with inspector", 1024, 600);
         }
 
+        public static object scriptEditor()
+        {
+            var graphControlType = "O2_Core_XRules.dll".type("ascx_XRules_Editor");
+            return graphControlType.openControlAsForm("XRules/Script Editor", 1024, 600);
+        }
+        
         public static object script()
         {
             var graphControlType = "O2_XRules_Database.exe".type("ascx_Simple_Script_Editor");
             return graphControlType.openControlAsForm("Simple Script Editor (Inspector)", 1024, 600);
+        }
+
+        public static object o2ObjectModel()
+        {
+            var graphControlType = "O2_Views_ASCX.dll".type("ascx_O2ObjectModel");
+            return graphControlType.openControlAsForm("O2 Object Model", 500, 400);
+        
         }
 
         public static Control viewAscx(string controlName)
