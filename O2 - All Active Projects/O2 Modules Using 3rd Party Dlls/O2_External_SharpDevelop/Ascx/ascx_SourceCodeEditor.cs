@@ -488,6 +488,11 @@ namespace O2.External.SharpDevelop.Ascx
         {
             enableCodeComplete();
         }
+
+        private void enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AutoBackUpOnCompileSucess = !AutoBackUpOnCompileSucess;
+        }
         
 
     }

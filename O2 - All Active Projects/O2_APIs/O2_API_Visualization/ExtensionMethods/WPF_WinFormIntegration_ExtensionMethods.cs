@@ -192,7 +192,7 @@ namespace O2.API.Visualization.ExtensionMethods
 		{
 			return (T)graphLayout.wpfInvoke(
     			()=>{
-    					var controlHost = graphLayout.add<WindowsFormsHost>(); 
+    					var controlHost = graphLayout.add_UIElement<WindowsFormsHost>(); 
 						controlHost.width(width);
 						controlHost.height(height);
 						var winFormsControl = (System.Windows.Forms.Control)typeof(T).ctor();	

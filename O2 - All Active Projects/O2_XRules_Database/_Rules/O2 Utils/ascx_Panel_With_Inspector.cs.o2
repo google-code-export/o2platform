@@ -31,9 +31,10 @@ namespace O2.XRules.Database._Rules.O2_Utils
 			//graph.testGraph();			
             inspector = controls[1].add_Script();
 
-            inspector.Code = "panel.clear();".line() + 
+            inspector.defaultCode = "panel.clear();".line() +                   // so that we don't get an autosave for this test code
                              "var textBox = panel.add_TextBox(true);".line() + 
                              "textBox.set_Text(\"hello world\");";
+            inspector.Code = inspector.defaultCode;             
             inspector.InvocationParameters.Add("panel", panel);
             inspector.InvocationParameters.Add("inspector", inspector);
             //inspector.enableCodeComplete();

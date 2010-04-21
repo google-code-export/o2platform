@@ -319,6 +319,39 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return control.add_SplitContainer_1x2(title1, title2, title3, align, distance1, distance2);
         }
 
+        public static List<Control> add_1x2(this Control control, string title1, string title2, string title3, bool verticalSplit)
+        {
+            return control.add_1x2(title1, title2, title3, verticalSplit, control.Height / 2, control.Width / 2);
+        }
+
+        public static List<Control> add_1x2<T1, T2, T3>(this Control control, bool verticalSplit)
+            where T1 : Control
+            where T2 : Control
+            where T3 : Control
+        {
+            return control.add_1x2<T1, T2, T3>(typeof(T1).Name, typeof(T2).Name, typeof(T3).Name, verticalSplit);
+        }
+
+        public static List<Control> add_1x2<T1, T2, T3>(this Control control, string title1, string title2, string title3)
+            where T1 : Control
+            where T2 : Control
+            where T3 : Control
+        {
+            return control.add_1x2<T1, T2, T3>(title1, title2, title3, true);
+        }
+
+        public static List<Control> add_1x2<T1, T2, T3>(this Control control, string title1, string title2, string title3, bool verticalSplit)
+            where T1 : Control
+            where T2 : Control
+            where T3 : Control
+        {
+            var controls = control.add_1x2(title1, title2, title3, verticalSplit);
+            controls[0] = controls[0].add_Control<T1>();
+            controls[1] = controls[1].add_Control<T2>();
+            controls[2] = controls[2].add_Control<T3>();
+            return controls;
+        }
+
         public static List<Control> add_1x1<T1, T2>(this Control control, string title1, string title2)
             where T1 : Control
             where T2 : Control
@@ -820,6 +853,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             if (treeNode != null)
                 treeNode.TreeView.clear(treeNode);
             return treeNode;
+        }
+
+        public static TreeNode selected(this TreeView treeView)
+        {
+            return treeView.current();
+        }
+
+        public static TreeNode selectedNode(this TreeView treeView)
+        {
+            return treeView.current();
         }
 
         public static TreeNode current(this TreeView treeView)

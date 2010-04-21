@@ -109,6 +109,8 @@ namespace O2.API.AST.ExtensionMethods
             return matches;
         }
 
+        
+
         public static T parent<T>(this INode iNode)
             where T : AbstractNode
         {
@@ -124,7 +126,7 @@ namespace O2.API.AST.ExtensionMethods
         }
 
         public static CompilationUnit compilationUnit(this INode iNode)
-        {
+        {         
             return iNode.parent<CompilationUnit>();
         }
 

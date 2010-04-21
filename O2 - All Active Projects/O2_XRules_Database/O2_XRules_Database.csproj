@@ -356,7 +356,10 @@
       <SubType>UserControl</SubType>
     </None>
     <None Include="_Rules\_UnderDev\PoCs\Load CSharp files and show methods declarations and references.h2" />
+    <None Include="_Rules\_UnderDev\PoCs\load files and create O2CodeStreams from them %28working%29.h2" />
+    <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method %28original version%29.h2" />
     <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method.h2" />
+    <None Include="_Rules\_UnderDev\PoCs\O2 DotNet AST Scanner %28First fully working PoC%29.h2" />
     <None Include="_Rules\_UnderDev\PoCs\view code in AST with code expantion.h2" />
     <None Include="_Rules\_UnderDev\PoCs\view code in AST with code usage %281 level down%29.h2" />
     <None Include="_Rules\_UnderDev\PoC_Add textbox to graph.h2" />
@@ -367,6 +370,7 @@
     <None Include="_Rules\_UnderDev\to document or add to API\Graph and Script - Dev environment.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\Graph development environment.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\search files and filter by name.h2" />
+    <None Include="_Rules\_UnderDev\to document or add to API\show AutoSavedScripts.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\show today%27s AutoSavedScripts.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\show type details and methods.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\Stop services after startup.h2" />

@@ -154,7 +154,19 @@ namespace O2.Kernel.ExtensionMethods
 
         public static string format(this string format, params object[] parameters)
         {
-            return string.Format(format, parameters);
+            if (format == null)
+                return "";
+            if (parameters == null)
+                return format;
+            try
+            {
+                return string.Format(format, parameters);
+            }
+            catch (Exception ex)
+            {
+                ex.log("error applying string format: " + format ?? "[null]");
+                return "";
+            }
         }
 
         public static string remove(this string _string, params string[] stringsToRemove)

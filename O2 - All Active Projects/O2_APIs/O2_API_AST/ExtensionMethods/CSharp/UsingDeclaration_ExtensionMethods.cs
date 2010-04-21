@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.NRefactory;
+using O2.DotNetWrappers.ExtensionMethods;
 
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
@@ -11,11 +12,29 @@ namespace O2.API.AST.ExtensionMethods.CSharp
     {
         #region create        
 
-        public static UsingDeclaration add_Using(this CompilationUnit compilationUnit, string @namespace)
+        /*public static UsingDeclaration add_Using(this CompilationUnit compilationUnit, string @namespace)
         {
             var newUsing = new UsingDeclaration(@namespace);
             //compilationUnit.Children.add(newUsing);
             //compilationUnit.Children.Insert(0, newUsing);
+            compilationUnit.insert(newUsing);
+            return newUsing;
+        }*/
+
+        public static CompilationUnit add_Using(this CompilationUnit compilationUnit, UsingDeclaration usingDeclaration)
+        {
+            compilationUnit.insert(usingDeclaration);
+            return compilationUnit;
+        }
+
+        public static UsingDeclaration add_Using(this CompilationUnit compilationUnit, string @namespace)
+        {
+            var currentUsingDeclaration = compilationUnit.@using(@namespace);
+            if (currentUsingDeclaration != null)
+                // these UsingDeclaration & Using classes are a bit of a mess (need to normalize this later)
+                return new UsingDeclaration(currentUsingDeclaration.wrapOnList());
+
+            var newUsing = new UsingDeclaration(@namespace);
             compilationUnit.insert(newUsing);
             return newUsing;
         }
@@ -30,6 +49,15 @@ namespace O2.API.AST.ExtensionMethods.CSharp
         #endregion
 
         #region query
+
+        public static bool hasUsing(this CompilationUnit compilationUnit, string @namespace)
+        {
+            foreach (var @using in compilationUnit.usings())
+                if (@using.Name == @namespace)
+                    return true;
+            return false;
+        }
+
         public static List<Using> usings(this IParser parser)
         {
             return parser.CompilationUnit.usings();

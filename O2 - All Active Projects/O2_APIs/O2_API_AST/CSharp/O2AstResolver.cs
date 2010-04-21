@@ -28,6 +28,8 @@ namespace O2.API.AST.CSharp
         {
             if (myProjectContent.NamespaceExists("System").isFalse())
                 myProjectContent.AddReferencedContent(pcRegistry.Mscorlib);
+            if (assemblyToLoad.valid().isFalse())
+                return;
             IProjectContent referenceProjectContent = pcRegistry.GetProjectContentForReference(assemblyToLoad, assemblyToLoad);
             if (referenceProjectContent == null)
                 "referenceProjectContent was null".error();
@@ -56,6 +58,8 @@ namespace O2.API.AST.CSharp
 
         public ICompilationUnit setCurrentCompilationUnit(CompilationUnit compilationUnit)
         {
+            if (compilationUnit == null)
+                return null;
             NRefactoryASTConvertVisitor converter;
             converter = new NRefactoryASTConvertVisitor(myProjectContent);
             compilationUnit.AcceptVisitor(converter, null);

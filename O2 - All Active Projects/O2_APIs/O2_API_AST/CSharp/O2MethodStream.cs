@@ -8,27 +8,27 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.API.AST.ExtensionMethods;
 using O2.API.AST;
-using O2.API.AST.CSharp;
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_WebAutomation.cs
-//using O2.Script;
 
-namespace O2.API.AST.CSharp_temp2
+namespace O2.API.AST.CSharp
 {
 
-	public class O2MethodStream_V2
+	public class O2MethodStream
 	{
-		public O2MappedAstData O2MappedAstData { get; set;}
-		public List<IMethod> IMethods {get;set;}
+		public O2MappedAstData O2MappedAstData { get; set;}		
+		public Dictionary<string, IMethod> MappedIMethods {get;set;}
+		public Dictionary<string,IMethod> ExternalIMethods {get;set;}
+		public Dictionary<string, IReturnType> ExternalClasses {get;set;}		
 		
-		
-		public O2MethodStream_V2(O2MappedAstData o2MappedAstData)
+		public O2MethodStream(O2MappedAstData o2MappedAstData)
 		{
 			O2MappedAstData = o2MappedAstData;
-			IMethods = new List<IMethod>();
+			MappedIMethods = new Dictionary<string,IMethod>();
+			ExternalIMethods = new Dictionary<string,IMethod>(); 
+			ExternalClasses = new Dictionary<string, IReturnType>();
 		}
 	}
 	
-    public class O2MethodStream
+    /*public class O2MethodStream
     {
     	public O2MappedAstData O2MappedAstData { get; set;}
         public LinkedList<O2MethodNode> Path { get; set; }
@@ -65,11 +65,7 @@ namespace O2.API.AST.CSharp_temp2
         public string File {get;set;}
         public string Signature {get;set;}
         public string SourceCode {get;set;}
-
-        /*public O2MethodNode(INode iNode)
-        {
-            INode = iNode;
-        }*/
+      
         
         public O2MethodNode(O2MappedAstData o2MappedAstData, IMethod iMethod)
         {        	
@@ -79,11 +75,11 @@ namespace O2.API.AST.CSharp_temp2
       	public O2MethodNode populateData(O2MappedAstData o2MappedAstData, IMethod iMethod)
       	{
       		IMethod = iMethod;        		        	
-        	/*MethodDeclaration = o2MappedAstData.methodDeclaration(iMethod);
+        	/ *MethodDeclaration = o2MappedAstData.methodDeclaration(iMethod);
         	INode = MethodDeclaration;
         	File = o2MappedAstData.file(iMethod);
         	SourceCode = o2MappedAstData.sourceCode(iMethod);
-        	Signature = iMethod.fullName();*/
+        	Signature = iMethod.fullName();* /
       		return this;
       	}
         
@@ -93,4 +89,5 @@ namespace O2.API.AST.CSharp_temp2
         }
         
     }
+     * */
 }

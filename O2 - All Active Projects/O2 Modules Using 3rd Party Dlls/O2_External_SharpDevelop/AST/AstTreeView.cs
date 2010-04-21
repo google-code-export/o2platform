@@ -60,6 +60,17 @@ namespace O2.External.SharpDevelop.AST
                 () => treeView.show_SourceCode_Ast_InTreeView(ast.CompilationUnit));
         }
 
+        public static TreeView show_Asts(this TreeView treeView, Dictionary<string, List<INode>> nodesToShow)
+        {
+            foreach (var item in nodesToShow)
+            {
+                var treeNode = treeView.add_Node(item.Key);
+                foreach (var iNode in item.Value)
+                    treeNode.show_Ast(iNode);
+            }
+            return treeView;
+        }
+
         public static TreeNode show_Asts<T>(this TreeNode treeNode, List<T> astNodes)
             where T : INode
         {

@@ -111,6 +111,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tcSourceInfo = new System.Windows.Forms.TabControl();
             this.scCodeAndAst = new System.Windows.Forms.SplitContainer();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -170,6 +171,8 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             // saveToolStripMenuItem
             // 
+            this.saveToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem});
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.saveToolStripMenuItem.Text = "Save";
@@ -952,6 +955,13 @@ namespace O2.External.SharpDevelop.Ascx
             this.scCodeAndAst.SplitterDistance = 291;
             this.scCodeAndAst.TabIndex = 53;
             // 
+            // enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem
+            // 
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Name = "enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem";
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Size = new System.Drawing.Size(384, 22);
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Text = "Enable or Disable Auto Backup on Compile Sucess (for CSharp)";
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Click += new System.EventHandler(this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem_Click);
+            // 
             // ascx_SourceCodeEditor
             // 
             this.AllowDrop = true;
@@ -1067,5 +1077,6 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.LinkLabel llPutFilePathInClipboard;
         private System.Windows.Forms.ToolStripMenuItem enableCodeCompleteToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.ToolStripMenuItem enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem;
     }
 }

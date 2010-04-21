@@ -40,7 +40,7 @@ namespace O2.API.Visualization.ExtensionMethods
 
         public static WpfTextEditor add_WpfTextEditor(this GraphLayout control)
         {
-            return control.add<WpfTextEditor>();
+            return control.add_UIElement<WpfTextEditor>();
         }
 
         #endregion

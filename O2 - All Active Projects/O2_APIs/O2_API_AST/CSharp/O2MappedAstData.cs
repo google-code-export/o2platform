@@ -142,8 +142,8 @@ namespace O2.API.AST.CSharp
         public List<IMethod> iMethods()
         {
             var methods = new List<IMethod>();
-            methods.AddRange(MapAstToNRefactory.IMethodToConstructorDeclaration.Keys.ToList());
             methods.AddRange(MapAstToNRefactory.IMethodToMethodDeclaration.Keys.ToList());
+            methods.AddRange(MapAstToNRefactory.IMethodToConstructorDeclaration.Keys.ToList());            
             return methods;
         }
     }

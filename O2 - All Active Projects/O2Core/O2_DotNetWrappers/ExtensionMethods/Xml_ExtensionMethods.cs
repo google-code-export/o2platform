@@ -49,7 +49,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             }
             catch (Exception ex)
             {
-                ex.info("in xmlDocumentElement");
+                ex.log("in xmlDocumentElement");
                 return "";
             }
         }

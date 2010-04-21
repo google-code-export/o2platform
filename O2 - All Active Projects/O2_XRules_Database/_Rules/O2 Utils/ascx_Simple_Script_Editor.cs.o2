@@ -69,14 +69,16 @@ namespace O2.XRules.Database.O2Utils
         public bool ExecuteOnEnter { get; set; }
         public object ReturnData { get; set; }
 		public MethodInvoker onCompilationOk {get ;set;}
-		
+
+        public string defaultCode = "PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
+                               .line("return \"Dynamic Data = \" + testString + \" :: \" + testNumber;");
+    		
+
         public static void startControl()
     	{
             //width = 700;    // make it bigger
             //height = 300;
-            var defaultCode = "PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
-                               .line("return \"Dynamic Data = \" + testString + \" :: \" + testNumber;");
-    		    		
+                		
     		//var control2 = O2Gui.load<PropertyGrid>();
     		//return;
             //var control = (ascx_Simple_Script_Editor)typeof(ascx_Simple_Script_Editor).showAsForm("O2 Simple Script Editor", 500, 500);			
@@ -88,7 +90,7 @@ namespace O2.XRules.Database.O2Utils
 				//control.configureGui();
     			control.InvocationParameters.Add("testString", "Hello World");
     			control.InvocationParameters.Add("testNumber", 42);
-    			control.commandsToExecute.set_Text(defaultCode);
+                control.commandsToExecute.set_Text(control.defaultCode);
     		});
     	}
 
@@ -258,7 +260,7 @@ namespace O2.XRules.Database.O2Utils
      		 			result_RichTextBox.set_Text("Compilation OK:\r\n\r\n")
 										  .textColor(Color.Green);
 						executeButton.enabled(true);
-                        if (AutoSaveOnCompileSuccess)
+                        if (AutoSaveOnCompileSuccess && Code != defaultCode)
                         {
                             AutoSaveDir.createDir();    // make sure it exits
                             var targetFile = AutoSaveDir.pathCombine(Files.getFileSaveDateTime_Now().trim() + ".cs");
@@ -416,19 +418,22 @@ namespace O2.XRules.Database.O2Utils
      	
      	public void saveScript()
      	{
-            this.invokeOnThread(
-                () =>
-                {
-                    var defaultH2ScriptFolder = @"C:\O2\_XRules_Local\H2Scripts";
-                    Files.checkIfDirectoryExistsAndCreateIfNot(defaultH2ScriptFolder);
-                    var targetFile = O2Forms.askUserForFileToSave(defaultH2ScriptFolder, ".h2");
-                    if (targetFile.valid())
+            if (commandsToExecute.editor().getFullPathTOCurrentSourceCodeFile().fileExists())
+                commandsToExecute.editor().saveSourceCode();
+            else
+                this.invokeOnThread(
+                    () =>
                     {
-                        var h2Script = new H2(commandsToExecute.get_Text());
-                        h2Script.save(targetFile);
-                    }
-                    this.info("target: {0}", targetFile);
-                });
+                        var defaultH2ScriptFolder = @"C:\O2\_XRules_Local\H2Scripts";
+                        Files.checkIfDirectoryExistsAndCreateIfNot(defaultH2ScriptFolder);
+                        var targetFile = O2Forms.askUserForFileToSave(defaultH2ScriptFolder, ".h2");
+                        if (targetFile.valid())
+                        {
+                            var h2Script = new H2(commandsToExecute.get_Text());
+                            h2Script.save(targetFile);
+                        }
+                        "target: {0}".info(targetFile);
+                    });
      	}
 
         public void swapGeneratedCodeViewMode()

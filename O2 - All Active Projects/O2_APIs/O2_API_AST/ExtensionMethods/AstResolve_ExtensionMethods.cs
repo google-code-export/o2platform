@@ -14,24 +14,34 @@ namespace O2.API.AST.ExtensionMethods
     {
         public static void initialize(this O2AstResolver o2AstResolver, Expression expression)
         {
-            o2AstResolver.resolver.Initialize(o2AstResolver.parseInformation, expression.StartLocation.Line, expression.StartLocation.Column);
+            o2AstResolver.resolver.Initialize(o2AstResolver.parseInformation, expression.StartLocation.Line, expression.StartLocation.Column);            
         }
 
         public static object resolve(this O2AstResolver o2AstResolver, Expression expression)
         {
-            o2AstResolver.initialize(expression);            
+            o2AstResolver.initialize(expression);
+
+            var methodDeclaration = expression.parent<MethodDeclaration>();
+            if (methodDeclaration != null)
+                o2AstResolver.resolver.RunLookupTableVisitor(methodDeclaration);
+
             //resolver.Initialize(parseInformation, memberReferenceExpression.StartLocation.Line, memberReferenceExpression.StartLocation.Column);
             //resolver.RunLookupTableVisitor(memberReferenceExpression);
 
             return o2AstResolver.resolver.ResolveInternal(expression, ExpressionContext.Default);            
         }
         
-        public static object resolve(this O2AstResolver o2AstResolver, MemberReferenceExpression memberReferenceExpression)
+        /*public static object resolve(this O2AstResolver o2AstResolver, MemberReferenceExpression memberReferenceExpression)
         {
             o2AstResolver.initialize(memberReferenceExpression as Expression);
+            // populate the local variables table
+            var methodDeclaration = memberReferenceExpression.parent<MethodDeclaration>();
+            if (methodDeclaration != null)
+                o2AstResolver.resolver.RunLookupTableVisitor(methodDeclaration);
             return o2AstResolver.resolve((memberReferenceExpression as Expression));
            
-        }
+        }*/
+
         public static string getNodeText(this ResolveResult resolveResult)
         {
             if (resolveResult is MemberResolveResult)

@@ -5,7 +5,46 @@ namespace O2.Kernel.ExtensionMethods
 {
     public static class Logging_ExtensionMethods
     {
-        public static void info(this object _object, string infoMessage)
+        public static string info(this string formatString, params object[] parameters)
+        {
+            var message = formatString.format(parameters);
+            PublicDI.log.info(message);
+            return message;
+        }
+
+        public static string debug(this string formatString, params object[] parameters)
+        {
+            var message = formatString.format(parameters);
+            PublicDI.log.debug(message);
+            return message;
+        }
+
+        public static string error(this string formatString, params object[] parameters)
+        {
+            var message = formatString.format(parameters);
+            PublicDI.log.error(message);
+            return message;
+        }
+
+        public static void info(this bool enabled, string infoFormat, params object[] parameters)
+        {
+            if (enabled)
+                PublicDI.log.info(infoFormat, parameters);
+        }
+
+        public static void debug(this bool enabled, string debugFormat, params object[] parameters)
+        {
+            if (enabled)
+                PublicDI.log.debug(debugFormat, parameters);
+        }
+
+        public static void error(this bool enabled, string errorFormat, params object[] parameters)
+        {
+            if (enabled)
+                PublicDI.log.error(errorFormat, parameters);
+        }
+
+        /*public static void info(this object _object, string infoMessage)
         {
             PublicDI.log.info("[{0}] {1}", _object.type().Name, infoMessage);
         }
@@ -30,23 +69,7 @@ namespace O2.Kernel.ExtensionMethods
             PublicDI.log.info(messageFormat.format(parameters));
         }
 
-        public static void info(this bool enabled, string infoFormat, params object[] parameters)
-        {
-            if (enabled)
-                PublicDI.log.info(infoFormat, parameters);
-        }
-
-        public static void debug(this bool enabled, string debugFormat, params object[] parameters)
-        {
-            if (enabled)
-                PublicDI.log.debug(debugFormat, parameters);
-        }
-
-        public static void error(this bool enabled, string errorFormat, params object[] parameters)
-        {
-            if (enabled)
-                PublicDI.log.error(errorFormat, parameters);
-        }
+        */
 
 
         public static void showInLog(this List<string> list)
@@ -61,7 +84,7 @@ namespace O2.Kernel.ExtensionMethods
             PublicDI.log.info(_string);
         }
 
-        public static void info(this string _string)
+        /*public static void info(this string _string)
         {
             PublicDI.log.info(_string);
         }
@@ -74,7 +97,7 @@ namespace O2.Kernel.ExtensionMethods
         public static void error(this string _string)
         {
             PublicDI.log.error(_string);
-        }
+        }*/
 
         public static void log(this Exception ex, string textFormat, params object[] parameters)
         {

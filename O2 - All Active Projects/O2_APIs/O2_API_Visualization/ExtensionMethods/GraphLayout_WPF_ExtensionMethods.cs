@@ -28,10 +28,10 @@ namespace O2.API.Visualization.ExtensionMethods
 
         #region adding and creating
 
-        public static T add<T>(this GraphLayout graphLayout) where T : UIElement
+        public static T add_UIElement<T>(this GraphLayout graphLayout) where T : UIElement
 		{
-			var uiElement = graphLayout.newInThread<T>();			
-			graphLayout.add(uiElement);
+			var uiElement = graphLayout.newInThread<T>();
+            graphLayout.add_Node(uiElement);
 			return uiElement;
 		}
         
@@ -57,6 +57,12 @@ namespace O2.API.Visualization.ExtensionMethods
                     return graphLayout;
                 });
         }
+        
+
+        /*public static GraphLayout add_Node(this GraphLayout graphLayout, object vertexToAdd)
+        {
+            return graphLayout.add(vertexToAdd);
+        }*/        
 
         #endregion
 
@@ -70,7 +76,7 @@ namespace O2.API.Visualization.ExtensionMethods
 		{
 			var textBox = graphLayout.newInThread<TextBox>();
 			textBox.set_Text(textValue);
-			graphLayout.add(textBox);
+			graphLayout.add_Node(textBox);
 			return textBox;
 		}				
 		
@@ -80,7 +86,7 @@ namespace O2.API.Visualization.ExtensionMethods
 		
 		public static Button add_Button(this GraphLayout graphLayout, string text, int width, int height)
 		{
-			var button  = graphLayout.add<Button>();
+            var button = graphLayout.add_UIElement<Button>();
 			button.set(text);
 			button.width(width);
 			button.height(height);
@@ -105,7 +111,7 @@ namespace O2.API.Visualization.ExtensionMethods
 		{
 			return (Image)graphLayout.wpfInvoke(
 				()=>{
-						var image = graphLayout.add<Image>();
+                        var image = graphLayout.add_UIElement<Image>();
 						var bitmap = new BitmapImage(uri);
 						image.Source = bitmap; 
 						if (width > -1)
