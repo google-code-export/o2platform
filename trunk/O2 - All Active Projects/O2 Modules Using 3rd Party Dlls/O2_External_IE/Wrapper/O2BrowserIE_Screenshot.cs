@@ -181,7 +181,7 @@ namespace O2.External.IE.Wrapper
             }
             catch (Exception ex)
             {
-                ex.error("in O2BrowserIE_Screenshot.fetchWebPage");
+                ex.log("in O2BrowserIE_Screenshot.fetchWebPage");
             }
 
             return false;

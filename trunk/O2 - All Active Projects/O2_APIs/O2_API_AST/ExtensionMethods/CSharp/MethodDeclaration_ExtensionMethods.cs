@@ -14,9 +14,29 @@ namespace O2.API.AST.ExtensionMethods.CSharp
     {
         #region create
 
+        public static TypeDeclaration add_Method(this TypeDeclaration typeDeclaration, MethodDeclaration methodDeclaration)
+        {
+            if (typeDeclaration != null && methodDeclaration != null)
+                typeDeclaration.AddChild(methodDeclaration);
+            return typeDeclaration;
+        }
+
+        public static CompilationUnit add_Method(this CompilationUnit compilationUnit, string @namespace, string typeName, MethodDeclaration methodDeclaration)
+        {
+            var myNamespace = compilationUnit.add_Namespace(@namespace);
+            var type = myNamespace.add_Type(typeName);
+            type.add_Method(methodDeclaration);
+            return compilationUnit;
+        }
+
+        public static MethodDeclaration add_Method(this TypeDeclaration typeDeclaration, string methodName)
+        {
+            return typeDeclaration.add_Method(methodName, null, null);
+        }
+
         public static MethodDeclaration add_Method(this TypeDeclaration typeDeclaration, string methodName, BlockStatement body)
         {
-            return typeDeclaration.add_Method(null, body);
+            return typeDeclaration.add_Method(methodName, null, body);
         }
 
         public static MethodDeclaration add_Method(this TypeDeclaration typeDeclaration, string methodName, Dictionary<string, object> invocationParameters, BlockStatement body)

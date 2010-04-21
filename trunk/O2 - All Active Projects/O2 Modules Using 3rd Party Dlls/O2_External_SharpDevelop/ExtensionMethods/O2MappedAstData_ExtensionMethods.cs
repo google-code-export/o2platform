@@ -36,8 +36,11 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         public static TreeView show_NRefactoryDom<T>(this TreeView treeView, T codeObject)
             where T : IFreezable
         {
-            treeView.configureTreeViewForCodeDomViewAndNRefactoryDom();
-            treeView.add_Nodes_WithPropertiesAsChildNodes<T>(codeObject);
+            if (codeObject != null)
+            {
+                treeView.configureTreeViewForCodeDomViewAndNRefactoryDom();
+                treeView.add_Nodes_WithPropertiesAsChildNodes<T>(codeObject);
+            }
             return treeView;
         }
 
@@ -165,6 +168,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             });
         }
 
+        
 
     }
 }

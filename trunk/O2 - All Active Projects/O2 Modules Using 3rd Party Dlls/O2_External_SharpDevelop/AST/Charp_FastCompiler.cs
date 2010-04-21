@@ -53,6 +53,8 @@ namespace O2.External.SharpDevelop.AST
 		
 		bool creatingAst;
 		bool compiling;
+
+        public System.Threading.ManualResetEvent FinishedCompilingCode { get;set;} 
 		
         public CSharp_FastCompiler()
         {        
@@ -65,6 +67,7 @@ namespace O2.External.SharpDevelop.AST
             generateDebugSymbols = false;
             //OriginalCodeSnippet = "";
             SourceCode = "";
+            FinishedCompilingCode = new System.Threading.ManualResetEvent(true);
             // defaults
 
         }
@@ -144,6 +147,7 @@ namespace O2.External.SharpDevelop.AST
         {
             try
             {
+                FinishedCompilingCode.Reset();
                 createAstStack = new Stack<string>();
           //      createAstStack.Clear();
                 if (createAstStack.Count == 0)
@@ -177,6 +181,8 @@ namespace O2.External.SharpDevelop.AST
                         var sourceCode = createCSharpCodeWith_Class_Method_WithMethodText(codeSnippet);
                         if (sourceCode != null)
                             compileSourceCode(sourceCode, CreatedFromSnipptet);
+                        else
+                            FinishedCompilingCode.Set();
                         creatingAst = false;
                         compileSnippet();
                     }
@@ -203,56 +209,70 @@ namespace O2.External.SharpDevelop.AST
        	    O2Thread.mtaThread(
        	        () =>
        	            {
-       	                if (compiling == false && compileStack.Count > 0)
-       	                {
-       	                    compiling = true;
-                            compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies();
-                            this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
-       	                    var sourceCode = compileStack.Pop();                            
-       	                    compileStack.Clear();
-       	                        // remove all previous compile requests (since their source code is now out of date
+                        try
+                        {
 
-       	                    //Files.setCurrentDirectoryToExecutableDirectory();                			                		
-       	                    Environment.CurrentDirectory = Kernel.PublicDI.config.CurrentExecutableDirectory;
-       	                    ;
-       	                    this.invoke(beforeCompile);
-       	                    DebugMode.info("Compiling Source Code (Size: {0})", sourceCode.size());
-       	                    SourceCode = sourceCode;
-       	                    var providerOptions = new Dictionary<string, string>();
-       	                    providerOptions.Add("CompilerVersion", "v3.5");
-       	                    var csharpCodeProvider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);
-       	                    var compilerParams = new CompilerParameters
-       	                                             {
-       	                                                 GenerateInMemory = !generateDebugSymbols,
-       	                                                 IncludeDebugInformation = generateDebugSymbols
-       	                                             };
+                            if (compiling == false && compileStack.Count > 0)
+                            {
+                                compiling = true;
+                                FinishedCompilingCode.Reset();
+                                compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies();
+                                this.sleep(forceAstBuildDelay, DebugMode);            // wait a bit to allow more entries to be cleared from the stack
+                                var sourceCode = compileStack.Pop();
+                                compileStack.Clear();
+                                // remove all previous compile requests (since their source code is now out of date
 
-       	                    foreach (var referencedAssembly in ReferencedAssemblies)
-       	                        compilerParams.ReferencedAssemblies.Add(referencedAssembly);
+                                //Files.setCurrentDirectoryToExecutableDirectory();                			                		
+                                Environment.CurrentDirectory = Kernel.PublicDI.config.CurrentExecutableDirectory;
+                                ;
+                                this.invoke(beforeCompile);
+                                DebugMode.info("Compiling Source Code (Size: {0})", sourceCode.size());
+                                SourceCode = sourceCode;
+                                var providerOptions = new Dictionary<string, string>();
+                                providerOptions.Add("CompilerVersion", "v3.5");
+                                var csharpCodeProvider = new Microsoft.CSharp.CSharpCodeProvider(providerOptions);
+                                var compilerParams = new CompilerParameters
+                                                         {
+                                                             GenerateInMemory = !generateDebugSymbols,
+                                                             IncludeDebugInformation = generateDebugSymbols
+                                                         };
 
-       	                    CompilerResults = csharpCodeProvider.CompileAssemblyFromSource(compilerParams, sourceCode);
-       	                    if (CompilerResults.Errors.Count > 0 || CompilerResults.CompiledAssembly == null)
-       	                    {
-       	                        CompilationErrors = "";
-       	                        foreach (CompilerError error in CompilerResults.Errors)
-       	                        {
-       	                            //CompilationErrors.Add(CompilationErrors.line(error.ToString());
-       	                            CompilationErrors =
-       	                                CompilationErrors.line(String.Format("{0}::{1}::{2}::{3}::{4}", error.Line,
-       	                                                                     error.Column, error.ErrorNumber,
-       	                                                                     error.ErrorText, error.FileName));
-       	                        }
-       	                        DebugMode.error("Compilation failed");
-       	                        this.invoke(onCompileFail);
-       	                    }
-       	                    else
-       	                    {
-       	                        DebugMode.debug("Compilation was OK");
-       	                        this.invoke(onCompileOK);
-       	                    }
-       	                    compiling = false;
-       	                    compileSourceCode();
-       	                }
+                                foreach (var referencedAssembly in ReferencedAssemblies)
+                                    compilerParams.ReferencedAssemblies.Add(referencedAssembly);
+
+                                CompilerResults = csharpCodeProvider.CompileAssemblyFromSource(compilerParams, sourceCode);
+
+                                FinishedCompilingCode.Set();
+
+                                if (CompilerResults.Errors.Count > 0 || CompilerResults.CompiledAssembly == null)
+                                {
+                                    CompilationErrors = "";
+                                    foreach (CompilerError error in CompilerResults.Errors)
+                                    {
+                                        //CompilationErrors.Add(CompilationErrors.line(error.ToString());
+                                        CompilationErrors =
+                                            CompilationErrors.line(String.Format("{0}::{1}::{2}::{3}::{4}", error.Line,
+                                                                                 error.Column, error.ErrorNumber,
+                                                                                 error.ErrorText, error.FileName));
+                                    }
+                                    DebugMode.error("Compilation failed");
+                                    this.invoke(onCompileFail);
+                                }
+                                else
+                                {
+                                    DebugMode.debug("Compilation was OK");
+                                    this.invoke(onCompileOK);
+                                }
+                                compiling = false;                                
+                                compileSourceCode();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.log("in compileSourceCode");
+                            compiling = false;
+                            FinishedCompilingCode.Set();
+                        }
        	            });
         }
 
@@ -443,6 +463,11 @@ namespace O2.External.SharpDevelop.AST
                         }*/
                     }
             return new Location(0, 0) ;
+        }
+
+        public void waitForCompilationComplete()
+        {
+            FinishedCompilingCode.WaitOne();
         }
     }
 }

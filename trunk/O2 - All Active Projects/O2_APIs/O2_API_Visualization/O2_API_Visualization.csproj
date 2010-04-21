@@ -82,6 +82,7 @@
       <DependentUpon>ascx_Xaml_Host.cs</DependentUpon>
     </Compile>
     <Compile Include="ExtensionMethods\ElementHost_ExtensioMethods.cs" />
+    <Compile Include="ExtensionMethods\GraphLayout_O2CodeStream_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\GraphLayout_WPF_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\GraphSharp_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\VerticesAndEdges_ExtensionMethods.cs" />

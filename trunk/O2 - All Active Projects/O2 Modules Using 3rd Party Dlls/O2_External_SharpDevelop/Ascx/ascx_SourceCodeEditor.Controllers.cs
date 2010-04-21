@@ -16,6 +16,7 @@ using O2.DotNetWrappers.Windows;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ScriptSamples;
 using O2.Interfaces.Views;
+using O2.Kernel.ExtensionMethods;
 using O2.Kernel.CodeUtils;
 using O2.Kernel;
 using O2.Views.ASCX.CoreControls;
@@ -52,6 +53,8 @@ namespace O2.External.SharpDevelop.Ascx
         Thread autoCompileThread;
         public bool allowCodeCompilation = true;
         public O2CodeCompletion o2CodeCompletion;
+        public string AutoBackupSaveDir = PublicDI.config.O2TempDir.pathCombine("_AutoSavedScripts");
+        public bool AutoBackUpOnCompileSucess = false;
 
         public void onLoad()
         {
@@ -242,10 +245,11 @@ namespace O2.External.SharpDevelop.Ascx
                                 loadPartialFileView(fileToLoad);
                             }
                             else
-                            {
+                            {                                
                                 if (fileToLoad.extension(".h2"))
-                                {
-                                    setDocumentContents(H2.load(fileToLoad).SourceCode); 
+                                {                                    
+                                    setPathToFileLoaded(fileToLoad);
+                                    setDocumentContents(H2.load(fileToLoad).SourceCode, fileToLoad, false); 
                                     setDocumentHighlightingStrategy("aa.cs");
                                 }
                                 else
@@ -395,10 +399,8 @@ namespace O2.External.SharpDevelop.Ascx
                                                      //tbSourceCode.Text = files.GetFileContent(config.getDefaultSourceCodeCompilationExampleFile());
 
                                                      //  tbSourceCode_PathToFileLoaded.Text = sPathToSourceCodeFileToLoad;
-                                                     sDirectoryOfFileLoaded = Path.GetDirectoryName(pathToSourceCodeFileToLoad);
-                                                     tbSourceCode_DirectoryOfFileLoaded.Text = sDirectoryOfFileLoaded;
-                                                     tbSourceCode_FileLoaded.Text = Path.GetFileName(pathToSourceCodeFileToLoad);
-                                                     sPathToFileLoaded = pathToSourceCodeFileToLoad;
+                                                     setPathToFileLoaded(pathToSourceCodeFileToLoad);
+                                                     
                                                      loadSourceCodeFileIntoTextEditor(pathToSourceCodeFileToLoad, tecSourceCode);
 
                                                      //compileSourceCode();
@@ -424,6 +426,18 @@ namespace O2.External.SharpDevelop.Ascx
                                  }));
         }
 
+        private void setPathToFileLoaded(string pathToSourceCodeFileToLoad)
+        {
+            tbSourceCode_DirectoryOfFileLoaded.invokeOnThread(
+                () =>
+                {
+                    sDirectoryOfFileLoaded = Path.GetDirectoryName(pathToSourceCodeFileToLoad);
+                    tbSourceCode_DirectoryOfFileLoaded.Text = sDirectoryOfFileLoaded;
+                    tbSourceCode_FileLoaded.Text = Path.GetFileName(pathToSourceCodeFileToLoad);
+                    sPathToFileLoaded = pathToSourceCodeFileToLoad;
+                });
+        }
+
         private bool hasNonRendredChars(string pathToSourceCodeFileToLoad)
         {
             var fileContents = Files.getFileContents(pathToSourceCodeFileToLoad);
@@ -438,7 +452,8 @@ namespace O2.External.SharpDevelop.Ascx
             if (Path.GetExtension(pathToFileLoaded).ToLower() == ".o2")
                 pathToFileLoaded = Path.GetFileNameWithoutExtension(pathToFileLoaded);
             switch (Path.GetExtension(pathToFileLoaded))
-            {               
+            {
+                case ".h2":
                 case ".cs":
                     btExecuteOnExternalEngine.Visible = false;
                     lbExecuteOnEngine.Visible = false;
@@ -498,22 +513,31 @@ namespace O2.External.SharpDevelop.Ascx
 
         public string getFullPathTOCurrentSourceCodeFile()
         {
-            Files.checkIfDirectoryExistsAndCreateIfNot(tbSourceCode_DirectoryOfFileLoaded.Text);
-            //return Path.Combine(sDirectoryOfFileLoaded, tbSourceCode_FileLoaded.Text);            
-            return Path.Combine(tbSourceCode_DirectoryOfFileLoaded.Text, tbSourceCode_FileLoaded.Text);
+            var directory = tbSourceCode_DirectoryOfFileLoaded.get_Text();
+            var file = tbSourceCode_FileLoaded.get_Text();
+            if (directory.valid() && file.valid())
+            {
+                Files.checkIfDirectoryExistsAndCreateIfNot(directory);
+                //return Path.Combine(sDirectoryOfFileLoaded, tbSourceCode_FileLoaded.Text);            
+                return Path.Combine(directory, file);
+            }
+            return "";
         }
 
         public void saveSourceCode()
         {
-            if (partialFileViewMode == false)
+            String sFilePath = getFullPathTOCurrentSourceCodeFile();
+            if (partialFileViewMode == false && sFilePath.extension(".h2").isFalse())
             {
                 // if (lbSourceCode_UnsavedChanges.Visible)
                 // {
-                String sFilePath = getFullPathTOCurrentSourceCodeFile();
+                
                 saveSourceCodeFile(sFilePath);
                 if (File.Exists(sFilePath))
                     sPathToFileLoaded = sFilePath;
             }
+            else
+                new H2(this.getSourceCode()).save(sFilePath);
             // }
         }
 
@@ -758,6 +782,7 @@ namespace O2.External.SharpDevelop.Ascx
                                 //PublicDI.log.info("in compileSourceCode");
                                 switch (fileExtention)
                                 {
+                                    case ".h2":
                                     case ".cs":
                                         compileDotNetCode();
                                         break;
@@ -773,43 +798,70 @@ namespace O2.External.SharpDevelop.Ascx
 
         }
 
+        public Assembly compileH2File()
+        {
+            var sourceCode = getSourceCode();
+            if (sourceCode != "")
+            {
+                saveSourceCode(); // always save before compiling  
+                var csharpCompiler = new AST.CSharp_FastCompiler();
+                                
+
+                csharpCompiler.compileSnippet(sourceCode);
+                csharpCompiler.waitForCompilationComplete();                
+                return csharpCompiler.CompilerResults.CompiledAssembly;
+            }
+            return null;
+        }
+
+        public Assembly compileCSSharpFile()
+        {
+            Assembly compiledAssembly = null;
+            var compileEngine = new CompileEngine();            
+            if (getSourceCode() != "")
+            {
+                saveSourceCode();
+                // always save before compiling                                                
+                compileEngine.compileSourceFile(sPathToFileLoaded);
+                compiledAssembly = compileEngine.compiledAssembly ?? null;
+            }
+
+            
+            btShowHideCompilationErrors.Visible = tvCompilationErrors.Visible = lbCompilationErrors.Visible =
+                compiledAssembly==null && compileEngine.sbErrorMessage != null;
+            
+
+            clearBookmarksAndMarkers();
+            // if there isn't a compiledAssembly, show errors
+            if (compiledAssembly== null)
+            {
+                compileEngine.addErrorsListToTreeView(tvCompilationErrors);
+                showErrorsInSourceCodeEditor(compileEngine.sbErrorMessage.ToString());
+            }
+            
+            return compiledAssembly;
+        }
+
         private void compileDotNetCode()
         {
             try
-            {
-                compiledAssembly = null;
-                var compileEngine = new CompileEngine();
-                var previousExecutedMethod = cboxCompliledSourceCodeMethods.Text;
-                if (getSourceCode() != "")
-                {
-                    saveSourceCode();
-                    // always save before compiling                                                
-                    compileEngine.compileSourceFile(sPathToFileLoaded);
-                    compiledAssembly = compileEngine.compiledAssembly ?? null;
-                }
+            {                
 
+                var compiledAssembly = sPathToFileLoaded.extension(".h2") ? compileH2File()  : compileCSSharpFile();
+                
                 // set gui options depending on compilation result
                 var assemblyCreated = compiledAssembly != null;
 
-                btShowHideCompilationErrors.Visible = tvCompilationErrors.Visible = lbCompilationErrors.Visible =
-                    !assemblyCreated && compileEngine.sbErrorMessage != null;
-
                 btDebugMethod.Visible = executeSelectedMethodToolStripMenuItem.Visible =
-                    btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
-                    lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible
-                    = assemblyCreated;
-                cboxCompliledSourceCodeMethods.Items.Clear();
+                                btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
+                                lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible
+                                = assemblyCreated;
 
-                clearBookmarksAndMarkers();
-                // if there is compiledAssembly, show errors
-                if (!assemblyCreated)
+                cboxCompliledSourceCodeMethods.Items.Clear();    
+                if (compiledAssembly!= null)
                 {
-                    compileEngine.addErrorsListToTreeView(tvCompilationErrors);
-                    showErrorsInSourceCodeEditor(compileEngine.sbErrorMessage.ToString());
-                }
-                else
-                {
-                    // if not, populate the cbox for dynamic execution                
+                    autoBackup();
+                    var previousExecutedMethod = cboxCompliledSourceCodeMethods.Text;                     
                     O2Messages.dotNetAssemblyAvailable(compiledAssembly.Location);
                     foreach (var method in PublicDI.reflection.getMethods(compiledAssembly))
                         if (false == method.IsAbstract && false == method.IsSpecialName)
@@ -832,6 +884,25 @@ namespace O2.External.SharpDevelop.Ascx
                 PublicDI.log.error("in compileDotNetCode:{0}", ex.Message);
             }
         }
+        
+        private void autoBackup()
+        {
+            if (AutoBackUpOnCompileSucess)
+            {
+                var code = getSourceCode();
+                AutoBackupSaveDir.createDir();    // make sure it exits
+                var extension = sPathToFileLoaded.extension();
+                if (extension.valid().isFalse())
+                    extension = ".cs";
+                var targetFile = AutoBackupSaveDir.pathCombine(Files.getFileSaveDateTime_Now().trim() + extension);
+                if (extension == ".h2")
+                    new H2(code).save(targetFile);
+                else
+                    targetFile.fileWrite(code);
+            }
+        }
+
+        
 
         private void showErrorsInSourceCodeEditor(string errorMessages)
         {

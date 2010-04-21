@@ -11,6 +11,22 @@ namespace O2.API.AST.ExtensionMethods.CSharp
     {
         #region create
         
+        // should be merged with the one using CompilationUnit
+        public static TypeDeclaration add_Type(this NamespaceDeclaration namespaceDeclaration, string typeName)
+        {
+            var newType = namespaceDeclaration.types(typeName);		// check if already exists and if it does return it
+            if (newType != null)
+                return newType;
+
+            const Modifiers modifiers = Modifiers.None | Modifiers.Public;
+            newType = new TypeDeclaration(modifiers, new List<AttributeSection>())
+            {
+                Name = typeName
+            };
+            namespaceDeclaration.AddChild(newType);
+            return newType;
+        }
+
         public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, string typeName)
         {
             const Modifiers modifiers = Modifiers.None | Modifiers.Public;
@@ -43,7 +59,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
 
         public static List<TypeDeclaration> types(this CompilationUnit compilationUnit, bool recursive)
         {
-            return ((AbstractNode)compilationUnit).types(recursive);
+            return ((AbstractNode)compilationUnit).types(recursive);            
         }
 
         public static List<TypeDeclaration> types(this TypeDeclaration typeDeclaration)
@@ -87,6 +103,22 @@ namespace O2.API.AST.ExtensionMethods.CSharp
                 types.AddRange(childTypes);
             }
             return types;
+        }
+
+        public static TypeDeclaration types(this CompilationUnit compilationUnit, string typeToFind)
+        {
+            foreach (var type in compilationUnit.types())
+                if (type.Name == typeToFind)
+                    return type;
+            return null;
+        }
+
+        public static TypeDeclaration types(this NamespaceDeclaration namespaceDeclaration, string typeToFind)
+        {
+            foreach (var type in namespaceDeclaration.types())
+                if (type.Name == typeToFind)
+                    return type;
+            return null;
         }
 
         public static List<string> values(this List<TypeDeclaration> typeDeclarations)

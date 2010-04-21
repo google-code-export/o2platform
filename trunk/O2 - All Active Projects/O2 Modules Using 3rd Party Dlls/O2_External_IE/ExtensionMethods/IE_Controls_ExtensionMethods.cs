@@ -122,7 +122,7 @@ namespace O2.External.IE.ExtensionMethods
             }
             catch (Exception ex)
             {
-                ex.error("in formField");
+                ex.log("in formField");
                 return null;
             }
         }

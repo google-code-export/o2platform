@@ -38,6 +38,11 @@ namespace O2.API.Visualization.ExtensionMethods
         
         #region GraphLayout
 
+        public static BidirectionalGraph<object, IEdge<object>> graph(this GraphLayout graphLayout)
+        {
+            return graphLayout.get_Graph();
+        }
+
         public static BidirectionalGraph<object, IEdge<object>> get_Graph(this GraphLayout graphLayout)
     	{
     		return (BidirectionalGraph<object, IEdge<object>>)
@@ -47,17 +52,17 @@ namespace O2.API.Visualization.ExtensionMethods
     							 });
     	}
 
-        public static Label add(this GraphLayout graphLayout, Int32 nodeValue)
+        public static Label add_Label(this GraphLayout graphLayout, Int32 nodeValue)
         {
-            return graphLayout.add<Label>().set_Text(nodeValue.str());
+            return graphLayout.add_UIElement<Label>().set_Text(nodeValue.str());
         }
 
-        public static Label add(this GraphLayout graphLayout, string nodeText)
+        public static Label add_Label(this GraphLayout graphLayout, string nodeText)
         {
-            return graphLayout.add<Label>().set_Text(nodeText);
+            return graphLayout.add_UIElement<Label>().set_Text(nodeText);
         }
 
-    	public static GraphLayout add(this GraphLayout graphLayout,object vertexToAdd)
+    	public static GraphLayout add_Node(this GraphLayout graphLayout,object vertexToAdd)
     	{
             if (graphLayout == vertexToAdd)     // can't add graphLayout as an Node
                 return graphLayout;
@@ -73,6 +78,11 @@ namespace O2.API.Visualization.ExtensionMethods
     					return graphLayout;
     				});
     	}
+
+        public static GraphLayout add_Edge(this GraphLayout graphLayout, object fromVertex, object toVertex)
+        {
+            return graphLayout.edge(fromVertex, toVertex);
+        }
     	
     	public static GraphLayout edge(this GraphLayout graphLayout,object fromVertex, object toVertex)
     	{

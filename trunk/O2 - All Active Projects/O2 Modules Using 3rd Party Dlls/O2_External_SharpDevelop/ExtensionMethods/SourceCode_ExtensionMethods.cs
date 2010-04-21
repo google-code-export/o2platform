@@ -424,6 +424,12 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 "in ascx_SourceCodeEditor.selectTextWithColor startLocation > endLocation".error();
                 return codeEditor;
             }
+            if (startLocation.Column == -1 || startLocation.Line == -1 ||
+                endLocation.Column == -1 || endLocation.Line == -1)
+            {
+                "in ascx_SourceCodeEditor.selectTextWithColor one of start or end location values was -1".error();
+                return codeEditor;
+            }
             return codeEditor.selectTextWithColor(new DefaultSelection(codeEditor.document(), startLocation, endLocation));
         }
 
@@ -460,14 +466,17 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static ascx_SourceCodeEditor selectTextWithColor(this ascx_SourceCodeEditor codeEditor, INode node)
         {
-            return codeEditor.selectTextWithColor(node.StartLocation.textLocation(), node.EndLocation.textLocation());
+            if (node.StartLocation.Column == 0 && node.StartLocation.Line == 0 && node.Parent != null && node != node.Parent)
+                return codeEditor.selectTextWithColor(node.Parent);
+            else
+                return codeEditor.selectTextWithColor(node.StartLocation.textLocation(), node.EndLocation.textLocation());
         }
 
         public static ascx_SourceCodeEditor colorINodes(this ascx_SourceCodeEditor codeEditor, List<INode> nodes)
         {
             codeEditor.clearMarkers();
-            foreach (var node in nodes)
-                codeEditor.selectTextWithColor(node);
+            foreach (var node in nodes)                            
+                codeEditor.selectTextWithColor(node);            
             codeEditor.refresh();
             return codeEditor;
         }

@@ -33,7 +33,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             }
             catch (Exception ex)
             {
-                ex.error("in Bitmap.save");
+                ex.log("in Bitmap.save");
                 return null;
             }        
         }
@@ -62,7 +62,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             }
             catch (Exception ex)
             {
-                ex.error("in Bitmap.resize");
+                ex.log("in Bitmap.resize");
                 return null;
             }        
         }

@@ -77,7 +77,7 @@ namespace O2.Script
 		{
 			if (file.exists())
 			{
-				this.info("loading file: {0}", file);	
+                "loading file: {0}".info(file);	
 				var loadedObject = file.deserialize<List<ProcessDetail>>();
 				if (loadedObject != null)
 				{
@@ -110,7 +110,7 @@ namespace O2.Script
 			{				
 				if (row[0].validString() && row[1].validString())
 				{
-					this.info(row.toString());
+					row.toString().info();
                     processDetails.createTypeAndAddToList<ProcessDetail>(row[0], row[1], row[2]);
 				}
 			}

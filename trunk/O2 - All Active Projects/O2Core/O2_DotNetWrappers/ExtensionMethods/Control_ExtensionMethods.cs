@@ -216,6 +216,48 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return control.Controls.list();
         }
 
+        public static T controls<T>(this Control rootControl, int depthToReturn)
+            where T : Control
+        {
+            var controls = rootControl.controls(depthToReturn);
+            return controls.control<T>();
+        }
+
+        public static List<Control> controls(this Control control, int depthToReturn)
+        {
+            var allControls = new List<Control>();
+            allControls.add(control);
+            for (int i = 0; i < depthToReturn; i++)
+                allControls = allControls.controls(false);
+            return allControls;
+        }
+
+        public static List<Control> controls(this List<Control> controls)
+        {
+            return controls.controls(false);
+        }
+
+        public static List<Control> controls(this List<Control> controls, bool includeRoot)
+        {
+            var allControls = new List<Control>();
+            foreach (var control in controls)
+            {
+                if (includeRoot)
+                    allControls.add(control);
+                allControls.add(control.controls());
+            }
+            return allControls;
+        }
+
+        public static T control<T>(this List<Control> controls)
+            where T : Control
+        {
+            foreach (var control in controls)
+                if (control is T)
+                    return (T)control;
+            return null;
+        }
+
         public static List<Control> list(this Control.ControlCollection controlCollection)
         {
             var controls = new List<Control>();

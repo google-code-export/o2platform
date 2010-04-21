@@ -44,7 +44,7 @@ namespace O2.Script
 
 		public void loadProcessData()
 		{
-            this.info("Loading Processes Data");
+            "Loading Processes Data".info();
 			this.invokeOnThread(
 				()=> {
 						 this.clear();
@@ -101,8 +101,8 @@ namespace O2.Script
 	     			()=>{	   
 	     					var row = dataGridView.get_Row(rowId); 					
 				     		var process = (Process)dataGridView.Rows[rowId].Tag;
-				     		this.info("Stopping process: {0}", process.ProcessName);
-				     		this.info(process.ProcessName);
+				     		"Stopping process: {0}".info(process.ProcessName);
+				     		process.ProcessName.info();
 				     		process.Kill();
 				     		process.WaitForExit();
 				     		dataGridView.remove_Row(row);				     						     		
