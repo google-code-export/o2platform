@@ -371,7 +371,6 @@
     <None Include="_Rules\_UnderDev\to document or add to API\Graph development environment.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\search files and filter by name.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\show AutoSavedScripts.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\show today%27s AutoSavedScripts.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\show type details and methods.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\Stop services after startup.h2" />
     <None Include="_Rules\_UnderDev\to document or add to API\View Code AST In Graph.h2" />
