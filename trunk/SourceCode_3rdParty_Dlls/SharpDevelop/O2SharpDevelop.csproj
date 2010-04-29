@@ -12,6 +12,7 @@
     <AssemblyName>O2SharpDevelop</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Administrator\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,8 +40,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\O2 - All Active Projects\_3rdPartyDlls\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="O2_Kernel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="O2_DotNetWrappers">
+      <HintPath>..\..\O2_Binaries\O2_DotNetWrappers.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Interfaces">
+      <HintPath>..\..\O2_Binaries\O2_Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Kernel">
       <HintPath>..\..\O2_Binaries\O2_Kernel.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
@@ -466,16 +472,6 @@
     <Content Include="NRefactory\Project\Src\Lexer\CSharp\KeywordList.txt" />
     <Content Include="NRefactory\Project\Src\Lexer\VBNet\KeywordList.txt" />
     <Content Include="NRefactory\Project\Src\Parser\Frames\SharpCoco.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\O2 - All Active Projects\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
-      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
-      <Name>O2 DotNet Wrappers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\O2 - All Active Projects\O2Core\O2_Interfaces\O2_Interfaces.csproj">
-      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
-      <Name>O2_Interfaces</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
