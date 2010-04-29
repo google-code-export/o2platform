@@ -1,0 +1,317 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4FAACCE1-AA19-4C1C-85F5-AC1BF33BDAF0}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>App.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Cropper</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Fusion8.Cropper</RootNamespace>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <StartupObject>Fusion8.Cropper.Program</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\O2 - All Active Projects\_3rdPartyDlls\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <NoStdLib>false</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Design">
+      <Name>System.Design</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.ico" />
+    <Compile Include="Core\CircularQueue%271.cs" />
+    <Compile Include="Core\Configuration.cs" />
+    <Compile Include="Core\ConfigurationPersistence.cs" />
+    <Compile Include="Core\CropSize.cs" />
+    <Compile Include="Core\DropDownButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\FileNameTemplate.cs" />
+    <Compile Include="Core\HotKeyAction.cs" />
+    <Compile Include="Core\HotKeySelection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Core\HotKeySelection.Designer.cs">
+      <DependentUpon>HotKeySelection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\HotKeySetting.cs" />
+    <Compile Include="Core\ImageCapture.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\ImageOutputCollection.cs" />
+    <Compile Include="Core\NativeMethods.cs" />
+    <Compile Include="Core\Plugins.cs" />
+    <Compile Include="Core\Prompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\Resources\Resources.cs" />
+    <Compile Include="Core\Resources\SR.cs">
+      <DependentUpon>SR.strings</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Core\Settings.cs" />
+    <Compile Include="Core\ShortcutTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\Templates.cs" />
+    <Compile Include="CropForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CropFormBlueColorTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CropFormDarkColorTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CropFormLightColorTable.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Extensibility\BaseConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Extensibility\BaseConfigurationForm.designer.cs">
+      <DependentUpon>BaseConfigurationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensibility\CropFormColorTable.cs" />
+    <Compile Include="Extensibility\CustomThemedTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Extensibility\Delegates.cs" />
+    <Compile Include="Extensibility\DesignablePlugin.cs" />
+    <Compile Include="Extensibility\DesignablePluginThatUsesFetchOutputStream.cs" />
+    <Compile Include="Extensibility\DesignablePluginThatUsesFetchOutputStreamAndSave.cs" />
+    <Compile Include="Extensibility\IConfigurablePlugin.cs" />
+    <Compile Include="Extensibility\ImageCapturedEventArgs.cs" />
+    <Compile Include="Extensibility\ImageCaptureInitializedEventArgs.cs" />
+    <Compile Include="Extensibility\ImageCapturingEventArgs.cs" />
+    <Compile Include="Extensibility\ImageFormatEventArgs.cs" />
+    <Compile Include="Extensibility\ImagePairNames.cs" />
+    <Compile Include="Extensibility\IPersistableImageFormat.cs" />
+    <Compile Include="Extensibility\IPersistableOutput.cs" />
+    <Compile Include="OutputFormats\Bmp\BmpFormat.cs" />
+    <Compile Include="LayeredForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainCropForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NativeMethods.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutputFormats\Clipboard\ClipboardFormat.cs" />
+    <Compile Include="OutputFormats\Clipboard\ClipboardOutputFormat.cs" />
+    <Compile Include="OutputFormats\Clipboard\ClipboardOutputSettings.cs" />
+    <Compile Include="OutputFormats\Clipboard\Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutputFormats\Clipboard\Options.designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OutputFormats\Clipboard\Resources\Resources.cs" />
+    <Compile Include="OutputFormats\Clipboard\Resources\SR.cs" />
+    <Compile Include="OutputFormats\Jpeg\JpegSettings.cs" />
+    <Compile Include="OutputFormats\Jpeg\JpgFormat.cs" />
+    <Compile Include="OutputFormats\Jpeg\Options.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OutputFormats\Jpeg\Options.designer.cs">
+      <DependentUpon>Options.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OutputFormats\Png\PngFormat.cs" />
+    <Compile Include="OutputFormats\PrinterOutput\PrinterOutput.cs" />
+    <Compile Include="PaintLayerEventArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Program.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resources\Resources.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resources\SR.cs">
+      <DependentUpon>SR.strings</DependentUpon>
+      <SubType>Code</SubType>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ScreenShotBounds.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Settings\SharedAssemblyInfo.cs" />
+    <Compile Include="Settings\VersionAssemblyInfo.cs" />
+    <EmbeddedResource Include="Core\HotKeySelection.resx" />
+    <EmbeddedResource Include="Core\ImageCapture.resx" />
+    <EmbeddedResource Include="Core\Prompt.resx" />
+    <EmbeddedResource Include="Core\Resources\SR.resx">
+      <DependentUpon>SR.strings</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Extensibility\BaseConfigurationForm.resx" />
+    <EmbeddedResource Include="LayeredForm.resx">
+      <DependentUpon>LayeredForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainCropForm.resx">
+      <DependentUpon>MainCropForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutputFormats\Clipboard\Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutputFormats\Clipboard\Resources\SR.resx">
+      <DependentUpon>SR.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OutputFormats\Jpeg\Options.resx">
+      <DependentUpon>Options.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SR.resx">
+      <DependentUpon>SR.strings</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Core\Resources\SR.strings">
+      <Generator>StringResourceTool</Generator>
+      <LastGenOutput>SR.cs</LastGenOutput>
+      <CustomToolNamespace>Fusion8.Cropper.Core</CustomToolNamespace>
+    </None>
+    <None Include="OutputFormats\Clipboard\Resources\SR.strings" />
+    <None Include="Resources\SR.strings">
+      <Generator>StringResourceTool</Generator>
+      <LastGenOutput>SR.cs</LastGenOutput>
+      <CustomToolNamespace>Fusion8.Cropper</CustomToolNamespace>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
