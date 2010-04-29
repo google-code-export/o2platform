@@ -12,6 +12,7 @@
     <AssemblyName>O2_External_SharpDevelop</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Administrator\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,9 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="O2SharpDevelop">
       <HintPath>..\..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Misc_Microsoft_MPL_Libs">
+      <HintPath>..\..\_3rdPartyDlls\O2_Misc_Microsoft_MPL_Libs.dll</HintPath>
     </Reference>
     <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -131,10 +134,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SourceCode_3rdParty_Dlls\Microsoft_MPL\Misc_Microsoft_MPL_Libs\O2_Misc_Microsoft_MPL_Libs.csproj">
-      <Project>{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}</Project>
-      <Name>O2_Misc_Microsoft_MPL_Libs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>
@@ -201,7 +200,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AstCSharp\" />
-    <Folder Include="WPF\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

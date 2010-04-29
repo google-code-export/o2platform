@@ -132,7 +132,7 @@
       <Name>O2_Views_ASCX</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Scanners\O2_External_OunceLabsCLI\O2_Scanner_OunceLabsCLI.csproj">
-      <Project>{46E58DB9-5ADB-4482-A366-73184B3C2011}</Project>
+      <Project>{39F35FB3-2A47-4DD9-A3EF-D18529C9A7A4}</Project>
       <Name>O2_Scanner_OunceLabsCLI</Name>
     </ProjectReference>
   </ItemGroup>

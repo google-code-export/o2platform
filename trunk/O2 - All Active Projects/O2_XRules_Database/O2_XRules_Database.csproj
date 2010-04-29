@@ -118,9 +118,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\O2_Binaries\O2SharpDevelop.dll</HintPath>
+    <Reference Include="O2SharpDevelop">
+      <HintPath>..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
     </Reference>
     <Reference Include="O2_Core_CIR, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\O2_Binaries\O2_Core_CIR.dll</HintPath>
@@ -157,6 +156,9 @@
     </Reference>
     <Reference Include="O2_Kernel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\O2_Binaries\O2_Kernel.dll</HintPath>
+    </Reference>
+    <Reference Include="O2_Misc_Microsoft_MPL_Libs">
+      <HintPath>..\_3rdPartyDlls\O2_Misc_Microsoft_MPL_Libs.dll</HintPath>
     </Reference>
     <Reference Include="O2_Rules_OunceLabs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -429,10 +431,6 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SourceCode_3rdParty_Dlls\Microsoft_MPL\Misc_Microsoft_MPL_Libs\O2_Misc_Microsoft_MPL_Libs.csproj">
-      <Project>{BB1489A2-57AB-4A8D-A4DA-7C7E444512B8}</Project>
-      <Name>O2_Misc_Microsoft_MPL_Libs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\O2_APIs\O2_API_AST\O2_API_AST.csproj">
       <Project>{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}</Project>
       <Name>O2_API_AST</Name>

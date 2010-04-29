@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 # SharpDevelop 3.2.0.5698
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RnD", "RnD", "{09D8FF82-7830-4707-8502-050F4FB37D7F}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_Filter_Assessment_Files", "O2_Tools\O2_Tool_Filter_Assessment_Files\O2_Tool_Filter_Assessment_Files.csproj", "{BBA8C568-865F-46E8-93A5-DF8FDFB1E8B6}"
 EndProject
@@ -31,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspectDNG_UnitTests", "RnD\AspectDNG_UnitTests\AspectDNG_UnitTests.csproj", "{B8048DA5-5BD7-49AD-88E7-116FCADDCF0D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2 Core", "O2 Core", "{60D3F45B-D4D5-40AE-8AC8-45138833855C}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Debugger_Mdbg", "O2Core\O2_Debugger_Mdbg\O2_Debugger_Mdbg.csproj", "{3EDD49CB-F7F2-4CFE-AFAC-698B13B0C968}"
 EndProject
@@ -57,6 +61,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2 (just gui)", "O2Core\O2\O2 (just gui).csproj", "{770B45B4-B19E-4884-8AB7-BC3BBBD5FC73}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2Scanners", "O2Scanners", "{2659969F-D878-4FD3-9E6A-8A668DC63403}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Scanner_OunceLabsCLI", "Scanners\O2_External_OunceLabsCLI\O2_Scanner_OunceLabsCLI.csproj", "{39F35FB3-2A47-4DD9-A3EF-D18529C9A7A4}"
 EndProject
@@ -71,6 +77,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_External_PostSharp", "Scanners\O2_External_PostSharp\O2_External_PostSharp.csproj", "{EDA941A6-FA49-473E-8A67-6785ABA13C3F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2 Tools", "O2 Tools", "{76A81ABB-2CA4-4AD5-BCF0-BE2D637BEB16}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_JoinTraces", "O2_Tools\O2_Tool_JoinTraces\O2_Tool_JoinTraces.csproj", "{ED678EA9-87C8-43BE-BD33-699958C86D9A}"
 EndProject
@@ -107,6 +115,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_XRules", "O2_Tools\O2_Tool_XRules\O2_Tool_XRules.csproj", "{1F4DA91C-EF77-4552-AA2A-1159C7032FCD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_UnitTests", "_UnitTests", "{1B691F63-D296-42F0-BF02-234503C51ECD}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2UnitTest_O2CoreLib", "_O2_UnitTests\O2UnitTest_O2CoreLib\O2UnitTest_O2CoreLib.csproj", "{0F63204A-4922-4FC3-8F9B-E80F27233FA5}"
 EndProject
@@ -129,6 +139,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Misc_UnitTests_and_Scripts", "_O2_UnitTests\Misc_UnitTests_and_Scripts.csproj", "{8434E201-1CAF-4776-BBF3-3804E0395F32}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2 3rd Party Wrappers", "O2 3rd Party Wrappers", "{DFBB5440-C874-4E7F-B71E-AFE7FA9EDDDB}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_External_WinFormsUI", "O2 Modules Using 3rd Party Dlls\O2_External_WinFormsUI\O2_External_WinFormsUI.csproj", "{EED5F98D-00BA-4D9B-A9E7-A7794AD50132}"
 EndProject
@@ -149,6 +161,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_External_IE", "O2 Modules Using 3rd Party Dlls\O2_External_IE\O2_External_IE.csproj", "{F6942664-5E64-4182-B3EB-11F481F461FB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2 Legacy", "O2 Legacy", "{FAFB62F8-5A17-4CFE-8979-B08394FB4A48}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Legacy_OunceV6", "O2Core\O2_Legacy_OunceV6\O2_Legacy_OunceV6.csproj", "{14F52AB9-7FC7-44F5-9A84-422ED47CFA1A}"
 EndProject
@@ -192,6 +206,8 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "O2_Installer_Tool_XRules", "_Installers\O2_Installer_Tool_XRules\O2_Installer_Tool_XRules.vdproj", "{C68E8F84-F47B-435B-8B5F-FD4F1AD6B922}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2 Cmd", "O2 Cmd", "{0FD551B5-831B-4A8C-A472-C8EF8E9B1CED}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Cmd_FindingsFilter", "O2_Cmd\O2_Cmd_FindingsFilter\O2_Cmd_FindingsFilter.csproj", "{18B24402-8F2F-4987-B324-4E7B4DC2FCD2}"
 EndProject
@@ -276,6 +292,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		RnD\WebService_Scan\WebService_Scan.sln = RnD\WebService_Scan\WebService_Scan.sln
 		_3rdPartyDlls\WeifenLuo.WinFormsUI.Docking.dll = _3rdPartyDlls\WeifenLuo.WinFormsUI.Docking.dll
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2 APIs", "O2 APIs", "{CF112E2A-C931-4025-B250-D8FD7E12B89E}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_API_AST", "O2_APIs\O2_API_AST\O2_API_AST.csproj", "{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_API_Visualization", "O2_APIs\O2_API_Visualization\O2_API_Visualization.csproj", "{7226283F-7C31-4EBB-9940-97AB0F676319}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -643,6 +667,14 @@ Global
 		{6D37815B-CD9E-4045-B209-B8E19A31A0C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0624FB3-77EE-4A17-B3B5-AC59A98E977B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75B23121-5004-4149-AACF-58C7FA7F7676}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7226283F-7C31-4EBB-9940-97AB0F676319}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7226283F-7C31-4EBB-9940-97AB0F676319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7226283F-7C31-4EBB-9940-97AB0F676319}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7226283F-7C31-4EBB-9940-97AB0F676319}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -735,5 +767,7 @@ Global
 		{B10305CD-A47E-41C7-8116-CA34180F6C6F} = {0FD551B5-831B-4A8C-A472-C8EF8E9B1CED}
 		{2ACFB8BA-AFD1-41F1-BFCA-A2699DE8AD02} = {0FD551B5-831B-4A8C-A472-C8EF8E9B1CED}
 		{18B24402-8F2F-4987-B324-4E7B4DC2FCD2} = {0FD551B5-831B-4A8C-A472-C8EF8E9B1CED}
+		{7226283F-7C31-4EBB-9940-97AB0F676319} = {CF112E2A-C931-4025-B250-D8FD7E12B89E}
+		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD} = {CF112E2A-C931-4025-B250-D8FD7E12B89E}
 	EndGlobalSection
 EndGlobal

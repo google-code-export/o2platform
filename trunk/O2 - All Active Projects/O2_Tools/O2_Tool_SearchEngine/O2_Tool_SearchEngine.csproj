@@ -148,6 +148,14 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+    <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
+      <Project>{49F0878F-E643-4D19-BE27-BC4CF4D6A138}</Project>
+      <Name>O2 ImportExport OunceLabs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
@@ -170,17 +178,9 @@
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
-      <Project>{D388D146-D728-412E-8097-5C6E4E53612E}</Project>
-      <Name>O2 ImportExport OunceLabs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
       <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
       <Name>O2_Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
-      <Project>{F84A06BA-48C8-42E5-A70A-1E737E7A735F}</Project>
-      <Name>O2 Kernel</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
       <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>

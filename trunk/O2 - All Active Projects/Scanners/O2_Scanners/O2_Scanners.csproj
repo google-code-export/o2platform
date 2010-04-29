@@ -137,6 +137,10 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
@@ -156,10 +160,6 @@
     <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
       <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
       <Name>O2_Interfaces</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
-      <Project>{F84A06BA-48C8-42E5-A70A-1E737E7A735F}</Project>
-      <Name>O2 Kernel</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
       <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>

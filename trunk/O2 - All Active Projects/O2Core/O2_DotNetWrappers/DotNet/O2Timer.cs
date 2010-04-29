@@ -61,5 +61,10 @@ namespace O2.DotNetWrappers.DotNet
                                      tsTime.Milliseconds);
             return String.Format("{0}{1}s:{2}ms", Description, tsTime.Seconds, tsTime.Milliseconds);
         }
+        
+		public override string ToString()
+		{
+			return this.TimeSpanString;
+		}
     }
 }

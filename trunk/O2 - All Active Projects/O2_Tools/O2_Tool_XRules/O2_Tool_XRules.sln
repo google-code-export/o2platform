@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
+# SharpDevelop 3.2.0.5698
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "O2_Installer_Tool_XRules", "..\..\_Installers\O2_Installer_Tool_XRules\O2_Installer_Tool_XRules.vdproj", "{E455A568-365D-4644-9C61-07A451AF9C7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Debugger_Mdbg", "..\..\O2Core\O2_Debugger_Mdbg\O2_Debugger_Mdbg.csproj", "{3EDD49CB-F7F2-4CFE-AFAC-698B13B0C968}"
@@ -8,8 +9,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Core_CIR", "..\..\O2Core\O2_Core_CIR\O2_Core_CIR.csproj", "{F19ED2FE-8191-4534-8DAC-4C42DEE87B52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_ImportExport_Misc", "..\..\O2Core\O2_ImportExport_Misc\O2_ImportExport_Misc.csproj", "{BC958F16-74FF-4816-B19A-D78524DB1152}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_SearchEngine", "..\O2_Tool_SearchEngine\O2_Tool_SearchEngine.csproj", "{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merlin", "..\..\..\SourceCode_3rdParty_Dlls\Merlin_Workflow\Merlin\Merlin.csproj", "{5569E453-3A8E-425A-81CF-EB964117B7EC}"
 EndProject
@@ -49,7 +48,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Misc_Microsoft_MPL_Libs"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_API_AST", "..\..\O2_APIs\O2_API_AST\O2_API_AST.csproj", "{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "010.Irony", "..\..\..\..\..\_Downloads\irony-47261\irony-47261\Irony\010.Irony.csproj", "{D81F5C91-D7DB-46E5-BC99-49488FB6814C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_External_O2Mono", "..\..\O2 Modules Using 3rd Party Dlls\O2_External_O2Mono\O2_External_O2Mono.csproj", "{F457A7EB-A573-41BB-BC12-61ABE5ACF702}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Rules_OunceLabs", "..\..\Scanners\O2_Rules_OunceLabs\O2_Rules_OunceLabs.csproj", "{831EEFD3-A243-484E-B008-BA1EC6499954}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_SearchEngine", "..\O2_Tool_SearchEngine\O2_Tool_SearchEngine.csproj", "857043B7-8F2E-49B9-9D47-760F7323E0BA"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -85,12 +88,6 @@ Global
 		{BC958F16-74FF-4816-B19A-D78524DB1152}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
 		{BC958F16-74FF-4816-B19A-D78524DB1152}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC958F16-74FF-4816-B19A-D78524DB1152}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
-		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
-		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5569E453-3A8E-425A-81CF-EB964117B7EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5569E453-3A8E-425A-81CF-EB964117B7EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5569E453-3A8E-425A-81CF-EB964117B7EC}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
@@ -205,12 +202,25 @@ Global
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
-		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
-		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D81F5C91-D7DB-46E5-BC99-49488FB6814C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E455A568-365D-4644-9C61-07A451AF9C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Publish to Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Publish to Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Publish to Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Publish to Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Release|Any CPU.Build.0 = Release|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		857043B7-8F2E-49B9-9D47-760F7323E0BA.Debug|Any CPU.Build.0 = Debug|Any CPU
+		857043B7-8F2E-49B9-9D47-760F7323E0BA.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		857043B7-8F2E-49B9-9D47-760F7323E0BA.Publish to Deploy|Any CPU.Build.0 = Debug|Any CPU
+		857043B7-8F2E-49B9-9D47-760F7323E0BA.Publish to Deploy|Any CPU.ActiveCfg = Debug|Any CPU
+		857043B7-8F2E-49B9-9D47-760F7323E0BA.Release|Any CPU.Build.0 = Release|Any CPU
+		857043B7-8F2E-49B9-9D47-760F7323E0BA.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
