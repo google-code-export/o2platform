@@ -138,7 +138,7 @@
       <Name>O2 DotNet Wrappers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
-      <Project>{D388D146-D728-412E-8097-5C6E4E53612E}</Project>
+      <Project>{49F0878F-E643-4D19-BE27-BC4CF4D6A138}</Project>
       <Name>O2 ImportExport OunceLabs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">

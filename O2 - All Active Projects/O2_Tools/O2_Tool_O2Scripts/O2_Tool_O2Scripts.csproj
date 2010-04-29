@@ -106,6 +106,10 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+    <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
+      <Project>{49F0878F-E643-4D19-BE27-BC4CF4D6A138}</Project>
+      <Name>O2 ImportExport OunceLabs</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
@@ -123,10 +127,6 @@
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\O2Core\O2_ImportExport_OunceLabs\O2 ImportExport OunceLabs.csproj">
-      <Project>{D388D146-D728-412E-8097-5C6E4E53612E}</Project>
-      <Name>O2 ImportExport OunceLabs</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
       <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>

@@ -20,14 +20,15 @@ namespace O2.Legacy.OunceV6.GLEEGraphWiz.GleeUtils
 {
     public class O2Graph
     {
-        public static void createGraphWizDotFile(AdjacencyGraph<String, MarkedEdge<String, String>> gGraphWizToPopulate,
+    	//DC this version was using the old QuickGraph MarkedEdge
+        public static void createGraphWizDotFile(AdjacencyGraph<String, TaggedEdge<String, String>> gGraphWizToPopulate,
                                                  TreeNode tnTreeNode, bool bOrder, bool bFilterName, bool bFilterClass,
                                                  int iFilterClassLevel)
         {
             if (bFilterClass)
                 tnTreeNode.Text = FilteredSignature.filterName(tnTreeNode.Text, false, false, true, 0, true, true,
                                                                iFilterClassLevel);
-            MarkedEdge<String, string> meTemp;
+            TaggedEdge<String, string> meTemp;
             if (gGraphWizToPopulate.ContainsVertex(tnTreeNode.Text))
             {
             }
@@ -43,11 +44,11 @@ namespace O2.Legacy.OunceV6.GLEEGraphWiz.GleeUtils
                 if (bOrder)
                 {
                     if (false == gGraphWizToPopulate.TryGetEdge(tnTreeNode.Text, tnChild.Text, out meTemp))
-                        gGraphWizToPopulate.AddEdge(new MarkedEdge<String, string>(tnTreeNode.Text, tnChild.Text,
+                        gGraphWizToPopulate.AddEdge(new TaggedEdge<String, string>(tnTreeNode.Text, tnChild.Text,
                                                                                    "marker"));
                 }
                 else if (false == gGraphWizToPopulate.TryGetEdge(tnChild.Text, tnTreeNode.Text, out meTemp))
-                    gGraphWizToPopulate.AddEdge(new MarkedEdge<String, string>(tnChild.Text, tnTreeNode.Text, "marker"));
+                    gGraphWizToPopulate.AddEdge(new TaggedEdge<String, string>(tnChild.Text, tnTreeNode.Text, "marker"));
 
                 //gGraphToPopulate.AddEdge(tnTreeNode.Text, tnChild.Text);
                 //    gGraphToPopulate.AddEdge(Analysis_CallFlow.display.filterName(tnChild.Text, false, false, false), Analysis_CallFlow.display.filterName(tnTreeNode.Text, false, false, false));

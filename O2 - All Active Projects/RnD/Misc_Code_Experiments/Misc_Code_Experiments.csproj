@@ -81,7 +81,7 @@
       <Name>O2_Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Kernel\O2 Kernel.csproj">
-      <Project>{F84A06BA-48C8-42E5-A70A-1E737E7A735F}</Project>
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
       <Name>O2 Kernel</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">

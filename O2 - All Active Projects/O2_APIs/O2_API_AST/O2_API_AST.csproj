@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="O2SharpDevelop">
+      <HintPath>..\..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -72,10 +75,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SourceCode_3rdParty_Dlls\SharpDevelop\O2SharpDevelop.csproj">
-      <Project>{2483564D-4343-4624-A0C6-63ABC932544A}</Project>
-      <Name>O2SharpDevelop</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
       <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
       <Name>O2 DotNet Wrappers</Name>

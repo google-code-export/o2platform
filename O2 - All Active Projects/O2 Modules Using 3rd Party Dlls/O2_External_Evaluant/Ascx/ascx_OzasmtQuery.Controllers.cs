@@ -88,7 +88,7 @@ namespace O2.External.Evaluant.Ascx
                                                                                                           mappingOfDataRowsToObjects);
                         //finding => new [] {results});
                     }
-                    lbNLinqQuery_ExecutionTime.Text = timer.stop();
+                    lbNLinqQuery_ExecutionTime.Text = timer.stop().ToString();
                 }
                 catch (Exception ex)
                 {
