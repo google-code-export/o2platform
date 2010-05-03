@@ -41,6 +41,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return "";
         }
 
+        public static string save(this byte[] contents)
+        {
+            return contents.saveAs(PublicDI.config.TempFileNameInTempDirectory);
+        }
+
+        public static string saveAs(this byte[] contents, string targetFileName)
+        {
+            Files.WriteFileContent(targetFileName, contents);
+            if (targetFileName.fileExists())
+                return targetFileName;
+            return "";
+        }
+
         public static string fileTrimContents(this string filePath)
         {
             var fileContents = filePath.fileContents();

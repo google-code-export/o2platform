@@ -46,7 +46,7 @@ namespace O2.Script
     	[Test]
     	public bool checkIfSvnServerIsOnline()
     	{
-    		var urlContents = Web.getUrlContents(svnServer);
+            var urlContents = new Web().getUrlContents(svnServer);
     		Assert.That(false == string.IsNullOrEmpty(urlContents), "urlContents was empty");    		
     		return true;
     	}
@@ -54,7 +54,7 @@ namespace O2.Script
     	[Test]
     	public bool checkIfRulesDatabaseIsAvailable()
     	{
-            var urlContents = Web.getUrlContents(XRulesDatabase);
+            var urlContents = new Web().getUrlContents(XRulesDatabase);
     		Assert.That(false == string.IsNullOrEmpty(urlContents), "urlContents was empty");    		
     		return true;
     	}    	

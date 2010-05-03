@@ -566,7 +566,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                 {
                                     //if (splitterDistance > -1 && splitterDistance > splitContainer.Panel1MinSize && 
                                     //                             splitterDistance < ( splitContainer.Width -  splitContainer.Panel2MinSize))                                    
-                                    splitContainer.SplitterDistance = splitterDistance;
+                                    if (splitterDistance > 0)
+                                    {                                        
+                                        splitContainer.SplitterDistance = splitterDistance;
+                                    }
                                 }
                                 catch (Exception ex)
                                 {
@@ -588,8 +591,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                                                         ? splitContainer.Height - splitterDistance
                                                                         : splitContainer.Width - splitterDistance;
                                     if (newSplitterDistance > 0)
+                                    {                                     
                                         splitContainer.SplitterDistance = newSplitterDistance;
-                                    else                                        
+                                    }
+                                    else
                                         "Could not set Splitter Distance since it was a negative value: {0}".format(newSplitterDistance).error();
                                 }
                                 splitContainer.Orientation = (location == AnchorStyles.Bottom) ? Orientation.Horizontal : Orientation.Vertical;
@@ -743,6 +748,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
         #endregion
 
         #region Control - KeyUp
+
+        public static T onKeyPress<T>(this T control, Func<Char, bool> callback)
+            where T : Control
+        {            
+            control.KeyPress += (sender, e) => e.Handled = callback(e.KeyChar);
+            return control;
+        }
 
         public static T onKeyPress<T>(this T control, Action<Keys> callback)
             where T : Control

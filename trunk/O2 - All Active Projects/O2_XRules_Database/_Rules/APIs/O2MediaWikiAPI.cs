@@ -73,7 +73,7 @@ namespace O2.Script
     	
     	public string apiSpec()
     	{
-    		return Web.getUrlContents(ApiPhp);
+            return new Web().getUrlContents(ApiPhp);
     	}
     	
     	public void format(string returnFormat)
@@ -82,39 +82,68 @@ namespace O2.Script
     	}
     			  
 		
-		public string parsePage(string page)
+		public string parsePage_Raw(string page)
 		{
 			try
 			{
 				var getData = "action=parse&page={0}&format=xml".format(page);			
-				var data = getApiPhp(getData);
+				return getApiPhp(getData);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in O2MediaWikiAPI.parsePage_Raw");
+                return null;
+            }
+        }
+
+        public string parsePage(string page)
+        {
+            try
+            {
+                var data = parsePage_Raw(page);
 				var value = data.xRoot().element("parse").element("text").value();
 				return value.fixCRLF();				
 			}
 			catch(Exception ex)
 			{
-				ex.log("in O2MediaWikiAPI.parse");
-				return null;
+				ex.log("in O2MediaWikiAPI.parsePage");				
 			}
+            return null;
 		}
 		
-		public string parseText(string textToParse)
+        public string parseText_Raw(string textToParse)
 		{
 			try
 			{
 				var getData = "action=parse&text={0}&format=xml".format(textToParse.urlEncode());			
-				var data = postApiPhp(getData);
-				// temp until next restart
-				if (data.starts("\n"))
+				var data = postApiPhp(getData);				
+				if (data.starts("\n"))              // fix prob with some wikis that return a enter at the top
 					data = data.trim();
-				var value = data.xRoot().element("parse").element("text").value();
-				return value.fixCRLF();				
+                return data;
+            }            
+			catch(Exception ex)
+			{
+				ex.log("in O2MediaWikiAPI.parseText_Raw");
+				return null;
+			}
+		}
+
+		public string parseText(string textToParse)
+		{
+			try
+			{
+                var data = parseText_Raw(textToParse);
+                if (data != null)
+                {
+                    var value = data.xRoot().element("parse").element("text").value();
+                    return value.fixCRLF();
+                }
 			}
 			catch(Exception ex)
 			{
-				ex.log("in O2MediaWikiAPI.parse");
-				return null;
+				ex.log("in O2MediaWikiAPI.parseText");				
 			}
+            return null;
 		}
 		
 		public string raw(string page)
@@ -160,7 +189,7 @@ namespace O2.Script
 			try
 			{
 				"sending GET request with: {0}".format(uri.str()).debug();
-				var responseData = Web.getUrlContents(uri.str(),Login_Cookie,false);
+                var responseData = new Web().getUrlContents(uri.str(), Login_Cookie, false);
 				if (responseData != null && responseData.valid())
 					"responseData size: {0}".format(responseData.size()).info(); 
 				else
@@ -179,7 +208,7 @@ namespace O2.Script
 			try
 			{
 				"sending POST request with: {0}".format(postData).debug();
-				return Web.getUrlContents_POST(ApiPhp,Login_Cookie,postData);
+                return new Web().getUrlContents_POST(ApiPhp, Login_Cookie, postData);
 			}		
 			catch(Exception ex)
 			{

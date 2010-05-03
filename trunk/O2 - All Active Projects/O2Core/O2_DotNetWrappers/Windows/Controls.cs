@@ -65,7 +65,7 @@ namespace O2.DotNetWrappers.Windows
             return dgvDataGridView;
         }
 
-        public static SplitContainer add_SplitContainer(Control cTargetControl, Control cPanel1, Control cPanel2,
+        /*public static SplitContainer add_SplitContainer(Control cTargetControl, Control cPanel1, Control cPanel2,
                                                        Orientation oOrientation, int iLeft, int iTop, int iWidth,
                                                        int iHeight, AnchorStyles asAnchorStyles)
         {
@@ -74,7 +74,7 @@ namespace O2.DotNetWrappers.Windows
                                            BorderStyle = BorderStyle.Fixed3D,
                                            Anchor = asAnchorStyles,
                                            Orientation = oOrientation
-                                       };
+                                       };            
             scSplitContainer.Panel1.Controls.Add(cPanel1);
             scSplitContainer.Panel2.Controls.Add(cPanel2);
             cPanel1.Dock = DockStyle.Fill;
@@ -87,6 +87,6 @@ namespace O2.DotNetWrappers.Windows
             scSplitContainer.Height = iHeight;
             cTargetControl.Controls.Add(scSplitContainer);
             return scSplitContainer;
-        }
+        }*/
     }
 }

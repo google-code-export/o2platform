@@ -89,7 +89,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string getUrlContents(this Uri uri, string cookies)
         {
-            return Web.getUrlContents(uri.str(), cookies,false);
+            return new Web().getUrlContents(uri.str(), cookies,false);
         }
 
         public static string getHtml(this Uri uri)
@@ -148,5 +148,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return "";
             }
         }
+
+
     }
 }
