@@ -40,7 +40,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return targetFileName;
             return "";
         }
-
+        
         public static string save(this byte[] contents)
         {
             return contents.saveAs(PublicDI.config.TempFileNameInTempDirectory);
@@ -182,6 +182,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static string fileContents(this string file)
         {
             return file.contents();
+        }
+
+        public static byte[] fileContents_AsByteArray(this string file)
+        {
+            return Files.getFileContentsAsByteArray(file);
         }
 
         public static string fileSnippet(this string file, int startLine, int endLine)

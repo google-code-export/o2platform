@@ -79,6 +79,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return button;
         }
 
+        public static Button click(this Button button)
+        {
+            button.invokeOnThread(() => button.PerformClick());
+            return button;
+        }
+
         public static Button set_Text(this Button button, string text)
         {
             return (Button)button.invokeOnThread(
@@ -89,6 +95,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
 
         }
+
         #endregion
 
         #region Label
@@ -634,8 +641,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 {
                     return textBox.Text;
                 });
-        }    	    	
-        
+        }
+
+        public static TextBox insertText(this TextBox textBox, string textToInsert)
+        {
+            return (TextBox)textBox.invokeOnThread(
+                () =>
+                {
+                    textBox.SelectionLength = 0;
+                    textBox.SelectedText = textToInsert;
+                    return textBox;
+                });
+        }
+
         public static void append_Line(this TextBox textBox, string textFormat, params object[] parameters)
         {
             textBox.append_Line(string.Format(textFormat, parameters));
@@ -1494,6 +1512,28 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                              richTextBox.ForeColor = color;
                                              return richTextBox;
                                          });
+        }
+
+        public static string get_Text(this RichTextBox richTextBox)
+        {
+            return (string)richTextBox.invokeOnThread(() => richTextBox.Text);
+        }
+
+        public static string get_Rtf(this RichTextBox richTextBox)
+        {
+            return (string)richTextBox.invokeOnThread(() => richTextBox.Rtf);
+        }
+
+        public static RichTextBox insertText(this RichTextBox richTextBox, string textToInsert)
+        {
+
+            return (RichTextBox)richTextBox.invokeOnThread(
+                () =>
+                {
+                    richTextBox.SelectionLength = 0;
+                    richTextBox.SelectedText = textToInsert;
+                    return richTextBox;
+                });
         }
 
         #endregion

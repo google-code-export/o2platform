@@ -13,6 +13,10 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX;
+using System.Windows.Forms;
+using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
 //O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_WebAutomation.cs
 
 namespace O2.Script
@@ -224,6 +228,11 @@ namespace O2.Script
     {	
     	#region login & security 
     	
+        public static bool loggedIn(this O2MediaWikiAPI wikiApi)
+        {
+            return wikiApi.Login_Result == "Success";
+        }
+
     	public static string editToken(this O2MediaWikiAPI wikiApi, string page)
     	{
     		return wikiApi.token("edit",page);
@@ -581,34 +590,153 @@ namespace O2.Script
 		//allimages, allpages, alllinks, allcategories, , backlinks, blocks, categorymembers, deletedrevs, embeddedin, imageusage, logevents, , search, usercontribs, watchlist, watchlistraw, exturlusage, users, random, protectedtitles
 		
 		#endregion
-		
-		#region mist
-		
-		
-		  
 
-		#endregion
-		
-		
-		
+        #region text parsing
+        
+        public static string parse(this O2MediaWikiAPI wikiApi, string textToParse)
+        {
+            var html = wikiApi.parseText(textToParse);
+            var xRoot = html.xRoot();
+            if (xRoot != null && xRoot.Name == "p")
+                return xRoot.innerXml();
+            return "";
+        }
+
+        public static string parseText(this O2MediaWikiAPI wikiApi, string textToParse, bool padWithHtmlPage)
+        {
+            var parsedText = wikiApi.parseText(textToParse);
+            if (padWithHtmlPage)
+                return wikiApi.wrapOnHtmlPage(parsedText);
+            return parsedText;
+        }
+
+        public static List<string> parseText_getImages(this O2MediaWikiAPI wikiApi, string textToParse)
+        {
+            var images = new List<String>();
+            return images;
+        }
+
+        #endregion
+
+        #region uploadImage
+
+        public static string uploadImage_FromClipboard(this O2MediaWikiAPI wikiApi)
+        {
+            var result = "";
+            if (wikiApi.loggedIn().isFalse())
+                "[in uploadImage_FromClipboard] cannot upload images if the user is not logged in".error();
+            else
+            {
+                var thread = O2Thread.staThread(
+                () =>
+                {
+                    if (Clipboard.ContainsImage())
+                    {
+                        var bitmap = (Bitmap)Clipboard.GetImage();
+                        MemoryStream memoryStream = new MemoryStream();
+                        bitmap.Save(memoryStream, ImageFormat.Jpeg);
+                        byte[] bitmapData = memoryStream.ToArray();
+                        var tempImageName = Files.getSafeFileNameString("{0}_{1}".format(DateTime.Now, Files.getTempFileName().replace(".tmp", ""))) + ".jpg";
+                        "[in O2MediaWikiAPI.uploadImage_fromClipboard]: got image, now uploading using under the tempName: {0}".info(tempImageName);
+                        result = wikiApi.uploadImage(tempImageName, bitmapData);
+                        "[in O2MediaWikiAPI.uploadImage_fromClipboard]: result ={0}".info(result);
+                    }
+                    else
+                        "[in uploadImage_fromClipboard]: There is no image on the clipboard".error();
+                }
+                );
+                thread.Join();
+            }
+            return result;
+        }
+
+        public static string uploadImage(this O2MediaWikiAPI wikiApi, string fileToUpload)
+        {
+            if (fileToUpload.fileExists().isFalse())
+                return "";
+            var fileName = fileToUpload.fileName();
+            var fileContents = fileToUpload.fileContents_AsByteArray();
+            return wikiApi.uploadImage(fileName, fileContents);
+        }
+
+        public static string uploadImage(this O2MediaWikiAPI wikiApi, string fileName, byte[] fileContents)
+        {
+            if (wikiApi.loggedIn().isFalse())
+                return "";
+
+            string sessionId = wikiApi.Login_SessionId; // "__c451ccaca794893f041024657b8ed498";
+            string userId = wikiApi.Login_UserId;
+            string userName = wikiApi.Login_Username;
+
+            string uploadDescription = "File uploaded using an O2 Platform script";
+            string postURL = wikiApi.IndexPhp + "/Special:Upload";
+            string fileFormat = fileName.extension();
+            string fileContentType = "image/" + fileFormat;
+            string userAgent = "O2 Platform";
+            string cookies = "wiki_db_session={0}; wiki_dbUserID={1}; wiki_dbUserName={2}".format(sessionId, userId, userName);
+
+            string postedFileHttpFieldName = "wpUploadFile";
+            var postParameters = new Dictionary<string, object>();
+            postParameters.Add("wpSourceType", "file");
+            postParameters.Add("wpDestFile", fileName);
+            postParameters.Add("wpUpload", "Upload File");
+            postParameters.Add("wpIgnoreWarning", "True");
+            postParameters.Add("wpUploadDescription", uploadDescription);
+
+            var httpWebResponse = HttpMultiPartForm.uploadFile(fileContents, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
+            if (httpWebResponse.ResponseUri.AbsoluteUri.extension() == fileName.extension())
+                return httpWebResponse.ResponseUri.AbsoluteUri.str();
+            return "";
+        }
+        #endregion
+
+        #region misc
+
+        public static string padWithHtmlPage(this O2MediaWikiAPI wikiApi, string textToParse)
+        {
+            return wikiApi.wrapOnHtmlPage(textToParse);
+        }
+
+        public static string wrapOnHtmlPage(this O2MediaWikiAPI wikiApi, string htmlCode)
+        {
+            return "<html><head><base href=\"{0}\"> {1} </head><body>{2}</body></html>".format(wikiApi.HostUrl, wikiApi.Styles, htmlCode);
+        }
+
+        public static string getWikiTextForImage(this O2MediaWikiAPI wikiApi, string imageUrl)
+        {
+            var indexOfFile = imageUrl.indexLast("File:");
+            if (indexOfFile > -1)
+            {
+                var file = imageUrl.Substring(indexOfFile + 5);
+                return "[[Image:{0}]]".format(file);
+            }
+            return "";
+        }
+
+        public static string getMediaHref(this O2MediaWikiAPI wikiApi, string mediaName)
+        {
+            try
+            {
+                var textToParse = "[[Media:{0}]]".format(mediaName);
+                var html = wikiApi.parseText(textToParse);
+                var xRoot = html.xRoot();
+                if (xRoot != null && xRoot.Name == "p")
+                {
+                    var href = xRoot.FirstNode.xElement().attribute("href").value();
+                    if (href.contains("Special:Upload"))		// happens when the file doesn't exist
+                        return "";
+                    return href;
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in getMediaHref for media:{0}".format(mediaName));
+            }
+            return "";
+        }
+
+        #endregion
+
+
     }
-    
-    public static class Wiki_Html_Utils
-    {
-    	public static string wrapOnHtmlPage(this O2MediaWikiAPI wikiApi, string htmlCode)
-    	{
-    		
-/*			<!--[if lt IE 5.5000]><link rel="stylesheet" href="/skins/gumax/IE50Fixes.css?207" type="text/css" media="screen" /><![endif]--> 
-			<!--[if IE 5.5000]><link rel="stylesheet" href="/skins/gumax/IE55Fixes.css?207" type="text/css" media="screen" /><![endif]--> 
-			<!--[if IE 6]><link rel="stylesheet" href="/skins/gumax/IE60Fixes.css?207" type="text/css" media="screen" /><![endif]--> 
-			<!--[if IE 7]><link rel="stylesheet" href="/skins/gumax/IE70Fixes.css?207" type="text/css" media="screen" /><![endif]--> 
-			<link rel="stylesheet" href="/skins/gumax/gumax_print.css?207" type="text/css" media="print" /> 
-			<link rel="stylesheet" href="/index.php?title=MediaWiki:Common.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" type="text/css" /> 
-			<link rel="stylesheet" href="/index.php?title=MediaWiki:Print.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" type="text/css" media="print" /> 
-			<link rel="stylesheet" href="/index.php?title=MediaWiki:Gumax.css&amp;usemsgcache=yes&amp;ctype=text%2Fcss&amp;smaxage=18000&amp;action=raw&amp;maxage=18000" type="text/css" /> 
-			<link rel="stylesheet" href="/index.php?title=-&amp;action=raw&amp;maxage=18000&amp;gen=css" type="text/css" /> 
-*/			
-    		return "<html><head><base href=\"{0}\"> {1} </head><body>{2}</body></html>".format(wikiApi.HostUrl, wikiApi.Styles, htmlCode);
-    	}
-    }
-}
+ }

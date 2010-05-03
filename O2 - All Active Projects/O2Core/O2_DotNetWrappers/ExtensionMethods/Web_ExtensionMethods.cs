@@ -135,6 +135,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return "";
             }
         }
+        public static string base64Encode(this byte[] bytesToEncode)
+        {
+            try
+            {
+                return System.Convert.ToBase64String(bytesToEncode);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in base64Encode");
+                return "";
+            }
+        }
 
         public static string base64Decode(this string stringToDecode)
         {
@@ -146,6 +158,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
             {
                 ex.log("in base64Decode");
                 return "";
+            }
+        }
+
+        public static byte[] base64Decode_AsByteArray(this string stringToDecode)
+        {
+            try
+            {
+                return System.Convert.FromBase64String(stringToDecode);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in base64Decode");
+                return null;
             }
         }
 

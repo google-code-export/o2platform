@@ -276,6 +276,20 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static Bitmap fromClipboardGetImage(this Control control)
+        {
+            return (Bitmap)control.invokeOnThread(
+                () =>
+                {
+                    if (Clipboard.ContainsImage())
+                    {
+                        return Clipboard.GetImage();
+                    }
+                    "in fromClipboardGetImage, the Clipboard doesn't contain an image".debug();
+                    return null;
+                });
+        }
+
         #endregion
 
         #region Control - events
@@ -749,12 +763,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region Control - KeyUp
 
-        public static T onKeyPress<T>(this T control, Func<Char, bool> callback)
+        public static T onKeyPress<T>(this T control, Func<Keys, bool> callback)
             where T : Control
-        {            
-            control.KeyPress += (sender, e) => e.Handled = callback(e.KeyChar);
+        {
+            control.KeyDown += (sender, e) => e.Handled = callback(e.KeyData);
             return control;
         }
+    	
 
         public static T onKeyPress<T>(this T control, Action<Keys> callback)
             where T : Control
@@ -790,6 +805,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     callback(control.Text);
             };
             return control;
+        }
+
+        public static T onEnter<T>(this T control, Action<String> callback)
+            where T : Control
+        {
+            return control.onKeyPress(Keys.Enter, callback);
         }
 
         #endregion

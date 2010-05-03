@@ -227,7 +227,24 @@ namespace O2.DotNetWrappers.ExtensionMethods
             }
             return null;
         }
-  
+
+        public static string innerXml(this XElement xElement)
+        {
+            if (xElement == null)
+                return "";
+            var reader = xElement.CreateReader();
+            reader.MoveToContent();
+            return reader.ReadInnerXml();
+        }
+
+        public static XElement xElement(this XNode xNode)
+        {
+            if (xNode is XElement)
+                return (XElement)xNode;
+            return null;
+        }        
+
+
         #endregion
 
         #region Controls - TreeView
