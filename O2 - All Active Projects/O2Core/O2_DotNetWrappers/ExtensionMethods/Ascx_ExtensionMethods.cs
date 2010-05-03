@@ -204,6 +204,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                         () =>
                                             {
                                                 var splitContainer = new SplitContainer {Orientation = orientation};
+                                                splitContainer.minimumSize(1);                                                
                                                 if (setDockStyleToFill)
                                                     splitContainer.Dock = DockStyle.Fill;
                                                 if (setBorderStyleTo3D)
@@ -271,6 +272,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return splitContainer;
         }
 
+        public static SplitContainer minimumSize(this SplitContainer splitContainer, int size)
+        {
+            splitContainer.invokeOnThread(
+                () =>
+                {
+                    splitContainer.Panel1MinSize = size;
+                    splitContainer.Panel2MinSize = size;
+                });
+            return splitContainer;
+        }
         #endregion
 
         #region SplitContainer_nxn
@@ -1522,7 +1533,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static ToolStripMenuItem add_MenuItem(this ContextMenuStrip contextMenu, string text, MethodInvoker onClick)
         {
-            return contextMenu.add_MenuItem(text, (item) => onClick());
+            return contextMenu.add_MenuItem(text, (item) => O2Thread.mtaThread(() => onClick()));
         }
 
         public static ToolStripMenuItem add_MenuItem(this ContextMenuStrip contextMenu, string text, Action<ToolStripMenuItem> onClick)

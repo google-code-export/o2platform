@@ -30,7 +30,7 @@ namespace O2.Views.ASCX.classes.TasksWrappers
                 return false;
             var fileToUnzip = (string) sourceObject;
             if (fileToUnzip.IndexOf("http://") > -1)
-                fileToUnzip = Web.downloadBinaryFile(fileToUnzip);
+                fileToUnzip = new Web().downloadBinaryFile(fileToUnzip);
             if (!File.Exists(fileToUnzip))
                 return false;
             folderToUnzipFiles = folderToUnzipFiles ?? DI.config.TempFolderInTempDirectory;

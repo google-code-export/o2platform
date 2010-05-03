@@ -111,7 +111,7 @@ namespace O2.DotNetWrappers.DotNet
                             {
                                 if (downloadIfHttp)
                                 {
-                                    var savedUrlContents = Web.saveUrlContents(item.ToString());
+                                    var savedUrlContents = new Web().saveUrlContents(item.ToString());
                                     if (savedUrlContents != "" && File.Exists(savedUrlContents))
                                         return savedUrlContents;
                                 }

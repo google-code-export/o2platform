@@ -16,10 +16,10 @@ using O2.DotNetWrappers.ExtensionMethods;
 namespace O2.Script
 {
 
-	public class O2PlatformWikiApi : O2MediaWikiAPI
+	public class O2PlatformWikiAPI : O2MediaWikiAPI
 	{
 
-		public O2PlatformWikiApi() 
+		public O2PlatformWikiAPI() 
 		{
 			init("http://www.o2platform.com/api.php");
 			this.Styles = styles();

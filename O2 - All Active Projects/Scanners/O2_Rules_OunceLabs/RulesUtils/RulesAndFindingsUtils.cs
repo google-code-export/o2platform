@@ -164,7 +164,8 @@ namespace O2.Rules.OunceLabs.RulesUtils
             var uniqueViaLinq = O2Linq.getUniqueListOfStrings(allSignatures, ref numberOfUniqueSignatures);
             DI.log.info("Via Linq there were {0} unique signatures calculated", numberOfUniqueSignatures);
             return uniqueViaLinq.ToList();
-            var uniqueSignatures = new List<String>();
+            
+            /*var uniqueSignatures = new List<String>();
             var partialLists = new List<List<String>>();
             // calculate partial signatures             
             foreach (var o2Finding in o2Findings)
@@ -185,17 +186,11 @@ namespace O2.Rules.OunceLabs.RulesUtils
                 if ((itemsProcessed++)%5000 == 0)
                     DI.log.info("on [{0}/{1}] there are {2} unique signatures", itemsProcessed, itemsToProcess,
                                 uniqueSignatures.Count);
-            }
-            /*if ((itemsProcessed++) % 5000 == 0)
-                DI.log.info("on [{0}/{1}] there are {2} unique signatures", itemsProcessed, itemsToProcess, uniqueSignatures.Count);*/
+            }            
+            
             DI.log.info("There are {0} unique signatures", uniqueSignatures.Count);
 
-         /*   foreach(var uniquesig in uniqueSignatures)
-                if (false == uniqueViaLinq.Contains(uniquesig))
-                { 
-                }
-            */
-            return uniqueSignatures;
+            return uniqueSignatures; */
         }
 
 

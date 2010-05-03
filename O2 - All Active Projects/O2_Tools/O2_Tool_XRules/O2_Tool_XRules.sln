@@ -1,7 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-# SharpDevelop 3.2.0.5698
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "O2_Installer_Tool_XRules", "..\..\_Installers\O2_Installer_Tool_XRules\O2_Installer_Tool_XRules.vdproj", "{E455A568-365D-4644-9C61-07A451AF9C7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Debugger_Mdbg", "..\..\O2Core\O2_Debugger_Mdbg\O2_Debugger_Mdbg.csproj", "{3EDD49CB-F7F2-4CFE-AFAC-698B13B0C968}"
@@ -52,13 +51,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_External_O2Mono", "..\..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Rules_OunceLabs", "..\..\Scanners\O2_Rules_OunceLabs\O2_Rules_OunceLabs.csproj", "{831EEFD3-A243-484E-B008-BA1EC6499954}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_SearchEngine", "..\O2_Tool_SearchEngine\O2_Tool_SearchEngine.csproj", "857043B7-8F2E-49B9-9D47-760F7323E0BA"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Tool_SearchEngine", "..\O2_Tool_SearchEngine\O2_Tool_SearchEngine.csproj", "{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Publish to Deploy|Any CPU = Publish to Deploy|Any CPU
@@ -66,6 +61,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E455A568-365D-4644-9C61-07A451AF9C7E}.Debug|Any CPU.ActiveCfg = Debug
+		{E455A568-365D-4644-9C61-07A451AF9C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E455A568-365D-4644-9C61-07A451AF9C7E}.Publish to Deploy|Any CPU.ActiveCfg = Release
 		{E455A568-365D-4644-9C61-07A451AF9C7E}.Publish to Deploy|Any CPU.Build.0 = Release
 		{E455A568-365D-4644-9C61-07A451AF9C7E}.Release|Any CPU.ActiveCfg = Release
@@ -202,27 +198,27 @@ Global
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Publish to Deploy|Any CPU.Build.0 = Release|Any CPU
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E455A568-365D-4644-9C61-07A451AF9C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Publish to Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Publish to Deploy|Any CPU.ActiveCfg = Debug|Any CPU
-		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Publish to Deploy|Any CPU.Build.0 = Debug|Any CPU
 		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{831EEFD3-A243-484E-B008-BA1EC6499954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F457A7EB-A573-41BB-BC12-61ABE5ACF702}.Release|Any CPU.Build.0 = Release|Any CPU
 		{831EEFD3-A243-484E-B008-BA1EC6499954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{831EEFD3-A243-484E-B008-BA1EC6499954}.Publish to Deploy|Any CPU.Build.0 = Debug|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{831EEFD3-A243-484E-B008-BA1EC6499954}.Publish to Deploy|Any CPU.ActiveCfg = Debug|Any CPU
-		{831EEFD3-A243-484E-B008-BA1EC6499954}.Release|Any CPU.Build.0 = Release|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Publish to Deploy|Any CPU.Build.0 = Debug|Any CPU
 		{831EEFD3-A243-484E-B008-BA1EC6499954}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		857043B7-8F2E-49B9-9D47-760F7323E0BA.Debug|Any CPU.Build.0 = Debug|Any CPU
-		857043B7-8F2E-49B9-9D47-760F7323E0BA.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		857043B7-8F2E-49B9-9D47-760F7323E0BA.Publish to Deploy|Any CPU.Build.0 = Debug|Any CPU
-		857043B7-8F2E-49B9-9D47-760F7323E0BA.Publish to Deploy|Any CPU.ActiveCfg = Debug|Any CPU
-		857043B7-8F2E-49B9-9D47-760F7323E0BA.Release|Any CPU.Build.0 = Release|Any CPU
-		857043B7-8F2E-49B9-9D47-760F7323E0BA.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{831EEFD3-A243-484E-B008-BA1EC6499954}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Publish to Deploy|Any CPU.ActiveCfg = Release|Any CPU
+		{E301CD2B-1D22-433C-8C23-CCB76DE7CFCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

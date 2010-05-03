@@ -29,7 +29,7 @@ namespace O2.Script
     	{    		
     		var executeWizards = O2Gui.showAsForm<ascx_AssemblyAttributes>("Execute Wizards",400,400);    		
     		var urlWithTargetFile = @"http://deploy.o2-ounceopen.com/DemoFiles/DotNet/HacmeBank_v2_WS.dll.zip";    		
-    		var targetFile = Web.checkIfFileExistsAndDownloadIfNot("HacmeBank_v2_WS.dll", urlWithTargetFile);	    		
+    		var targetFile = new Web().checkIfFileExistsAndDownloadIfNot("HacmeBank_v2_WS.dll", urlWithTargetFile);	    		
     		if (File.Exists(targetFile))
     		{
     			log.debug("File exists: {0}", targetFile);

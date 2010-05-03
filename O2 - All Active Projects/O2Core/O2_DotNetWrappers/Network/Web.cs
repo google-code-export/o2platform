@@ -15,7 +15,7 @@ namespace O2.DotNetWrappers.Network
     public class Web
     {
 
-        public static string saveUrlContents(string urlToFetch)
+        public string saveUrlContents(string urlToFetch)
         {
             if (urlToFetch.validUri())
             {
@@ -37,7 +37,8 @@ namespace O2.DotNetWrappers.Network
             }
             return "";
         }
-        public static string saveUrlContents(string urlToFetch, string targetFile)
+
+        public string saveUrlContents(string urlToFetch, string targetFile)
         {
             var urlContents = getUrlContents(urlToFetch);
             if (urlContents != "")
@@ -48,17 +49,18 @@ namespace O2.DotNetWrappers.Network
             return "";
 
         }
-        public static String getUrlContents(String urlToFetch)
+
+        public String getUrlContents(String urlToFetch)
         {
             return getUrlContents(urlToFetch, false);
         }
 
-        public static String getUrlContents(String urlToFetch, bool verbose)
+        public String getUrlContents(String urlToFetch, bool verbose)
         {
             return getUrlContents(urlToFetch, null, verbose);
         }
 
-        public static String getUrlContents(String urlToFetch, string cookies, bool verbose)
+        public String getUrlContents(String urlToFetch, string cookies, bool verbose)
         {        
             try
             {
@@ -83,23 +85,23 @@ namespace O2.DotNetWrappers.Network
             }
         }
 
-        public static String getUrlContents_POST(String urlToFetch, string postData)
+        public String getUrlContents_POST(String urlToFetch, string postData)
         {
             return getUrlContents_POST(urlToFetch, null, postData);
         }  
         
 
-        public static String getUrlContents_POST(String urlToFetch, string cookies, string postData)
+        public String getUrlContents_POST(String urlToFetch, string cookies, string postData)
         {
             return getUrlContents_POST(urlToFetch, cookies,  Encoding.ASCII.GetBytes(postData));
         }
 
-        public static String getUrlContents_POST(String urlToFetch, byte[] postData)
+        public String getUrlContents_POST(String urlToFetch, byte[] postData)
         {
             return getUrlContents_POST(urlToFetch, null, postData);
         }
 
-        public static String getUrlContents_POST(String urlToFetch, string cookies, byte[] postData)
+        public String getUrlContents_POST(String urlToFetch, string cookies, byte[] postData)
         {        
             try
             {   
@@ -110,7 +112,7 @@ namespace O2.DotNetWrappers.Network
                     webRequest.Headers.Add("Cookie", cookies);
                 webRequest.Method = "POST";
                 webRequest.ContentLength = postData.Length;
-                webRequest.ContentType = "application/x-www-form-urlencoded";
+                webRequest.ContentType = "application/x-www-form-urlencoded";                
                 Stream dataStream = webRequest.GetRequestStream();
                 dataStream.Write(postData, 0, postData.Length);
                 dataStream.Close();
@@ -131,13 +133,13 @@ namespace O2.DotNetWrappers.Network
             }
         }                 
 
-		public static string downloadBinaryFile(string urlOfFileToFetch)
+		public string downloadBinaryFile(string urlOfFileToFetch)
 		{
 			return downloadBinaryFile(urlOfFileToFetch, true);
 		}
 				
 		
-        public static string downloadBinaryFile(string urlOfFileToFetch, bool saveUsingTempFileName)
+        public string downloadBinaryFile(string urlOfFileToFetch, bool saveUsingTempFileName)
         {
         	string targetFile = String.Format("{0}.{1}", 
                 									(saveUsingTempFileName) ? PublicDI.config.TempFileNameInTempDirectory + "_" : PublicDI.config.O2TempDir,
@@ -145,7 +147,7 @@ namespace O2.DotNetWrappers.Network
             return downloadBinaryFile(urlOfFileToFetch,targetFile);
         }
         
-        public static string downloadBinaryFile(string urlOfFileToFetch, string targetFileOrFolder)
+        public string downloadBinaryFile(string urlOfFileToFetch, string targetFileOrFolder)
         {
         	var targetFile = targetFileOrFolder;
         	if (Directory.Exists(targetFileOrFolder))
@@ -167,7 +169,7 @@ namespace O2.DotNetWrappers.Network
             return null;
         }
 
-        public static List<String> downloadZipFileAndExtractFiles(string urlOfFileToFetch)
+        public List<String> downloadZipFileAndExtractFiles(string urlOfFileToFetch)
         {
             var webClient = new WebClient();
             try
@@ -187,12 +189,12 @@ namespace O2.DotNetWrappers.Network
             return null;
         }
         
-        public static string checkIfFileExistsAndDownloadIfNot(string urlToDownloadFile)
+        public string checkIfFileExistsAndDownloadIfNot(string urlToDownloadFile)
         {
             return checkIfFileExistsAndDownloadIfNot(urlToDownloadFile.fileName(), urlToDownloadFile);
         }
 
-        public static string checkIfFileExistsAndDownloadIfNot(string file , string urlToDownloadFile)
+        public string checkIfFileExistsAndDownloadIfNot(string file , string urlToDownloadFile)
         {
         	if (File.Exists(file))
         		return file;

@@ -70,7 +70,7 @@ namespace O2.XRules.Database
     		var logoFile = "..\\O2_Logo.gif";
     		var tempPath = this.tempDir().pathCombine(logoFile);
     		if (! tempPath.fileExists())
-		    	pathToPictureBox = Web.checkIfFileExistsAndDownloadIfNot(logoFile, @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
+		    	pathToPictureBox = new Web().checkIfFileExistsAndDownloadIfNot(logoFile, @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
 		    else
 		    	pathToPictureBox = tempPath;		    
         }
@@ -112,11 +112,15 @@ namespace O2.XRules.Database
                        .add_MenuItem("Open Simple Script Editor", () => openSimpleScriptEditor())
                        .add_MenuItem("Open quick development gui", () => open.devEnvironment())
                        .add_MenuItem("Open 'Graph' development gui", () => open.graphEditor())
-                       .add_MenuItem("Open XRules/Script Editor", () => open.scriptEditor())                       
+                       .add_MenuItem("Open XRules/Script Editor", () => open.scriptEditor())
+                       .add_MenuItem("O2 Object Model", () => open.o2ObjectModel())
                        .add_MenuItem("Current Script",false)
         	                        .add_MenuItem("View loaded script source Code", ()=> showLoadedScriptSourceCode() )
         	                        .add_MenuItem("Execute Again", ()=> executeCompiledCode() );
-            contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());            
+            contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());
+            contextMenu.add_MenuItem("Tools")
+                       .add_MenuItem("Image Screetshot tool", () => screenShotTool())
+                       .add_MenuItem("Web Browser", () =>  open.webBrowser());
             contextMenu.add_MenuItem("Exit Application (and close all windows)", () => PublicDI.config.closeO2Process());
             
         	
@@ -135,7 +139,12 @@ namespace O2.XRules.Database
         	//this.add_Link("reload",10,2,()=>loadH2Script());
         	
         	
-     	}        	     	
+     	}
+
+        private void screenShotTool()
+        {
+            O2Thread.staThread(Fusion8.Cropper.Program.Main);            
+        }        	     	
      	
      	public void loadH2Script()
      	{

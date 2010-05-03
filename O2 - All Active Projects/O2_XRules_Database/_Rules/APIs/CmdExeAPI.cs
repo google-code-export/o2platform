@@ -13,6 +13,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
+using O2.Views.ASCX.classes.MainGUI;
 using WindowsInput;
 //O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_WebAutomation.cs
 //O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_VisualizationApi.cs
@@ -31,6 +32,10 @@ namespace O2.Script
     	public string cmdProcessName = "cmd.exe";
     	public string cmdStartArguments = "";
     	
+    	public static void launchControl()
+    	{
+    		O2Gui.open<CmdExeGui>("Cmd Exe GUI", 400,300); 
+    	}
     	
     	public CmdExeGui()
     	{

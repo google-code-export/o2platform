@@ -20,7 +20,7 @@ namespace O2.Core.XRules.Classes
     	
         public static string getHtmlCode(string urlToFetch)
         {
-            var urlContents = Web.getUrlContents(urlToFetch);
+            var urlContents = new Web().getUrlContents(urlToFetch);
             return urlContents;
         }
 
@@ -47,7 +47,7 @@ namespace O2.Core.XRules.Classes
         public static List<SvnMappedUrl> getSvnMappedUrls(string urlToFetch)
         {
             var svnMappedUrls = new List<SvnMappedUrl>();
-            var codeToParse = Web.getUrlContents(urlToFetch);
+            var codeToParse = new Web().getUrlContents(urlToFetch);
             if (codeToParse != "")
             {                
                 var nodes = Majestic12ToXml.ConvertNodesToXml(codeToParse);                
@@ -75,8 +75,8 @@ namespace O2.Core.XRules.Classes
         		
         		//var fileContents = Web.getUrlContents(svnMappedUrl.FullPath);
         		//Files.WriteFileContent(localfile,fileContents);
-        		
-        		Web.downloadBinaryFile(svnMappedUrl.FullPath, localfile);
+
+                new Web().downloadBinaryFile(svnMappedUrl.FullPath, localfile);
         		
         		if (!File.Exists(localfile))
 //        			log.info("contents saved to local file: {0}", localfile);        		
@@ -123,7 +123,7 @@ namespace O2.Core.XRules.Classes
         public string getFileContents()
         {
             if (IsFile)
-                return Web.getUrlContents(FullPath);
+                return new Web().getUrlContents(FullPath);
             return "";
         }
     }

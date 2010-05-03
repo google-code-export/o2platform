@@ -73,7 +73,7 @@ namespace O2.Script
     	{
     		var urlRequest = "http://translate.google.com/translate_a/t?client=t&text={0}&sl={1}&tl={2}&pc=0"
     						 .format(textToTranslate,sourceLanguage,targetLanguage);
-    		return Web.getUrlContents(urlRequest);		
+    		return new Web().getUrlContents(urlRequest);		
     	}
     	
     	public static string extractTranslationText(string translatedText)
