@@ -9,7 +9,7 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 
-namespace O2.Script
+namespace O2.DotNetWrappers.Network
 {
 	// this code was based on the code from from http://www.briangrinstead.com/blog/multipart-form-post-in-c
 	// which was created following this StackOverflow thread http://stackoverflow.com/questions/219827/multipart-forms-from-c-client
