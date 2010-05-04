@@ -14,34 +14,50 @@ using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX.Ascx.MainGUI;
 using O2.External.IE.ExtensionMethods;
+using O2.XRules.Database._Rules._Interfaces;
+
 namespace O2.Script
 {
     public class MediaWikiEditor
-    {    
-    	private static IO2Log log = PublicDI.log;
-
-		public static void run()
-		{
+    {        	
+		public void run()
+		{			
+			var fileWithSecretData = @"C:\O2\_USERDATA\O2TestUsers.xml";			
 			
-			var wikiApi = new O2PlatformWikiAPI(); 
-			new MediaWikiEditor().buildGui(wikiApi, @"C:\O2\_USERDATA\O2PlatformWiki.xml");
+			// MediaWiki Api Object
+			var wikiApi = new O2PlatformWikiAPI(); 			
+			var secretData = fileWithSecretData.deserialize<SecretData>();
+			var username = secretData.username("O2Platform-Wiki");
+			var password = secretData.password("O2Platform-Wiki");
+			wikiApi.login(username,password); 			
+			
+			// WordPress Api Object
+			var wpApi = new WordPressAPI("http://use-o2.com");
+			wpApi.login(secretData.username("O2Platform-WordPress"), secretData.password("O2Platform-WordPress"));
+			wpApi.LoggedIn.str().info();
+			
+			//create MediaWikiEditor
+			new MediaWikiEditor().buildGui(wikiApi, wpApi);
 		}		        
 
-        public void buildGui(O2MediaWikiAPI wikiApi, string fileWithloginDetails)
+        public void buildGui(O2MediaWikiAPI wikiApi, WordPressAPI wpApi)
         {
-        	var panel = O2Gui.open<Panel>("MediaWiki Editor", 600,400);
-			var loginDetails = fileWithloginDetails.xRoot();			
-			var username = loginDetails.element("Credentials").element("UserName").value();
-			var password = loginDetails.element("Credentials").element("Password").value();
-			wikiApi.login(username,password); 
-			 
-			var controls = panel.add_1x2("WikiText","Preview","Current Content",true,500,100); 
+        	// add Controls
+        	var panel = O2Gui.open<Panel>("MediaWiki Editor", 750,500);			 
+			var controls = panel.add_1x2("WikiText","Preview","Live data (Wiki or WordPress)",true,500,300); 
 			var wikiTextEditor = controls[0].add_RichTextBox();
 			var browserPreview = controls[1].add_Browser();
-			var browserCurrent = controls[2].add_Browser();  
+			var browserCurrent = controls[2].add_Browser(); 
 			
-			wikiTextEditor.onKeyPress((key)=> 
+			var textBox = wikiTextEditor.insert_Above<TextBox>(50);
+			var bottomPanel = textBox.insert_Below<Panel>(30);  			
+			
+			wikiTextEditor.insert_Below<ascx_LogViewer>(130);
+			
+			//Events			
+			wikiTextEditor.onKeyPress((key)=> 			// add suport to paste images form Clipboard
 				{
 					if (key == (Keys.Control | Keys.V))		
 						if (Clipboard.ContainsImage())
@@ -58,33 +74,23 @@ namespace O2.Script
 					return false;
 				}); 
 				
-			var contextMenu = wikiTextEditor.add_ContextMenu();
-			
-			contextMenu.add_MenuItem("Past Image from Clipboard", 
-				()=>{
-						var imageUrl = wikiApi.uploadImage_FromClipboard();
-						var wikiTextForImage = wikiApi.getWikiTextForImage(imageUrl);					
-						wikiTextEditor.insertText("[[Image:{0}]]".format(wikiTextForImage)); 
-						//RichTextBox aaa = wikiTextEditor.insertText("[[image:asdas]]"); 			   
-						//var currentRange = wikiTextEditor.SelectedText
-						//wikiTextEditor.insert_Above "selected item".info();
-					});
+						
 			browserPreview.silent(true);
 			browserCurrent.silent(true);
-			
-			var textBox = wikiTextEditor.insert_Above<TextBox>(50);
-			var bottomPanel = textBox.insert_Below<Panel>(30);  
-			 
+						
 			//default values
-			textBox.set_Text("Test");
+			textBox.set_Text("Test");			 			
 			
-			// events
-			 
-			var image = panel.fromClipboardGetImage();
-			var button = bottomPanel.add_Button("Paste Image",0, 350);
+			// add buttons	& its events	 
 			
-			button.BackgroundImage = image;
-			button.BackgroundImageLayout = ImageLayout.Stretch;
+			bottomPanel.add_Button("Post To WordPress",0, 350).onClick(
+				()=>{
+						var pageToEdit = textBox.get_Text();																				
+						var postId = wpApi.post_from_MediaWiki(wikiApi,pageToEdit);
+						var postUrl = "{0}/?p={1}".format(wpApi.WordPressServer,postId);
+						browserCurrent.open(postUrl);
+					});
+						
 			
 			bottomPanel.add_Button("Load",0).onClick(
 				()=>{

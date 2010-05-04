@@ -18,16 +18,19 @@ namespace O2.Script
 {
     public class WordPressAPI
     {    
-    	public string WordPressServer {get; set;} 
+    	public string WordPressServer {get; set;}
+        public string WordPressXmlRpc { get; set; } 
     	public WordPressWrapper wordPressWrapper { get; set; }
     	public bool LoggedIn { get; set; }    	    
+
     	public WordPressAPI(string wordPressServer)
-    	{
-    		WordPressServer = wordPressServer;
-    		if (WordPressServer.Contains("/xmlrpc.php").isFalse())
-    			WordPressServer+="/xmlrpc.php";
-    		if (WordPressServer.lower().starts("http").isFalse())
-    			WordPressServer= "http://" + WordPressServer;
+    	{               
+            WordPressXmlRpc = wordPressServer;
+            if (WordPressXmlRpc.Contains("/xmlrpc.php").isFalse())
+                WordPressXmlRpc += "/xmlrpc.php";
+            if (WordPressXmlRpc.lower().starts("http").isFalse())
+                WordPressXmlRpc = "http://" + WordPressXmlRpc;
+            WordPressServer = WordPressXmlRpc.replace("/xmlrpc.php","");
     	}    	    	  
     	    	
     }
@@ -36,8 +39,8 @@ namespace O2.Script
     {
     
     	public static WordPressAPI login(this WordPressAPI wpApi, string username, string password)
-    	{    	
-    		wpApi.wordPressWrapper = new WordPressWrapper(wpApi.WordPressServer, username, password);    		
+    	{
+            wpApi.wordPressWrapper = new WordPressWrapper(wpApi.WordPressXmlRpc, username, password);    		
     		wpApi.LoggedIn = wpApi.loggedIn();
     		return wpApi;
     	}  
@@ -102,17 +105,19 @@ namespace O2.Script
 							href.Value = wikiApi.HostUrl + href.Value; 		
 				}
 					
-				var postBody = htmlDocument.DocumentNode.OuterHtml; 
-				var messageToAppend = "...".line() + "...automatic O2 tag line...".line() + "<hr>" + 
-									  "Exported from MediaWiki on:{0}".format(DateTime.Now.ToShortDateString()).line() + "<hr/>" + 
-								      "Note: This blog post was created by an <a href='http://www.o2platform.com'>O2 Script</a> and is a copy of the MediaWiki page with the title <i>'{0}'</i> located at: <a href='{1}'>{1}</a>"
-								      .format(mediaWikiPage, wikiApi.pageUrl(mediaWikiPage));
+				var postBody = htmlDocument.DocumentNode.OuterHtml;
+                var messageToAppend = "[automatic O2 comment]:" + "<hr>" +
+                                      "<b>Note:</b> This blog post was created by an <a href='http://www.o2platform.com'>O2 Script</a> and is a copy of the MediaWiki page with the title <i>'{0}'</i> located at: <a href='{1}'>{1}</a>"
+                                      .format(mediaWikiPage, wikiApi.pageUrl(mediaWikiPage)).line() +
+                                      "<b>Exported on</b>:{0}"
+                                      .format(DateTime.Now.ToShortDateString());
+								      
 				postBody = postBody.add(messageToAppend);
 				return wpApi.post(postTitle, postBody);
 			}
 			catch(Exception ex)
-			{	
-				ex.log("in WordPressAPI.post_from_MediaWiki, for MediaWikiAPI page '{0}'".format(mediaWikiPage));
+			{
+                ex.logWithStackTrace("in WordPressAPI.post_from_MediaWiki, for MediaWikiAPI page '{0}'".format(mediaWikiPage));
 				return "";
 			}			
 		}
