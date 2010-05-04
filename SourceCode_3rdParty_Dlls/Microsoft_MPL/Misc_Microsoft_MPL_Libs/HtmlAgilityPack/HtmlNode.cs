@@ -448,10 +448,11 @@ namespace HtmlAgilityPack
 				HtmlNodeNavigator n = (HtmlNodeNavigator)it.Current;
 				list.Add(n.CurrentNode);
 			}
-			if (list.Count == 0)
-			{
-				return null;
-			}
+            //DC removed this so that we get an empty list when there are no matching nodes
+			//if (list.Count == 0)
+			//{
+			//	return null;
+			//}
 			return list;
 		}
 

@@ -120,8 +120,10 @@ namespace O2.XRules.Database
         	                        .add_MenuItem("Execute Again", ()=> executeCompiledCode() );            
             contextMenu.add_MenuItem("Tools")
                        .add_MenuItem("Image Screenshot tool", () => screenShotTool())
-                       .add_MenuItem("O2 'Secret Data' Editor", () => SecretDataEditor.showGui())                       
-                       .add_MenuItem("Web Browser", () =>  open.webBrowser("http://www.o2platform.com"));
+                       .add_MenuItem("O2 'Secret Data' Editor", () => new SecretDataEditor().showGui())                       
+                       .add_MenuItem("Web Browser", () =>  open.webBrowser("http://www.o2platform.com"))
+                       .add_MenuItem("Notepad", () =>  exec.cmd("notepad.exe"))
+                       .add_MenuItem("Cmd.exe", () =>  exec.cmd("cmd.exe"));
             contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());
             contextMenu.add_MenuItem("Exit Application (and close all windows)", () => PublicDI.config.closeO2Process());
             

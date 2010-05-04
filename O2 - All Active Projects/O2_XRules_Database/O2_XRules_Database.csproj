@@ -347,7 +347,7 @@
     <None Include="_Rules\H2 SCRIPTS\open - Web Browser.h2" />
     <None Include="_Rules\H2 SCRIPTS\open - XRules Editor.h2" />
     <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Prompt.cs.o2" />
-    <Compile Include="_Rules\O2 Utils\SecretDataEditor.cs" />
+    <Compile Include="_Rules\O2 Utils\SecretDataEditor.cs.o2" />
     <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
     <None Include="_Rules\Web Utils\ascx_View_WebPage_Details.cs.o2">
       <SubType>UserControl</SubType>
@@ -355,7 +355,7 @@
     <Compile Include="_Rules\Web Utils\ascx_Translate_Text.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\Web Utils\MediaWikiEditor.cs" />
+    <Compile Include="_Rules\Web Utils\MediaWikiEditor.cs.o2" />
     <Compile Include="_Rules\Windows Utils\ascx_Processes_Stop.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
