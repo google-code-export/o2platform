@@ -56,7 +56,7 @@ namespace O2.External.IE.ExtensionMethods
                                    () =>
                                        {
                                            var splitControl = control.add_SplitContainer(
-                                               true, 		//setOrientationToHorizontal
+                                               false, 		//setOrientationToVertical
                                                true,		// setDockStyleoFill
                                                false);		// setBorderStyleTo3D                        
                                            splitControl.FixedPanel = FixedPanel.Panel1;
