@@ -89,9 +89,10 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.DotNetWrappers.Network")
                                      .add("O2.External.IE.ExtensionMethods")
                                      .add("O2.XRules.Database.ExtensionMethods")
+                                     .add("O2.XRules.Database._Rules._Interfaces")
                                      .add("O2.XRules.Database.O2Utils")
                                      .add("O2.External.SharpDevelop.ExtensionMethods")
-                                     .add("O2.External.SharpDevelop.Ascx")
+                                     .add("O2.External.SharpDevelop.Ascx")                                        
                 //GraphSharp related
                                      .add("O2.Script")
                                      .add("GraphSharp.Controls")

@@ -38,7 +38,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>51</ApplicationRevision>
+    <ApplicationRevision>52</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -347,6 +347,7 @@
     <None Include="_Rules\H2 SCRIPTS\open - Web Browser.h2" />
     <None Include="_Rules\H2 SCRIPTS\open - XRules Editor.h2" />
     <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Prompt.cs.o2" />
+    <Compile Include="_Rules\O2 Utils\SecretDataEditor.cs" />
     <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
     <None Include="_Rules\Web Utils\ascx_View_WebPage_Details.cs.o2">
       <SubType>UserControl</SubType>
@@ -385,6 +386,7 @@
     <Compile Include="_Rules\Windows Utils\ascx_Start_Tools.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="_Rules\_Interfaces\ISecretData.cs" />
     <Compile Include="_Rules\_Samples\Example of Ascx Control Injection.cs">
       <SubType>UserControl</SubType>
     </Compile>

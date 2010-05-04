@@ -127,7 +127,7 @@ namespace O2.External.IE.Wrapper
 
             documentCompleted.Reset();
             O2Thread.mtaThread(() => open(uri));
-            while (documentCompleted.WaitOne())
+            while (documentCompleted.WaitOne(1000*60))  // maxwait is 1 minute
             {
                 // hack to handle the case where about:blank was being fired 
                 if (HtmlPage.PageUri.str() != "about:blank" && uri.ToString() != "about:blank")
