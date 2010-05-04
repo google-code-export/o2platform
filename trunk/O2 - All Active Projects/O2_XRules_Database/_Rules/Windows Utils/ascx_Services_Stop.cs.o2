@@ -44,7 +44,7 @@ namespace O2.Script
 
 		public void loadServicesData()
 		{
-			this.info("Loading Services Data");
+            "Loading Services Data".info();
 			this.invokeOnThread(
 				()=> {
 						 this.clear();
@@ -54,7 +54,7 @@ namespace O2.Script
 						 
 						 
 						 var menu  = dataGridView.add_ContextMenu();
-    		 			 menu.add("refresh", (menuItem) => loadServicesData());
+    		 			 menu.add_MenuItem("refresh", (menuItem) => loadServicesData());
     		 
 			        	 var services = ServiceController.GetServices();
 			        	 			        	
@@ -88,11 +88,11 @@ namespace O2.Script
 	     			()=>{	     		
 							var row = dataGridView.get_Row(rowId); 					
 				     		var service = (ServiceController)row.Tag;
-				     		this.info("Stopping service: {0}", service.ServiceName);				     		
+				     		"Stopping service: {0}".info(service.ServiceName);				     		
 				     		service.Stop();
 				     		service.WaitForStatus(ServiceControllerStatus.Stopped);
 				     		service.Refresh();
-				     		this.info("Service status: {0}", service.Status);
+				     		"Service status: {0}".info(service.Status);
 				     		if (service.Status == ServiceControllerStatus.Stopped)
 				     			dataGridView.remove_Row(row);				     		
 				     	});

@@ -38,7 +38,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>50</ApplicationRevision>
+    <ApplicationRevision>51</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -354,12 +354,13 @@
     <Compile Include="_Rules\Web Utils\ascx_Translate_Text.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="_Rules\Web Utils\MediaWikiEditor.cs" />
     <Compile Include="_Rules\Windows Utils\ascx_Processes_Stop.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <None Include="_Rules\Windows Utils\ascx_Services_Stop.cs.o2">
+    <Compile Include="_Rules\Windows Utils\ascx_Services_Stop.cs.o2">
       <SubType>UserControl</SubType>
-    </None>
+    </Compile>
     <None Include="_Rules\_UnderDev\PoCs\Load CSharp files and show methods declarations and references.h2" />
     <None Include="_Rules\_UnderDev\PoCs\load files and create O2CodeStreams from them %28working%29.h2" />
     <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method %28original version%29.h2" />

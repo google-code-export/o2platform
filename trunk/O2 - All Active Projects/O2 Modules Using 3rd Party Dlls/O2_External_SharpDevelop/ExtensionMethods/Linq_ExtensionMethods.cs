@@ -138,7 +138,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static XAttribute attribute(this XElement xElement, string name)
         {
-            return xElement.Attribute(name);
+            if (xElement != null)
+                return xElement.Attribute(name);
+            "in XElement.attribute(...), xElement was null (name = {0})".error(name);
+            return null;
         }
 
         public static string attributeValue(this XElement xElement, string name)
@@ -148,7 +151,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string value(this XAttribute xAttribute)
         {
-            return xAttribute.Value;
+            if (xAttribute != null)
+                return xAttribute.Value;
+            "in XAttribute.value(...), xAttribute was null".error();
+            return null;
         }
 
         public static List<XAttribute> attributes(this XElement xElement)
