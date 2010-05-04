@@ -21,6 +21,18 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return csharpCompiler.assembly();
         }
 
+        public static Assembly compile_CodeSnippet(this string codeSnipptet)
+        {
+            var csharpCompiler = new CSharp_FastCompiler();
+            var compileProcess = new System.Threading.AutoResetEvent(false);
+            //csharpCompiler.compileSourceCode(pathToFileToCompile.contents());
+            csharpCompiler.compileSnippet(codeSnipptet);
+            csharpCompiler.onCompileFail = () => compileProcess.Set();
+            csharpCompiler.onCompileOK = () => compileProcess.Set();
+            compileProcess.WaitOne();
+            return csharpCompiler.assembly();
+        }
+
         public static Assembly assembly(this CSharp_FastCompiler csharpCompiler)
         {
             if (csharpCompiler != null)

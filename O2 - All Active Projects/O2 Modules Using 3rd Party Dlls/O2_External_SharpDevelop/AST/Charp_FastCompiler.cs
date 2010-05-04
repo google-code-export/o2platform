@@ -199,10 +199,19 @@ namespace O2.External.SharpDevelop.AST
 
 		public void compileSourceCode(string sourceCode)
         {
-            // we need to do make sure we include any extra references included in the code
-            var astCSharp = new Ast_CSharp(sourceCode);            
-            mapCodeO2References(astCSharp);
-            compileSourceCode(sourceCode, false);
+            if (sourceCode.valid().isFalse())
+            {
+                "in CSharp_FastCompiler,compileSourceCode, provided sourceCode code was empty".error();
+                if (onCompileFail !=null)
+                    onCompileFail();
+            }
+            else
+            {
+                // we need to do make sure we include any extra references included in the code
+                var astCSharp = new Ast_CSharp(sourceCode);
+                mapCodeO2References(astCSharp);
+                compileSourceCode(sourceCode, false);
+            }
        	}
        	
        	public void compileSourceCode()

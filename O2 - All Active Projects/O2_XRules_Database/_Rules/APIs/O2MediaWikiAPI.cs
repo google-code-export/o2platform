@@ -12,12 +12,12 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Views.ASCX;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_WebAutomation.cs
 
 namespace O2.Script
 {
@@ -284,13 +284,53 @@ namespace O2.Script
     		var urlData = "action=edit&format=xml&createonly&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(),page.urlEncode(),pageContent.urlEncode()); 
     		return wikiApi.postApiPhp(urlData);
     	}
-		
-		public static string editPage(this O2MediaWikiAPI wikiApi,string page, string pageContent)
+
+
+
+        public static string save(this O2MediaWikiAPI wikiApi, string page, string pageContent)
+        {
+            return wikiApi.editPage(page, pageContent);
+        }		        
+
+        public static string editPage(this O2MediaWikiAPI wikiApi,string page, string pageContent)
     	{
-    		var urlData = "action=edit&format=xml&nocreate&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(),page.urlEncode(),pageContent.urlEncode()); 
-    		return wikiApi.postApiPhp(urlData);
-    	}
-		
+    		//var urlData = "action=edit&format=xml&nocreate&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(),page.urlEncode(),pageContent.urlEncode()); 
+    		//return wikiApi.postApiPhp(urlData);
+            //   return wikiApi.editPage(page, pageContent, "", "");
+    	    //}                 
+            try
+            {
+                var response = wikiApi.editPage(page, pageContent, "", "");
+                var result = response.xRoot().element("edit").attribute("result").value();
+                if (result == "Failure")
+                {
+                    "trying to save using captcha".info();
+                    var captchaId = response.xRoot().element("edit").element("captcha").attribute("id").value();
+                    var captchaQuestion = response.xRoot().element("edit").element("captcha").attribute("question").value();
+                    "MediaWiki Captcha Question:{1}".info(captchaId, captchaQuestion);
+                    var code = "return {0};".format(captchaQuestion);
+                    var assembly = code.compile_CodeSnippet();
+                    var captchaAnswer = assembly.executeFirstMethod();
+                    "MediaWiki Captcha Answer: {0}".info(captchaAnswer);
+                    response = wikiApi.editPage(page, pageContent, captchaId, captchaAnswer.str());                    
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in O2MediaWikiAPI.save");
+            }
+            return "";
+        }
+
+        public static string editPage(this O2MediaWikiAPI wikiApi, string page, string pageContent, string captchaId, string captchaWord)
+        {
+            var urlData = "action=edit&format=xml&nocreate&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(), page.urlEncode(), pageContent.urlEncode());
+            if (captchaId.valid() && captchaWord.valid())
+                urlData = "{0}&captchaid={1}&captchaword={2}".format(urlData, captchaId, captchaWord);
+            return wikiApi.postApiPhp(urlData);
+        }
+
 		public static bool exists(this O2MediaWikiAPI wikiApi,string page)
 		{
 			return wikiApi.raw(page).valid();
@@ -733,6 +773,11 @@ namespace O2.Script
                 ex.log("in getMediaHref for media:{0}".format(mediaName));
             }
             return "";
+        }
+
+        public static string pageUrl(this O2MediaWikiAPI wikiApi, string page)
+        {
+            return wikiApi.IndexPhp + "/" + page;
         }
 
         #endregion
