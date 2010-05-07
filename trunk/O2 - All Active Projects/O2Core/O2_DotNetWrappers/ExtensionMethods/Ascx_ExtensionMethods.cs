@@ -75,13 +75,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static Button onClick(this Button button, MethodInvoker onClick)
         {
             if (onClick != null)
-                button.Click += (sender, e) => onClick();
+                button.Click += (sender, e) => O2Thread.mtaThread(() => onClick());
             return button;
         }
 
         public static Button click(this Button button)
         {
-            button.invokeOnThread(() => button.PerformClick());
+            O2Thread.mtaThread(
+                () =>
+                {
+                    button.invokeOnThread(() => button.PerformClick());
+                });
             return button;
         }
 
@@ -1612,8 +1616,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static ToolStripMenuItem add_MenuItem(this ToolStripMenuItem menuItem, string text, bool returnParentMenuItem, Action<ToolStripMenuItem> onClick)
         {
             var clildMenuItem = new ToolStripMenuItem { Text = text };            
-            clildMenuItem.Click += 
-                (sender, e) => O2Thread.mtaThread(()=> onClick(menuItem)); 
+            clildMenuItem.Click +=
+                (sender, e) => O2Thread.mtaThread(() => onClick(clildMenuItem)); 
             menuItem.DropDownItems.Add(clildMenuItem);
             if (returnParentMenuItem)
                 return menuItem;
@@ -1690,6 +1694,24 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static ProgressBar add_ProgressBar(this Control control, params int[] position)
         {
             return control.add_Control<ProgressBar>(position);
+        }
+
+        public static ProgressBar maximum(this ProgressBar progressBar, int value)
+        {
+            progressBar.invokeOnThread(() => progressBar.Maximum = value);
+            return progressBar;
+        }
+
+        public static ProgressBar value(this ProgressBar progressBar, int value)
+        {
+            progressBar.invokeOnThread(() => progressBar.Value = value);
+            return progressBar;
+        }
+
+        public static ProgressBar increment(this ProgressBar progressBar, int value)
+        {
+            progressBar.invokeOnThread(() => progressBar.Increment(value));
+            return progressBar;
         }
 
         #endregion
@@ -2042,6 +2064,32 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion
+
+        #region FlowLayoutPanel
+
+        public static FlowLayoutPanel add_FlowLayoutPanel(this Control control)
+        {
+            return control.add_Control<FlowLayoutPanel>();
+        }
+
+
+        public static FlowLayoutPanel clear(this FlowLayoutPanel flowLayoutPanel)
+        {
+            return (FlowLayoutPanel)flowLayoutPanel.invokeOnThread(
+                    () =>
+                    {
+                        flowLayoutPanel.Controls.Clear();
+                        return flowLayoutPanel;
+                    });
+        }
+
+        /*public static void add_Control(this FlowLayoutPanel flowLayoutPanel, Control control)
+        {
+            flowLayoutPanel.invokeOnThread(() => flowLayoutPanel.Controls.Add(control));
+        }*/
+
+        #endregion
+        
 
     }
 }

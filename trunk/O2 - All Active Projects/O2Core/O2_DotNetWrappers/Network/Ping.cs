@@ -16,9 +16,9 @@ namespace O2.DotNetWrappers.Network
 
         #endregion
 
-        public static event dPingCompleted ePingCompleted;
+        public event dPingCompleted ePingCompleted;
 
-        public static bool ping(String sHostNameOrAddressToPing)
+        public bool ping(String sHostNameOrAddressToPing)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace O2.DotNetWrappers.Network
             }
         }
 
-        public static void ping_Async(String sHostNameOrAddressToPing)
+        public void ping_Async(String sHostNameOrAddressToPing)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace O2.DotNetWrappers.Network
             }
         }
 
-        private static void pPing_PingCompleted(object sender, PingCompletedEventArgs e)
+        private void pPing_PingCompleted(object sender, PingCompletedEventArgs e)
         {
             if (e.Error == null)
                 DI.log.info("Ping status: {0}", e.Reply.Status.ToString());

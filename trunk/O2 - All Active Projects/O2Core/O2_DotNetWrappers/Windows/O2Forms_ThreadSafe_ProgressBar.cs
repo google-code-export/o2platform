@@ -12,19 +12,6 @@ namespace O2.DotNetWrappers.Windows
 
     public static class O2Forms_ThreadSafe_ProgressBar
     {        
-        public static void ts_Maximum(this ProgressBar progressBar, int value)
-        {
-            progressBar.invokeOnThread(()=>progressBar.Maximum = value);
-        }
-
-        public static void ts_Value(this ProgressBar progressBar, int value)
-        {
-            progressBar.invokeOnThread(() => progressBar.Value = value);
-        }
-
-        public static void ts_Increment(this ProgressBar progressBar,int value)
-        {
-            progressBar.invokeOnThread(() => progressBar.Increment(value));
-        }
+        
     }
 }

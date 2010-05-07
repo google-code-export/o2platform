@@ -67,7 +67,7 @@ namespace O2.Core.XRules.Ascx
         private void executeAllLoadedXRules()
         {
             DI.log.debug("Executing All Loaded XRules");
-            flowLayoutPanelWithResults.ts_Clear();            
+            flowLayoutPanelWithResults.clear();            
             var loadedXRules = (List<ILoadedXRule>)tvXRules.Tag;
             if (loadedXRules != null)
             {

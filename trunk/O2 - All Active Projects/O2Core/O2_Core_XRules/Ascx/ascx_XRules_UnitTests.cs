@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using O2.Core.XRules.Classes;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.ExtensionMethods;
 
 namespace O2.Core.XRules.Ascx
 {
@@ -42,7 +43,7 @@ namespace O2.Core.XRules.Ascx
 
         private void llClearResultsView_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            flowLayoutPanelWithResults.ts_Clear();
+            flowLayoutPanelWithResults.clear();
         }
 
         private void tvXRulesFromUnitTests_KeyUp(object sender, KeyEventArgs e)

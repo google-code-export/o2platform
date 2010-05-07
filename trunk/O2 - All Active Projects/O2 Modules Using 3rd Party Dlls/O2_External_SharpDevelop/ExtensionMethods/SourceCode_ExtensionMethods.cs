@@ -136,6 +136,25 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             
         }
 
+        public static ascx_SourceCodeViewer insert_Text(this ascx_SourceCodeViewer sourceCodeViewer, string text)
+        {
+            sourceCodeViewer.editor().insert_Text(text);
+            return sourceCodeViewer;
+        }
+
+        public static ascx_SourceCodeEditor insert_Text(this ascx_SourceCodeEditor sourceCodeEditor, string text)
+        {
+            var textArea = sourceCodeEditor.textEditorControl().textArea();
+            return (ascx_SourceCodeEditor)textArea.invokeOnThread(
+                () =>
+                {
+                    textArea.InsertString(text);
+                    return sourceCodeEditor;
+                });
+            
+        }
+            
+
         public static string get_Text(this ascx_SourceCodeViewer sourceCodeViewer)
         {
             return sourceCodeViewer.editor().getSourceCode();

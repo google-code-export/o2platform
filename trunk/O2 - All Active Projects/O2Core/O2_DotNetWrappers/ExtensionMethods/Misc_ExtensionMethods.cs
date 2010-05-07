@@ -5,11 +5,18 @@ using O2.Kernel;
 using System.Drawing;
 using O2.DotNetWrappers.DotNet;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class Misc_ExtensionMethods
     {
+        public static int sleep(this int sleepPeriod)
+        {
+            Thread.Sleep(sleepPeriod);
+            return sleepPeriod;
+        }
+
         public static void sleep(this object _object, int miliseconds)
         {
             Processes.Sleep(miliseconds);
