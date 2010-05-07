@@ -13,9 +13,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region Control - add
 
-        public static Control add(this Control hostControl, Control childControl)
+        public static T add<T>(this Control hostControl, T childControl)
+            where T : Control
         {
-            return (Control)hostControl.invokeOnThread(
+            return (T)hostControl.invokeOnThread(
                     () =>
                     {
                         hostControl.Controls.Add(childControl);
@@ -28,23 +29,34 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return hostControl.add_Control<T>(position);
         }
 
-        public static Control add_Control(this Control control, Type childControlType)
+        public static T add_Control<T>(this Control hostControl, T childControl)
+            where T : Control
+        {
+            return (T)hostControl.add(childControl);
+        }
+
+        public static Control add_Control(this Control control, Type childControlType)            
         {
             return (Control)control.invokeOnThread(
                                  () =>
                                  {
-                                     var childControl =
-                                         (Control)
-                                         PublicDI.reflection.createObjectUsingDefaultConstructor(childControlType);
-                                     if (control != null)
+                                     try
                                      {
-                                         childControl.Dock = DockStyle.Fill;
-                                         control.Controls.Add(childControl);
-                                         return childControl;
+                                         var childControl = (Control)PublicDI.reflection.createObjectUsingDefaultConstructor(childControlType);
+                                         if (control != null)
+                                         {
+                                             childControl.Dock = DockStyle.Fill;
+                                             control.Controls.Add(childControl);
+                                             return childControl;
+                                         }
+                                     }
+                                     catch (Exception ex)
+                                     {
+                                         ex.log("in Control.add_Control");
                                      }
                                      return null;
                                  });
-        }
+        }          
 
         public static T add_Control<T>(this Control hostControl, params int[] position) where T : Control
         {
@@ -80,6 +92,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     }
                     return null;
                 });
+        }
+
+        public static List<T> add_Controls<T>(this Control control, List<T> controlsToAdd)
+            where T : Control
+        {
+            foreach (var controlToAdd in controlsToAdd)
+                control.add_Control(controlToAdd);
+            return controlsToAdd;
         }
 
         #endregion
@@ -145,20 +165,98 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region Control - misc
 
-        public static Control fill(this Control control)
+        public static Form parentForm(this Control control)
         {
-            control.Dock = DockStyle.Fill;
-            return control;
+            return control.parent<Form>();
         }
 
-        public static void enabled(this Control control, bool state)
+        public static T set_Text<T>(this T control, string text)
+            where T : Control
         {
-            control.invokeOnThread(() => control.invoke("set_Enabled", state));
+            return (T)control.invokeOnThread(
+                () =>
+                {
+
+                    control.Text = text;
+                    return (T)control;
+                });
         }
 
-        public static void visible(this Control control, bool state)
+        public static T createInThread<T>(this Control control)
+            where T : Control
         {
-            control.invokeOnThread(() => control.invoke("set_Visible", state));
+            return control.newInThread<T>();
+        }
+
+        public static T newInThread<T>(this Control control)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    try
+                    {
+                        return (T)typeof(T).ctor();
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.log("in Control.invokeOnThread");
+                        return null;
+                    }
+                });
+        }
+
+        public static T fill<T>(this T control)
+            where T : Control
+        {
+            return control.fill(true);
+        }
+
+
+        public static T fill<T>(this T control, bool status)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.Dock = (status) ? DockStyle.Fill : DockStyle.None;
+                    return (T)control;
+                });
+
+        }
+
+        public static T enabled<T>(this T control)
+            where T : Control
+        {
+            return control.enabled(true);
+        }
+
+        public static T enabled<T>(this T control, bool state)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.Enabled = state;
+                    return (T)control;
+                });
+        }
+
+        public static T visible<T>(this T control)
+            where T : Control
+        {
+            return control.visible(true);
+        }
+
+        public static T visible<T>(this T control, bool state)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.Visible = state;
+                    return (T)control;
+                });
         }
 
         public static Control mapToWidth(this Control hostControl, Control control, bool alignToTop)
@@ -188,14 +286,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
-        public static Control backColor(this Control control, Color color)
+        public static T backColor<T>(this T control, Color color)
+            where T : Control
         {
-            return (Control)control.invokeOnThread(
+            return (T)control.invokeOnThread(
                 () =>
                 {
                     control.BackColor = color;
                     return control;
                 });
+        }
+
+        public static T backColor<T>(this T control, string colorName)
+            where T : Control
+        {
+            return control.backColor(Color.FromName(colorName));
         }
 
         public static List<Control> controls(this Control control)
@@ -276,6 +381,46 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static T width<T>(this T control, int value)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.Width = value;
+                    return (T)control;
+                });
+        }
+
+        public static T height<T>(this T control, int value)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.Height = value;
+                    return (T)control;
+                });
+        }
+
+        public static int width(this Control control)
+        {
+            return (int)control.invokeOnThread(
+                () =>
+                {
+                    return control.Width;
+                });
+        }
+
+        public static int height(this Control control)
+        {
+            return (int)control.invokeOnThread(
+                () =>
+                {
+                    return control.Height;
+                });
+        }
+
         public static Bitmap fromClipboardGetImage(this Control control)
         {
             return (Bitmap)control.invokeOnThread(
@@ -307,7 +452,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
             };
             //
         }
-        //		
+
+        public static T onClosed<T>(this T control, MethodInvoker onClosed)
+            where T : Control
+        {
+            var parentForm = control.parentForm();
+            if (parentForm == null)
+            {
+                "in Control.onClosed, provided form value was null".error();
+                return null;
+            }
+            parentForm.Closed += (sender, e) => onClosed();
+            return control;
+        }
 
 
         #endregion
@@ -596,6 +753,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                             case AnchorStyles.Right:
                                 splitContainer.Panel1.add(controlToWrap);
                                 splitContainer.Panel2.add(controlToInject);
+                                splitContainer.Orientation = (location == AnchorStyles.Bottom) ? Orientation.Horizontal : Orientation.Vertical;
                                 splitContainer.FixedPanel = FixedPanel.Panel2;
 
                                 if (splitterDistance > -1)
@@ -610,8 +768,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                     }
                                     else
                                         "Could not set Splitter Distance since it was a negative value: {0}".format(newSplitterDistance).error();
-                                }
-                                splitContainer.Orientation = (location == AnchorStyles.Bottom) ? Orientation.Horizontal : Orientation.Vertical;
+                                }                                
                                 break;
                             case AnchorStyles.None:
                                 PublicDI.log.error("in injectControl the location provided was AnchorStyles.None");
@@ -862,6 +1019,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 //			});					
             };
             return control;
+        }
+
+        #endregion
+
+        #region Form
+
+        public static Form onClosed<T>(this Form form, MethodInvoker onClosed)
+        {
+            if (form == null)
+            {
+                "in Form.onClosed, provided form value was null".error();
+                return null;
+            }
+            form.Closed += (sender, e) => onClosed();
+            return form;
         }
 
         #endregion

@@ -14,6 +14,7 @@ namespace O2.DotNetWrappers.Network
 {
     public class Web
     {
+        public static int DefaultHttpWebRequestTimeout = 1000 * 10;
 
         public string saveUrlContents(string urlToFetch)
         {
@@ -66,7 +67,9 @@ namespace O2.DotNetWrappers.Network
             {
                 if (verbose)
                     PublicDI.log.info("Fetching url: {0}", urlToFetch);
-                WebRequest webRequest = WebRequest.Create(urlToFetch);
+                HttpWebRequest webRequest = WebRequest.Create(urlToFetch) as HttpWebRequest;
+                webRequest.Timeout = Web.DefaultHttpWebRequestTimeout;
+                webRequest.ReadWriteTimeout = Web.DefaultHttpWebRequestTimeout;
                 if (cookies!= null && cookies.valid())
                     webRequest.Headers.Add("Cookie", cookies);
                 WebResponse rResponse = webRequest.GetResponse();
@@ -102,35 +105,50 @@ namespace O2.DotNetWrappers.Network
         }
 
         public String getUrlContents_POST(String urlToFetch, string cookies, byte[] postData)
-        {        
+        {
+            //var thread = O2Thread.mtaThread(
+            //    () =>
+            //    {
             try
-            {   
-                
-                WebRequest webRequest = WebRequest.Create(urlToFetch);                
+            {
+                // the Timeout and GC calls below were introduced due to GetResponseStream() hangs                
+                HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create(urlToFetch);
+
+                webRequest.Timeout = Web.DefaultHttpWebRequestTimeout;
+                webRequest.ReadWriteTimeout = Web.DefaultHttpWebRequestTimeout;
                 // setup POST details:
                 if (cookies != null && cookies.valid())
                     webRequest.Headers.Add("Cookie", cookies);
                 webRequest.Method = "POST";
                 webRequest.ContentLength = postData.Length;
-                webRequest.ContentType = "application/x-www-form-urlencoded";                
-                Stream dataStream = webRequest.GetRequestStream();
-                dataStream.Write(postData, 0, postData.Length);
-                dataStream.Close();
-
-                WebResponse rResponse = webRequest.GetResponse();
-                Stream sStream = rResponse.GetResponseStream();
-                var srStreamReader = new StreamReader(sStream);
-                string sHtml = srStreamReader.ReadToEnd();
-                sStream.Close();
-                srStreamReader.Close();
-                rResponse.Close();
-                return sHtml;
+                webRequest.ContentType = "application/x-www-form-urlencoded";
+                using (Stream dataStream = webRequest.GetRequestStream())
+                {
+                    dataStream.Write(postData, 0, postData.Length);
+                    dataStream.Close();
+                    System.GC.Collect();
+                }
+                using (WebResponse rResponse = webRequest.GetResponse())
+                {
+                    using (Stream sStream = rResponse.GetResponseStream())
+                    {
+                        var srStreamReader = new StreamReader(sStream);
+                        string sHtml = srStreamReader.ReadToEnd();
+                        sStream.Close();
+                        srStreamReader.Close();
+                        rResponse.Close();
+                        return sHtml;
+                    }
+                }
             }
+
             catch (Exception ex)
             {
                 PublicDI.log.error("Error in getUrlContents: {0}", ex.Message);
                 return "";
             }
+             //   });
+            //thread.
         }                 
 
 		public string downloadBinaryFile(string urlOfFileToFetch)

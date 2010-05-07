@@ -25,18 +25,21 @@ var graph = controls[2].add_Graph();
 
 // use Gui (this script was inside the 'script' control
 
-var targetFolder = @"C:\O2\DemoData\HacmeBank_FLAT_VIEW";
-var files = targetFolder.files();
-var currentFile = files[0];  
+//var targetFolder = @"C:\O2\DemoData\HacmeBank_FLAT_VIEW";
+//var files = targetFolder.files();
+//var currentFile = files[0];  
+//var currentFile = @"C:\O2\DemoData\HacmeBank_FLAT_VIEW\HacmeBank_v2_WS.WS_UserManagement.Login.cs";
+var currentFile = @"C:\O2\DemoData\HacmeBank_FLAT_VIEW\HacmeBank_v2_WS.WS_UserManagement.CreateUser.cs";
       
 var astData = new O2MappedAstData();    
 astData.O2AstResolver.addReference("");   // to load MsCorLib.dll
+astData.O2AstResolver.addReference("System.Data");
 astData.loadFile(currentFile);               
 treeView.afterSelect&lt;O2CodeStreamNode&gt;
 	((streamNode)=&gt; codeStream.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation));
      
 var taintRules = new O2CodeStreamTaintRules(); 
-//taintRules.add_TaintPropagator("System.String.Concat");
+taintRules.add_TaintPropagator("System.String.Concat");
 var o2CodeStream = new O2CodeStream(astData,taintRules, currentFile); 
  
 var iMethod = astData.iMethods()[0];
@@ -61,7 +64,7 @@ o2FindingsViewer.invokeOnThread(
 			o2FindingsViewer.setTraceTreeViewVisibleStatus(true);
 		 });
 */
-
+ 
 
 
 return "done";
@@ -70,10 +73,6 @@ return "done";
 //using O2.Views.ASCX.O2Findings
 //using O2.DotNetWrappers.O2Findings 
 //using O2.External.SharpDevelop.AST
-//using O2.API.AST.ExtensionMethods.CSharp
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_WebAutomation.cs 
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\O2CodeStream_ExtensionMethods.cs
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_VisualizationAPI.cs
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\O2CodeStreamTaintRules_ExtensionMethods.cs </SourceCode>
+//using O2.API.AST.ExtensionMethods.CSharp</SourceCode>
   <ReferencedAssemblies />
 </H2>

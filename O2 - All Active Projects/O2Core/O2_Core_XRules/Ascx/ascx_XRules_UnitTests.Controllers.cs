@@ -88,7 +88,7 @@ namespace O2.Core.XRules.Ascx
         
         public void executionResult(bool result, object resultData)
         {
-            progressBarExecutionStatus.ts_Increment(1);            
+            progressBarExecutionStatus.increment(1);            
             if (result)
             {
                 DI.log.debug("Execution result was: true");
@@ -103,7 +103,7 @@ namespace O2.Core.XRules.Ascx
 
         public void onComplete()
         {
-            progressBarExecutionStatus.ts_Value(progressBarExecutionStatus.Maximum);            
+            progressBarExecutionStatus.value(progressBarExecutionStatus.Maximum);            
         }
 
         //private void executeXRulesInSelectedNode()
@@ -113,8 +113,8 @@ namespace O2.Core.XRules.Ascx
 
         public void resetFlowPanelLayoutGUI()
         {
-            flowLayoutPanelWithResults.ts_Clear();
-            progressBarExecutionStatus.ts_Value(0);
+            flowLayoutPanelWithResults.clear();
+            progressBarExecutionStatus.value(0);
         }
 
         public void executeSelectedNode()
@@ -135,7 +135,7 @@ namespace O2.Core.XRules.Ascx
 
         public void executeMethods(List<MethodInfo> methodsToExecute)
         {            
-            progressBarExecutionStatus.ts_Maximum(methodsToExecute.Count);
+            progressBarExecutionStatus.maximum(methodsToExecute.Count);
             UnitTestExecution.executeXRuleMethods(methodsToExecute, executionResult, onComplete);
         }
     }

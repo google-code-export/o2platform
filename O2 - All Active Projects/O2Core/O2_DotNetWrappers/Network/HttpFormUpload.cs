@@ -85,29 +85,31 @@ namespace O2.DotNetWrappers.Network
 		
 		private static HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData, string cookies)
 		{
-			HttpWebRequest request = WebRequest.Create(postUrl) as HttpWebRequest;
-	 
-			if (request == null)
+            HttpWebRequest webRequest = WebRequest.Create(postUrl) as HttpWebRequest;
+
+            webRequest.Timeout = Web.DefaultHttpWebRequestTimeout;
+            webRequest.ReadWriteTimeout = Web.DefaultHttpWebRequestTimeout;
+            if (webRequest == null)
 			{
 				throw new NullReferenceException("request is not a http request");
 			}
 	 
 			// Set up the request properties
-			request.Method = "POST";
-			request.ContentType = contentType;
-			request.UserAgent = userAgent;
+            webRequest.Method = "POST";
+            webRequest.ContentType = contentType;
+            webRequest.UserAgent = userAgent;
 			//request.CookieContainer = new CookieContainer();            
-			request.Headers.Add("Cookie",cookies);
-			request.ContentLength = formData.Length;  // We need to count how many bytes we're sending. 
-	 
-			using (Stream requestStream = request.GetRequestStream())
+            webRequest.Headers.Add("Cookie", cookies);
+            webRequest.ContentLength = formData.Length;  // We need to count how many bytes we're sending. 
+
+            using (Stream requestStream = webRequest.GetRequestStream())
 			{
 				// Push it out there
 				requestStream.Write(formData, 0, formData.Length);
 				requestStream.Close();
 			}
-	 
-			return request.GetResponse() as HttpWebResponse;
+
+            return webRequest.GetResponse() as HttpWebResponse;
 		}
 	 
 		private static byte[] GetMultipartFormData(Dictionary<string, object> postParameters, string boundary)

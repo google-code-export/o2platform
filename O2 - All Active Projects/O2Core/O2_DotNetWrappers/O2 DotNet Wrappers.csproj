@@ -120,7 +120,6 @@
     <Compile Include="Windows\Controls.cs" />
     <Compile Include="Network\Netsh.cs" />
     <Compile Include="Windows\NamePipes.cs" />
-    <Compile Include="Windows\O2Forms_ThreadSafe_FlowLayoutPanel.cs" />
     <Compile Include="Windows\Files.cs" />
     <Compile Include="Windows\FillTreeViewWithlSerializedObjectData.cs" />
     <Compile Include="Windows\FolderWatcher.cs" />

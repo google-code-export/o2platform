@@ -13,6 +13,8 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
+using O2.Kernel;
+using O2.DotNetWrappers.Windows;
 
 namespace O2.External.SharpDevelop.AST
 {
@@ -422,6 +424,15 @@ namespace O2.External.SharpDevelop.AST
                 comment.Text.eq("StaThread", () => { ExecuteInStaThread = true; });
                 comment.Text.eq("MtaThread", () => { ExecuteInMtaThread = true; });  
             }
+
+            //make sure the referenced assemblies are in the current execution directory
+            foreach(var reference in ReferencedAssemblies)
+                if (reference.fileExists())
+                {
+                    var expectedFile = PublicDI.config.CurrentExecutableDirectory.pathCombine(reference.fileName());
+                    if (expectedFile.fileExists().isFalse())
+                        Files.Copy(reference, expectedFile);
+                }
 
             if (onlyAddReferencedAssemblies.isFalse())
             {

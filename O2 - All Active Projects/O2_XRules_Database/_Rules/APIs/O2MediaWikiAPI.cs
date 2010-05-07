@@ -703,29 +703,35 @@ namespace O2.Script
         {
             if (wikiApi.loggedIn().isFalse())
                 return "";
+            try
+            {
+                string sessionId = wikiApi.Login_SessionId; // "__c451ccaca794893f041024657b8ed498";
+                string userId = wikiApi.Login_UserId;
+                string userName = wikiApi.Login_Username;
 
-            string sessionId = wikiApi.Login_SessionId; // "__c451ccaca794893f041024657b8ed498";
-            string userId = wikiApi.Login_UserId;
-            string userName = wikiApi.Login_Username;
+                string uploadDescription = "File uploaded using an O2 Platform script";
+                string postURL = wikiApi.IndexPhp + "/Special:Upload";
+                string fileFormat = fileName.extension();
+                string fileContentType = "image/" + fileFormat;
+                string userAgent = "O2 Platform";
+                string cookies = "wiki_db_session={0}; wiki_dbUserID={1}; wiki_dbUserName={2}".format(sessionId, userId, userName);
 
-            string uploadDescription = "File uploaded using an O2 Platform script";
-            string postURL = wikiApi.IndexPhp + "/Special:Upload";
-            string fileFormat = fileName.extension();
-            string fileContentType = "image/" + fileFormat;
-            string userAgent = "O2 Platform";
-            string cookies = "wiki_db_session={0}; wiki_dbUserID={1}; wiki_dbUserName={2}".format(sessionId, userId, userName);
+                string postedFileHttpFieldName = "wpUploadFile";
+                var postParameters = new Dictionary<string, object>();
+                postParameters.Add("wpSourceType", "file");
+                postParameters.Add("wpDestFile", fileName);
+                postParameters.Add("wpUpload", "Upload File");
+                postParameters.Add("wpIgnoreWarning", "True");
+                postParameters.Add("wpUploadDescription", uploadDescription);
 
-            string postedFileHttpFieldName = "wpUploadFile";
-            var postParameters = new Dictionary<string, object>();
-            postParameters.Add("wpSourceType", "file");
-            postParameters.Add("wpDestFile", fileName);
-            postParameters.Add("wpUpload", "Upload File");
-            postParameters.Add("wpIgnoreWarning", "True");
-            postParameters.Add("wpUploadDescription", uploadDescription);
-
-            var httpWebResponse = HttpMultiPartForm.uploadFile(fileContents, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
-            if (httpWebResponse.ResponseUri.AbsoluteUri.extension() == fileName.extension())
-                return httpWebResponse.ResponseUri.AbsoluteUri.str();
+                var httpWebResponse = HttpMultiPartForm.uploadFile(fileContents, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
+                if (httpWebResponse.ResponseUri.AbsoluteUri.extension() == fileName.extension())
+                    return httpWebResponse.ResponseUri.AbsoluteUri.str();
+            }
+            catch (Exception ex)
+            {
+                ex.log("in O2MediaWiki.uploadImage");
+            }
             return "";
         }
         #endregion

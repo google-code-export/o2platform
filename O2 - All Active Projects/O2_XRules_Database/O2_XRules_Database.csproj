@@ -38,7 +38,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>52</ApplicationRevision>
+    <ApplicationRevision>54</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -315,6 +315,19 @@
     <Compile Include="_Rules\APIs\SunOfStrikeApi.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="_Rules\APIs\Tasks\ascx_SimpleTaskGui.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="_Rules\APIs\Tasks\ascx_SimpleTaskGui_ExtensionMethods.cs" />
+    <Compile Include="_Rules\APIs\Tasks\ascx_Task_Ping.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="_Rules\APIs\Tasks\ascx_Task_WebGet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="_Rules\APIs\Tasks\ascx_Task_WebPost.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="_Rules\APIs\WordPressAPI.cs" />
     <Compile Include="_Rules\Graphs_and_Visualization\ascx_GraphWithInspector.cs">
       <SubType>Component</SubType>
@@ -362,6 +375,7 @@
     <Compile Include="_Rules\Windows Utils\ascx_Services_Stop.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
+    <None Include="_Rules\Web Utils\Network Tests %28Ping and Http%29.h2" />
     <None Include="_Rules\_UnderDev\PoCs\Load CSharp files and show methods declarations and references.h2" />
     <None Include="_Rules\_UnderDev\PoCs\load files and create O2CodeStreams from them %28working%29.h2" />
     <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method %28original version%29.h2" />

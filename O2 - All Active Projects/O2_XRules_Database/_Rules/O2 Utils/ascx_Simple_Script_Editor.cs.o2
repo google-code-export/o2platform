@@ -23,8 +23,9 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.ExtensionMethods;
 //O2Ref:O2_Views_ASCX.dll
-using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX;
+using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX.ExtensionMethods;
 //O2Ref:O2_External_SharpDevelop.dll
 using O2.External.SharpDevelop.Ascx;
 using O2.External.SharpDevelop.AST;
@@ -180,20 +181,64 @@ namespace O2.XRules.Database.O2Utils
         	
         	commandsToExecute.textArea().KeyUp+= (sender,e) => handlePressedKeys(e);
             commandsToExecute.textArea().KeyEventHandler += handleKeyEventHandler;
-            contextMenu.add_MenuItem("execute", (menuitem) => execute());
-            contextMenu.add_MenuItem("save", (menuitem) => saveScript());
-            contextMenu.add_MenuItem("force compilation", (menuitem) => forceCompilation());
-            contextMenu.add_MenuItem("replace with generated source code", (menuitem) => replaceMainCodeWithGeneratedSource());
-            contextMenu.add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode());
-            contextMenu.add_MenuItem("enable /disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter);
+            contextMenu.add_MenuItem("current source code")                       
+                       .add_MenuItem("save", (menuitem) => saveScript())
+                       .add_MenuItem("force compilation", (menuitem) => forceCompilation())
+                       .add_MenuItem("replace with generated source code", (menuitem) => replaceMainCodeWithGeneratedSource())
+                       .add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode());
+            contextMenu.add_MenuItem("execution options")
+                       .add_MenuItem("execute", (menuitem) => execute())
+                       .add_MenuItem("enable /disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter)
+                       .add_MenuItem("disable / enabled Auto compile on code change", (menuitem) => AutoCompileOnCodeChange = !AutoCompileOnCodeChange);
+            contextMenu.add_MenuItem("auto saved scripts")
+                       .add_MenuItem("show auto saved scripts", (menuitem) => showAutoSavedScripts())
+                       .add_MenuItem("enable / disable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = !AutoSaveOnCompileSuccess);                            
+            contextMenu.add_MenuItem("code complete")                       
+                       .add_MenuItem("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete())
+                       .add_MenuItem("disable / enable 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = !commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace);
+            contextMenu.add_MenuItem("code snippets (helper)")
+                       .add_MenuItem("generate debug symbols (and create temp assembly)", (menuitem) => insertCodeSnipptet(menuitem.Text))
+                       .add_MenuItem("when compiling, only add referenced assemblies", (menuitem) => insertCodeSnipptet(menuitem.Text))
+                       .add_MenuItem("add using statement", (menuitem) => insertCodeSnipptet(menuitem.Text))
+                       .add_MenuItem("add additional source code (when compile)", (menuitem) => insertCodeSnipptet(menuitem.Text))
+                       .add_MenuItem("add external reference (dll or exe or GAC assembly)", (menuitem) => insertCodeSnipptet(menuitem.Text))
+                       .add_MenuItem("run in STA thread (when invoke)", (menuitem) => insertCodeSnipptet(menuitem.Text))
+                       .add_MenuItem("run in MTA thread (when invoke)", (menuitem) => insertCodeSnipptet(menuitem.Text));
             contextMenu.add_MenuItem("show Log Viewer", (menuitem) => showLogViewer());
-            contextMenu.add_MenuItem("disable / enabled Auto compile on code change", (menuitem) => AutoCompileOnCodeChange = !AutoCompileOnCodeChange);
-            contextMenu.add_MenuItem("enable / disable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = !AutoSaveOnCompileSuccess);
-            contextMenu.add_MenuItem("show auto saved scripts", (menuitem) => showAutoSavedScripts());
-            contextMenu.add_MenuItem("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete());
-            contextMenu.add_MenuItem("disable / enable 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = !commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace);
-     	}        	     	
-	     		     	
+            
+
+     	}
+
+        public void insertCodeSnipptet(string snippetToInsert)
+        {
+            switch (snippetToInsert)
+            {
+                case "generate debug symbols (and create temp assembly)":
+                    commandsToExecute.insert_Text("".line() + "//generateDebugSymbols".line()); 
+                    break;
+                case "when compiling, only add referenced assemblies":
+                    commandsToExecute.insert_Text("".line() + "//O2Tag_OnlyAddReferencedAssemblies".line());
+                    break;
+                case "add using statement":
+                    commandsToExecute.insert_Text("".line() + "//using:".line());
+                    break;
+                case "add additional source code (when compile)":
+                    commandsToExecute.insert_Text("".line() + "//O2File:".line());
+                    break;
+                case "add external reference (dll or exe or GAC assembly)":
+                    commandsToExecute.insert_Text("".line() + "//O2Ref:".line());
+                    break;
+                case "run in STA thread (when invoke)":
+                    commandsToExecute.insert_Text("".line() + "//StaThread:".line());
+                    break;
+                case "run in MTA thread (when invoke)":
+                    commandsToExecute.insert_Text("".line() + "//MtaThread:".line());
+                    break;
+                default:
+//                    commandsToExecute.insert_Text(".........");                    
+                    break;
+            }
+        }
 	    public void setCompilerEnvironment()
 	    {                     
 	    	csharpCompiler = new CSharp_FastCompiler();     
@@ -320,8 +365,17 @@ namespace O2.XRules.Database.O2Utils
 
         public void showAutoSavedScripts()
         {
-            var directory = (ascx_Directory)open.directory();
-            directory.openDirectory(AutoSaveDir);
+            O2Thread.mtaThread(
+                () =>
+                {
+                    var panel2 = O2Gui.open<Panel>("Search AutoSaved Scripts", 800, 300);
+                    var autoSaveDir = this.tempO2Dir().pathCombine("_AutoSavedScripts");
+                    var controls = panel2.add_1x1("Files", "Content", true, 200);
+                    var sourceViewer = controls[1].add_SourceCodeViewer();
+                    var directory = controls[0].add_Directory();
+                    directory.afterFileSelect((file) => sourceViewer.open(file));
+                    directory.open(autoSaveDir);
+                });
         }
 
         public bool handleKeyEventHandler(char key)
