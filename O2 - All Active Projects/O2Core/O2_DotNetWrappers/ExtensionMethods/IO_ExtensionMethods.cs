@@ -299,6 +299,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             if (file.StartsWith("/"))           // need to remove a leading '/' or the Path.Combine doesn't work properly
                 file = file.Substring(1);
+            if (file.StartsWith(@"\"))           // need to remove a leading '\' or the Path.Combine doesn't work properly
+                file = file.Substring(1);
             return Path.Combine(folder, file).fullPath();
         }
 

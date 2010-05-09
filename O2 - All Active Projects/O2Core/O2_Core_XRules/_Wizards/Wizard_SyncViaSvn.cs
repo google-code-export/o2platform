@@ -64,12 +64,12 @@ namespace O2.Core.XRules._Wizards
 				step.append_Line(" .... Deleting local database: {0}", targetFolder);
 				Files.deleteFolder(targetFolder,true);
 				step.append_Line(" .... Calculating files to download");
-				var svnMappedUrls= SvnApi.getSvnMappedUrls(svnUrl,true);
+                var svnMappedUrls = SvnApi.HttpMode.getSvnMappedUrls(svnUrl, true);
 				step.append_Line(" .... There are {0} files & folders to download {1}" , svnMappedUrls.Count(), Environment.NewLine);
 				foreach(var svnMappedUrl in svnMappedUrls)				
 				{
 					step.append_Line("   * Downloading: {0}", svnMappedUrl.FullPath.Replace(svnUrl, ""));
-					SvnApi.download(svnMappedUrl, svnUrl, targetFolder);
+					SvnApi.HttpMode.download(svnMappedUrl, svnUrl, targetFolder);
 				}
 				
 				step.append_Line("{0}{0} .... Download complete", Environment.NewLine);

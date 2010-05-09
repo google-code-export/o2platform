@@ -180,6 +180,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\O2_APIs\O2_API_Visualization\_externalDlls\QuickGraph.dll</HintPath>
     </Reference>
+    <Reference Include="SharpSvn, Version=1.6006.1373.40218, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\SharpSvn.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -361,6 +365,7 @@
     <None Include="_Rules\H2 SCRIPTS\open - XRules Editor.h2" />
     <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Prompt.cs.o2" />
     <Compile Include="_Rules\O2 Utils\SecretDataEditor.cs.o2" />
+    <None Include="_Rules\O2 Utils\AutoUpdate - Using Dll Ref.h2" />
     <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
     <None Include="_Rules\Web Utils\ascx_View_WebPage_Details.cs.o2">
       <SubType>UserControl</SubType>

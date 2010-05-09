@@ -38,12 +38,13 @@ using O2.Core.XRules._Wizards;
 using O2.Views.ASCX.Ascx.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.XRules.Database.O2Utils;
+using O2.Core.XRules.Classes;
 
 namespace O2.XRules.Database
 { 
     public class ascx_Execute_Scripts: UserControl
     {
-        public string welcomeMessage = "Hello! To start, drop your files on the logo.";
+        public string welcomeMessage = "Hello! To start right-click on the logo";
         public string pathToPictureBox = "";    
     	public string currentScript = "";
     	public CSharp_FastCompiler csharpCompiler;  
@@ -105,10 +106,9 @@ namespace O2.XRules.Database
         	mainSplitContainer.panel2Collapsed(true);
         	
         	var contextMenu = pictureBox.add_ContextMenu();
-            contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());
             contextMenu.add_MenuItem("View available scripts", () => showAvailableScripts());
-            contextMenu.add_MenuItem("Sync/Download local XRules From O2's Svn", () => syncO2ViaSvn());                       
-
+            contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());            
+            //contextMenu.add_MenuItem("Sync/Download local XRules From O2's Svn", () => syncO2ViaSvn());                       
             contextMenu.add_MenuItem("O2 Script Development &&  Debug")
                        .add_MenuItem("Open Simple Script Editor", () => openSimpleScriptEditor())
                        .add_MenuItem("Open quick development gui", () => open.devEnvironment())
@@ -141,8 +141,8 @@ namespace O2.XRules.Database
             
         	// put this on menu item
         	//this.add_Link("reload",10,2,()=>loadH2Script());
-        	
-        	
+
+            syncO2ViaSvn();
      	}
 
         private void screenShotTool()
@@ -233,8 +233,9 @@ namespace O2.XRules.Database
                     targetTreeView.clear(treeNode);
                     var folder = treeNode.Tag.ToString();
                     foreach (var dir in folder.dirs())
-                        targetTreeView.add_Node(treeNode, dir.fileName(), dir, true)
-                            .ForeColor = Color.SaddleBrown;
+                        if (dir.contains(".svn").isFalse())
+                            targetTreeView.add_Node(treeNode, dir.fileName(), dir, true)
+                                .ForeColor = Color.SaddleBrown;
                     foreach (var file in folder.files())
                         targetTreeView.add_Node(treeNode, file.fileName(), file, false)
                             .ForeColor = Color.DarkBlue;
@@ -275,9 +276,34 @@ namespace O2.XRules.Database
 
         public void syncO2ViaSvn()
         {
-            new Wizard_SyncXRulesViaSvn().runWizard();
+            O2Thread.mtaThread(() =>
+                {
+                    showInfo("Updating XRules using via SVN ...");
+                    SvnApi.SyncLocalFolderWithO2XRulesDatabase();
+                    showInfo("SVN XRules updated Update completed");
+                    1000.sleep();
+                    checkForClickOnceUpdates();
+                    showInfo(welcomeMessage);
+                });
+            //new Wizard_SyncXRulesViaSvn().runWizard();
         }
 
+        public void checkForClickOnceUpdates()
+        {
+            //if (ClickOnceDeployment.isClickOnceDeployment())
+            {
+                showInfo("Checking for ClickOnce updates");
+                var XRulesWithUpdateCheckScript = XRules_Config.PathTo_XRulesDatabase_fromO2.pathCombine(@"\O2 Utils\AutoUpdate - Using Dll Ref.h2");
+                if (XRulesWithUpdateCheckScript.fileExists().isFalse())
+                    "[in checkForClickOnceUpdates]: could not find H2 script to execute: {0}".error(XRulesWithUpdateCheckScript);
+                else
+                {
+                    XRulesWithUpdateCheckScript.executeFirstMethod();
+                }
+                showInfo("Check for ClickOnce updates completed");
+            }
+
+        }
         public void openO2LogViewer()
         {
             O2Gui.open<ascx_LogViewer>();
