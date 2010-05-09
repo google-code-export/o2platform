@@ -83,9 +83,9 @@ namespace O2.Core.XRules.Ascx
             if (e.Item is TreeNode)
             {
                 var treeNode = (TreeNode)e.Item;
-                if (treeNode.Tag != null && treeNode.Tag is SvnMappedUrl)
+                if (treeNode.Tag != null && treeNode.Tag is SvnApi.HttpMode.SvnMappedUrl)
                 {
-                    var svnMappedUrl = ((SvnMappedUrl)treeNode.Tag);
+                    var svnMappedUrl = ((SvnApi.HttpMode.SvnMappedUrl)treeNode.Tag);
                     if (svnMappedUrl.IsFile)
                         DoDragDrop(svnMappedUrl.FullPath, DragDropEffects.Copy);
                 }
@@ -96,7 +96,7 @@ namespace O2.Core.XRules.Ascx
         {        	
         	if (tvDirectoriesAndFiles.SelectedNode != null)
         	{
-        		var svnMappedUrl = (SvnMappedUrl)tvDirectoriesAndFiles.SelectedNode.Tag;
+                var svnMappedUrl = (SvnApi.HttpMode.SvnMappedUrl)tvDirectoriesAndFiles.SelectedNode.Tag;
         		log.info("on after select for: {0}", svnMappedUrl.Text);
         		
         		if (svnMappedUrl.IsFile)
@@ -110,7 +110,7 @@ namespace O2.Core.XRules.Ascx
         {
             if (false == urlToOpen.StartsWith("http"))
                 urlToOpen = svnBaseUrl + urlToOpen;
-            var svnMappedUrls = SvnApi.getSvnMappedUrls(urlToOpen);
+            var svnMappedUrls = SvnApi.HttpMode.getSvnMappedUrls(urlToOpen);
             if (svnMappedUrls.Count == 0)            
                 PublicDI.log.error("in openSvnUrl there was no svnMappedUrls");
             else

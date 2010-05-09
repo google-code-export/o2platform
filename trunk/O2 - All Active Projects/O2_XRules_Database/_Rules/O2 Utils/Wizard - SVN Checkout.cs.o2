@@ -112,13 +112,13 @@ namespace O2.Core.XRules._Wizards
 				else
   					Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);				
 				textBox.append_Line(" .... Calculating files to download");
-				var svnMappedUrls= SvnApi.getSvnMappedUrls(svnUrl,true);
+                var svnMappedUrls = SvnApi.HttpMode.getSvnMappedUrls(svnUrl, true);
 				textBox.append_Line(" .... There are {0} files & folders to download {1}" , svnMappedUrls.Count(), Environment.NewLine);
 				
 				foreach(var svnMappedUrl in svnMappedUrls)				
 				{								
 						textBox.append_Line("   * Downloading: {0}", WebEncoding.urlDecode(svnMappedUrl.FullPath.Replace(svnUrl, "")));
-						SvnApi.download(svnMappedUrl, svnUrl, targetFolder);										
+						SvnApi.HttpMode.download(svnMappedUrl, svnUrl, targetFolder);										
 				}
 				
 				textBox.append_Line("{0}{0} .... Download complete", Environment.NewLine);
