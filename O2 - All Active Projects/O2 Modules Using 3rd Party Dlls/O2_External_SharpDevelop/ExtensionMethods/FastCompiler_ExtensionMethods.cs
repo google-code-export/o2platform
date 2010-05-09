@@ -5,6 +5,7 @@ using O2.External.SharpDevelop.AST;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.DotNet;
 using System;
+using O2.DotNetWrappers.H2Scripts;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -119,6 +120,39 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 ex.log("in CSharp_FastCompiler.executeMethod");
                 return null;
             }
+        }        
+
+        public static object executeH2Script(this string h2ScriptFile)
+        {
+            try
+            {
+                if (h2ScriptFile.extension(".h2").isFalse())
+                    "[in executeH2Script]: file to execute must be a *.h2 file, it was:{0}".error(h2ScriptFile);
+                else
+                {
+                    var h2Script = H2.load(h2ScriptFile);
+                    return h2Script.execute();                    
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in CSharp_FastCompiler.executeH2Script");
+            }
+            return null;
+        }
+
+        public static object execute(this H2 h2Script)
+        {
+            try
+            {                
+                var assembly = h2Script.SourceCode.assembly();
+                return assembly.executeFirstMethod();                
+            }
+            catch (Exception ex)
+            {
+                ex.log("in CSharp_FastCompiler.executeH2Script");
+            }
+            return null;
         }
     }
 }

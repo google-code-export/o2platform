@@ -298,7 +298,7 @@ namespace O2.XRules.Database
                     "[in checkForClickOnceUpdates]: could not find H2 script to execute: {0}".error(XRulesWithUpdateCheckScript);
                 else
                 {
-                    XRulesWithUpdateCheckScript.executeFirstMethod();
+                    XRulesWithUpdateCheckScript.executeH2Script();
                 }
                 showInfo("Check for ClickOnce updates completed");
             }
