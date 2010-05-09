@@ -77,8 +77,9 @@ namespace O2.External.SharpDevelop.AST
         public List<string> getDefaultUsingStatements()
         {
             return new List<string>().add("System")
-                                     .add("System.Windows.Forms")
                                      .add("System.Drawing")
+                                     .add("System.Windows.Forms")
+                                     .add("System.Collections.Generic")                                     
                                      .add("O2.Interfaces")
                                      .add("O2.Kernel")
                                      .add("O2.Kernel.ExtensionMethods")

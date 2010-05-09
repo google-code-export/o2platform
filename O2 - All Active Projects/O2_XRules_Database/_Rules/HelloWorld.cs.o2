@@ -9,8 +9,7 @@ namespace O2.XRules.Database._Rules._Samples
     {    	
         [Test]
         public void sayHello()
-        {
-        	PublicDI.log.info("test","asd");
+        {        	
             PublicDI.log.showMessageBox("Hello O2 World!");
             
         }
