@@ -145,7 +145,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         {
             try
             {                
-                var assembly = h2Script.SourceCode.assembly();
+                var assembly = h2Script.SourceCode.compile_CodeSnippet();
                 return assembly.executeFirstMethod();                
             }
             catch (Exception ex)
