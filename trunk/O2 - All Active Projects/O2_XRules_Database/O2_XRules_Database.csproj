@@ -366,6 +366,7 @@
     <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Prompt.cs.o2" />
     <Compile Include="_Rules\O2 Utils\SecretDataEditor.cs.o2" />
     <None Include="_Rules\O2 Utils\AutoUpdate - Using Dll Ref.h2" />
+    <None Include="_Rules\O2 Utils\AutoUpdate - Using Reflection.h2" />
     <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
     <None Include="_Rules\Web Utils\ascx_View_WebPage_Details.cs.o2">
       <SubType>UserControl</SubType>
