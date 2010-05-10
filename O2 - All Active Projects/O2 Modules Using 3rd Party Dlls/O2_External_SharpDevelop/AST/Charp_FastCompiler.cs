@@ -79,7 +79,7 @@ namespace O2.External.SharpDevelop.AST
             return new List<string>().add("System")
                                      .add("System.Drawing")
                                      .add("System.Windows.Forms")
-                                     .add("System.Collections.Generic")                                     
+                                     .add("System.Collections.Generic")
                                      .add("O2.Interfaces")
                                      .add("O2.Kernel")
                                      .add("O2.Kernel.ExtensionMethods")
@@ -93,9 +93,10 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.External.IE.ExtensionMethods")
                                      .add("O2.XRules.Database.ExtensionMethods")
                                      .add("O2.XRules.Database._Rules._Interfaces")
+                                     .add("O2.XRules.Database._Rules.APIs")
                                      .add("O2.XRules.Database.O2Utils")
                                      .add("O2.External.SharpDevelop.ExtensionMethods")
-                                     .add("O2.External.SharpDevelop.Ascx")                                        
+                                     .add("O2.External.SharpDevelop.Ascx")
                 //GraphSharp related
                                      .add("O2.Script")
                                      .add("GraphSharp.Controls")
@@ -103,11 +104,9 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.API.AST.Graph")
                                      .add("O2.API.AST.CSharp")
                                      .add("O2.API.AST.ExtensionMethods.CSharp")
-                                     .add("O2.API.AST.ExtensionMethods")          
+                                     .add("O2.API.AST.ExtensionMethods")
                                      .add("WPF=System.Windows.Controls")
-                                     .add("Media=System.Windows.Media")
-                //Twitter related
-                                     .add("O2.API.Visualization.Twitter");
+                                     .add("Media=System.Windows.Media");               
         }
 		public List<string> getDefaultReferencedAssemblies()
         {

@@ -112,10 +112,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static Label add_Label(this Control control, string text, int top, int left)
         {
             Label label = control.add_Label(text);
-            if (top > -1)
-                label.Top = top;
-            if (left > -1)
-                label.Left = left;
+            label.invokeOnThread(() =>
+                {
+                    if (top > -1)
+                        label.Top = top;
+                    if (left > -1)
+                        label.Left = left;
+                });
             return label;
         }
 
@@ -580,6 +583,27 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                      });
         }
 
+        public static TabPage onSelected(this TabPage tabPage, MethodInvoker callback)
+        {
+            if (callback != null)
+            {
+                tabPage.invokeOnThread(() =>
+                    {
+                        var tabControl = tabPage.parent<TabControl>();
+                        tabControl.SelectedIndexChanged +=
+                            (sender, e) =>
+                            {
+                                if (tabControl.SelectedTab == tabPage)
+                                    callback();
+                            };
+                        // handle the case where the tabPage is the current selected tab
+                        if (tabControl.SelectedTab == tabPage)
+                            callback();
+                    });
+            }
+            return tabPage;
+        }
+
         #endregion
 
         #region TextBox
@@ -618,6 +642,52 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                          control.Controls.Add(textBox);
                                          return textBox;
                                      });
+        }
+
+        public static TextBox add_TextBox(this Control control, int top, int left)
+        {
+            return control.add_TextBox(top, left, -1, -1);
+        }
+
+        public static TextBox add_TextBox(this Control control, int top, int left, int width)
+        {
+            return control.add_TextBox(top, left, width, -1);
+        }
+
+        public static TextBox add_TextBox(this Control control, int top, int left, int width, int height)
+        {
+            var textBox = control.add_TextBox(false);
+            textBox.top(top);
+            textBox.left(left);
+            textBox.width(width);
+            if (height > -1)
+            {
+                textBox.multiLine(true);
+                textBox.height(height);
+            }
+            return textBox;
+        }
+
+        public static TextBox append_TextBox(this Control control, string text)
+        {
+            return control.append_TextBox(text, -1, -1);
+        }
+
+        public static TextBox append_TextBox(this Control control, int width)
+        {
+            return control.append_TextBox("", width, -1);
+        }
+
+        public static TextBox append_TextBox(this Control control, string text, int width)
+        {
+            return control.append_TextBox(text, width, -1);
+        }
+
+        public static TextBox append_TextBox(this Control control, string text, int width, int height)
+        {
+            var textBox = control.Parent.add_TextBox(control.Top - 3, control.Left + control.Width + 5, width, height);
+            textBox.set_Text(text);
+            return textBox;
         }
 
         public static TextBox select(this TextBox textBox, int start, int length)
@@ -1786,6 +1856,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
             type.properties().ForEach(property => dataGridView.add_Column(property.Name));
         }
 
+        public static DataGridView add_Columns(this DataGridView dataGridView, List<string> columns)
+        {
+            return dataGridView.add_Columns(columns.ToArray());
+        }
+
+        public static DataGridView add_Columns(this DataGridView dataGridView, params string[] columns)
+        {
+            columns.ForEach(column => dataGridView.add_Column(column));
+            return dataGridView;
+        }
+
         public static int add_Row(this DataGridView dataGridView, params object[] cells)
         {
             int id = dataGridView.Rows.Add(cells);
@@ -2034,6 +2115,29 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region ComboBox
 
+        public static ComboBox add_ComboBox(this Control control)
+        {
+            return control.add_ComboBox(0, 0, null).fill();
+        }
+
+        public static ComboBox add_ComboBox(this Control control, int top, int left)
+        {
+            return control.add_ComboBox(top, left, null);
+        }
+
+        public static ComboBox add_ComboBox(this Control control, int top, int left, List<string> items)
+        {
+            var comboBox = control.add_Control<ComboBox>(top, left);
+            comboBox.invokeOnThread(
+            () =>
+            {
+                comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                if (items != null)
+                    comboBox.add_Items(items);
+            });
+            return comboBox;
+        }
+        
         public static string get_Text(this ComboBox comboBox)
         {
             return (string)comboBox.invokeOnThread(
@@ -2052,13 +2156,101 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return comboBox;
                 });
         }
-
+        
         public static ComboBox insert_Item(this ComboBox comboBox, object itemToInsert)
         {
             return (ComboBox)comboBox.invokeOnThread(
                 () =>
                 {
                     comboBox.Items.Insert(0, itemToInsert);
+                    return comboBox;
+                });
+        }
+
+        public static ComboBox add_Item(this ComboBox comboBox, object itemToInsert)
+        {
+            return (ComboBox)comboBox.invokeOnThread(
+                           () =>
+                           {
+                               if (itemToInsert != null)
+                                   comboBox.Items.Add(itemToInsert);
+                               return comboBox;
+                           });
+        }
+
+        public static ComboBox add_Items<T>(this ComboBox comboBox, List<T> itemsToInsert)
+        {
+            return (ComboBox)comboBox.invokeOnThread(
+                           () =>
+                           {
+                               if (itemsToInsert != null)
+                                   foreach (var itemToInsert in itemsToInsert)
+                                       comboBox.Items.Add(itemToInsert);
+                               return comboBox;
+                           });
+        }
+
+        public static ComboBox select_Item(this ComboBox comboBox, int index)
+        {
+            return (ComboBox)comboBox.invokeOnThread(
+                () =>
+                {
+                    if (index < comboBox.Items.Count)
+                        comboBox.SelectedIndex = index;
+                    else
+                        "in ComboBox.select_Item, provided index is bigger than the current items collection: {0} > {1}".error(index, comboBox.Items.Count);
+                    return comboBox;
+                });
+        }
+
+        public static object selected(this ComboBox comboBox)
+        {
+            return comboBox.invokeOnThread(
+                () =>
+                {
+                    return comboBox.SelectedItem;
+                });
+        }
+
+        public static T selected<T>(this ComboBox comboBox)
+        {
+            return (T)comboBox.invokeOnThread(
+                () =>
+                {
+                    if (comboBox.SelectedItem is T)
+                        return (T)comboBox.SelectedItem;
+                    return null;
+                });
+        }
+
+        public static ComboBox onSelection(this ComboBox comboBox, MethodInvoker callback)
+        {
+            if (callback != null)
+            {
+                comboBox.SelectedIndexChanged += (sender, e) => callback();
+            }
+            return comboBox;
+        }
+
+        public static ComboBox onSelection<T>(this ComboBox comboBox, Action<T> callback)
+        {
+            if (callback != null)
+            {
+                comboBox.SelectedIndexChanged += (sender, e) =>
+                {
+                    if (comboBox.SelectedItem != null && comboBox.SelectedItem is T)
+                        callback((T)comboBox.SelectedItem);
+                };
+            }
+            return comboBox;
+        }
+
+        public static ComboBox clear(this ComboBox comboBox)
+        {
+            return (ComboBox)comboBox.invokeOnThread(
+                () =>
+                {
+                    comboBox.Items.Clear();
                     return comboBox;
                 });
         }

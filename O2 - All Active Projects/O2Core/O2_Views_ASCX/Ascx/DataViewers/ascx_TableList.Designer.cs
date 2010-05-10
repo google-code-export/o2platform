@@ -70,7 +70,7 @@ namespace O2.Views.ASCX.DataViewers
             // 
             this.llMakeColumnWithMatchCellWidth.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.llMakeColumnWithMatchCellWidth.AutoSize = true;
-            this.llMakeColumnWithMatchCellWidth.Location = new System.Drawing.Point(575, 6);
+            this.llMakeColumnWithMatchCellWidth.Location = new System.Drawing.Point(575, 5);
             this.llMakeColumnWithMatchCellWidth.Name = "llMakeColumnWithMatchCellWidth";
             this.llMakeColumnWithMatchCellWidth.Size = new System.Drawing.Size(83, 13);
             this.llMakeColumnWithMatchCellWidth.TabIndex = 2;
@@ -82,7 +82,7 @@ namespace O2.Views.ASCX.DataViewers
             // 
             this.llClearLoadedItems.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.llClearLoadedItems.AutoSize = true;
-            this.llClearLoadedItems.Location = new System.Drawing.Point(664, 6);
+            this.llClearLoadedItems.Location = new System.Drawing.Point(664, 5);
             this.llClearLoadedItems.Name = "llClearLoadedItems";
             this.llClearLoadedItems.Size = new System.Drawing.Size(30, 13);
             this.llClearLoadedItems.TabIndex = 3;

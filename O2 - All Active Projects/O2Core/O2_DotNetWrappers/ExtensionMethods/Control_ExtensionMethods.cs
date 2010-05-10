@@ -381,13 +381,38 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static T top<T>(this T control, int top)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                    () =>
+                    {
+                        if (top > -1)
+                            control.Top = top;
+                        return control;
+                    });
+        }
+
+        public static T left<T>(this T control, int left)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                    () =>
+                    {
+                        if (left > -1)
+                            control.Left = left;
+                        return control;
+                    });
+        }
+
         public static T width<T>(this T control, int value)
             where T : Control
         {
             return (T)control.invokeOnThread(
                 () =>
                 {
-                    control.Width = value;
+                    if (value > -1)
+                        control.Width = value;
                     return (T)control;
                 });
         }
@@ -398,7 +423,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (T)control.invokeOnThread(
                 () =>
                 {
-                    control.Height = value;
+                    if (value > -1)
+                        control.Height = value;
                     return (T)control;
                 });
         }
@@ -828,7 +854,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (T)control.invokeOnThread(
                 () =>
                 {
-                    var newControl = control.add_Control<T>();
+                    //var newControl = control.add_Control<T>();
+                    var newControl = control.newInThread<T>();
                     newControl.fill();
                     control.insert_Above(newControl, distance);
                     return newControl;

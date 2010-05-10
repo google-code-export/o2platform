@@ -52,8 +52,8 @@ namespace O2.Kernel.ExtensionMethods
         public static bool neq(this string string1, string string2)
         {
             return (string1 != string2);
-        }
-        
+        }        
+
         public static bool contains(this string targetString, string stringToFind)
         {
             return (stringToFind != null)
