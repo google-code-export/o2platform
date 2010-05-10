@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var dir = @"C:\O2\DemoData\HacmeBank_v2.0 (Dinis version - 7 Dec 08)\HacmeBank_v2_WS\WebServices";
+var targetFolder = PublicDI.config.getTempFolderInTempDirectory("MethodStreams");
+
+var o2MappedAstData = new O2MappedAstData();   
+o2MappedAstData.O2AstResolver.addReference("System.Data"); 
+
+var targetSourceFiles = (dir + "\\..").fullPath().files("*.cs",true); 
+
+o2MappedAstData.loadFiles(targetSourceFiles);  
+
+panel.clear();
+
+var originalFile = panel.add_SourceCodeViewer();
+  
+var treeView = originalFile.insert_Left&lt;Panel&gt;(300)
+						    .add_Directory()
+							.open(dir)
+							.afterFileSelect(
+											(file) =&gt; {
+														originalFile.set_Text(file.fileContents());
+														o2MappedAstData.createO2MethodStreamFiles(dir.files()[1], targetFolder); 
+													  })
+							.getTreeView();
+							
+treeView.SelectedNode = treeView.Nodes[2];		 
+
+var methodStreamViewer = originalFile.insert_Below&lt;ascx_SourceCodeViewer&gt;();
+	 
+var createdFiles = methodStreamViewer.insert_Left&lt;Panel&gt;(300)
+									 .add_Directory(targetFolder)
+								     .afterFileSelect((file)=&gt;methodStreamViewer.open(file));
+					
+
+
+
+
+
+
+
+	   				
+ 
+//directory.open(firstDir);
+//return directory; 
+return null;</SourceCode>
+  <ReferencedAssemblies />
+</H2>
