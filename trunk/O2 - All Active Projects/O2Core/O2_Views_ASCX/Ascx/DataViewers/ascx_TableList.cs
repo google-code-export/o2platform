@@ -152,12 +152,18 @@ namespace O2.Views.ASCX.DataViewers
 
         private void llMakeColumnWithMatchCellWidth_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            resizeColumnsWidth = false;
-            lvData.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            resizeColumnsWidth = true;
+            makeColumnWidthMatchCellWidth();
         }
-
-
+        
+        public void makeColumnWidthMatchCellWidth()
+        {
+            this.invokeOnThread(() =>
+                {
+                    resizeColumnsWidth = false;
+                    lvData.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
+                    resizeColumnsWidth = true;
+                });
+        }
 
         public ListView getListViewControl()
         {

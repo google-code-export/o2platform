@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using O2.DotNetWrappers.Windows;
@@ -68,6 +69,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
             if (file.valid())
                 return Path.GetFileName(file);
             return "";
+        }
+
+        public static List<string> fileNames(this List<string> files)
+        {
+            var fileNames = from file in files
+                            select file.fileName();
+            return fileNames.toList();
         }
 
         public static string directoryName(this string file)

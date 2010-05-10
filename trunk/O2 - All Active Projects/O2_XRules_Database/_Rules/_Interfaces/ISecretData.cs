@@ -64,6 +64,11 @@ namespace O2.XRules.Database._Rules._Interfaces
             
         }
 
+        public override string ToString()
+        {
+            return UserName ?? base.ToString();
+        }
+
     }
 
     public static class SecretData_ExtensionMethods
@@ -71,10 +76,14 @@ namespace O2.XRules.Database._Rules._Interfaces
         #region username
 
         public static List<Credential> credentialTypes(this ISecretData secretData, string credentialType)
-        {
-            if (credentialType.valid().isFalse())
-                return secretData.Credentials;
+        {            
             var credentials = new List<Credential>();
+            if (credentialType.valid().isFalse())
+                if (secretData != null && secretData.Credentials != null)
+                    return secretData.Credentials;
+                else
+                    return credentials;
+            
             foreach (var credential in secretData.Credentials)
                 if (credential.CredentialType == credentialType)
                     credentials.add(credential);
@@ -104,8 +113,36 @@ namespace O2.XRules.Database._Rules._Interfaces
             return "";
         }
 
+        public static List<ICredential> usernames(this ISecretData secretData)
+        {
+            return secretData.usernames("");
+        }
+        public static List<ICredential> usernames(this ISecretData secretData, string credentialType)
+        {
+            var usernames = from credential in secretData.credentialTypes(credentialType)
+                            select (ICredential)credential;
+            return usernames.ToList();
+        }
         #endregion
 
+        #region get_User
+
+        public static ICredential get_User(this ISecretData secretData, string userName)
+        {
+            return secretData.get_User("", userName);
+        }
+
+        public static ICredential get_User(this ISecretData secretData, string credentialType, string userName)
+        {
+            if (secretData != null && secretData.Credentials != null)
+                foreach (var credential in secretData.Credentials)
+                    if (credential.UserName == userName)
+                        if (credentialType.valid().isFalse() || credentialType == credential.CredentialType)
+                            return credential;
+            return null;
+        }
+
+        #endregion
         #region password
 
         public static string password(this ISecretData secretData)
@@ -129,8 +166,15 @@ namespace O2.XRules.Database._Rules._Interfaces
             if (index < credentials.size())
                 return credentials[index].Password;
             return "";
-        }        
+        }
 
+        public static string password(this ISecretData secretData, string credentialType, string username)
+        {
+            foreach (var credential in secretData.Credentials)
+                if (credential.UserName == username && credential.CredentialType == credentialType)
+                    return credential.Password;
+            return "";
+        }
         #endregion
 
     }

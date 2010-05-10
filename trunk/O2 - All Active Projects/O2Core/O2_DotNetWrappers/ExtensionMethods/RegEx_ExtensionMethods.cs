@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 
 namespace O2.DotNetWrappers.ExtensionMethods
@@ -37,5 +38,15 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     where item.regEx(regEx)
                     select item).ToList(); ;
         }
+
+        public static List<string> filter(this List<string> items, string textToFind)
+        {
+            textToFind = textToFind.lower();
+            var filteredItems = from item in items
+                                where item.lower().contains(textToFind)
+                                select item;
+            return filteredItems.toList();
+        }
+       
     }
 }

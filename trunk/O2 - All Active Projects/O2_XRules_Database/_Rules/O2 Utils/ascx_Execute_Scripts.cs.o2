@@ -290,17 +290,24 @@ namespace O2.XRules.Database
 
         public void checkForClickOnceUpdates()
         {
-            //if (ClickOnceDeployment.isClickOnceDeployment())
+            try
             {
-                showInfo("Checking for ClickOnce updates");
-                var XRulesWithUpdateCheckScript = XRules_Config.PathTo_XRulesDatabase_fromO2.pathCombine(@"\O2 Utils\AutoUpdate - Using Reflection.h2");
-                if (XRulesWithUpdateCheckScript.fileExists().isFalse())
-                    "[in checkForClickOnceUpdates]: could not find H2 script to execute: {0}".error(XRulesWithUpdateCheckScript);
-                else
+                if (ClickOnceDeployment.isClickOnceDeployment())
                 {
-                    XRulesWithUpdateCheckScript.executeH2Script();
+                    showInfo("Checking for ClickOnce updates");
+                    var XRulesWithUpdateCheckScript = XRules_Config.PathTo_XRulesDatabase_fromO2.pathCombine(@"\O2 Utils\AutoUpdate - Using Reflection.h2");
+                    if (XRulesWithUpdateCheckScript.fileExists().isFalse())
+                        "[in checkForClickOnceUpdates]: could not find H2 script to execute: {0}".error(XRulesWithUpdateCheckScript);
+                    else
+                    {
+                        XRulesWithUpdateCheckScript.executeH2Script();
+                    }
+                    showInfo("Check for ClickOnce updates completed");
                 }
-                showInfo("Check for ClickOnce updates completed");
+            }
+            catch (Exception ex)
+            {
+                ex.log("in checkForClickOnceUpdates");
             }
 
         }

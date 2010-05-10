@@ -38,7 +38,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>56</ApplicationRevision>
+    <ApplicationRevision>58</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -315,6 +315,7 @@
     </Compile>
     <Compile Include="_Rules\APIs\O2MediaWikiAPI.cs" />
     <Compile Include="_Rules\APIs\O2PlatformWikiAPI.cs" />
+    <Compile Include="_Rules\APIs\O2TwitterAPI.cs" />
     <Compile Include="_Rules\APIs\OwaspAPI.cs" />
     <Compile Include="_Rules\APIs\SunOfStrikeApi.cs">
       <SubType>Component</SubType>
@@ -382,6 +383,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <None Include="_Rules\Web Utils\Network Tests %28Ping and Http%29.h2" />
+    <None Include="_Rules\Web Utils\Twitter Client.h2" />
     <None Include="_Rules\_UnderDev\PoCs\Load CSharp files and show methods declarations and references.h2" />
     <None Include="_Rules\_UnderDev\PoCs\load files and create O2CodeStreams from them %28working%29.h2" />
     <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method %28original version%29.h2" />
@@ -421,7 +423,6 @@
     </Compile>
     <Compile Include="_Rules\_UnderDev\To Blog about\FirstTest.cs" />
     <Compile Include="_Rules\_UnderDev\To Blog about\Irony Parser - CmdExe_Dir.cs" />
-    <Compile Include="_Rules\_UnderDev\Twitter_ExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="H2Logo.ico" />

@@ -100,12 +100,12 @@ namespace O2.Views.ASCX.ExtensionMethods
         {
             tableList.invokeOnThread(
                 () =>
-                    {
+                    {                        
                         ListView listView = tableList.getListViewControl();
                         listView.Columns.Clear();
-                        listView.AllowColumnReorder = true;
+                        listView.AllowColumnReorder = true;                        
                         foreach (var columnName in columnNames)
-                            listView.Columns.Add(columnName);
+                            listView.Columns.Add(columnName);                        
                     });
 
         }

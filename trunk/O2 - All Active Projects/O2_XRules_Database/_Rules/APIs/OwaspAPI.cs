@@ -10,7 +10,7 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Script;
 
-namespace O2.Script_Local
+namespace O2.Script
 {
 
 	public class OwaspWikiAPI : O2MediaWikiAPI
