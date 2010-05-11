@@ -724,9 +724,10 @@ namespace O2.Script
                 postParameters.Add("wpIgnoreWarning", "True");
                 postParameters.Add("wpUploadDescription", uploadDescription);
 
-                var httpWebResponse = HttpMultiPartForm.uploadFile(fileContents, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
-                if (httpWebResponse.ResponseUri.AbsoluteUri.extension() == fileName.extension())
-                    return httpWebResponse.ResponseUri.AbsoluteUri.str();
+                var httpWebResponse = new HttpMultiPartForm().uploadFile(fileContents, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
+                if (httpWebResponse != null)
+                    if (httpWebResponse.ResponseUri.AbsoluteUri.extension() == fileName.extension())
+                        return httpWebResponse.ResponseUri.AbsoluteUri.str();
             }
             catch (Exception ex)
             {
