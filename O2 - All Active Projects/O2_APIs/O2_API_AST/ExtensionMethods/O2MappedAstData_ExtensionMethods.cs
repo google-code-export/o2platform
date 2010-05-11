@@ -382,6 +382,11 @@ namespace O2.API.AST.ExtensionMethods
             return null;
         }
 
+        public static List<String> files(this O2MappedAstData astData)
+        {
+            return astData.FileToCompilationUnit.Keys.toList();
+        }
+
         public static string file(this O2MappedAstData o2MappedAstData, CompilationUnit compilationUnit)
         {
             foreach (var file in o2MappedAstData.FileToCompilationUnit)

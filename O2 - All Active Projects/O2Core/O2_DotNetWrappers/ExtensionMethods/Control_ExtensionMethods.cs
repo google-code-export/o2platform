@@ -465,17 +465,23 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region Control - events
 
-        public static void onDrop(this Control control, Action<string> onDropFileOrFolder)
+        public static T onDrop<T>(this T control, Action<string> onDropFileOrFolder)
+            where T : Control
         {
-            control.AllowDrop = true;
-            control.DragEnter += (sender, e) => Dnd.setEffect(e);
-            control.DragDrop += (sender, e)
-                 =>
-            {
-                var fileOrFolder = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
-                if (fileOrFolder.valid())
-                    onDropFileOrFolder(fileOrFolder);
-            };
+            return (T)control.invokeOnThread(() =>
+                {
+
+                    control.AllowDrop = true;
+                    control.DragEnter += (sender, e) => Dnd.setEffect(e);
+                    control.DragDrop += (sender, e)
+                         =>
+                    {
+                        var fileOrFolder = Dnd.tryToGetFileOrDirectoryFromDroppedObject(e);
+                        if (fileOrFolder.valid())
+                            onDropFileOrFolder(fileOrFolder);
+                    };
+                    return control;
+                });
             //
         }
 

@@ -38,7 +38,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>59</ApplicationRevision>
+    <ApplicationRevision>60</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -353,6 +353,12 @@
     </Compile>
     <Compile Include="_Rules\O2 Utils\ascx_SvnBrower.cs.o2">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Rules\O2 Utils\DotNet_Ast_Scanner\O2_DotNet_Ast_Engine.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="_Rules\O2 Utils\DotNet_Ast_Scanner\O2_DotNet_Ast_Scanner.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="_Rules\O2 Utils\Wizard - SVN Checkout.cs.o2" />
     <None Include="_Rules\H2 SCRIPTS\O2 Command Prompt.h2" />
