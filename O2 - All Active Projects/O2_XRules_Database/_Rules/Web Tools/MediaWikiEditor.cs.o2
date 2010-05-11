@@ -20,33 +20,45 @@ using O2.XRules.Database._Rules._Interfaces;
 
 namespace O2.Script
 {
-    public class MediaWikiEditor
-    {        	
-		public void run()
-		{			
-			var fileWithSecretData = @"C:\O2\_USERDATA\O2TestUsers.xml";			
-			
-			// MediaWiki Api Object
-			var wikiApi = new O2PlatformWikiAPI(); 			
-			var secretData = fileWithSecretData.deserialize<SecretData>();
+    public class MediaWikiEditor : Control
+    {     
+    	public String FileWithSecretData {get; set;}
+    	
+    	public O2MediaWikiAPI WikiApi {get; set;}
+    	public WordPressAPI WpApi {get; set;}
+    	
+    	public static MediaWikiEditor launch()
+    	{    		
+    		var wikiEditor = O2Gui.open<MediaWikiEditor>("O2 MediaWiki Editor",750,500);
+    		wikiEditor.buildGui();
+    		return wikiEditor;
+    	}
+    	
+    	public MediaWikiEditor()
+    	{
+    		FileWithSecretData = @"C:\O2\_USERDATA\O2TestUsers.xml";
+    	}
+    	
+    	public void loginToWikiAndWordPress()
+    	{
+    		// MediaWiki Api Object
+    		WikiApi = new O2PlatformWikiAPI(); 			
+			var secretData = FileWithSecretData.deserialize<SecretData>();
 			var username = secretData.username("O2Platform-Wiki");
 			var password = secretData.password("O2Platform-Wiki");
-			wikiApi.login(username,password); 			
+			WikiApi.login(username,password); 			
 			
 			// WordPress Api Object
-			var wpApi = new WordPressAPI("http://use-o2.com");
-			wpApi.login(secretData.username("O2Platform-WordPress"), secretData.password("O2Platform-WordPress"));
-			wpApi.LoggedIn.str().info();
-			
-			//create MediaWikiEditor
-			new MediaWikiEditor().buildGui(wikiApi, wpApi);
-		}		        
+			WpApi = new WordPressAPI("http://use-o2.com");
+			//WpApi.login(secretData.username("O2Platform-WordPress"), secretData.password("O2Platform-WordPress"));			
+    	}    					        
 
-        public void buildGui(O2MediaWikiAPI wikiApi, WordPressAPI wpApi)
+        public void buildGui()
         {
+        	loginToWikiAndWordPress();
         	// add Controls
-        	var panel = O2Gui.open<Panel>("MediaWiki Editor", 750,500);			 
-			var controls = panel.add_1x2("WikiText","Preview","Live data (Wiki or WordPress)",true,500,300); 
+        	//var panel = O2Gui.open<Panel>("MediaWiki Editor", 750,500);			 
+			var controls = this.add_1x2("WikiText","Preview","Live data (Wiki or WordPress)",true,500,300); 
 			var wikiTextEditor = controls[0].add_RichTextBox();
 			var browserPreview = controls[1].add_Browser();
 			var browserCurrent = controls[2].add_Browser(); 
@@ -65,8 +77,8 @@ namespace O2.Script
 							"Image in Clipboard".debug();
 							O2Thread.mtaThread( 
 								()=>{
-										var imageUrl = wikiApi.uploadImage_FromClipboard();
-										var wikiTextForImage = wikiApi.getWikiTextForImage(imageUrl);					
+										var imageUrl = WikiApi.uploadImage_FromClipboard();
+										var wikiTextForImage = WikiApi.getWikiTextForImage(imageUrl);					
 										wikiTextEditor.insertText(wikiTextForImage); 
 									});
 							return true;
@@ -86,10 +98,11 @@ namespace O2.Script
 			bottomPanel.add_Button("Post To WordPress",0, 350).onClick(
 				()=>{
 						var pageToEdit = textBox.get_Text();																				
-						var postId = wpApi.post_from_MediaWiki(wikiApi,pageToEdit);
-						var postUrl = "{0}/?p={1}".format(wpApi.WordPressServer,postId);
+						var postId = WpApi.post_from_MediaWiki(WikiApi,pageToEdit);
+						var postUrl = "{0}/?p={1}".format(WpApi.WordPressServer,postId);
 						browserCurrent.open(postUrl);
-					});
+					})
+					  .append_Link("Reset network connection", ()=> System.GC.Collect());
 						
 			
 			bottomPanel.add_Button("Load",0).onClick(
@@ -97,11 +110,11 @@ namespace O2.Script
 						O2Thread.mtaThread(()=>
 						{			
 							var pageToEdit =  textBox.get_Text();	
-							var wikiText = wikiApi.wikiText(pageToEdit);
+							var wikiText = WikiApi.wikiText(pageToEdit);
 							//wikiTextEditor.set_Text(wikiApi.wikiText(pageToEdit));
 							wikiTextEditor.set_Text(wikiText);
-							browserPreview.set_Text(wikiApi.parseText(wikiText,true));
-							browserCurrent.set_Text(wikiApi.html(pageToEdit));	  
+							browserPreview.set_Text(WikiApi.parseText(wikiText,true));
+							browserCurrent.set_Text(WikiApi.html(pageToEdit));	  
 						});
 					}).click();
 			
@@ -110,7 +123,7 @@ namespace O2.Script
 				()=>{
 						O2Thread.mtaThread( 
 								()=>{
-										browserPreview.set_Text(wikiApi.parseText(wikiTextEditor.get_Text(),true));
+										browserPreview.set_Text(WikiApi.parseText(wikiTextEditor.get_Text(),true));
 									});
 					});
 					
@@ -118,19 +131,19 @@ namespace O2.Script
 				()=>{
 						var currentPage =  textBox.get_Text();
 						// save content
-						wikiApi.save(currentPage, wikiTextEditor.get_Text()); 
+						WikiApi.save(currentPage, wikiTextEditor.get_Text()); 
 						 
 						// reload content and show it
-						var wikiText = wikiApi.wikiText(currentPage);					
-						browserPreview.set_Text(wikiApi.parseText(wikiText,true));
-						browserCurrent.set_Text(wikiApi.html(currentPage));	  			
+						var wikiText = WikiApi.wikiText(currentPage);					
+						browserPreview.set_Text(WikiApi.parseText(wikiText,true));
+						browserCurrent.set_Text(WikiApi.html(currentPage));	  			
 					}); 
 			
 			wikiTextEditor.onKeyPress(Keys.Enter, 
 				(code)=>{
 							O2Thread.mtaThread(()=>
 							{			
-								browserPreview.set_Text(wikiApi.parseText(code,true));
+								browserPreview.set_Text(WikiApi.parseText(code,true));
 							});
 						});
 			        }

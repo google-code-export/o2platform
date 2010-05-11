@@ -30,7 +30,7 @@ namespace O2.DotNetWrappers.Network
 		}*/
 		//
 		
-		public static HttpWebResponse uploadFile(string fileToUpload, string fileName, string fileFormat, string fileContentType , 
+		public HttpWebResponse uploadFile(string fileToUpload, string fileName, string fileFormat, string fileContentType , 
 							   string postURL, string userAgent, string cookies)
 		{		
 			// Read file data
@@ -41,7 +41,7 @@ namespace O2.DotNetWrappers.Network
 			return uploadFile(data, fileName ,fileFormat ,fileContentType , postURL, userAgent, cookies);			
 		}	
 		
-		public static HttpWebResponse uploadFile(byte[] data, string fileName, string fileFormat, string fileContentType , 
+		public HttpWebResponse uploadFile(byte[] data, string fileName, string fileFormat, string fileContentType , 
 							   string postURL, string userAgent, string cookies)
 		{
 			// Generate post objects
@@ -52,7 +52,7 @@ namespace O2.DotNetWrappers.Network
 			return uploadFile(data, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
 		}
 		
-		public static HttpWebResponse uploadFile(byte[] data, Dictionary<string, object> postParameters, string fileName, string fileContentType , 
+		public HttpWebResponse uploadFile(byte[] data, Dictionary<string, object> postParameters, string fileName, string fileContentType , 
 							   string postURL, string userAgent, string postedFileHttpFieldName, string cookies)
 		{
 			
@@ -71,48 +71,65 @@ namespace O2.DotNetWrappers.Network
 			*/
 		}			
 	    
-		private static readonly Encoding encoding = Encoding.UTF8;
+		private readonly Encoding encoding = Encoding.UTF8;
 		
-		public static HttpWebResponse MultipartFormDataPost(string postUrl, string userAgent, Dictionary<string, object> postParameters, string cookies)
+		public HttpWebResponse MultipartFormDataPost(string postUrl, string userAgent, Dictionary<string, object> postParameters, string cookies)
 		{
 			string formDataBoundary = "-----------------------------28947758029299";
 			string contentType = "multipart/form-data; boundary=" + formDataBoundary;
 	 
 			byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
 	 
-			return PostForm(postUrl, userAgent, contentType, formData, cookies);
+			var response = PostForm(postUrl, userAgent, contentType, formData, cookies);
+            this.gcCollect();
+            return response;
 		}
 		
-		private static HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData, string cookies)
+		private HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData, string cookies)
 		{
-            HttpWebRequest webRequest = WebRequest.Create(postUrl) as HttpWebRequest;
+            try
+            {
 
-            webRequest.Timeout = Web.DefaultHttpWebRequestTimeout;
-            webRequest.ReadWriteTimeout = Web.DefaultHttpWebRequestTimeout;
-            if (webRequest == null)
-			{
-				throw new NullReferenceException("request is not a http request");
-			}
-	 
-			// Set up the request properties
-            webRequest.Method = "POST";
-            webRequest.ContentType = contentType;
-            webRequest.UserAgent = userAgent;
-			//request.CookieContainer = new CookieContainer();            
-            webRequest.Headers.Add("Cookie", cookies);
-            webRequest.ContentLength = formData.Length;  // We need to count how many bytes we're sending. 
+                HttpWebRequest webRequest = WebRequest.Create(postUrl) as HttpWebRequest;
 
-            using (Stream requestStream = webRequest.GetRequestStream())
-			{
-				// Push it out there
-				requestStream.Write(formData, 0, formData.Length);
-				requestStream.Close();
-			}
+                webRequest.Timeout = Web.DefaultHttpWebRequestTimeout;
+                webRequest.ReadWriteTimeout = Web.DefaultHttpWebRequestTimeout;
+                if (webRequest == null)
+                {
+                    throw new NullReferenceException("request is not a http request");
+                }
 
-            return webRequest.GetResponse() as HttpWebResponse;
+                // Set up the request properties
+                webRequest.Method = "POST";
+                webRequest.ContentType = contentType;
+                webRequest.UserAgent = userAgent;
+                //request.CookieContainer = new CookieContainer();            
+                webRequest.Headers.Add("Cookie", cookies);
+                webRequest.ContentLength = formData.Length;  // We need to count how many bytes we're sending. 
+
+                this.gcCollect();                            // Hack: need this or after a couple requests the webRequest.GetRequestStream() will hang
+                
+                using (Stream requestStream = webRequest.GetRequestStream())
+                {
+                    // Push it out there
+                    requestStream.Write(formData, 0, formData.Length);
+                    requestStream.Close();
+                    System.GC.Collect();
+                }
+
+                var response = webRequest.GetResponse() as HttpWebResponse;
+                
+                return response;                       
+            }
+            catch (Exception ex)
+            {
+                ex.log("in HttpFormUpload.PostForm");
+                this.gcCollect();                       //Hack: need this or after a couple requests the webRequest.GetRequestStream() will hang
+                return null;
+            }
 		}
 	 
-		private static byte[] GetMultipartFormData(Dictionary<string, object> postParameters, string boundary)
+		private byte[] GetMultipartFormData(Dictionary<string, object> postParameters, string boundary)
 		{
 			Stream formDataStream = new System.IO.MemoryStream();
 	 

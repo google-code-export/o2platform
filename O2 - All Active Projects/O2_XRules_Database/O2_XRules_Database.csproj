@@ -38,7 +38,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>58</ApplicationRevision>
+    <ApplicationRevision>59</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -375,7 +375,9 @@
     <Compile Include="_Rules\Web Utils\ascx_Translate_Text.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\Web Tools\MediaWikiEditor.cs.o2" />
+    <Compile Include="_Rules\Web Tools\MediaWikiEditor.cs.o2">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="_Rules\Windows Utils\ascx_Processes_Stop.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
