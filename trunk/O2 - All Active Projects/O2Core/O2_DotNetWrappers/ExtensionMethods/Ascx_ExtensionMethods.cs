@@ -1695,6 +1695,38 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
         #endregion
 
+        #region MenuStrip
+        public static MenuStrip add_Menu(this Form form)
+        {
+            return (MenuStrip)form.invokeOnThread(
+                () =>
+                {
+                    var menuStrip = new MenuStrip();
+                    form.Controls.Add(menuStrip);
+                    form.MainMenuStrip = menuStrip;
+                    return menuStrip;
+                });
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this MenuStrip menuStrip, string text)
+        {
+            return menuStrip.add_MenuItem(text, null);
+        }
+
+        public static ToolStripMenuItem add_MenuItem(this MenuStrip menuStrip, string text, MethodInvoker callback)
+        {
+            return (ToolStripMenuItem)menuStrip.invokeOnThread(
+                () =>
+                {
+                    var fileMenuItem = new ToolStripMenuItem { Text = text };
+                    menuStrip.Items.Add(fileMenuItem);
+                    if (callback != null)
+                        menuStrip.Click += (sender, e) => callback();
+                    return fileMenuItem;
+                });
+        }
+        #endregion
+
         #region PictureBox
 
         public static PictureBox add_Image(this Control control)

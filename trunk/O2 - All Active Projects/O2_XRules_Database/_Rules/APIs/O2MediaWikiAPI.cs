@@ -18,6 +18,8 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
+using O2.External.IE.Wrapper;
+using O2.External.IE.ExtensionMethods;
 
 namespace O2.Script
 {
@@ -785,6 +787,18 @@ namespace O2.Script
         public static string pageUrl(this O2MediaWikiAPI wikiApi, string page)
         {
             return wikiApi.IndexPhp + "/" + page;
+        }
+
+        public static O2BrowserIE add_WikiHelpPage(this Control control, string wikiPage)
+        {
+            var browser = control.add_Browser();
+            O2Thread.mtaThread(
+                () =>
+                {
+                    var htmlText = new O2PlatformWikiAPI().getPageHtml(wikiPage);
+                    browser.set_Text(htmlText);
+                });
+            return browser;
         }
 
         #endregion
