@@ -77,24 +77,33 @@ namespace O2.External.SharpDevelop.Ascx
     	
     	public void setupEnvironment()
     	{
-    		textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += TextAreaKeyEventHandler;
-            textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += Caret_PositionChanged;
-			textEditor.Disposed += CloseCodeCompletionWindow;  // When the editor is disposed, close the code completion window
-			
-			//set up the ToolTipRequest event
-			textEditor.ActiveTextAreaControl.TextArea.ToolTipRequest += OnToolTipRequest;
-			
-			this.pcRegistry = new ProjectContentRegistry();
-			this.myProjectContent = new DefaultProjectContent();
-			this.myProjectContent.Language = this.CurrentLanguageProperties;
-            pcRegistry.ActivatePersistence(Path.Combine(PublicDI.config.O2TempDir,
-                                                        "CSharpCodeCompletion"));
-			// static parse current code thread
-			//startParseCodeThread();
-			// add references
-			
-			startAddReferencesThread();
-            startParseCodeThread();
+            try
+            {
+                textEditor.ActiveTextAreaControl.TextArea.KeyEventHandler += TextAreaKeyEventHandler;
+                textEditor.ActiveTextAreaControl.TextArea.Caret.PositionChanged += Caret_PositionChanged;
+                textEditor.Disposed += CloseCodeCompletionWindow;  // When the editor is disposed, close the code completion window
+
+                //set up the ToolTipRequest event
+                textEditor.ActiveTextAreaControl.TextArea.ToolTipRequest += OnToolTipRequest;
+
+                this.pcRegistry = new ProjectContentRegistry();
+                this.myProjectContent = new DefaultProjectContent();
+                this.myProjectContent.Language = this.CurrentLanguageProperties;
+                var persistanceFolder = Path.Combine(Path.GetTempPath(), "CSharpCodeCompletion");
+                persistanceFolder.createFolder();
+                pcRegistry.ActivatePersistence(persistanceFolder);
+                // static parse current code thread
+                //startParseCodeThread();
+                // add references
+
+                startAddReferencesThread();
+                startParseCodeThread();
+            }
+            catch (Exception ex)
+            {
+                ex.log("in setupEnvironment");
+            }
+
     	}
 
         void Caret_PositionChanged(object sender, EventArgs e)
@@ -852,19 +861,26 @@ namespace O2.External.SharpDevelop.Ascx
     {
     	public static void add_Reference(this DefaultProjectContent projectContent, ProjectContentRegistry pcRegistry, string assemblyToLoad, Action<string> debugMessage)
     	{
-    		debugMessage("Loading: {0}".format(assemblyToLoad));
-    		//if (!assemblyToLoad.fileExists())
-    		//	"file doesn't exist".error();    		
-    		IProjectContent referenceProjectContent = pcRegistry.GetProjectContentForReference(assemblyToLoad, assemblyToLoad);
-    		if (referenceProjectContent== null)
-    			"referenceProjectContent was null".error();
-    		else
-    		{
-				projectContent.AddReferencedContent(referenceProjectContent);
-				if (referenceProjectContent is ReflectionProjectContent)
-                    (referenceProjectContent as ReflectionProjectContent).InitializeReferences();
-                else 
-                	"something when wrong in DefaultProjectContent.add_Reference".error();
+            try
+            {
+                debugMessage("Loading: {0}".format(assemblyToLoad));
+                //if (!assemblyToLoad.fileExists())
+                //	"file doesn't exist".error();    		
+                IProjectContent referenceProjectContent = pcRegistry.GetProjectContentForReference(assemblyToLoad, assemblyToLoad);
+                if (referenceProjectContent == null)
+                    "referenceProjectContent was null".error();
+                else
+                {
+                    projectContent.AddReferencedContent(referenceProjectContent);
+                    if (referenceProjectContent is ReflectionProjectContent)
+                        (referenceProjectContent as ReflectionProjectContent).InitializeReferences();
+                    else
+                        "something when wrong in DefaultProjectContent.add_Reference".error();
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in DefaultProjectContent.add_Reference");
             }
     	}
     }

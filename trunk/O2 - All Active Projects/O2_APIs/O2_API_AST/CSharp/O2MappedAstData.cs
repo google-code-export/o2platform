@@ -10,6 +10,7 @@ using O2.API.AST.ExtensionMethods.CSharp;
 using O2.DotNetWrappers.ExtensionMethods;
 using ICSharpCode.SharpDevelop.Dom;
 using O2.API.AST.CSharp;
+using ICSharpCode.NRefactory;
 
 
 namespace O2.API.AST.CSharp
@@ -23,6 +24,7 @@ namespace O2.API.AST.CSharp
 		public Dictionary<string, GetAllINodes> FileToINodes { get; set; }
 		public Dictionary<string, CompilationUnit> FileToCompilationUnit { get; set; }
 		
+        public Dictionary<string, List<ISpecial>> FileToSpecials {get;set;}
         /*//from MapAstToDom
         public Dictionary<CompilationUnit, List<CodeNamespace>> CompilationUnitToNameSpaces { get; set; }
         public Dictionary<MethodDeclaration, CodeMemberMethod> MethodsAstToDom { get; set; }
@@ -45,7 +47,8 @@ namespace O2.API.AST.CSharp
             MapAstToDom = new MapAstToDom();
             MapAstToNRefactory = new MapAstToNRefactory(O2AstResolver.myProjectContent);
 			FileToINodes = new Dictionary<string, GetAllINodes>();            
-			FileToCompilationUnit = new Dictionary<string,CompilationUnit>();            
+			FileToCompilationUnit = new Dictionary<string,CompilationUnit>();
+            FileToSpecials = new Dictionary<string, List<ISpecial>>(); 
         }
 
         public void loadFile(string fileOrCode)
@@ -67,9 +70,10 @@ namespace O2.API.AST.CSharp
                 }
                 // get compilation unit
                 var parser = codeToLoad.csharpAst();
+                var specials = parser.Lexer.SpecialTracker.RetrieveSpecials();
                 var compilationUnit = parser.CompilationUnit;
                 //processCompilationUnit
-                loadCompilationUnit(filePath, compilationUnit);
+                loadCompilationUnit(filePath, specials, compilationUnit);
             }
             catch (Exception ex)
             {
@@ -78,8 +82,10 @@ namespace O2.API.AST.CSharp
 		}                            
         
 
-        public void loadCompilationUnit(string filePath, CompilationUnit compilationUnit)
+        public void loadCompilationUnit(string filePath, List<ISpecial> specials, CompilationUnit compilationUnit)
         {        	
+            //store specials
+            FileToSpecials.add(filePath, specials);
         	// map all INodes
 	        FileToINodes.add(filePath,new GetAllINodes(compilationUnit));
             FileToCompilationUnit.add(filePath,compilationUnit);

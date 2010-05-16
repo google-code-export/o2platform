@@ -92,6 +92,8 @@ namespace O2.API.AST.ExtensionMethods.CSharp
 
         public static List<TypeDeclaration> types(this AbstractNode abstractNode, bool recursive)
         {
+            if (abstractNode == null)
+                return new List<TypeDeclaration>();
             var types = (from child in abstractNode.Children
                          where child is TypeDeclaration
                          select (TypeDeclaration)child).ToList();

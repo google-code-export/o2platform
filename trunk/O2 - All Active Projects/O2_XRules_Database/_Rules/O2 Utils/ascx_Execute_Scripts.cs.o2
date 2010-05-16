@@ -68,13 +68,20 @@ namespace O2.XRules.Database
     	}    	
     	
     	public ascx_Execute_Scripts()
-    	{    
+    	{
+            handleSpecialControlKeys();
     		var logoFile = "..\\O2_Logo.gif";
     		var tempPath = this.tempDir().pathCombine(logoFile);
     		if (! tempPath.fileExists())
 		    	pathToPictureBox = new Web().checkIfFileExistsAndDownloadIfNot(logoFile, @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
 		    else
 		    	pathToPictureBox = tempPath;		    
+        }
+
+        private void handleSpecialControlKeys()
+        {
+            if (Control.ModifierKeys == Keys.Shift)
+                openO2LogViewer();
         }
     
         private void buildGui()
@@ -283,6 +290,7 @@ namespace O2.XRules.Database
                     showInfo("SVN XRules updated Update completed");
                     1000.sleep();
                     checkForClickOnceUpdates();
+                    1000.sleep();
                     showInfo(welcomeMessage);
                 });
             //new Wizard_SyncXRulesViaSvn().runWizard();
@@ -346,6 +354,7 @@ namespace O2.XRules.Database
      	
      	public void showInfo(string infoMessage, object details)
      	{
+            infoMessage.info();
      		statusLabel.set_Text(infoMessage).textColor(this,Color.Green);  
      		if (details != null)     		
      		{

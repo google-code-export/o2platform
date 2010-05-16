@@ -123,7 +123,7 @@ namespace O2.API.Visualization.ExtensionMethods
 
 		#endregion    	
 		
-    	#region ElementHost - graph and zoom        	
+    	#region ElementHost - graph and zoom        	 
     	
     	public static GraphLayout add_GraphWithZoom(this ElementHost elementHost)
 		{

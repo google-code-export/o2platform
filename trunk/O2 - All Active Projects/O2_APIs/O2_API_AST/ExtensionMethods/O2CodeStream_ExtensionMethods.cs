@@ -446,7 +446,7 @@ namespace O2.API.AST.ExtensionMethods
 			treeView.selectFirst();
     		return o2CodeStream;
     	}    	    	    	     	 
-    	 
+    	//REMOVE 
     	public static List<IO2Finding> o2Findings(this O2CodeStream o2CodeStream)
     	{
     		var uniqueStreamPaths = o2CodeStream.getUniqueStreamPaths(100);

@@ -239,6 +239,39 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     });
         }
 
+        public static SplitContainer borderNone(this SplitContainer control)
+        {
+            return (SplitContainer)control.invokeOnThread(
+                () =>
+                    {
+                        control.BorderStyle = BorderStyle.None;
+                        return control;
+                    });
+        }        
+
+        public static SplitContainer fixedPanel1(this SplitContainer control)
+        {
+            return (SplitContainer)control.invokeOnThread(
+                () =>
+                    {
+                        control.FixedPanel = FixedPanel.Panel1;
+                        return control;
+                    });
+        }
+
+        public static SplitContainer fixedPanel2(this SplitContainer control)
+        {
+            return (SplitContainer)control.invokeOnThread(
+                () =>
+                {
+                    control.FixedPanel = FixedPanel.Panel2;
+                    return control;
+                });
+        }
+
+        
+
+
         public static SplitContainer panel2Collapsed(this SplitContainer control, bool value)
         {
             return (SplitContainer)control.invokeOnThread(
@@ -954,8 +987,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static TreeNode clear(this TreeNode treeNode)
         {
             if (treeNode != null)
-                treeNode.TreeView.clear(treeNode);
-            return treeNode;
+                return (TreeNode)treeNode.TreeView.invokeOnThread(()=>treeNode.clear(treeNode));
+            return null;
         }
 
         public static TreeNode selected(this TreeView treeView)
@@ -1025,9 +1058,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     });
         }
 
-        public static void clear(this TreeView treeView, TreeNode treeNode)
+        public static TreeView clear(this TreeView treeView, TreeNode treeNode)
         {
-            treeView.invokeOnThread(() => treeNode.Nodes.Clear());
+            return (TreeView)treeView.invokeOnThread(() =>
+                    {
+                        treeNode.Nodes.Clear();
+                        return treeView;
+                    });
         }
 
         public static void clear(this TreeView treeView)
@@ -1118,6 +1155,27 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static TreeView remove_Node(this TreeView treeView, TreeNode treeNode)
+        {
+            return (TreeView)treeView.invokeOnThread(
+                                () =>
+                                {
+                                    treeView.Nodes.Remove(treeNode);
+                                    return treeView;
+                                });
+        }
+
+        public static TreeView remove_Nodes(this TreeView treeView, List<TreeNode> treeNodes)
+        {
+            return (TreeView)treeView.invokeOnThread(
+                                () =>
+                                {
+                                    foreach(var treeNode in treeNodes)
+                                        treeView.Nodes.Remove(treeNode);
+                                    return treeView;
+                                });
+        }
+
         public static Delegate[] getEventHandlers(this TreeView treeView, string eventName)
         {
             var eventDelegate = (MulticastDelegate)treeView.field(eventName);
@@ -1191,6 +1249,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             var results = new List<TreeNode>();
             treeNodes.forEach<TreeNode>((node) => results.AddRange(node.nodes()));
             return results;
+        }
+
+        public static TreeView treeView(this TreeNode treeNode)
+        {            
+            return treeNode.TreeView;
         }
 
         public static TreeView treeView(this List<TreeNode> treeNodes)
@@ -1504,6 +1567,25 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return treeView;
         }
 
+        public static string get_Text(this TreeView treeView)
+        {
+            return (string)treeView.invokeOnThread(() => { return treeView.Text; });
+        }
+
+        public static object get_Tag(this TreeView treeView)
+        {
+            return (object)treeView.invokeOnThread(() => { return treeView.Tag; });
+        }
+
+        public static string get_Text(this TreeNode treeNode)
+        {
+            return (string)treeNode.treeView().invokeOnThread(() => { return treeNode.Text; });
+        }
+
+        public static object get_Tag(this TreeNode treeNode)
+        {
+            return (object)treeNode.treeView().invokeOnThread(() => { return treeNode.Tag; });
+        }
 
         #endregion
 
@@ -1901,10 +1983,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static int add_Row(this DataGridView dataGridView, params object[] cells)
         {
-            int id = dataGridView.Rows.Add(cells);
-            //DataGridViewRow dgvr = dgvDataGridView.Rows[id];
-            //dgvr.Tag = oTagObject;
-            return id;
+            return (int)dataGridView.invokeOnThread(() =>
+                {
+                    int id = dataGridView.Rows.Add(cells);                    
+                    return id;
+                });
         }
 
         public static void add_Rows<T>(this DataGridView dataGridView, List<T> collection)
@@ -2145,6 +2228,41 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #endregion
 
+        #region ToolStripTextBox
+
+        public static ToolStripTextBox add_TextBox(this ContextMenuStrip contextMenu, string text)
+        {
+            var textBox = new ToolStripTextBox { Text = text };
+            contextMenu.Items.Add(textBox);
+            return textBox;
+        }
+
+        public static ToolStripTextBox add_TextBox(this ToolStripMenuItem menuItem, string text)
+        {
+            var textBox = new ToolStripTextBox { Text = text };
+            menuItem.DropDownItems.Add(textBox);
+            return textBox;
+        }
+
+        public static string get_Text(this ToolStripTextBox textBox)
+        {
+            return textBox.Text;
+        }
+
+        public static ToolStripTextBox set_Text(this ToolStripTextBox textBox, string text)
+        {
+            textBox.Text = text;
+            return textBox;
+        }
+
+        public static ToolStripTextBox width(this ToolStripTextBox textBox, int width)
+        {
+            textBox.Width = width;
+            textBox.TextBox.Width = width;
+            return textBox;
+        }
+
+        #endregion 
         #region ComboBox
 
         public static ComboBox add_ComboBox(this Control control)
