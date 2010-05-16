@@ -16,31 +16,50 @@ using O2.Views.ASCX;
 using O2.API.AST.CSharp;
 using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
+using O2.API.Visualization.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
+using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
+using O2.External.IE.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI; 
+using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
+using GraphSharp.Controls;
+
+//O2Ref:GraphSharp.dll
+//O2Ref:GraphSharp.Controls.dll
 //O2Ref:QuickGraph.dll
+//O2Ref:PresentationFramework.dll
+//O2Ref:PresentationCore.dll
+//O2Ref:WindowsBase.dll
+//O2Ref:ICSharpCode.AvalonEdit.dll
+//O2Ref:WindowsFormsIntegration.dll
 //O2File:C:\O2\_XRules_Local\Extra_methods.cs
 
-namespace O2.Script
+namespace O2.Script.Temp5
 {
-    public class O2_DotNet_Ast_Engine : Control
-	{	 	
-		
+    public class O2_DotNet_Ast_Engine : UserControl
+	{	 			
 	 	public Panel HostPanel { get; set; }
 	 	public TreeView Step_1_TreeView_SourceFiles { get; set; }	 	
+	 	public ToolStripStatusLabel StatusLabel { get; set; }
+	 	public ProgressBar TopProgressBar { get ; set; }
 	 	
-	 	public string step_1_WikiHelpPage = "O2 DotNet Ast Engine - Step 1: load source code files";
 	 	public string step_2_WikiHelpPage = "O2 DotNet Ast Engine - Step 2: view method streams";
-	 	
+	 	public Dictionary<string, Assembly> ReferencedAssemblies;
 	 	public O2MappedAstData AstData { get; set; }
+
+		//public Dictionary<IMethod, string> MethodStreams { get; set; }
 
 		public O2_DotNet_Ast_Engine()
 		{
-			AstData = new O2MappedAstData(); 	
+			this.width(500);
+			this.height(400);
+			AstData = new O2MappedAstData(); 
+			ReferencedAssemblies = new  Dictionary<string, Assembly>();
+			//MethodStreams = new Dictionary<IMethod, string>();
 		}
 		
 	 	public void start()
@@ -51,48 +70,120 @@ namespace O2.Script
 	 	
 		public void buildGui() 
 		{		 
+			var statusStrip = this.parentForm().controls(true).control<StatusStrip>();
+			
+			if (statusStrip != null)
+				StatusLabel = (ToolStripStatusLabel)statusStrip.Items[0];
+			else
+				StatusLabel = this.add_StatusStrip();
+			
+			statusMessage("building Gui");
+			//add_StatusStrip();
+			//statusStrip.set_Text("test");
 			var controls = this.add_1x1("actions", "", false, 40);		
-			controls[0].add_Link("Step 1: load source code files", 15, 2, step1)
-			           .append_Link("Step 2: view method streams", step2)
-			           .append_Link("Step 3: ...", null).enabled(false)
-			           .append_Link("Step 4: ...", null).enabled(false)
-			           .append_Link("Step 5: ...", null).enabled(false);
-			
+			TopProgressBar =  controls[0].add_Link("Step 1: load artifacts (C# source code)", 15, 2, () => step_LoadArtifacts())
+								         .append_Link("view AST", ()=> step_ViewAST())
+								         .append_Link("search AST", ()=> step_SearchAST())
+								         .append_Link("search Comments", ()=> step_SearchComments())
+								         .append_Link("method streams", ()=> step_MethodStreams())
+								         .append_Link("write rule", ()=> step_WriteRule())								         
+								         .append_Link("view findings", null).enabled(false)
+								         .append_Control<ProgressBar>();
+			TopProgressBar.align_Right(controls[0]);        
+			TopProgressBar.top(TopProgressBar.Top -4);
+			 
 			HostPanel = controls[1].add_Panel();
-			
-			HostPanel.parent<SplitContainer>().BorderStyle = BorderStyle.None;  			
-			HostPanel.parent<SplitContainer>().FixedPanel = FixedPanel.Panel1;
-		}
-		
-		
-		public void step1()
-		{			
-			HostPanel.clear();
-			HostPanel.backColor("Control");  
-			Step_1_TreeView_SourceFiles =  HostPanel.add_TreeView(); 
-			var Step_1_Browser = Step_1_TreeView_SourceFiles.insert_Above<Panel>(100);
-			Step_1_Browser.add_WikiHelpPage(step_1_WikiHelpPage);	    						
-			Step_1_TreeView_SourceFiles.insert_Below<Panel>(20)
-			       	                   .add_Link("clear",0,0,()=> Step_1_TreeView_SourceFiles.clear());
 
-			Step_1_TreeView_SourceFiles.invokeOnThread(
-			()=> 
-				Step_1_TreeView_SourceFiles.onDrop((fileOrFolder)=> step1_loadSourceFiles(fileOrFolder))				
-				);
-		}
-		 
-		public void step1_loadSourceFiles(string fileOrFolder)
-		{
-			if (fileOrFolder.fileExists())			
-				AstData.loadFile(fileOrFolder);				
-			else if (fileOrFolder.dirExists())
-				AstData.loadFiles(fileOrFolder.files("*.cs",true));		
-				
-			Step_1_TreeView_SourceFiles.clear();
-			Step_1_TreeView_SourceFiles.add_Nodes(AstData.files());
+            HostPanel.parent<SplitContainer>().borderNone();
+            HostPanel.parent<SplitContainer>().fixedPanel1();
+			
+			statusMessage("all ready...");
 		}
 		
-		public void step2()
+		public Step_LoadArtifacts step_LoadArtifacts()
+		{
+			return new Step_LoadArtifacts(this);
+		}
+		
+		public Step_ViewAST step_ViewAST()
+		{
+			return new Step_ViewAST(this);
+		}
+		
+		public Step_SearchAST step_SearchAST()
+		{
+			return new Step_SearchAST(this);
+		}
+		
+		public Step_SearchComments step_SearchComments()
+		{
+			return new Step_SearchComments(this);
+		}
+		
+		public Step_MethodStreams step_MethodStreams()
+		{
+			return new Step_MethodStreams(this);
+		}
+		
+		public Step_WriteRule step_WriteRule()
+		{
+			return new Step_WriteRule(this);
+		}
+				
+		 
+		public void loadSourceFiles(string fileOrFolder)
+		{			
+			if (fileOrFolder.fileExists())			
+				loadSourceFiles(fileOrFolder.wrapOnList());
+			else if (fileOrFolder.dirExists())
+			{
+				statusMessage("Finding (recursively) all *.cs to process in: {0}".format(fileOrFolder));
+				loadSourceFiles(fileOrFolder.files("*.cs",true));		
+			}
+				
+			//Step_1_TreeView_SourceFiles.clear();
+			//Step_1_TreeView_SourceFiles.add_Nodes(AstData.files());
+		}
+		
+		public void loadSourceFiles(List<string> filesToLoad)
+		{			
+			TopProgressBar.maximum(filesToLoad.size());
+			int count = 0;
+			int total = filesToLoad.size();
+			var o2Timer = new O2Timer("{0} files processed in".format(total)).start();
+			foreach(var file in filesToLoad)
+			{				
+				AstData.loadFile(file);
+				TopProgressBar.increment(1);
+				//statusMessage("loading source code files: {0}/{1} : {2}".format(count++, total, file.fileName()));
+				statusMessage("loading source code files: {0}/{1}".format(count++, total));
+			}
+			//statusMessage(o2Timer.stop().TimeSpanString);
+			o2Timer.stop().TimeSpanString.info();;
+			//calculateMethodsStreams();
+			//
+		}
+		
+		public void calculateMethodsStreams()
+		{			
+			var targerFolder = PublicDI.config.getTempFolderInTempDirectory("_MethodStream");
+			
+			var iMethods = AstData.iMethods(AstData.methodDeclarations()); 
+			TopProgressBar.maximum(iMethods.size());
+			int count = 0;
+			int total = iMethods.size();
+			//this.MethodStreams = new Dictionary<IMethod, string>();    		
+			foreach(var iMethod in iMethods)
+			{
+				TopProgressBar.increment(1);				
+				AstData.createO2MethodStreamFile(iMethod,targerFolder);
+				
+    			//MethodStreams.Add(iMethod,AstData.createO2MethodStream(iMethod).csharpCode());    						
+				statusMessage("calculating methodStream: {0}/{1}".format(count++, total));
+			}						
+		}
+		
+	/*	public void step2()
 		{
 			HostPanel.clear();
 			
@@ -110,7 +201,7 @@ namespace O2.Script
 			()=> 
 				files_treeView.onDrop(
 					(fileOrFolder)=>{
-										step1_loadSourceFiles(fileOrFolder);
+										loadSourceFiles(fileOrFolder);
 										files_treeView.clear();
 										files_treeView.add_Nodes(AstData.files());
 									})
@@ -138,7 +229,7 @@ namespace O2.Script
 			//var Step_1_Browser = Step_1_TreeView_SourceFiles.insert_Above<Panel>(100);
 			//Step_1_Browser.add_WikiHelpPage(step_2_WikiHelpPage);	    						
 		}
-
+*/
 	/*
 			var dir = "C:\\O2\\DemoData\\HacmeBank_v2.0 (Dinis version - 7 Dec 08)\\HacmeBank_v2_WS\\WebServices";
 			var targetFolder = PublicDI.config.getTempFolderInTempDirectory("MethodStreams");
@@ -165,6 +256,614 @@ namespace O2.Script
 			var createdFiles = methodStreamViewer.insert_Left<Panel>(300).add_Directory(targetFolder).afterFileSelect(file => methodStreamViewer.open(file));
 	*/
 		
+		public void resetLoadedData()
+		{
+			AstData = new O2MappedAstData();
+			ReferencedAssemblies = new Dictionary<string, Assembly>();			
+		}
+		
+		public void statusMessage(string message)
+		{
+			StatusLabel.set_Text(message);			
+		}
 	
+	
+		
+		public class Step_LoadArtifacts
+		{
+			public O2_DotNet_Ast_Engine AstEngine { get; set; }
+			public DataGridView Stats_DataGridView  { get; set; }
+			public TreeView LoadFiles_TreeView { get; set; }
+			public TreeView References_TreeView { get; set; }
+			public TabPage LoadFilesTab { get; set; }
+			public TabPage StatsTab { get; set; }
+			public TabPage LoadedFilesTab { get; set; }
+			public TabPage ReferencedAssembliesTab { get; set; }
+			public TabPage OptionsTab { get; set; }
+			public TabPage HelpTab { get; set; }						
+			
+			public string wikiHelpPage = "O2 DotNet Ast Engine - Load Artifacts";
+			//public string wikiHelpPage = "O2 DotNet Ast Engine - Step 1: load source code files";
+			
+			public Step_LoadArtifacts(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;
+				buildGui();
+				loadDataInGui();
+			}
+			
+			public void buildGui()
+			{					
+				AstEngine.HostPanel.clear();
+				
+				var tabControl = AstEngine.HostPanel.add_TabControl();
+	
+				LoadFilesTab = tabControl.add_Tab("Load Files to analyze");
+				StatsTab = tabControl.add_Tab("Stats");
+				LoadedFilesTab = tabControl.add_Tab("Loaded Files Source code");
+				ReferencedAssembliesTab = tabControl.add_Tab("Referenced Assemblies");
+				HelpTab = tabControl.add_Tab("Help and 'How does this works'");
+				
+				// loadFilesTab  	 
+				
+				LoadFilesTab.add_Label("To add files, drag and drop the files or folder to analyze in the treeView below", 10)
+							.append_Link("reset all loaded data",
+								()=>{
+										AstEngine.resetLoadedData(); 
+										loadDataInGui();
+									});
+				LoadFiles_TreeView = LoadFilesTab.add_TreeView();
+				LoadFiles_TreeView.top(30)
+				 				 .align_Left(LoadFilesTab)
+				 				 .align_Right(LoadFilesTab) 
+								 .align_Bottom(LoadFilesTab);
+								 
+				LoadFiles_TreeView.onDrop(
+					(fileOrFolder)=>{
+										AstEngine.loadSourceFiles(fileOrFolder);     
+										loadDataInGui();
+									});
+				
+				//statsTab 
+				Stats_DataGridView = StatsTab.add_DataGridView();
+				Stats_DataGridView.noSelection();
+				
+				
+				// loadedFilesTab
+				var sourceCode = LoadedFilesTab.add_SourceCodeViewer();
+				var treeView = sourceCode.insert_Left<TreeView>(300); 
+				treeView.add_Nodes(AstEngine.AstData.files())			
+						.afterSelect<string>((file)=> sourceCode.open(file));
+	
+				// ReferencedAssembliesTab
+				References_TreeView = ReferencedAssembliesTab.add_TreeView();
+				References_TreeView.insert_Above<Panel>(20)					
+								   .add_Label("Enter Referenced Assembly to add")
+								   .top(3)
+								   .append_TextBox("")
+								   .top(0)
+								   .align_Right(References_TreeView)
+								   .onEnter((text)=> addReferenceAssembly(text));
+				/*References_TreeView.insert_Above<TextBox>(20)
+							       .onEnter((text)=> References_TreeView.add_Node(text))
+							       .insert_Left<Label>(100);*/
+				//OptionsTab
+				//helpTab				
+				HelpTab.add_Browser()
+					   .silent(true)
+					   .add_WikiHelpPage(wikiHelpPage);				
+			}
+			
+			public void addReferenceAssembly(string assembly)
+			{
+				AstEngine.ReferencedAssemblies.Add(assembly,null);				
+				loadDataInGui();
+			}
+			
+			public void loadDataInGui()
+			{
+				// Loaded Files
+				LoadFiles_TreeView.clear();
+				LoadFiles_TreeView.add_Nodes(AstEngine.AstData.files()); 
+				
+				// Stats
+				Stats_DataGridView.clear();
+				Stats_DataGridView.add_Columns("name","value"); 
+				Stats_DataGridView.add_Row("> Files loaded:", AstEngine.AstData.files().size());
+				Stats_DataGridView.add_Row("> INodes (total)", AstEngine.AstData.iNodes().size());
+				Stats_DataGridView.add_Row("> ISpecials (total)", AstEngine.AstData.iSpecials().size());
+				
+				foreach(var item in AstEngine.AstData.iSpecials_By_Type())
+					Stats_DataGridView.add_Row(item.Key,item.Value.size());
+					
+				var iNodesByType = AstEngine.AstData.iNodes_By_Type();
+				foreach(var item in iNodesByType)  
+					Stats_DataGridView.add_Row(item.Key,item.Value.size()); 
+				
+				//Referenced Assemblies
+				References_TreeView.clear();
+				References_TreeView.add_Nodes(AstEngine.ReferencedAssemblies.Keys);
+			}
+
+		}
+		
+		public class Step_ViewAST
+		{
+			public O2_DotNet_Ast_Engine AstEngine;
+			
+			public ascx_SourceCodeViewer CodeViewer { get; set; }
+			public TreeView DataTreeView { get; set; }
+			public Panel Options { get; set; }
+						
+			public bool Show_Ast { get; set; }
+			public bool Show_CodeDom { get; set; }
+			public bool Show_NRefactory { get; set; }			
+			
+			public Step_ViewAST(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;
+				buildGui();
+				loadDataInGui();
+			}
+			
+			public void buildGui()
+			{
+				AstEngine.HostPanel.clear();
+				
+				CodeViewer = AstEngine.HostPanel.add_SourceCodeViewer();   
+				DataTreeView = CodeViewer.insert_Left<TreeView>(200);     
+				Options = DataTreeView.insert_Below<Panel>(40); 
+				Options.add_CheckBox("View AST",0,0,(value)=> { this.Show_Ast = value;}).check();
+				Options.add_CheckBox("View CodeDom",0,95,(value)=> {this.Show_CodeDom = value; }).front().check();
+				Options.add_CheckBox("View NRefactory",20,0,(value)=> {this.Show_NRefactory = value;}).front().autoSize();
+
+				DataTreeView.showSelection();	
+				DataTreeView.configureTreeViewForCodeDomViewAndNRefactoryDom();
+				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor2(DataTreeView, CodeViewer.editor());  
+	
+				DataTreeView.afterSelect<string>(
+					(file)=>{
+							if (file.fileExists())
+								CodeViewer.open(file);
+							});
+				
+				
+				DataTreeView.beforeExpand<CompilationUnit>(
+					(compilationUnit)=>{																	
+											var treeNode = DataTreeView.selected();																									
+											treeNode.clear();	           
+																				
+											if (Show_Ast)
+											{										
+												if (compilationUnit!=null) 
+													treeNode.add_Node("AST",null)
+			            									.show_Ast(compilationUnit)
+			            									.show_Asts(compilationUnit.types(true))
+			            									.show_Asts(compilationUnit.methods());
+								                		//treeNode.show_Ast(compilationUnit);
+								             }
+								        
+								            if (Show_CodeDom)
+								            {
+									            var codeNamespace = AstEngine.AstData.MapAstToDom.CompilationUnitToNameSpaces[compilationUnit];
+								            	var domNode = treeNode.add_Node("CodeDom");
+		            							domNode.add_Node("CodeNamespaces").show_CodeDom(codeNamespace);
+												domNode.add_Node("CodeTypeDeclarations").show_CodeDom(AstEngine.AstData.codeTypeDeclarations());
+		            							domNode.add_Node("CodeMemberMethods").show_CodeDom(AstEngine.AstData.codeMemberMethods());
+		            							//domNode.add_Node("CodeMemberMethods").show_CodeDom(o2MappedAstData.codeMemberMethods());
+								            }
+								            if (Show_NRefactory)
+								            {
+								            	var iCompilationUnit = AstEngine.AstData.MapAstToNRefactory.CompilationUnitToICompilationUnit[compilationUnit];
+								            	treeNode.add_Node("NRefactory")
+								            		    .add_Nodes_WithPropertiesAsChildNodes<ICompilationUnit>(iCompilationUnit);
+		                                           //.show_NRefactoryDom(o2MappedAstData.iClasses())
+		                                           //.show_NRefactoryDom(o2MappedAstData.iMethods());
+		
+								            }
+								
+						    });				
+
+			}
+			
+			public void loadDataInGui()
+			{
+				DataTreeView.clear();
+				foreach(var file in AstEngine.AstData.files())
+					DataTreeView.add_Node(file.fileName(), AstEngine.AstData.compilationUnit(file),true);
+				if (DataTreeView.nodes().size()>0)
+					DataTreeView.nodes()[0].expand();
+			}
+			
+		}
+		
+		
+		public class Step_SearchAST
+		{
+			public O2_DotNet_Ast_Engine AstEngine { get; set; }
+			
+			public TreeView AstValueTreeView { get; set; }
+			public TreeView AstTypeTreeView { get; set; }
+			public ascx_SourceCodeViewer CodeViewer { get; set; }
+			
+			public String INodeTypeFilter { get; set; }
+			public String INodeValueFilter { get; set; }
+				
+			public Step_SearchAST(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;
+				INodeTypeFilter = "";
+				INodeValueFilter = "";
+				buildGui();
+				loadDataInGui();
+			}
+			
+			public void buildGui()
+			{
+				
+				AstEngine.HostPanel.clear();
+				var topPanel = AstEngine.HostPanel.add_1x1("AST INode Value", "Source Code", true, 400);								
+				
+				CodeViewer = topPanel[1].add_SourceCodeViewer(); 
+				
+				AstValueTreeView = topPanel[0].add_TreeView()
+											  .sort() 
+											  .showSelection()
+											  .beforeExpand<List<INode>>(
+												  	(selectedNode, nodes)=>{
+												  				 selectedNode.add_Nodes(nodes);
+												  			 });
+				
+				 
+				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor2(AstValueTreeView, CodeViewer.editor());  		   
+				AstTypeTreeView  = topPanel[0].insert_Left<GroupBox>(200)
+										.set_Text("AST INode Type") 
+										.add_TreeView()
+										.sort()
+										.showSelection()
+										.afterSelect<List<INode>>(
+											(iNodes)=>{ 	 															
+												 		  showINodes(iNodes);
+													  });
+				
+													 		 
+				AstTypeTreeView.insert_Above<TextBox>(20)
+							   .onTextChange_AlertOnRegExFail()
+							   .onEnter((value)=>{
+													INodeTypeFilter= value;
+													loadDataInGui();
+												 });
+
+				//nodeFilterTextBox.onTextChange_AlertOnRegExFail();
+				//nodeTypeTextBox.onTextChange_AlertOnRegExFail();
+							 
+				AstValueTreeView.insert_Above<TextBox>(20)
+								.onTextChange_AlertOnRegExFail()
+								.onEnter(
+								(value)=>{
+											INodeValueFilter= value;
+											showINodes(null);
+										 });
+														   							
+			}
+			
+			public void showINodes(List<INode> iNodes)
+			{
+				if (iNodes == null)
+					if (AstTypeTreeView.selected() ==null)
+						return;
+					else
+						iNodes = (List<INode>)AstTypeTreeView.selected().tag<List<INode>>(); 
+						
+				O2Thread.mtaThread(
+					()=>{  
+							var indexedData = iNodes.indexOnToString(INodeValueFilter);   
+							var typeName = iNodes[0].typeName();			 																					
+							AstValueTreeView.visible(false);  
+						 	AstValueTreeView.clear();
+							var rootNode = AstValueTreeView.add_Node(typeName, null);
+							rootNode.add_Nodes(indexedData, 100, AstEngine.TopProgressBar); 
+							AstValueTreeView.visible(true);
+							if (AstValueTreeView.nodes().size() > 0 && AstValueTreeView.nodes()[0].nodes().size() >0 )
+								AstValueTreeView.nodes()[0].nodes()[0].selected(); 		  																		
+							rootNode.expand();
+						});
+			}
+			
+			public void loadDataInGui()
+			{
+				AstTypeTreeView.clear();
+				AstValueTreeView.clear();
+				var iNodesByType = AstEngine.AstData.iNodes_By_Type(INodeTypeFilter); 			
+								
+				foreach(var item in iNodesByType)
+				{					
+					var nodeText = "{0}   ({1})".format(item.Key, item.Value.size()); 	
+					AstTypeTreeView.add_Node(nodeText, item.Value);						
+				}
+				
+				AstTypeTreeView.selectFirst();
+			}			
+		}
+		
+		public class Step_SearchComments
+		{
+			public O2_DotNet_Ast_Engine AstEngine { get; set; }
+			
+			public TreeView CommentsTreeView  { get; set; }
+			public ascx_SourceCodeViewer CodeViewer { get; set; }
+			
+			public String CommentsFilter { get; set; }
+			
+				
+			public Step_SearchComments(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;
+				CommentsFilter = "";				
+				buildGui();
+				loadDataInGui();
+			}	
+			
+			public void buildGui()
+			{
+				AstEngine.HostPanel.clear();												
+
+				var topPanel = AstEngine.HostPanel.add_1x1("Comment's Values", "Source Code", true, 400);								
+								
+				CodeViewer = topPanel[1].add_SourceCodeViewer(); 
+				  
+				CommentsTreeView = topPanel[0].add_TreeView()
+											  .sort() 
+											  .showSelection();
+				CommentsTreeView.insert_Above<TextBox>(20).onTextChange_AlertOnRegExFail()
+			   											  .onEnter((value)=>{
+																				CommentsFilter= value;
+																				loadDataInGui();
+																			 });
+				
+				
+				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor2(CommentsTreeView, CodeViewer.editor());  		   			
+								
+				CommentsTreeView.beforeExpand_PopulateWithList<ISpecial>();				
+			}
+			
+			public void loadDataInGui()
+			{
+				var comments = AstEngine.AstData.comments_IndexedByTextValue(CommentsFilter); 
+				CommentsTreeView.visible(false); 
+				CommentsTreeView.clear();
+				CommentsTreeView.add_Nodes(comments, -1, AstEngine.TopProgressBar); 
+				CommentsTreeView.visible(true);
+			}
+		}
+		
+		
+		public class Step_MethodStreams
+		{
+			public O2_DotNet_Ast_Engine AstEngine { get; set; }
+			
+			
+			public O2MappedAstData AstData_MethodStream { get; set; }
+			public O2MethodStream MethodStream { get; set; }
+			public O2CodeStream CodeStream { get; set; }			
+			public O2CodeStreamTaintRules TaintRules { get; set; }
+			public String MethodStreamFile { get; set; }
+			
+			public TreeView MethodsTreeView  { get; set; }
+			public TreeView ParametersTreeView  { get; set; }
+			public TreeView MethodsCalledTreeView { get; set; }
+			public ascx_SourceCodeViewer CodeViewer { get; set; }			
+			public GraphLayout CodeStreamGraph { get; set; }	
+			public TreeView CodeStreamTreeView { get; set; }	
+			public TabPage CodeStreamGraphTab { get; set; }
+			public TabPage CodeStreamTreeViewTab { get; set; }
+			public String MethodsFilter { get; set; }
+			public ascx_SourceCodeViewer CodeStreamCodeViewer  { get; set; }	
+				
+			public Step_MethodStreams(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;
+				MethodsFilter = "";		
+				AstData_MethodStream = new O2MappedAstData();
+				//CodeStream = new O2CodeStream();
+				buildGui();
+				loadDataInGui();
+				
+				TaintRules = new O2CodeStreamTaintRules(); 
+				TaintRules.add_TaintPropagator("System.String.Concat");
+				//taintRules.add_TaintPropagator("System.String");
+			}	
+			
+			public void buildGui()
+			{
+				AstEngine.HostPanel.clear();												
+
+				var topPanel = AstEngine.HostPanel.add_1x1("Methods & Parameters", "Source Code", true, 400);								
+								
+				//CodeViewer = topPanel[1].add_SourceCodeViewer(); 
+				
+				var tabControl = topPanel[1].add_TabControl(); 
+				CodeViewer = tabControl.add_Tab("Source Code").add_SourceCodeViewer();
+				
+				CodeStreamTreeViewTab = tabControl.add_Tab("CodeStream TreeView");
+				CodeStreamGraphTab = tabControl.add_Tab("CodeStream Graph");
+				CodeStreamGraphTab.backColor(Color.White);				
+				CodeStreamCodeViewer = CodeStreamTreeViewTab.add_SourceCodeViewer();
+				CodeStreamTreeView = CodeStreamCodeViewer.insert_Left<TreeView>(200);
+				CodeStreamGraph = CodeStreamGraphTab.add_Panel().add_Graph(); 
+				  
+				 CodeStreamTreeView.afterSelect<O2CodeStreamNode>
+				 	((streamNode)=> CodeStreamCodeViewer.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation));				
+				
+				MethodsTreeView = topPanel[0].add_TreeView()
+											  .sort() 
+											  .showSelection();
+											  
+				MethodsTreeView.insert_Above<TextBox>(20).onTextChange_AlertOnRegExFail()
+			   											 .onEnter((value)=>{
+																				MethodsFilter= value;
+																				loadDataInGui();
+																			});
+				MethodsTreeView.afterSelect<IMethod>(
+					(iMethod)=>
+						{
+							createMethodStreamAndShowInGui(iMethod);						
+						});				
+				
+				ParametersTreeView =  MethodsTreeView.insert_Below<TreeView>(100);
+				MethodsCalledTreeView =  ParametersTreeView.insert_Right<TreeView>(200);
+				
+				AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(MethodsCalledTreeView, CodeViewer.editor()); 
+				AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(ParametersTreeView, CodeViewer.editor());
+																
+				MethodsCalledTreeView.afterSelect<INode>((iNode)=>showCodeStream(iNode));
+				ParametersTreeView.afterSelect<INode>((iNode)=>showCodeStream(iNode));
+				
+				MethodsTreeView.beforeExpand_PopulateWithList<ISpecial>();							
+				
+			}
+			
+			public void loadDataInGui()
+			{
+				var iMethods = AstEngine.AstData.iMethods();
+				
+				MethodsTreeView.visible(false); 
+				MethodsTreeView.clear();
+								
+				foreach(var iMethod in iMethods)
+				{	
+					var fullName = iMethod.fullName();
+					var name = iMethod.name();
+					if (MethodsFilter.valid().isFalse() || name.regEx(MethodsFilter))
+						MethodsTreeView.add_Node(name,iMethod).toolTip(fullName);
+				}
+				//MethodsTreeView.showToolTip();
+				MethodsTreeView.visible(true);				
+			}
+			
+			
+			public void createMethodStreamAndShowInGui(IMethod iMethod)
+			{
+			
+				createMethodStream(iMethod);
+				showMethodStreamInGui();							
+			}
+			
+			public void createMethodStream(IMethod iMethod)
+			{
+				MethodStream = AstEngine.AstData.createO2MethodStream(iMethod);
+				MethodStreamFile = MethodStream.csharpCode().saveWithExtension(".cs");
+							
+				CodeViewer.open(MethodStreamFile);
+				CodeStreamCodeViewer.open(MethodStreamFile);								
+				
+				AstData_MethodStream = new O2MappedAstData(); 							
+				AstData_MethodStream.loadFile(MethodStreamFile);								
+			}
+			
+			public void showMethodStreamInGui()
+			{
+				if (AstData_MethodStream.iMethods().size() > 0)
+				{
+					var iCodeStreamMethod = AstData_MethodStream.iMethods()[0];
+					iCodeStreamMethod.str().info();
+										
+					//AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(MethodsCalledTreeView, CodeViewer.editor()); 				
+					//AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(ParametersTreeView, CodeViewer.editor());  		   			
+					
+				 	ParametersTreeView.clear();
+				 	MethodsCalledTreeView.clear();
+				 	
+					var methodDeclaration = AstData_MethodStream.methodDeclaration(iCodeStreamMethod);
+					
+					if (methodDeclaration != null)
+					{
+						foreach(var parameter in methodDeclaration.parameters())
+							ParametersTreeView.add_Node(parameter.name(),parameter);
+												
+						foreach(var methodCalled in AstData_MethodStream.calledINodesReferences(iCodeStreamMethod))
+							if (methodCalled!= null)
+								MethodsCalledTreeView.add_Node(methodCalled.str(),methodCalled);
+					}
+				}
+			}
+			
+			
+			public void showCodeStream(INode iNode)
+			{					
+				CodeStream = new O2CodeStream(AstData_MethodStream,TaintRules, MethodStreamFile); 
+								
+				if (iNode is ParameterDeclarationExpression)
+					CodeStream.createStream(iNode,null);  				
+				else if (iNode is Expression)
+				{
+					var expressionNode = CodeStream.add_INode(iNode, null);
+					CodeStream.expandTaint(iNode as Expression,null,expressionNode);  
+				}
+				
+				CodeStream.show(CodeViewer.editor());
+				CodeStream.show(CodeStreamCodeViewer.editor());
+				CodeStream.show(CodeStreamTreeView);
+				CodeStreamGraphTab.clear();
+				CodeStreamGraph = CodeStreamGraphTab.add_Graph();
+				CodeStream.show(CodeStreamGraph);
+								
+			}
+		}
+		
+		
+		public class Step_WriteRule
+		{
+			public O2_DotNet_Ast_Engine AstEngine { get; set; }
+			
+			/*public TreeView CommentsTreeView  { get; set; }
+			public ascx_SourceCodeViewer CodeViewer { get; set; }
+			
+			public String CommentsFilter { get; set; }
+			*/
+				
+			public Step_WriteRule(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;
+				//CommentsFilter = "";				
+				buildGui();
+				loadDataInGui();
+			}	
+			
+			public void buildGui()
+			{
+				AstEngine.HostPanel.clear();												
+
+				/*var topPanel = AstEngine.HostPanel.add_1x1("Comment's Values", "Source Code", true, 400);								
+								
+				CodeViewer = topPanel[1].add_SourceCodeViewer(); 
+				  
+				CommentsTreeView = topPanel[0].add_TreeView()
+											  .sort() 
+											  .showSelection();
+				CommentsTreeView.insert_Above<TextBox>(20).onTextChange_AlertOnRegExFail()
+			   											  .onEnter((value)=>{
+																				CommentsFilter= value;
+																				loadDataInGui();
+																			 });
+				
+				
+				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor2(CommentsTreeView, CodeViewer.editor());  		   			
+								
+				CommentsTreeView.beforeExpand_PopulateWithList<ISpecial>();				
+				*/
+			}
+			
+			public void loadDataInGui()
+			{
+				/*
+				var comments = AstEngine.AstData.comments_IndexedByTextValue(CommentsFilter); 
+				CommentsTreeView.visible(false); 
+				CommentsTreeView.clear();
+				CommentsTreeView.add_Nodes(comments, -1, AstEngine.TopProgressBar); 
+				CommentsTreeView.visible(true);
+				*/
+			}
+		}
 	}
 }

@@ -102,8 +102,18 @@ namespace O2.Views.ASCX.classes.MainGUI
 
         public static void _Error(String sFormat, params Object[] oArgs)
         {
-            if (bShowError)
-                insertText("ERROR: " + String.Format(sFormat, oArgs), Color.Red);
+            try
+            {
+                if (bShowError)
+                    insertText("ERROR: " + String.Format(sFormat, oArgs), Color.Red);
+            }
+            catch (Exception ex)
+            {
+                if (sFormat!= null)
+                    insertText("ERROR: " + sFormat, Color.Red);
+                else
+                    insertText("ERROR: in _Error function", Color.Red);
+            }
         }
 
         public static void insertText(String sText, Color cColour)

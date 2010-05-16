@@ -124,7 +124,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             {
                 treeView.afterSelect<AstTreeView.ElementNode>((node) =>
                 {
-                    var element = (INode)node.field("element");
+                    var element = (INode)node.field("element");                    
                     codeEditor.setSelectionText(element.StartLocation, element.EndLocation);
                 });
                 treeView.afterSelect<INode>((node) =>

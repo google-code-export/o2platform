@@ -242,8 +242,9 @@ namespace O2.Script
     	
     	public static string token(this O2MediaWikiAPI wikiApi, string action, string page)
     	{
-    		var xmlData = wikiApi.getApiPhp("action=query&prop=info&intoken={0}&titles={1}&format=xml".format(action,page)); 
-    		return xmlData.xRoot().elementsAll().element("page").attribute("edittoken").value();
+    		var xmlData = wikiApi.getApiPhp("action=query&prop=info&intoken={0}&titles={1}&format=xml".format(action,page));
+            var attributeName = "{0}token".format(action);
+            return xmlData.xRoot().elementsAll().element("page").attribute(attributeName).value();
     	}
     	
     	public static bool login(this O2MediaWikiAPI wikiApi, string username, string password)
@@ -277,7 +278,7 @@ namespace O2.Script
     	
     	#endregion
     	
-		#region create and edit pages
+		#region create edit, move, delete pages
 		
 		
 		//note: the createonly option doesn't seem to be working
@@ -286,8 +287,6 @@ namespace O2.Script
     		var urlData = "action=edit&format=xml&createonly&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(),page.urlEncode(),pageContent.urlEncode()); 
     		return wikiApi.postApiPhp(urlData);
     	}
-
-
 
         public static string save(this O2MediaWikiAPI wikiApi, string page, string pageContent)
         {
@@ -337,7 +336,39 @@ namespace O2.Script
 		{
 			return wikiApi.raw(page).valid();
 		}
-	
+
+        public static bool deletePage(this O2MediaWikiAPI wikiApi, string pageToDelete)
+        {
+            var deleteToken = wikiApi.token("delete", pageToDelete).urlEncode();
+            if (deleteToken.valid())
+            {
+                var postData = "action=delete&format=xml&token={0}&title={1}".format(deleteToken, pageToDelete.urlEncode());
+                var response = wikiApi.postApiPhp(postData);
+                if (response.xRoot().elements("error").size() > 0)
+                    "error deleting page {0}: {1}".error(pageToDelete, response);
+                else
+                    return true;
+            }
+            else
+                "in O2MediaWikiAPI.deletePage, it was not possible to get a delete token".error();
+            return false;
+        }
+
+        public static bool movePage(this O2MediaWikiAPI wikiApi, string fromPage, string toPage)
+        {
+            return wikiApi.movePage(fromPage, toPage, true);
+        }
+
+        public static bool movePage(this O2MediaWikiAPI wikiApi, string fromPage, string toPage, bool deleteFromPage)
+        {
+            var infoToken = wikiApi.token("edit", fromPage);
+            var postData = "action=move&token={0}&from={1}&to={2}&format=xml".format(infoToken.urlEncode(), fromPage.urlEncode(), toPage.urlEncode());
+            var response = wikiApi.postApiPhp(postData);
+            if (response.xRoot().elements("error").size() ==0)
+                if (deleteFromPage)
+                    return wikiApi.deletePage(fromPage);
+            return false;
+        }
 		
 		#endregion
     	
@@ -385,30 +416,57 @@ namespace O2.Script
     	
     	public static string action_query_prop(this O2MediaWikiAPI wikiApi,string query, string pages)
     	{
-    		var urlData = "action=query&prop={0}&titles={1}&format={2}".format(query,pages,wikiApi.ReturnFormat);
-    		return wikiApi.getApiPhp(urlData);
+            return wikiApi.action_query("prop", query, pages);
+    		//var urlData = "action=query&prop={0}&titles={1}&format={2}".format(query,pages,wikiApi.ReturnFormat);
+    		//return wikiApi.getApiPhp(urlData);
     	}
-    	
-    	public static List<XElement> getQueryContinueResults(this O2MediaWikiAPI wikiApi, string pages, int rvlimit, 
-    														 string propertyName , string continueVarName , string continueValue, 
-    														 string dataElement)
+
+        public static string action_query(this O2MediaWikiAPI wikiApi, string queryType, string query,string pages)
+        {
+            var urlData = "action=query&{0}={1}&format={2}".format(queryType, query, wikiApi.ReturnFormat);
+            if (pages.valid())
+                urlData += "&titles={0}".format(pages);
+            
+            return wikiApi.getApiPhp(urlData);
+        }
+
+        public static List<XElement> getQueryContinueResults(this O2MediaWikiAPI wikiApi, string pages, int rvlimit,
+                                                             string propertyName, string continueVarName, string continueValue,
+                                                             string dataElement)
+        {
+            return wikiApi.getQueryContinueResults(pages,"rvlimit", rvlimit, "prop", propertyName, continueVarName,
+                                                   continueValue, dataElement, -1, true);
+        }
+
+        public static List<XElement> getQueryContinueResults(this O2MediaWikiAPI wikiApi, string pages, string limitVar, int limitValue, 
+                                                             string properyType,string propertyName , string continueVarName , string continueValue, 
+    														 string dataElement, int maxItemsToFetch, bool resolveRedirects) 
     	{
     		var results = new List<XElement>();
-    		var cmd = "{0}&rvlimit={1}".format(propertyName,rvlimit);
-    		cmd += "&redirects";		// to automatically resolve redirects
+    		var cmd = "{0}&{1}={2}".format(propertyName, limitVar, limitValue);
+            if (resolveRedirects)
+    		    cmd += "&redirects";		// to automatically resolve redirects
     		if (continueValue != "")
     			cmd += "&{0}={1}".format(continueVarName, continueValue);
-    		var data = wikiApi.action_query_prop(cmd,pages).xRoot();
+            var data = wikiApi.action_query(properyType,cmd, pages).xRoot();
     		if (data.elements("query-continue").size() == 0)
     			continueValue = "";
     		else
     			continueValue = data.elements("query-continue").element(propertyName).attribute(continueVarName).Value;
     		
     		results.AddRange(data.elementsAll(dataElement));
-    		
+    		if (maxItemsToFetch > -1 && maxItemsToFetch < results.size())
+            {
+                "in O2MediaWikiAPI.getQueryContinueResults, maxItemsToFetch reached ({0}), so stoping recursive fetch".debug(maxItemsToFetch);
+                return results;
+            }
+                
     		//continueValue.error();
     		if (continueValue != "")
-    			results.AddRange(wikiApi.getQueryContinueResults(pages,rvlimit, propertyName, continueVarName, continueValue, dataElement));
+                results.AddRange(wikiApi.getQueryContinueResults(pages, limitVar, limitValue, 
+                                 properyType, propertyName, 
+                                 continueVarName, continueValue, dataElement,
+                                 maxItemsToFetch, resolveRedirects));
     								//wikiApi.templates(pages, rvlimit, continueValue)
     							//);
     		return results;    		
@@ -422,6 +480,33 @@ namespace O2.Script
     	{
     		return wikiApi.action_query_prop("info",pages).xRoot();
     	}
+
+        public static List<string> pages(this O2MediaWikiAPI wikiApi)
+        {
+            return wikiApi.allPages();
+        }
+
+        public static List<string> allPages(this O2MediaWikiAPI wikiApi)
+        {
+            return wikiApi.allPagesRaw().attributes("title").values();
+        }
+
+        public static List<XElement> pagesRaw(this O2MediaWikiAPI wikiApi)
+        {
+            return wikiApi.allPagesRaw();
+        }
+
+        public static List<XElement> allPagesRaw(this O2MediaWikiAPI wikiApi)
+        {
+            var propertyName = "allpages";
+            var continueVarName = "apfrom";
+            var dataElement = "p";
+            var rvlimit = 500;          
+            var response = wikiApi.getQueryContinueResults("", "aplimit", rvlimit, "list", propertyName, continueVarName, "", dataElement, -1, false);
+            return response;
+            response.size().str().info();
+            //return response.attibute("title");
+        }
     	
     	public static List<string> revisions(this O2MediaWikiAPI wikiApi, string page)
     	{
@@ -454,7 +539,7 @@ namespace O2.Script
     		var dataElement = "rev";    		
 			var rvlimit = 100;
 			
-    		return wikiApi.getQueryContinueResults(page, rvlimit, propertyName, continueVarName, "", dataElement);    											   
+    		return wikiApi.getQueryContinueResults(page, rvlimit, propertyName, continueVarName, "", dataElement);  
     	}
     	
     	public static List<String> links(this O2MediaWikiAPI wikiApi, string pages)

@@ -5,6 +5,7 @@ using System.Text;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.PrettyPrinter;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
@@ -12,9 +13,17 @@ namespace O2.API.AST.ExtensionMethods.CSharp
     {
         public static string csharpCode(this INode iNode)
         {
-            var outputVisitor = new CSharpOutputVisitor();
-            iNode.AcceptVisitor(outputVisitor, null);
-            return outputVisitor.Text;
+            try
+            {
+                var outputVisitor = new CSharpOutputVisitor();
+                iNode.AcceptVisitor(outputVisitor, null);
+                return outputVisitor.Text;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in CSharpSourceCode_ExtensionMethods.csharpCode");
+                return "error creating source code for iNode. Error message was: ".format(ex.Message) ;
+            }
         }
 
         public static string csharpCode(this IParser parser)

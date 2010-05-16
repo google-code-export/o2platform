@@ -26,15 +26,17 @@ namespace O2.Core.XRules.Classes
         {
             try
             {
+                "in SyncLocalFolderWithO2XRulesDatabase".debug();
                 var targetLocalDir = XRules_Config.PathTo_XRulesDatabase_fromO2;
                 var o2XRulesSvn = svnO2DatabaseRulesFolder;
 
-                "starting Sync with XRules Database to {0}".info();
+                "starting Sync with XRules Database to {0}".info(targetLocalDir);
                 using (SvnClient client = new SvnClient())
                 {
-                    if (targetLocalDir.dirExists().isFalse())
+                    if (targetLocalDir.dirExists().isFalse() || targetLocalDir.pathCombine(".svn").dirExists().isFalse())
                     {
-                        "First Sync, so doing an SVN Checkout".info();
+                        "First Sync, so doing an SVN Checkout to: {0}".info(targetLocalDir);
+                        Files.deleteFolder(targetLocalDir, true);
                         client.CheckOut(new Uri(o2XRulesSvn), targetLocalDir);
                     }
                     else

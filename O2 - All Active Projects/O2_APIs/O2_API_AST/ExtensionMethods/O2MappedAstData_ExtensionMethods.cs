@@ -120,8 +120,6 @@ namespace O2.API.AST.ExtensionMethods
 
         #endregion
 
-
-
         #region iMethod(s)
 
         public static IMethod iMethod(this O2MappedAstData o2MappedAstData, ConstructorDeclaration constructorDeclaration)
@@ -328,6 +326,17 @@ namespace O2.API.AST.ExtensionMethods
             return calledIMethods;
         }
 
+        #endregion
+
+        #region methodStreams
+
+        public static Dictionary<IMethod, string> methodStreams(this O2MappedAstData astData, Action<string> statusMessage)
+        {
+            var methodStreams = new Dictionary<IMethod, string>();
+            foreach (var iMethod in astData.iMethods())
+                methodStreams.Add(iMethod, astData.createO2MethodStream(iMethod).csharpCode());
+            return methodStreams;
+        }
         #endregion
 
         #region mist info

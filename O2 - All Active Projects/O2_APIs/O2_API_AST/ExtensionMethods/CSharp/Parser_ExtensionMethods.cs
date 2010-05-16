@@ -28,7 +28,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             var codeToParse = (csharpCodeOrFile.fileExists()) ? csharpCodeOrFile.fileContents() : csharpCodeOrFile;
 
             var parser = ParserFactory.CreateParser(language, new StringReader(codeToParse));
-
+            
             parser.Parse();
             return parser;
         }

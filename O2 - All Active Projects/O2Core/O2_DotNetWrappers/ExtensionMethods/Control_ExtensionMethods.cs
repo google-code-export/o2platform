@@ -102,6 +102,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return controlsToAdd;
         }
 
+        public static T append_Control<T>(this Control control)
+            where T : Control
+        {
+            return control.Parent.add_Control<T>(control.Top, control.Left + control.Width + 5);
+        }
+
         #endregion
 
         #region Control - get
@@ -463,7 +469,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #endregion
 
-        #region Control - events
+        #region Control - events 
 
         public static T onDrop<T>(this T control, Action<string> onDropFileOrFolder)
             where T : Control

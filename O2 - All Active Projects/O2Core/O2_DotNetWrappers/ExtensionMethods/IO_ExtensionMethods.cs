@@ -316,13 +316,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return Path.GetFullPath(path);
         }
+
         public static void createDir(this string directory)
         {
             Files.checkIfDirectoryExistsAndCreateIfNot(directory);
         }
 
         public static void createFolder(this string folder)
-        {
+        {            
             folder.createDir();
         }
 
