@@ -35,9 +35,7 @@ namespace O2.Kernel
 
             sDefaultFileName_ReportBug_LogView = "ReportBug_LogView.Rtf";
             sDefaultFileName_ReportBug_ScreenShotImage = "ReportBug_ScreenShotImage.bmp";
-            sEmailDefaultTextFromO2Gui = "enter message here";
-            //sEmailHost = "mail.ouncelabs.com";
-            //sEmailToSendBugReportsTo = "dinis.cruz@ouncelabs.com";
+            sEmailDefaultTextFromO2Gui = "enter message here";            
             sEmailHost = "ASPMX.L.GOOGLE.COM";
             sEmailToSendBugReportsTo = "dinis.cruz@owasp.org";
             sO2Website = "https://ounceopen.squarespace.com";

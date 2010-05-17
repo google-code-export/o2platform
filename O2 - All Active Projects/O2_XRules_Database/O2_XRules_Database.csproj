@@ -431,6 +431,7 @@
     </Compile>
     <Compile Include="_Rules\_UnderDev\To Blog about\FirstTest.cs" />
     <Compile Include="_Rules\_UnderDev\To Blog about\Irony Parser - CmdExe_Dir.cs" />
+    <None Include="_tempDevFiles\Extra_methods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="H2Logo.ico" />
