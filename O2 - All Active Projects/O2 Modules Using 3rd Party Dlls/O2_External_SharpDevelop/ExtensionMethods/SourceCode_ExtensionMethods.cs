@@ -94,31 +94,36 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static TextEditorControl showAstValueInSourceCode(this TextEditorControl textEditorControl, AstValue<object> astValue)
         {
+            return (TextEditorControl)textEditorControl.invokeOnThread(() =>
+                {
+                    PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
 
-            PublicDI.log.error("{0} {1} - {2}", astValue.Text, astValue.StartLocation, astValue.EndLocation);
-            
-            var start = new TextLocation(astValue.StartLocation.X - 1,
-                                                                astValue.StartLocation.Y - 1);
-            var end = new TextLocation(astValue.EndLocation.X - 1, astValue.EndLocation.Y - 1);
-            var selection = new DefaultSelection(textEditorControl.Document, start, end);
-            textEditorControl.ActiveTextAreaControl.SelectionManager.SetSelection(selection);
-            setCaretToCurrentSelection(textEditorControl);
-            return textEditorControl;
+                    var start = new TextLocation(astValue.StartLocation.X - 1,
+                                                                        astValue.StartLocation.Y - 1);
+                    var end = new TextLocation(astValue.EndLocation.X - 1, astValue.EndLocation.Y - 1);
+                    var selection = new DefaultSelection(textEditorControl.Document, start, end);
+                    textEditorControl.ActiveTextAreaControl.SelectionManager.SetSelection(selection);
+                    setCaretToCurrentSelection(textEditorControl);
+                    return textEditorControl;
+                });
         }
 
         public static TextEditorControl setCaretToCurrentSelection(this TextEditorControl textEditorControl)
         {
-            var finalCaretPosition = textEditorControl.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection[0].StartPosition;
-            var tempCaretPosition = new TextLocation
-            {
-                X = finalCaretPosition.X,
-                Y = finalCaretPosition.Y + 10
-            };
-            textEditorControl.ActiveTextAreaControl.Caret.Position = tempCaretPosition;
-            textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
-            textEditorControl.ActiveTextAreaControl.Caret.Position = finalCaretPosition;
-            textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
-            return textEditorControl;
+            return (TextEditorControl)textEditorControl.invokeOnThread(() =>
+                {
+                    var finalCaretPosition = textEditorControl.ActiveTextAreaControl.TextArea.SelectionManager.SelectionCollection[0].StartPosition;
+                    var tempCaretPosition = new TextLocation
+                    {
+                        X = finalCaretPosition.X,
+                        Y = finalCaretPosition.Y + 10
+                    };
+                    textEditorControl.ActiveTextAreaControl.Caret.Position = tempCaretPosition;
+                    textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
+                    textEditorControl.ActiveTextAreaControl.Caret.Position = finalCaretPosition;
+                    textEditorControl.ActiveTextAreaControl.TextArea.ScrollToCaret();
+                    return textEditorControl;
+                });
         }
 
         public static ascx_SourceCodeViewer set_Text(this ascx_SourceCodeViewer sourceCodeViewer, string text)
@@ -179,42 +184,63 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static ascx_SourceCodeViewer astDetails(this ascx_SourceCodeViewer sourceCodeViewer, bool value)
         {
-            sourceCodeViewer.editor()._ShowSearchAndAstDetails = value;
+            sourceCodeViewer.invokeOnThread(() =>
+                {
+                    sourceCodeViewer.editor()._ShowSearchAndAstDetails = value;
+                });
             return sourceCodeViewer;
         }
 
         public static ascx_SourceCodeEditor vScroolBar_Enabled(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
-            sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Enabled = value;
+            sourceCodeEditor.invokeOnThread(() =>
+                {
+                    sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Enabled = value;
+                });
             return sourceCodeEditor;
         }
 
         public static ascx_SourceCodeEditor vScroolBar_Visible(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
-            sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Visible = value;
+            sourceCodeEditor.invokeOnThread(() =>
+                {
+                    sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.VScrollBar.Visible = value;
+                });
             return sourceCodeEditor;
         }
 
         public static ascx_SourceCodeEditor hScroolBar_Enabled(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
-            sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Enabled = value;
+            sourceCodeEditor.invokeOnThread(() =>
+                {
+                    sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Enabled = value;
+                });
             return sourceCodeEditor;
         }
 
         public static ascx_SourceCodeEditor hScroolBar_Visible(this ascx_SourceCodeEditor sourceCodeEditor, bool value)
         {
-            sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Visible = value;
+            sourceCodeEditor.invokeOnThread(() =>
+                {
+                    sourceCodeEditor.getObject_TextEditorControl().ActiveTextAreaControl.HScrollBar.Visible = value;
+                });
             return sourceCodeEditor;
         }
         public static ascx_SourceCodeViewer set_ColorsForCSharp(this ascx_SourceCodeViewer sourceCodeViewer)
         {
-            sourceCodeViewer.editor().setDocumentHighlightingStrategy("aa.cs");
+            sourceCodeViewer.invokeOnThread(() =>
+                {
+                    sourceCodeViewer.editor().setDocumentHighlightingStrategy("aa.cs");
+                });
             return sourceCodeViewer;
         }
 
         public static IDocument document(this ascx_SourceCodeEditor sourceCodeEditor)
         {
-            return sourceCodeEditor.getObject_TextEditorControl().Document;
+            return (IDocument)sourceCodeEditor.invokeOnThread(() =>
+                {
+                    return sourceCodeEditor.getObject_TextEditorControl().Document;
+                });
         }
 
         public static IDocument document(this ascx_SourceCodeViewer sourceCodeViewer)

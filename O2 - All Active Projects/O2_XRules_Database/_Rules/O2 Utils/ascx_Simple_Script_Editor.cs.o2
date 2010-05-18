@@ -181,8 +181,10 @@ namespace O2.XRules.Database.O2Utils
         	
         	commandsToExecute.textArea().KeyUp+= (sender,e) => handlePressedKeys(e);
             commandsToExecute.textArea().KeyEventHandler += handleKeyEventHandler;
-            contextMenu.add_MenuItem("current source code")                       
+            contextMenu.add_MenuItem("current source code")
+                       .add_MenuItem("compile", (menuitem) => compile())
                        .add_MenuItem("save", (menuitem) => saveScript())
+
                        .add_MenuItem("force compilation", (menuitem) => forceCompilation())
                        .add_MenuItem("replace with generated source code", (menuitem) => replaceMainCodeWithGeneratedSource())
                        .add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode());
@@ -323,6 +325,11 @@ namespace O2.XRules.Database.O2Utils
             {
                 compileCodeSnippet(newText);
             }
+        }
+
+        public void compile()
+        {
+            compileCodeSnippet(commandsToExecute.get_Text());
         }
 
 		public void compileCodeSnippet(string codeSnippet)
