@@ -9,11 +9,13 @@ using System.Text;
 using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
+using O2.Interfaces.O2Findings;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
 using O2.Views.ASCX.Ascx.MainGUI;
+using O2.Views.ASCX.O2Findings;
 using O2.API.AST.CSharp;
 using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
@@ -29,6 +31,7 @@ using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
 using GraphSharp.Controls;
 using O2.XRules.Database.ExtensionMethods;
+using O2.XRules.Database.O2Utils;
 
 //O2Ref:GraphSharp.dll
 //O2Ref:GraphSharp.Controls.dll
@@ -49,10 +52,13 @@ namespace O2.Script.Temp5
 	 	public ToolStripStatusLabel StatusLabel { get; set; }
 	 	public ProgressBar TopProgressBar { get ; set; }
 	 	
-	 	public string step_2_WikiHelpPage = "O2 DotNet Ast Engine - Step 2: view method streams";
+	 	//public string step_2_WikiHelpPage = "O2 DotNet Ast Engine - Step 2: view method streams";
 	 	public Dictionary<string, Assembly> ReferencedAssemblies;
 	 	public O2MappedAstData AstData { get; set; }
+	 	//public List<IO2Finding> CreatedO2Findings  { get; set; }
 
+		public Step_WriteRule WriteRule_Step { get; set; }
+	
 		//public Dictionary<IMethod, string> MethodStreams { get; set; }
 
 		public O2_DotNet_Ast_Engine()
@@ -61,6 +67,7 @@ namespace O2.Script.Temp5
 			this.height(400);
 			AstData = new O2MappedAstData(); 
 			ReferencedAssemblies = new  Dictionary<string, Assembly>();
+			//CreatedO2Findings = new List<IO2Finding>();
 			//MethodStreams = new Dictionary<IMethod, string>();
 		}
 		
@@ -90,7 +97,7 @@ namespace O2.Script.Temp5
 								         .append_Link("search Comments", ()=> step_SearchComments())
 								         .append_Link("method streams", ()=> step_MethodStreams())
 								         .append_Link("write rule", ()=> step_WriteRule())								         
-								         .append_Link("view findings", null).enabled(false)
+								         .append_Link("view findings",()=> step_ViewFindings())
 								         .append_Control<ProgressBar>();
 			TopProgressBar.align_Right(controls[0]);        
 			TopProgressBar.top(TopProgressBar.Top -4);
@@ -132,7 +139,13 @@ namespace O2.Script.Temp5
 		
 		public Step_WriteRule step_WriteRule()
 		{
-			return new Step_WriteRule(this);
+			WriteRule_Step = new Step_WriteRule(this);
+			return WriteRule_Step;
+		}
+		
+		public Step_ViewFindings step_ViewFindings()
+		{
+			return  new Step_ViewFindings(this);			
 		}
 				
 		 
@@ -366,9 +379,9 @@ namespace O2.Script.Temp5
 					()=>{
 							AstEngine.ReferencedAssemblies.Add(assembly,null);				
 							"...loading reference assembly: {0}".debug(assembly);
-							References_TreeView.enabled(false);
+							References_TreeView.backColor(Color.DarkGray);
 							AstEngine.AstData.O2AstResolver.addReference(assembly);
-							References_TreeView.enabled(true);
+							References_TreeView.backColor(Color.White);
 							"...load complete".debug();
 							loadDataInGui();
 						});
@@ -834,6 +847,15 @@ namespace O2.Script.Temp5
 		{
 			public O2_DotNet_Ast_Engine AstEngine { get; set; }
 			
+			public ascx_Simple_Script_Editor MethodStreamScript { get; set; }
+			public ascx_Simple_Script_Editor CodeStreamScript { get; set; }
+			public ascx_Simple_Script_Editor FindingsScript { get; set; }
+			
+			public TreeView MethodStreamViewer { get; set; }
+			public TreeView CodeStreamViewer { get; set; }
+			
+			public ascx_FindingsViewer RawFindingsViewer { get; set; }
+			public ascx_FindingsViewer FinalFindingsViewer { get; set; }
 			/*public TreeView CommentsTreeView  { get; set; }
 			public ascx_SourceCodeViewer CodeViewer { get; set; }
 			
@@ -853,73 +875,113 @@ namespace O2.Script.Temp5
 				AstEngine.HostPanel.clear();	
 				
 				var controls = AstEngine.HostPanel.add_1x1x1();     
-   
+   	
 				var MethodStreamPanel  = controls[0].add_1x1("Create MethodStream","MethodStreams", false);
 				var CodeStreamPanel = controls[1].add_1x1("Create CodeStreams", "CodeStreams", false); 
 				var FindingsPanel = controls[2].add_1x1x1("Create Findings","Raw Findings" , "Final Findings",false);
 				
 				// MethodStreamPanel  
-				var MethodStreamScript = MethodStreamPanel[0].add_Script(false);   
-				var MethodStreamViewer = MethodStreamPanel[1].add_MethodStreamViewer();																			
+				MethodStreamScript = MethodStreamPanel[0].add_Script(false);   
+				MethodStreamViewer = MethodStreamPanel[1].add_MethodStreamViewer();																			
 								
 				//CodeStreamPanel    
-				var CodeStreamScript = CodeStreamPanel[0].add_Script(false);  
-				var CodeStreamViewer = CodeStreamPanel[1].add_CodeStreamViewer();   
-				//var CodeStreamViewer = MethodStreamPanel[1].add_CodeStreamViewer();   
+				CodeStreamScript = CodeStreamPanel[0].add_Script(false);  
+				CodeStreamViewer = CodeStreamPanel[1].add_CodeStreamViewer();   
+				//CodeStreamViewer = MethodStreamPanel[1].add_CodeStreamViewer();   
 				
 				// FindingsPanel
-				var FindingsScript = FindingsPanel[0].add_Script(false);
-				var rawFindingsViewer = FindingsPanel[1].add_FindingsViewer();
-				var finalFindingsViewer = FindingsPanel[2].add_FindingsViewer();
+				FindingsScript = FindingsPanel[0].add_Script(false);
+				RawFindingsViewer = FindingsPanel[1].add_FindingsViewer();
+				FinalFindingsViewer = FindingsPanel[2].add_FindingsViewer();
 				//var controls2 = host[1].add_1x1x1(true);  
-				
-
+	
+				// extra vars
+								
 				// script parameters				
-				var scriptParameters = new Dictionary<string,object>(); 
+				var scriptParameters = new Dictionary<string,object>(); 				
 				scriptParameters.Add("methodStreamViewer", MethodStreamViewer);  
 				scriptParameters.Add("codeStreamViewer", CodeStreamViewer); 
-				scriptParameters.Add("astData", AstEngine.AstData); 
-				scriptParameters.Add("rawFindingsViewer", rawFindingsViewer); 
-				scriptParameters.Add("finalFindingsViewer", finalFindingsViewer); 
-
+				
+				scriptParameters.Add("rawFindingsViewer", RawFindingsViewer); 
+				scriptParameters.Add("finalFindingsViewer", FinalFindingsViewer); 
+				
+				scriptParameters.Add("astData", AstEngine.AstData); 				
 				
 				MethodStreamScript.InvocationParameters.AddRange(scriptParameters);				
 				CodeStreamScript.InvocationParameters.AddRange(scriptParameters);
 				FindingsScript.InvocationParameters.AddRange(scriptParameters);
 
 
-
-				/*var topPanel = AstEngine.HostPanel.add_1x1("Comment's Values", "Source Code", true, 400);								
-								
-				CodeViewer = topPanel[1].add_SourceCodeViewer(); 
-				  
-				CommentsTreeView = topPanel[0].add_TreeView()
-											  .sort() 
-											  .showSelection();
-				CommentsTreeView.insert_Above<TextBox>(20).onTextChange_AlertOnRegExFail()
-			   											  .onEnter((value)=>{
-																				CommentsFilter= value;
-																				loadDataInGui();
-																			 });
-				
-				
-				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor2(CommentsTreeView, CodeViewer.editor());  		   			
-								
-				CommentsTreeView.beforeExpand_PopulateWithList<ISpecial>();				
-				*/
 			}
 			
 			public void loadDataInGui()
 			{
-				//MethodStreamTreeView.add_Nodes(AstEngine.AstData.methodStreams());
-				//AstEngine.AstData.showMethodStreams(MethodStreamPanel[1], AstEngine.TopProgressBar); 
-				/*
-				var comments = AstEngine.AstData.comments_IndexedByTextValue(CommentsFilter); 
-				CommentsTreeView.visible(false); 
-				CommentsTreeView.clear();
-				CommentsTreeView.add_Nodes(comments, -1, AstEngine.TopProgressBar); 
-				CommentsTreeView.visible(true);
-				*/
+				var defaultUsingAndFileRef		 = "//using ICSharpCode.NRefactory".line() + 
+													"//using ICSharpCode.NRefactory.Ast".line() + 
+													"//using ICSharpCode.SharpDevelop.Dom".line() + 
+													@"//O2File:C:\O2\_XRules_Local\Extra_methods.cs".line();
+													
+				var scriptFor_MethodStreamScript = 	"methodStreamViewer.clear();".line() + 
+												   	"var iMethods = new List<IMethod>();".line() + 
+
+												   	"foreach(var attribute in astData.attributes())".line() + 			
+														"if (attribute.name() == \"WebMethod\")".line() + 
+														"{".line() +  			
+															"var methodDeclaration = attribute.parent<MethodDeclaration>();".line() + 															
+															"if (methodDeclaration.parameters().size() > 0)".line() + 
+																"iMethods.Add(astData.iMethod(methodDeclaration));".line() + 
+														"}".line() +  
+
+													"astData.showMethodStreams(iMethods, methodStreamViewer);".line() + 
+													"".line() + 
+													defaultUsingAndFileRef;
+													
+				var scriptFor_CodeStreamScript = 	"codeStreamViewer.clear();".line() +
+													"var iMethods = (List<IMethod>)methodStreamViewer.Tag;".line() +
+													"".line() +
+													"var o2Findings = astData.createAndShowCodeStreams(iMethods,codeStreamViewer);".line() +
+													
+													"rawFindingsViewer.show(o2Findings);".line() + 
+													defaultUsingAndFileRef;
+													
+				var scriptFor_FindingsScript = 		"var o2Findings = rawFindingsViewer.o2Findings();".line() + 
+													"var filteredFindings = o2Findings.filter_SinkStartsWith(\"constructor: public System.Data.SqlClient.SqlCommand.SqlCommand\");".line() + 
+													"".line() + 
+													"filteredFindings.set_VulnName(\"System.Data.SqlClient.SqlCommand.SqlCommand\");".line() + 
+													"filteredFindings.set_VulnType(\"Sql Injection\");".line() + 
+													"".line() + 
+													"finalFindingsViewer.show(filteredFindings);".line() + 													
+													"return finalFindingsViewer.save();".line() + 
+													defaultUsingAndFileRef;
+												
+				MethodStreamScript.set_Command(scriptFor_MethodStreamScript);
+				CodeStreamScript.set_Command(scriptFor_CodeStreamScript);
+				FindingsScript.set_Command(scriptFor_FindingsScript);
+			}
+		}
+		
+		public class Step_ViewFindings
+		{
+			public O2_DotNet_Ast_Engine AstEngine { get; set; }
+						
+			public ascx_FindingsViewer FindingsViewer { get; set; }
+				
+			public Step_ViewFindings(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;				
+				buildGui();
+				loadDataInGui();
+			}	
+			
+			public void buildGui()
+			{
+				AstEngine.HostPanel.clear();												
+				FindingsViewer = AstEngine.HostPanel.add_FindingsViewer();
+			}
+			
+			public void loadDataInGui()
+			{
+				FindingsViewer.show(AstEngine.WriteRule_Step.FinalFindingsViewer.o2Findings());
 			}
 		}
 	}
