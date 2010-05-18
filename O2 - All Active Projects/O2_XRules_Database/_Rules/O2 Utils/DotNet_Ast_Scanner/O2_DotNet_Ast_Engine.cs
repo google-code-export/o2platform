@@ -916,10 +916,10 @@ namespace O2.Script
 			
 			public void loadDataInGui()
 			{
-				var defaultUsingAndFileRef		 = "//using ICSharpCode.NRefactory".line() + 
-													"//using ICSharpCode.NRefactory.Ast".line() + 
-													"//using ICSharpCode.SharpDevelop.Dom".line() + 
-													@"//O2File:C:\O2\_XRules_Local\Extra_methods.cs".line();
+				var defaultUsingAndFileRef		 = "";//"//using ICSharpCode.NRefactory".line() + 
+													//"//using ICSharpCode.NRefactory.Ast".line() + 
+													//"//using ICSharpCode.SharpDevelop.Dom".line() + 
+													//@"//O2File:C:\O2\_XRules_Local\Extra_methods.cs".line();
 													
 				var scriptFor_MethodStreamScript = 	"methodStreamViewer.clear();".line() + 
 												   	"var iMethods = new List<IMethod>();".line() + 
