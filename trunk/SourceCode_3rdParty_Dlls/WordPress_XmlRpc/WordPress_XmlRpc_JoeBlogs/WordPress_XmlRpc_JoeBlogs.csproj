@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{340C4EC4-B02E-42A9-A8FE-2871ED8315E0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JoeBlogs</RootNamespace>
+    <AssemblyName>WordPress_XmlRpc_JoeBlogs</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\Administrator\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoStdLib>False</NoStdLib>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\O2 - All Active Projects\_3rdPartyDlls</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <BaseAddress>4194304</BaseAddress>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="structs\Category.cs" />
+    <Compile Include="structs\CommentCount.cs" />
+    <Compile Include="structs\Author.cs" />
+    <Compile Include="structs\MediaObjectInfo.cs" />
+    <Compile Include="structs\PostStatusList.cs" />
+    <Compile Include="structs\File.cs" />
+    <Compile Include="structs\Data.cs" />
+    <Compile Include="structs\Option.cs" />
+    <Compile Include="structs\PageTemplate.cs" />
+    <Compile Include="structs\PageMin.cs" />
+    <Compile Include="structs\UserInfo.cs" />
+    <Compile Include="structs\CustomField.cs" />
+    <Compile Include="structs\TagInfo.cs" />
+    <Compile Include="structs\Post.cs" />
+    <Compile Include="structs\Page.cs" />
+    <Compile Include="wrappers\MetaWeblogWrapper.cs" />
+    <Compile Include="wrappers\WrapperBase.cs" />
+    <Compile Include="xmlRpcInterfaces\IWordPressXmlRpc.cs" />
+    <Compile Include="structs\Comment.cs" />
+    <Compile Include="structs\UserBlog.cs" />
+    <Compile Include="structs\MediaObject.cs" />
+    <Compile Include="wrappers\WordPressWrapper.cs">
+    </Compile>
+    <Compile Include="xmlRpcInterfaces\IMetaWeblogXmlRpc.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="structs\CommentFilter.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="XmlRpc\GuidEx.cs" />
+    <Compile Include="XmlRpc\IHttpRequest.cs" />
+    <Compile Include="XmlRpc\IHttpRequestHandler.cs" />
+    <Compile Include="XmlRpc\IHttpResponse.cs" />
+    <Compile Include="XmlRpc\IXmlRpcProxy.cs" />
+    <Compile Include="XmlRpc\RequestResponseLogger.cs" />
+    <Compile Include="XmlRpc\SystemMethodsBase.cs" />
+    <Compile Include="XmlRpc\Tracer.cs" />
+    <Compile Include="XmlRpc\util.cs" />
+    <Compile Include="XmlRpc\XmlRpcAsyncResult.cs" />
+    <Compile Include="XmlRpc\XmlRpcBeginAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcBoolean.cs" />
+    <Compile Include="XmlRpc\XmlRpcClientFormatterSink.cs" />
+    <Compile Include="XmlRpc\XmlRpcClientFormatterSinkProvider.cs" />
+    <Compile Include="XmlRpc\XmlRpcClientProtocol.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="XmlRpc\XmlRpcDateTime.cs" />
+    <Compile Include="XmlRpc\XmlRpcDocWriter.cs" />
+    <Compile Include="XmlRpc\XmlRpcDouble.cs" />
+    <Compile Include="XmlRpc\XmlRpcEndAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcException.cs" />
+    <Compile Include="XmlRpc\XmlRpcFaultException.cs" />
+    <Compile Include="XmlRpc\XmlRpcHttpRequest.cs" />
+    <Compile Include="XmlRpc\XmlRpcHttpResponse.cs" />
+    <Compile Include="XmlRpc\XmlRpcHttpServerProtocol.cs" />
+    <Compile Include="XmlRpc\XmlRpcInt.cs" />
+    <Compile Include="XmlRpc\XmlRpcListenerRequest.cs" />
+    <Compile Include="XmlRpc\XmlRpcListenerResponse.cs" />
+    <Compile Include="XmlRpc\XmlRpcListenerService.cs" />
+    <Compile Include="XmlRpc\XmlRpcLogger.cs" />
+    <Compile Include="XmlRpc\XmlRpcMemberAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcMethodAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcMethodInfo.cs" />
+    <Compile Include="XmlRpc\XmlRpcMissingMappingAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcNonStandard.cs" />
+    <Compile Include="XmlRpc\XmlRpcParameterAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcParameterInfo.cs" />
+    <Compile Include="XmlRpc\XmlRpcProxyCodeGen.cs" />
+    <Compile Include="XmlRpc\XmlRpcProxyGen.cs" />
+    <Compile Include="XmlRpc\XmlRpcRequest.cs" />
+    <Compile Include="XmlRpc\XmlRpcRequestEventArgs.cs" />
+    <Compile Include="XmlRpc\XmlRpcResponse.cs" />
+    <Compile Include="XmlRpc\XmlRpcResponseEventArgs.cs" />
+    <Compile Include="XmlRpc\XmlRpcReturnValueAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcSerializer.cs" />
+    <Compile Include="XmlRpc\XmlRpcServerFormatterSink.cs" />
+    <Compile Include="XmlRpc\XmlRpcServerFormatterSinkProvider.cs" />
+    <Compile Include="XmlRpc\XmlRpcServerProtocol.cs" />
+    <Compile Include="XmlRpc\XmlRpcService.cs" />
+    <Compile Include="XmlRpc\XmlRpcServiceAttribute.cs" />
+    <Compile Include="XmlRpc\XmlRpcServiceInfo.cs" />
+    <Compile Include="XmlRpc\XmlRpcStruct.cs" />
+    <Compile Include="XmlRpc\XmlRpcUrlAttribute.cs" />
+    <None Include="XmlRpc\Source_of_XmlRpc.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

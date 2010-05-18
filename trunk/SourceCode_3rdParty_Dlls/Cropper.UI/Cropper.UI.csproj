@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4FAACCE1-AA19-4C1C-85F5-AC1BF33BDAF0}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -260,14 +260,22 @@
     </Compile>
     <Compile Include="Settings\SharedAssemblyInfo.cs" />
     <Compile Include="Settings\VersionAssemblyInfo.cs" />
-    <EmbeddedResource Include="Core\HotKeySelection.resx" />
-    <EmbeddedResource Include="Core\ImageCapture.resx" />
-    <EmbeddedResource Include="Core\Prompt.resx" />
+    <EmbeddedResource Include="Core\HotKeySelection.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\ImageCapture.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Prompt.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Core\Resources\SR.resx">
       <DependentUpon>SR.strings</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Extensibility\BaseConfigurationForm.resx" />
+    <EmbeddedResource Include="Extensibility\BaseConfigurationForm.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="LayeredForm.resx">
       <DependentUpon>LayeredForm.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -282,12 +290,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="OutputFormats\Clipboard\Options.resx">
       <DependentUpon>Options.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OutputFormats\Clipboard\Resources\SR.resx">
       <DependentUpon>SR.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="OutputFormats\Jpeg\Options.resx">
       <DependentUpon>Options.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SR.resx">
       <DependentUpon>SR.strings</DependentUpon>

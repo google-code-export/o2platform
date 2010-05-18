@@ -1,0 +1,3 @@
+﻿The code for this XmlRpc folder is from http://www.xml-rpc.net/
+
+Dinis note: I placed it inside the  JoeBlogs project so that there is only one DLL to add to O2's code base
