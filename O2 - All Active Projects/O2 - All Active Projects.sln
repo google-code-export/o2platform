@@ -58,8 +58,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Core_XRules", "O2Core\O2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2_Interfaces", "O2Core\O2_Interfaces\O2_Interfaces.csproj", "{64223518-03C2-4818-8C82-F045037E3DFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "O2 (just gui)", "O2Core\O2\O2 (just gui).csproj", "{770B45B4-B19E-4884-8AB7-BC3BBBD5FC73}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2Scanners", "O2Scanners", "{2659969F-D878-4FD3-9E6A-8A668DC63403}"
 	ProjectSection(SolutionItems) = postProject
 	EndProjectSection
@@ -291,6 +289,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		_3rdPartyDlls\Spring.Core.dll = _3rdPartyDlls\Spring.Core.dll
 		RnD\WebService_Scan\WebService_Scan.sln = RnD\WebService_Scan\WebService_Scan.sln
 		_3rdPartyDlls\WeifenLuo.WinFormsUI.Docking.dll = _3rdPartyDlls\WeifenLuo.WinFormsUI.Docking.dll
+		_3rdPartyDlls\Cropper.exe = _3rdPartyDlls\Cropper.exe
+		_3rdPartyDlls\Dimebrain.TweetSharp.dll = _3rdPartyDlls\Dimebrain.TweetSharp.dll
+		_3rdPartyDlls\ICSharpCode.AvalonEdit.dll = _3rdPartyDlls\ICSharpCode.AvalonEdit.dll
+		_3rdPartyDlls\Microsoft.mshtml.dll = _3rdPartyDlls\Microsoft.mshtml.dll
+		_3rdPartyDlls\Newtonsoft.Json.dll = _3rdPartyDlls\Newtonsoft.Json.dll
+		_3rdPartyDlls\O2_Misc_Microsoft_MPL_Libs.dll = _3rdPartyDlls\O2_Misc_Microsoft_MPL_Libs.dll
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "O2 APIs", "O2 APIs", "{CF112E2A-C931-4025-B250-D8FD7E12B89E}"
@@ -343,10 +347,6 @@ Global
 		{9C7333DD-7A9F-4C31-8205-C6E68D99714B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C7333DD-7A9F-4C31-8205-C6E68D99714B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C7333DD-7A9F-4C31-8205-C6E68D99714B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{770B45B4-B19E-4884-8AB7-BC3BBBD5FC73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{770B45B4-B19E-4884-8AB7-BC3BBBD5FC73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{770B45B4-B19E-4884-8AB7-BC3BBBD5FC73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{770B45B4-B19E-4884-8AB7-BC3BBBD5FC73}.Release|Any CPU.Build.0 = Release|Any CPU
 		{10891283-A6D8-4F2E-A89D-D59384DBA596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10891283-A6D8-4F2E-A89D-D59384DBA596}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10891283-A6D8-4F2E-A89D-D59384DBA596}.Release|Any CPU.ActiveCfg = Release|Any CPU
