@@ -118,7 +118,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         }
 
 
-        public static TreeView afterSelect_ShowInSourceCodeEditor(this O2MappedAstData o2MappedAstData, TreeView treeView, ascx_SourceCodeEditor codeEditor)
+        /*public static TreeView afterSelect_ShowInSourceCodeEditor(this O2MappedAstData o2MappedAstData, TreeView treeView, ascx_SourceCodeEditor codeEditor)
         {
             return (TreeView)codeEditor.invokeOnThread(() =>
             {
@@ -166,8 +166,130 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 });
                 return treeView;
             });
-        }
+        }*/
+        // above is the older version
 
+        //this code needs heavy refacting (lots of redundant code)
+        public static TreeView afterSelect_ShowInSourceCodeEditor(this O2MappedAstData o2MappedAstData, TreeView treeView, ascx_SourceCodeEditor codeEditor)
+        {
+            return (TreeView)codeEditor.invokeOnThread(() =>
+            {
+                treeView.afterSelect<AstTreeView.ElementNode>((node) =>
+                {
+                    var element = (INode)node.field("element");
+                    var file = o2MappedAstData.file(element);
+                    if (file != null)
+                    {
+                        codeEditor.open(file);
+                        codeEditor.setSelectionText(element.StartLocation, element.EndLocation);
+                    }
+                });
+
+                // if it is a list select the first one
+                treeView.afterSelect<List<INode>>((nodes) =>
+                {
+                    if (nodes.size() > 0)
+                    {
+                        var node = nodes[0];
+                        var file = o2MappedAstData.file(node);
+                        if (file != null)
+                        {
+                            codeEditor.open(file);
+                            codeEditor.setSelectionText(node.StartLocation, node.EndLocation);
+                        }
+                    }
+                });
+
+                treeView.afterSelect<INode>((node) =>
+                {
+                    var file = o2MappedAstData.file(node);
+                    if (file != null)
+                    {
+                        codeEditor.open(file);
+                        codeEditor.setSelectionText(node.StartLocation, node.EndLocation);
+                    }
+                });
+
+                treeView.afterSelect<ISpecial>((iSpecial) =>
+                {
+                    var file = o2MappedAstData.file(iSpecial);
+                    if (file != null)
+                    {
+                        codeEditor.open(file);
+                        codeEditor.setSelectionText(iSpecial.StartPosition, iSpecial.EndPosition);
+                    }
+                });
+
+                // if it is a list select the first one
+                treeView.afterSelect<List<ISpecial>>((iSpecials) =>
+                {
+                    if (iSpecials.size() > 0)
+                    {
+                        var iSpecial = iSpecials[0];
+                        var file = o2MappedAstData.file(iSpecial);
+                        if (file != null)
+                        {
+                            codeEditor.open(file);
+                            codeEditor.setSelectionText(iSpecial.StartPosition, iSpecial.EndPosition);
+                        }
+                    }
+                });
+
+                treeView.afterSelect<CodeTypeDeclaration>((codeTypeDeclaration) =>
+                {
+                    if (o2MappedAstData.MapAstToDom.TypesDomToAst.hasKey(codeTypeDeclaration))
+                    {
+                        var typeDeclaration = o2MappedAstData.MapAstToDom.TypesDomToAst[codeTypeDeclaration];
+                        var file = o2MappedAstData.file(typeDeclaration);
+                        if (file != null)
+                        {
+                            codeEditor.open(file);
+                            codeEditor.setSelectionText(typeDeclaration.StartLocation, typeDeclaration.EndLocation);
+                        }
+                    }
+                    else
+                        "in afterSelect<CodeTypeDeclaration>, key was node found for :{0}".format(codeTypeDeclaration.str());
+                });
+
+                treeView.afterSelect<CodeMemberMethod>((codeMemberMethod) =>
+                {
+                    if (o2MappedAstData.MapAstToDom.MethodsDomToAst.hasKey(codeMemberMethod))
+                    {
+                        var methodDeclaration = o2MappedAstData.MapAstToDom.MethodsDomToAst[codeMemberMethod];
+                        var file = o2MappedAstData.file(methodDeclaration);
+                        if (file != null)
+                        {
+                            codeEditor.open(file);
+                            codeEditor.setSelectionText(methodDeclaration.StartLocation, methodDeclaration.EndLocation);
+                        }
+                    }
+                    else
+                        "in afterSelect<CodeMemberMethod> no key for {0}".format(codeMemberMethod.str()).error();
+                });
+
+                treeView.afterSelect<IMethod>((method) =>
+                {
+                    var file = o2MappedAstData.file2(method);
+                    if (file != null)
+                    {
+                        codeEditor.open(file);
+                        if (o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration.hasKey(method))
+                        {
+                            var methodDeclaration = o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration[method];
+                            codeEditor.setSelectionText(methodDeclaration.StartLocation, methodDeclaration.EndLocation);
+                        }
+                        else
+                            if (o2MappedAstData.MapAstToNRefactory.IMethodToConstructorDeclaration.hasKey(method))
+                            {
+                                var constructorDeclaration = o2MappedAstData.MapAstToNRefactory.IMethodToConstructorDeclaration[method];
+                                codeEditor.setSelectionText(constructorDeclaration.StartLocation, constructorDeclaration.EndLocation);
+                            }
+                        "in afterSelect<CodeMemberMethod> no key for {0}".format(method.str()).error();
+                    };
+                });
+                return treeView;
+            });
+        }
         
 
     }

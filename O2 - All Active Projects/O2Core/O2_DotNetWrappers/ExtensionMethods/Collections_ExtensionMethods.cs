@@ -161,5 +161,45 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return (collection != null) ? collection.ToList() : null;
         }
+
+        public static Dictionary<string, List<T>> indexOnToString<T>(this List<T> items)
+        {
+            return items.indexOnToString("");
+        }
+
+        public static Dictionary<string, List<T>> indexOnToString<T>(this List<T> items, string string_RegExFilter)
+        {
+            var result = new Dictionary<string, List<T>>();
+            foreach (var item in items)
+            {
+                if (item != null)
+                {
+                    var str = item.str();
+                    if (string_RegExFilter.valid().isFalse() || str.regEx(string_RegExFilter))
+                        result.add(str, item);
+                }
+            }
+            return result;
+        }
+
+        public static Dictionary<string, List<T>> indexOnProperty<T>(this List<T> items, string propertyName, string string_RegExFilter)
+        {
+            var result = new Dictionary<string, List<T>>();
+            foreach (var item in items)
+            {
+                if (item != null)
+                {
+                    var propertyValue = item.prop(propertyName);
+
+                    if (propertyValue != null)
+                    {
+                        var str = propertyValue.str();
+                        if (string_RegExFilter.valid().isFalse() || str.regEx(string_RegExFilter))
+                            result.add(str, item);
+                    }
+                }
+            }
+            return result;
+        }
     }
 }

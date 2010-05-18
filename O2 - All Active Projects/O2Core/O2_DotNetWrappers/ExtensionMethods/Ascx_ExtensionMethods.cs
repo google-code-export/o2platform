@@ -366,6 +366,38 @@ namespace O2.DotNetWrappers.ExtensionMethods
             groupBoxes.Add(control_2);
             return groupBoxes;
         }
+        
+        public static List<GroupBox> add_1x1x1(this Control control, string title1, string title2, string title3)
+        {
+            return control.add_1x1x1(title1, title2, title3, true);
+        }
+
+        public static List<GroupBox> add_1x1x1(this Control control, string title1, string title2, string title3, bool verticalSplit)
+        {
+            var panels = control.add_1x1x1(verticalSplit);
+            var groupBox1 = panels[0].add_GroupBox(title1);
+            var groupBox2 = panels[1].add_GroupBox(title2);
+            var groupBox3 = panels[2].add_GroupBox(title3);
+            return groupBox1.wrapOnList().add(groupBox2).add(groupBox3);
+        }
+
+        public static List<Panel> add_1x1x1(this Control control)
+        {
+            return control.add_1x1x1(true);
+        }
+        public static List<Panel> add_1x1x1(this Control control, bool verticalSplit)
+        {
+
+            var spliterDistance = ((verticalSplit) ? control.width() : control.height()) / 3;
+            var panel3 = control.add_Panel();
+            var panel2 = (verticalSplit) ? panel3.insert_Left<Panel>(spliterDistance)
+                                         : panel3.insert_Above<Panel>(spliterDistance);
+            var panel1 = (verticalSplit) ? panel3.insert_Left<Panel>(spliterDistance)
+                                         : panel3.insert_Above<Panel>(spliterDistance);
+            panel2.parent<SplitContainer>().splitterDistance(spliterDistance);
+            panel1.parent<SplitContainer>().splitterDistance(spliterDistance);
+            return panel2.wrapOnList().add(panel1).add(panel3);
+        }
 
         public static List<Control> add_1x2(this Control control, string title1, string title2, string title3)
         {
@@ -799,6 +831,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return textBox;
                 });
         }
+        
+        public static TextBox onTextChange_AlertOnRegExFail(this TextBox textBox)
+        {
+            textBox.onTextChange((text) =>
+            {
+                textBox.backColor(text.regExOk()
+                                        ? Color.White
+                                        : Color.Red
+                                  );
+            });
+            return textBox;
+
+        }
 
         public static TextBox multiLine(this TextBox textBox)
         {
@@ -831,7 +876,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return textBox;
             });
         }
-
+        
         #endregion
 
         #region TreeView
@@ -973,6 +1018,40 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return treeNode;
         }
 
+        public static TreeView add_Nodes<T>(this TreeView treeView, Dictionary<string, List<T>> items)
+        {
+            return treeView.add_Nodes(items, -1, null);
+        }
+
+        public static TreeView add_Nodes<T>(this TreeView treeView, Dictionary<string, List<T>> items, int maxNodeTextSize, ProgressBar progressBar)
+        {
+            return treeView.rootNode().add_Nodes(items, maxNodeTextSize, progressBar).treeView();
+        }
+
+        public static TreeNode add_Nodes<T>(this TreeNode treeNode, Dictionary<string, List<T>> items)
+        {
+            return treeNode.add_Nodes(items, -1, null);
+        }
+
+        public static TreeNode add_Nodes<T>(this TreeNode treeNode, Dictionary<string, List<T>> items, int maxNodeTextSize, ProgressBar progressBar)
+        {
+            treeNode.treeView().invokeOnThread(
+                () =>
+                {
+                    progressBar.maximum(items.size());
+                    foreach (var item in items)
+                    {
+                        var nodeText = (maxNodeTextSize > 1 && item.Key.size() > maxNodeTextSize)
+                                            ? item.Key.Substring(0, maxNodeTextSize).add("...")
+                                            : item.Key;
+                        treeNode.add_Node(nodeText, item.Value, item.Value.size() > 1);
+                        progressBar.increment(1);
+                    }
+                });
+            return treeNode;
+
+        }
+
         public static TreeNode add_Nodes<T, T1>(this TreeNode treeNode, Dictionary<T, List<T1>> dictionary)
         {
             foreach (var item in dictionary)
@@ -1111,6 +1190,25 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     callback((T)e.Node.Tag);
                 }
             };
+            return treeView;
+        }
+
+        public static TreeView beforeExpand<T>(this TreeView treeView, Action<TreeNode, T> callback)
+        {
+            treeView.beforeExpand<T>(
+                (tagData) =>
+                {
+                    var selectedNode = treeView.selected();
+                    selectedNode.clear();
+                    callback(selectedNode, tagData);
+                });
+            return treeView;
+        }
+
+        public static TreeView beforeExpand_PopulateWithList<T>(this TreeView treeView)
+        {
+            treeView.beforeExpand<List<T>>(
+                (treeNode, items) => treeNode.add_Nodes(items));
             return treeView;
         }
 
@@ -1587,6 +1685,35 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (object)treeNode.treeView().invokeOnThread(() => { return treeNode.Tag; });
         }
 
+        public static TreeView showToolTip(this TreeView treeView)
+        {
+            if (treeView != null)
+                treeView.invokeOnThread(() => treeView.ShowNodeToolTips = true);
+            return treeView;
+        }
+
+        public static TreeNode toolTip(this TreeNode treeNode, string toolTipText)
+        {
+            if (treeNode != null)
+                treeNode.treeView().invokeOnThread(() => treeNode.ToolTipText = toolTipText);
+            return treeNode;
+        }
+
+        public static TreeNode foreColor(this TreeNode treeNode, Color color)
+        {
+            if (treeNode != null)
+                treeNode.treeView().invokeOnThread(() => treeNode.ForeColor = color);
+            return treeNode;
+        }
+
+        public static TreeNode backColor(this TreeNode treeNode, Color color)
+        {
+            if (treeNode != null)
+                treeNode.treeView().invokeOnThread(() => treeNode.BackColor = color);
+            return treeNode;
+        }        
+
+
         #endregion
 
         #region RichTextBox
@@ -1710,6 +1837,67 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                           control.Controls.Add(checkBox);
                                           return checkBox;
                                       });
+        }
+
+        public static bool @checked(this CheckBox checkBox)
+        {
+            return checkBox.value();
+        }
+
+        public static bool value(this CheckBox checkBox)
+        {
+            return (bool)checkBox.invokeOnThread(
+                () =>
+                {
+                    return checkBox.Checked;
+                });
+        }
+
+        public static CheckBox @checked(this CheckBox checkBox, bool value)
+        {
+            return checkBox.value(value);
+        }
+
+        public static CheckBox value(this CheckBox checkBox, bool value)
+        {
+            return (CheckBox)checkBox.invokeOnThread(
+                () =>
+                {
+                    checkBox.Checked = value;
+                    return checkBox;
+                });
+        }
+
+        public static CheckBox check(this CheckBox checkBox)
+        {
+            return checkBox.value(true);
+        }
+
+        public static CheckBox uncheck(this CheckBox checkBox)
+        {
+            return checkBox.value(false);
+        }
+
+        public static CheckBox tick(this CheckBox checkBox)
+        {
+            return checkBox.value(true);
+        }
+
+        public static CheckBox untick(this CheckBox checkBox)
+        {
+            return checkBox.value(false);
+        }
+
+
+        public static CheckBox autoSize(this CheckBox checkBox)
+        {
+            return checkBox.autoSize(true);
+        }
+
+        public static CheckBox autoSize(this CheckBox checkBox, bool value)
+        {
+            checkBox.invokeOnThread(() => checkBox.AutoSize = value);
+            return checkBox;
         }
 
         #endregion
@@ -2263,6 +2451,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion 
+
         #region ComboBox
 
         public static ComboBox add_ComboBox(this Control control)
