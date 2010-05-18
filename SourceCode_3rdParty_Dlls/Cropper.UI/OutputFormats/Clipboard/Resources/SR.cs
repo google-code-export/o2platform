@@ -69,6 +69,8 @@ namespace Fusion8.Cropper.ClipboardFormat
             public static string GetString(string key, object[] args)
             {
                 string msg = resourceManager.GetString(key, Resources.CultureInfo);
+                if (msg == null)
+                    return "missing reference string for: " + key;
                 msg = string.Format(msg, args);
                 return msg;
             }

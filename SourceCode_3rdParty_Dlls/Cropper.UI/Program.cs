@@ -78,7 +78,7 @@ namespace Fusion8.Cropper
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		private static void Main()
+		public static void Main()
 		{
             bool isFirstInstance;
             Mutex mutex = new Mutex(false, "Local\\Cropper", out isFirstInstance);
@@ -102,7 +102,7 @@ namespace Fusion8.Cropper
 
 		private static void HandleMainCropFormClosed(object sender, EventArgs e)
 		{
-			Application.Exit();
+			//Application.Exit();
 		}
 	}
 }
