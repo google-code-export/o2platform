@@ -874,11 +874,16 @@ namespace O2.Script
 			{
 				AstEngine.HostPanel.clear();	
 				
-				var controls = AstEngine.HostPanel.add_1x1x1();     
-   	
+				//var controls = AstEngine.HostPanel.add_1x1x1();     
+				var tabControl = AstEngine.HostPanel.add_TabControl();
+   				var tabPages = new List<TabPage>();
+   				tabPages.Add(tabControl.add_Tab("Step 1: Create Method Streams"));
+   				tabPages.Add(tabControl.add_Tab("Step 2: Create Code Streams"));
+   				tabPages.Add(tabControl.add_Tab("Step 1: Create Final Findings"));
+   				var controls = tabPages;
 				var MethodStreamPanel  = controls[0].add_1x1("Create MethodStream","MethodStreams", false);
 				var CodeStreamPanel = controls[1].add_1x1("Create CodeStreams", "CodeStreams", false); 
-				var FindingsPanel = controls[2].add_1x1x1("Create Findings","Raw Findings" , "Final Findings",false);
+				var FindingsPanel = controls[2].add_1x1("Create Findings", "Final Findings",false);
 				
 				// MethodStreamPanel  
 				MethodStreamScript = MethodStreamPanel[0].add_Script(false);   
@@ -886,13 +891,20 @@ namespace O2.Script
 								
 				//CodeStreamPanel    
 				CodeStreamScript = CodeStreamPanel[0].add_Script(false);  
-				CodeStreamViewer = CodeStreamPanel[1].add_CodeStreamViewer();   
+				var CodeStreamScriptResult = CodeStreamPanel[1].add_1x1("Code Streams", "Raw Findings", true, CodeStreamScript.width()/2);
+				
+				CodeStreamViewer =  CodeStreamScriptResult[0].add_CodeStreamViewer();   
+				RawFindingsViewer = CodeStreamScriptResult[1].add_FindingsViewer();
+				
+				
+				//RawFindingsViewer = FindingsPanel[1].add_FindingsViewer();				
 				//CodeStreamViewer = MethodStreamPanel[1].add_CodeStreamViewer();   
 				
+				
 				// FindingsPanel
-				FindingsScript = FindingsPanel[0].add_Script(false);
-				RawFindingsViewer = FindingsPanel[1].add_FindingsViewer();
-				FinalFindingsViewer = FindingsPanel[2].add_FindingsViewer();
+				FindingsScript = FindingsPanel[0].add_Script(false);				
+				FinalFindingsViewer = FindingsPanel[1].add_FindingsViewer();
+				
 				//var controls2 = host[1].add_1x1x1(true);  
 	
 				// extra vars
@@ -957,6 +969,8 @@ namespace O2.Script
 				MethodStreamScript.set_Command(scriptFor_MethodStreamScript);
 				CodeStreamScript.set_Command(scriptFor_CodeStreamScript);
 				FindingsScript.set_Command(scriptFor_FindingsScript);
+				//FindingsScript.compile();
+				//CodeStreamScript.compile();
 			}
 		}
 		
