@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using ICSharpCode.TextEditor;
 using O2.API.AST.CSharp;
 using ICSharpCode.NRefactory.Ast;
@@ -10,6 +11,9 @@ using O2.DotNetWrappers.ExtensionMethods;
 using ICSharpCode.SharpDevelop.Dom;
 using O2.API.AST.Visitors;
 using O2.API.AST.ExtensionMethods.CSharp;
+using O2.Interfaces.O2Findings;
+using ICSharpCode.NRefactory;
+using O2.DotNetWrappers.O2Findings;
 
 namespace O2.API.AST.ExtensionMethods
 {
@@ -427,59 +431,7 @@ namespace O2.API.AST.ExtensionMethods
         {
             return astData.createO2MethodStream(iMethod).csharpCode();
         }
-
-        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, Control control)
-        {
-            return astData.showMethodStreams(control, null);
-        }
-
-        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, Control control, ProgressBar progressBar)
-        {
-            var iMethods = astData.iMethods();
-            return astData.showMethodStreams(iMethods, control, progressBar);
-
-        }
-
-        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, Control control, ProgressBar progressBar)
-        {
-            var treeView = control.add_MethodStreamViewer();
-            return astData.showMethodStreams(iMethods, treeView, progressBar);
-        }
-
-        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, TreeView treeView)
-        {
-            return astData.showMethodStreams(iMethods, treeView, null);
-        }
-
-        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, TreeView treeView, ProgressBar progressBar)
-        {
-            treeView.Tag = iMethods;
-            progressBar.maximum(iMethods.size());
-            progressBar.value(0);
-
-            var methodStreams = new Dictionary<IMethod, string>();
-            foreach (var iMethod in iMethods)
-            {
-                var methodStreamCSharpCode = astData.createO2MethodStream(iMethod).csharpCode();
-                methodStreams.Add(iMethod, methodStreamCSharpCode);
-                var nodeText = "{0}          ({1} chars)".format(iMethod.name(), methodStreamCSharpCode.size());
-                treeView.add_Node(nodeText, methodStreamCSharpCode);
-                progressBar.increment(1);
-            }
-            treeView.selectFirst();
-            return methodStreams;
-        }
-
-        public static TreeView add_MethodStreamViewer(this Control control)
-        {
-            control.clear();
-            var codeViewer = control.add_SourceCodeViewer();
-            var treeView = codeViewer.insert_Left<TreeView>(control.width() / 3);
-            treeView.showSelection();
-            treeView.afterSelect<string>((code) => codeViewer.set_Text(code));
-            return treeView;
-        }
-
+                                                                                
         public static string methodStream_SharpCode(this O2MappedAstData o2MappedAstData, MethodDeclaration methodDeclaration)
         {
             var iMethod = o2MappedAstData.iMethod(methodDeclaration);
@@ -488,30 +440,14 @@ namespace O2.API.AST.ExtensionMethods
         }
 
         public static Dictionary<IMethod, string> methodStreams(this O2MappedAstData astData)
+        {
+            return astData.methodStreams(null);
+        }
 
         #endregion
 
         #region codeStreams
-
-        public static TreeView add_CodeStreamViewer(this Control control)
-        {
-            control.clear();
-            var codeViewer = control.add_SourceCodeViewer();
-            var treeView = codeViewer.insert_Left<TreeView>(control.width() / 3);
-            treeView.showSelection();
-            treeView.afterSelect<O2CodeStreamNode>
-                    ((streamNode) =>
-                    {
-                        "in afterSelect".info();
-                        codeViewer.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation);
-                    });
-            treeView.afterSelect<string>((code) => codeViewer.set_Text(code));
-            treeView.beforeExpand<string>((code) => codeViewer.set_Text(code));
-            treeView.beforeExpand<List<INode>>((iNodes) => codeViewer.editor().colorINodes(iNodes));
-            treeView.afterSelect<List<INode>>((iNodes) => codeViewer.editor().colorINodes(iNodes));
-            return treeView;
-        }
-
+        
         public static TreeView add_CodeStreams(this O2MappedAstData astData, TreeView treeView, List<IMethod> iMethods)
         {
             foreach (var iMethod in iMethods)

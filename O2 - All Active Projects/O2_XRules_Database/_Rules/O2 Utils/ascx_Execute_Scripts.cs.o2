@@ -114,8 +114,7 @@ namespace O2.XRules.Database
         	
         	var contextMenu = pictureBox.add_ContextMenu();
             contextMenu.add_MenuItem("View available scripts", () => showAvailableScripts());
-            contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());            
-            //contextMenu.add_MenuItem("Sync/Download local XRules From O2's Svn", () => syncO2ViaSvn());                       
+            contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());                        
             contextMenu.add_MenuItem("O2 Script Development &&  Debug")
                        .add_MenuItem("Open Simple Script Editor", () => openSimpleScriptEditor())
                        .add_MenuItem("Open quick development gui", () => open.devEnvironment())
@@ -130,7 +129,8 @@ namespace O2.XRules.Database
                        .add_MenuItem("O2 'Secret Data' Editor", () => new SecretDataEditor().showGui())                       
                        .add_MenuItem("Web Browser", () =>  open.webBrowser("http://www.o2platform.com"))
                        .add_MenuItem("Notepad", () =>  exec.cmd("notepad.exe"))
-                       .add_MenuItem("Cmd.exe", () =>  exec.cmd("cmd.exe"));
+                       .add_MenuItem("Cmd.exe", () =>  exec.cmd("cmd.exe"))
+                       .add_MenuItem("Manual Sync/Download local XRules From O2's Svn", () => syncO2ViaSvn());                       
             contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());
             contextMenu.add_MenuItem("Exit Application (and close all windows)", () => PublicDI.config.closeO2Process());
             
