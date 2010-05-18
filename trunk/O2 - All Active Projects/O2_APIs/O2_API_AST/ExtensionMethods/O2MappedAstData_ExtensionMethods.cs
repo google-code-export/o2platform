@@ -118,6 +118,70 @@ namespace O2.API.AST.ExtensionMethods
             return null;
         }
 
+        public static Dictionary<string, List<INode>> iNodes_By_Type(this O2MappedAstData astData)
+        {
+            return astData.iNodes_By_Type("");
+        }
+
+        public static Dictionary<string, List<INode>> iNodes_By_Type(this O2MappedAstData astData, string iNodeType_RegExFilter)
+        {
+            var iNodesByType = new Dictionary<string, List<INode>>();
+            foreach (var iNode in astData.iNodes())
+            {
+                var typeName = iNode.typeName();
+                if (iNodeType_RegExFilter.valid().isFalse() || typeName.regEx(iNodeType_RegExFilter))
+                    iNodesByType.add(typeName, iNode);
+            }
+            return iNodesByType;
+        }
+
+        #endregion
+
+        #region ISpecial
+
+        public static Dictionary<string, List<ISpecial>> iSpecials_By_Type(this O2MappedAstData astData)
+        {
+            var iSpecialsByType = new Dictionary<string, List<ISpecial>>();
+            foreach (var iSpecial in astData.iSpecials())
+            {
+                var typeName = iSpecial.typeName();
+                iSpecialsByType.add(typeName, iSpecial);
+            }
+
+            return iSpecialsByType;
+        }
+
+
+        public static List<ISpecial> comments(this O2MappedAstData astData)
+        {
+            var iSpecialByType = astData.iSpecials_By_Type();
+            if (iSpecialByType.hasKey("Comment"))
+                return iSpecialByType["Comment"];
+            return new List<ISpecial>();
+        }
+
+        public static Dictionary<string, List<ISpecial>> comments_IndexedByTextValue(this O2MappedAstData astData)
+        {
+            return astData.comments_IndexedByTextValue("");
+        }
+
+        public static Dictionary<string, List<ISpecial>> comments_IndexedByTextValue(this O2MappedAstData astData, string commentsFilter)
+        {
+            return astData.comments()
+                          .indexOnProperty("CommentText", commentsFilter);
+        }
+
+
+        public static List<ISpecial> iSpecials(this O2MappedAstData astData)
+        {
+            var iSpecials = new List<ISpecial>();
+            foreach (var item in astData.FileToSpecials)
+                iSpecials.AddRange(item.Value);
+            return iSpecials;
+
+        }
+
+
         #endregion
 
         #region iMethod(s)
@@ -326,6 +390,27 @@ namespace O2.API.AST.ExtensionMethods
             return calledIMethods;
         }
 
+        public static List<ICSharpCode.NRefactory.Ast.Attribute> attributes(this O2MappedAstData o2MappedAstData)
+        {
+            return o2MappedAstData.iNodes<ICSharpCode.NRefactory.Ast.Attribute>();
+        }
+
+        public static List<INode> calledINodesReferences(this O2MappedAstData o2MappedAstData, IMethod iMethod)
+        {
+            var calledIMethodsRefs = new List<INode>();
+            if (iMethod != null)
+            {
+                "-------------------".info();
+                var methodDeclaration = o2MappedAstData.methodDeclaration(iMethod);
+
+                // handle invocations via MemberReferenceExpression
+                calledIMethodsRefs.add(methodDeclaration.iNodes<INode, MemberReferenceExpression>());
+                calledIMethodsRefs.add(methodDeclaration.iNodes<INode, InvocationExpression>());
+                calledIMethodsRefs.add(methodDeclaration.iNodes<INode, ObjectCreateExpression>());
+            }
+            return calledIMethodsRefs;
+        }
+
         #endregion
 
         #region methodStreams
@@ -337,6 +422,287 @@ namespace O2.API.AST.ExtensionMethods
                 methodStreams.Add(iMethod, astData.createO2MethodStream(iMethod).csharpCode());
             return methodStreams;
         }
+
+        public static string methodStream(this O2MappedAstData astData, IMethod iMethod)
+        {
+            return astData.createO2MethodStream(iMethod).csharpCode();
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, Control control)
+        {
+            return astData.showMethodStreams(control, null);
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, Control control, ProgressBar progressBar)
+        {
+            var iMethods = astData.iMethods();
+            return astData.showMethodStreams(iMethods, control, progressBar);
+
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, Control control, ProgressBar progressBar)
+        {
+            var treeView = control.add_MethodStreamViewer();
+            return astData.showMethodStreams(iMethods, treeView, progressBar);
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, TreeView treeView)
+        {
+            return astData.showMethodStreams(iMethods, treeView, null);
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, TreeView treeView, ProgressBar progressBar)
+        {
+            treeView.Tag = iMethods;
+            progressBar.maximum(iMethods.size());
+            progressBar.value(0);
+
+            var methodStreams = new Dictionary<IMethod, string>();
+            foreach (var iMethod in iMethods)
+            {
+                var methodStreamCSharpCode = astData.createO2MethodStream(iMethod).csharpCode();
+                methodStreams.Add(iMethod, methodStreamCSharpCode);
+                var nodeText = "{0}          ({1} chars)".format(iMethod.name(), methodStreamCSharpCode.size());
+                treeView.add_Node(nodeText, methodStreamCSharpCode);
+                progressBar.increment(1);
+            }
+            treeView.selectFirst();
+            return methodStreams;
+        }
+
+        public static TreeView add_MethodStreamViewer(this Control control)
+        {
+            control.clear();
+            var codeViewer = control.add_SourceCodeViewer();
+            var treeView = codeViewer.insert_Left<TreeView>(control.width() / 3);
+            treeView.showSelection();
+            treeView.afterSelect<string>((code) => codeViewer.set_Text(code));
+            return treeView;
+        }
+
+        public static string methodStream_SharpCode(this O2MappedAstData o2MappedAstData, MethodDeclaration methodDeclaration)
+        {
+            var iMethod = o2MappedAstData.iMethod(methodDeclaration);
+            var methodStream = o2MappedAstData.createO2MethodStream(iMethod);
+            return methodStream.csharpCode();
+        }
+
+        public static Dictionary<IMethod, string> methodStreams(this O2MappedAstData astData)
+
+        #endregion
+
+        #region codeStreams
+
+        public static TreeView add_CodeStreamViewer(this Control control)
+        {
+            control.clear();
+            var codeViewer = control.add_SourceCodeViewer();
+            var treeView = codeViewer.insert_Left<TreeView>(control.width() / 3);
+            treeView.showSelection();
+            treeView.afterSelect<O2CodeStreamNode>
+                    ((streamNode) =>
+                    {
+                        "in afterSelect".info();
+                        codeViewer.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation);
+                    });
+            treeView.afterSelect<string>((code) => codeViewer.set_Text(code));
+            treeView.beforeExpand<string>((code) => codeViewer.set_Text(code));
+            treeView.beforeExpand<List<INode>>((iNodes) => codeViewer.editor().colorINodes(iNodes));
+            treeView.afterSelect<List<INode>>((iNodes) => codeViewer.editor().colorINodes(iNodes));
+            return treeView;
+        }
+
+        public static TreeView add_CodeStreams(this O2MappedAstData astData, TreeView treeView, List<IMethod> iMethods)
+        {
+            foreach (var iMethod in iMethods)
+                astData.add_CodeStreams(treeView, iMethod);
+            return treeView;
+        }
+
+        public static TreeView add_CodeStreams(this O2MappedAstData astData, TreeView treeView, IMethod iMethod)
+        {
+            var methodName = iMethod.name();
+            var methodStream = astData.methodStream(iMethod);
+            var codeStreams = methodStream.codeStreams();
+            return treeView.add_CodeStreams(methodName, methodStream, codeStreams);
+        }
+
+        public static TreeView add_CodeStreams(this TreeView treeView, string rootFunctionName, string methodStreamCode, List<O2CodeStream> codeStreams)
+        {
+            return treeView.add_CodeStreams(rootFunctionName, methodStreamCode, codeStreams.codeStreams_UniquePaths());
+        }
+        public static TreeView add_CodeStreams(this TreeView treeView, string rootFunctionName, string methodStreamCode, List<List<O2CodeStreamNode>> codeStreamsPaths)
+        {
+            var count = 1;
+            var treeNode = treeView.add_Node(rootFunctionName, methodStreamCode);
+            //foreach(var codeStream in codeStreams.codeStreams_UniquePaths())
+            //show.info(codeStreams[0]);
+            foreach (var uniquePath in codeStreamsPaths)
+            {
+                //foreach(var uniquePath in codeStream.
+                //var codeStreamNodes = codeStream.O2CodeStreamNodes.Values.toList();
+
+
+                var iNodes = uniquePath.iNodes();// codeStream.O2CodeStreamNodes.Keys.toList();
+                var nodeText = "Path #{0}       ({1} steps)".format(count++, uniquePath.size());
+                treeNode.add_Node(nodeText, iNodes).add_Nodes(uniquePath);
+            }
+            return treeView;
+        }
+
+        public static List<IO2Finding> createAndShowCodeStreams(this O2MappedAstData astData, TreeView codeStreamViewer)
+        {
+            return astData.createAndShowCodeStreams(astData.iMethods(), codeStreamViewer);
+        }
+
+        public static List<IO2Finding> createAndShowCodeStreams(this O2MappedAstData astData, List<IMethod> iMethods, TreeView codeStreamViewer)
+        {
+            var o2Findings = new List<IO2Finding>();
+            var processedMethods = new List<string>();		// hack deal with the problem that in some cases new IMethods mappings have to be added to astData (for more info search for "add extra mapping to IMethodToMethodDeclaration for:")
+            foreach (var iMethod in iMethods)
+            {
+                if (processedMethods.Contains(iMethod.fullName()).isFalse())
+                {
+                    o2Findings.add(astData.createAndShowCodeStreams(iMethod, codeStreamViewer));
+                    processedMethods.add(iMethod.fullName());
+                }
+            }
+            return o2Findings;
+        }
+
+        public static List<IO2Finding> createAndShowCodeStreams(this O2MappedAstData astData, IMethod iMethod, TreeView codeStreamViewer)
+        {
+            var o2Findings = new List<IO2Finding>();
+            var methodName = iMethod.name();
+            var methodStream = astData.methodStream(iMethod);
+
+            var codeStreams = methodStream.codeStreams_UniquePaths();
+
+            codeStreamViewer.add_CodeStreams(methodName, methodStream, codeStreams);
+            o2Findings.add_CodeStreams(methodStream, codeStreams);
+            return o2Findings;
+        }
+
+        // add the abilty to define where the taint starts (method parameter, external caller, etc..)
+        public static List<O2CodeStream> codeStreams(this string methodStreamFile)
+        {
+            if (methodStreamFile.fileExists().isFalse())
+                methodStreamFile = methodStreamFile.saveWithExtension(".MethodStream.cs");
+
+            var codeStreams = new List<O2CodeStream>();
+            var AstData_MethodStream = new O2MappedAstData();
+            AstData_MethodStream.loadFile(methodStreamFile);
+            var iMethods = AstData_MethodStream.iMethods();
+            if (iMethods.size() > 0)
+            //if (AstData_MethodStream.iNodes().size() > 10)
+            {
+                var iMethod = iMethods[0];
+                if (AstData_MethodStream.methodDeclaration(iMethod) != null)
+                {
+                    var parameters = AstData_MethodStream.methodDeclaration(iMethod).parameters();
+                    var TaintRules = new O2CodeStreamTaintRules();
+                    foreach (var parameter in parameters)
+                    {
+                        var codeStream = new O2CodeStream(AstData_MethodStream, TaintRules, methodStreamFile);
+                        codeStream.createStream(parameter, null);
+                        codeStreams.add(codeStream);
+                    }
+                }
+            }
+            return codeStreams;
+        }
+
+        public static List<List<O2CodeStreamNode>> codeStreams_UniquePaths(this List<O2CodeStream> codeStreams)
+        {
+            var uniqueCodeStreams = new List<List<O2CodeStreamNode>>();
+            foreach (var codeStream in codeStreams)
+                foreach (var uniquePath in codeStream.getUniqueStreamPaths(100))
+                    uniqueCodeStreams.Add(uniquePath);
+            return uniqueCodeStreams;
+        }
+        
+
+        public static List<List<O2CodeStreamNode>> codeStreams_UniquePaths(this O2MappedAstData astData, IMethod iMethod)
+    	{			
+    		var methodStream =  astData.methodStream(iMethod);
+    		return methodStream.codeStreams_UniquePaths();
+    	}
+    	
+    	public static List<List<O2CodeStreamNode>> codeStreams_UniquePaths(this string methodStream)
+    	{    		
+    		var codeStreams = methodStream.codeStreams();
+    		return codeStreams.codeStreams_UniquePaths();
+    	}
+
+        public static List<IO2Finding> add_CodeStreams(this List<IO2Finding> o2Findings, string methodStream, List<List<O2CodeStreamNode>> codeStreams)
+        {
+            o2Findings.AddRange(codeStreams.o2Findings(methodStream, "vulnName", "vulnType", "Source of Tainted Data"));
+            return o2Findings;
+        }
+
+        public static List<INode> iNodes(this List<O2CodeStreamNode> codeStreamNodes)
+    	{
+    		var iNodes = from node in codeStreamNodes select node.INode;
+    		return iNodes.toList();
+    	}
+
+        public static bool contains(this List<O2CodeStreamNode> codeStream, string stringToFind)
+    	{
+    		foreach(var streamNode in codeStream)
+    		{    			
+    			if (streamNode.str().contains(stringToFind))
+    				return true;
+    		}
+    		return false;
+    	}
+
+        #endregion
+
+        #region codeStreams & O2Findings
+
+        public static List<IO2Finding> o2Findings(this List<O2CodeStream> codeStreams, string vulnName, string vulnType, string sourceNodeText)
+        {
+            var o2Findings = new List<IO2Finding>();
+            foreach (var codeStream in codeStreams)                
+                o2Findings.add(codeStream.o2Findings(vulnName, vulnType, sourceNodeText));
+            return o2Findings;
+        }
+
+        public static List<IO2Finding> o2Findings(this O2CodeStream o2CodeStream, string vulnName, string vulnType, string sourceNodeText)
+        {
+            var uniqueStreamPaths = o2CodeStream.getUniqueStreamPaths(100);
+            return uniqueStreamPaths.o2Findings(o2CodeStream.SourceFile, vulnName, vulnType, sourceNodeText);
+        }
+
+        public static List<IO2Finding> o2Findings(this List<List<O2CodeStreamNode>> codeStreamPaths, string methodStreamFile, string vulnName, string vulnType, string sourceNodeText)
+        {
+            if (methodStreamFile.fileExists().isFalse())
+                methodStreamFile = methodStreamFile.saveWithExtension(".MethodStream.cs");
+            var o2Findings = new List<IO2Finding>();
+            foreach (var uniquePath in codeStreamPaths)
+            {
+                var o2Finding = new O2Finding();
+                o2Finding.vulnName = vulnName;
+                o2Finding.vulnType = vulnType;
+                var o2Trace = o2Finding.addTrace(sourceNodeText);
+                o2Trace.traceType = TraceType.Source;
+                foreach (var streamNode in uniquePath)
+                {
+                    var newTrace = new O2Trace(streamNode.str());
+                    o2Trace.childTraces.Add(newTrace);
+                    o2Trace = newTrace;
+                    o2Trace.file = methodStreamFile;
+                    o2Trace.lineNumber = streamNode.INode.StartLocation.Line.uInt();
+                }
+                o2Trace.traceType = TraceType.Known_Sink;
+
+                o2Finding.lineNumber = o2Trace.lineNumber;
+                o2Finding.file = o2Trace.file;
+                o2Findings.Add(o2Finding);
+            }
+            return o2Findings;
+        }
+
         #endregion
 
         #region mist info
@@ -404,10 +770,28 @@ namespace O2.API.AST.ExtensionMethods
             return null;
         }
 
-        public static string file(this O2MappedAstData o2MappedAstData, IMethod iMethod)
+        /*public static string file(this O2MappedAstData o2MappedAstData, IMethod iMethod)
         {
             var methodDeclaration = o2MappedAstData.methodDeclaration(iMethod);
             return o2MappedAstData.file(methodDeclaration);
+        }*/
+        //replaced with the one below
+        public static string file(this O2MappedAstData o2MappedAstData, IMethod iMethod)
+        {
+            var iNode = o2MappedAstData.methodDeclaration(iMethod) as INode;
+            if (iNode == null)
+                iNode = o2MappedAstData.constructorDeclaration(iMethod) as INode;
+            return o2MappedAstData.file(iNode);
+        }
+
+        //not very optimized (see if it is an issue in big data sets
+        public static string file(this O2MappedAstData astData, ISpecial iSpecialToMap)
+        {
+            foreach (var item in astData.FileToSpecials)
+                foreach (var iSpecial in item.Value)
+                    if (iSpecialToMap == iSpecial)
+                        return item.Key;
+            return "";
         }
 
         public static string file(this O2MappedAstData o2MappedAstData, INode iNode)

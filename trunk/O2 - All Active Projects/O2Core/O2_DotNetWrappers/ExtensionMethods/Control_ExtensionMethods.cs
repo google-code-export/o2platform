@@ -467,6 +467,31 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static T front<T>(this T control)
+            where T : Control
+        {
+            return control.bringToFront();
+        }
+        public static T bringToFront<T>(this T control)
+            where T : Control
+        {
+            control.invokeOnThread(() => control.BringToFront());
+            return control;
+        }
+
+        public static T back<T>(this T control)
+            where T : Control
+        {
+            return control.sendToBack();
+        }
+
+        public static T sendToBack<T>(this T control)
+            where T : Control
+        {
+            control.invokeOnThread(() => control.SendToBack());
+            return control;
+        }
+
         #endregion
 
         #region Control - events 

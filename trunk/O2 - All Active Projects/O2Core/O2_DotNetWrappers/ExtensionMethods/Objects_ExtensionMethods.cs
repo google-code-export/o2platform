@@ -56,5 +56,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return _object.tempO2Dir();
         }
 
+        public static uint uInt(this int _int)
+        {
+            return (uint)_int;
+        }
+
     }
 }
