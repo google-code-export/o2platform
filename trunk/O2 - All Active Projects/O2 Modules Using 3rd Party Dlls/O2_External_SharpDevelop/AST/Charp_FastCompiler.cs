@@ -106,7 +106,12 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.API.AST.ExtensionMethods.CSharp")
                                      .add("O2.API.AST.ExtensionMethods")
                                      .add("WPF=System.Windows.Controls")
-                                     .add("Media=System.Windows.Media");               
+                                     .add("Media=System.Windows.Media")
+                //Scanning AST Engine related
+                                     .add("ICSharpCode.NRefactory")
+                                     .add("ICSharpCode.NRefactory.Ast")
+                                     .add("ICSharpCode.SharpDevelop.Dom");            
+
         }
 		public List<string> getDefaultReferencedAssemblies()
         {

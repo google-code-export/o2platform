@@ -6,12 +6,16 @@ using System.Windows.Forms;
 using ICSharpCode.SharpDevelop.Dom;
 using ICSharpCode.NRefactory.Ast;
 using O2.API.AST.CSharp;
+using O2.API.AST.ExtensionMethods;
+using O2.API.AST.ExtensionMethods.CSharp;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.Ascx;
-using O2.API.AST.ExtensionMethods;
+
 using System.CodeDom;
+using ICSharpCode.NRefactory;
+
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -269,7 +273,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
                 treeView.afterSelect<IMethod>((method) =>
                 {
-                    var file = o2MappedAstData.file2(method);
+                    var file = o2MappedAstData.file(method);
                     if (file != null)
                     {
                         codeEditor.open(file);
@@ -290,7 +294,82 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 return treeView;
             });
         }
+
+        #region methodStream and codeStream related
+
+        public static TreeView add_MethodStreamViewer(this Control control)
+        {
+            control.clear();
+            var codeViewer = control.add_SourceCodeViewer();
+            var treeView = codeViewer.insert_Left<TreeView>(control.width() / 3);
+            treeView.showSelection();
+            treeView.afterSelect<string>((code) => codeViewer.set_Text(code));
+            return treeView;
+        }
+
+        public static TreeView add_CodeStreamViewer(this Control control)
+        {
+            control.clear();
+            var codeViewer = control.add_SourceCodeViewer();
+            var treeView = codeViewer.insert_Left<TreeView>(control.width() / 3);
+            treeView.showSelection();
+            treeView.afterSelect<O2CodeStreamNode>
+                    ((streamNode) =>
+                    {
+                        "in afterSelect".info();
+                        codeViewer.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation);
+                    });
+            treeView.afterSelect<string>((code) => codeViewer.set_Text(code));
+            treeView.beforeExpand<string>((code) => codeViewer.set_Text(code));
+            treeView.beforeExpand<List<INode>>((iNodes) => codeViewer.editor().colorINodes(iNodes));
+            treeView.afterSelect<List<INode>>((iNodes) => codeViewer.editor().colorINodes(iNodes));
+            return treeView;
+        }
+
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, Control control)
+        {
+            return astData.showMethodStreams(control, null);
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, Control control, ProgressBar progressBar)
+        {
+            var iMethods = astData.iMethods();
+            return astData.showMethodStreams(iMethods, control, progressBar);
+
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, Control control, ProgressBar progressBar)
+        {
+            var treeView = control.add_MethodStreamViewer();
+            return astData.showMethodStreams(iMethods, treeView, progressBar);
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, TreeView treeView)
+        {
+            return astData.showMethodStreams(iMethods, treeView, null);
+        }
+
+        public static Dictionary<IMethod, string> showMethodStreams(this O2MappedAstData astData, List<IMethod> iMethods, TreeView treeView, ProgressBar progressBar)
+        {
+            treeView.Tag = iMethods;
+            progressBar.maximum(iMethods.size());
+            progressBar.value(0);
+
+            var methodStreams = new Dictionary<IMethod, string>();
+            foreach (var iMethod in iMethods)
+            {
+                var methodStreamCSharpCode = astData.createO2MethodStream(iMethod).csharpCode();
+                methodStreams.Add(iMethod, methodStreamCSharpCode);
+                var nodeText = "{0}          ({1} chars)".format(iMethod.name(), methodStreamCSharpCode.size());
+                treeView.add_Node(nodeText, methodStreamCSharpCode);
+                progressBar.increment(1);
+            }
+            treeView.selectFirst();
+            return methodStreams;
+        }
         
+        #endregion
 
     }
 }

@@ -1066,7 +1066,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static TreeNode clear(this TreeNode treeNode)
         {
             if (treeNode != null)
-                return (TreeNode)treeNode.TreeView.invokeOnThread(()=>treeNode.clear(treeNode));
+                return (TreeNode)treeNode.TreeView.invokeOnThread(() => treeNode.TreeView.clear(treeNode));
             return null;
         }
 

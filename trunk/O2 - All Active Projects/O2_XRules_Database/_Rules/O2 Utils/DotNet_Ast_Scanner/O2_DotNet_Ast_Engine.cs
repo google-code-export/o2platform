@@ -41,9 +41,9 @@ using O2.XRules.Database.O2Utils;
 //O2Ref:WindowsBase.dll
 //O2Ref:ICSharpCode.AvalonEdit.dll
 //O2Ref:WindowsFormsIntegration.dll
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs
+//O2Ref:System.Data.dll
 
-namespace O2.Script.Temp5
+namespace O2.Script
 {
     public class O2_DotNet_Ast_Engine : UserControl
 	{	 			
@@ -446,7 +446,7 @@ namespace O2.Script.Temp5
 
 				DataTreeView.showSelection();	
 				DataTreeView.configureTreeViewForCodeDomViewAndNRefactoryDom();
-				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor2(DataTreeView, CodeViewer.editor());  
+				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor(DataTreeView, CodeViewer.editor());  
 	
 				DataTreeView.afterSelect<string>(
 					(file)=>{
@@ -542,7 +542,7 @@ namespace O2.Script.Temp5
 												  			 });
 				
 				 
-				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor2(AstValueTreeView, CodeViewer.editor());  		   
+				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor(AstValueTreeView, CodeViewer.editor());  		   
 				AstTypeTreeView  = topPanel[0].insert_Left<GroupBox>(200)
 										.set_Text("AST INode Type") 
 										.add_TreeView()
@@ -649,7 +649,7 @@ namespace O2.Script.Temp5
 																			 });
 				
 				
-				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor2(CommentsTreeView, CodeViewer.editor());  		   			
+				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor(CommentsTreeView, CodeViewer.editor());  		   			
 								
 				CommentsTreeView.beforeExpand_PopulateWithList<ISpecial>();				
 			}
@@ -740,8 +740,8 @@ namespace O2.Script.Temp5
 				ParametersTreeView =  MethodsTreeView.insert_Below<TreeView>(100);
 				MethodsCalledTreeView =  ParametersTreeView.insert_Right<TreeView>(200);
 				
-				AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(MethodsCalledTreeView, CodeViewer.editor()); 
-				AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(ParametersTreeView, CodeViewer.editor());
+				AstData_MethodStream.afterSelect_ShowInSourceCodeEditor(MethodsCalledTreeView, CodeViewer.editor()); 
+				AstData_MethodStream.afterSelect_ShowInSourceCodeEditor(ParametersTreeView, CodeViewer.editor());
 																
 				MethodsCalledTreeView.afterSelect<INode>((iNode)=>showCodeStream(iNode));
 				ParametersTreeView.afterSelect<INode>((iNode)=>showCodeStream(iNode));
@@ -951,7 +951,7 @@ namespace O2.Script.Temp5
 													"filteredFindings.set_VulnType(\"Sql Injection\");".line() + 
 													"".line() + 
 													"finalFindingsViewer.show(filteredFindings);".line() + 													
-													"return finalFindingsViewer.save();".line() + 
+													//"return finalFindingsViewer.save();".line() + 
 													defaultUsingAndFileRef;
 												
 				MethodStreamScript.set_Command(scriptFor_MethodStreamScript);
