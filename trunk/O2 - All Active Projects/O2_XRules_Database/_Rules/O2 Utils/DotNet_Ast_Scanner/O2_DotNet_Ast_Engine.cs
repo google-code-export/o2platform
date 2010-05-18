@@ -13,6 +13,7 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
+using O2.Views.ASCX.Ascx.MainGUI;
 using O2.API.AST.CSharp;
 using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
@@ -27,6 +28,7 @@ using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
 using GraphSharp.Controls;
+using O2.XRules.Database.ExtensionMethods;
 
 //O2Ref:GraphSharp.dll
 //O2Ref:GraphSharp.Controls.dll
@@ -64,8 +66,9 @@ namespace O2.Script.Temp5
 		
 	 	public void start()
 	 	{
-	 		var astEngine = O2Gui.open<O2_DotNet_Ast_Engine>("O2 .NET Ast Engine", 600,400);
-	 		astEngine.buildGui();		 			 		
+	 		var astEngine = O2Gui.open<O2_DotNet_Ast_Engine>("O2 .NET Ast Engine", 800,600);
+	 		astEngine.buildGui();	
+	 		astEngine.step_LoadArtifacts();
 	 	}
 	 	
 		public void buildGui() 
@@ -96,6 +99,8 @@ namespace O2.Script.Temp5
 
             HostPanel.parent<SplitContainer>().borderNone();
             HostPanel.parent<SplitContainer>().fixedPanel1();
+            
+            HostPanel.insert_Below<ascx_LogViewer>(100);
 			
 			statusMessage("all ready...");
 		}
@@ -312,6 +317,7 @@ namespace O2.Script.Temp5
 										AstEngine.resetLoadedData(); 
 										loadDataInGui();
 									});
+									
 				LoadFiles_TreeView = LoadFilesTab.add_TreeView();
 				LoadFiles_TreeView.top(30)
 				 				 .align_Left(LoadFilesTab)
@@ -355,9 +361,17 @@ namespace O2.Script.Temp5
 			}
 			
 			public void addReferenceAssembly(string assembly)
-			{
-				AstEngine.ReferencedAssemblies.Add(assembly,null);				
-				loadDataInGui();
+			{				
+				O2Thread.mtaThread( 
+					()=>{
+							AstEngine.ReferencedAssemblies.Add(assembly,null);				
+							"...loading reference assembly: {0}".debug(assembly);
+							References_TreeView.enabled(false);
+							AstEngine.AstData.O2AstResolver.addReference(assembly);
+							References_TreeView.enabled(true);
+							"...load complete".debug();
+							loadDataInGui();
+						});
 			}
 			
 			public void loadDataInGui()
@@ -414,7 +428,7 @@ namespace O2.Script.Temp5
 				DataTreeView = CodeViewer.insert_Left<TreeView>(200);     
 				Options = DataTreeView.insert_Below<Panel>(40); 
 				Options.add_CheckBox("View AST",0,0,(value)=> { this.Show_Ast = value;}).check();
-				Options.add_CheckBox("View CodeDom",0,95,(value)=> {this.Show_CodeDom = value; }).front().check();
+				Options.add_CheckBox("View CodeDom",0,95,(value)=> {this.Show_CodeDom = value; }).front();
 				Options.add_CheckBox("View NRefactory",20,0,(value)=> {this.Show_NRefactory = value;}).front().autoSize();
 
 				DataTreeView.showSelection();	
@@ -692,7 +706,7 @@ namespace O2.Script.Temp5
 				CodeStreamTreeView = CodeStreamCodeViewer.insert_Left<TreeView>(200);
 				CodeStreamGraph = CodeStreamGraphTab.add_Panel().add_Graph(); 
 				  
-				 CodeStreamTreeView.afterSelect<O2CodeStreamNode>
+				CodeStreamTreeView.afterSelect<O2CodeStreamNode>
 				 	((streamNode)=> CodeStreamCodeViewer.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation));				
 				
 				MethodsTreeView = topPanel[0].add_TreeView()
@@ -763,7 +777,12 @@ namespace O2.Script.Temp5
 			
 			public void showMethodStreamInGui()
 			{
-				if (AstData_MethodStream.iMethods().size() > 0)
+				ParametersTreeView.clear();
+				MethodsCalledTreeView.clear();
+				
+				if (AstData_MethodStream.iMethods().size() == 0)
+					"AstData_MethodStream.iMethods().size() == 0".debug();
+				else
 				{
 					var iCodeStreamMethod = AstData_MethodStream.iMethods()[0];
 					iCodeStreamMethod.str().info();
@@ -771,8 +790,7 @@ namespace O2.Script.Temp5
 					//AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(MethodsCalledTreeView, CodeViewer.editor()); 				
 					//AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(ParametersTreeView, CodeViewer.editor());  		   			
 					
-				 	ParametersTreeView.clear();
-				 	MethodsCalledTreeView.clear();
+				 	
 				 	
 					var methodDeclaration = AstData_MethodStream.methodDeclaration(iCodeStreamMethod);
 					
@@ -832,7 +850,44 @@ namespace O2.Script.Temp5
 			
 			public void buildGui()
 			{
-				AstEngine.HostPanel.clear();												
+				AstEngine.HostPanel.clear();	
+				
+				var controls = AstEngine.HostPanel.add_1x1x1();     
+   
+				var MethodStreamPanel  = controls[0].add_1x1("Create MethodStream","MethodStreams", false);
+				var CodeStreamPanel = controls[1].add_1x1("Create CodeStreams", "CodeStreams", false); 
+				var FindingsPanel = controls[2].add_1x1x1("Create Findings","Raw Findings" , "Final Findings",false);
+				
+				// MethodStreamPanel  
+				var MethodStreamScript = MethodStreamPanel[0].add_Script(false);   
+				var MethodStreamViewer = MethodStreamPanel[1].add_MethodStreamViewer();																			
+								
+				//CodeStreamPanel    
+				var CodeStreamScript = CodeStreamPanel[0].add_Script(false);  
+				var CodeStreamViewer = CodeStreamPanel[1].add_CodeStreamViewer();   
+				//var CodeStreamViewer = MethodStreamPanel[1].add_CodeStreamViewer();   
+				
+				// FindingsPanel
+				var FindingsScript = FindingsPanel[0].add_Script(false);
+				var rawFindingsViewer = FindingsPanel[1].add_FindingsViewer();
+				var finalFindingsViewer = FindingsPanel[2].add_FindingsViewer();
+				//var controls2 = host[1].add_1x1x1(true);  
+				
+
+				// script parameters				
+				var scriptParameters = new Dictionary<string,object>(); 
+				scriptParameters.Add("methodStreamViewer", MethodStreamViewer);  
+				scriptParameters.Add("codeStreamViewer", CodeStreamViewer); 
+				scriptParameters.Add("astData", AstEngine.AstData); 
+				scriptParameters.Add("rawFindingsViewer", rawFindingsViewer); 
+				scriptParameters.Add("finalFindingsViewer", finalFindingsViewer); 
+
+				
+				MethodStreamScript.InvocationParameters.AddRange(scriptParameters);				
+				CodeStreamScript.InvocationParameters.AddRange(scriptParameters);
+				FindingsScript.InvocationParameters.AddRange(scriptParameters);
+
+
 
 				/*var topPanel = AstEngine.HostPanel.add_1x1("Comment's Values", "Source Code", true, 400);								
 								
@@ -856,6 +911,8 @@ namespace O2.Script.Temp5
 			
 			public void loadDataInGui()
 			{
+				//MethodStreamTreeView.add_Nodes(AstEngine.AstData.methodStreams());
+				//AstEngine.AstData.showMethodStreams(MethodStreamPanel[1], AstEngine.TopProgressBar); 
 				/*
 				var comments = AstEngine.AstData.comments_IndexedByTextValue(CommentsFilter); 
 				CommentsTreeView.visible(false); 
