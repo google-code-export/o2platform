@@ -20,6 +20,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using O2.External.IE.Wrapper;
 using O2.External.IE.ExtensionMethods;
+using O2.XRules.Database.ExtensionMethods;
 
 namespace O2.Script
 {
@@ -371,9 +372,94 @@ namespace O2.Script
         }
 		
 		#endregion
-    	
-    	#region get wrappers
-    	public static string html(this O2MediaWikiAPI wikiApi, string page)
+
+        #region categories
+
+        public static List<string> categories(this O2MediaWikiAPI wikiApi)
+        {
+            return wikiApi.categories(true);
+        }
+
+        public static List<string> categories(this O2MediaWikiAPI wikiApi, bool autoRemoveCategoryPrefix)
+        {
+            var categoryString = "Category:";
+            var categories = new List<string>();
+            var results = wikiApi.categoriesRaw().attributes("title").values();
+            if (autoRemoveCategoryPrefix)
+            {
+                foreach (var category in results)
+                    if (category.starts(categoryString))
+                        categories.add(category.Substring(categoryString.size()));
+                    else
+                        categories.add(category);
+            }
+            else
+                categories = results;
+            return categories;
+        }
+
+        public static List<XElement> categoriesRaw(this O2MediaWikiAPI wikiApi)
+        {
+            string pages = "";
+            string limitVar = "aclimit";
+            int limitValue = 200;
+            string properyType = "generator";
+            string propertyName = "allcategories";
+            string continueVarName = "gacfrom";
+            string continueValue = "";
+            string dataElement = "page";
+            int maxItemsToFetch = -1;
+            bool resolveRedirects = false;
+            //"info&generator=allcategories",""
+            return wikiApi.getQueryContinueResults(pages, limitVar, limitValue, properyType,
+                                                    propertyName, continueVarName, continueValue,
+                                                    dataElement, maxItemsToFetch, resolveRedirects);
+        }
+
+        public static List<string> pagesInCategory(this O2MediaWikiAPI wikiApi, string category)
+        {
+            return wikiApi.pagesInCategory(category, true);
+        }
+
+        public static List<string> pagesInCategory(this O2MediaWikiAPI wikiApi, string category, bool autoAddCategoryPrefix)
+        {
+            if (autoAddCategoryPrefix)
+                category = "Category:" + category;
+            return wikiApi.pagesInCategoryRaw(category).attributes("title").values();
+        }
+
+        public static List<XElement> pagesInCategoryRaw(this O2MediaWikiAPI wikiApi, string category)
+        {
+            string pages = "&gcmtitle=" + category;
+            string limitVar = "cmlimit";
+            int limitValue = 200;
+            string properyType = "generator";
+            string propertyName = "categorymembers";
+            string continueVarName = "gcmcontinue";
+            string continueValue = "";
+            string dataElement = "page";
+            int maxItemsToFetch = -1;
+            bool resolveRedirects = false;
+            //"info&generator=allcategories",""
+            return wikiApi.getQueryContinueResults(pages, limitVar, limitValue, properyType,
+                                                    propertyName, continueVarName, continueValue,
+                                                    dataElement, maxItemsToFetch, resolveRedirects);
+        }
+
+        public static List<string> uncategorizedPages(this O2MediaWikiAPI wikiApi)
+        {
+            var maxToFetchPerRequest = 500;
+            var maxItemsToFetch = 5000;
+            return wikiApi.getIndexPhp_UsingXPath_AttributeValues("title=Special:UncategorizedPages",
+                                                                  "//div[@class='mw-spcontent']//li//a", "href",
+                                                                  "limit", maxToFetchPerRequest,
+                                                                  "offset", maxItemsToFetch);
+        }
+
+        #endregion
+
+        #region get wrappers
+        public static string html(this O2MediaWikiAPI wikiApi, string page)
     	{
     		return wikiApi.getPageHtml(page);
     	}
@@ -718,8 +804,35 @@ namespace O2.Script
 		
 		#endregion
 
+        #region other requests with loop support
+
+        public static List<string> getIndexPhp_UsingXPath_AttributeValues(this O2MediaWikiAPI wikiApi,
+                                                                          string wikiQueryString, string xPathQuery, string xPathAttribute,
+                                                                          string limitVarName, int maxToFetchPerRequest,
+                                                                          string offsetVarName, int maxItemsToFetch)
+        {
+            var currentOffset = 0;
+            var result = new List<string>();
+            while (result.size() < maxItemsToFetch)
+            {
+                //var getRequest = "http://www.o2platform.com/index.php?title=Special:UncategorizedPages&limit={0}&offset={1}".format(maxToFetch,currentOffset);
+                var getRequest = "{0}&{1}={2}&{3}={4}".format(wikiQueryString, limitVarName, maxToFetchPerRequest, offsetVarName, currentOffset);
+                var htmlCode = wikiApi.getIndexPhp(getRequest);
+                //"uncategorizedPages GET request: {0}".info(getRequest);
+                var htmlDocument = htmlCode.htmlDocument();
+                var pages = htmlDocument.select(xPathQuery).attributes(xPathAttribute).values();
+                result.add(pages);
+                if (pages.size() == 0 || pages.size() < maxToFetchPerRequest)
+                    break;
+                currentOffset += maxToFetchPerRequest;
+            }
+            return result;
+        }
+
+        #endregion
+
         #region text parsing
-        
+
         public static string parse(this O2MediaWikiAPI wikiApi, string textToParse)
         {
             var html = wikiApi.parseText(textToParse);

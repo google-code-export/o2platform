@@ -373,7 +373,6 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return codeEditor;
         }
 
-
         public static ascx_SourceCodeViewer load(this ascx_SourceCodeViewer codeViewer, string fileOrCode)
         {
             codeViewer.editor().load(fileOrCode);

@@ -162,6 +162,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (collection != null) ? collection.ToList() : null;
         }
 
+        public static List<T> toList<T>(this IEnumerable list)
+        {
+            var results = new List<T>();
+            foreach (var item in list)
+                results.Add((T)item);
+            return results;
+        }
+        
         public static Dictionary<string, List<T>> indexOnToString<T>(this List<T> items)
         {
             return items.indexOnToString("");
@@ -200,6 +208,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 }
             }
             return result;
+        }
+
+        public static List<String> sort(this List<String> list)
+        {
+            list.Sort();
+            return list;
         }
     }
 }

@@ -1086,7 +1086,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion
-
+       
         #region Form
 
         public static Form onClosed<T>(this Form form, MethodInvoker onClosed)
@@ -1101,5 +1101,25 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion
+
+        #region SendKeys
+
+        public static T sendKeys<T>(this T control, string textToSend) where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.focus();
+                    SendKeys.Send(textToSend);
+                    return control;
+                });
+        }
+
+        public static T sendEnter<T>(this T control) where T : Control
+        {
+            return control.sendKeys("".line());
+        }
+
+        #endregion 
     }
 }
