@@ -1689,6 +1689,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (object)treeNode.treeView().invokeOnThread(() => { return treeNode.Tag; });
         }
 
+        public static TreeNode set_Text(this TreeNode treeNode, string text)
+        {
+            return (TreeNode)treeNode.treeView().invokeOnThread(
+                                        () =>
+                                        {
+                                            treeNode.Text = text;
+                                            return treeNode;
+                                        });
+        }
+
         public static TreeView showToolTip(this TreeView treeView)
         {
             if (treeView != null)
@@ -1715,8 +1725,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
             if (treeNode != null)
                 treeNode.treeView().invokeOnThread(() => treeNode.BackColor = color);
             return treeNode;
-        }        
+        }
 
+        public static TreeView sort(this TreeView treeView, bool value)
+        {
+            return (TreeView)treeView.invokeOnThread(() => treeView.Sorted = value);
+        }
 
         #endregion
 
@@ -2624,7 +2638,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }*/
 
         #endregion
-        
+
+        #region WebBrowser
+
+        public static WebBrowser open(this WebBrowser webBrowser, string url)
+        {
+            webBrowser.invokeOnThread(() => webBrowser.Navigate(url));
+            return webBrowser;
+        }
+
+        #endregion
 
     }
 }

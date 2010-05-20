@@ -38,7 +38,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>64</ApplicationRevision>
+    <ApplicationRevision>65</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -62,12 +62,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\AxInterop.WMPLib.dll</HintPath>
+    </Reference>
     <Reference Include="Cecil.Decompiler, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\Cecil.Decompiler.dll</HintPath>
     </Reference>
     <Reference Include="Cropper">
       <HintPath>..\_3rdPartyDlls\Cropper.exe</HintPath>
+    </Reference>
+    <Reference Include="DesktopRecorder, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\DesktopRecorder.exe</HintPath>
     </Reference>
     <Reference Include="Dimebrain.TweetSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -92,6 +100,26 @@
     <Reference Include="ICSharpCode.AvalonEdit, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\ICSharpCode.AvalonEdit.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Interop.SHDocVw.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.TCPILib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Interop.TCPILib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMEncoderLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Interop.WMEncoderLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMEncPrivateTlb, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Interop.WMEncPrivateTlb.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Interop.WMPLib.dll</HintPath>
     </Reference>
     <Reference Include="itextsharp, Version=5.0.0.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -198,6 +226,10 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WatiN.Core, Version=2.0.20.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\WatiN.Core.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -309,6 +341,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
+    <Compile Include="ExtensionMethods\HtmlAgilityPack_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Scripts_ExecutionMethods.cs" />
     <Compile Include="_Rules\APIs\CmdExeAPI.cs">
       <SubType>Component</SubType>
@@ -372,6 +405,7 @@
     <None Include="_Rules\H2 SCRIPTS\open - XRules Editor.h2" />
     <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Prompt.cs.o2" />
     <Compile Include="_Rules\O2 Utils\SecretDataEditor.cs.o2" />
+    <None Include="_Rules\Misc Utils\O2 Simple Text Editor.h2" />
     <None Include="_Rules\O2 Utils\AutoUpdate - Using Dll Ref.h2" />
     <None Include="_Rules\O2 Utils\AutoUpdate - Using Reflection.h2" />
     <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
@@ -392,6 +426,7 @@
     </Compile>
     <None Include="_Rules\Web Utils\Network Tests %28Ping and Http%29.h2" />
     <None Include="_Rules\Web Tools\Twitter Client.h2" />
+    <None Include="_Rules\Web Utils\Quick HtmlCode Viewer.h2" />
     <None Include="_Rules\_UnderDev\PoCs\Load CSharp files and show methods declarations and references.h2" />
     <None Include="_Rules\_UnderDev\PoCs\load files and create O2CodeStreams from them %28working%29.h2" />
     <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method %28original version%29.h2" />
