@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var services = ServiceController.GetServices().ToDictionary((service)=&gt; { return service.ServiceName;});
+
+var servicesToStop = "SPSearch".wrapOnList()				
+				.add("SPTimerV3")
+				.add("SPTrace")
+				.add("OSearch")
+				.add("MSSQL$OFFICESERVERS")
+				.add("IISADMIN")
+				.add("HTTPFilter")
+				.add("DCLauncher")
+				.add("DCLoadBalancer")
+				.add("W3SVC");
+
+foreach(var id in servicesToStop)	
+	services[id].Stop();
+	
+foreach(var id in servicesToStop)	
+	"[{0}] {1} : {2} "
+		.format(services[id].Status,services[id].ServiceName, services[id].DisplayName)
+		.info();
+return servicesToStop;
+//using System.Linq
+//O2File:C:\O2\XRulesDatabase\_Rules\Windows Utils\ascx_Services_Stop.cs.o2</SourceCode>
+  <ReferencedAssemblies />
+</H2>

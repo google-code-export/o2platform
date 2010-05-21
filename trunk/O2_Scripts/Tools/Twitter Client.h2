@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>
+var fileWithCredentials = @"C:\O2\_USERDATA\TwitterAccounts.xml";
+
+//panel.clear();
+//var tabControl = panel.add_TabControl(); 
+var panel2 = O2Gui.open&lt;Panel&gt;("O2 Twitter Client", 600,400);
+var tabControl = panel2.add_TabControl();
+
+//var credentials = fileWithCredentials.deserialize&lt;SecretData&gt;();
+ISecretData secretData = null; // = fileWithCredentials.deserialize&lt;SecretData&gt;(); 
+var twitterAPI = new O2TwitterAPI(); 
+
+
+var topPanel = tabControl.insert_Above&lt;Panel&gt;(30); 
+topPanel.add_Label("Selected User",5,0);
+var usersComboBox = topPanel.add_ComboBox(0,100)
+							.onSelection&lt;ICredential&gt;( 
+							   (credential)=&gt;{
+												twitterAPI.login(credential);												
+											 });
+//usersComboBox.add_Items(secretData.usernames());   
+var writeTweetTab = tabControl.add_Tab("Write Tweet");
+var timelineTab = tabControl.add_Tab("Public Timeline");
+var userTweetsTab = tabControl.add_Tab("User Tweets");
+var followersTab = tabControl.add_Tab("Followers").onSelected(()=&gt;{"followers".debug();});  
+var followingTab = tabControl.add_Tab("Following").onSelected(()=&gt;{"following".debug();});
+var optionsTab = tabControl.add_Tab("Options"); 
+   
+// optionsTab
+optionsTab.add_Label("File with credentials",20,0)
+          .append_TextBox(200)
+          .onTextChange((text)=&gt;{
+          							"onTextChange".debug();
+          							fileWithCredentials = text;
+          							secretData = fileWithCredentials.deserialize&lt;SecretData&gt;();
+          							usersComboBox.clear();           	 						
+          							usersComboBox.add_Items(secretData.usernames("Twitter"));
+          							usersComboBox.select_Item(0);
+          						})   
+          .set_Text(fileWithCredentials);
+ 
+ 
+// timelineTab   
+timelineTab.onSelected(
+	()=&gt;{
+			timelineTab.add_TableList_With_Tweets(twitterAPI.home(10));
+		});
+
+//userTweetsTab 
+userTweetsTab.onSelected(
+	()=&gt;{
+			userTweetsTab.add_TableList_With_Tweets(twitterAPI.tweets(10));
+		}); 
+		
+//writeTweetTab
+var maxTweetSize = 140; 
+var tweetText = writeTweetTab.add_TextArea(); 
+var bottomPanel = tweetText.insert_Below&lt;Panel&gt;(20);  
+var textSize = bottomPanel.add_Label("Tweet TextSize: 0",0,0);
+textSize.append_Link("post tweet",
+	()=&gt;{
+			"in post tweet".debug();
+			var response = twitterAPI.newTweet(tweetText.get_Text()); 
+			if (response)
+				tweetText.set_Text("");
+			"after post tweet".debug();			
+		});
+		
+tweetText.onTextChange((text)=&gt;
+	{		
+		var size = text.size(); 
+		textSize.set_Text("Tweet TextSize: {0}".format(size)); 
+		tweetText.backColor( size &gt; maxTweetSize ? Color.Red : Color.White);
+	});
+
+//followersTab
+followersTab.onSelected( 
+	()=&gt;{
+			followersTab.add_TableList_With_Users(twitterAPI.followers());
+		});
+		
+//followingTab
+followingTab.onSelected( 
+	()=&gt;{
+			followingTab.add_TableList_With_Users(twitterAPI.following());
+		});
+return "done";
+ 
+
+//using TweetSharp.Fluent
+//using TweetSharp.Extensions
+//O2Ref:System.Data.dll
+//using O2.XRules.Database._Rules.APIs</SourceCode>
+  <ReferencedAssemblies />
+</H2>
