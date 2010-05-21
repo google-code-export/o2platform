@@ -102,7 +102,7 @@ namespace O2.Script
 		{
 			var image = Screenshots.getScreenshotOfDesktop();
 			//var image = Screenshots.getScreenshotOfFormObjectAndItsControls(this);			
-			this.info("image:{0}", image.typeName());
+			"image:{0}".info(image.typeName());
 			
         	pictureBox.BackgroundImage = image;
 			return image;
@@ -142,7 +142,7 @@ namespace O2.Script
 		
 		public void onDocumentCompleted(IO2HtmlPage htmlPage)
 		{
-			this.info("---- onDocumentCompleted");
+			"---- onDocumentCompleted".info();
 			var o2BrowserIE = (O2BrowserIE)browser;
 			
 			//this.info("---- Text: {0}" , o2BrowserIE.Text());
