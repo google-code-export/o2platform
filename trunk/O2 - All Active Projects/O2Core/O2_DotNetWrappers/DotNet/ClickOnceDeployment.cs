@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using O2.DotNetWrappers.Network;
-//using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
 using O2.Kernel;
 
 namespace O2.DotNetWrappers.DotNet
@@ -116,8 +116,11 @@ namespace O2.DotNetWrappers.DotNet
 
         public static bool isClickOnceDeployment()
         {
+            var systemDeploymentDll = "System.Deployment".assembly();
+
+            var value = (bool)systemDeploymentDll.type("ApplicationDeployment").prop("IsNetworkDeployed");
             //return ApplicationDeployment.IsNetworkDeployed;
-            return false;
+            return value;
         }
     }
 }
