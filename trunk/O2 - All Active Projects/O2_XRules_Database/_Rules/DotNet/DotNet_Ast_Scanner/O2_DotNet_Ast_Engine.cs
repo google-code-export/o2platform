@@ -806,15 +806,25 @@ namespace O2.Script
 				 	
 				 	
 					var methodDeclaration = AstData_MethodStream.methodDeclaration(iCodeStreamMethod);
-					
+					  
 					if (methodDeclaration != null)
 					{
 						foreach(var parameter in methodDeclaration.parameters())
 							ParametersTreeView.add_Node(parameter.name(),parameter);
 												
 						foreach(var methodCalled in AstData_MethodStream.calledINodesReferences(iCodeStreamMethod))
-							if (methodCalled!= null)
-								MethodsCalledTreeView.add_Node(methodCalled.str(),methodCalled);
+                            if (methodCalled != null && methodCalled is MemberReferenceExpression)
+                            {
+                                var memberReference = (MemberReferenceExpression)methodCalled;
+                                if (memberReference.TargetObject.typeName() == "MemberReferenceExpression")
+                                {
+                                    
+                                    //var asss = methodCalled.name();
+                                    //var iMethod = AstData_MethodStream.fromMemberReferenceExpressionGetMethodDeclaration(memberReference);
+                                    //||memberReference.TargetObject.typeName() == "ObjectCreateExpression")
+                                    MethodsCalledTreeView.add_Node(memberReference.MemberName, methodCalled);
+                                }
+                            }
 					}
 				}
 			}
@@ -822,15 +832,24 @@ namespace O2.Script
 			
 			public void showCodeStream(INode iNode)
 			{					
-				CodeStream = new O2CodeStream(AstData_MethodStream,TaintRules, MethodStreamFile); 
-								
-				if (iNode is ParameterDeclarationExpression)
-					CodeStream.createStream(iNode,null);  				
-				else if (iNode is Expression)
-				{
-					var expressionNode = CodeStream.add_INode(iNode, null);
-					CodeStream.expandTaint(iNode as Expression,null,expressionNode);  
-				}
+				CodeStream = new O2CodeStream(AstData_MethodStream,TaintRules, MethodStreamFile);
+
+                if (iNode is ParameterDeclarationExpression)
+                    CodeStream.createStream(iNode, null);
+                else
+                {
+               //     "here".error();
+                    if (iNode is Expression)
+                    {
+                        var expressionNode = CodeStream.add_INode(iNode, null);
+                        CodeStream.expandTaint(iNode as Expression, null, expressionNode);
+                        var variableDeclaration = iNode.parent<VariableDeclaration>();
+                        if (variableDeclaration != null)
+                        {
+                            CodeStream.createStream(variableDeclaration, CodeStream.O2CodeStreamNodes[CodeStream.INodeStack.Peek()]);
+                        }
+                    }
+                }
 				
 				CodeStream.show(CodeViewer.editor());
 				CodeStream.show(CodeStreamCodeViewer.editor());
