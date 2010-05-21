@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var script = O2Gui.open&lt;ascx_Simple_Script_Editor&gt;("O2 Command Prompt",700,70);  
+script.splitContainer_CommandBox.distance(400);
+script.splitContainer_CommandBox.Panel2.clear();  
+var groupBox = script.splitContainer_Results.controls(true).get&lt;GroupBox&gt;();		
+script.splitContainer_CommandBox.Panel2.add(groupBox);		
+script.commandsToExecute.textEditor().showInvalidLines(false);
+//script.commandsToExecute.textEditor().showLineNumbers(false);
+script.ExecuteOnEnter = true;
+script.commandsToExecute.set_Text("hello");</SourceCode>
+  <ReferencedAssemblies />
+</H2>

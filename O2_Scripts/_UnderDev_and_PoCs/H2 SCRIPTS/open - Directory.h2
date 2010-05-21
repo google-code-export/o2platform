@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var directory = O2Gui.open&lt;ascx_Directory&gt;("Directory"); 
+directory.openDirectory(Environment.CurrentDirectory);
+directory.simpleMode_withAddressBar(); // will work on next publish
+</SourceCode>
+  <ReferencedAssemblies />
+</H2>

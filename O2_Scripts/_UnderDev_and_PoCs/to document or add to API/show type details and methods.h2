@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var info = O2Gui.open&lt;ascx_ShowInfo&gt;();  // using the ascx_ShowInfo as the example   		
+O2Gui.open&lt;ascx_ShowInfo&gt;().show(info);
+O2Gui.open&lt;ascx_ShowInfo&gt;("all").show(info.type().methods());
+O2Gui.open&lt;ascx_ShowInfo&gt;("public").show(info.type().methods_public());
+O2Gui.open&lt;ascx_ShowInfo&gt;("private").show(info.type().methods_private());
+O2Gui.open&lt;ascx_ShowInfo&gt;("declared").show(info.type().methods_declared());
+O2Gui.open&lt;ascx_ShowInfo&gt;("static").show(info.type().methods_static());
+O2Gui.open&lt;ascx_ShowInfo&gt;("instance").show(info.type().methods_instance());
+info.close();</SourceCode>
+  <ReferencedAssemblies />
+</H2>
