@@ -52,7 +52,10 @@ namespace O2.API.AST.ExtensionMethods
 	    				break;
 	    			case "ReturnStatement":       				    				
 	    				o2CodeStream.expandTaint(iNode as ReturnStatement,parentStreamNode);  
-	    				break;    			
+	    				break;
+                    case "InvocationExpression":
+                       o2CodeStream.expandTaint(iNode as Expression,null, parentStreamNode);  
+                       break;
 	    			default:
 	    				"Unsupported stream Node type:{0}".error(iNode.typeName());
 	    				break;
