@@ -10,7 +10,7 @@ namespace O2.XRules.Database._Rules.DotNet.DotNet_Ast_Scanner
 		//modified
         public static string wsdl_CreateCSharp(string sourcefile, string targetDir)
         {
-            return "modified";
+            return "modified2";
         }
        
     }
