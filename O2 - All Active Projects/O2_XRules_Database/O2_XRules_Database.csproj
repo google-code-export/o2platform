@@ -39,7 +39,7 @@
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>67</ApplicationRevision>
+    <ApplicationRevision>68</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -241,61 +241,13 @@
   <ItemGroup>
     <Compile Include="DI.cs" />
     <Compile Include="InstallXRules.cs" />
-    <Compile Include="_Rules\DotNet\old versions\ascx_O2_Command_Line.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="_Rules\_Interfaces\KAnalysisArtifacts.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_Rules\O2 Utils\Wizard - XRule Exec Simple.cs.o2" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow.cs" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_1.cs" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_2.cs" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_3.cs" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_4.cs" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\Analysis_WorkFlow_Phase_5.cs" />
     <Compile Include="_Rules\_Interfaces\IAnalysisArtifacts.cs" />
-    <Compile Include="_Rules\Findings Filtering\XRule_Findings_Filter.cs" />
-    <Compile Include="_Rules\IBM\Wizard_Setup_MySql.cs" />
-    <Compile Include="_Rules\J2EE\Struts\XRule_Struts.cs" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\XUtils_Analysis.cs" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\XUtils_AnalysisWorkflow.cs" />
-    <Compile Include="_Rules\Findings Filtering\xUtils_Findings_v0_1.cs" />
-    <Compile Include="_Rules\J2EE\Struts\XUtils_Struts_Joins_V0_1.cs" />
-    <Compile Include="_Rules\J2EE\Struts\xUtils_Struts_v0_1.cs" />
-    <Compile Include="_Rules\IBM\Analysis_Workflows\Sample_Analysis_Workflow_WebGoat.cs" />
-    <Compile Include="_Rules\_Samples\Support files For Unit Tests\1_helloWorld.cs" />
-    <Compile Include="_Rules\_Samples\Support files For Unit Tests\2_For_UnitTest_HotMethodPatch.cs" />
-    <Compile Include="_Rules\_Samples\Support files For Unit Tests\4_For_UnitTest_SimpleCalls.cs" />
-    <Compile Include="_Rules\_Samples\Support files For Unit Tests\_Sample_UnitTests.cs" />
-    <Compile Include="_Rules\HelloWorld.cs.o2" />
-    <Compile Include="_Rules\_Samples\SampleScripts.cs.o2" />
-    <Compile Include="_Rules\_Samples\SampleUnitTests.cs" />
-    <Compile Include="_Rules\_Samples\SvnTest.cs" />
-    <Compile Include="_Rules\_Samples\Under_Development\Rohit%27s GUI v0.1.cs" />
-    <Compile Include="_Rules\DotNet\ascx_AssemblyAttributes.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\DotNet\ascx_MonoDecompiler.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\Windows Utils\ascx_Running_Processes_Details.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\DotNet\ascx_View_SourceCode_AST.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\Windows Utils\Wizard - Enable or Disable Network Interfaces.cs.o2" />
-    <Compile Include="_Rules\DotNet\Wizard - Start HacmeBank.cs.o2" />
     <Compile Include="_Rules\O2 Utils\Wizard - BackupFolder.cs.o2" />
-    <Compile Include="_Rules\DotNet\Wizard - CopyGacDlls.cs.o2" />
-    <Compile Include="_Rules\Misc Utils\Wizard - SearchEngine UseCase 1.cs.o2" />
-    <Compile Include="_Rules\_Samples\Under_Development\Wizard_ViewStrutsMappings %28under dev%29.cs" />
     <Compile Include="_Rules\O2 Utils\Wizard - Sync XRules Via Svn.cs.o2" />
-    <Compile Include="_Rules\_Sample_Vulnerabilities\Web_SQL_Injection.cs" />
-    <Compile Include="_Rules\_Templates\Empty_XRule.cs" />
-    <Compile Include="_Rules\_Templates\Empty_Class.cs" />
-    <Compile Include="_Rules\_Templates\Local_Findings_Files.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -328,41 +280,9 @@
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
     <Compile Include="ExtensionMethods\HtmlAgilityPack_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Scripts_ExecutionMethods.cs" />
-    <Compile Include="_Rules\APIs\CmdExeAPI.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\APIs\O2MediaWikiAPI.cs" />
-    <Compile Include="_Rules\APIs\O2PlatformWikiAPI.cs" />
-    <Compile Include="_Rules\APIs\O2TwitterAPI.cs" />
-    <Compile Include="_Rules\APIs\OwaspAPI.cs" />
-    <Compile Include="_Rules\APIs\SunOfStrikeApi.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\APIs\Tasks\ascx_SimpleTaskGui.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\APIs\Tasks\ascx_SimpleTaskGui_ExtensionMethods.cs" />
-    <Compile Include="_Rules\APIs\Tasks\ascx_Task_Ping.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\APIs\Tasks\ascx_Task_WebGet.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\APIs\Tasks\ascx_Task_WebPost.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\APIs\WordPressAPI.cs" />
-    <Compile Include="_Rules\Graphs_and_Visualization\ascx_GraphWithInspector.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\Misc Utils\ascx_Create_Links_From_Clipboard.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <None Include="_Rules\APIs\O2_API_Cmd_exe.cs.o2" />
-    <None Include="_Rules\Graphs_and_Visualization\O2 Xaml Editor %28PoC%29.h2" />
     <Compile Include="_Rules\O2 Utils\ascx_Panel_With_Inspector.cs.o2">
       <SubType>Component</SubType>
     </Compile>
@@ -372,93 +292,18 @@
     <Compile Include="_Rules\O2 Utils\ascx_SvnBrower.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\DotNet\DotNet_Ast_Scanner\O2_DotNet_Ast_Engine.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\DotNet\DotNet_Ast_Scanner\O2_DotNet_Ast_Scanner.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="_Rules\O2 Utils\Wizard - SVN Checkout.cs.o2" />
-    <None Include="_Rules\H2 SCRIPTS\O2 Command Prompt.h2" />
-    <None Include="_Rules\H2 SCRIPTS\open - Cir Viewer.h2" />
-    <None Include="_Rules\H2 SCRIPTS\open - Directory.h2" />
-    <None Include="_Rules\H2 SCRIPTS\open - File Search.h2" />
-    <None Include="_Rules\H2 SCRIPTS\open - O2 Object Model.h2" />
-    <None Include="_Rules\H2 SCRIPTS\open - O2 Rules at SVN server.h2" />
-    <None Include="_Rules\H2 SCRIPTS\open - Source Code Editor.h2" />
-    <None Include="_Rules\H2 SCRIPTS\open - Web Browser.h2" />
-    <None Include="_Rules\H2 SCRIPTS\open - XRules Editor.h2" />
     <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Prompt.cs.o2" />
     <Compile Include="_Rules\O2 Utils\SecretDataEditor.cs.o2" />
-    <None Include="_Rules\Misc Utils\O2 Simple Text Editor.h2" />
     <None Include="_Rules\O2 Utils\AutoUpdate - Using Dll Ref.h2" />
     <None Include="_Rules\O2 Utils\AutoUpdate - Using Reflection.h2" />
-    <None Include="_Rules\Web Utils\ascx_Html_Editor.cs.o2" />
-    <None Include="_Rules\Web Utils\ascx_View_WebPage_Details.cs.o2">
-      <SubType>UserControl</SubType>
-    </None>
-    <Compile Include="_Rules\Web Utils\ascx_Translate_Text.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\Web Tools\MediaWikiEditor.cs.o2">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\Windows Utils\ascx_Processes_Stop.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\Windows Utils\ascx_Services_Stop.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <None Include="_Rules\Web Utils\Network Tests %28Ping and Http%29.h2" />
-    <None Include="_Rules\Web Tools\Twitter Client.h2" />
-    <None Include="_Rules\Web Utils\Quick HtmlCode Viewer.h2" />
-    <None Include="_Rules\_UnderDev\PoCs\Load CSharp files and show methods declarations and references.h2" />
-    <None Include="_Rules\_UnderDev\PoCs\load files and create O2CodeStreams from them %28working%29.h2" />
-    <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method %28original version%29.h2" />
-    <None Include="_Rules\_UnderDev\PoCs\map code to ast, codedom and Nrefactor and insert method.h2" />
-    <None Include="_Rules\_UnderDev\PoCs\O2 DotNet AST Scanner %28First fully working PoC%29.h2" />
-    <None Include="_Rules\_UnderDev\PoCs\view code in AST with code expantion.h2" />
-    <None Include="_Rules\_UnderDev\PoCs\view code in AST with code usage %281 level down%29.h2" />
-    <None Include="_Rules\_UnderDev\PoC_Add textbox to graph.h2" />
-    <None Include="_Rules\_UnderDev\PoC_GraphWithInspector.h2" />
-    <None Include="_Rules\_UnderDev\To Blog about\Irony Parser - First Test.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\backup folders.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\create PDF with text and Image.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\Graph and Script - Dev environment.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\Graph development environment.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\search files and filter by name.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\show AutoSavedScripts.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\show type details and methods.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\Stop services after startup.h2" />
-    <None Include="_Rules\_UnderDev\to document or add to API\View Code AST In Graph.h2" />
-    <None Include="_Rules\_UnderDev\Visualization Tests\visualizing assembly properties.h2" />
-    <None Include="_Rules\_UnderDev\Visualization Tests\visualizing xml to object path.h2" />
-    <Compile Include="_Rules\Windows Utils\ascx_Start_Tools.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="_Rules\_Interfaces\ISecretData.cs" />
-    <Compile Include="_Rules\_Samples\Example of Ascx Control Injection.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\_Samples\Under_Development\ascx_WebBrowser_with_FormData.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\SqlCommand.cs" />
-    <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\HttpContext.cs" />
-    <Compile Include="_Rules\_Sample_Vulnerabilities\_MockClasses\HttpRequest.cs" />
-    <Compile Include="_Rules\_UnderDev\Develop_Visualization_API.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\_UnderDev\To Blog about\FirstTest.cs" />
-    <Compile Include="_Rules\_UnderDev\To Blog about\Irony Parser - CmdExe_Dir.cs" />
     <None Include="_tempDevFiles\Extra_methods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="H2Logo.ico" />
     <Content Include="Images\O2Logo_Medium.gif" />
     <Content Include="O2Logo.ico" />
-    <Content Include="_Rules\Graphs_and_Visualization\KaxamlSnippets.xml" />
-    <Content Include="_Rules\_UnderDev\PoCs\SosAPI and GUI %28with script with loop%29.txt" />
   </ItemGroup>
   <ItemGroup>
     <FileAssociation Include=".h2">

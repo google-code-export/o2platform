@@ -25,6 +25,8 @@ namespace O2.API.AST.CSharp
 		public Dictionary<string, CompilationUnit> FileToCompilationUnit { get; set; }
 		
         public Dictionary<string, List<ISpecial>> FileToSpecials {get;set;}
+        public bool debugMode { get; set; }
+
         /*//from MapAstToDom
         public Dictionary<CompilationUnit, List<CodeNamespace>> CompilationUnitToNameSpaces { get; set; }
         public Dictionary<MethodDeclaration, CodeMemberMethod> MethodsAstToDom { get; set; }

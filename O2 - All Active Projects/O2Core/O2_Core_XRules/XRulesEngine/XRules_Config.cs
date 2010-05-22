@@ -12,7 +12,7 @@ namespace O2.Core.XRules.XRulesEngine
         
         static XRules_Config()
         {
-            PathTo_XRulesDatabase_fromO2 = @"C:\O2\XRulesDatabase\_Rules";
+            PathTo_XRulesDatabase_fromO2 = @"C:\O2\O2Scripts_Database\_Scripts";
             PathTo_XRulesDatabase_fromLocalDisk = @"C:\O2\_XRules_Local";
             PathTo_XRulesTemplates = PathTo_XRulesDatabase_fromO2 + @"\_Templates";
             PathTo_XRulesCompiledDlls = PathTo_XRulesDatabase_fromO2 + @"\..\_CompiledDlls";

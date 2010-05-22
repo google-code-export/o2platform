@@ -16,6 +16,24 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return iMethod.Name;
         }
 
+        public static string fullName(this IMethodOrProperty iMethodOrProperty)
+        {
+            if (iMethodOrProperty is IMethod)
+                return (iMethodOrProperty as IMethod).fullName();
+            else if (iMethodOrProperty is IProperty)
+                return (iMethodOrProperty as IProperty).fullName();
+            return "[null value]";
+        }
+
+        public static string fullName(this IProperty iProperty)
+        {
+            if (iProperty == null)
+                return "[null value]";
+            CSharpAmbience ambience = new CSharpAmbience();
+            ambience.ConversionFlags = ConversionFlags.StandardConversionFlags | ConversionFlags.UseFullyQualifiedMemberNames | ConversionFlags.UseFullyQualifiedTypeNames;
+            return ambience.Convert(iProperty);
+        }
+
         public static string fullName(this IMethod iMethod)
         {
             if (iMethod == null)

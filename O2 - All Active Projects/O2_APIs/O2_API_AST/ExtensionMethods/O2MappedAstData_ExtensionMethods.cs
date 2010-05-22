@@ -49,17 +49,20 @@ namespace O2.API.AST.ExtensionMethods
 
         public static INode iNode(this O2MappedAstData o2MappedAstData, string file, Caret caret)
         {
-            if (o2MappedAstData.FileToINodes.hasKey(file))
+            if (o2MappedAstData != null && file != null && caret != null)
             {
-                var allINodes = o2MappedAstData.FileToINodes[file];
-                var adjustedLine = caret.Line + 1;
-                var adjustedColumn = caret.Column + 1;
-                var iNode = allINodes.getINodeAt(adjustedLine, adjustedColumn);
-                if (iNode != null)
-                    return iNode;
-                "Could not find iNOde for position {0}:{1} in file:{2}".format(adjustedLine, adjustedColumn, file).error();
+                if (o2MappedAstData.FileToINodes.hasKey(file))
+                {
+                    var allINodes = o2MappedAstData.FileToINodes[file];
+                    var adjustedLine = caret.Line + 1;
+                    var adjustedColumn = caret.Column + 1;
+                    var iNode = allINodes.getINodeAt(adjustedLine, adjustedColumn);
+                    if (iNode != null)
+                        return iNode;
+                    "Could not find iNOde for position {0}:{1} in file:{2}".format(adjustedLine, adjustedColumn, file).error();
+                }
+                "o2MappedAstData did not have INodes for file:{0}".format(file).error();
             }
-            "o2MappedAstData did not have INodes for file:{0}".format(file).error();
             return null;
         }
 
@@ -254,6 +257,13 @@ namespace O2.API.AST.ExtensionMethods
 
         public static IMethod fromExpressionGetIMethod(this O2MappedAstData o2MappedAstData, Expression expression)
         {
+            var result = o2MappedAstData.fromExpressionGetIMethodOrProperty(expression);
+            if (result is IMethod)
+                return (IMethod)result;
+            return null;
+        }
+        public static IMethodOrProperty fromExpressionGetIMethodOrProperty(this O2MappedAstData o2MappedAstData, Expression expression)
+        {
             if (expression == null)
                 return null;
             var compilationUnit = expression.compilationUnit();
@@ -276,12 +286,17 @@ namespace O2.API.AST.ExtensionMethods
                 if (resolved is MemberResolveResult)
                 {
                     var memberResolveResult = (MemberResolveResult)resolved;
-                    if (memberResolveResult.ResolvedMember is IMethod)
-                        return memberResolveResult.ResolvedMember as IMethod;
+                    if (memberResolveResult.ResolvedMember is IMethodOrProperty)
+                        return memberResolveResult.ResolvedMember as IMethodOrProperty;
                     //else
                     //    "in fromExpressionGetIMethod, could not resolve Expression".error();
                 }
             return null;
+        }
+
+        public static IMethodOrProperty fromMemberReferenceExpressionGetIMethodOrProperty(this O2MappedAstData o2MappedAstData, MemberReferenceExpression memberReferenceExpression)
+        {
+            return o2MappedAstData.fromExpressionGetIMethodOrProperty(memberReferenceExpression as Expression);  
         }
 
         public static IMethod fromMemberReferenceExpressionGetIMethod(this O2MappedAstData o2MappedAstData, MemberReferenceExpression memberReferenceExpression)
@@ -687,9 +702,14 @@ namespace O2.API.AST.ExtensionMethods
 
         public static MethodDeclaration methodDeclaration(this O2MappedAstData o2MappedAstData, IMethod iMethod)
         {
+            //try to find by Key
             if (iMethod != null)
                 if (o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration.hasKey(iMethod))
                     return o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration[iMethod];
+            //try to find by Signature
+            foreach (var item in o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration)
+                if (item.Key.fullName() == iMethod.fullName())
+                    return item.Value;
             return null;
         }
 
@@ -778,6 +798,45 @@ namespace O2.API.AST.ExtensionMethods
 
         
 
+        #endregion
+
+        #region show in WindowsForms
+
+        public static O2MappedAstData showMethodStreamDetailsInTreeViews(this O2MappedAstData astData, TreeView ParametersTreeView, TreeView MethodsCalledTreeView)
+        {
+            ParametersTreeView.clear();
+            MethodsCalledTreeView.clear();
+
+            if (astData.iMethods().size() == 0)
+                "AstData_MethodStream.iMethods().size() == 0".debug();
+            else
+            {
+                var iCodeStreamMethod = astData.iMethods()[0];
+                iCodeStreamMethod.str().info();
+
+                var methodDeclaration = astData.methodDeclaration(iCodeStreamMethod);
+
+                if (methodDeclaration != null)
+                {
+                    foreach (var parameter in methodDeclaration.parameters())
+                        ParametersTreeView.add_Node(parameter.name(), parameter);
+
+                    foreach (var methodCalled in astData.calledINodesReferences(iCodeStreamMethod))
+                        if (methodCalled != null)
+                            if (methodCalled is MemberReferenceExpression)
+                            {
+                                var memberReference = (MemberReferenceExpression)methodCalled;
+                                if (memberReference.TargetObject.typeName() == "MemberReferenceExpression")
+                                {
+                                    MethodsCalledTreeView.add_Node(memberReference.MemberName, methodCalled);
+                                }
+                                else
+                                    MethodsCalledTreeView.add_Node(">" + memberReference, methodCalled);
+                            }
+                }
+            }
+            return astData;
+        } 
         #endregion
     }
 }

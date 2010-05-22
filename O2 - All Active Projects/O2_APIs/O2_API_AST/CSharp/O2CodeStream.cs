@@ -26,8 +26,8 @@ namespace O2.API.AST.CSharp
     	public Dictionary<INode, O2CodeStreamNode> O2CodeStreamNodes { get; set; }
     	public string SourceFile { get; set; }
     	public Stack<INode> INodeStack { get; set; }    	
-    	public List<O2CodeStreamNode> StreamNode_First { get; set; }    
-    	    	    	    	    
+    	public List<O2CodeStreamNode> StreamNode_First { get; set; }        	
+    	    	    	    
 		public O2CodeStream(O2MappedAstData o2MappedAstData , O2CodeStreamTaintRules taintRules , string sourceFile )
 		{
 			 O2MappedAstData = o2MappedAstData;

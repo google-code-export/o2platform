@@ -18,7 +18,8 @@ namespace O2.Core.XRules.Classes
     public class SvnApi
     {
         public static string svnO2RootFolder = "http://o2platform.googlecode.com/svn/trunk/";		
-        public static string svnO2DatabaseRulesFolder = "http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules";        
+        //public static string svnO2DatabaseRulesFolder = "http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules";
+        public static string svnO2DatabaseRulesFolder = "http://o2platform.googlecode.com/svn/trunk/O2_Scripts/";
 
     	private static IO2Log log = PublicDI.log;
 

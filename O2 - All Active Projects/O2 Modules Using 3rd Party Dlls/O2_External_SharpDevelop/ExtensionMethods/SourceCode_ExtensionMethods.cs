@@ -489,11 +489,11 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 "in ascx_SourceCodeEditor.selectTextWithColor selection.Length was <  0".error();
                 return codeEditor;
             }
-            "offset: {0} : lenght {1}".format(selection.Offset, selection.Length).info();
+            //"offset: {0} : lenght {1}".format(selection.Offset, selection.Length).info();
             return (ascx_SourceCodeEditor)codeEditor.invokeOnThread(
             () =>
             {
-                "offset: {0} : lenght {1}".format(selection.Offset, selection.Length).info();
+                //"offset: {0} : lenght {1}".format(selection.Offset, selection.Length).info();
                 var newMarker = new TextMarker(
                                         selection.Offset,
                                         selection.Length,

@@ -147,6 +147,15 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                     });
         }
 
+        public static string get_Text(this Label label)
+        {
+            return (string)label.invokeOnThread(
+                () =>
+                {
+                    return label.Text;
+                });
+        }
+
         public static Label textColor(this Label label, Color color)
         {
             return (Label)label.invokeOnThread(

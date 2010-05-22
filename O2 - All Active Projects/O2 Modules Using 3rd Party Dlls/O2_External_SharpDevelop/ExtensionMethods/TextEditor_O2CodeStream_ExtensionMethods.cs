@@ -13,8 +13,11 @@ namespace O2.External.SharpDevelop.ExtensionMethods
     {
         public static O2CodeStream show(this O2CodeStream o2CodeStream, ascx_SourceCodeEditor codeEditor)
         {
-            codeEditor.open(o2CodeStream.SourceFile);
-            codeEditor.colorINodes(o2CodeStream.iNodes());
+            if (o2CodeStream != null)
+            {
+                codeEditor.open(o2CodeStream.SourceFile);
+                codeEditor.colorINodes(o2CodeStream.iNodes());
+            }
 
             //var iNodes =
             //var file = o2CodeStream.O2MappedAstData.file(node.INode);
