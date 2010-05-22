@@ -21,17 +21,26 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 if (control.InvokeRequired)
                 {
                     object returnData = null;
-                    var sync = new AutoResetEvent(false);
-                    control.Invoke(new EventHandler((sender, e) =>
-                                                        {
-                                                            returnData = codeToInvoke();
-                                                            sync.Set();
-                                                        }));
-                    sync.WaitOne();
+                    lock (control)
+                    {                        
+                        var sync = new AutoResetEvent(false);
+                        control.Invoke(new EventHandler((sender, e) =>
+                                                            {
+                                                                try
+                                                                {
+                                                                    returnData = codeToInvoke();
+                                                                }
+                                                                catch (Exception ex)
+                                                                {
+                                                                    System.Diagnostics.Debug.WriteLine("in invokeOnThread: " + ex.Message);
+                                                                }
+                                                                sync.Set();
+                                                            }));
+                        sync.WaitOne();
+                    }
                     return returnData;
                 }
                 return codeToInvoke();
-
             }
 
             catch (Exception ex)

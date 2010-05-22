@@ -73,7 +73,7 @@ namespace ICSharpCode.SharpDevelop.Dom.NRefactoryResolver
 		public ResolveResult Resolve(Expression expression)
 		{
 			ResolveResult rr;
-			if (!cachedResults.TryGetValue(expression, out rr)) {
+			if (!cachedResults.TryGetValue(expression, out rr))  {
 				rr = (ResolveResult)expression.AcceptVisitor(this, null);
 				if (rr != null)
 					rr.Freeze();
