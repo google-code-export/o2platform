@@ -42,8 +42,9 @@ using O2.XRules.Database.O2Utils;
 //O2Ref:ICSharpCode.AvalonEdit.dll
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:System.Data.dll
+//O2File:C:\O2\_XRules_Local\Extra_methods.cs
 
-namespace O2.Script
+namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 {
     public class O2_DotNet_Ast_Engine : UserControl
 	{	 			
@@ -96,6 +97,7 @@ namespace O2.Script
 								         .append_Link("search AST", ()=> step_SearchAST())
 								         .append_Link("search Comments", ()=> step_SearchComments())
 								         .append_Link("method streams", ()=> step_MethodStreams())
+								         .append_Link("manual method stream", ()=> step_ManualMethodStream())
 								         .append_Link("write rule", ()=> step_WriteRule())								         
 								         .append_Link("view findings",()=> step_ViewFindings())
 								         .append_Control<ProgressBar>();
@@ -135,7 +137,13 @@ namespace O2.Script
 		public Step_MethodStreams step_MethodStreams()
 		{
 			return new Step_MethodStreams(this);
+		}				
+		
+		public Step_ManualMethodStream step_ManualMethodStream()
+		{
+			return new Step_ManualMethodStream(this);
 		}
+		
 		
 		public Step_WriteRule step_WriteRule()
 		{
@@ -743,8 +751,8 @@ namespace O2.Script
 				AstData_MethodStream.afterSelect_ShowInSourceCodeEditor(MethodsCalledTreeView, CodeViewer.editor()); 
 				AstData_MethodStream.afterSelect_ShowInSourceCodeEditor(ParametersTreeView, CodeViewer.editor());
 																
-				MethodsCalledTreeView.afterSelect<INode>((iNode)=>showCodeStream(iNode));
-				ParametersTreeView.afterSelect<INode>((iNode)=>showCodeStream(iNode));
+				MethodsCalledTreeView.afterSelect<INode>((iNode)=> createAndShowCodeStream(iNode));
+				ParametersTreeView.afterSelect<INode>((iNode)=> createAndShowCodeStream(iNode));
 				
 				MethodsTreeView.beforeExpand_PopulateWithList<ISpecial>();							
 				
@@ -773,7 +781,8 @@ namespace O2.Script
 			{
 			
 				createMethodStream(iMethod);
-				showMethodStreamInGui();							
+				//showMethodStreamInGui();											
+				AstData_MethodStream.showMethodStreamDetailsInTreeViews(ParametersTreeView, MethodsCalledTreeView);
 			}
 			
 			public void createMethodStream(IMethod iMethod)
@@ -788,69 +797,16 @@ namespace O2.Script
 				AstData_MethodStream.loadFile(MethodStreamFile);								
 			}
 			
-			public void showMethodStreamInGui()
+			
+			
+			public void createAndShowCodeStream(INode iNode)
 			{
-				ParametersTreeView.clear();
-				MethodsCalledTreeView.clear();
-				
-				if (AstData_MethodStream.iMethods().size() == 0)
-					"AstData_MethodStream.iMethods().size() == 0".debug();
-				else
-				{
-					var iCodeStreamMethod = AstData_MethodStream.iMethods()[0];
-					iCodeStreamMethod.str().info();
-										
-					//AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(MethodsCalledTreeView, CodeViewer.editor()); 				
-					//AstData_MethodStream.afterSelect_ShowInSourceCodeEditor2(ParametersTreeView, CodeViewer.editor());  		   			
-					
-				 	
-				 	
-					var methodDeclaration = AstData_MethodStream.methodDeclaration(iCodeStreamMethod);
-					  
-					if (methodDeclaration != null)
-					{
-						foreach(var parameter in methodDeclaration.parameters())
-							ParametersTreeView.add_Node(parameter.name(),parameter);
-												
-						foreach(var methodCalled in AstData_MethodStream.calledINodesReferences(iCodeStreamMethod))
-                            if (methodCalled != null && methodCalled is MemberReferenceExpression)
-                            {
-                                var memberReference = (MemberReferenceExpression)methodCalled;
-                                if (memberReference.TargetObject.typeName() == "MemberReferenceExpression")
-                                {
-                                    
-                                    //var asss = methodCalled.name();
-                                    //var iMethod = AstData_MethodStream.fromMemberReferenceExpressionGetMethodDeclaration(memberReference);
-                                    //||memberReference.TargetObject.typeName() == "ObjectCreateExpression")
-                                    MethodsCalledTreeView.add_Node(memberReference.MemberName, methodCalled);
-                                }
-                            }
-					}
-				}
+				CodeStream = AstData_MethodStream.createO2CodeStream(TaintRules, MethodStreamFile,iNode);
+				showCodeStream();
 			}
 			
-			
-			public void showCodeStream(INode iNode)
-			{					
-				CodeStream = new O2CodeStream(AstData_MethodStream,TaintRules, MethodStreamFile);
-
-                if (iNode is ParameterDeclarationExpression)
-                    CodeStream.createStream(iNode, null);
-                else
-                {
-               //     "here".error();
-                    if (iNode is Expression)
-                    {
-                        var expressionNode = CodeStream.add_INode(iNode, null);
-                        CodeStream.expandTaint(iNode as Expression, null, expressionNode);
-                        var variableDeclaration = iNode.parent<VariableDeclaration>();
-                        if (variableDeclaration != null)
-                        {
-                            CodeStream.createStream(variableDeclaration, CodeStream.O2CodeStreamNodes[CodeStream.INodeStack.Peek()]);
-                        }
-                    }
-                }
-				
+			public void showCodeStream()
+			{							
 				CodeStream.show(CodeViewer.editor());
 				CodeStream.show(CodeStreamCodeViewer.editor());
 				CodeStream.show(CodeStreamTreeView);
@@ -861,6 +817,180 @@ namespace O2.Script
 			}
 		}
 		
+		public class Step_ManualMethodStream
+		{
+			public O2_DotNet_Ast_Engine AstEngine { get; set; }
+		
+			public O2MappedAstData AstData_MethodStream { get; set; }
+			//public O2MethodStream MethodStream { get; set; }
+			//public O2CodeStream CodeStream { get; set; }			
+			//public O2CodeStreamTaintRules TaintRules { get; set; }
+			public String MethodStreamFile { get; set; }
+			public INode CurrentINode { get; set; }
+			
+			//public TreeView MethodsTreeView  { get; set; }
+			public TreeView ParametersTreeView  { get; set; }
+			public TreeView MethodsCalledTreeView { get; set; }
+			public ascx_SourceCodeViewer CodeViewer { get; set; }			
+			public GraphLayout CodeStreamGraph { get; set; }	
+			public TreeView CodeStreamTreeView { get; set; }	
+			public TabPage CodeStreamGraphTab { get; set; }
+			public TabPage CodeStreamTreeViewTab { get; set; }
+			public Label CurrentINodeLabel { get; set; }
+			
+			public LinkLabel SaveCodeLink { get; set; }
+			public LinkLabel showINodeLink { get; set; }
+			//public String MethodsFilter { get; set; }
+			public ascx_SourceCodeViewer CodeStreamCodeViewer  { get; set; }	
+			
+			public Step_ManualMethodStream(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;
+				buildGui();
+				loadDataInGui();
+				//TaintRules = new O2CodeStreamTaintRules(); 
+				//TaintRules.add_TaintPropagator("System.String.Concat");
+			}	
+			
+			public void buildGui()
+			{
+				AstEngine.HostPanel.clear();												
+
+				var topPanel = AstEngine.HostPanel.add_1x1("Methods & Parameters", "Source Code", true, 700);
+				var tabControl = topPanel[1].add_TabControl(); 
+				//CodeViewer = tabControl.add_Tab("Source Code").add_SourceCodeViewer();				
+				CodeViewer = topPanel[0].add_SourceCodeViewer();
+				CodeViewer.editor().colorCodeForExtension(".cs");
+				CodeStreamTreeViewTab = tabControl.add_Tab("CodeStream TreeView");
+				//CodeStreamGraphTab = tabControl.add_Tab("CodeStream Graph");
+				//CodeStreamGraphTab.backColor(Color.White);				
+				//CodeStreamCodeViewer = CodeStreamTreeViewTab.add_SourceCodeViewer();
+				//CodeStreamTreeView = CodeStreamCodeViewer.insert_Left<TreeView>(200);
+				CodeStreamTreeView = CodeStreamTreeViewTab.add_TreeView();
+				//CodeStreamGraph = CodeStreamGraphTab.add_Panel().add_Graph(); 
+				
+				ParametersTreeView =  CodeViewer.insert_Below<TreeView>(100);
+				MethodsCalledTreeView =  ParametersTreeView.insert_Right<TreeView>(200);
+				var commandsPanel = ParametersTreeView.insert_Left<Panel>(100);
+				SaveCodeLink = commandsPanel.add_Link("save code", 0,0, ()=> saveEditorContents());
+				CurrentINodeLabel = commandsPanel.add_Label("current INode: ", 25,0); 				
+				
+				showINodeLink = commandsPanel.add_Link("show INode CodeStream", 50,0, ()=> showCurrentINodeCodeStream());
+				 
+				// context menu
+				 
+				/*MethodsCalledTreeView.add_ContextMenu()
+						  		     .add_MenuItem("Show Method Stream Details", ()=> showMethodStreamDetails(CodeViewer.get_Text()));
+				*/	
+				//events
+				
+				CodeStreamTreeView.afterSelect<O2CodeStreamNode>
+				 	((streamNode)=> CodeViewer.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation));				
+				
+				MethodsCalledTreeView.afterSelect<INode>((iNode)=>createAndShowCodeStream(iNode));
+				ParametersTreeView.afterSelect<INode>((iNode)=>createAndShowCodeStream(iNode));
+				
+				CodeViewer.onCaretMove((caret)=> findINodeAtCaretLocation(caret));
+				//CodeViewer.editor().eDocumentDataChanged += (text)=> saveEditorContents();
+								
+			}
+			
+			public void loadDataInGui()
+			{
+			
+			}
+			
+			public void saveEditorContents()
+			{
+				
+				if (MethodStreamFile.fileExists())
+					Files.deleteFile(MethodStreamFile);			// delete previous file since we don't need it anymore
+								
+				var code = CodeViewer.get_Text();				
+				MethodStreamFile = code.saveWithExtension(".cs");
+				"saving editor contents: {0}".info(MethodStreamFile);	
+				
+				//O2AstResolver cachedO2AstResolver = null;
+				//if (AstData_MethodStream != null)
+				//	cachedO2AstResolver = AstData_MethodStream.O2AstResolver;
+				
+				AstData_MethodStream = new O2MappedAstData(); 		
+				//if (cachedO2AstResolver !=null)
+				//{
+				//	"using chached references".debug();
+				//	AstData_MethodStream.O2AstResolver = cachedO2AstResolver;
+				//}
+				//else
+				//{
+					AstData_MethodStream.O2AstResolver.addReference("System.Web");
+					AstData_MethodStream.O2AstResolver.addReference("System.Web.Services");
+					"added reference to System.Web".info();
+				//}
+					
+				
+				AstData_MethodStream.loadFile(MethodStreamFile);	
+			}
+			
+			public void findINodeAtCaretLocation(ICSharpCode.TextEditor.Caret caret)
+			{	
+				
+				if (AstData_MethodStream!=null)
+				{
+					var iNode = AstData_MethodStream.iNode(MethodStreamFile, caret);
+					if (iNode != null)	
+					{
+						//CodeViewer.editor().selectTextWithColor(iNode);	
+						if (iNode is TypeReference)
+							iNode = iNode.Parent;
+							
+						CurrentINode = iNode;
+						CurrentINodeLabel.set_Text("current iNode:{0}".format(iNode.typeName()));						
+						
+						//"current iNode:{0} : {1}".debug(iNode.typeName(), iNode);	
+						
+						//createAndShowCodeStream(iNode);
+					}
+				}				
+			}
+			
+			/*public void showMethodStreamDetails(string code)
+			{
+				code.info();				
+								
+				
+				AstData_MethodStream = new O2MappedAstData(); 							
+				AstData_MethodStream.loadFile(MethodStreamFile);	
+				AstData_MethodStream.showMethodStreamDetailsInTreeViews(ParametersTreeView, MethodsCalledTreeView);
+			}*/
+			
+			public void showCurrentINodeCodeStream()
+			{
+				createAndShowCodeStream(CurrentINode);
+			}
+			
+			public void createAndShowCodeStream(INode iNode)
+			{
+				if (iNode != null)
+				{
+					CodeViewer.editor().selectTextWithColor(iNode);	
+					
+					var taintRules = new O2CodeStreamTaintRules();
+					taintRules.add_TaintPropagator("System.Int32.Parse");					
+					var codeStream = AstData_MethodStream.createO2CodeStream(taintRules, MethodStreamFile,iNode);
+					//var codeStream = AstData_MethodStream.createO2CodeStream(MethodStreamFile,iNode);
+					if (codeStream.hasPaths())
+						showCodeStream(codeStream);
+				}
+			}
+			
+			public void showCodeStream(O2CodeStream codeStream)
+			{							
+				codeStream.show(CodeViewer.editor());
+				codeStream.show(CodeStreamTreeView);
+				CodeStreamTreeView.expand();
+			}
+			
+		}
 		
 		public class Step_WriteRule
 		{
