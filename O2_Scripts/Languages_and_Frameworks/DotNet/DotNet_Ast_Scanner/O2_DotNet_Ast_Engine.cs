@@ -376,9 +376,9 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 							       .insert_Left<Label>(100);*/
 				//OptionsTab
 				//helpTab				
-				HelpTab.add_Browser()
-					   .silent(true)
-					   .add_WikiHelpPage(wikiHelpPage);				
+				//HelpTab.add_Browser()
+				//	   .silent(true)
+				//	   .add_WikiHelpPage(wikiHelpPage);				
 			}
 			
 			public void addReferenceAssembly(string assembly)
