@@ -168,7 +168,7 @@ namespace O2.Views.ASCX.classes.MainGUI
                                         richTextBox.SelectionStart = 0;
                                         richTextBox.SelectionLength = sText.Length;
                                         richTextBox.SelectionColor = cColour;
-                                        Application.DoEvents();
+                                        //Application.DoEvents();
                                         // System.Diagnostics.Debug.WriteLine(sText);                              
                                         //if (bAlsoSendMessageToDebugView)
                                         //    Debug.WriteLine(sText);

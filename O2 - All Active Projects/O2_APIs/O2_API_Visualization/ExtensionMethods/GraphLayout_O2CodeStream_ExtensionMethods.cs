@@ -25,12 +25,16 @@ namespace O2.API.Visualization.ExtensionMethods
 
             if (previousNode == null)
                 graphLayout.add_Node(streamNode);
-            else
+            else            
                 graphLayout.add_Edge(previousNode, streamNode);
+
 
             foreach (var childNode in streamNode.ChildNodes)
             {
-                childNode.show_StreamNode(graphLayout, streamNode);
+                if (streamNode != childNode)
+                    childNode.show_StreamNode(graphLayout, streamNode);
+                else
+                    O2.Kernel.ExtensionMethods.Logging_ExtensionMethods.error("in show_StreamNode, streamNode ==  childNode: {0}", childNode.Text);
             }
         }
     }

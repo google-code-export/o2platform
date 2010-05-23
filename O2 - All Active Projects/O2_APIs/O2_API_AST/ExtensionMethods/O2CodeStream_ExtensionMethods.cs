@@ -133,10 +133,15 @@ namespace O2.API.AST.ExtensionMethods
                     for (int i = 0; i < streamNode.ChildNodes.size(); i++)
                     {
                         var childStream = streamNode.ChildNodes[i];
-                        if (i > 0)								//create a copy of the current stream for branches																				
-                            streamPaths.Add(new List<O2CodeStreamNode>(streamPath), childStream);
+                        if (childStream != streamNode)
+                        {
+                            if (i > 0)								//create a copy of the current stream for branches																				
+                                streamPaths.Add(new List<O2CodeStreamNode>(streamPath), childStream);
+                            else
+                                streamPaths.Add(streamPath, childStream);
+                        }
                         else
-                            streamPaths.Add(streamPath, childStream);
+                            "in createUniqueStreamPath: childStream = streamNode.ChildNodes[{0}]".error(i);
                     }
                     foreach (var item in streamPaths)
                         uniqueStreamPaths.createUniqueStreamPath(maxDepth, item.Key, item.Value);
@@ -397,7 +402,7 @@ namespace O2.API.AST.ExtensionMethods
 				return streamNode;
     		}   
     		var existingStreamNode = o2CodeStream.O2CodeStreamNodes[iNode];
-			if (parentStreamNode!= null)
+            if (parentStreamNode != null && parentStreamNode != existingStreamNode)
 				parentStreamNode.ChildNodes.Add(existingStreamNode);					
     		return existingStreamNode;
         }

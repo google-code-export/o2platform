@@ -81,7 +81,10 @@ namespace O2.API.Visualization.ExtensionMethods
 
         public static GraphLayout add_Edge(this GraphLayout graphLayout, object fromVertex, object toVertex)
         {
-            return graphLayout.edge(fromVertex, toVertex);
+            if (fromVertex != toVertex)
+                return graphLayout.edge(fromVertex, toVertex);
+            else
+                return graphLayout.add_Node(fromVertex);
         }
     	
     	public static GraphLayout edge(this GraphLayout graphLayout,object fromVertex, object toVertex)

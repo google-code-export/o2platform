@@ -21,23 +21,26 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 if (control.InvokeRequired)
                 {
                     object returnData = null;
-                    lock (control)
-                    {                        
+                    //lock (control)
+                    //{                        
                         var sync = new AutoResetEvent(false);
                         control.Invoke(new EventHandler((sender, e) =>
                                                             {
-                                                                try
-                                                                {
+                                                                //try
+                                                                //{
                                                                     returnData = codeToInvoke();
-                                                                }
-                                                                catch (Exception ex)
-                                                                {
-                                                                    System.Diagnostics.Debug.WriteLine("in invokeOnThread: " + ex.Message);
-                                                                }
+                                                                //}
+                                                                //catch (Exception ex)
+                                                                //{
+                                                                //    System.Diagnostics.Debug.WriteLine("in invokeOnThread: " + ex.Message);
+                                                                //}
                                                                 sync.Set();
                                                             }));
-                        sync.WaitOne();
-                    }
+                        if (sync.WaitOne(2000).isFalse())
+                        {
+                            return null;
+                        }
+                    //}
                     return returnData;
                 }
                 return codeToInvoke();
