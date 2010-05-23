@@ -179,44 +179,47 @@ namespace O2.XRules.Database
                 statusLabel.set_Text("showing rtf document: {0}".format(fileToLoad));
                 return show.document(fileToLoad);  
             }
-            return loadH2Script(fileToLoad);
+            loadH2Script(fileToLoad);
+            return null; 
         }
 
-     	public object loadH2Script(string scriptToLoad)
-     	{            
-     		if (scriptToLoad.fileName().starts(this.typeName()))
-     		{
-           		PublicDI.log.error("We can execute the current type of we will get a recursive load :)");
-				return null;
-			}					     		
-     		currentScript = scriptToLoad;
-     		statusLabel.set_Text("loading script: {0}".format( scriptToLoad.fileName()));
-     		
-     		csharpCompiler = new CSharp_FastCompiler();     
-			     		 		
-	    	csharpCompiler.onAstFail = ()=> showError("Ast creation failed", csharpCompiler.AstErrors);
-	     			 
-	     	csharpCompiler.onAstOK = ()=> showInfo("Ast creation Ok");	     				     		 		
-     		 		
-     		csharpCompiler.onCompileFail = () => showError("Compilation failed", csharpCompiler.CompilationErrors);
-     		 		
-     		csharpCompiler.onCompileOK =
-							     		 	()=>{
-							     					showInfo("Compilation Ok: Executing 1st method");
-							     					var result = (executeCompiledCode() ?? "").ToString();
-							     					showInfo("Execution Completed",result);     					     					
-												};
-			
-			var sourceCode = "";			
-			if (scriptToLoad.extension(".h2"))
-				sourceCode = H2.load(scriptToLoad).SourceCode;
-			if (scriptToLoad.extension(".o2") || scriptToLoad.extension(".cs"))
-				sourceCode = scriptToLoad.contents();			
-			if (sourceCode.valid())
-				csharpCompiler.compileSnippet(sourceCode);
-			else
-				statusLabel.set_Text("Non supported file").textColor(this,Color.Red);					
-            return csharpCompiler;
+     	public void loadH2Script(string scriptToLoad)
+     	{
+            O2Thread.mtaThread(() =>
+            {
+                if (scriptToLoad.fileName().starts(this.typeName()))
+                {
+                    PublicDI.log.error("We can execute the current type of we will get a recursive load :)");
+                    return;
+                }
+                currentScript = scriptToLoad;
+                statusLabel.set_Text("loading script: {0}".format(scriptToLoad.fileName()));
+
+                csharpCompiler = new CSharp_FastCompiler();
+
+                csharpCompiler.onAstFail = () => showError("Ast creation failed", csharpCompiler.AstErrors);
+
+                csharpCompiler.onAstOK = () => showInfo("Ast creation Ok");
+
+                csharpCompiler.onCompileFail = () => showError("Compilation failed", csharpCompiler.CompilationErrors);
+
+                csharpCompiler.onCompileOK =
+                                                () =>
+                                                {
+                                                    showInfo("Compilation Ok: Executing 1st method");
+                                                    executeCompiledCode();                                                    
+                                                };
+
+                var sourceCode = "";
+                if (scriptToLoad.extension(".h2"))
+                    sourceCode = H2.load(scriptToLoad).SourceCode;
+                if (scriptToLoad.extension(".o2") || scriptToLoad.extension(".cs"))
+                    sourceCode = scriptToLoad.contents();
+                if (sourceCode.valid())
+                    csharpCompiler.compileSnippet(sourceCode);
+                else
+                    statusLabel.set_Text("Non supported file").textColor(this, Color.Red);
+            });
      	}     	  
      	
      	public void showLoadedScriptSourceCode()
@@ -324,20 +327,26 @@ namespace O2.XRules.Database
             O2Gui.open<ascx_LogViewer>();
         }
 
-     	public object executeCompiledCode()
+     	public void executeCompiledCode()
      	{
-            try
-            {
-     		    if (csharpCompiler != null)
-     			    if (csharpCompiler.CompilerResults != null)
-     				    if (csharpCompiler.CompilerResults.CompiledAssembly != null)
-     					    return csharpCompiler.executeFirstMethod();
-            }
-            catch(Exception ex)
-            {
-                PublicDI.log.ex(ex,"in executeCompiledCode");
-            }
-     		return null;
+            O2Thread.mtaThread(() =>
+                {
+                    try
+                    {
+                        if (csharpCompiler != null)
+                            if (csharpCompiler.CompilerResults != null)
+                                if (csharpCompiler.CompilerResults.CompiledAssembly != null)
+                                {
+                                    var result = csharpCompiler.executeFirstMethod();
+                                    showInfo("Execution Completed", result);
+                                }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        PublicDI.log.ex(ex, "in executeCompiledCode");
+                    }
+                });
      	}
      	
      	public void showError(string errorMessage, string errorDetails)
