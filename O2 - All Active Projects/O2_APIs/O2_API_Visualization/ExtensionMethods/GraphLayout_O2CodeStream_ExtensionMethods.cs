@@ -6,6 +6,7 @@ using O2.API.AST.CSharp;
 using GraphSharp.Controls;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.API.AST.Graph;
 
 namespace O2.API.Visualization.ExtensionMethods
 {
@@ -18,7 +19,7 @@ namespace O2.API.Visualization.ExtensionMethods
                 //graphLayout.newGraph();
                 graphLayout.tree();                
                 foreach (var streamNode in o2CodeStream.StreamNode_First)
-                    streamNode.show_StreamNode(graphLayout, null);
+                    graphLayout.show_CodeStreamNode(o2CodeStream, streamNode, null);
             }
             catch (Exception ex)
             {
@@ -27,23 +28,23 @@ namespace O2.API.Visualization.ExtensionMethods
             return o2CodeStream;
         }
 
-        public static void show_StreamNode(this O2CodeStreamNode streamNode, GraphLayout graphLayout, O2CodeStreamNode previousNode)
+        public static void show_CodeStreamNode(this GraphLayout graphLayout, O2CodeStream codeStream, O2CodeStreamNode codeStreamNode, CodeStreamGraphNode previousNode)
         {
             try
             {
-                if (streamNode == null)
+                if (codeStreamNode == null)
                     return;
 
                 if (previousNode == null)
-                    graphLayout.add_Node(new O2.API.AST.Graph.CodeStreamGraphNode(streamNode,null));
+                    previousNode = graphLayout.add_CodeStreamNode(codeStream, codeStreamNode);
                 else
-                    graphLayout.add_Edge(new O2.API.AST.Graph.CodeStreamGraphNode(previousNode,null), new O2.API.AST.Graph.CodeStreamGraphNode(streamNode,null));
+                    previousNode = graphLayout.add_CodeStreamEdge(codeStream, codeStreamNode, previousNode);
 
 
-                foreach (var childNode in streamNode.ChildNodes)
+                foreach (var childNode in codeStreamNode.ChildNodes)
                 {
-                    if (streamNode != childNode)
-                        childNode.show_StreamNode(graphLayout, streamNode);
+                    if (codeStreamNode != childNode)
+                        graphLayout.show_CodeStreamNode(codeStream, childNode, previousNode);
                     else
                         "in show_StreamNode, streamNode ==  childNode: {0}".error(childNode.Text);
                 }
@@ -52,6 +53,28 @@ namespace O2.API.Visualization.ExtensionMethods
             {
                 ex.log("in show_StreamNode");
             }
+        }
+
+        public static CodeStreamGraphNode add_CodeStreamNode(this GraphLayout graphLayout, O2CodeStream codeStream, O2CodeStreamNode codeStreamNode)
+        {
+            return (CodeStreamGraphNode)graphLayout.wpfInvoke(
+                () =>
+                {
+                    var codeStreamGraphNode = new CodeStreamGraphNode(codeStream, codeStreamNode);
+                    graphLayout.add_Node(codeStreamGraphNode);
+                    return codeStreamGraphNode;
+                });
+        }
+
+        public static CodeStreamGraphNode add_CodeStreamEdge(this GraphLayout graphLayout, O2CodeStream codeStream, O2CodeStreamNode codeStreamNode, CodeStreamGraphNode previousGraphNode)
+        {
+            return (CodeStreamGraphNode)graphLayout.wpfInvoke(
+                () =>
+                {
+                    var codeStreamGraphNode = new CodeStreamGraphNode(codeStream, codeStreamNode);
+                    graphLayout.add_Edge(previousGraphNode, codeStreamGraphNode);
+                    return codeStreamGraphNode;
+                });
         }
     }
 }

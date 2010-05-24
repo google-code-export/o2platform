@@ -6,6 +6,7 @@ using O2.Kernel.ExtensionMethods;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ICSharpCode.NRefactory.Ast;
+using O2.API.AST.CSharp;
 //O2Ref:System.Core.dll
 //O2Ref:PresentationCore.dll
 //O2Ref:PresentationFramework.dll
@@ -15,24 +16,21 @@ namespace O2.API.AST.Graph
 {
     public class CodeStreamGraphNode : Label
     {
-        public CompilationUnit CompilationUnit { get; set; }
-        public object OriginalObject { get; set; }
+        public O2CodeStream CodeStream { get; set; }
+        public O2CodeStreamNode CodeStreamNode { get; set; }
+        
         public string NodeText { get; set; }
         public Action<CodeStreamGraphNode> onDoubleClick { get; set; }
         public Action<CodeStreamGraphNode> onMouseEnter { get; set; }
         public Action<CodeStreamGraphNode> onMouseLeave { get; set; }
 
 
-        public CodeStreamGraphNode(object originalObject, CompilationUnit compilationUnit)
-            : this(originalObject, originalObject.str(), compilationUnit)
-        {            
-        }
-
-        public CodeStreamGraphNode(object originalObject, string nodeText, CompilationUnit compilationUnit)       
+        public CodeStreamGraphNode(O2CodeStream codeStream , O2CodeStreamNode codeStreamNode)                            
         {
-            CompilationUnit = compilationUnit;
-            OriginalObject = originalObject;
-            NodeText = nodeText;
+            CodeStream = codeStream;
+            CodeStreamNode = codeStreamNode;
+
+            NodeText = CodeStreamNode.Text;
             this.Content = NodeText;
             setColorBasedOnObjectType();
             this.MouseDoubleClick+=(sender,e) => { if (onDoubleClick != null) onDoubleClick(this);};
@@ -48,7 +46,7 @@ namespace O2.API.AST.Graph
         }*/
         public void setColorBasedOnObjectType()
         {
-            switch (OriginalObject.typeName())
+            switch (CodeStreamNode.typeName())
             { 
                 case "ParameterDeclarationExpression":
                     Foreground = Brushes.Gray;
@@ -72,7 +70,8 @@ namespace O2.API.AST.Graph
                     break;
                 
                 default:
-                    Foreground = Brushes.Red;
+                    //Foreground = Brushes.Red;
+                    Foreground = Brushes.Black;
                     break;
             }
         }

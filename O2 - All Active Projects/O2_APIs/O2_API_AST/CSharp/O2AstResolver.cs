@@ -90,10 +90,10 @@ namespace O2.API.AST.CSharp
             return parsedCompilationUnits[file];
         }
 
-        public object resolve(O2.API.AST.Graph.CodeStreamGraphNode nodeToExpand)
+        /*public object resolve(O2.API.AST.Graph.CodeStreamGraphNode nodeToExpand)
         {
             setCurrentCompilationUnit(nodeToExpand.CompilationUnit);
             return this.resolve(nodeToExpand.OriginalObject as Expression);
-        }
+        }*/
     }
 }
