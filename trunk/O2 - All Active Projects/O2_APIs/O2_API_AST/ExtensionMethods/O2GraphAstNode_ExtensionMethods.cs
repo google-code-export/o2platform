@@ -10,16 +10,16 @@ using O2.DotNetWrappers.ExtensionMethods;
 
 namespace O2.API.AST.ExtensionMethods
 {
-    public static class O2GraphNode_ExtensionMethods
+    public static class O2GraphAstNode_ExtensionMethods
     {
-        public static O2GraphASTNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject)
+        public static O2GraphAstNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject)
         {
-            return new O2GraphASTNode(originalObject, compilationUnit);
+            return new O2GraphAstNode(originalObject, compilationUnit);
         }
 
-        public static O2GraphASTNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject, string nodeText)
+        public static O2GraphAstNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject, string nodeText)
         {
-            return new O2GraphASTNode(originalObject, nodeText, compilationUnit);
+            return new O2GraphAstNode(originalObject, nodeText, compilationUnit);
         }
 
         // this needs to be rewitten using the new AstVistors

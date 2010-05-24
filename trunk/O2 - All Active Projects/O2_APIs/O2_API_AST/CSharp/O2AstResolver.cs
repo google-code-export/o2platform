@@ -90,7 +90,7 @@ namespace O2.API.AST.CSharp
             return parsedCompilationUnits[file];
         }
 
-        public object resolve(O2.API.AST.Graph.O2GraphASTNode nodeToExpand)
+        public object resolve(O2.API.AST.Graph.O2GraphAstNode nodeToExpand)
         {
             setCurrentCompilationUnit(nodeToExpand.CompilationUnit);
             return this.resolve(nodeToExpand.OriginalObject as Expression);
