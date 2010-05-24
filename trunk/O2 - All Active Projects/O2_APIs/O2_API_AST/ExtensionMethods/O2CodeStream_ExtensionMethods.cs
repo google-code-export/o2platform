@@ -27,40 +27,88 @@ namespace O2.API.AST.ExtensionMethods
             return o2CodeStream.createStream(iNode, null, parentStreamNode);
         }
 
-    	public static INode createStream(this O2CodeStream o2CodeStream, INode iNode, IdentifierExpression identifier, O2CodeStreamNode parentStreamNode)
-    	{            
-    		if (o2CodeStream.has_INode(iNode).isFalse())    			
-	    		switch(iNode.typeName())
-	    		{
-	    			case "ParameterDeclarationExpression":
-	    				var parametedNode = o2CodeStream.add_INode(iNode, parentStreamNode);
-	    				o2CodeStream.expandTaint(iNode as ParameterDeclarationExpression, parametedNode);	    				
-	    				break;    			
-	    			case "IdentifierExpression":	    			
-	    				var identifierNode = o2CodeStream.add_INode(iNode, parentStreamNode);
-                        o2CodeStream.expandTaint(iNode as Expression, identifier, identifierNode);
-	    				break;
-	    			case "VariableDeclaration":
-	    				var variableNode = o2CodeStream.add_INode(iNode , parentStreamNode);
-	    				o2CodeStream.expandTaint(iNode as VariableDeclaration, variableNode);	    				
-	    				break;
-	    			case "ReturnStatement":
-                        var returnStatement = o2CodeStream.add_INode(iNode, parentStreamNode);
-                        o2CodeStream.expandTaint(iNode as ReturnStatement, returnStatement);  
-	    				break;
-                    case "InvocationExpression":
-                        var invocationExpressionNode = o2CodeStream.add_INode(iNode, parentStreamNode);
-                        o2CodeStream.expandTaint(iNode as Expression, identifier, invocationExpressionNode);  
-                       break;
-                    case "ObjectCreateExpression":
-                       var objectCreateExpression = o2CodeStream.add_INode(iNode, parentStreamNode);
-                       o2CodeStream.expandTaint(iNode as Expression, identifier, objectCreateExpression);
-                       break;
-	    			default:
-	    				"Unsupported stream Node type:{0}".error(iNode.typeName());
-	    				break;
-	    		}
-    		return iNode;
+        public static INode createStream(this O2CodeStream o2CodeStream, INode iNode, IdentifierExpression identifier, O2CodeStreamNode parentStreamNode)
+        {
+            if (iNode != null)
+                if (o2CodeStream.has_INode(iNode).isFalse())
+                    switch (iNode.typeName())
+                    {
+                        case "ParameterDeclarationExpression":
+                            var parametedNode = o2CodeStream.add_INode(iNode, parentStreamNode);
+                            o2CodeStream.expandTaint(iNode as ParameterDeclarationExpression, parametedNode);
+                            break;
+                        case "IdentifierExpression":
+                            var identifierNode = o2CodeStream.add_INode(iNode, parentStreamNode);
+                            o2CodeStream.expandTaint(iNode as Expression, identifier, identifierNode);
+                            break;
+                        case "VariableDeclaration":
+                            // handle special case of global vars 
+                            if (iNode.Parent is FieldDeclaration && iNode.Parent.Parent is TypeDeclaration)
+                            {
+                                var fieldDeclaration = iNode.Parent as FieldDeclaration;
+                                var fieldNode = o2CodeStream.add_INode(fieldDeclaration, parentStreamNode);
+                                var fieldType = (iNode.Parent.Parent as TypeDeclaration);
+                                foreach(var fieldUsage in fieldType.iNodes<IdentifierExpression>())
+                                    foreach(var fieldName in fieldDeclaration.Fields)
+                                        if (fieldUsage.Identifier == fieldName.Name)
+                                            o2CodeStream.createStream(fieldUsage, fieldNode);
+                            }
+                            else                            
+                            {
+                                var variableNode = o2CodeStream.add_INode(iNode, parentStreamNode);
+                                o2CodeStream.expandTaint(iNode as VariableDeclaration, variableNode);
+                            }
+                            break;
+                        case "ReturnStatement":
+                            var returnStatement = o2CodeStream.add_INode(iNode, parentStreamNode);
+                            o2CodeStream.expandTaint(iNode as ReturnStatement, returnStatement);
+                            break;
+                        case "InvocationExpression":
+                            var invocationExpressionNode = o2CodeStream.add_INode(iNode, parentStreamNode);
+                            o2CodeStream.expandTaint(iNode as Expression, identifier, invocationExpressionNode);
+                            break;
+                        case "ObjectCreateExpression":
+                            var objectCreateExpression = o2CodeStream.add_INode(iNode, parentStreamNode);
+                            o2CodeStream.expandTaint(iNode as Expression, identifier, objectCreateExpression);
+                            break;
+                        case "ForeachStatement":
+                            var foreachStatement = (ForeachStatement)iNode;
+                            var variableName = foreachStatement.VariableName;
+                            foreach (var iExpression in iNode.iNodes<IdentifierExpression>())                            
+                                if (iExpression.Identifier == variableName)
+                                {
+                                    o2CodeStream.createStream(iExpression, parentStreamNode);        
+                                }                            
+                            break;
+                        case "ForStatement":
+                            var forStatement = (ForStatement)iNode;                            
+                            foreach (var initializer in forStatement.Initializers)
+                            {
+                                if (initializer is LocalVariableDeclaration)
+                                {
+                                    var parentNode = o2CodeStream.peekStack();
+                                    foreach (var forVariableDeclaration in (initializer as LocalVariableDeclaration).Variables)
+                                        o2CodeStream.createStream(forVariableDeclaration, parentNode);
+                                }
+                            }
+                            break;
+                        default:
+                            if (o2CodeStream.debugMode())
+                                "Unsupported stream Node type (tying its parent):{0}".error(iNode.typeName());
+                            o2CodeStream.createStream(iNode.Parent, identifier, parentStreamNode);
+                            // get an iNode that we have not added (getParentINodeThatIsNotAdded will first check the provided iNode)
+                            /*iNode = o2CodeStream.getParentINodeThatIsNotAdded(iNode);
+                            if (iNode != null)
+                            {
+                                parentStreamNode = o2CodeStream.add_INode(iNode, parentStreamNode);
+                                // get its parent
+                                var parentToTaint = iNode.Parent; //o2CodeStream.getParentINodeThatIsNotAdded(iNode.Parent);
+                                // create stream for Parent
+                                o2CodeStream.createStream(parentToTaint, identifier, parentStreamNode);
+                            }*/
+                            break;
+                    }
+            return iNode;
         }
 
         public static O2CodeStream createO2CodeStream(this O2MappedAstData astData, string methodStreamFile, INode iNode)
@@ -74,25 +122,29 @@ namespace O2.API.AST.ExtensionMethods
             if (iNode == null)
                 return null;
             var codeStream = new O2CodeStream(astData, taintRules, methodStreamFile);
-
+            //O2CodeStreamNode parentNode = null;
             // start with the first node and keep going up (via its parent) until we find a iNode type that is currently handled
             var originalINode = iNode;
             IdentifierExpression identifier = null;
             while (iNode != null)
             {
-                "> iNode:{0}           :      {1}".debug(iNode.typeName(), iNode);
+                //"> iNode:{0}           :      {1}".debug(iNode.typeName(), iNode);
                 switch (iNode.typeName())
                 {
                     // these trigger the createStream process
                     case "ParameterDeclarationExpression":
                         var parameterDeclaration = (ParameterDeclarationExpression)iNode;
-                        "Creating Stream for Variable Declaration: {0}".info(parameterDeclaration.ParameterName);
-                        codeStream.createStream(iNode, null);
+                        "Creating Stream for ParameterDeclarationExpression Declaration: {0}".info(parameterDeclaration.ParameterName);
+                        // start with the host method
+                        if (parameterDeclaration.Parent is MethodDeclaration)                        
+                            codeStream.add_INode(parameterDeclaration.Parent, codeStream.peekStack());                        
+                        
+                        codeStream.createStream(iNode, codeStream.peekStack());
                         return codeStream;
-                    case "VariableDeclaration":
+                    case "VariableDeclaration":                                               
                         var variableDeclaration = (VariableDeclaration)iNode;
-                        "Creating Stream for Variable Declaration: {0}".info(variableDeclaration.Name);
-                        codeStream.createStream(variableDeclaration, codeStream.peekStack()); //codeStream.O2CodeStreamNodes[codeStream.INodeStack.Peek()]);
+                        "Creating Stream for VariableDeclaration: {0}".info(variableDeclaration.Name);
+                        codeStream.createStream(variableDeclaration, codeStream.peekStack()); //codeStream.O2CodeStreamNodes[codeStream.INodeStack.Peek()]);                        
                         return codeStream;
                     case "InvocationExpression":
                         var invocationExpression = (InvocationExpression)iNode;
@@ -100,17 +152,60 @@ namespace O2.API.AST.ExtensionMethods
                         codeStream.createStream(invocationExpression, identifier, codeStream.peekStack());
                         return codeStream;
 
+
+
                     // these create an INode but let the upwards iNode.Parent path to continue
                     case "MemberReferenceExpression":
                         var memberReferenceExpression = (MemberReferenceExpression)iNode;
                         "Adding reference to MemberReferenceExpression: {0}".info(memberReferenceExpression.MemberName);
-                        codeStream.add_INode(memberReferenceExpression, null);                        
+                        codeStream.add_INode(memberReferenceExpression, codeStream.peekStack());
                         break;
-                    case "IdentifierExpression":
+                    
+                    case "IdentifierExpression":                        
                         identifier = iNode as IdentifierExpression;
-                        break;         
+                        codeStream.add_INode(identifier, codeStream.peekStack());
+                        break;
+
+                    case "ForeachStatement":
+                    case "ForStatement":
+                        codeStream.createStream(iNode, codeStream.peekStack());
+                        
+                        //var variableName = forStatement.I
+                        //var identifiers = iNode.iNodes<IdentifierExpression>();
+
+
+                        return codeStream;
+                    case "MethodDeclaration":
+                    case "TypeDeclaration":                            
+                        "in createO2CodeStream, not supported INode type:{0}".error(iNode.typeName());
+                        return codeStream;
+
+                    case "BlockStatement":
+                        break;
+
+                    default:
+                        codeStream.add_INode(iNode, codeStream.peekStack());
+                        break; 
                 }
-                iNode = iNode.Parent;
+                // figure out where to go next
+                switch (iNode.typeName())
+                {
+
+                    case "IndexerExpression":
+                        if (codeStream.has_INode(iNode))
+                            iNode = iNode.Parent;
+                        else
+                        {
+                            var indexerExpression = (IndexerExpression)iNode;
+                            //"Adding reference to IndexerExpression.TargetObject: {0}".info(indexerExpression.Tar.MemberName);
+                            codeStream.add_INode(indexerExpression, codeStream.peekStack());
+                            iNode = indexerExpression.TargetObject;
+                        }
+                        break;
+                    default:
+                        iNode = iNode.Parent;
+                        break;
+                }
             }
             return codeStream;
         }
@@ -164,11 +259,19 @@ namespace O2.API.AST.ExtensionMethods
             var lastMethodDeclaration = o2CodeStream.popStack<MethodDeclaration>();
             if (lastMethodDeclaration != default(MethodDeclaration))
             {
+                // option to add this method as a tain propagator
+                /*
+                // and add to TaintRules as taint propagator
+                var lastMethodDeclaration_IMethod = o2CodeStream.O2MappedAstData.iMethod(lastMethodDeclaration);
+                o2CodeStream.TaintRules.add_TaintPropagator(lastMethodDeclaration_IMethod.fullName());
+                o2CodeStream.TaintRules.add_TaintPropagator(lastMethodDeclaration_IMethod.DotNetName);*/
                 //"lastMethodDeclaration: {0}".debug(lastMethodDeclaration);    		
 
-                // find who calls this and create stream from it
+                // find who calls this
                 var iNode = o2CodeStream.popStack();
-                var iNodeToTaint = o2CodeStream.getParentINodeThatIsNotAdded(iNode);
+                o2CodeStream.expandTaint_of_ParentINode(iNode, parentStreamNode);
+
+                /*var iNodeToTaint = o2CodeStream.getParentINodeThatIsNotAdded(iNode);
                 if (iNodeToTaint != null)
                 {
                     if (o2CodeStream.debugMode())
@@ -176,13 +279,17 @@ namespace O2.API.AST.ExtensionMethods
                         "FOUND iNodeToTaint:{0}".info(iNodeToTaint);
                         "FOUND iNodeToTaint.Parent:{0}".info(iNodeToTaint.Parent);
                     }
+                    
+                    //var invocationExpression = iNodeToTaint.parent<InvocationExpression>();
+                    //if (invocationExpression != null)
+                    //    o2CodeStream.createStream(invocationExpression, parentStreamNode);
+                    //else
+                    //{
+ 
+                    //}
+                    //o2CodeStream.createStream(iNodeToTaint.Parent, parentStreamNode);
                     o2CodeStream.createStream(iNodeToTaint.Parent, parentStreamNode);
-                }
-
-                // and add to TaintRules as taint propagator
-                var lastMethodDeclaration_IMethod = o2CodeStream.O2MappedAstData.iMethod(lastMethodDeclaration);
-                o2CodeStream.TaintRules.add_TaintPropagator(lastMethodDeclaration_IMethod.fullName());
-                o2CodeStream.TaintRules.add_TaintPropagator(lastMethodDeclaration_IMethod.DotNetName);
+                }*/                
             }
             return o2CodeStream;
         }
@@ -241,7 +348,7 @@ namespace O2.API.AST.ExtensionMethods
             {
                 case "IdentifierExpression":
 
-                    //var identifier = expression as IdentifierExpression; 		
+                    var identifierExpression = expression as IdentifierExpression; 		
 
                     var parent = expression.Parent;
                     if (parent == expression)		// just in case so that we don't have a non-ending recursive loop
@@ -254,14 +361,24 @@ namespace O2.API.AST.ExtensionMethods
                         case "ObjectCreateExpression":
                         case "CollectionInitializerExpression":
                         case "ArrayCreateExpression":
-                            o2CodeStream.expandTaint(parent as Expression, expression as IdentifierExpression, parentStreamNode);
+                        case "IndexerExpression":
+                        case "ParenthesizedExpression":
+                        case "CastExpression":
+                            o2CodeStream.expandTaint(parent as Expression, identifierExpression, parentStreamNode);
                             break;
                         case "ReturnStatement":
                         case "VariableDeclaration":
                             o2CodeStream.createStream(parent, parentStreamNode);
                             break;
+                        case "ForStatement":
+                        case "ForeachStatement":
+                            o2CodeStream.createStream(parent,parentStreamNode);
+                            break;
+                        case "MemberReferenceExpression":
+                            o2CodeStream.createStream(parent, identifierExpression, parentStreamNode);
+                            break;
                         default:
-                            if (o2CodeStream.debugMode())
+                            //if (o2CodeStream.debugMode())
                                 "in Expression.IdentifierExpression.expandTaint unsupported INode parent type: {0}".error(parent.typeName());
                             break;
                     }
@@ -281,6 +398,10 @@ namespace O2.API.AST.ExtensionMethods
                         {
                             if (o2CodeStream.debugMode())
                                 "Handling Taint Propagator:{0}".info(calledIMethod.DotNetName);
+                            parentStreamNode = o2CodeStream.add_INode(invocationExpression, parentStreamNode);
+                            o2CodeStream.expandTaint_of_ParentINode(invocationExpression, parentStreamNode);
+
+                            /*
                             if (invocationExpression.Parent is InvocationExpression)
                             {
                                 var taintNode = o2CodeStream.add_INode(invocationExpression, parentStreamNode);
@@ -294,6 +415,7 @@ namespace O2.API.AST.ExtensionMethods
                             }
                             else
                                 o2CodeStream.createStream(invocationExpression.Parent, parentStreamNode);
+                            */
                         }
                         else
                         {
@@ -346,6 +468,9 @@ namespace O2.API.AST.ExtensionMethods
                 case "BinaryOperatorExpression":
                 case "CollectionInitializerExpression":
                 case "ArrayCreateExpression":
+                case "IndexerExpression":
+                case "ParenthesizedExpression":
+                case "CastExpression":
                     if (expression.Parent is Expression)
                         o2CodeStream.expandTaint(expression.Parent as Expression, identifier, parentStreamNode);
                     else
@@ -353,7 +478,7 @@ namespace O2.API.AST.ExtensionMethods
                     break;
 
                 default:
-                    if (o2CodeStream.debugMode())
+                    //if (o2CodeStream.debugMode())
                         "in Expression.expandTaint unsupported INode type: {0}".error(expression.typeName());
                     break;
             }
@@ -374,6 +499,31 @@ namespace O2.API.AST.ExtensionMethods
                         o2CodeStream.add_INode(iNode, parentStreamNode);
             return o2CodeStream;
         }
+
+
+        public static O2CodeStream expandTaint_of_ParentINode(this O2CodeStream o2CodeStream, INode iNode, O2CodeStreamNode parentStreamNode)
+        {
+            // find a taint target
+            while (iNode != null)
+            {
+                if (o2CodeStream.has_INode(iNode).isFalse())
+                {
+                    switch (iNode.typeName())
+                    {
+                        case "VariableDeclaration":
+                        case "InvocationDeclaration":
+                        case "ObjectCreateExpression":
+                            o2CodeStream.createStream(iNode, parentStreamNode);
+                            return o2CodeStream;
+                    }
+                }
+                //"INODE TO Taint: {0}".info(iNode);
+                iNode = iNode.Parent;
+            }
+            return o2CodeStream;
+        }
+
+
         #endregion
             	    	
 
@@ -433,69 +583,95 @@ namespace O2.API.AST.ExtensionMethods
     	{
 	    	var typeName = iNode.typeName();
 	    	var text = typeName;
-	    	switch(typeName)
-			{
-				case "ParameterDeclarationExpression":    					
-					text = "parameter: {0}".format((iNode as ParameterDeclarationExpression).name());
-					break;
-				case "MethodDeclaration":   
-					var iMethod = o2CodeStream.O2MappedAstData.iMethod(iNode as MethodDeclaration);
-					text = "method: {0}".format(iMethod.fullName()); 
-					// o2CodeStream.O2MappedAstData.iMethod(iNode as MethodDeclaration).name());
-					break;
-				case "InvocationExpression":    
-                    var invocationExpression = iNode as InvocationExpression;
-					var invocationMethod = o2CodeStream.O2MappedAstData.iMethod(invocationExpression);
-                    if (invocationMethod != null)
-                        text = "invocation: {0}".format(invocationMethod.fullName());
-                    else if (invocationExpression.TargetObject is MemberReferenceExpression)
-                    {
-                        var memberReferenceExpressionTarget = (MemberReferenceExpression)invocationExpression.TargetObject;
-                        var iMethodOrIProperty = o2CodeStream.O2MappedAstData.fromMemberReferenceExpressionGetIMethodOrProperty(memberReferenceExpressionTarget);
-                        if (iMethodOrIProperty != null)
-                            text = "invocation: {0}".format(iMethodOrIProperty.fullName());
+            try
+            {
+                switch (typeName)
+                {
+                    case "ParameterDeclarationExpression":
+                        text = "parameter -> {0}".format((iNode as ParameterDeclarationExpression).name());
+                        break;
+                    case "MethodDeclaration":
+                        var iMethod = o2CodeStream.O2MappedAstData.iMethod(iNode as MethodDeclaration);
+                        text = "method -> {0}".format(iMethod.fullName());
+                        // o2CodeStream.O2MappedAstData.iMethod(iNode as MethodDeclaration).name());
+                        break;
+                    case "InvocationExpression":
+                        var invocationExpression = iNode as InvocationExpression;
+                        var invocationMethod = o2CodeStream.O2MappedAstData.iMethod(invocationExpression);
+                        if (invocationMethod != null)
+                            text = "invocation -> {0}".format(invocationMethod.fullName());
+                        else if (invocationExpression.TargetObject is MemberReferenceExpression)
+                        {
+                            var memberReferenceExpressionTarget = (MemberReferenceExpression)invocationExpression.TargetObject;
+                            var iMethodOrIProperty = o2CodeStream.O2MappedAstData.fromMemberReferenceExpressionGetIMethodOrProperty(memberReferenceExpressionTarget);
+                            if (iMethodOrIProperty != null)
+                                text = "invocation -> {0}".format(iMethodOrIProperty.fullName());
+                            else
+                                text = "invocation -> {0}".format(memberReferenceExpressionTarget.MemberName);
+                        }
                         else
-                            text = "invocation: {0}".format(memberReferenceExpressionTarget.MemberName);
-                    }
-                    else
-                        text = "invocation: COULD NOT FIND TARGET";
-                    
-					    //text = "invocation: {0}".format(invocationExpression.TargetObject);
-                //elseelse
+                            text = "invocation: COULD NOT FIND TARGET";
 
-					break;
-				case "IdentifierExpression":
-					text = "identifier: {0}".format((iNode as IdentifierExpression).Identifier);
-					break;
-				case "VariableDeclaration":
-					text = "variable: {0}".format((iNode as VariableDeclaration).Name);
-					break;
-				case "ConstructorDeclaration":
-					var ctorIMethod = o2CodeStream.O2MappedAstData.iMethod(iNode as ConstructorDeclaration);
-					text = "constructor: {0}".format(ctorIMethod.fullName());// (iNode as ConstructorDeclaration).Name);
-					break;
-                case "MemberReferenceExpression":
-                    var memberReferenceExpression = (MemberReferenceExpression)iNode;
-                    var iMethodOrProperty = o2CodeStream.O2MappedAstData.fromMemberReferenceExpressionGetIMethodOrProperty(memberReferenceExpression);
-                    if (iMethodOrProperty != null)
-                    {
-                        var signature = iMethodOrProperty.fullName();
-                        text = "{0}: {1}".format(iMethodOrProperty.typeName(), signature);
-                    }
-                    else
-                        text = "MemberReferenceExpression: {0}".format(memberReferenceExpression.MemberName);
-                    break;
-                case "ObjectCreateExpression":
-                    var objectCreateExpression = (ObjectCreateExpression)iNode;
-                    var objectCreateMapping = o2CodeStream.O2MappedAstData.fromExpressionGetIMethodOrProperty(iNode as Expression);
-                    var objectCreateSignature = objectCreateMapping.fullName();
-                    text = "{0}: {1}".format(objectCreateMapping.typeName(), objectCreateSignature);
-                    break;
-                default:                    
-                    "in O2CodeStream.getTextForNode: not supported INode type: {0}".error(text);
-                    break;
- 
-			}
+                        //text = "invocation: {0}".format(invocationExpression.TargetObject);
+                        //elseelse
+
+                        break;
+                    case "IdentifierExpression":
+                        var identifier = (iNode as IdentifierExpression);
+                        var resolved = o2CodeStream.O2MappedAstData.resolveExpression(identifier);
+                        var identifierType = (resolved.ResolvedType != null) ? resolved.ResolvedType.FullyQualifiedName : "[type not resolved]";
+                        text = "identifier  -> {0} : {1}".format(identifier.Identifier, identifierType);
+                        break;
+                    case "VariableDeclaration":
+                        text = "variable  -> {0}".format((iNode as VariableDeclaration).Name);
+                        break;
+                    case "ConstructorDeclaration":
+                        var ctorIMethod = o2CodeStream.O2MappedAstData.iMethod(iNode as ConstructorDeclaration);
+                        text = "constructor -> {0}".format(ctorIMethod.fullName());// (iNode as ConstructorDeclaration).Name);
+                        break;
+                    case "MemberReferenceExpression":
+                        var memberReferenceExpression = (MemberReferenceExpression)iNode;
+                        var iMethodOrProperty = o2CodeStream.O2MappedAstData.fromMemberReferenceExpressionGetIMethodOrProperty(memberReferenceExpression);
+                        if (iMethodOrProperty != null)
+                        {
+                            var signature = iMethodOrProperty.fullName();
+                            text = "memberRef -> {0}: {1}".format(iMethodOrProperty.typeName(), signature);
+                        }
+                        else
+                        {
+                            var memberReferenceResolved = o2CodeStream.O2MappedAstData.resolveExpression(memberReferenceExpression.TargetObject);
+                            if (memberReferenceResolved.ResolvedType != null && memberReferenceResolved.ResolvedType.FullyQualifiedName.valid())
+                                text = "memberRef -> {0} : {1}".format(memberReferenceExpression.MemberName, memberReferenceResolved.ResolvedType.FullyQualifiedName);
+                            else
+                                text = "memberRef -> {0} : [target not resolved]".format(memberReferenceExpression.MemberName);
+                        }
+                        break;
+
+                    case "ObjectCreateExpression":
+                        var objectCreateExpression = (ObjectCreateExpression)iNode;
+                        var objectCreateMapping = o2CodeStream.O2MappedAstData.fromExpressionGetIMethodOrProperty(iNode as Expression);
+                        var objectCreateSignature = objectCreateMapping.fullName();
+                        text = "objectCreate -> {0}: {1}".format(objectCreateMapping.typeName(), objectCreateSignature);
+                        break;
+
+                    case "FieldDeclaration":
+                        var fieldDeclaration = (FieldDeclaration)iNode;
+                        var variableName = "";
+                        foreach (var field in fieldDeclaration.Fields)
+                            variableName += field.Name + " ";
+                        text = "field -> {0} : {1}".format(variableName.trim(), fieldDeclaration.TypeReference.Type);
+                        break;
+                    default:
+                        "in O2CodeStream.getTextForNode: not supported INode type: {0}".error(text);
+                        break;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in getTextForINode");
+                text += "     (error calculating text: {0})".format(ex.Message);
+            }
 			return text;
         }
 

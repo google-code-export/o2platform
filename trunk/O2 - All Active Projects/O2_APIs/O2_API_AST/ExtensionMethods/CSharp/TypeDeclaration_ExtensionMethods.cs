@@ -4,19 +4,104 @@ using System.Linq;
 using System.Text;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.NRefactory;
+using ICSharpCode.SharpDevelop.Dom;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
     public static class TypeDeclaration_ExtensionMethods
     {
         #region create
-        
-        // should be merged with the one using CompilationUnit
-        public static TypeDeclaration add_Type(this NamespaceDeclaration namespaceDeclaration, string typeName)
+
+        public static TypeDeclaration add_Type(this NamespaceDeclaration namespaceDeclaration, IClass iClass)
         {
+            // move to method IClass.typeDeclaration();
+            var typeName = iClass.Name;
+
             var newType = namespaceDeclaration.types(typeName);		// check if already exists and if it does return it
             if (newType != null)
                 return newType;
+
+            const Modifiers modifiers = Modifiers.None | Modifiers.Public;
+            newType = new TypeDeclaration(modifiers, new List<AttributeSection>())
+            {
+                Name = typeName
+            };
+
+            foreach (var baseType in iClass.BaseTypes)
+            {
+                if (baseType.FullyQualifiedName != "System.Object")  // no need to include this one                
+                    newType.BaseTypes.Add(new TypeReference(baseType.FullyQualifiedName));
+            }
+
+            namespaceDeclaration.AddChild(newType);
+
+            return newType;
+
+            return namespaceDeclaration.add_Type_(iClass.Name);
+        }
+
+        /*public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, IReturnType iReturnType)
+        { 
+           
+        }*/
+
+        public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, IClass iClass)
+        {
+            try
+            {       
+                if (iClass.Namespace.valid())
+                {
+                    var namespaceDeclaration = compilationUnit.add_Namespace(iClass.Namespace);
+                    return namespaceDeclaration.add_Type(iClass);
+                }
+
+                // move to method IClass.typeDeclaration();
+                var typeName = iClass.Name;
+
+                var newType = compilationUnit.types(typeName);		// check if already exists and if it does return it
+                if (newType != null)
+                    return newType;
+
+                const Modifiers modifiers = Modifiers.None | Modifiers.Public;
+                newType = new TypeDeclaration(modifiers, new List<AttributeSection>())
+                {
+                    Name = typeName
+                };
+
+                foreach (var baseType in iClass.BaseTypes)
+                {
+                    newType.BaseTypes.Add(new TypeReference(baseType.FullyQualifiedName));
+                }
+
+                compilationUnit.AddChild(newType);
+
+                return newType;
+              //  return newType;
+
+
+                /*var classFinder = new ClassFinder(iClass,0,0);
+                var typeReference = (TypeReference)ICSharpCode.SharpDevelop.Dom.Refactoring.CodeGenerator.ConvertType(iClass.DefaultReturnType, classFinder);
+                if (typeReference != null)
+                { 
+                    compilationUnit.AddChild(typeReference);
+                    return typeReference;
+                }*/
+                //return compilationUnit.add_Type_(iClass.Namespace, iClass.Name);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in TypeReference.add_Type");                
+            }
+            return compilationUnit.add_Type_(iClass.Namespace, iClass.Name);
+        }
+
+        // should be merged with the one using CompilationUnit
+        public static TypeDeclaration add_Type_(this NamespaceDeclaration namespaceDeclaration, string typeName)
+        {
+            var newType = namespaceDeclaration.types(typeName);		// check if already exists and if it does return it
+            if (newType != null)
+                return newType;            
 
             const Modifiers modifiers = Modifiers.None | Modifiers.Public;
             newType = new TypeDeclaration(modifiers, new List<AttributeSection>())
@@ -27,7 +112,18 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return newType;
         }
 
-        public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, string typeName)
+        public static TypeDeclaration add_Type_(this CompilationUnit compilationUnit, string @namespace, string typeName)
+        {
+            if (@namespace.valid())
+            {
+                var typeNamespace = compilationUnit.add_Namespace(@namespace);
+                return typeNamespace.add_Type_(typeName);
+            }
+            else
+                return compilationUnit.add_Type_(typeName);
+        }
+        
+        public static TypeDeclaration add_Type_(this CompilationUnit compilationUnit, string typeName)
         {
             const Modifiers modifiers = Modifiers.None | Modifiers.Public;
             var newType = new TypeDeclaration(modifiers, new List<AttributeSection>())

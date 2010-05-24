@@ -7,6 +7,7 @@ using ICSharpCode.NRefactory;
 using O2.API.AST.CSharp;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using ICSharpCode.SharpDevelop.Dom;
 
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
@@ -21,11 +22,25 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return typeDeclaration;
         }
 
-        public static CompilationUnit add_Method(this CompilationUnit compilationUnit, string @namespace, string typeName, MethodDeclaration methodDeclaration)
+        public static CompilationUnit add_Method(this CompilationUnit compilationUnit, IClass iClass, MethodDeclaration methodDeclaration)
         {
-            var myNamespace = compilationUnit.add_Namespace(@namespace);
-            var type = myNamespace.add_Type(typeName);
-            type.add_Method(methodDeclaration);
+            var typeDeclaration = compilationUnit.add_Type(iClass);
+            compilationUnit.add_Method(typeDeclaration, methodDeclaration);
+            return compilationUnit;
+        }        
+
+        public static CompilationUnit add_Method_(this CompilationUnit compilationUnit, string @namespace, string typeName, MethodDeclaration methodDeclaration)
+        {
+            var typeDeclaration = compilationUnit.add_Type_(@namespace, typeName);
+            compilationUnit.add_Method(typeDeclaration, methodDeclaration);
+            return compilationUnit;
+        }
+        
+        
+
+        public static CompilationUnit add_Method(this CompilationUnit compilationUnit, TypeDeclaration typeDeclaration, MethodDeclaration methodDeclaration)
+        {                                   
+            typeDeclaration.add_Method(methodDeclaration);
             return compilationUnit;
         }
 

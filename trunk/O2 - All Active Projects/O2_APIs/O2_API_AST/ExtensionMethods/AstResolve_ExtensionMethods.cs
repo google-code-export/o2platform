@@ -17,10 +17,21 @@ namespace O2.API.AST.ExtensionMethods
             o2AstResolver.resolver.Initialize(o2AstResolver.parseInformation, expression.StartLocation.Line, expression.StartLocation.Column);            
         }
 
-        public static object resolve(this O2AstResolver o2AstResolver, Expression expression)
+        public static ResolveResult resolve(this O2AstResolver o2AstResolver, Expression expression)
+        {
+            return o2AstResolver.resolve(expression,null,null);
+        }
+
+        public static ResolveResult resolve(this O2AstResolver o2AstResolver, Expression expression, IClass callingClass, IMember callingMember)
         {
             o2AstResolver.initialize(expression);
-
+            if (callingClass != null)                   // this is needed on the cases where we need to resolve expressions from partial files
+            {
+                o2AstResolver.resolver.CallingClass = callingClass;
+                o2AstResolver.resolver.CallingMember = callingMember;
+                o2AstResolver.resolver.CaretColumn = 0;
+                o2AstResolver.resolver.CaretLine = 0;
+            }
             var methodDeclaration = expression.parent<MethodDeclaration>();
             if (methodDeclaration != null)
                 o2AstResolver.resolver.RunLookupTableVisitor(methodDeclaration);

@@ -255,6 +255,54 @@ namespace O2.API.AST.ExtensionMethods
 
         //merge this one with fromMemberReferenceExpressionGetIMethod (and add support for use of Fields and Properties)
 
+        public static ResolveResult resolveExpression(this O2MappedAstData o2MappedAstData, Expression expression)
+        {
+            //resolve type  (move this into a method called typeResolve
+            var compilationUnit = expression.compilationUnit();
+            if (compilationUnit != null)
+            {                
+                o2MappedAstData.O2AstResolver.setCurrentCompilationUnit(compilationUnit);
+                var resolved = o2MappedAstData.O2AstResolver.resolve(expression);
+                if (resolved is UnknownIdentifierResolveResult)
+                {
+                    // this is a hack to deal with partial classes (which are located in different files (this could be heavily optimized
+                    var callingClassName = resolved.CallingClass.FullyQualifiedName;
+                    foreach (var item in o2MappedAstData.MapAstToNRefactory.IClassToTypeDeclaration)
+                    {
+                        var iClass = item.Key;
+                        var typeDeclaration = item.Value;
+                        if (iClass.FullyQualifiedName == callingClassName)
+                        {
+                            var otherCompilationUnit = typeDeclaration.compilationUnit();
+                            if (otherCompilationUnit != compilationUnit)
+                            {
+                                o2MappedAstData.O2AstResolver.setCurrentCompilationUnit(otherCompilationUnit);
+                                var resolved2 = o2MappedAstData.O2AstResolver.resolve(expression, iClass, null);
+                                if ((resolved2 is UnknownIdentifierResolveResult).isFalse())
+                                    return resolved2;
+                            }
+                        }
+                        //var types = cu.types(true);
+                        //                        foreach(var type in types)
+                        //                            if (type.Name
+
+                    }
+
+                    //var methodDeclaration = expression.parent<MethodDeclaration>();
+                    //var iMethod = o2MappedAstData.iMethod(methodDeclaration);
+
+                    // if we got here it means that we were not able to resolve this field (even after looking in partial files)
+                    if (expression is IdentifierExpression)
+                        "in resolved Expression, it was not possible to resolve: {0}".error((expression as IdentifierExpression).Identifier);
+                    else
+                        "in resolved Expression, it was not possible to resolve: {0}".error(expression.str());
+                    return resolved;
+                }
+                return resolved;
+            }
+            return null;
+        }
+
         public static IMethod fromExpressionGetIMethod(this O2MappedAstData o2MappedAstData, Expression expression)
         {
             var result = o2MappedAstData.fromExpressionGetIMethodOrProperty(expression);
@@ -369,8 +417,8 @@ namespace O2.API.AST.ExtensionMethods
                 foreach (var item in o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration)
                     if (item.Key.fullName() == iMethod.fullName())
                     {
-                        "add extra mapping to IMethodToMethodDeclaration for: {0}".format(item.Key.fullName()).error();
-                        o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration.add(iMethod, item.Value);
+                        //"add extra mapping to IMethodToMethodDeclaration for: {0}".format(item.Key.fullName()).error();
+                        //o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration.add(iMethod, item.Value);
                         return true;
                     }
             }
@@ -819,7 +867,7 @@ namespace O2.API.AST.ExtensionMethods
                 if (methodDeclaration != null)
                 {
                     foreach (var parameter in methodDeclaration.parameters())
-                        ParametersTreeView.add_Node(parameter.name(), parameter);
+                        ParametersTreeView.add_Node("parameter: " + parameter.name(), parameter);
 
                     foreach (var methodCalled in astData.calledINodesReferences(iCodeStreamMethod))
                         if (methodCalled != null)
@@ -828,11 +876,34 @@ namespace O2.API.AST.ExtensionMethods
                                 var memberReference = (MemberReferenceExpression)methodCalled;
                                 if (memberReference.TargetObject.typeName() == "MemberReferenceExpression")
                                 {
+                                    MethodsCalledTreeView.add_Node("memberRef: " + memberReference.MemberName, methodCalled);
+                                }
+                               // else
+                               //     MethodsCalledTreeView.add_Node(">" + memberReference, methodCalled);
+                            }
+                    var parentType = methodDeclaration.parent<TypeDeclaration>();
+                    if (parentType != null)
+                    {
+                        foreach (var fieldDeclaration in parentType.iNodes<FieldDeclaration>())
+                            foreach(var fieldVariable in fieldDeclaration.Fields)
+                                ParametersTreeView.add_Node("field: " + fieldVariable.Name, fieldVariable);
+
+                        foreach (var propertyDeclaration in parentType.iNodes<PropertyDeclaration>())
+                            ParametersTreeView.add_Node("property: " + propertyDeclaration.Name, propertyDeclaration);
+                    }
+
+                    foreach (var identifierExpression in methodDeclaration.iNodes<IdentifierExpression>())                        
+                        ParametersTreeView.add_Node("identifier: " + identifierExpression.Identifier, identifierExpression);                        
+                        /*    if (methodCalled is MemberReferenceExpression)
+                            {
+                                var memberReference = (MemberReferenceExpression)methodCalled;
+                                if (memberReference.TargetObject.typeName() == "MemberReferenceExpression")
+                                {
                                     MethodsCalledTreeView.add_Node(memberReference.MemberName, methodCalled);
                                 }
-                                else
-                                    MethodsCalledTreeView.add_Node(">" + memberReference, methodCalled);
-                            }
+                                // else
+                                //     MethodsCalledTreeView.add_Node(">" + memberReference, methodCalled);
+                            }*/
                 }
             }
             return astData;

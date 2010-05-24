@@ -131,6 +131,8 @@ namespace O2.API.AST.ExtensionMethods
             return false;
         }
 
+        #region add/map IMethod
+
         public static O2MethodStream add_IMethods(this O2MethodStream o2MethodStream, List<IMethod> iMethods)
         {
             foreach (var iMethod in iMethods)
@@ -170,52 +172,136 @@ namespace O2.API.AST.ExtensionMethods
             var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
             if (methodDeclaration != null)
             {
-                // map MemberReferenceExpression
-                var memberReferenceExpressions = methodDeclaration.iNodes<INode, MemberReferenceExpression>();
-                foreach (var memberReferenceExpression in memberReferenceExpressions)
-                {
-                    var calledIMethod = o2MethodStream.O2MappedAstData.iMethod(memberReferenceExpression);
-                    if (calledIMethod != null)
-                        if (o2MethodStream.O2MappedAstData.has_IMethod(calledIMethod))
-                            o2MethodStream.add_IMethod(calledIMethod);
-                        else
-                            o2MethodStream.add_ExternalIMethod(calledIMethod);
-                    //else
-                    //    "Could not resolve iMethod for memberReferenceExpression".error();
-                }
+                o2MethodStream.map_Expressions(methodDeclaration.iNodes<INode, IdentifierExpression>())
+                              .map_MemberReferenceExpressions(methodDeclaration)
+                              .map_ObjectCreateExpressions(methodDeclaration)
+                              .map_InvocationExpressions(methodDeclaration);                              
 
-                // map ObjectCreateExpression (just about the same process as for memberReferenceExpressions
-                var objectCreateExpressions = methodDeclaration.iNodes<INode, ObjectCreateExpression>();
-                foreach (var objectCreateExpression in objectCreateExpressions)
-                {
-                    var calledIMethod = o2MethodStream.O2MappedAstData.iMethod(objectCreateExpression);
-                    if (calledIMethod != null)
-                        if (o2MethodStream.O2MappedAstData.has_IMethod(calledIMethod))
-                            o2MethodStream.add_IMethod(calledIMethod);
-                        else
-                            o2MethodStream.add_ExternalIMethod(calledIMethod);
-                    //else
-                    //    "Could not resolve iMethod for ObjectCreateExpression".error();
-                }
-
-                // map ObjectCreateExpression (just about the same process as for memberReferenceExpressions
-                var invocationExpressions = methodDeclaration.iNodes<INode, InvocationExpression>();
-                foreach (var invocationExpression in invocationExpressions)
-                {
-                    var calledIMethod = o2MethodStream.O2MappedAstData.iMethod(invocationExpression);
-                    if (calledIMethod != null)
-                        if (o2MethodStream.O2MappedAstData.has_IMethod(calledIMethod))
-                            o2MethodStream.add_IMethod(calledIMethod);
-                        else
-                            o2MethodStream.add_ExternalIMethod(calledIMethod);
-                    //else
-                    //    "Could not resolve iMethod for InvocationExpression".error();
-                }
+                // map IdentifierExpression global and external static variables                
+                    //var iMethodOrProperty = o2MethodStream.O2MappedAstData.fromExpressionGetIMethodOrProperty(identifierExpression as Expression);                
+                
+                
+                
             }
             // map the external classes
             o2MethodStream.map_ExternalClasses(iMethod);
             return o2MethodStream;
         }
+
+
+        public static O2MethodStream map_Expression<T>(this O2MethodStream o2MethodStream, T expression)
+            where T : Expression
+        {
+            return o2MethodStream.map_Expressions(expression.wrapOnList());
+        }
+
+        public static O2MethodStream map_Expressions<T>(this O2MethodStream o2MethodStream, List<T> expressions)
+            where T : Expression
+        {             
+            foreach (var identifierExpression in expressions)
+            {
+                var resolved = o2MethodStream.O2MappedAstData.resolveExpression(identifierExpression);
+
+                switch (resolved.typeName())
+                { 
+                    case "MemberResolveResult":
+                        var resolvedMember = (resolved as MemberResolveResult).ResolvedMember;
+                        if (resolvedMember is IField)
+                        {
+                            var iField = (resolvedMember as IField);
+                            o2MethodStream.Fields.add(iField.FullyQualifiedName, iField);
+                        }
+                        else
+                        if (resolvedMember is IProperty)
+                        {
+                            var iProperty = (resolvedMember as IProperty);
+                            o2MethodStream.Properties.add(iProperty.FullyQualifiedName, iProperty);
+                        }
+                        break;
+
+                    case "TypeResolveResult":
+                        //var typeResolveResult = (resolved as TypeResolveResult);
+                        //var resolvedClass = typeResolveResult.ResolvedType;
+                        //o2MethodStream.compilationUnit().add_Type(typeResolveResult.ResolvedType);
+                        break;
+
+                    case "LocalResolveResult":
+                        var localResolveResutlt = (resolved as LocalResolveResult);
+                        break;
+
+                    case "NamespaceResolveResult":
+                        var namespaceResolveResult = (resolved as NamespaceResolveResult);
+                        
+                        break;
+
+                    default:                        
+                        if (o2MethodStream.O2MappedAstData.debugMode)
+                        {
+                            var unsupportedType = resolved.typeName();
+                            "in map_IdentifierExpressions, unsupported ResolvedResult: {0}".error(unsupportedType);
+                        }
+                        break;
+                }                
+            }
+            return o2MethodStream;
+        }
+
+        public static O2MethodStream map_MemberReferenceExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
+        {            
+            var memberReferenceExpressions = methodDeclaration.iNodes<INode, MemberReferenceExpression>();
+            foreach (var memberReferenceExpression in memberReferenceExpressions)
+            {
+                var calledIMethod = o2MethodStream.O2MappedAstData.iMethod(memberReferenceExpression);
+                if (calledIMethod != null)
+                    if (o2MethodStream.O2MappedAstData.has_IMethod(calledIMethod))
+                        o2MethodStream.add_IMethod(calledIMethod);
+                    else
+                        o2MethodStream.add_ExternalIMethod(calledIMethod);
+                else
+                {
+                    o2MethodStream.map_Expression(memberReferenceExpression);                    
+                }
+                //else
+                //    "Could not resolve iMethod for memberReferenceExpression".error();
+            }
+            return o2MethodStream;
+        }
+
+        public static O2MethodStream map_ObjectCreateExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
+        {
+            // map ObjectCreateExpression (just about the same process as for memberReferenceExpressions
+            var objectCreateExpressions = methodDeclaration.iNodes<INode, ObjectCreateExpression>();
+            foreach (var objectCreateExpression in objectCreateExpressions)
+            {
+                var calledIMethod = o2MethodStream.O2MappedAstData.iMethod(objectCreateExpression);
+                if (calledIMethod != null)
+                    if (o2MethodStream.O2MappedAstData.has_IMethod(calledIMethod))
+                        o2MethodStream.add_IMethod(calledIMethod);
+                    else
+                        o2MethodStream.add_ExternalIMethod(calledIMethod);
+                //else
+                //    "Could not resolve iMethod for ObjectCreateExpression".error();
+            }
+
+            return o2MethodStream;
+        }
+
+        public static O2MethodStream map_InvocationExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
+        {            
+            var invocationExpressions = methodDeclaration.iNodes<INode, InvocationExpression>();
+            foreach (var invocationExpression in invocationExpressions)
+            {
+                var calledIMethod = o2MethodStream.O2MappedAstData.iMethod(invocationExpression);
+                if (calledIMethod != null)
+                    if (o2MethodStream.O2MappedAstData.has_IMethod(calledIMethod))
+                        o2MethodStream.add_IMethod(calledIMethod);
+                    else
+                        o2MethodStream.add_ExternalIMethod(calledIMethod);         
+            }
+            return o2MethodStream;
+        }
+
+        #endregion
 
         public static bool has_ExternalClass(this O2MethodStream o2MethodStream, string fullName)
         {
@@ -236,34 +322,40 @@ namespace O2.API.AST.ExtensionMethods
         public static CompilationUnit compilationUnit(this O2MethodStream o2MethodStream)
         {
             var compilationUnit = new CompilationUnit();
+            
+            // this has to be the first since we want the first method to be the one that created the MethodStream
+
             // add methods that we have the code for (and want to include in the current compilationUnit			
             foreach (var iMethod in o2MethodStream.MappedIMethods.Values)
             {
-                var @namespace = iMethod.DeclaringType.Namespace;
-                var typeName = iMethod.DeclaringType.Name;
+                //var @namespace = iMethod.DeclaringType.Namespace;
+                //var typeName = iMethod.DeclaringType.Name;
                 var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
 
-                compilationUnit.add_Method(@namespace, typeName, methodDeclaration);
+                compilationUnit.add_Method(iMethod.DeclaringType, methodDeclaration);
             }
 
             // add external methods
             foreach (var iMethod in o2MethodStream.ExternalIMethods.Values)
             {
-                var @namespace = iMethod.DeclaringType.Namespace;
-                var typeName = iMethod.DeclaringType.Name;
-
+                //var @namespace = iMethod.DeclaringType.Namespace;
+                //var typeName = iMethod.DeclaringType.Name;
+                var declaringType = iMethod.DeclaringType;
                 var csharpAst = iMethod.csharpCode().csharpAst();
                 if (csharpAst.methods().size() == 1)
                 {
                     var methodDeclaration = csharpAst.methods()[0];
-                    compilationUnit.add_Method(@namespace, typeName, methodDeclaration);
-                    compilationUnit.add_Using(@namespace);
+                    //compilationUnit.add_Method(@namespace, typeName, methodDeclaration);
+                    compilationUnit.add_Method(declaringType, methodDeclaration);                    
+                    compilationUnit.add_Using(declaringType.Namespace);
                 }
                 else if (csharpAst.constructors().size() == 1)
                 {
                     var constructor = csharpAst.constructors()[0];
-                    compilationUnit.add_Ctor(@namespace, typeName, constructor);
-                    compilationUnit.add_Using(@namespace);
+                    compilationUnit.add_Ctor(declaringType, constructor);
+                    compilationUnit.add_Using(declaringType.Namespace);
+                    //compilationUnit.add_Ctor(@namespace, typeName, constructor);
+                    //compilationUnit.add_Using(@namespace);
                 }
                 else
                     "*****: could not add to source code:{0}".format(iMethod.fullName()).error();
@@ -281,6 +373,19 @@ namespace O2.API.AST.ExtensionMethods
                     compilationUnit.add_Using(iReturnType.Namespace);
                 }
             }
+
+
+            // add fields
+            foreach (var iField in o2MethodStream.Fields.Values)
+            {
+                compilationUnit.add_Field(iField);
+            }
+
+            foreach (var iProperty in o2MethodStream.Properties.Values)
+            {
+                compilationUnit.add_Property(iProperty);
+            }
+
             return compilationUnit;
         }
 

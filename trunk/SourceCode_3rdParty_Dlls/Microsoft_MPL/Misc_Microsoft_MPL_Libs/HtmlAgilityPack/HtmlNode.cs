@@ -440,14 +440,20 @@ namespace HtmlAgilityPack
 		public HtmlNodeCollection SelectNodes(string xpath)
 		{
 			HtmlNodeCollection list = new HtmlNodeCollection(null);
-
-			HtmlNodeNavigator nav = new HtmlNodeNavigator(_ownerdocument, this);
-			XPathNodeIterator it = nav.Select(xpath);
-			while (it.MoveNext())
-			{
-				HtmlNodeNavigator n = (HtmlNodeNavigator)it.Current;
-				list.Add(n.CurrentNode);
-			}
+            try
+            {
+                HtmlNodeNavigator nav = new HtmlNodeNavigator(_ownerdocument, this);
+                XPathNodeIterator it = nav.Select(xpath);
+                while (it.MoveNext())
+                {
+                    HtmlNodeNavigator n = (HtmlNodeNavigator)it.Current;
+                    list.Add(n.CurrentNode);
+                }
+            }
+            catch (Exception ex)
+            {
+                O2.Kernel.ExtensionMethods.Logging_ExtensionMethods.log(ex, "in HtmlNodeCollection SelectNodes");
+            }
             //DC removed this so that we get an empty list when there are no matching nodes
 			//if (list.Count == 0)
 			//{

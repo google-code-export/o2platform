@@ -123,7 +123,9 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static bool hasKey<T, T1>(this Dictionary<T, T1> dictionary, T key)
         {
-            return dictionary.ContainsKey(key);
+            if (dictionary != null && key != null)
+                return dictionary.ContainsKey(key);
+            return false;
         }
 
         public static List<T> add<T>(this List<T> list, T item)

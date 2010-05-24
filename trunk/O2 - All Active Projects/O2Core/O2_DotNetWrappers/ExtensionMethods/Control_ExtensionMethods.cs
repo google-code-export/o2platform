@@ -779,6 +779,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             try
             {
+                if (controlToWrap == null || controlToInject == null)
+                    return new List<Control>();
                 return (List<Control>)controlToWrap.invokeOnThread(
                     () =>
                     {
@@ -920,6 +922,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 () =>
                 {
                     var newControl = control.add_Control<T>();
+                    if (newControl == null)
+                        return null;
                     newControl.fill();
                     control.insert_Below(newControl, distance);
                     return newControl;

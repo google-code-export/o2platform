@@ -46,6 +46,9 @@ namespace O2.API.AST.CSharp
         public O2MappedAstData()
         {
             O2AstResolver = new O2AstResolver();
+            //by default add these two (it slows down a bit, but it helps when viewing AST/DOM data
+            O2AstResolver.addReference("System");
+            //"added reference to MsCorLib.dll and System.dll".info();
             MapAstToDom = new MapAstToDom();
             MapAstToNRefactory = new MapAstToNRefactory(O2AstResolver.myProjectContent);
 			FileToINodes = new Dictionary<string, GetAllINodes>();            
