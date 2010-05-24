@@ -683,23 +683,29 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			public O2CodeStream CodeStream { get; set; }			
 			public O2CodeStreamTaintRules TaintRules { get; set; }
 			public String MethodStreamFile { get; set; }
+			public bool ShowGraphInNewWindow {get; set;}
+			public bool JoinGraphData {get; set;}
+			
 			
 			public TreeView MethodsTreeView  { get; set; }
 			public TreeView ParametersTreeView  { get; set; }
 			public TreeView MethodsCalledTreeView { get; set; }
 			public ascx_SourceCodeViewer CodeViewer { get; set; }			
-			public GraphLayout CodeStreamGraph { get; set; }	
+			public GraphLayout CodeStreamGraph { get; set; }
+			public ascx_Simple_Script_Editor CodeStreamGraphScript { get; set; }			
+			public Panel CodeStreamGraphPanel { get; set; }
 			public TreeView CodeStreamTreeView { get; set; }	
 			public TabPage CodeStreamGraphTab { get; set; }
 			public TabPage CodeStreamTreeViewTab { get; set; }
 			public String MethodsFilter { get; set; }
 			public ascx_SourceCodeViewer CodeStreamCodeViewer  { get; set; }	
-				
+			
 			public Step_MethodStreams(O2_DotNet_Ast_Engine astEngine)
 			{
 				AstEngine = astEngine;
 				MethodsFilter = "";		
 				AstData_MethodStream = new O2MappedAstData();
+				
 				//CodeStream = new O2CodeStream();
 				buildGui();
 				loadDataInGui();
@@ -721,12 +727,12 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 				CodeViewer = tabControl.add_Tab("Source Code").add_SourceCodeViewer();
 				
 				CodeStreamTreeViewTab = tabControl.add_Tab("CodeStream TreeView");
-				CodeStreamGraphTab = tabControl.add_Tab("CodeStream Graph");
-				CodeStreamGraphTab.backColor(Color.White);				
+				CodeStreamGraphTab = tabControl.add_Tab("CodeStream Graph");							
 				CodeStreamCodeViewer = CodeStreamTreeViewTab.add_SourceCodeViewer();
 				CodeStreamTreeView = CodeStreamCodeViewer.insert_Left<TreeView>(200);
-				CodeStreamGraph = CodeStreamGraphTab.add_Panel().add_Graph(); 
-				  
+				CodeStreamGraphPanel = CodeStreamGraphTab.add_Panel().backColor(Color.White);					
+				CodeStreamGraph = CodeStreamGraphPanel.add_Graph();
+				CodeStreamGraphScript = CodeStreamGraphPanel.insert_Below<Panel>().add_Script();
 				CodeStreamTreeView.afterSelect<O2CodeStreamNode>
 				 	((streamNode)=> CodeStreamCodeViewer.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation));				
 				
@@ -745,6 +751,13 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 							createMethodStreamAndShowInGui(iMethod);						
 						});				
 				
+				var optionsPanel = MethodsTreeView.insert_Below<Panel>(25);
+				optionsPanel.add_CheckBox("Open Graph in New Window", 0, 0,(value)=> ShowGraphInNewWindow = value)
+							.autoSize();
+							
+				optionsPanel.add_CheckBox("Join Graph Data",0, 200,(value)=> JoinGraphData = value)
+							.autoSize().bringToFront();							   
+							   				
 				ParametersTreeView =  MethodsTreeView.insert_Below<TreeView>(100);
 				MethodsCalledTreeView =  ParametersTreeView.insert_Right<TreeView>(200);
 				
@@ -754,7 +767,8 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 				MethodsCalledTreeView.afterSelect<INode>((iNode)=> createAndShowCodeStream(iNode));
 				ParametersTreeView.afterSelect<INode>((iNode)=> createAndShowCodeStream(iNode));
 				
-				MethodsTreeView.beforeExpand_PopulateWithList<ISpecial>();							
+				MethodsTreeView.beforeExpand_PopulateWithList<ISpecial>();	
+								
 				
 			}
 			
@@ -779,14 +793,17 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			
 			public void createMethodStreamAndShowInGui(IMethod iMethod)
 			{
-			
-				createMethodStream(iMethod);
-				//showMethodStreamInGui();											
-				AstData_MethodStream.showMethodStreamDetailsInTreeViews(ParametersTreeView, MethodsCalledTreeView);
+				O2Thread.mtaThread(
+					()=>{
+							createMethodStream(iMethod);
+							ParametersTreeView.clear();
+							MethodsCalledTreeView.clear();
+							AstData_MethodStream.showMethodStreamDetailsInTreeViews(ParametersTreeView, MethodsCalledTreeView);
+						});
 			}
 			
 			public void createMethodStream(IMethod iMethod)
-			{
+			{				
 				MethodStream = AstEngine.AstData.createO2MethodStream(iMethod);
 				MethodStreamFile = MethodStream.csharpCode().saveWithExtension(".cs");
 							
@@ -801,8 +818,11 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			
 			public void createAndShowCodeStream(INode iNode)
 			{
-				CodeStream = AstData_MethodStream.createO2CodeStream(TaintRules, MethodStreamFile,iNode);
-				showCodeStream();
+				O2Thread.mtaThread(
+					()=>{
+							CodeStream = AstData_MethodStream.createO2CodeStream(TaintRules, MethodStreamFile,iNode);
+							showCodeStream();
+						});
 			}
 			
 			public void showCodeStream()
@@ -810,9 +830,27 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 				CodeStream.show(CodeViewer.editor());
 				CodeStream.show(CodeStreamCodeViewer.editor());
 				CodeStream.show(CodeStreamTreeView);
-				CodeStreamGraphTab.clear();
-				CodeStreamGraph = CodeStreamGraphTab.add_Graph();
-				CodeStream.show(CodeStreamGraph);
+				
+				
+				O2Thread.mtaThread(
+					()=>{							
+							if (ShowGraphInNewWindow)
+							{		
+								if (JoinGraphData.isFalse())
+									CodeStreamGraph = O2Gui.open<Panel>("O2 Ast Engine Graph",400,400).add_Graph();
+								CodeStream.show(CodeStreamGraph);
+							}
+							else
+							{
+								if (JoinGraphData.isFalse())
+								{
+									CodeStreamGraphPanel.clear();						
+									CodeStreamGraph = CodeStreamGraphPanel.add_Graph();
+								}
+								CodeStream.show(CodeStreamGraph);
+							}							
+							CodeStreamGraphScript.InvocationParameters.add("graph",CodeStreamGraph);
+						});
 								
 			}
 		}
@@ -914,18 +952,8 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 				//if (AstData_MethodStream != null)
 				//	cachedO2AstResolver = AstData_MethodStream.O2AstResolver;
 				
-				AstData_MethodStream = new O2MappedAstData(); 		
-				//if (cachedO2AstResolver !=null)
-				//{
-				//	"using chached references".debug();
-				//	AstData_MethodStream.O2AstResolver = cachedO2AstResolver;
-				//}
-				//else
-				//{
-					AstData_MethodStream.O2AstResolver.addReference("System.Web");
-					AstData_MethodStream.O2AstResolver.addReference("System.Web.Services");
-					"added reference to System.Web".info();
-				//}
+				AstData_MethodStream = new O2MappedAstData(); 														
+				
 					
 				
 				AstData_MethodStream.loadFile(MethodStreamFile);	
@@ -975,7 +1003,7 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 					CodeViewer.editor().selectTextWithColor(iNode);	
 					
 					var taintRules = new O2CodeStreamTaintRules();
-					taintRules.add_TaintPropagator("System.Int32.Parse");					
+					//taintRules.add_TaintPropagator("System.Int32.Parse");					
 					var codeStream = AstData_MethodStream.createO2CodeStream(taintRules, MethodStreamFile,iNode);
 					//var codeStream = AstData_MethodStream.createO2CodeStream(MethodStreamFile,iNode);
 					if (codeStream.hasPaths())

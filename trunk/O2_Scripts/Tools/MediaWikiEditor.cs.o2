@@ -18,9 +18,11 @@ using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.Ascx.MainGUI;
 using O2.External.IE.ExtensionMethods;
 using O2.XRules.Database._Rules._Interfaces;
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs
 using O2.External.IE.Wrapper;
-
+//O2File:C:\O2\O2Scripts_Database\_Scripts\APIs\O2MediaWikiAPI.cs
+//O2File:C:\O2\O2Scripts_Database\_Scripts\APIs\WordPressAPI.cs
+//O2File:C:\O2\O2Scripts_Database\_Scripts\APIs\O2PlatformWikiAPI.cs
+//O2File:C:\O2\O2Scripts_Database\_Scripts\APIs\OwaspAPI.cs
 namespace O2.Script
 {
     public class MediaWikiEditor : Control

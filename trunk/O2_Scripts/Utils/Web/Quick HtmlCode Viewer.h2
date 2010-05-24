@@ -55,6 +55,8 @@ treeView.beforeExpand&lt;HtmlAgilityPack.HtmlNode&gt;(
 treeView.afterSelect&lt;HtmlAgilityPack.HtmlNode&gt;(
 				  (htmlNode)=&gt;{ htmlCodeViewer.showHtmlNodeLocation(htmlNode);});
 
+pageToOpen.onDrop((file)=&gt;pageToOpen.set_Text(file));
+
 pageToOpen.onEnter(
 		(text)=&gt;{
 					pageToOpen.backColor(Color.LightBlue);	 				
