@@ -40,7 +40,7 @@ namespace O2.API.AST.Graph
         public override object VisitMethodDeclaration(MethodDeclaration methodDeclaration, object data)
         {
             O2AstResolver.resolver.RunLookupTableVisitor(methodDeclaration);  // make sure the current variables are mapped to the resolver.lookupTableVisitor
-            var method = new O2GraphAstNode(methodDeclaration, "[m] " + methodDeclaration.name(), CompilationUnit);
+            var method = new CodeStreamGraphNode(methodDeclaration, "[m] " + methodDeclaration.name(), CompilationUnit);
             Graph.edge(data, method);            
             return base.VisitMethodDeclaration(methodDeclaration, method);
         }

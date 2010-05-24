@@ -35,9 +35,9 @@ namespace O2.API.Visualization.ExtensionMethods
                     return;
 
                 if (previousNode == null)
-                    graphLayout.add_Node(new O2.API.AST.Graph.O2GraphAstNode(streamNode,null));
+                    graphLayout.add_Node(new O2.API.AST.Graph.CodeStreamGraphNode(streamNode,null));
                 else
-                    graphLayout.add_Edge(new O2.API.AST.Graph.O2GraphAstNode(previousNode,null), new O2.API.AST.Graph.O2GraphAstNode(streamNode,null));
+                    graphLayout.add_Edge(new O2.API.AST.Graph.CodeStreamGraphNode(previousNode,null), new O2.API.AST.Graph.CodeStreamGraphNode(streamNode,null));
 
 
                 foreach (var childNode in streamNode.ChildNodes)

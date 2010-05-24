@@ -112,12 +112,12 @@
     <Compile Include="ExtensionMethods\IAstVisitor_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2CodeStreamTaintRules_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2CodeStream_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\O2GraphAstNode_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CodeStreamGraphNode_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2MappedAstData_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2MethodStream_ExtensionMethods.cs" />
     <Compile Include="Graph\AstMethodFinder.cs" />
     <Compile Include="Graph\GraphAstVisitor.cs" />
-    <Compile Include="Graph\O2GraphAstNode.cs" />
+    <Compile Include="Graph\CodeStreamGraphNode.cs" />
     <Compile Include="Visitors\FindIdentifierUsage.cs" />
     <Compile Include="Visitors\GetAllINodes.cs" />
     <Compile Include="Visitors\MapAstToDom.cs" />
