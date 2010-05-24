@@ -7,12 +7,18 @@ using O2.API.AST.Graph;
 using ICSharpCode.SharpDevelop.Dom;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.API.AST.CSharp;
 
 namespace O2.API.AST.ExtensionMethods
 {
-    public static class O2GraphAstNode_ExtensionMethods
+    public static class CodeStreamGraphNode_ExtensionMethods
     {
-        public static O2GraphAstNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject)
+        /*public static O2GraphAstNode newO2GraphNode(this O2CodeStream codeStream);
+        {
+            return new O2GraphAstNode(codeStream, originalObject);
+        }*/
+
+        /*public static O2GraphAstNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject)
         {
             return new O2GraphAstNode(originalObject, compilationUnit);
         }
@@ -20,7 +26,7 @@ namespace O2.API.AST.ExtensionMethods
         public static O2GraphAstNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject, string nodeText)
         {
             return new O2GraphAstNode(originalObject, nodeText, compilationUnit);
-        }
+        }*/
 
         // this needs to be rewitten using the new AstVistors
         /*

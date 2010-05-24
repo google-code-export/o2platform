@@ -13,22 +13,22 @@ using ICSharpCode.NRefactory.Ast;
 
 namespace O2.API.AST.Graph 
 {
-    public class O2GraphAstNode : Label
+    public class CodeStreamGraphNode : Label
     {
         public CompilationUnit CompilationUnit { get; set; }
         public object OriginalObject { get; set; }
         public string NodeText { get; set; }
-        public Action<O2GraphAstNode> onDoubleClick { get; set; }
-        public Action<O2GraphAstNode> onMouseEnter { get; set; }
-        public Action<O2GraphAstNode> onMouseLeave { get; set; }
+        public Action<CodeStreamGraphNode> onDoubleClick { get; set; }
+        public Action<CodeStreamGraphNode> onMouseEnter { get; set; }
+        public Action<CodeStreamGraphNode> onMouseLeave { get; set; }
 
 
-        public O2GraphAstNode(object originalObject, CompilationUnit compilationUnit)
+        public CodeStreamGraphNode(object originalObject, CompilationUnit compilationUnit)
             : this(originalObject, originalObject.str(), compilationUnit)
         {            
         }
 
-        public O2GraphAstNode(object originalObject, string nodeText, CompilationUnit compilationUnit)       
+        public CodeStreamGraphNode(object originalObject, string nodeText, CompilationUnit compilationUnit)       
         {
             CompilationUnit = compilationUnit;
             OriginalObject = originalObject;
