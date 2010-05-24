@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>
-var fileWithCredentials = @"C:\O2\_USERDATA\TwitterAccounts.xml";
+  <SourceCode>var fileWithCredentials = @"C:\O2\_USERDATA\TwitterAccounts.xml";
 
 //panel.clear();
 //var tabControl = panel.add_TabControl(); 
@@ -88,10 +87,8 @@ followingTab.onSelected(
 		});
 return "done";
  
-
-//using TweetSharp.Fluent
-//using TweetSharp.Extensions
-//O2Ref:System.Data.dll
-//using O2.XRules.Database._Rules.APIs</SourceCode>
+//using O2.XRules.Database._Rules._Interfaces
+//using O2.XRules.Database._Rules.APIs 
+//O2File:C:\O2\O2Scripts_Database\_Scripts\APIs\O2TwitterAPI.cs</SourceCode>
   <ReferencedAssemblies />
 </H2>
