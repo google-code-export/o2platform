@@ -21,7 +21,14 @@ namespace O2.API.AST.ExtensionMethods
 
         public static BidirectionalGraph<object, IEdge<object>> add_Node(this BidirectionalGraph<object, IEdge<object>> graph, object vertexToAdd)
         {
-            graph.AddVertex(vertexToAdd);
+            if (vertexToAdd != null)
+            {
+                "adding vertex: {0}".info(vertexToAdd.str());
+                graph.AddVertex(vertexToAdd);
+            }
+            else
+            { 
+            }
             return graph;
         }
 
@@ -29,9 +36,15 @@ namespace O2.API.AST.ExtensionMethods
         {
             try
             {
-                graph.AddVertex(fromVertex);
-                graph.AddVertex(toVertex);
-                graph.AddEdge(new Edge<object>(fromVertex, toVertex));                
+                if (fromVertex != null)
+                    graph.AddVertex(fromVertex);
+                if (toVertex != null)
+                    graph.AddVertex(toVertex);
+                if (fromVertex != null && toVertex != null)
+                    graph.AddEdge(new Edge<object>(fromVertex, toVertex));
+                else
+                { 
+                }
             }
             catch (System.Exception ex)
             { 

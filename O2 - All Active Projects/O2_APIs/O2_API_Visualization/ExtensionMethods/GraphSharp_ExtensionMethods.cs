@@ -81,10 +81,18 @@ namespace O2.API.Visualization.ExtensionMethods
 
         public static GraphLayout add_Edge(this GraphLayout graphLayout, object fromVertex, object toVertex)
         {
-            if (fromVertex != toVertex)
-                return graphLayout.edge(fromVertex, toVertex);
-            else
-                return graphLayout.add_Node(fromVertex);
+            try
+            {
+                if (fromVertex != toVertex)
+                    return graphLayout.edge(fromVertex, toVertex);
+                else
+                    return graphLayout.add_Node(fromVertex);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in GraphLayout.add_Edge");
+                return graphLayout;
+            }
         }
     	
     	public static GraphLayout edge(this GraphLayout graphLayout,object fromVertex, object toVertex)
@@ -158,7 +166,7 @@ namespace O2.API.Visualization.ExtensionMethods
     	
     	public static GraphLayout defaultLayout(this GraphLayout graphLayout)
     	{
-    		return (GraphLayout)graphLayout.wpfInvoke(
+    		graphLayout.wpfInvoke(
     			()=>{
                         try
                         {
@@ -175,6 +183,7 @@ namespace O2.API.Visualization.ExtensionMethods
                         }
 			           	return graphLayout;
 			         });
+            return graphLayout;
         }
 
         public static GraphLayout overlapRemovalParameters(this GraphLayout graphLayout, float horizontalGap, float verticalGap)

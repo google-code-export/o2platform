@@ -17,7 +17,11 @@ namespace O2.API.AST.CSharp
 		public O2MappedAstData O2MappedAstData { get; set;}		
 		public Dictionary<string, IMethod> MappedIMethods {get;set;}
 		public Dictionary<string,IMethod> ExternalIMethods {get;set;}
-		public Dictionary<string, IReturnType> ExternalClasses {get;set;}		
+        public Dictionary<string, IReturnType> ExternalClasses { get; set; }
+        public Dictionary<string, IField> Fields { get; set; }
+        public Dictionary<string, IProperty> Properties { get; set; }
+
+        public List<string> NamespaceReferences { get; set; }
 		
 		public O2MethodStream(O2MappedAstData o2MappedAstData)
 		{
@@ -25,6 +29,9 @@ namespace O2.API.AST.CSharp
 			MappedIMethods = new Dictionary<string,IMethod>();
 			ExternalIMethods = new Dictionary<string,IMethod>(); 
 			ExternalClasses = new Dictionary<string, IReturnType>();
+            Fields = new Dictionary<string,IField>();
+            Properties = new Dictionary<string, IProperty>();
+            NamespaceReferences = new List<String>();
 		}
 	}
 	

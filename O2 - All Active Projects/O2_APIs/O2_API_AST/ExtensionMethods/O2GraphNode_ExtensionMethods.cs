@@ -12,18 +12,18 @@ namespace O2.API.AST.ExtensionMethods
 {
     public static class O2GraphNode_ExtensionMethods
     {
-        public static O2GraphNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject)
+        public static O2GraphASTNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject)
         {
-            return new O2GraphNode(originalObject, compilationUnit);
+            return new O2GraphASTNode(originalObject, compilationUnit);
         }
 
-        public static O2GraphNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject, string nodeText)
+        public static O2GraphASTNode newO2GraphNode(this CompilationUnit compilationUnit, object originalObject, string nodeText)
         {
-            return new O2GraphNode(originalObject, nodeText, compilationUnit);
+            return new O2GraphASTNode(originalObject, nodeText, compilationUnit);
         }
 
         // this needs to be rewitten using the new AstVistors
-
+        /*
         public static void expandNode(this GraphAstVisitor graphAstVisitor, O2GraphNode nodeToExpand)
         {
             object resolved = null;
@@ -66,7 +66,7 @@ namespace O2.API.AST.ExtensionMethods
 
 
             "in expand node for: {0}".format(nodeToExpand).info();
-        }        
+        } */       
 
     }
 }

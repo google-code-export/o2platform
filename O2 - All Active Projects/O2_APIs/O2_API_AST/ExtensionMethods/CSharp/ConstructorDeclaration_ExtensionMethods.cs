@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.NRefactory;
+using ICSharpCode.SharpDevelop.Dom;
 
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
@@ -19,10 +20,17 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return typeDeclaration;
         }
 
-        public static CompilationUnit add_Ctor(this CompilationUnit compilationUnit, string @namespace, string typeName, ConstructorDeclaration constructorDeclaration)
+        public static CompilationUnit add_Ctor(this CompilationUnit compilationUnit, IClass iClass,  ConstructorDeclaration constructorDeclaration)
+        {
+            var typeDeclaration = compilationUnit.add_Type(iClass);
+            typeDeclaration.add_Ctor(constructorDeclaration);
+            return compilationUnit;
+        }
+
+        public static CompilationUnit add_Ctor_(this CompilationUnit compilationUnit, string @namespace, string typeName, ConstructorDeclaration constructorDeclaration)
         {
             var myNamespace = compilationUnit.add_Namespace(@namespace);
-            var type = myNamespace.add_Type(typeName);
+            var type = myNamespace.add_Type_(typeName);
             type.add_Ctor(constructorDeclaration);
             return compilationUnit;
         }

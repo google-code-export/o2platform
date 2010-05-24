@@ -33,8 +33,8 @@ namespace ICSharpCode.SharpDevelop.Dom.NRefactoryResolver
 	public class NRefactoryResolver : IResolver
 	{
 		ICompilationUnit cu;
-		IClass callingClass;
-		IMember callingMember;
+		public IClass callingClass;
+		public IMember callingMember;
 		ICSharpCode.NRefactory.Visitors.LookupTableVisitor lookupTableVisitor;
 		IProjectContent projectContent;
 		
@@ -70,24 +70,40 @@ namespace ICSharpCode.SharpDevelop.Dom.NRefactoryResolver
 			get {
 				return callingClass;
 			}
+            set
+            {
+                callingClass = value;   //DC (this value needs to be reset when dealing with partial classes
+            }
 		}
 		
 		public IMember CallingMember {
 			get {
 				return callingMember;
 			}
+            set
+            {
+                callingMember = value;   //DC (this value needs to be reset when dealing with partial classes
+            }
 		}
 		
 		public int CaretLine {
 			get {
 				return caretLine;
 			}
+            set
+            {
+                caretLine = value;   //DC (this value needs to be reset when dealing with partial classes
+            }
 		}
 		
 		public int CaretColumn {
 			get {
 				return caretColumn;
 			}
+            set
+            {
+                caretColumn = value;   //DC (this value needs to be reset when dealing with partial classes
+            }
 		}
 		
 		readonly LanguageProperties languageProperties;
