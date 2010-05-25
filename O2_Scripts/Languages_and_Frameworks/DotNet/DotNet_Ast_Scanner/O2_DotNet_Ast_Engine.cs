@@ -33,16 +33,9 @@ using GraphSharp.Controls;
 using O2.XRules.Database.ExtensionMethods;
 using O2.XRules.Database.O2Utils;
 
-//O2Ref:GraphSharp.dll
-//O2Ref:GraphSharp.Controls.dll
-//O2Ref:QuickGraph.dll
-//O2Ref:PresentationFramework.dll
-//O2Ref:PresentationCore.dll
-//O2Ref:WindowsBase.dll
-//O2Ref:ICSharpCode.AvalonEdit.dll
-//O2Ref:WindowsFormsIntegration.dll
 //O2Ref:System.Data.dll
 //O2File:C:\O2\_XRules_Local\Extra_methods.cs
+//O2File:C:\_O2_SVN\O2 - All Active Projects\O2_APIs\O2_API_Visualization\Ascx\ascx_GraphAst_MethodCalls.cs
 
 namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 {
@@ -94,8 +87,9 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			var controls = this.add_1x1("actions", "", false, 40);		
 			TopProgressBar =  controls[0].add_Link("Step 1: load artifacts (C# source code)", 15, 2, () => step_LoadArtifacts())
 								         .append_Link("view AST", ()=> step_ViewAST())
-								         .append_Link("search AST", ()=> step_SearchAST())
+								         .append_Link("search AST", ()=> step_SearchAST())								         
 								         .append_Link("search Comments", ()=> step_SearchComments())
+								         .append_Link("who calls who?", ()=> step_WhoCallsWho())
 								         .append_Link("method streams", ()=> step_MethodStreams())
 								         .append_Link("manual method stream", ()=> step_ManualMethodStream())
 								         .append_Link("write rule", ()=> step_WriteRule())								         
@@ -127,12 +121,18 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 		public Step_SearchAST step_SearchAST()
 		{
 			return new Step_SearchAST(this);
-		}
+		}			
 		
 		public Step_SearchComments step_SearchComments()
 		{
 			return new Step_SearchComments(this);
 		}
+		
+		public Step_WhoCallsWho step_WhoCallsWho()
+		{
+			return new Step_WhoCallsWho(this);
+		}
+		
 		
 		public Step_MethodStreams step_MethodStreams()
 		{
@@ -209,79 +209,6 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			}						
 		}
 		
-	/*	public void step2()
-		{
-			HostPanel.clear();
-			
-			var topControls = HostPanel.add_1x1("Source Files","Method Streams",false);
-			var files_treeView = topControls[0].add_TreeView();
-			files_treeView.add_Nodes(AstData.files());
-			var childControls = topControls[1].add_1x1("Methods","Stream",true,300); 
-			var methods_TreeView = childControls[0].add_TreeView(); 
-			var sourceCode = childControls[1].add_SourceCodeViewer();
-			
-			files_treeView.parent<SplitContainer>().FixedPanel = FixedPanel.Panel1;
-			methods_TreeView.parent<SplitContainer>().FixedPanel = FixedPanel.Panel1;
-			
-			files_treeView.invokeOnThread(
-			()=> 
-				files_treeView.onDrop(
-					(fileOrFolder)=>{
-										loadSourceFiles(fileOrFolder);
-										files_treeView.clear();
-										files_treeView.add_Nodes(AstData.files());
-									})
-				);
-			files_treeView.afterSelect<string>(
-				(file)=>{
-							methods_TreeView.clear(); 
-							foreach(var iNode in AstData.iNodes<MethodDeclaration>(file)) 
-							{
-								var iMethod = AstData.iMethod(iNode);
-								methods_TreeView.add_Node(iMethod.name(),iMethod); 
-							}
-							//sourceCode.open(file);
-						});
-			
-			methods_TreeView.afterSelect<IMethod>(
-				(iMethod)=>{
-							var methodStream = AstData.createO2MethodStream(iMethod);
-							sourceCode.set_Text(methodStream.csharpCode());
-							//"method stream:{0}".info(methodStream);
-						});
-						
-			//HostPanel.backColor(Color.White);  
-			//Step__TreeView_SourceFiles =  HostPanel.add_TreeView(); 
-			//var Step_1_Browser = Step_1_TreeView_SourceFiles.insert_Above<Panel>(100);
-			//Step_1_Browser.add_WikiHelpPage(step_2_WikiHelpPage);	    						
-		}
-*/
-	/*
-			var dir = "C:\\O2\\DemoData\\HacmeBank_v2.0 (Dinis version - 7 Dec 08)\\HacmeBank_v2_WS\\WebServices";
-			var targetFolder = PublicDI.config.getTempFolderInTempDirectory("MethodStreams");
-			
-			var o2MappedAstData = new O2MappedAstData();
-			o2MappedAstData.O2AstResolver.addReference("System.Data");
-	
-			var targetSourceFiles = (dir + "\\..").fullPath().files("*.cs", true);
-	 
-			o2MappedAstData.loadFiles(targetSourceFiles);		
-	
-			var originalFile = this.add_SourceCodeViewer();
-	
-			var treeView = originalFile.insert_Left<Panel>(300).add_Directory().open(dir).afterFileSelect(file =>
-			{
-				originalFile.set_Text(file.fileContents());
-				o2MappedAstData.createO2MethodStreamFiles(dir.files()[1], targetFolder);
-			}).getTreeView();
-	
-			treeView.SelectedNode = treeView.Nodes[2];
-	
-			var methodStreamViewer = originalFile.insert_Below<ascx_SourceCodeViewer>();
-	
-			var createdFiles = methodStreamViewer.insert_Left<Panel>(300).add_Directory(targetFolder).afterFileSelect(file => methodStreamViewer.open(file));
-	*/
-		
 		public void resetLoadedData()
 		{
 			AstData = new O2MappedAstData();
@@ -308,8 +235,7 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			public TabPage OptionsTab { get; set; }
 			public TabPage HelpTab { get; set; }						
 			
-			public string wikiHelpPage = "O2 DotNet Ast Engine - Load Artifacts";
-			//public string wikiHelpPage = "O2 DotNet Ast Engine - Step 1: load source code files";
+			public string wikiHelpPage = "O2 DotNet Ast Engine - Load Artifacts";			
 			
 			public Step_LoadArtifacts(O2_DotNet_Ast_Engine astEngine)
 			{
@@ -671,6 +597,82 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 				CommentsTreeView.visible(true);
 			}
 		}
+		
+		
+		public class Step_WhoCallsWho
+		{
+			public O2_DotNet_Ast_Engine AstEngine { get; set; }
+			
+			public TreeView MethodsTreeView  { get; set; }
+			public TabControl ParentTabControl { get; set; }
+			public TabPage TreeViewModeTab { get; set; }
+			public TabPage GraphModeTab { get; set; }
+			public TabPage InteractiveBrowseModeTab { get; set; }
+			
+			public Dictionary<string,List<String>> MethodsCalledMappings { get; set; }
+			public Dictionary<string,List<String>> MethodIsCalledByMappings { get; set; }
+			public List<string> AllMethods { get; set; }			
+			public String FileFilter { get; set; }
+				
+			public Step_WhoCallsWho(O2_DotNet_Ast_Engine astEngine)
+			{
+				AstEngine = astEngine;
+				//CommentsFilter = "";				
+				buildGui();
+				//loadDataInGui();
+			}				
+			
+			public void buildGui()
+			{
+				AstEngine.HostPanel.clear();															
+				"Calculating Mappings fro Methods called".info();
+				MethodsCalledMappings = AstEngine.AstData.calculateMappingsFor_MethodsCalled();			
+				MethodIsCalledByMappings = AstEngine.AstData.calculateMappingsFor_MethodIsCalledBy(MethodsCalledMappings);			
+				
+				AllMethods = this.MethodsCalledMappings.Keys.toList();
+				AllMethods.add_OnlyNewItems(this.MethodIsCalledByMappings.Keys.toList());
+				"MethodsCalledMappings has {0} root methods".info(MethodsCalledMappings.Keys.size());
+				"MethodIsCalledByMappings has {0} root methods".info(MethodIsCalledByMappings.Keys.size());
+				"AllMethods has {0} root methods".info(AllMethods.size());
+				
+				ParentTabControl = AstEngine.HostPanel.add_TabControl();
+				TreeViewModeTab = ParentTabControl.add_Tab("TreeView Mode");
+				GraphModeTab = ParentTabControl.add_Tab("Graph Mode");
+				InteractiveBrowseModeTab = ParentTabControl.add_Tab("Interactive Browse Mode");
+				//build_TreeViewMode(TreeViewModeTab);
+				build_GraphMode(GraphModeTab);
+			}
+			
+			/*public void loadDataInGui()
+			{				
+				
+				//CommentsTreeView.visible(false); 
+				//CommentsTreeView.clear();
+//				MethodsTreeView.add_Nodes(AstEngine.AstData.iMethods());
+				//CommentsTreeView.visible(true);
+			}*/
+			
+			public void build_TreeViewMode(Control control)
+			{			
+				var sourceViewer = control.add_SourceCodeViewer();
+				var controls = sourceViewer.insert_Above<Panel>().add_1x1("Methods called", "Methods called by", true, AstEngine.HostPanel.width()/2);
+				
+				var methodsCalledTreeView = controls[0].add_TreeViewWithFilter(MethodsCalledMappings);			
+				var methodIsCalledByTreeView = controls[1].add_TreeViewWithFilter(MethodIsCalledByMappings);
+				
+				methodsCalledTreeView.afterSelect_ShowMethodSignatureInSourceCode(AstEngine.AstData, sourceViewer);
+				methodIsCalledByTreeView.afterSelect_ShowMethodSignatureInSourceCode(AstEngine.AstData, sourceViewer);
+			}
+			
+			public void build_GraphMode(Control control)
+			{
+				var graphMethodCalls =  control.add_Control<ascx_GraphAst_MethodCalls>();
+				graphMethodCalls.setData(AstEngine.AstData, MethodsCalledMappings, MethodIsCalledByMappings, AllMethods);
+				graphMethodCalls.buildGui();
+			}
+		}
+				
+		
 		
 		
 		public class Step_MethodStreams
