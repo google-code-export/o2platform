@@ -455,6 +455,29 @@ namespace O2.Script
                                                                   "limit", maxToFetchPerRequest,
                                                                   "offset", maxItemsToFetch);
         }
+		
+		public static List<string> allImages(this O2MediaWikiAPI wikiApi)
+		{			                         
+            return wikiApi.allImagesRaw().attributes("url").values();
+		}
+
+		public static List<XElement> allImagesRaw(this O2MediaWikiAPI wikiApi)
+        {
+            string pages = "";
+            string limitVar = "ailimit";
+            int limitValue = 200;
+            string properyType = "list";
+            string propertyName = "allimages";
+            string continueVarName = "aifrom";
+            string continueValue = "";
+            string dataElement = "img";
+            int maxItemsToFetch = -1;
+            bool resolveRedirects = false;
+            //"info&generator=allcategories",""
+            return wikiApi.getQueryContinueResults(pages, limitVar, limitValue, properyType,
+                                                    propertyName, continueVarName, continueValue,
+                                                    dataElement, maxItemsToFetch, resolveRedirects);
+        }
 
         #endregion
 
@@ -986,14 +1009,14 @@ namespace O2.Script
         {
             return wikiApi.IndexPhp + "/" + page;
         }
-
-        public static O2BrowserIE add_WikiHelpPage(this Control control, string wikiPage)
+        
+        public static O2BrowserIE add_WikiHelpPage(this Control control, O2MediaWikiAPI wikiApi,  string wikiPage)
         {
             var browser = control.add_Browser();
             O2Thread.mtaThread(
                 () =>
                 {
-                    var htmlText = new O2PlatformWikiAPI().getPageHtml(wikiPage);
+                    var htmlText = wikiApi.getPageHtml(wikiPage);
                     browser.set_Text(htmlText);
                 });
             return browser;
