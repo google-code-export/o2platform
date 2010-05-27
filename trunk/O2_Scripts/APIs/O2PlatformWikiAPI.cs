@@ -9,9 +9,7 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 
-//O2File:C:\O2\_XRules_Local\WebAutomation\O2MediaWikiAPI.cs
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_WebAutomation.cs
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_VisualizationAPI.cs
+//O2File:O2MediaWikiApi.cs    
 
 namespace O2.Script
 {
