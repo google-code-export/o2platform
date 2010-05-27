@@ -15,6 +15,7 @@ using O2.External.SharpDevelop.Ascx;
 
 using System.CodeDom;
 using ICSharpCode.NRefactory;
+using System.Drawing;
 
 
 namespace O2.External.SharpDevelop.ExtensionMethods
@@ -121,59 +122,8 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return o2MappedAstData;
         }
 
+        #region afterSelect events
 
-        /*public static TreeView afterSelect_ShowInSourceCodeEditor(this O2MappedAstData o2MappedAstData, TreeView treeView, ascx_SourceCodeEditor codeEditor)
-        {
-            return (TreeView)codeEditor.invokeOnThread(() =>
-            {
-                treeView.afterSelect<AstTreeView.ElementNode>((node) =>
-                {
-                    var element = (INode)node.field("element");                    
-                    codeEditor.setSelectionText(element.StartLocation, element.EndLocation);
-                });
-                treeView.afterSelect<INode>((node) =>
-                {
-                    codeEditor.setSelectionText(node.StartLocation, node.EndLocation);
-                });
-
-                treeView.afterSelect<CodeTypeDeclaration>((codeTypeDeclaration) =>
-                {
-                    if (o2MappedAstData.MapAstToDom.TypesDomToAst.hasKey(codeTypeDeclaration))
-                    {
-                        var typeDeclaration = o2MappedAstData.MapAstToDom.TypesDomToAst[codeTypeDeclaration];
-                        codeEditor.setSelectionText(typeDeclaration.StartLocation, typeDeclaration.EndLocation);
-                    }
-                    else
-                        "in afterSelect<CodeTypeDeclaration>, key was node found for :{0}".format(codeTypeDeclaration.str());
-                });
-
-                treeView.afterSelect<CodeMemberMethod>((codeMemberMethod) =>
-                {
-                    if (o2MappedAstData.MapAstToDom.MethodsDomToAst.hasKey(codeMemberMethod))
-                    {
-                        var methodDeclaration = o2MappedAstData.MapAstToDom.MethodsDomToAst[codeMemberMethod];
-                        codeEditor.setSelectionText(methodDeclaration.StartLocation, methodDeclaration.EndLocation);
-                    }
-                    else
-                        "in afterSelect<CodeMemberMethod> no key for {0}".format(codeMemberMethod.str()).error();
-                });
-
-                treeView.afterSelect<IMethod>((method) =>
-                {
-                    if (o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration.hasKey(method))
-                    {
-                        var methodDeclaration = o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration[method];
-                        codeEditor.setSelectionText(methodDeclaration.StartLocation, methodDeclaration.EndLocation);
-                    }
-                    else
-                        "in afterSelect<CodeMemberMethod> no key for {0}".format(method.str()).error();
-                });
-                return treeView;
-            });
-        }*/
-        // above is the older version
-
-        //this code needs heavy refacting (lots of redundant code)
         public static TreeView afterSelect_ShowInSourceCodeEditor(this O2MappedAstData o2MappedAstData, TreeView treeView, ascx_SourceCodeEditor codeEditor)
         {
             return (TreeView)codeEditor.invokeOnThread(() =>
@@ -294,6 +244,29 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 return treeView;
             });
         }
+
+        public static TreeView afterSelect_ShowMethodSignatureInSourceCode(this TreeView treeView, O2MappedAstData astData, ascx_SourceCodeViewer codeViewer)
+        {
+            treeView.afterSelect(
+                (treeNode) =>
+                {                    
+                    var text = O2.DotNetWrappers.ExtensionMethods.Ascx_ExtensionMethods.get_Text(treeNode);
+                    var methodDeclaration = astData.methodDeclaration_withSignature(treeNode.get_Text());
+                    if (methodDeclaration != null)
+                    {
+                        treeNode.color(Color.DarkGreen);
+                        var file = astData.file(methodDeclaration);
+                        codeViewer.open(file);
+                        codeViewer.editor().clearBookmarksAndMarkers();
+                        codeViewer.editor().setSelectionText(methodDeclaration.StartLocation, methodDeclaration.EndLocation);
+                    }
+                    else
+                        treeNode.color(Color.Red);
+                });
+            return treeView;
+        }
+
+        #endregion
 
         #region methodStream and codeStream related
 

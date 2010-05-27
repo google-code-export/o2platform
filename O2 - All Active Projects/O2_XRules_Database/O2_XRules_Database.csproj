@@ -35,11 +35,12 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://o2platform.googlecode.com/svn/O2_ClickOnce_Installers/O2_XRules_Database/</InstallUrl>
     <ProductName>O2 XRules Database</ProductName>
-    <PublisherName>O2 - Ounce Open</PublisherName>
+    <PublisherName>OWASP O2 Platform</PublisherName>
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>71</ApplicationRevision>
+    <ApplicationRevision>77</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -215,11 +216,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\WatiN.Core.1x.dll</HintPath>
     </Reference>
-    <Reference Include="WebDev.WebServer, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\O2_Tools\O2_Tool_XRules\WebDev.WebServer.EXE</HintPath>
-    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -285,6 +281,7 @@
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
     <Compile Include="ExtensionMethods\HtmlAgilityPack_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Scripts_ExecutionMethods.cs" />
+    <Compile Include="ExtensionMethods\SecretData_ExtensionMethods.cs" />
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>

@@ -252,6 +252,13 @@ namespace O2.API.AST.ExtensionMethods
             return iMethods;
         }
 
+        public static IMethod iMethod_withSignature(this O2MappedAstData astData, string iMethodSignature)
+        {
+            foreach (var iMethod in astData.iMethods())
+                if (iMethod.fullName() == iMethodSignature)
+                    return iMethod;
+            return null;
+        }
 
         //merge this one with fromMemberReferenceExpressionGetIMethod (and add support for use of Fields and Properties)
 
@@ -428,12 +435,14 @@ namespace O2.API.AST.ExtensionMethods
         // REWRITE (lots of redundant code
         public static List<IMethod> calledIMethods(this O2MappedAstData o2MappedAstData, IMethod iMethod)
         {
-            "in Called IMETHODS".debug();
+            //"in Called IMETHODS".debug();
             var calledIMethods = new List<IMethod>();
             if (iMethod != null)
             {
-                "-------------------".info();
+              //  "-------------------".info();
                 var methodDeclaration = o2MappedAstData.methodDeclaration(iMethod);
+                if (methodDeclaration == null)
+                    return calledIMethods;
 
                 // handle invocations via MemberReferenceExpression
                 var memberReferenceExpressions = methodDeclaration.iNodes<INode, MemberReferenceExpression>();
@@ -447,12 +456,10 @@ namespace O2.API.AST.ExtensionMethods
 
                 // handle contructors
                 var objectCreateExpressions = methodDeclaration.iNodes<INode, ObjectCreateExpression>();
-                "objectCreateExpressions: {0}".format(objectCreateExpressions.Count).info();
+                //"objectCreateExpressions: {0}".format(objectCreateExpressions.Count).info();
                 foreach (var objectCreateExpression in objectCreateExpressions)
                     calledIMethods.add(o2MappedAstData.iMethod(objectCreateExpression));
 
-                // handle 
-                //var objIMethod = astData.fromObjectCreateExpressionGetIMethod(obj[0]);
             }
             return calledIMethods;
         }
@@ -761,6 +768,14 @@ namespace O2.API.AST.ExtensionMethods
             return null;
         }
 
+        public static MethodDeclaration methodDeclaration_withSignature(this O2MappedAstData astData, string iMethodSignature)
+        {
+            var iMethod = astData.iMethod_withSignature(iMethodSignature);
+            if (iMethod != null)
+                return astData.methodDeclaration(iMethod);
+            return null;
+        }
+
         public static List<String> files(this O2MappedAstData astData)
         {
             return astData.FileToCompilationUnit.Keys.toList();
@@ -908,6 +923,87 @@ namespace O2.API.AST.ExtensionMethods
             }
             return astData;
         } 
+        #endregion
+
+        #region Methods called and MethodIsCalledBy
+
+        public static List<IMethod> iMethodsThatCallThisIMethod(this O2MappedAstData astData, IMethod targetIMethod)
+        {
+            var results = new List<IMethod>();
+            if (astData != null && targetIMethod != null)
+            {
+                var targetIMethodName = targetIMethod.fullName();
+                foreach (var iMethod in astData.iMethods())
+                    if (iMethod != null && iMethod.DotNetName.valid())
+                    {
+                        try
+                        {
+                            foreach (var iMethodCalled in astData.calledIMethods(iMethod))
+                            {
+                                if (iMethodCalled != null && iMethodCalled.fullName() == targetIMethodName)
+                                    if (results.Contains(iMethod).isFalse())
+                                        results.add(iMethod);
+                                //"{0} -> {1}".debug(iMethod.DotNetName,  iMethodCalled.DotNetName);
+                                //results.add(iMethod);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.log("iMethodsThatCallThisIMethod");
+                        }
+                    }
+            }
+            return results;
+        }
+
+        public static Dictionary<string, List<string>> calculateMappingsFor_MethodsCalled(this O2MappedAstData astData)
+        {
+            "stating: calculateMappingsFor_MethodsCalled".info();
+            var mappings = new Dictionary<string, List<string>>();
+            foreach (var iMethod in astData.iMethods())
+                if (iMethod != null && iMethod.DotNetName.valid())
+                {
+                    var calledMethodsList = mappings.add_Key(iMethod.fullName());
+                    try
+                    {
+                        foreach (var iMethodCalled in astData.calledIMethods(iMethod))
+                            if (iMethodCalled != null)
+                            {
+                                var methodCalledName = iMethodCalled.fullName();
+                                if (calledMethodsList.Contains(methodCalledName).isFalse())
+                                    calledMethodsList.add(methodCalledName);
+                            }
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.log("iMethodsThatCallThisIMethod");
+                    }
+                    //if (mappings.Keys.size() == 25)
+                    //	return mappings;
+                }
+            "completed: calculateMappingsFor_MethodsCalled".info();
+            return mappings;
+        }
+
+        public static Dictionary<string, List<string>> calculateMappingsFor_MethodIsCalledBy(this O2MappedAstData astData, Dictionary<string, List<string>> methodsCalledMappings)
+        {
+            "stating: calculateMappingsFor_MethodIsCalledBy".info();
+            var mappings = new Dictionary<string, List<string>>();
+            foreach (var item in methodsCalledMappings)
+            {
+                var methodName = item.Key;
+                var methodsCalled = item.Value;
+                foreach (var methodCalled in methodsCalled)
+                {
+                    var isCalledBy = mappings.add_Key(methodCalled);
+                    if (isCalledBy.Contains(methodName).isFalse())
+                        isCalledBy.Add(methodName);
+                }
+            }
+            "completed: calculateMappingsFor_MethodIsCalledBy".debug(); ;
+            return mappings;
+        }
+
         #endregion
     }
 }

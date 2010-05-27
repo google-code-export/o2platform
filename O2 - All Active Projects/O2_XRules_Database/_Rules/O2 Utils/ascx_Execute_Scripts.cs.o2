@@ -211,6 +211,7 @@ namespace O2.XRules.Database
                                                 };
 
                 var sourceCode = "";
+                csharpCompiler.SourceCodeFile = scriptToLoad;
                 if (scriptToLoad.extension(".h2"))
                     sourceCode = H2.load(scriptToLoad).SourceCode;
                 if (scriptToLoad.extension(".o2") || scriptToLoad.extension(".cs"))

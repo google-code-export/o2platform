@@ -84,16 +84,86 @@ namespace O2.API.Visualization.ExtensionMethods
 					return (T)item;
 			return null;
 		}
-		
+
+
+        public static T set_Tag<T>(this T control, object tagObject)
+            where T : Control
+        {
+            control.wpfInvoke(() => control.Tag = tagObject);
+            return control;
+        }
+
+        public static object get_Tag<T>(this T frameworkElement)
+            where T : FrameworkElement
+        {
+            return (object)frameworkElement.wpfInvoke(() => frameworkElement.Tag);
+        }
+
+        public static T get_Tag<T>(this Control control)
+        {
+            return (T)control.wpfInvoke(
+                () =>
+                {
+                    var tag = control.Tag;
+                    if (tag is T)
+                        return (T)tag;
+                    return default(T);
+                });
+        }
+
+        public static string get_Text<T>(this T control)
+            where T : ContentControl
+        {
+            return (string)control.wpfInvoke(() => control.Content);
+        }
+        /* unfortunatly I can't seem to be call this set_Text able to do this since there are conflits when WPF and WinForms Extension methods are
+         * used at the same time */
+        public static T set_Text_Wpf<T>(this T control, string value)
+            where T : ContentControl
+        {
+            return (T)control.wpfInvoke(() =>
+                        {
+                            control.Content = value;
+                            return control;
+                        });
+        }
+
+        public static T set_Content<T>(this T control, string value)
+            where T : ContentControl
+        {
+            return control.set_Text_Wpf(value);
+        }
+
+        public static Brush get_Color<T>(this T control)
+            where T : Control
+        {
+            return (Brush)control.wpfInvoke(() => control.Foreground);
+        }
 		#endregion
 		
-		#region Label
-		
-		public static Label set_Text(this Label label, string value)
-    	{
-    		label.wpfInvoke(()=> label.Content = value);    		
-			return label;
-    	}
+        #region generic events
+
+        public static T onMouseDoubleClick<T1, T>(this T control, Action<T1> callback)
+            where T : Control
+        {
+            control.MouseDoubleClick += (sender, e) =>
+            {
+                var tag = control.get_Tag();
+                if (tag != null && tag is T1)
+                    callback((T1)tag);
+            };
+            return control;
+        }
+
+        #endregion
+
+        #region Label
+
+        //public static Label set_Text(this Label label, string value)
+    	//{
+    	//	label.wpfInvoke(()=> label.Content = value);    		
+		//	return label;
+    	//}
     	
     	#endregion
     	    	        	
