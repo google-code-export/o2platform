@@ -89,6 +89,6 @@ return "done";
  
 //using O2.XRules.Database._Rules._Interfaces
 //using O2.XRules.Database._Rules.APIs 
-//O2File:C:\O2\O2Scripts_Database\_Scripts\APIs\O2TwitterAPI.cs</SourceCode>
+//O2File:..\APIs\Twitter\O2TwitterAPI.cs</SourceCode>
   <ReferencedAssemblies />
 </H2>
