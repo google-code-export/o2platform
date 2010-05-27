@@ -121,11 +121,26 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     action((T)item);
         }
 
+        public static List<T> add_Key<T>(this Dictionary<string, List<T>> items, string keyToAdd)
+        {
+            if (items.ContainsKey(keyToAdd).isFalse())
+                items.Add(keyToAdd, new List<T>());
+            return items[keyToAdd];
+        }
+
         public static bool hasKey<T, T1>(this Dictionary<T, T1> dictionary, T key)
         {
             if (dictionary != null && key != null)
                 return dictionary.ContainsKey(key);
             return false;
+        }
+
+        public static List<string> add_OnlyNewItems(this List<string> targetList, List<string> itemsToAdd)
+        {            
+            foreach (var item in itemsToAdd)
+                if (targetList.Contains(item).isFalse())
+                    targetList.add(item);            
+            return targetList;
         }
 
         public static List<T> add<T>(this List<T> list, T item)

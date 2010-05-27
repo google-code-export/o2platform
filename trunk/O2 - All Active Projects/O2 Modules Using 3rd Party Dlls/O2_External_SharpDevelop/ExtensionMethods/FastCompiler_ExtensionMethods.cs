@@ -72,8 +72,28 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static object executeFirstMethod(this string pathToFileToCompileAndExecute, object[] parameters)
         {
-            var assembly = pathToFileToCompileAndExecute.compile();
-            return assembly.executeFirstMethod(parameters);
+            if (pathToFileToCompileAndExecute.fileExists().isFalse())
+            { 
+                // if we were not provided a complete path, try to find it on the local o2 script folder
+                var defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
+                var o2LocalScriptFiles = defaultLocalScriptsFolder.files("*.cs".wrapOnList().add("*.o2").add("*.h2"), true);
+                foreach (var localScriptFile in o2LocalScriptFiles)
+                {
+                    if (localScriptFile.fileName().lower().starts(pathToFileToCompileAndExecute.lower()))                  
+                    {
+                        "The script to execute was resolved from '{0}' to '{1}'".debug(pathToFileToCompileAndExecute, localScriptFile);
+                        pathToFileToCompileAndExecute = localScriptFile;
+                        break;
+                    }
+                }
+            }
+            if (pathToFileToCompileAndExecute.extension(".h2"))
+                return executeH2Script(pathToFileToCompileAndExecute);
+            else
+            {
+                var assembly = pathToFileToCompileAndExecute.compile();
+                return assembly.executeFirstMethod(parameters);
+            }
         }
 
         public static object executeFirstMethod(this Assembly assembly)

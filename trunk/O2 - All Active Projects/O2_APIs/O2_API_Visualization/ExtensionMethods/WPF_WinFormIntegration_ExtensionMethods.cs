@@ -154,7 +154,7 @@ namespace O2.API.Visualization.ExtensionMethods
     	public static Label add_WPF_Label(this System.Windows.Forms.Control winFormsControl, string text)
     	{    		
     		var label = winFormsControl.add_WPF_Control<Label>();
-    		label.set_Text(text);
+    		label.set_Text_Wpf(text);
     	
     		return label;
     	}    	
@@ -180,7 +180,7 @@ namespace O2.API.Visualization.ExtensionMethods
     	public static Label add_Label(this ascx_Xaml_Host xamlHost, string text)
     	{
     		var label = add_Control<Label>(xamlHost);
-    		label.set_Text(text);
+            label.set_Text_Wpf(text);
     		//"in add_Label".debug();
     		return label;
     	} 

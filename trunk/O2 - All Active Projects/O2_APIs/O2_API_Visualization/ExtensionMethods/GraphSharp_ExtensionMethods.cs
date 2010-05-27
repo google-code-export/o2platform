@@ -54,12 +54,12 @@ namespace O2.API.Visualization.ExtensionMethods
 
         public static Label add_Label(this GraphLayout graphLayout, Int32 nodeValue)
         {
-            return graphLayout.add_UIElement<Label>().set_Text(nodeValue.str());
+            return graphLayout.add_UIElement<Label>().set_Text_Wpf(nodeValue.str());            
         }
 
         public static Label add_Label(this GraphLayout graphLayout, string nodeText)
         {
-            return graphLayout.add_UIElement<Label>().set_Text(nodeText);
+            return graphLayout.add_UIElement<Label>().set_Text_Wpf(nodeText);            
         }
 
     	public static GraphLayout add_Node(this GraphLayout graphLayout,object vertexToAdd)

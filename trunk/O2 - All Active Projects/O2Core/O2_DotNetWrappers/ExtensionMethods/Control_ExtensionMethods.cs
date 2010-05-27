@@ -360,6 +360,15 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return allControls;
         }
 
+        public static T controls<T>(this Control control)
+            where T : Control
+        {
+            foreach (var childControl in control.controls())
+                if (childControl is T)
+                    return (T)childControl;
+            return null;
+        }
+
         public static T control<T>(this List<Control> controls)
             where T : Control
         {
@@ -1104,6 +1113,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return form;
         }
 
+        public static Form close(this Form form)
+        {
+            form.invokeOnThread(() => form.Close());
+            return form;
+        }
         #endregion
 
         #region SendKeys

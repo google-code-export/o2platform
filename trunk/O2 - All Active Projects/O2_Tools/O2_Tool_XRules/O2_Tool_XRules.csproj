@@ -191,6 +191,7 @@
     <Content Include="ildasm.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebDev.WebHost.dll" />
     <Content Include="WebDev.WebServer.EXE">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

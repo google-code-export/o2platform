@@ -22,6 +22,7 @@ namespace O2.External.SharpDevelop.AST
     {
         internal int forceAstBuildDelay = 100;
         public string SourceCode { get; set; }						// I think there is a small race condition with the use of this variable
+        public string SourceCodeFile { get; set; }
         //public string OriginalCodeSnippet { get; set; }	
         public bool CreatedFromSnipptet { get; set; }
         public List<string> ReferencedAssemblies { get; set; }
@@ -110,13 +111,14 @@ namespace O2.External.SharpDevelop.AST
                 //Scanning AST Engine related
                                      .add("ICSharpCode.NRefactory")
                                      .add("ICSharpCode.NRefactory.Ast")
-                                     .add("ICSharpCode.SharpDevelop.Dom");            
+                                     .add("ICSharpCode.SharpDevelop.Dom");                
+           
 
         }
 		public List<string> getDefaultReferencedAssemblies()
         {
             return new List<string>().add("System.dll")
-                                     .add("System.Drawing.dll")                                        
+                                     .add("System.Drawing.dll")
                                      .add("System.Core.dll")
                                      .add("System.Windows.Forms.dll")
                                      .add("O2_Kernel.dll")
@@ -127,7 +129,7 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2_XRules_Database.exe")
                                      .add("O2_External_SharpDevelop.dll")
                                      .add("O2SharpDevelop.dll")
-                                     //GraphSharp related
+                //GraphSharp related
                                      .add("O2_Api_Visualization.dll")
                                      .add("O2_Api_AST.dll")
                                      .add("QuickGraph.dll")
@@ -138,13 +140,13 @@ namespace O2.External.SharpDevelop.AST
                                      .add("WindowsBase.dll")
                                      .add("WindowsFormsIntegration.dll")
                                      .add("ICSharpCode.AvalonEdit.dll")
-                                     // twitter related
+                // twitter related
                                      .add("Newtonsoft.Json.dll")
                                      .add("Dimebrain.TweetSharp.dll")
-                                     //Linq to Xsd
+                //Linq to Xsd
                                      .add("System.Xml.dll")
                                      .add("System.Xml.Linq.dll")
-                                     .add("O2_Misc_Microsoft_MPL_Libs.dll");
+                                     .add("O2_Misc_Microsoft_MPL_Libs.dll");                                     
         }
 
 		public Dictionary<string,object> getDefaultInvocationParameters()
@@ -298,7 +300,7 @@ namespace O2.External.SharpDevelop.AST
         public void compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies()
         {            
             if (ExtraSourceCodeFilesToCompile.size() > 0)
-            {                
+            {                        
                 var assembly = new CompileEngine().compileSourceFiles(ExtraSourceCodeFilesToCompile);                
                 if (assembly != null)
                 {
@@ -421,7 +423,8 @@ namespace O2.External.SharpDevelop.AST
                 comment.Text.eq("O2Tag_OnlyAddReferencedAssemblies", () => onlyAddReferencedAssemblies = true);                
                 comment.Text.starts("using ", false, value => astCSharp.CompilationUnit.add_Using(value));
                 comment.Text.starts(new [] {"ref ", "O2Ref:"}, false,  value => ReferencedAssemblies.Add(value));
-                comment.Text.starts(new[] { "file ", "O2File:" }, false, value => ExtraSourceCodeFilesToCompile.Add(value)); 
+                comment.Text.starts(new[] { "include", "file ", "O2File:" }, false, value => ExtraSourceCodeFilesToCompile.Add(value));
+                comment.Text.starts(new[] { "dir ", "O2Dir:" }, false, value => ExtraSourceCodeFilesToCompile.AddRange(value.files("*.cs",true))); 
                
                 comment.Text.starts(new[] {"O2:debugSymbols",
                                         "generateDebugSymbols", 
@@ -429,6 +432,10 @@ namespace O2.External.SharpDevelop.AST
                 comment.Text.eq("StaThread", () => { ExecuteInStaThread = true; });
                 comment.Text.eq("MtaThread", () => { ExecuteInMtaThread = true; });  
             }
+
+            //resolve location of ExtraSourceCodeFilesToCompile
+
+            resolveFileLocationsOfExtraSourceCodeFilesToCompile();                        
 
             //make sure the referenced assemblies are in the current execution directory
             foreach(var reference in ReferencedAssemblies)
@@ -449,8 +456,53 @@ namespace O2.External.SharpDevelop.AST
                         compilationUnit.add_Using(usingStatement);
             }
 
-        }               
-        
+        }
+
+        public void resolveFileLocationsOfExtraSourceCodeFilesToCompile()
+        {
+            if (ExtraSourceCodeFilesToCompile.size() > 0)
+            {
+                string defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
+                List<string> o2LocalScriptFiles = null;
+                // try to resolve local file references
+                try
+                {
+                    for (int i = 0; i < ExtraSourceCodeFilesToCompile.size(); i++)
+                    {
+                        var fileToResolve = ExtraSourceCodeFilesToCompile[i].trim();
+                        if (fileToResolve.fileExists().isFalse())
+                            if (SourceCodeFile.valid())
+                            {
+                                var resolvedFile = SourceCodeFile.directoryName().pathCombine(fileToResolve);
+                                if (resolvedFile.fileExists())
+                                    ExtraSourceCodeFilesToCompile[i] = resolvedFile;
+                            }
+                        if (fileToResolve.fileExists().isFalse())
+                        {
+                            if (o2LocalScriptFiles == null)
+                            {
+                                o2LocalScriptFiles = defaultLocalScriptsFolder.files(true, "*.cs");
+                            }
+                            foreach (var localScriptFile in o2LocalScriptFiles)
+                            {     
+                                if (localScriptFile.fileName().lower().starts(fileToResolve.lower()))
+                                //if (fileToResolve.lower() == localScriptFile.fileName().lower())
+                                {
+                                    "in CSharp fast compiler, file reference '{0}' was mapped to local O2 Script file '{1}'".debug(fileToResolve, localScriptFile);
+                                    ExtraSourceCodeFilesToCompile[i] = localScriptFile;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.log("in compileExtraSourceCodeReferencesAndUpdateReferencedAssemblies while resolving ExtraSourceCodeFilesToCompile");
+                }
+            }
+        }
+
         public object executeFirstMethod()
         {        	
         	var parametersValues = InvocationParameters.valuesArray();

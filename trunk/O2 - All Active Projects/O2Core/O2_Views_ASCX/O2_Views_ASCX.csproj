@@ -93,6 +93,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="classes\MainGUI\WinForms.cs" />
+    <Compile Include="ExtensionMethods\DataViewers_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\FindingsViewer_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\WinForms_ExtensionMethods.cs" />
     <Compile Include="classes\O2CoreResources.Designer.cs">

@@ -79,6 +79,13 @@ namespace O2.External.SharpDevelop.AST
             return treeNode;
         }
 
+        public static TreeView show_Ast(this TreeView treeView, INode iNode)
+        {
+            treeView.clear();
+            treeView.rootNode().show_Ast(iNode);
+            return treeView;
+        }
+
         public static TreeNode show_Ast<T>(this TreeNode treeNode, T astNode)
             where T : INode
         {

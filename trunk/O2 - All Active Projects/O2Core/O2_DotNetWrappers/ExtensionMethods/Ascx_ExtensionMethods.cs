@@ -182,7 +182,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                                              Top = top,
                                                              Left = left
                                                          };
-                                          link.LinkClicked += (sender, e) => { if (onClick != null) onClick(); };
+                                          link.LinkClicked += 
+                                              (sender, e)=> { 
+                                                                if (onClick != null) 
+                                                                    O2Thread.mtaThread(()=> onClick()); 
+                                                            };
                                           control.Controls.Add(link);
                                           return link;
                                       });
@@ -358,7 +362,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static List<Control> add_1x1(this Control control, string title1, string title2)
         {
-            return control.add_1x1(title1, title2, true, control.Height / 2);
+            return control.add_1x1(title1, title2, true, control.width() / 2);
         }
 
         public static List<Control> add_1x1(this Control control, string title1, string title2, bool verticalSplit, int distance1)
@@ -676,6 +680,26 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     });
             }
             return tabPage;
+        }
+
+        public static TabControl remove_Tab(this TabControl tabControl, TabPage tabPage)
+        {
+            return (TabControl)tabControl.invokeOnThread(
+                () =>
+                {
+                    tabControl.TabPages.Remove(tabPage);
+                    return tabControl;
+                });
+        }
+
+        public static TabControl select_Tab(this TabControl tabControl, TabPage tabPage)
+        {
+            return (TabControl)tabControl.invokeOnThread(
+                () =>
+                {
+                    tabControl.SelectedTab = tabPage;
+                    return tabControl;
+                });
         }
 
         #endregion
@@ -1168,7 +1192,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                             return; // makes this Sync call
                                         });
         }
-                
+
+        public static TreeNode color(this TreeNode treeNode, Color color)
+        {
+            return treeNode.setTextColor(color);
+        }
+
         public static TreeNode setTextColor(this TreeNode treeNode, Color color)
         {
             treeNode.TreeView.invokeOnThread(() => { treeNode.ForeColor = color; });
@@ -1609,6 +1638,60 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return treeNode;
         }
 
+        public static TreeView add_TreeViewWithFilter(this Control control, List<string> itemsToShow)
+        {
+            var treeView = control.add_TreeView();
+
+            treeView.insert_Above<TextBox>(25).onEnter(
+                (text) =>
+                {
+                    var skipRegexFilter = text.valid().isFalse();
+                    treeView.clear();
+                    foreach (var item in itemsToShow)
+                        if (skipRegexFilter || item.regEx(text))
+                            treeView.add_Node(item);
+                });
+
+
+            treeView.add_Nodes(itemsToShow);
+            return treeView;
+        }
+
+        public static TreeView add_TreeViewWithFilter(this Control control, Dictionary<string, List<string>> itemsToShow)
+        {
+            var treeView = control.add_TreeView();
+
+            treeView.insert_Above<TextBox>(25).onEnter(
+                (text) =>
+                {
+                    var skipRegexFilter = text.valid().isFalse();
+                    treeView.clear();
+                    foreach (var item in itemsToShow)
+                        if (skipRegexFilter || item.Key.regEx(text))
+                            treeView.add_Node(item.Key, item.Value, item.Value.size() > 0);
+                });
+
+            foreach (var item in itemsToShow)
+                treeView.add_Node(item.Key, item.Value, item.Value.size() > 0);
+
+            treeView.beforeExpand<List<string>>(
+                (treeNode, items) =>
+                {
+                    foreach (var item in items)
+                    {
+                        if (itemsToShow.hasKey(item))
+                        {
+                            var childItems = itemsToShow[item];
+                            treeNode.add_Node(item, childItems, childItems.size() > 0);
+                        }
+                        else
+                            treeNode.add_Node(item);
+                    }
+                });
+
+            return treeView;
+        }
+
         public static TreeView removeEventHandlers_BeforeExpand(this TreeView treeView)
         {
             return treeView.removeEventHandlers("BeforeExpand");
@@ -1740,6 +1823,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return (TreeView)treeView.invokeOnThread(() => treeView.Sorted = value);
         }
+
+        public static TextBox isPasswordField(this TextBox textBox)
+        {
+            textBox.invokeOnThread(() => textBox.PasswordChar = '*');
+            return textBox;
+        }
+
 
         #endregion
 

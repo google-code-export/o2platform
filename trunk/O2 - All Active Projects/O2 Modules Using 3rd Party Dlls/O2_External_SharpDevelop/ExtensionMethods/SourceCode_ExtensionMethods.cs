@@ -159,11 +159,26 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             
         }
             
-
         public static string get_Text(this ascx_SourceCodeViewer sourceCodeViewer)
         {
             return sourceCodeViewer.editor().getSourceCode();
         }
+
+        #region events
+
+        public static ascx_SourceCodeViewer onClick(this ascx_SourceCodeViewer codeViewer, MethodInvoker callback)
+        {
+            codeViewer.editor().onClick(callback);
+            return codeViewer;
+        }
+
+        public static ascx_SourceCodeEditor onClick(this ascx_SourceCodeEditor codeEditor, MethodInvoker callback)
+        {
+            codeEditor.invokeOnThread(() => codeEditor.textArea().MouseClick += (sender, e) => callback());
+            return codeEditor;
+        }
+
+        #endregion
 
         public static ascx_SourceCodeViewer onTextChanged(this ascx_SourceCodeViewer sourceCodeViewer, Action<string> textChanged)
         {
@@ -391,6 +406,11 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 codeEditor.setDocumentContents(fileOrCode);
             }
             return codeEditor;
+        }
+
+        public static Caret caret(this ascx_SourceCodeViewer codeViewer)
+        {
+            return codeViewer.editor().caret();
         }
 
         public static Caret caret(this ascx_SourceCodeEditor codeEditor)
