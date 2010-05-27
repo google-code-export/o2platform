@@ -35,7 +35,7 @@ using O2.XRules.Database.O2Utils;
 
 //O2Ref:System.Data.dll
 //O2File:C:\O2\_XRules_Local\Extra_methods.cs
-//O2File:C:\_O2_SVN\O2 - All Active Projects\O2_APIs\O2_API_Visualization\Ascx\ascx_GraphAst_MethodCalls.cs
+//O2File:Controls\ascx_GraphAst_MethodCalls.cs
 
 namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 {
