@@ -114,23 +114,29 @@ namespace O2.XRules.Database
         	
         	var contextMenu = pictureBox.add_ContextMenu();
             contextMenu.add_MenuItem("View available scripts", () => showAvailableScripts());
-            contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());                        
+            contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());
             contextMenu.add_MenuItem("O2 Script Development &&  Debug")
                        .add_MenuItem("Open Simple Script Editor", () => openSimpleScriptEditor())
                        .add_MenuItem("Open quick development gui", () => open.devEnvironment())
                        .add_MenuItem("Open 'Graph' development gui", () => open.graphEditor())
                        .add_MenuItem("Open XRules/Script Editor", () => open.scriptEditor())
                        .add_MenuItem("O2 Object Model", () => open.o2ObjectModel())
-                       .add_MenuItem("Current Script",false)
-        	                        .add_MenuItem("View loaded script source Code", ()=> showLoadedScriptSourceCode() )
-        	                        .add_MenuItem("Execute Again", ()=> executeCompiledCode() );            
+                       .add_MenuItem("Current Script", false)
+                                    .add_MenuItem("View loaded script source Code", () => showLoadedScriptSourceCode())
+                                    .add_MenuItem("Execute Again", () => executeCompiledCode());                       
             contextMenu.add_MenuItem("Tools")
                        .add_MenuItem("Image Screenshot tool", () => screenShotTool())
-                       .add_MenuItem("O2 'Secret Data' Editor", () => new SecretDataEditor().showGui())                       
-                       .add_MenuItem("Web Browser", () =>  open.webBrowser("http://www.o2platform.com"))
-                       .add_MenuItem("Notepad", () =>  exec.cmd("notepad.exe"))
-                       .add_MenuItem("Cmd.exe", () =>  exec.cmd("cmd.exe"))
-                       .add_MenuItem("Manual Sync/Download local XRules From O2's Svn", () => syncO2ViaSvn());                       
+                       .add_MenuItem("MediaWiki Editor", () => executeScript("Opening MediaWiki Client)", "MediaWikiEditor.cs.o2"))
+                       .add_MenuItem("Twitter Client", () => executeScript("Opening Twitter Client)", "Twitter Client.h2"))
+                       .add_MenuItem("Simple Text Editor", () => executeScript("Opening Simple Text Editor", "O2 Simple Text Editor.h2"))                       
+                       .add_MenuItem("O2 'Secret Data' Editor", () => executeScript("Opening 'Secret Data Editor'", "SecretDataEditor.cs.o2"));           
+                       //.add_MenuItem("O2 'Secret Data' Editor", () => new SecretDataEditor().showGui());
+
+            contextMenu.add_MenuItem("SVN O2 Scripts")
+                        .add_MenuItem("ReSync Scripts from O2's Svn (using SVN client)", ()=> execute("ReSync SVN Rules",() => syncO2ViaSvn()))
+                        .add_MenuItem("Manual Sync Scripts from O2's Svn (using HTTP) ", ()=> execute("Trying Manual SVN Sync via HTTP",() => new Wizard_SyncViaSvn().runWizard()))
+                        .add_MenuItem(@"Delete local O2 Scripts folder (C:\O2\O2Scripts_Database)", deleteLocalScriptsFolder);
+
             contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());
             contextMenu.add_MenuItem("Exit Application (and close all windows)", () => PublicDI.config.closeO2Process());
             
@@ -151,6 +157,31 @@ namespace O2.XRules.Database
 
             syncO2ViaSvn();
      	}
+
+        public ascx_Execute_Scripts execute(string infoMessage, MethodInvoker codeToExecute)
+        {
+            showInfo(infoMessage);
+            codeToExecute();
+            return this;
+        }
+
+        public ascx_Execute_Scripts executeScript(string infoMessage, string scriptToExecute)
+        {
+            showInfo(infoMessage);
+            scriptToExecute.executeFirstMethod();
+            return this;
+        }
+
+        private void deleteLocalScriptsFolder()
+        {
+            var localScriptsFolder = @"C:\O2\O2Scripts_Database";
+            var userQuestion = "Are you sure you want to deleted the local scripts folder: " + localScriptsFolder;
+            if (userQuestion.askUserQuestion())
+            {
+                "Deleting Folder: ".debug(localScriptsFolder);
+                Files.deleteFolder(localScriptsFolder, true);
+            }
+        }
 
         private void screenShotTool()
         {
@@ -307,13 +338,14 @@ namespace O2.XRules.Database
                 if (ClickOnceDeployment.isClickOnceDeployment())
                 {
                     showInfo("Checking for ClickOnce updates");
-                    var XRulesWithUpdateCheckScript = XRules_Config.PathTo_XRulesDatabase_fromO2.pathCombine(@"\O2 Utils\AutoUpdate - Using Reflection.h2");
+                    "AutoUpdate - Using Reflection.h2".executeFirstMethod();
+                   /* var XRulesWithUpdateCheckScript = XRules_Config.PathTo_XRulesDatabase_fromO2.pathCombine(@"\O2 Utils\AutoUpdate - Using Reflection.h2");
                     if (XRulesWithUpdateCheckScript.fileExists().isFalse())
                         "[in checkForClickOnceUpdates]: could not find H2 script to execute: {0}".error(XRulesWithUpdateCheckScript);
                     else
                     {
                         XRulesWithUpdateCheckScript.executeH2Script();
-                    }
+                    }*/
                     showInfo("Check for ClickOnce updates completed");
                 }
             }

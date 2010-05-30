@@ -1649,7 +1649,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     treeView.clear();
                     foreach (var item in itemsToShow)
                         if (skipRegexFilter || item.regEx(text))
-                            treeView.add_Node(item);
+                            treeView.add_Node(item, item);
                 });
 
 
