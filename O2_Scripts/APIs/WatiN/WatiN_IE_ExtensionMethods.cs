@@ -507,6 +507,13 @@ namespace O2.Script
     		return (from textField in textFields 
     				select textField.value()).toList();
     	}
+ 		
+ 		public static TextField equals(this TextField textField, string value)
+ 		{
+ 			if (textField!= null)    		
+    			textField.Value = value;    	
+    		return textField;
+ 		}
  
     	public static TextField value(this TextField textField, string value)
     	{

@@ -68,7 +68,7 @@ namespace O2.Script
                           "graph.edge(200,\"F\");".line() + 
                           "graph.edge(200,300);" .line() + 
                           "var blueLabel = graph.add_UIElement<WPF.Label>();" .line() + 
-                          "blueLabel.set_Text(\"blue label\");" .line() + 
+                          "blueLabel.set_Content(\"blue label\");" .line() + 
                           "blueLabel.color(\"Blue\");" .line() + 
                           "graph.edge(200,blueLabel);" .line() + 
                           "var redLabel = graph.add_UIElement<WPF.TextBox>().set_Text(\"red textbox\").color(\"Red\");" .line() +
