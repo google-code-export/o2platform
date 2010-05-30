@@ -10,7 +10,7 @@
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>WatiN.Core</AssemblyName>
+    <AssemblyName>WatiN.Core.2x</AssemblyName>
     <AssemblyOriginatorKeyFile>..\WatiN.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
@@ -51,7 +51,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG;NET20</DefineConstants>
-    <DocumentationFile>bin\WatiN.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\WatiN.Core.2x.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -76,7 +76,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;NET20</DefineConstants>
-    <DocumentationFile>bin\WatiN.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\WatiN.Core.2x.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -99,7 +99,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
-    <DocumentationFile>bin\WatiN.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\WatiN.Core.2x.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -119,7 +119,7 @@
     <OutputPath>..\..\..\O2 - All Active Projects\_3rdPartyDlls\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET35</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
-    <DocumentationFile>..\..\..\O2 - All Active Projects\_3rdPartyDlls\WatiN.Core.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\O2 - All Active Projects\_3rdPartyDlls\WatiN.Core.2x.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <FileAlignment>4096</FileAlignment>
     <NoWarn>1591</NoWarn>
@@ -137,7 +137,7 @@
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE;NET35</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
-    <DocumentationFile>bin\WatiN.Core.XML</DocumentationFile>
+    <DocumentationFile>bin\WatiN.Core.2x.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <FileAlignment>4096</FileAlignment>
