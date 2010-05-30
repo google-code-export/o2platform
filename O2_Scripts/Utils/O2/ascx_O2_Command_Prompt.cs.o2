@@ -1,7 +1,4 @@
-﻿using O2.Script;
-using O2.External.SharpDevelop.ExtensionMethods;
-using O2.XRules.Database.O2Utils;
-using O2.XRules.Database.ExtensionMethods;
+﻿using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.IE.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
@@ -12,8 +9,10 @@ using O2.Interfaces;
 using System.Drawing;
 using System.Windows.Forms;
 using System;
+//O2File:ascx_Simple_Script_Editor.cs.o2
+//O2File:Scripts_ExecutionMethods.cs
 
-namespace O2.XRules.Database.O2Utils
+namespace O2.XRules.Database.Utils.O2
 {
 	public class O2CommandPrompt
 	{

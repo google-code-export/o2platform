@@ -40,8 +40,9 @@ using O2.External.IE.ExtensionMethods;
 using O2.Views.ASCX.DataViewers;
 using O2.Views.ASCX.CoreControls;
 using O2.API.AST.ExtensionMethods.CSharp;
+//O2Ref:O2_API_Ast.dll
 
-namespace O2.XRules.Database.O2Utils
+namespace O2.XRules.Database.Utils.O2
 {
 
 	// Comments: (24 Feb 2010): This was the 6th pass at building an O2 Command Prompt (i.e. simple script editor)	
