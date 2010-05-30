@@ -20,7 +20,7 @@ using System.Collections;
 using Google.GData.Client;
 using Google.GData.Extensions;
 
-namespace Google.GData.Photos {
+namespace    {
 
     //////////////////////////////////////////////////////////////////////
     /// <summary>
