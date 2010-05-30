@@ -1,0 +1,299 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ED4D7A89-B456-4D4A-9E24-570D9D8ECA46}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DemoApp</RootNamespace>
+    <AssemblyName>Test Recorder</AssemblyName>
+    <ApplicationIcon>App.ICO</ApplicationIcon>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/Test Recorder/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <NoWin32Manifest>true</NoWin32Manifest>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\O2 - All Active Projects\_3rdPartyDlls\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="csExWB, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_ExternalDlls\csExWB.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\O2 - All Active Projects\_3rdPartyDlls\Interop.SHDocVw.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\O2 - All Active Projects\_3rdPartyDlls\Microsoft.mshtml.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Win32.Hooks, Version=1.0.2630.24489, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>_ExternalDlls\Microsoft.Win32.Hooks.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\O2 - All Active Projects\_3rdPartyDlls\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\AppSettings.cs" />
+    <Compile Include="Core\EmailException.cs" />
+    <Compile Include="Core\Templates.cs" />
+    <Compile Include="Core\WatiNCSharp.cs" />
+    <Compile Include="Core\WatiNPerl.cs" />
+    <Compile Include="Core\WatiNPHP.cs" />
+    <Compile Include="Core\WatiNPython.cs" />
+    <Compile Include="Core\WatiNVBNet.cs" />
+    <Compile Include="frmAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAbout.Designer.cs">
+      <DependentUpon>frmAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmAuthenticate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAuthenticate.Designer.cs">
+      <DependentUpon>frmAuthenticate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmCacheCookie.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmCacheCookie.Designer.cs">
+      <DependentUpon>frmCacheCookie.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDocInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDocInfo.Designer.cs">
+      <DependentUpon>frmDocInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDynamicConfirm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDynamicConfirm.Designer.cs">
+      <DependentUpon>frmDynamicConfirm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmException.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmException.Designer.cs">
+      <DependentUpon>frmException.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmFeedback.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFeedback.Designer.cs">
+      <DependentUpon>frmFeedback.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmFunctionChooser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFunctionChooser.Designer.cs">
+      <DependentUpon>frmFunctionChooser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLocateResource.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLocateResource.Designer.cs">
+      <DependentUpon>frmLocateResource.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmFind.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmFind.Designer.cs">
+      <DependentUpon>frmFind.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLog.Designer.cs">
+      <DependentUpon>frmLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPopup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPopup.Designer.cs">
+      <DependentUpon>frmPopup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPropertyExplorer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPropertyExplorer.Designer.cs">
+      <DependentUpon>frmPropertyExplorer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSettings.Designer.cs">
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\FunctionManager.cs" />
+    <Compile Include="Core\FunctionPage.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="frmMain.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPopup.resx">
+      <DependentUpon>frmPopup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Core\Settings.cs" />
+    <Compile Include="Core\WatinScript.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmFind.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmFind.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\IeToolbar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.ICO" />
+    <Content Include="NUnitConfig.xml" />
+    <EmbeddedResource Include="frmDynamicConfirm.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmDynamicConfirm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAbout.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAuthenticate.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmAuthenticate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmCacheCookie.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmCacheCookie.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDocInfo.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmDocInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmException.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmException.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFeedback.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmFeedback.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmFunctionChooser.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmFunctionChooser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLocateResource.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmLocateResource.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.en-US.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPropertyExplorer.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmPropertyExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSettings.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>frmSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\progress_spinner.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WatIN.Core.1x\WatIN.Core.1x.csproj">
+      <Project>{2FE380ED-1ADC-45ED-A53B-C25DC3BD50CE}</Project>
+      <Name>WatIN.Core.1x</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
