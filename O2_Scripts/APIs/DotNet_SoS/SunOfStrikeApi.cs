@@ -15,7 +15,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
-
+//O2File:CmdExeAPI.cs
 namespace O2.Script
 {
 	public class SonOfStrikeGui : Control
