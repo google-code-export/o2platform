@@ -33,7 +33,7 @@ namespace O2.Core.XRules._Wizards
 		
         public static string testTargetFolder = PublicDI.config.getTempFolderInTempDirectory("Svn To Sync");
 
-        public Thread test_runWizard()
+        public Thread runWizard()
         {
             return runWizard(SvnApi.svnO2DatabaseRulesFolder, testTargetFolder);        	
         }

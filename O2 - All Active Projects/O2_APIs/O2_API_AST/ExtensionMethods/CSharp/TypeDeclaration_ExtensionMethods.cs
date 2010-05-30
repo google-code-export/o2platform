@@ -38,7 +38,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
 
             return newType;
 
-            return namespaceDeclaration.add_Type_(iClass.Name);
+            return namespaceDeclaration.add_Type(iClass.Name);
         }
 
         /*public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, IReturnType iReturnType)
@@ -93,11 +93,11 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             {
                 ex.log("in TypeReference.add_Type");                
             }
-            return compilationUnit.add_Type_(iClass.Namespace, iClass.Name);
+            return compilationUnit.add_Type(iClass.Namespace, iClass.Name);
         }
 
         // should be merged with the one using CompilationUnit
-        public static TypeDeclaration add_Type_(this NamespaceDeclaration namespaceDeclaration, string typeName)
+        public static TypeDeclaration add_Type(this NamespaceDeclaration namespaceDeclaration, string typeName)
         {
             var newType = namespaceDeclaration.types(typeName);		// check if already exists and if it does return it
             if (newType != null)
@@ -112,18 +112,18 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return newType;
         }
 
-        public static TypeDeclaration add_Type_(this CompilationUnit compilationUnit, string @namespace, string typeName)
+        public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, string @namespace, string typeName)
         {
             if (@namespace.valid())
             {
                 var typeNamespace = compilationUnit.add_Namespace(@namespace);
-                return typeNamespace.add_Type_(typeName);
+                return typeNamespace.add_Type(typeName);
             }
             else
-                return compilationUnit.add_Type_(typeName);
+                return compilationUnit.add_Type(typeName);
         }
         
-        public static TypeDeclaration add_Type_(this CompilationUnit compilationUnit, string typeName)
+        public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, string typeName)
         {
             const Modifiers modifiers = Modifiers.None | Modifiers.Public;
             var newType = new TypeDeclaration(modifiers, new List<AttributeSection>())

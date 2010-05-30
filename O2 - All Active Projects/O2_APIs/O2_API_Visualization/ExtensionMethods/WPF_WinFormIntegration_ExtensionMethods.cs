@@ -169,12 +169,17 @@ namespace O2.API.Visualization.ExtensionMethods
 		
 		public static GraphLayout add_Graph(this ascx_Xaml_Host xamlHost)
 		{
-			var zoom = xamlHost.element().add_Zoom();
-            
-			var graphLayout = zoom.set<GraphLayout>();						
-			graphLayout.newGraph();
-			graphLayout.defaultLayout();			
-			return graphLayout;
+            return (GraphLayout)xamlHost.invokeOnThread(
+                () =>
+                {
+
+                    var zoom = xamlHost.element().add_Zoom();
+
+                    var graphLayout = zoom.set<GraphLayout>();
+                    graphLayout.newGraph();
+                    graphLayout.defaultLayout();
+                    return graphLayout;
+                });
 		}
 		
     	public static Label add_Label(this ascx_Xaml_Host xamlHost, string text)

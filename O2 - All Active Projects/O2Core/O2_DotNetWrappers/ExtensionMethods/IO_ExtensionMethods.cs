@@ -339,7 +339,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return fileContents.Insert(location, textToInsert).saveAs(filePath);
         }
 
-        
+        public static bool askUserQuestion(this string question)
+        { 
+            return System.Windows.Forms.MessageBox.Show(question, "O2 Question", System.Windows.Forms.MessageBoxButtons.YesNo)
+                == System.Windows.Forms.DialogResult.Yes;
+        }
 
     }
 }

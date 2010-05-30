@@ -354,7 +354,7 @@ namespace O2.External.SharpDevelop.AST
                         // map parsedCode into a new type and method 
 
                         var blockStatement = (BlockStatement)parsedCode;
-                        CompilationUnit.add_Type_(default_TypeName)
+                        CompilationUnit.add_Type(default_TypeName)
                             .add_Method(default_MethodName, InvocationParameters, blockStatement);
 
                         astCSharp = new Ast_CSharp(CompilationUnit, snippetParser.Specials);

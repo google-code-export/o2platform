@@ -30,7 +30,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
         public static CompilationUnit add_Ctor_(this CompilationUnit compilationUnit, string @namespace, string typeName, ConstructorDeclaration constructorDeclaration)
         {
             var myNamespace = compilationUnit.add_Namespace(@namespace);
-            var type = myNamespace.add_Type_(typeName);
+            var type = myNamespace.add_Type(typeName);
             type.add_Ctor(constructorDeclaration);
             return compilationUnit;
         }

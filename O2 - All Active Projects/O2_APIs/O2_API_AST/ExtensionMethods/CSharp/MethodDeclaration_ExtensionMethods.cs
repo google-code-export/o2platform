@@ -29,9 +29,9 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return compilationUnit;
         }        
 
-        public static CompilationUnit add_Method_(this CompilationUnit compilationUnit, string @namespace, string typeName, MethodDeclaration methodDeclaration)
+        public static CompilationUnit add_Method(this CompilationUnit compilationUnit, string @namespace, string typeName, MethodDeclaration methodDeclaration)
         {
-            var typeDeclaration = compilationUnit.add_Type_(@namespace, typeName);
+            var typeDeclaration = compilationUnit.add_Type(@namespace, typeName);
             compilationUnit.add_Method(typeDeclaration, methodDeclaration);
             return compilationUnit;
         }
