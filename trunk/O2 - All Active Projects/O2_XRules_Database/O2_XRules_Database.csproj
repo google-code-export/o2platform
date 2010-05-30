@@ -40,7 +40,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>78</ApplicationRevision>
+    <ApplicationRevision>79</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -242,13 +242,8 @@
   <ItemGroup>
     <Compile Include="DI.cs" />
     <Compile Include="InstallXRules.cs" />
-    <Compile Include="_Rules\_Interfaces\KAnalysisArtifacts.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="_Rules\O2 Utils\Wizard - XRule Exec Simple.cs.o2" />
-    <Compile Include="_Rules\_Interfaces\IAnalysisArtifacts.cs" />
-    <Compile Include="_Rules\O2 Utils\Wizard - BackupFolder.cs.o2" />
-    <Compile Include="_Rules\O2 Utils\Wizard - Sync XRules Via Svn.cs.o2" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -279,27 +274,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
-    <Compile Include="ExtensionMethods\HtmlAgilityPack_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\Scripts_ExecutionMethods.cs" />
-    <Compile Include="ExtensionMethods\SecretData_ExtensionMethods.cs" />
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="_Rules\O2 Utils\ascx_Panel_With_Inspector.cs.o2">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="_Rules\O2 Utils\ascx_Simple_Script_Editor.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\O2 Utils\ascx_SvnBrower.cs.o2">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="_Rules\O2 Utils\Wizard - SVN Checkout.cs.o2" />
-    <Compile Include="_Rules\O2 Utils\ascx_O2_Command_Prompt.cs.o2" />
-    <Compile Include="_Rules\O2 Utils\SecretDataEditor.cs.o2" />
-    <None Include="_Rules\O2 Utils\AutoUpdate - Using Dll Ref.h2" />
-    <None Include="_Rules\O2 Utils\AutoUpdate - Using Reflection.h2" />
-    <Compile Include="_Rules\_Interfaces\ISecretData.cs" />
     <None Include="_tempDevFiles\Extra_methods.cs" />
   </ItemGroup>
   <ItemGroup>

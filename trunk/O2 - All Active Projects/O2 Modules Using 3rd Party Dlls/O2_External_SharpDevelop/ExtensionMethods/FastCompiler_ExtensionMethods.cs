@@ -112,7 +112,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             {
                 var methods = assembly.methods();
                 foreach (var method in methods)
-                    if (method.IsSpecialName == false)  // we need to do this since Properties get_ and set_ also look like methods
+                    if (method.IsSpecialName == false && method.IsPublic)  // we need to do this since Properties get_ and set_ also look like methods
                     //if (methods.Count >0)        		
                     //{
                     {
