@@ -55,6 +55,17 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 	
 		//public Dictionary<IMethod, string> MethodStreams { get; set; }
 
+		public void start()
+	 	{
+	 		var astEngine = O2Gui.open<O2_DotNet_Ast_Engine>("O2 .NET Ast Engine", 800,600);
+	 		astEngine.buildGui();	
+	 		//astEngine.step_LoadArtifacts();
+	 		//astEngine.AstData.O2AstResolver.addReference("System.Data");
+			//astEngine.loadSourceFiles(@"C:\O2\DemoData\HacmeBank_v2.0 (Dinis version - 7 Dec 08)\HacmeBank_v2_WS".files("*.cs",true));
+
+			//astEngine.step_WhoCallsWho();
+	 	}
+	 	
 		public O2_DotNet_Ast_Engine()
 		{
 			this.width(500);
@@ -65,12 +76,7 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			//MethodStreams = new Dictionary<IMethod, string>();
 		}
 		
-	 	public void start()
-	 	{
-	 		var astEngine = O2Gui.open<O2_DotNet_Ast_Engine>("O2 .NET Ast Engine", 800,600);
-	 		astEngine.buildGui();	
-	 		astEngine.step_LoadArtifacts();
-	 	}
+	 	
 	 	
 		public void buildGui() 
 		{		 
@@ -639,18 +645,10 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 				TreeViewModeTab = ParentTabControl.add_Tab("TreeView Mode");
 				GraphModeTab = ParentTabControl.add_Tab("Graph Mode");
 				InteractiveBrowseModeTab = ParentTabControl.add_Tab("Interactive Browse Mode");
-				//build_TreeViewMode(TreeViewModeTab);
+				build_TreeViewMode(TreeViewModeTab);
 				build_GraphMode(GraphModeTab);
 			}
-			
-			/*public void loadDataInGui()
-			{				
-				
-				//CommentsTreeView.visible(false); 
-				//CommentsTreeView.clear();
-//				MethodsTreeView.add_Nodes(AstEngine.AstData.iMethods());
-				//CommentsTreeView.visible(true);
-			}*/
+						
 			
 			public void build_TreeViewMode(Control control)
 			{			
@@ -670,6 +668,14 @@ namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 				graphMethodCalls.setData(AstEngine.AstData, MethodsCalledMappings, MethodIsCalledByMappings, AllMethods);
 				graphMethodCalls.buildGui();
 			}
+			
+			/*public void build_InteractiveMode(Control control)
+			{
+				var interctiveCalls =  control.add_Control<ascx_Interactive_MethodCalls>();
+				interctiveCalls.setData(AstEngine.AstData, MethodsCalledMappings, MethodIsCalledByMappings, AllMethods);
+				interctiveCalls.buildGui();
+			}*/
+			
 		}
 				
 		

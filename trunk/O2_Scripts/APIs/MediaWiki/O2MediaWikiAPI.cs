@@ -558,12 +558,12 @@ namespace O2.Script
     		if (continueValue != "")
     			cmd += "&{0}={1}".format(continueVarName, continueValue);
             var data = wikiApi.action_query(properyType,cmd, pages).xRoot();
-    		if (data.elements("query-continue").size() == 0)
+    		if (data == null || data.elements("query-continue").size() == 0)
     			continueValue = "";
     		else
     			continueValue = data.elements("query-continue").element(propertyName).attribute(continueVarName).Value;
-    		
-    		results.AddRange(data.elementsAll(dataElement));
+    		if (data!= null)
+    			results.AddRange(data.elementsAll(dataElement));
     		if (maxItemsToFetch > -1 && maxItemsToFetch < results.size())
             {
                 "in O2MediaWikiAPI.getQueryContinueResults, maxItemsToFetch reached ({0}), so stoping recursive fetch".debug(maxItemsToFetch);
