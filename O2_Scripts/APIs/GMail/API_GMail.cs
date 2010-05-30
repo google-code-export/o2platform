@@ -16,8 +16,8 @@ using SHDocVw;
 using WatiN.Core;
 using O2.XRules.Database._Rules._Interfaces;
 using O2.XRules.Database.ExtensionMethods;
-//O2File:..\WatiN\WatiN_IE_ExtensionMethods.cs    
-//O2File:..\WatiN\WatiN_IE.cs
+//O2File:WatiN_IE_ExtensionMethods.cs
+//O2File:WatiN_IE.cs
 //O2Ref:Interop.SHDocVw.dll
 //O2Ref:WatiN.Core.1x.dll
  
