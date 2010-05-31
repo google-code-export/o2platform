@@ -30,14 +30,18 @@ using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
 using GraphSharp.Controls;
-using O2.XRules.Database.ExtensionMethods;
-using O2.XRules.Database.O2Utils;
+using O2.XRules.Database.Utils.ExtensionMethods;
+using O2.XRules.Database.Utils.O2;
 
-//O2Ref:System.Data.dll
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs
-//O2File:Controls\ascx_GraphAst_MethodCalls.cs
-
-namespace O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
+//O2File:ascx_GraphAst_MethodCalls.cs
+//O2File:HtmlAgilityPack_ExtensionMethods.cs 
+//O2File:Scripts_ExtensionMethods.cs   
+//O2File:ascx_GraphAst_MethodCalls.cs 
+//O2Ref:System.Data.dll 
+//O2Ref:O2_API_Visualization.dll 
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
+ 
+namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 {
     public class O2_DotNet_Ast_Engine : UserControl
 	{	 			

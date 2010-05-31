@@ -11,7 +11,7 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
-using O2.API.AST.CSharp;
+using O2.API.AST.CSharp; 
 using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
 using ICSharpCode.NRefactory;
@@ -19,14 +19,10 @@ using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
-using O2.Script.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner;
-//using O2.API.Visualization.ExtensionMethods;
 using O2.Views.ASCX;
-using O2.XRules.Database.ExtensionMethods;
-using O2.XRules.Database.O2Utils;
-//O2File:..\O2_DotNet_Ast_Engine.cs
+//O2Ref:QuickGraph.dll
 
-namespace O2.Script
+namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 {
     public class ascx_Interactive_MethodCalls : System.Windows.Forms.Control
     {        	

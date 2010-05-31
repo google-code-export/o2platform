@@ -19,8 +19,8 @@ using O2.API.AST.ExtensionMethods.CSharp;
 using O2.API.Visualization.ExtensionMethods;
 using O2.Views.ASCX;
 using GraphSharp.Controls;
-using O2.XRules.Database.ExtensionMethods;
-using O2.XRules.Database.O2Utils;
+using O2.XRules.Database.Utils.O2;
+
 //O2Ref:GraphSharp.dll
 //O2Ref:GraphSharp.Controls.dll
 //O2Ref:QuickGraph.dll
@@ -29,10 +29,12 @@ using O2.XRules.Database.O2Utils;
 //O2Ref:WindowsBase.dll
 //O2Ref:ICSharpCode.AvalonEdit.dll
 //O2Ref:WindowsFormsIntegration.dll
+//O2Ref:O2_API_Visualization.dll
 
-//O2File:Controls\WPF_O2MappedAstData_ExtensionMethods.cs
+//O2File:ascx_Simple_Script_Editor.cs.o2
+//O2File:Scripts_ExtensionMethods.cs
 
-namespace O2.Script
+namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 {
     public class ascx_GraphAst_MethodCalls : System.Windows.Forms.Control
     {        	

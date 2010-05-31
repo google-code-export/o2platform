@@ -13,27 +13,29 @@
 //O2Ref:O2SharpDevelop.dll
 //O2Ref:O2_External_SharpDevelop.dll
 //O2Ref:O2_External_IE.dll
-using O2.External.IE.ExtensionMethods;
-using O2.External.IE.Wrapper;
-using System.Windows.Forms.Integration;
 using System;
-using O2.Kernel.ExtensionMethods;
-using O2.DotNetWrappers.ExtensionMethods;
-using O2.API.Visualization.Ascx;
-using O2.API.Visualization.ExtensionMethods;
 using System.Windows.Forms;
-using O2.Views.ASCX.classes.MainGUI;
-using O2.External.SharpDevelop.ExtensionMethods;
-using O2.XRules.Database.O2Utils;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Forms.Integration;
+using System.Windows;
 using QuickGraph;
 using GraphSharp;
 using GraphSharp.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows;
-using O2.XRules.Database.ExtensionMethods;
 
-namespace O2.Script
+using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.External.IE.Wrapper;
+using O2.External.IE.ExtensionMethods;
+using O2.External.SharpDevelop.ExtensionMethods;
+using O2.API.Visualization.Ascx;
+using O2.API.Visualization.ExtensionMethods;
+using O2.Views.ASCX.classes.MainGUI;
+using O2.XRules.Database.Utils.O2;
+//O2File:Scripts_ExtensionMethods.cs 
+//O2File:ascx_Simple_Script_Editor.cs.o2 
+
+namespace O2.XRules.Database.Utils.O2
 {
     public class ascx_GraphWithInspector : Control
     {        
