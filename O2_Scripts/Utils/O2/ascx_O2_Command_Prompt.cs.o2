@@ -10,7 +10,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System;
 //O2File:ascx_Simple_Script_Editor.cs.o2
-//O2File:Scripts_ExecutionMethods.cs
+//O2File:Scripts_ExtensionMethods.cs
 
 namespace O2.XRules.Database.Utils.O2
 {

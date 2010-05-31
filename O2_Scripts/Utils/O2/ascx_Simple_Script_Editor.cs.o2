@@ -132,7 +132,7 @@ namespace O2.XRules.Database.Utils.O2
             var groupBoxes = this.add_1x1("Command To Execute", "Invoke and Result", true, this.Width - 150);   
         	
         	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();
-            
+            commandsToExecute.document().TextEditorProperties.EnableFolding = false;
 
             splitContainer_CommandBox = (SplitContainer)groupBoxes[0].Parent.Parent;
             splitContainer_CommandBox.Panel2MinSize = 110;
@@ -155,6 +155,7 @@ namespace O2.XRules.Database.Utils.O2
 			result_RichTextBox = outputPanel.add_RichTextBox();            
         	
         	result_Panel = outputPanel.add_Panel();
+        	        	
         }
         
         public void configureGui()

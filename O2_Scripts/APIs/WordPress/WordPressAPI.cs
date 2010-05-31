@@ -12,9 +12,9 @@ using O2.DotNetWrappers.ExtensionMethods;
 using JoeBlogs;
 using JoeBlogs.Structs;
 //O2Ref:WordPress_XmlRpc_JoeBlogs.dll
+//O2File:O2MediaWikiApi.cs
 
-
-namespace O2.Script
+namespace O2.XRules.Database.APIs
 {
     public class WordPressAPI
     {    

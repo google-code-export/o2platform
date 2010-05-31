@@ -20,14 +20,12 @@ using O2.Views.ASCX;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 using WatiN.Core;
- 
 using SHDocVw;
- 
 //O2Ref:WatiN.Core.1x.dll
 //O2Ref:Interop.SHDocVw.dll
+//O2File:WatiN_IE_ExtensionMethods.cs
  
- 
-namespace O2.Script
+namespace O2.XRules.Database.APIs
 {
     public class WatiN_IE
 	{

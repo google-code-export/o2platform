@@ -9,10 +9,11 @@ using O2.Kernel;
 //O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.O2CmdShell;
-//O2File:..\..\Interfaces\IAnalysisArtifacts.cs
+//O2File:IAnalysisArtifacts.cs
 using O2.XRules.Database.Interfaces;
 //O2Ref:nunit.framework.dll
 using NUnit.Framework;
+//O2Ref:O2_Interfaces.dll
 
 namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {

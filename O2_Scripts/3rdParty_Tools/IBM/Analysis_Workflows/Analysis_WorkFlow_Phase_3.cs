@@ -5,13 +5,19 @@ using O2.Interfaces.O2Findings;
 using O2.Interfaces.XRules;
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;
-using O2.XRules.Database._Rules.J2EE.Struts;
+//using O2.XRules.Database._Rules.J2EE.Struts;
 using O2.XRules.Database.Interfaces;
 //O2Ref:nunit.framework.dll
 using NUnit.Framework;
-
-//O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\IAnalysisArtifacts.cs
-//O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\KAnalysisArtifacts.cs
+//O2Ref:O2_Interfaces.dll
+using O2.XRules.Database._Rules;
+using O2.XRules.Database._Rules.J2EE.Struts;
+//O2File:IAnalysisArtifacts.cs
+//O2File:KAnalysisArtifacts.cs
+//O2File:XUtils_Findings_v_0_1.cs
+//O2File:XUtils_Analysis.cs
+//O2File:xUtils_Struts_v0_1.cs
+//O2File:XRule_Struts.cs
 
 namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {

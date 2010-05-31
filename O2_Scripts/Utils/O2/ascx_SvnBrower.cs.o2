@@ -64,7 +64,7 @@ namespace O2.Core.XRules.Ascx
         public void InitializeComponent()
         {
         	splitControl = this.add_SplitContainer(
-            						false, 		//setOrientationToHorizontal
+            						true, 		//setOrientationToVertical
             						true,		// setDockStyleoFill
             						true);		// setBorderStyleTo3D)
             leftGroupBox = splitControl.Panel1.add_GroupBox("Directories and Files");

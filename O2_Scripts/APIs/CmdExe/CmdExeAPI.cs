@@ -15,9 +15,6 @@ using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes.MainGUI;
 using WindowsInput;
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_WebAutomation.cs
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_VisualizationApi.cs
-//O2File:C:\_O2_SVN\SourceCode\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Windows\NamePipes.cs
 
 namespace O2.Script
 {

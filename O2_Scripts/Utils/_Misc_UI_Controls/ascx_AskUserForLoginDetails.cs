@@ -12,9 +12,10 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.IE.ExtensionMethods;
-using O2.XRules.Database._Rules._Interfaces;
- 
-namespace O2.Script
+using O2.XRules.Database.Utils.O2;
+//O2File:ISecretData.cs
+
+namespace O2.XRules.Database.Utils
 {
     public class ascx_AskUserForLoginDetails : ContainerControl
     {       

@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 using O2.DotNetWrappers.DotNet;
 //O2Ref:O2_Kernel.dll
 using O2.Kernel;
-//O2File:C:\O2\XRulesDatabase\_Rules\_Interfaces\IAnalysisArtifacts.cs
+//O2File:IAnalysisArtifacts.cs
 
 namespace O2.XRules.Database.Interfaces
 {

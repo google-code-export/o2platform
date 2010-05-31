@@ -6,14 +6,15 @@ using System.Windows.Forms;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
-using O2.XRules.Database._Rules._Interfaces;
 using O2.Views.ASCX.ExtensionMethods;
 using TweetSharp.Fluent;
 using TweetSharp.Model;
 using TweetSharp.Extensions;
+using O2.XRules.Database.Utils.O2;
 //O2Ref:Dimebrain.TweetSharp.dll
+//O2File:ISecretData.cs
 
-namespace O2.XRules.Database._Rules.APIs
+namespace O2.XRules.Database.APIs
 {
     public class O2TwitterAPI
     {

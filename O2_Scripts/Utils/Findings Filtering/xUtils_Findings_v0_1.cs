@@ -19,6 +19,7 @@ using O2.Interfaces.O2Core;
 using O2.Interfaces.O2Findings;
 using O2.Kernel;
 //O2Ref:O2_Views_ASCX.dll
+//O2Ref:O2_Interfaces.dll
 
 using O2.Views.ASCX.O2Findings;
 
