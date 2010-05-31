@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var panel = O2Gui.open&lt;Panel&gt;("Compiling all local O2 Scripts",500,500);
+panel.clear();
+panel.insert_Below&lt;ascx_LogViewer&gt;();
+var dataGridView = panel.add_DataGridView();
+dataGridView.add_Column("File");
+dataGridView.add_Column("Compiler Mode #1",100);
+dataGridView.add_Column("Compiler Mode #2",100); 
+dataGridView.noSelection();
+foreach(var file in @"C:\O2\O2Scripts_Database\_Scripts".files("*.cs",true)) 
+{				
+	var compiler1Result = (file.compile() != null);	
+	var compiler2Result = (new O2.DotNetWrappers.DotNet.CompileEngine().compileSourceFile(file) != null);
+	var rowId = dataGridView.add_Row(file,compiler1Result, compiler2Result); 
+	dataGridView.get_Row(rowId).Cells[0].Style.ForeColor = (compiler1Result &amp;&amp; compiler2Result) ? Color.Green : Color.Red;
+	dataGridView.get_Row(rowId).Cells[1].Style.ForeColor = (compiler1Result) ? Color.Green : Color.Red;
+	dataGridView.get_Row(rowId).Cells[2].Style.ForeColor = (compiler2Result) ? Color.Green : Color.Red;
+}
+ 
+//O2Ref:System.Data.dll
+//using O2.Views.ASCX.Ascx.MainGUI</SourceCode>
+  <ReferencedAssemblies />
+</H2>

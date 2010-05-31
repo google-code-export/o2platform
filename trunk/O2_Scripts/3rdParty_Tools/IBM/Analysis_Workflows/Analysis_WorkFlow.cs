@@ -8,7 +8,7 @@ using O2.Kernel;
 //O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;
-//O2File:..\..\Interfaces\IAnalysisArtifacts.cs
+//O2File:IAnalysisArtifacts.cs
 using O2.XRules.Database.Interfaces;
 //O2Ref:nunit.framework.dll
 using NUnit.Framework;

@@ -11,7 +11,7 @@ using System.IO;
 using System.Xml;
 
 
-namespace O2.XRules.Database.ExtensionMethods
+namespace O2.XRules.Database.Utils.ExtensionMethods
 {
     public static class HtmlAgilityPack_ExtensionMethods
     {

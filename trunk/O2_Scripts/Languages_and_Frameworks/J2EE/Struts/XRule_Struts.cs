@@ -10,7 +10,7 @@ using O2.Interfaces.XRules;
 using O2.Kernel;
 //O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.DotNet;
-//O2File:..\..\Findings Filtering\XUtils_Findings_v0_1.cs
+//O2File:XUtils_Findings_v0_1.cs
 //O2File:XUtils_Struts_v0_1.cs
 //O2File:XUtils_Struts_Joins_V0_1.cs
 

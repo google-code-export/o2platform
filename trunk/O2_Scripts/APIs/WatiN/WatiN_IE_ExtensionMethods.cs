@@ -20,17 +20,21 @@ using O2.Views.ASCX;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods; 
-using O2.XRules.Database._Rules._Interfaces;
+using O2.XRules.Database.Utils;
+using O2.XRules.Database.Utils.O2;
 using WatiN.Core;
+using WatiN.Core.Interfaces;
 using SHDocVw;
- 
+using mshtml;
 //O2Ref:WatiN.Core.1x.dll
 //O2Ref:Interop.SHDocVw.dll
+//O2Ref:Microsoft.mshtml.dll
 //O2File:WatiN_IE.cs
-//O2File:..\..\Utils\_Misc_UI_Controls\ascx_CaptchaQuestion.cs
-//O2File:..\..\Utils\_Misc_UI_Controls\ascx_AskUserForLoginDetails.cs
- 
-namespace O2.Script
+//O2File:ascx_CaptchaQuestion.cs
+//O2File:ascx_AskUserForLoginDetails.cs
+//O2File:ISecretData.cs
+
+namespace O2.XRules.Database.APIs
 {
     public static class WatiN_IE_ExtensionMethods
     {    
@@ -66,7 +70,10 @@ namespace O2.Script
  		{ 			
 			return new WatiN_IE(webBrowser);						
 		}
- 
+ 	}
+ 	
+ 	public static class WatiN_IE_ExtensionMethods_Misc
+    {
     	// uri & url
  
     	public static Uri uri(this WatiN_IE watinIe)
@@ -79,7 +86,12 @@ namespace O2.Script
     	{
     		return watinIe.uri().str();
     	}
- 
+    	
+    	public static bool url(this WatiN_IE watinIe, string url)
+		{
+			return  (watinIe.url() == url);
+		}
+
     	public static string title(this WatiN_IE watinIe)
     	{
     		return watinIe.IE.Title;
@@ -119,10 +131,7 @@ namespace O2.Script
 				}); 
 			return watinIe;
     	}
- 
- 
-    	// internet explorer
- 
+  
     	public static InternetExplorerClass internetExplorer(this WatiN_IE watinIe)
     	{
     		return watinIe.InternetExplorer;
@@ -172,8 +181,10 @@ namespace O2.Script
     		return element;
     	}
  
- 
-    	// WatiN Image Extension Methods
+ 	}
+ 	
+	public static class WatiN_IE_ExtensionMethods_Image
+	{
  
     	public static WatiN.Core.Image image(this WatiN_IE watinIe, string name)
     	{
@@ -211,7 +222,10 @@ namespace O2.Script
 					: "";
     	}
  
-    	// WatiN Link Extension methods    	
+ 	}
+ 	
+    public static class WatiN_IE_ExtensionMethods_Link
+    { 	
  
     	public static Link link(this WatiN_IE watinIe, string name)
     	{
@@ -261,9 +275,28 @@ namespace O2.Script
     	{
     		return (from link in links 
     				select link.url()).toList();
-    	}
+    	} 
+    	
+    	public static List<string> ids(this List<Link> links)
+		{
+			return (from link in links
+					where (link.Id != null)
+					select link.Id).toList();
+		}
  
-    	// WatiN Button Extension methods
+		public static bool hasLink(this WatiN_IE watinIe, string nameOrId)
+		{			
+			foreach(var link in watinIe.links())
+				if (link.id() == nameOrId || link.text() == nameOrId)
+					return true;
+			return false;
+			//return watinIe.links().ids().Contains(id);
+		}
+
+ 	}
+ 	
+    public static class WatiN_IE_ExtensionMethods_Button
+    {
  
     	public static WatiN.Core.Button button(this WatiN_IE watinIe, string name)
     	{
@@ -318,7 +351,37 @@ namespace O2.Script
     		return button;
     	}
  
-    	// WatiN SelectLists Extension methods    	
+ 		public static bool hasButton(this WatiN_IE watinIe, string nameOrId)
+		{	
+			foreach(var button in watinIe.buttons())
+				if (button.id() == nameOrId || button.value() == nameOrId)
+					return true;
+			return false;
+			//return watinIe.buttons().ids().Contains(id);						
+		}
+ 
+		public static WatiN_IE click(this WatiN_IE watinIe, string id)
+		{
+			if (watinIe.hasButton(id))
+			{
+				var button = watinIe.button(id);			
+				button.click();
+			}
+			else if (watinIe.hasLink(id))
+			{
+				var link = watinIe.link(id);			
+				link.click();
+			}
+			else
+				"in WatiN_IE click, could not find button or link with id: {0}".error(id);
+			return watinIe;
+ 
+		}
+
+ 	}
+ 	
+    public static class WatiN_IE_ExtensionMethods_SelectList
+    {	
  
     	public static SelectList selectList(this WatiN_IE watinIe, string name)
     	{    		
@@ -375,7 +438,10 @@ namespace O2.Script
     			options[index].select();
     		return selectList;
     	}
-    	// WatiN CheckBox Extension methods    	
+    }
+    
+    public static class WatiN_IE_ExtensionMethods_CheckBox
+    {
  
     	public static WatiN.Core.CheckBox checkBox(this WatiN_IE watinIe, string name)
     	{
@@ -443,7 +509,10 @@ namespace O2.Script
     		return checkBox.value(false);
     	}
  
-    	// WatiN TextField Extension methods    	
+ 	}
+ 	
+    public static class WatiN_IE_ExtensionMethods_TextField
+    {	
     	public static TextField field(this WatiN_IE watinIe, string name)
     	{
     		return watinIe.textField(name);
@@ -522,7 +591,53 @@ namespace O2.Script
     		return textField;
     	}
  
-    	// WatiN Forms Extension methods    	
+ 		public static List<string> texts(this List<TextField> textFields)
+		{
+			return (from textField in textFields
+					select textField.text()).toList();
+		}
+ 
+		public static List<TextField> texts(this List<TextField> textFields, string text)
+		{
+			return (from textField in textFields
+					where textField.text() == text
+					select textField).toList();
+		}
+		public static TextField appendLine(this TextField textField, string textToAppend)
+		{
+			return textField.appendText(textToAppend.line());
+		}
+ 
+		public static TextField appendText(this TextField textField, string textToAppend)
+		{
+			if (textField!= null)
+			{
+				textField.value(textField.value() + textToAppend);
+			}
+			return textField; 
+		}
+ 
+		public static WatiN_IE set_Value(this WatiN_IE watinIe, string textFieldId, string text)
+		{
+			return watinIe.value(textFieldId, text);
+		}
+ 
+ 
+		public static WatiN_IE value(this WatiN_IE watinIe, string textFieldId, string text)
+		{
+			var textField = watinIe.textField(textFieldId);
+			if (textField != null)
+				textField.value(text);
+			else
+				"in WatiN_IE value, could not find textField with id: {0}".error(text);
+			return watinIe;
+ 
+		}
+
+    }
+    
+    public static class WatiN_IE_ExtensionMethods_Forms
+    {
  
     	public static List<WatiN.Core.Form> forms(this WatiN_IE watinIe)
     	{
@@ -531,7 +646,10 @@ namespace O2.Script
     	}
  
  
-    	// WatiN Elemetns Extension methods  
+    }
+    
+    public static class WatiN_IE_ExtensionMethods_Elements
+    {
  
     	public static List<Element> elements(this WatiN_IE watinIe, string tagName)
     	{
@@ -559,40 +677,12 @@ namespace O2.Script
     			result.add(element.TagName, element);
     		return result;
     	}
- 
- 
+  
     	public static string tagName(this Element element)
     	{
     		return element.TagName;
     	}
- 
- 
-    	// WatiN Divs Extension methods  
- 
- 
-    	public static Div div(this WatiN_IE watinIe, string id)
-    	{
-    		foreach(var div in watinIe.divs())
-    			if (div.Id != null && div.Id == id)
-    				return div;
-    		return null;
-    	}
-    	public static List<Div> divs(this WatiN_IE watinIe)
-    	{
-    		return (from div in watinIe.IE.Divs
-    				select div).toList();
-    	}
- 
-    	public static List<string> ids(this List<Div> divs)
-    	{
- 
-    		return (from div in divs 
-    				where div.Id != null
-    				select div.Id).toList();
-    	}
- 
-    	// WatiN  Element Extension methods    	   	   	
- 
+    	
     	public static string id(this Element element)
     	{
     		return (element != null)
@@ -632,8 +722,199 @@ namespace O2.Script
     	{
     		return element.outerHtml();
     	}
+    	
+    	public static IHTMLElement htmlElement(this Element element)
+    	{
+    		return (IHTMLElement) element.HTMLElement;
+    	}    	   	
  
-    	// Captcha Extension methods
+    	public static void remove(this Element element)
+    	{
+    		element.outerHtml("");	
+    	}
+ 
+    	public static void remove(this List<Element> elements)
+    	{
+    		foreach(var element in elements)
+    			element.outerHtml("");	
+    	}
+ 
+    	public static List<T> outerHtml<T>(this List<T> elements, string outerHtml)
+    		where T : Element
+    	{
+    		foreach(var element in elements)
+    			element.outerHtml(outerHtml);	
+    		return elements;
+    	}
+ 
+    	public static List<T> innerHtml<T>(this List<T> elements, string innerHtml)
+    		where T : Element
+    	{
+    		foreach(var element in elements)
+    			element.innerHtml(innerHtml);	
+    		return elements;
+    	}
+ 
+    	public static T outerHtml<T>(this T element, string outerHtml)
+    		where T : Element
+    	{
+    		if (element!= null)
+    		{
+    			var htmlElement = element.htmlElement();
+    			if (htmlElement != null)    			
+    				htmlElement.outerHTML = outerHtml;    				   			
+    		}
+    		return element;
+    	}
+ 
+    	public static T innerHtml<T>(this T element, string innerHtml)
+    		where T : Element
+    	{
+    		if (element!= null)
+    		{
+    			var htmlElement = element.htmlElement();
+    			if (htmlElement != null)    			
+    				htmlElement.innerHTML= innerHtml;    				   			
+    		}
+    		return element;
+    	}	
+ 
+    	public static Element @class(this List<Element> elements, string className)
+    	{
+    		foreach(var element in elements)
+				if (element.ClassName == className)
+					return element;
+			return null;
+    	}
+    	public static List<Element> @classes(this List<Element> elements, string className)
+    	{
+    		return (from element in elements
+					where (element.ClassName == className)
+					select element).toList();
+    	}
+ 
+    	public static List<string> classes(this List<Element> elements)
+		{
+			return (from element in elements
+					where (element.ClassName != null)
+					select element.ClassName).toList();
+		}
+ 
+    	public static List<Element> elements(this IElementsContainer elementsContainer)
+    	{
+    		return (from element in elementsContainer.Elements
+    				select element).toList();
+    	}
+ 
+    	public static List<T> elements<T>(this WatiN_IE watinIe)
+    		where T : Element
+		{
+			return (from element in watinIe.elements()
+					where element is T
+					select (T)element).toList();
+		}
+ 
+		public static List<string> ids(this List<Element> elements)
+		{
+			return (from element in elements
+					where (element.Id != null)
+					select element.Id).toList();
+		}
+ 
+		public static Dictionary<string,Element> byId(this List<Element> elements)
+		{		
+			var result = new Dictionary<string,Element>();
+			foreach(var element in elements)
+				if (element.Id != null)
+					result.add(element.Id, element);
+			return result;
+		}
+ 
+ 
+		public static T element<T>(this WatiN_IE watinIe, string id)
+			where T : Element
+		{
+			return watinIe.elements().id<T>(id);
+		}
+ 
+		public static Element element(this WatiN_IE watinIe, string id)
+		{
+			return watinIe.elements().id(id);
+		}
+ 
+		public static Element id(this List<Element> elements, string id)
+		{
+			foreach(var element in elements)
+				if (element.Id != null && element.Id == id)
+					return element;
+			return null;
+		}
+ 
+		public static List<Element> texts(this List<Element> elements, string text)
+		{
+			return elements.texts(text,false);
+		}
+ 
+		public static List<Element> texts(this List<Element> elements, string text, bool useRegEx)
+		{
+			if (useRegEx)
+				return (from element in elements
+						where element.text().regEx(text)
+						select element).toList();
+			else
+				return (from element in elements
+						where element.text() == text
+						select element).toList();
+		}
+ 
+		public static Element text(this List<Element> elements, string text)
+		{
+			foreach(var element in elements)
+				if (element.Id != null && element.text() == text)
+					return element;
+			return null;
+		}
+ 
+		public static T id<T>(this List<Element> elements, string id)
+			where T : Element
+		{
+			var element = elements.id(id);
+			if (element is T)
+				return (T)element;
+			return null;			
+		}
+
+ 
+ 
+    }
+    
+    public static class WatiN_IE_ExtensionMethods_Divs
+    { 
+ 
+    	public static Div div(this WatiN_IE watinIe, string id)
+    	{
+    		foreach(var div in watinIe.divs())
+    			if (div.Id != null && div.Id == id)
+    				return div;
+    		return null;
+    	}
+    	public static List<Div> divs(this WatiN_IE watinIe)
+    	{
+    		return (from div in watinIe.IE.Divs
+    				select div).toList();
+    	}
+ 
+    	public static List<string> ids(this List<Div> divs)
+    	{
+ 
+    		return (from div in divs 
+    				where div.Id != null
+    				select div.Id).toList();
+    	}
+ 	}    	     	
+ 
+    public static class WatiN_IE_ExtensionMethods_Captcha
+    {
  
     	public static string resolveCaptcha(this WatiN_IE watinIe, string captchaImageUrl)
     	{
@@ -655,7 +936,10 @@ namespace O2.Script
     		}
 			return watinIe;    		
     	}    	
- 
+ 	}
+ 	
+ 	public static class WatiN_IE_ExtensionMethods_AskUser
+    {
     	public static string askUserQuestion(this WatiN_IE watinIe, string question, string title, string defaultValue)
     	{
     		var assembly =  "Microsoft.VisualBasic".assembly();
@@ -684,7 +968,11 @@ namespace O2.Script
 		   	credential.CredentialType = loginType;
 	   	return credential;
 	    }
-    	// TreeView helper 
+    
+    }
+    
+    public static class WatiN_IE_ExtensionMethods_WinForms
+    {
  
     	public static Panel showElementsInTreeView(this WatiN_IE watinIe)
     	{
@@ -705,7 +993,6 @@ namespace O2.Script
 					   .afterSelect<List<Element>>((elements)=> propertyGrid.show(elements[0]));
     		return hostPanel;
     	}
- 
     	// Control Extensionmethods
  
     	public static WatiN_IE add_IE(this Control control)
@@ -715,4 +1002,37 @@ namespace O2.Script
     	}
  
      }
+     
+    public static class WatiN_IE_ExtensionMethods_Highlight
+    {
+    
+    	public static T flash<T>(this T element)
+		where T : Element
+		{
+			return element.flash(2);
+		}
+ 
+		public static T flash<T>(this T element, int timesToFlash)
+			where T : Element
+		{
+			element.Flash(timesToFlash);
+			return element;
+		}
+ 
+		public static T select<T>(this T element)
+			where T : Element
+		{
+			return element.highlight();			
+		}
+ 
+		public static T highlight<T>(this T element)
+			where T : Element
+		{
+			element.Highlight(true);
+			return element;
+ 
+		}
+    
+    }
+     
 }

@@ -20,7 +20,8 @@ using O2.DotNetWrappers.O2Findings;
 //O2Ref:O2_Views_ASCX.dll
 using O2.Views.ASCX.O2Findings;
 //O2Ref:O2_XRules_Database.exe
-//O2_File:xUtils_Findings_v0_1.cs
+//O2File:xUtils_Findings_v0_1.cs
+using O2.XRules.Database._Rules;
 
 namespace O2.XRules.Database._Rules
 {

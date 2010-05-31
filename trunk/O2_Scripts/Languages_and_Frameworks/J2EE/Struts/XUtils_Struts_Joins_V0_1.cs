@@ -24,7 +24,7 @@ using O2.DotNetWrappers.O2Findings;
 using O2.External.WinFormsUI.Forms;
 //O2Ref:O2_Views_ASCX.dll
 using O2.Views.ASCX.O2Findings;
-//O2File:..\..\Findings Filtering\XUtils_Findings_v0_1.cs
+//O2File:XUtils_Findings_v0_1.cs
 
 /*public XRule_Struts()
         {

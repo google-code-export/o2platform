@@ -13,7 +13,7 @@ using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.IE.ExtensionMethods;
  
-namespace O2.Script
+namespace O2.XRules.Database.Utils
 {
     public class ascx_CaptchaQuestion : ContainerControl
     {       

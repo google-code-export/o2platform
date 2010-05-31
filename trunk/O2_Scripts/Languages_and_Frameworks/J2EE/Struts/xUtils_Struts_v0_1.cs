@@ -11,6 +11,7 @@ using System.Linq;
 //O2Ref:System.Windows.Forms.dll
 using System.Windows.Forms;
 //O2Ref:O2_Kernel.dll
+//O2Ref:O2_Interfaces.dll
 using O2.Interfaces.FrameworkSupport.J2EE;
 using O2.Interfaces.O2Core;
 using O2.Interfaces.Views;

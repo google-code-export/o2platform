@@ -27,7 +27,7 @@ using O2.External.IE.Interfaces;
 using O2.External.IE.Wrapper;
 using O2.DotNetWrappers.Windows;
 
-namespace O2.Script
+namespace O2.XRules.Database.Utils
 {
     public class ascx_Create_Links_From_Clipboard : Control
     {    
