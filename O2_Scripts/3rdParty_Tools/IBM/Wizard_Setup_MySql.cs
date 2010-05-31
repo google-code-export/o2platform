@@ -17,7 +17,7 @@ using Merlin;
 using MerlinStepLibrary;
 //O2Ref:nunit.framework.dll
 using NUnit.Framework; 
-
+//O2Ref:O2_Rules_OunceLabs.dll
 
 namespace O2.Script
 {

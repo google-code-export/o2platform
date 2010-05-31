@@ -3,6 +3,9 @@ using System;
 using O2.Kernel;
 using O2.Interfaces.O2Core;
 using O2.XRules.Database._Rules._Sample_Vulnerabilities._MockClasses;
+//O2File:HttpContext.cs
+//O2File:HttpRequest.cs
+//O2File:SqlCommand.cs
 
 namespace O2.XRules.Database._Rules._Sample_Vulnerabilities
 {

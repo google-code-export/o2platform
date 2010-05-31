@@ -5,8 +5,10 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 //O2Ref:O2_Kernel.dll
+//O2Ref:O2_Interfaces.dll
 using O2.Interfaces.O2Findings;
 using O2.Interfaces.XRules;
+//O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.O2CmdShell;
 using O2.DotNetWrappers.Windows;
@@ -17,7 +19,9 @@ using NUnit.Framework;
 //O2File:xUtils_Findings_v0_1.cs
 //O2File:XUtils_Analysis.cs
 //O2File:xUtils_Struts_v0_1.cs
-//O2Ref:O2_Interfaces.dll
+//O2Ref:System.Core.dll
+
+
 
 
 namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows

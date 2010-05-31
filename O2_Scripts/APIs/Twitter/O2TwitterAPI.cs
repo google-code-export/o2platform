@@ -13,6 +13,7 @@ using TweetSharp.Extensions;
 using O2.XRules.Database.Utils.O2;
 //O2Ref:Dimebrain.TweetSharp.dll
 //O2File:ISecretData.cs
+//O2Ref:System.Data.dll
 
 namespace O2.XRules.Database.APIs
 {

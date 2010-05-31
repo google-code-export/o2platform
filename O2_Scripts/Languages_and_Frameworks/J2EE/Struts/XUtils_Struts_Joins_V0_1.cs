@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 //O2Ref:O2_Kernel.dll
 using O2.Interfaces.FrameworkSupport.J2EE;
+//O2Ref:O2_Interfaces.dll
 using O2.Interfaces.O2Findings;
 using O2.Interfaces.Views;
 using O2.Kernel;

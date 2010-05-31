@@ -9,6 +9,7 @@ using O2.External.SharpDevelop.Ascx;
 using O2.External.SharpDevelop.ExtensionMethods;
 using System.IO;
 using System.Xml;
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 
 
 namespace O2.XRules.Database.Utils.ExtensionMethods

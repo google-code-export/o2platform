@@ -1,5 +1,5 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
-//O2File:..\Findings Filtering\xUtils_Findings_v0_1.cs
+
 //O2Ref:System.dll
 using System;
 using System.IO;
@@ -8,17 +8,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-//O2Ref:O2_Kernel.dll
+//O2Ref:O2_Interfaces.dll
 using O2.Interfaces.O2Core;
-using O2.Kernel;
+//O2Ref:O2_Kernel.dll
+using O2.Kernel; 
 using O2.Kernel.Interfaces.XRules;
 //O2Ref:O2_DotNetWrappers.dll
 using O2.DotNetWrappers.O2Findings;
-//O2File:..\..\Interfaces\IAnalysisArtifacts.cs
-using O2.XRules.Database.Interfaces;
-
-//O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\IAnalysisArtifacts.cs
-//O2Tag_AddSourceFile:E:\O2\_SourceCode_O2\O2_XRules_Database\Interfaces\KAnalysisArtifacts.cs
+//O2File:IAnalysisArtifacts.cs
+using O2.XRules.Database.Interfaces;  
+//O2File:KAnalysisArtifacts.cs
 
 namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {
