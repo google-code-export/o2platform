@@ -107,33 +107,9 @@ namespace O2.API.AST.ExtensionMethods
             //matches.add(result);
             //	matches.add(getAllNodes.allByType<LocalVariableDeclaration>());
             return matches;
-        }
+        }                
 
         
-
-        public static T parent<T>(this INode iNode)
-            where T : AbstractNode
-        {
-            if (iNode != null)
-            {
-                while (iNode.Parent != null && (iNode is T).isFalse())
-                    iNode = iNode.Parent;
-                if (iNode is T)
-                    return iNode as T;
-            }
-            "Could node find {0} for provided iNode: {1}".format(typeof(T).Name, iNode != null ? iNode.str() : "[null value]").error();
-            return null;
-        }
-
-        public static CompilationUnit compilationUnit(this INode iNode)
-        {         
-            return iNode.parent<CompilationUnit>();
-        }
-
-        public static MethodDeclaration methodDeclaration(this INode iNode)
-        {
-            return iNode.parent<MethodDeclaration>();
-        }
     
     }
 }

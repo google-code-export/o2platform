@@ -10,12 +10,7 @@ using O2.Kernel;
 namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class Objects_ExtensionMethods
-    {
-        public static void gcCollect(this object _object)
-        {
-            System.GC.Collect();
-        }
-            
+    {                    
         public static void sleep(this object _object, int miliseconds)
         {
             Processes.Sleep(miliseconds);
@@ -41,25 +36,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
-        public static string o2Temp2Dir(this object _object)
-        {
-            return PublicDI.config.O2TempDir;
-        }
-
-        public static string tempO2Dir(this object _object)
-        {
-            return PublicDI.config.O2TempDir;
-        }
-
-        public static string tempDir(this object _object)
-        {
-            return _object.tempO2Dir();
-        }
-
-        public static uint uInt(this int _int)
-        {
-            return (uint)_int;
-        }
-
+        
     }
 }

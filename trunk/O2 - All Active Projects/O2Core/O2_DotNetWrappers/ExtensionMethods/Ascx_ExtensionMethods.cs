@@ -2531,6 +2531,29 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     });
         }
 
+        public static object tag(this Panel panel)
+        {
+            return (object)panel.invokeOnThread(() => panel.Tag);
+        }
+
+        public static T tag<T>(this Panel panel)
+        {
+            return (T)panel.invokeOnThread(
+                () =>
+                {
+                    var tag = panel.Tag;
+                    if (tag is T)
+                        return (T)tag;
+                    return default(T);
+                });
+        }
+
+        public static Panel tag(this Panel panel, object tag)
+        {
+            panel.invokeOnThread(() => panel.Tag = tag);
+            return panel;
+        }
+
         #endregion
 
         #region ToolStripTextBox

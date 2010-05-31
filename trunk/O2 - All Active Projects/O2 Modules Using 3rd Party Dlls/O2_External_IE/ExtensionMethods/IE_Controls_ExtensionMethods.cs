@@ -138,17 +138,26 @@ namespace O2.External.IE.ExtensionMethods
                            Enabled = enabled
                        };
         }
-        
-        public static void onEditedHtmlChange(this O2BrowserIE o2BrowserIE, Action<string> onHtmlChange)
+       
+        public static O2BrowserIE onTextChange(this O2BrowserIE o2BrowserIE, Action<string> callback)
         {
-            if (o2BrowserIE.Document != null)
-            {
-                var markupContainer2 = (mshtml.IMarkupContainer2) o2BrowserIE.Document.DomDocument;
+            return o2BrowserIE.onEditedHtmlChange(callback);
+        }
 
-                uint pdwCookie;
-                markupContainer2.RegisterForDirtyRange(
-                    new IEChangeSink(() => onHtmlChange(o2BrowserIE.html())), out pdwCookie);
-            }
+        public static O2BrowserIE onEditedHtmlChange(this O2BrowserIE o2BrowserIE, Action<string> onHtmlChange)
+        {
+            return (O2BrowserIE)o2BrowserIE.invokeOnThread(() =>
+                    {
+                        if (o2BrowserIE.Document != null)
+                        {
+                            var markupContainer2 = (mshtml.IMarkupContainer2)o2BrowserIE.Document.DomDocument;
+
+                            uint pdwCookie;
+                            markupContainer2.RegisterForDirtyRange(
+                                new IEChangeSink(() => onHtmlChange(o2BrowserIE.html())), out pdwCookie);
+                        }
+                        return o2BrowserIE;
+                    });
         }
 
         public static HtmlDocument document(this O2BrowserIE o2BrowserIE)
@@ -255,5 +264,16 @@ namespace O2.External.IE.ExtensionMethods
                 });
 
         }
+
+        public static O2BrowserIE editMode(this O2BrowserIE o2BrowserIE)
+        {
+            return (O2BrowserIE)o2BrowserIE.invokeOnThread(
+                () =>
+                {
+                    o2BrowserIE.HtmlEditMode = true;
+                    return o2BrowserIE;
+                });
+        }
+
     }
 }

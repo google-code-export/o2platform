@@ -116,6 +116,7 @@ namespace O2.API.Visualization.ExtensionMethods
         {
             return (string)control.wpfInvoke(() => control.Content);
         }
+
         /* unfortunatly I can't seem to be call this set_Text able to do this since there are conflits when WPF and WinForms Extension methods are
          * used at the same time */
         public static T set_Text_Wpf<T>(this T control, string value)
@@ -159,11 +160,12 @@ namespace O2.API.Visualization.ExtensionMethods
 
         #region Label
 
-        //public static Label set_Text(this Label label, string value)
-    	//{
-    	//	label.wpfInvoke(()=> label.Content = value);    		
-		//	return label;
-    	//}
+        public static Label set_Text(this Label label, string value)
+    	{
+            label.set_Text_Wpf(value);
+    		//label.wpfInvoke(()=> label.Content = value);    		
+			return label;
+    	}
     	
     	#endregion
     	    	        	

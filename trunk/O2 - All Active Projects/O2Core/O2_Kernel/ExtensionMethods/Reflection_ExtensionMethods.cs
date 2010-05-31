@@ -75,6 +75,14 @@ namespace O2.Kernel.ExtensionMethods
             return PublicDI.reflection.getTypes(type);
         }
 
+        public static void infoTypeName(this object _object)
+        {
+            if (_object.notNull())
+                _object.typeName().info();
+            else
+                "in infoTypeName _object was null".error();
+        }
+
         public static string typeName(this object _object)
         {
             if (_object != null)

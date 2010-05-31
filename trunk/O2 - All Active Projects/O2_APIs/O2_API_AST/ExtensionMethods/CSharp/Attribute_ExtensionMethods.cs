@@ -7,7 +7,31 @@ using ICSharpCode.NRefactory.Ast;
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
     public static class Attribute_ExtensionMethods
-    {        
+    {
+
+        public static T add_Attribute<T>(this T attributedNode, string attributeName)
+    where T : AttributedNode
+        {
+            var attribute = new Attribute(attributeName, null, null);
+            return attributedNode.add_Attribute(attribute);
+        }
+
+        public static T add_Attribute<T>(this T attributedNode, Attribute attribute)
+            where T : AttributedNode
+        {
+            var attributeSection = new AttributeSection();
+            attributeSection.Attributes.Add(attribute);
+            return attributedNode.add_Attribute(attributeSection);
+        }
+
+        public static T add_Attribute<T>(this T attributedNode, AttributeSection attributeSection)
+            where T : AttributedNode
+        {
+            attributedNode.Attributes.Add(attributeSection);
+            return attributedNode;
+        }
+
+
         public static List<Attribute> attributesAll(this IParser parser)
         {
             return parser.CompilationUnit.attributesAll();

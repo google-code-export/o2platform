@@ -80,36 +80,7 @@ namespace O2.API.AST.ExtensionMethods
             var results = from iNode in o2MappedAstData.iNodes() where iNode is T select (T)iNode;
             return results.ToList();
         }
-
-        public static List<T> iNodes<T>(this INode iNode)
-        {
-            var iNodesInT = new List<T>();
-            var childINodes = iNode.iNodes();
-            foreach (var childINode in childINodes)
-                if (childINode is T)
-                    iNodesInT.add((T)childINode);
-            return iNodesInT;
-        }
-
-        public static List<INode> iNodes(this INode iNode)            
-        {
-            if (iNode == null)
-                return null;
-            var allINodes = new GetAllINodes();
-            iNode.AcceptVisitor(allINodes, null);
-            return allINodes.AllNodes;
-        }
-
-        public static List<T2> iNodes<T1, T2>(this T1 iNode)
-            where T1 : INode
-            where T2 : INode
-        {
-            if (iNode == null)
-                return null;
-            var results = from node in iNode.iNodes() where node is T2 select (T2)node;
-            return results.ToList();
-        }
-
+        
         public static List<INode> iNodes(this O2MappedAstData o2MappedAstData, string file)
         {
             if (o2MappedAstData.FileToINodes.hasKey(file))
