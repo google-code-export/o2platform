@@ -35,9 +35,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             compilationUnit.add_Method(typeDeclaration, methodDeclaration);
             return compilationUnit;
         }
-        
-        
-
+               
         public static CompilationUnit add_Method(this CompilationUnit compilationUnit, TypeDeclaration typeDeclaration, MethodDeclaration methodDeclaration)
         {                                   
             typeDeclaration.add_Method(methodDeclaration);
@@ -93,6 +91,18 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return methodDeclaration.TypeReference;
         }
 
+        public static MethodDeclaration returnType(this MethodDeclaration methodDeclaration, string returnType)
+        {
+            methodDeclaration.TypeReference = new TypeReference(returnType);
+            return methodDeclaration;
+        }
+
+        public static BlockStatement add_Body(this MethodDeclaration methodDeclaration)
+        {
+            var blockDeclaration = new BlockStatement();
+            methodDeclaration.Body = blockDeclaration;
+            return blockDeclaration;
+        }
         #endregion
 
         #region query

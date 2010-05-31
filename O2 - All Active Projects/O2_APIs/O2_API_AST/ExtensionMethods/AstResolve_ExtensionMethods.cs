@@ -7,6 +7,7 @@ using O2.API.AST.Graph;
 using ICSharpCode.SharpDevelop.Dom;
 using O2.Kernel.ExtensionMethods;
 using O2.API.AST.CSharp;
+using O2.API.AST.ExtensionMethods.CSharp;
 
 namespace O2.API.AST.ExtensionMethods
 {
@@ -76,11 +77,6 @@ namespace O2.API.AST.ExtensionMethods
         }
 
 
-        public static List<INode> getAstPath(this INode node, int line, int column)
-        {
-            var findLocation = new FindLocationInAst(line, column);
-            node.AcceptVisitor(findLocation, null);
-            return findLocation.Matches;
-        }
+        
     }
 }

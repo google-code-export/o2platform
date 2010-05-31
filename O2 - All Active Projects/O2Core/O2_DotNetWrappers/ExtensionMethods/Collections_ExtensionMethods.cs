@@ -135,6 +135,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return false;
         }
 
+        public static bool contains(this List<String> list, string text)
+        {
+            if (list != null)
+                return list.Contains(text);
+            return false;
+        }
+
         public static List<string> add_OnlyNewItems(this List<string> targetList, List<string> itemsToAdd)
         {            
             foreach (var item in itemsToAdd)
@@ -232,5 +239,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
             list.Sort();
             return list;
         }
+        
     }
 }

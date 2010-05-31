@@ -188,7 +188,7 @@ namespace O2.External.SharpDevelop.AST
 
                         InvocationParameters = getDefaultInvocationParameters();
                         this.invoke(beforeSnippetAst);
-                        DebugMode.info("Compiling Source Snippet (Size: {0})", codeSnippet.size());
+                        DebugMode.ifInfo("Compiling Source Snippet (Size: {0})", codeSnippet.size());
                         var sourceCode = createCSharpCodeWith_Class_Method_WithMethodText(codeSnippet);
                         if (sourceCode != null)
                             compileSourceCode(sourceCode, CreatedFromSnipptet);
@@ -246,7 +246,7 @@ namespace O2.External.SharpDevelop.AST
                                 Environment.CurrentDirectory = Kernel.PublicDI.config.CurrentExecutableDirectory;
                                 ;
                                 this.invoke(beforeCompile);
-                                DebugMode.info("Compiling Source Code (Size: {0})", sourceCode.size());
+                                DebugMode.ifInfo("Compiling Source Code (Size: {0})", sourceCode.size());
                                 SourceCode = sourceCode;
                                 var providerOptions = new Dictionary<string, string>();
                                 providerOptions.Add("CompilerVersion", "v3.5");
@@ -275,12 +275,12 @@ namespace O2.External.SharpDevelop.AST
                                                                                  error.Column, error.ErrorNumber,
                                                                                  error.ErrorText, error.FileName));
                                     }
-                                    DebugMode.error("Compilation failed");
+                                    DebugMode.ifError("Compilation failed");
                                     this.invoke(onCompileFail);
                                 }
                                 else
                                 {
-                                    DebugMode.debug("Compilation was OK");
+                                    DebugMode.ifDebug("Compilation was OK");
                                     this.invoke(onCompileOK);
                                 }
                                 compiling = false;                                
@@ -319,7 +319,7 @@ namespace O2.External.SharpDevelop.AST
         
             if (parsedCode == null)
             {
-                DebugMode.error("Ast parsing Failed");
+                DebugMode.ifError("Ast parsing Failed");
                 this.invoke(onAstFail);
             }
             return parsedCode;
@@ -392,7 +392,7 @@ namespace O2.External.SharpDevelop.AST
                         var tempAstDetails = new Ast_CSharp(SourceCode).AstDetails;
                         //note we should try to add back the specials here (so that comments make it to the generated code
                         AstDetails = tempAstDetails;
-	                    DebugMode.debug("Ast parsing was OK");
+	                    DebugMode.ifDebug("Ast parsing was OK");
 	                    this.invoke(onAstOK);
 	                    return SourceCode;
                     }
@@ -400,7 +400,7 @@ namespace O2.External.SharpDevelop.AST
             }
             catch (Exception ex)
             {                            	
-				DebugMode.error("in createCSharpCodeWith_Class_Method_WithMethodText:{0}", ex.Message);                
+				DebugMode.ifError("in createCSharpCodeWith_Class_Method_WithMethodText:{0}", ex.Message);                
             }      			
 			return null;                
         }        

@@ -26,19 +26,29 @@ namespace O2.Kernel.ExtensionMethods
             return message;
         }
 
-        public static void info(this bool enabled, string infoFormat, params object[] parameters)
+        public static void info(this bool value)
+        {
+            value.str().info();
+        }
+
+        public static string debug(this bool value)
+        {
+            return value.str().debug();
+        }
+
+        public static void ifInfo(this bool enabled, string infoFormat, params object[] parameters)
         {
             if (enabled)
                 PublicDI.log.info(infoFormat, parameters);
         }
 
-        public static void debug(this bool enabled, string debugFormat, params object[] parameters)
+        public static void ifDebug(this bool enabled, string debugFormat, params object[] parameters)
         {
             if (enabled)
                 PublicDI.log.debug(debugFormat, parameters);
         }
 
-        public static void error(this bool enabled, string errorFormat, params object[] parameters)
+        public static void ifError(this bool enabled, string errorFormat, params object[] parameters)
         {
             if (enabled)
                 PublicDI.log.error(errorFormat, parameters);

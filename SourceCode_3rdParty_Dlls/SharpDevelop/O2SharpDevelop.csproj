@@ -332,6 +332,7 @@
     </Compile>
     <Compile Include="ICSharpCode.TextEditor\Project\Src\Gui\TextView.cs" />
     <Compile Include="ICSharpCode.TextEditor\Project\Src\Gui\ToolTipRequestEventArgs.cs" />
+    <Compile Include="ICSharpCode.TextEditor\Project\Src\ParserFoldingStrategy.cs" />
     <Compile Include="ICSharpCode.TextEditor\Project\Src\Undo\IUndoableOperation.cs" />
     <Compile Include="ICSharpCode.TextEditor\Project\Src\Undo\UndoableDelete.cs" />
     <Compile Include="ICSharpCode.TextEditor\Project\Src\Undo\UndoableInsert.cs" />

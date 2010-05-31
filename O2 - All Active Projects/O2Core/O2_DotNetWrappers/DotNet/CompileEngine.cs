@@ -330,6 +330,17 @@ namespace O2.DotNetWrappers.DotNet
                                 filePath = Path.Combine(directory, file);
                                 break;
                             }
+
+                        foreach (var localScriptFile in @"C:\O2\O2Scripts_Database\_Scripts".files(true,"*.cs"))
+                        {
+                            if (localScriptFile.fileName().ToLower().StartsWith(file.ToLower()))
+                            //if (fileToResolve.lower() == localScriptFile.fileName().lower())
+                            {
+                                PublicDI.log.debug("in CompileEngin, file reference '{0}' was mapped to local O2 Script file '{1}'",file, localScriptFile);
+                                filePath =  localScriptFile;
+                                break;
+                            }
+                        }
                         if (filePath == "")
                             PublicDI.log.error("in addSourceFileOrFolderIncludedInSourceCode, could not file file to add: {0}", file);
                     }

@@ -59,6 +59,7 @@
     <Compile Include="CodeUtils\O2Kernel_Serialize.cs" />
     <Compile Include="CodeUtils\O2Messages.cs" />
     <Compile Include="CodeUtils\O2Kernel_Processes.cs" />
+    <Compile Include="ExtensionMethods\Object_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Reflection_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\String_ExtensionMethods.cs" />
     <Compile Include="DI.cs" />

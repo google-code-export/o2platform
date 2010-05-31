@@ -239,6 +239,15 @@ namespace O2.External.SharpDevelop.Ascx
             mappedCompilationUnits[file] = newCompilationUnit;
             //            lastCompilationUnit = newCompilationUnit;
             parseInformation.SetCompilationUnit(newCompilationUnit);
+
+            try {
+            //    if (file.exists())
+                    textEditor.Document.FoldingManager.UpdateFoldings(this.DummyFileName, parseInformation);
+            } catch (Exception ex)
+            {
+                //ex.log(ex);
+            }
+
         }
 		
 		public ICompilationUnit ConvertCompilationUnit(CompilationUnit compilationUnit)

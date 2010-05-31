@@ -27,7 +27,8 @@ namespace ICSharpCode.TextEditor.Document
 			doc.FormattingStrategy  = new DefaultFormattingStrategy();
 			doc.LineManager         = new LineManager(doc, null);
 			doc.FoldingManager      = new FoldingManager(doc, doc.LineManager);
-			doc.FoldingManager.FoldingStrategy       = null; //new ParserFoldingStrategy();
+			//doc.FoldingManager.FoldingStrategy       = null; //new ParserFoldingStrategy();
+            doc.FoldingManager.FoldingStrategy = new ParserFoldingStrategy();
 			doc.MarkerStrategy      = new MarkerStrategy(doc);
 			doc.BookmarkManager     = new BookmarkManager(doc, doc.LineManager);
 			return doc;
