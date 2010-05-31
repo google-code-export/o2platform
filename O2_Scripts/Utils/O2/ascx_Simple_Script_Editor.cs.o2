@@ -55,6 +55,8 @@ namespace O2.XRules.Database.Utils.O2
 		public RichTextBox result_RichTextBox {get ; set;}
 		public Panel result_Panel{get ; set;}
 		public Button executeButton {get ; set;}
+		public TextBox currentScriptPath {get ; set;}
+		
 		//public SplitContainer topLevelSplitContainer {get ; set;}
         public SplitContainer splitContainer_CommandBox {get ; set;}
         public SplitContainer splitContainer_TopLevel {get ; set;}
@@ -133,14 +135,15 @@ namespace O2.XRules.Database.Utils.O2
         	
         	commandsToExecute = groupBoxes[0].add_SourceCodeViewer();
             commandsToExecute.document().TextEditorProperties.EnableFolding = false;
-
+			//currentScriptPath = commandsToExecute.insert_Below<TextBox>();
+			
             splitContainer_CommandBox = (SplitContainer)groupBoxes[0].Parent.Parent;
             splitContainer_CommandBox.Panel2MinSize = 110;
             splitContainer_CommandBox.FixedPanel = FixedPanel.Panel2;
             var bottomPanel = this.add_GroupBox("Generated Source Code");
 
-        	sourceCodeViewer = bottomPanel.add_SourceCodeViewer();            
-
+        	sourceCodeViewer = bottomPanel.add_SourceCodeViewer();            			
+			
             splitContainer_CommandBox.insert_Below(bottomPanel,200);//, 200);
         	
 			executeButton = this.add_Button("Execute");        	        	
