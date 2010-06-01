@@ -371,8 +371,10 @@ namespace ICSharpCode.TextEditor.Document
 					if (segmentEnd < e.Offset)
 						segmentEnd = e.Offset;
 				}
-				
-				Debug.Assert(segmentStart <= segmentEnd);
+
+                if (segmentStart <= segmentEnd)     //DC
+                    return;
+                //Debug.Assert(segmentStart <= segmentEnd);//DC
 				
 				if (segmentStart == segmentEnd) {
 					list.RemoveAt(i);
@@ -384,8 +386,11 @@ namespace ICSharpCode.TextEditor.Document
 					segmentStart += insertedCharacters;
 				if (e.Offset < segmentEnd)
 					segmentEnd += insertedCharacters;
-				
-				Debug.Assert(segmentStart < segmentEnd);
+
+                if (segmentStart < segmentEnd)      //DC
+                    return;
+
+                //Debug.Assert(segmentStart < segmentEnd);  //DC
 				
 				s.Offset = segmentStart;
 				s.Length = segmentEnd - segmentStart;

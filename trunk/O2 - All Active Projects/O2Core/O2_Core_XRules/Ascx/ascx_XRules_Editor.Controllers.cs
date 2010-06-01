@@ -23,7 +23,7 @@ namespace O2.Core.XRules.Ascx
         {
             if (DesignMode == false && runOnLoad)
             {
-                loadXRuleDatabase();                                
+                loadXRuleDatabase();                
                 runOnLoad = false;
             }
 

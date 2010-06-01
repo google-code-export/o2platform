@@ -345,5 +345,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 == System.Windows.Forms.DialogResult.Yes;
         }
 
+
+        public static List<string> onlyValidFiles(this List<string> files)
+        {
+            return (from file in files
+                    where file.fileExists()
+                    select file).toList();
+        }
     }
 }
