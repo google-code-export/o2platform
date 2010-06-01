@@ -98,6 +98,10 @@ namespace O2.External.SharpDevelop.AST
                                      //.add("O2.XRules.Database.O2Utils")
                                      .add("O2.External.SharpDevelop.ExtensionMethods")
                                      .add("O2.External.SharpDevelop.Ascx")
+                //O2 XRules Database
+                                     .add("O2.XRules.Database.APIs")
+                                     .add("O2.XRules.Database.Utils")
+                                     .add("O2.XRules.Database.Utils.O2")
                 //GraphSharp related
                                      //.add("O2.Script")
                                      .add("GraphSharp.Controls")
@@ -461,8 +465,7 @@ namespace O2.External.SharpDevelop.AST
         public void resolveFileLocationsOfExtraSourceCodeFilesToCompile()
         {
             if (ExtraSourceCodeFilesToCompile.size() > 0)
-            {
-                string defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
+            {                
                 List<string> o2LocalScriptFiles = null;
                 // try to resolve local file references
                 try
@@ -470,31 +473,47 @@ namespace O2.External.SharpDevelop.AST
                     for (int i = 0; i < ExtraSourceCodeFilesToCompile.size(); i++)
                     {
                         var fileToResolve = ExtraSourceCodeFilesToCompile[i].trim();
-                        if (fileToResolve.fileExists().isFalse())
-                            if (SourceCodeFile.valid())
-                            {
-                                var resolvedFile = SourceCodeFile.directoryName().pathCombine(fileToResolve);
-                                if (resolvedFile.fileExists())
-                                    ExtraSourceCodeFilesToCompile[i] = resolvedFile;
-                            }
-                        if (fileToResolve.fileExists().isFalse())
+
+                        //handle the File:xxx:Ref:xxx case
+                        if (fileToResolve.starts("Ref:"))
                         {
-                            if (o2LocalScriptFiles == null)
+                            fileToResolve= fileToResolve.remove("Ref:");
+                            var fileRef = CompileEngine.getCachedCompiledAssembly(fileToResolve);
+                            
+                            if (fileRef.valid() && fileRef.fileExists())
                             {
-                                o2LocalScriptFiles = defaultLocalScriptsFolder.files(true, "*.cs");
+                                if (ReferencedAssemblies.contains(fileRef).isFalse())
+                                    ReferencedAssemblies.add(fileRef);
                             }
-                            foreach (var localScriptFile in o2LocalScriptFiles)
-                            {     
-                                if (localScriptFile.fileName().lower().starts(fileToResolve.lower()))
-                                //if (fileToResolve.lower() == localScriptFile.fileName().lower())
+                            ExtraSourceCodeFilesToCompile[i] = "";                                                        
+                        }
+                        else
+                        {
+
+
+                            if (fileToResolve.fileExists().isFalse())
+                                if (SourceCodeFile.valid())
                                 {
-                                    "in CSharp fast compiler, file reference '{0}' was mapped to local O2 Script file '{1}'".debug(fileToResolve, localScriptFile);
-                                    ExtraSourceCodeFilesToCompile[i] = localScriptFile;
-                                    break;
+                                    var resolvedFile = SourceCodeFile.directoryName().pathCombine(fileToResolve);
+                                    if (resolvedFile.fileExists())
+                                        ExtraSourceCodeFilesToCompile[i] = resolvedFile;
                                 }
+                            if (fileToResolve.fileExists().isFalse())
+                            {
+                                var mappedFile = CompileEngine.findScriptOnLocalScriptFolder(fileToResolve);
+                                if (mappedFile.valid())
+                                    ExtraSourceCodeFilesToCompile[i] = mappedFile;                     
                             }
                         }
                     }
+                    //add extra _ExtensionMethods.cs if avaiable
+                    for (int i = 0; i < ExtraSourceCodeFilesToCompile.size(); i++)
+                    {
+                        var extensionMethod = ExtraSourceCodeFilesToCompile[i].replace(".cs","_ExtensionMethods.cs");
+                        if (extensionMethod.fileExists() && ExtraSourceCodeFilesToCompile.contains(extensionMethod).isFalse())
+                            ExtraSourceCodeFilesToCompile.Add(extensionMethod);
+                    }
+
                 }
                 catch (Exception ex)
                 {

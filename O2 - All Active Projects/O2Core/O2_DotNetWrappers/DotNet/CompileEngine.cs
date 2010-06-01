@@ -14,12 +14,13 @@ using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.O2Misc;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
 using O2.Kernel.CodeUtils;
 
 namespace O2.DotNetWrappers.DotNet
 {
     public class CompileEngine
-    {
+    {        
         static string onlyAddReferencedAssemblies = "O2Tag_OnlyAddReferencedAssemblies";
         static List<string> specialO2Tag_ExtraReferences = new List<string>() {"//O2Tag_AddReferenceFile:", "//O2Ref:"};
         static List<string> specialO2Tag_ExtraSourceFile = new List<string>() { "//O2Tag_AddSourceFile:", "//O2File:" };
@@ -30,6 +31,9 @@ namespace O2.DotNetWrappers.DotNet
         public CompilerResults crCompilerResults;
         public StringBuilder sbErrorMessage;
         public bool DebugMode;
+
+        public static Dictionary<string, string> LocalScriptFileMappings = new Dictionary<string, string>();
+        public static Dictionary<string, string> CachedCompiledAssemblies = new Dictionary<string, string>();
 
         public List<String> lsGACExtraReferencesToAdd = new List<string>(new []
                                                                                  {
@@ -209,7 +213,9 @@ namespace O2.DotNetWrappers.DotNet
             // see if there are any extra DLL references in the code
             
             mapReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
-
+            sourceCodeFiles = sourceCodeFiles.onlyValidFiles();
+            if (sourceCodeFiles.size() == 0)  // means there are no files to compile
+                return null;
             if (compileSourceFiles(sourceCodeFiles, referencedAssemblies.ToArray(), ref compiledAssembly, ref errorMessages, false
                 /*verbose*/, mainClass, outputAssemblyName))
             {
@@ -252,8 +258,9 @@ namespace O2.DotNetWrappers.DotNet
         {
             var filesToNotCompile = new List<string>();
             foreach(var sourceCodeFile in sourceCodeFiles)
-                if ("" != StringsAndLists.InFileTextStartsWithStringListItem(sourceCodeFile, specialO2Tag_DontCompile))
-                    filesToNotCompile.Add(sourceCodeFile);
+                if (sourceCodeFile.fileExists())
+                    if ("" != StringsAndLists.InFileTextStartsWithStringListItem(sourceCodeFile, specialO2Tag_DontCompile))
+                        filesToNotCompile.Add(sourceCodeFile);
             foreach (var fileToNotCompile in filesToNotCompile)
             {
                 PublicDI.log.debug("Removing from list of files to compile the file: {0}", fileToNotCompile);
@@ -267,45 +274,51 @@ namespace O2.DotNetWrappers.DotNet
             var currentSourceDirectories = new List<string>(); // in case we need to resolve file names below
             foreach (var file in sourceCodeFiles)
             {
-                var directory = Path.GetDirectoryName(file);
-                if (false == currentSourceDirectories.Contains(directory))
-                    currentSourceDirectories.Add(directory);
+                if (file.valid())
+                {
+                    var directory = Path.GetDirectoryName(file);
+                    if (false == currentSourceDirectories.Contains(directory))
+                        currentSourceDirectories.Add(directory);
+                }
             }
 
             var filesToAdd = new List<string>();
             // find the extra files to add
             foreach (var sourceCodeFile in sourceCodeFiles)
             {
-                var fileLines = Files.getFileLines(sourceCodeFile);
-                foreach (var fileLine in fileLines)
+                if (sourceCodeFile.valid())
                 {
-                    var match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_ExtraSourceFile);
-                    if (match != "")
+                    var fileLines = Files.getFileLines(sourceCodeFile);
+                    foreach (var fileLine in fileLines)
                     {
-                     //   var file = fileLine.Replace(specialO2Tag_ExtraSourceFile, "").Trim();
-                        var file = fileLine.Replace(match, "").Trim();
-                        if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
-                        {
-                            filesToAdd.Add(file);                          
-                        }
-                    }
-                    //else if (fileLine.StartsWith(specialO2Tag_ExtraFolder))
-                    else 
-                    {
-                        match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_ExtraFolder);
+                        var match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_ExtraSourceFile);
                         if (match != "")
                         {
-                            var folder = fileLine.Replace(match, "").Trim();
-                            if (false == Directory.Exists(folder))
-                                foreach(var path in currentSourceDirectories)
-                                    if(Directory.Exists(Path.Combine(path,folder)))
-                                    {
-                                        folder = Path.Combine(path,folder);
-                                        break;
-                                    }
-                            foreach(var file in Files.getFilesFromDir_returnFullPath(folder,"*.cs",true))
-                                if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
-                                    filesToAdd.Add(file);
+                            //   var file = fileLine.Replace(specialO2Tag_ExtraSourceFile, "").Trim();
+                            var file = fileLine.Replace(match, "").Trim();
+                            if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
+                            {
+                                filesToAdd.Add(file);
+                            }
+                        }
+                        //else if (fileLine.StartsWith(specialO2Tag_ExtraFolder))
+                        else
+                        {
+                            match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_ExtraFolder);
+                            if (match != "")
+                            {
+                                var folder = fileLine.Replace(match, "").Trim();
+                                if (false == Directory.Exists(folder))
+                                    foreach (var path in currentSourceDirectories)
+                                        if (Directory.Exists(Path.Combine(path, folder)))
+                                        {
+                                            folder = Path.Combine(path, folder);
+                                            break;
+                                        }
+                                foreach (var file in Files.getFilesFromDir_returnFullPath(folder, "*.cs", true))
+                                    if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
+                                        filesToAdd.Add(file);
+                            }
                         }
                     }
                 }
@@ -331,16 +344,8 @@ namespace O2.DotNetWrappers.DotNet
                                 break;
                             }
 
-                        foreach (var localScriptFile in @"C:\O2\O2Scripts_Database\_Scripts".files(true,"*.cs"))
-                        {
-                            if (localScriptFile.fileName().ToLower().StartsWith(file.ToLower()))
-                            //if (fileToResolve.lower() == localScriptFile.fileName().lower())
-                            {
-                                PublicDI.log.debug("in CompileEngin, file reference '{0}' was mapped to local O2 Script file '{1}'",file, localScriptFile);
-                                filePath =  localScriptFile;
-                                break;
-                            }
-                        }
+                        filePath = findScriptOnLocalScriptFolder(file);
+                        
                         if (filePath == "")
                             PublicDI.log.error("in addSourceFileOrFolderIncludedInSourceCode, could not file file to add: {0}", file);
                     }
@@ -442,6 +447,7 @@ namespace O2.DotNetWrappers.DotNet
         {
             try
             {
+                sourceCodeFiles = sourceCodeFiles.onlyValidFiles();
                 showErrorMessageIfPathHasParentheses(sourceCodeFiles);
                 if (outputAssemblyName == "")
                     outputAssemblyName = PublicDI.config.TempFileNameInTempDirectory;
@@ -574,6 +580,51 @@ namespace O2.DotNetWrappers.DotNet
             }
         }
 
-        
+        public static string findScriptOnLocalScriptFolder(string file)
+        {
+            string defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
+
+            if (LocalScriptFileMappings.hasKey(file))
+                return LocalScriptFileMappings[file];
+            var mappedFilePath = "";
+
+            var filesToSearch = defaultLocalScriptsFolder.files(true, "*.cs");
+            filesToSearch.add(defaultLocalScriptsFolder.files(true, "*.o2"));
+            foreach (var localScriptFile in filesToSearch)
+            {
+                if (localScriptFile.fileName().ToLower().StartsWith(file.ToLower()))
+                //if (fileToResolve.lower() == localScriptFile.fileName().lower())
+                {
+                    PublicDI.log.debug("in CompileEngin, file reference '{0}' was mapped to local O2 Script file '{1}'",file, localScriptFile);
+                    mappedFilePath = localScriptFile;
+                    break;
+                }
+            }
+            if (mappedFilePath.valid())
+                LocalScriptFileMappings.add(file, mappedFilePath);
+            return mappedFilePath;
+        }
+        public static string getCachedCompiledAssembly(string scriptFile)
+        {
+            if (CachedCompiledAssemblies.hasKey(scriptFile))
+            {
+                var pathToDll = CachedCompiledAssemblies[scriptFile];
+                "in getCachedCompiledAssembly, mapped file '{0}' to cached assembly '{1}'".debug(scriptFile, pathToDll);
+                return pathToDll;
+            }
+            var mappedFile = CompileEngine.findScriptOnLocalScriptFolder(scriptFile);
+            //var sourceCode = mappedFile.fileContents();
+            //if (sourceCode.contains("//generateDebugSymbols").isFalse())
+                //sourceCode += "//generateDebugSymbols".lineBefore();
+            var assembly = new CompileEngine().compileSourceFile(mappedFile);
+            if (assembly != null && assembly.Location.fileExists())
+            {
+                var pathToDll = assembly.Location;
+                CachedCompiledAssemblies.add(scriptFile, pathToDll);
+                "in getCachedCompiledAssembly, compiled file '{0}' to assembly '{1}' (and added it to CachedCompiledAssembly)".debug(scriptFile, pathToDll);
+                return assembly.Location;
+            }
+            return "";
+        }
     }
 }

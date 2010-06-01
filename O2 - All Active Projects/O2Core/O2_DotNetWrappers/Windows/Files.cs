@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.O2Misc;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel;
 
 namespace O2.DotNetWrappers.Windows
@@ -411,10 +412,13 @@ namespace O2.DotNetWrappers.Windows
             //var sbFileContents = new StringBuilder();
             try
             {
-                fs = File.OpenRead(sFileToOpen);
-                sr = new StreamReader(fs);
-                while (false == sr.EndOfStream)
-                    lsFileLines.Add(sr.ReadLine());
+                if (sFileToOpen.fileExists())
+                {
+                    fs = File.OpenRead(sFileToOpen);
+                    sr = new StreamReader(fs);
+                    while (false == sr.EndOfStream)
+                        lsFileLines.Add(sr.ReadLine());
+                }
             }
             catch (Exception ex)
             {

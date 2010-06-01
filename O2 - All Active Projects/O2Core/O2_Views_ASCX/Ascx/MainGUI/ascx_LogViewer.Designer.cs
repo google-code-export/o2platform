@@ -46,11 +46,11 @@ namespace O2.Views.ASCX.Ascx.MainGUI
             // rtbDebugMessages
             // 
             this.rtbDebugMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                                                                                  | System.Windows.Forms.AnchorStyles.Left)
-                                                                                 | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbDebugMessages.Location = new System.Drawing.Point(0, 22);
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtbDebugMessages.Location = new System.Drawing.Point(0, 17);
             this.rtbDebugMessages.Name = "rtbDebugMessages";
-            this.rtbDebugMessages.Size = new System.Drawing.Size(447, 97);
+            this.rtbDebugMessages.Size = new System.Drawing.Size(447, 107);
             this.rtbDebugMessages.TabIndex = 27;
             this.rtbDebugMessages.Text = "";
             this.rtbDebugMessages.WordWrap = false;
@@ -61,7 +61,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
             this.btClearDebugView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btClearDebugView.BackColor = System.Drawing.Color.White;
             this.btClearDebugView.ForeColor = System.Drawing.Color.Black;
-            this.btClearDebugView.Location = new System.Drawing.Point(2, 121);
+            this.btClearDebugView.Location = new System.Drawing.Point(2, 127);
             this.btClearDebugView.Name = "btClearDebugView";
             this.btClearDebugView.Size = new System.Drawing.Size(13, 19);
             this.btClearDebugView.TabIndex = 31;
@@ -74,7 +74,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
             this.btAddNewLineToDebugWindiw.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btAddNewLineToDebugWindiw.BackColor = System.Drawing.Color.White;
             this.btAddNewLineToDebugWindiw.ForeColor = System.Drawing.Color.Black;
-            this.btAddNewLineToDebugWindiw.Location = new System.Drawing.Point(21, 121);
+            this.btAddNewLineToDebugWindiw.Location = new System.Drawing.Point(21, 127);
             this.btAddNewLineToDebugWindiw.Name = "btAddNewLineToDebugWindiw";
             this.btAddNewLineToDebugWindiw.Size = new System.Drawing.Size(13, 19);
             this.btAddNewLineToDebugWindiw.TabIndex = 30;
@@ -89,7 +89,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
             this.cbErrorMessages.Checked = true;
             this.cbErrorMessages.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbErrorMessages.ForeColor = System.Drawing.Color.Black;
-            this.cbErrorMessages.Location = new System.Drawing.Point(52, 124);
+            this.cbErrorMessages.Location = new System.Drawing.Point(52, 130);
             this.cbErrorMessages.Name = "cbErrorMessages";
             this.cbErrorMessages.Size = new System.Drawing.Size(48, 17);
             this.cbErrorMessages.TabIndex = 32;
@@ -104,7 +104,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
             this.cbDebugMessages.Checked = true;
             this.cbDebugMessages.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbDebugMessages.ForeColor = System.Drawing.Color.Black;
-            this.cbDebugMessages.Location = new System.Drawing.Point(119, 124);
+            this.cbDebugMessages.Location = new System.Drawing.Point(119, 130);
             this.cbDebugMessages.Name = "cbDebugMessages";
             this.cbDebugMessages.Size = new System.Drawing.Size(58, 17);
             this.cbDebugMessages.TabIndex = 33;
@@ -119,7 +119,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
             this.cbInfoMessages.Checked = true;
             this.cbInfoMessages.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbInfoMessages.ForeColor = System.Drawing.Color.Black;
-            this.cbInfoMessages.Location = new System.Drawing.Point(196, 124);
+            this.cbInfoMessages.Location = new System.Drawing.Point(196, 130);
             this.cbInfoMessages.Name = "cbInfoMessages";
             this.cbInfoMessages.Size = new System.Drawing.Size(44, 17);
             this.cbInfoMessages.TabIndex = 34;
@@ -131,7 +131,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(3, 6);
+            this.label1.Location = new System.Drawing.Point(-2, 1);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 13);
             this.label1.TabIndex = 35;
@@ -141,7 +141,7 @@ namespace O2.Views.ASCX.Ascx.MainGUI
             // 
             this.llGCCollect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.llGCCollect.AutoSize = true;
-            this.llGCCollect.Location = new System.Drawing.Point(390, 125);
+            this.llGCCollect.Location = new System.Drawing.Point(390, 131);
             this.llGCCollect.Name = "llGCCollect";
             this.llGCCollect.Size = new System.Drawing.Size(57, 13);
             this.llGCCollect.TabIndex = 36;

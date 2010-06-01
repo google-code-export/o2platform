@@ -43,7 +43,7 @@ namespace O2.Tool.XRules
                 HandleO2MessageOnMdbg.setO2MessageMdbgListener();       // be able to handle Debugger events             
                 HandleO2MessageOnSD.setO2MessageFileEventListener();    // be able to handle open file events
 
-                O2AscxGUI.addControlToMenu("Simple Script Editor", () => open.script());
+                //O2AscxGUI.addControlToMenu("Simple Script Editor", () => open.script());
                 O2AscxGUI.addControlToMenu(typeof(ascx_TilesDefinition_xml));
                 O2AscxGUI.addControlToMenu(typeof(ascx_J2EE_web_xml));
                 O2AscxGUI.addControlToMenu(typeof(ascx_Validation_xml));

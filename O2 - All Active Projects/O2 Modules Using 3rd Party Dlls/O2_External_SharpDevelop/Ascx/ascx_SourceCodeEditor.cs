@@ -375,8 +375,9 @@ namespace O2.External.SharpDevelop.Ascx
         }
 
         private void cboxCompliledSourceCodeMethods_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            setDebugButtonEnableState();
+        {   
+            // this was causing a lot of messages when ascx_SourceCodeEditor was used without debugger
+            //  setDebugButtonEnableState();
         }
 
         private void menuStripForSourceEdition_Opening(object sender, CancelEventArgs e)

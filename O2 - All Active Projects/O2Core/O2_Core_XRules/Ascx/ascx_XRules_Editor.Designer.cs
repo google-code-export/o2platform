@@ -45,18 +45,16 @@ namespace O2.Core.XRules.Ascx
             this.lbCurrentXRulesTemplates = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-            this.btSyncViaSvn = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
-            this.btBrowseSVN = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.btBackupLocalFiles = new System.Windows.Forms.ToolStripButton();
             this.directoryWithXRulesDatabase = new O2.Views.ASCX.CoreControls.ascx_Directory();
-            this.llReloadSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
-            this.llRemoveSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
+            this.scRightPanel = new System.Windows.Forms.SplitContainer();
             this.tcTabControlWithRulesSource = new System.Windows.Forms.TabControl();
             this.tpNoRulesLoaded = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
+            this.llReloadSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
+            this.llRemoveSelectedSourceCodeFile = new System.Windows.Forms.LinkLabel();
+            this.ascx_LogViewer1 = new O2.Views.ASCX.Ascx.MainGUI.ascx_LogViewer();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.scTopLevel.Panel1.SuspendLayout();
             this.scTopLevel.Panel2.SuspendLayout();
             this.scTopLevel.SuspendLayout();
@@ -68,6 +66,9 @@ namespace O2.Core.XRules.Ascx
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.scRightPanel.Panel1.SuspendLayout();
+            this.scRightPanel.Panel2.SuspendLayout();
+            this.scRightPanel.SuspendLayout();
             this.tcTabControlWithRulesSource.SuspendLayout();
             this.tpNoRulesLoaded.SuspendLayout();
             this.SuspendLayout();
@@ -87,9 +88,7 @@ namespace O2.Core.XRules.Ascx
             // 
             // scTopLevel.Panel2
             // 
-            this.scTopLevel.Panel2.Controls.Add(this.llReloadSelectedSourceCodeFile);
-            this.scTopLevel.Panel2.Controls.Add(this.llRemoveSelectedSourceCodeFile);
-            this.scTopLevel.Panel2.Controls.Add(this.tcTabControlWithRulesSource);
+            this.scTopLevel.Panel2.Controls.Add(this.scRightPanel);
             this.scTopLevel.Size = new System.Drawing.Size(812, 460);
             this.scTopLevel.SplitterDistance = 410;
             this.scTopLevel.TabIndex = 10;
@@ -253,10 +252,6 @@ namespace O2.Core.XRules.Ascx
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel3,
-            this.btSyncViaSvn,
-            this.toolStripLabel4,
-            this.btBrowseSVN,
             this.toolStripLabel1,
             this.btBackupLocalFiles});
             this.toolStrip1.Location = new System.Drawing.Point(3, 16);
@@ -264,47 +259,6 @@ namespace O2.Core.XRules.Ascx
             this.toolStrip1.Size = new System.Drawing.Size(405, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripLabel3
-            // 
-            this.toolStripLabel3.Name = "toolStripLabel3";
-            this.toolStripLabel3.Size = new System.Drawing.Size(69, 22);
-            this.toolStripLabel3.Text = "Sync via SVN";
-            this.toolStripLabel3.Click += new System.EventHandler(this.toolStripLabel3_Click);
-            // 
-            // btSyncViaSvn
-            // 
-            this.btSyncViaSvn.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btSyncViaSvn.Image = ((System.Drawing.Image)(resources.GetObject("btSyncViaSvn.Image")));
-            this.btSyncViaSvn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btSyncViaSvn.Name = "btSyncViaSvn";
-            this.btSyncViaSvn.Size = new System.Drawing.Size(23, 22);
-            this.btSyncViaSvn.Text = "Sync with O2\'s SVN (i.e. download latest version)";
-            this.btSyncViaSvn.Click += new System.EventHandler(this.btSyncViaSvn_Click);
-            // 
-            // toolStripLabel4
-            // 
-            this.toolStripLabel4.Name = "toolStripLabel4";
-            this.toolStripLabel4.Size = new System.Drawing.Size(64, 22);
-            this.toolStripLabel4.Text = "browse SVN";
-            this.toolStripLabel4.Click += new System.EventHandler(this.toolStripLabel4_Click);
-            // 
-            // btBrowseSVN
-            // 
-            this.btBrowseSVN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btBrowseSVN.Image = ((System.Drawing.Image)(resources.GetObject("btBrowseSVN.Image")));
-            this.btBrowseSVN.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btBrowseSVN.Name = "btBrowseSVN";
-            this.btBrowseSVN.Size = new System.Drawing.Size(23, 22);
-            this.btBrowseSVN.Text = "Browse XRules Dartabase on SVN Server";
-            this.btBrowseSVN.Click += new System.EventHandler(this.btBrowseSVN_Click);
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(45, 22);
-            this.toolStripLabel1.Text = "backup:";
-            this.toolStripLabel1.Click += new System.EventHandler(this.toolStripLabel1_Click);
             // 
             // btBackupLocalFiles
             // 
@@ -339,11 +293,67 @@ namespace O2.Core.XRules.Ascx
             this.directoryWithXRulesDatabase._onDirectoryClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryClick);
             this.directoryWithXRulesDatabase._onDirectoryDoubleClick += new O2.Kernel.CodeUtils.Callbacks.dMethod_String(this.directoryWithXRulesDatabase__onDirectoryDoubleClick);
             // 
+            // scRightPanel
+            // 
+            this.scRightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.scRightPanel.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.scRightPanel.Location = new System.Drawing.Point(0, 0);
+            this.scRightPanel.Name = "scRightPanel";
+            this.scRightPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // scRightPanel.Panel1
+            // 
+            this.scRightPanel.Panel1.Controls.Add(this.tcTabControlWithRulesSource);
+            this.scRightPanel.Panel1.Controls.Add(this.llReloadSelectedSourceCodeFile);
+            this.scRightPanel.Panel1.Controls.Add(this.llRemoveSelectedSourceCodeFile);
+            this.scRightPanel.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer2_Panel1_Paint);
+            // 
+            // scRightPanel.Panel2
+            // 
+            this.scRightPanel.Panel2.Controls.Add(this.ascx_LogViewer1);
+            this.scRightPanel.Size = new System.Drawing.Size(394, 456);
+            this.scRightPanel.SplitterDistance = 356;
+            this.scRightPanel.TabIndex = 3;
+            // 
+            // tcTabControlWithRulesSource
+            // 
+            this.tcTabControlWithRulesSource.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tcTabControlWithRulesSource.Controls.Add(this.tpNoRulesLoaded);
+            this.tcTabControlWithRulesSource.Location = new System.Drawing.Point(3, 18);
+            this.tcTabControlWithRulesSource.Name = "tcTabControlWithRulesSource";
+            this.tcTabControlWithRulesSource.SelectedIndex = 0;
+            this.tcTabControlWithRulesSource.Size = new System.Drawing.Size(388, 335);
+            this.tcTabControlWithRulesSource.TabIndex = 0;
+            // 
+            // tpNoRulesLoaded
+            // 
+            this.tpNoRulesLoaded.Controls.Add(this.label1);
+            this.tpNoRulesLoaded.Location = new System.Drawing.Point(4, 22);
+            this.tpNoRulesLoaded.Name = "tpNoRulesLoaded";
+            this.tpNoRulesLoaded.Padding = new System.Windows.Forms.Padding(3);
+            this.tpNoRulesLoaded.Size = new System.Drawing.Size(380, 309);
+            this.tpNoRulesLoaded.TabIndex = 0;
+            this.tpNoRulesLoaded.Text = "no rules loaded";
+            this.tpNoRulesLoaded.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(140, 92);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(113, 96);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Choose rule to edit from XRules Database";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // llReloadSelectedSourceCodeFile
             // 
             this.llReloadSelectedSourceCodeFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.llReloadSelectedSourceCodeFile.AutoSize = true;
-            this.llReloadSelectedSourceCodeFile.Location = new System.Drawing.Point(189, 1);
+            this.llReloadSelectedSourceCodeFile.Location = new System.Drawing.Point(189, 2);
             this.llReloadSelectedSourceCodeFile.Name = "llReloadSelectedSourceCodeFile";
             this.llReloadSelectedSourceCodeFile.Size = new System.Drawing.Size(95, 13);
             this.llReloadSelectedSourceCodeFile.TabIndex = 2;
@@ -355,7 +365,7 @@ namespace O2.Core.XRules.Ascx
             // 
             this.llRemoveSelectedSourceCodeFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.llRemoveSelectedSourceCodeFile.AutoSize = true;
-            this.llRemoveSelectedSourceCodeFile.Location = new System.Drawing.Point(290, 1);
+            this.llRemoveSelectedSourceCodeFile.Location = new System.Drawing.Point(290, 2);
             this.llRemoveSelectedSourceCodeFile.Name = "llRemoveSelectedSourceCodeFile";
             this.llRemoveSelectedSourceCodeFile.Size = new System.Drawing.Size(101, 13);
             this.llRemoveSelectedSourceCodeFile.TabIndex = 1;
@@ -363,39 +373,21 @@ namespace O2.Core.XRules.Ascx
             this.llRemoveSelectedSourceCodeFile.Text = "remove selected file";
             this.llRemoveSelectedSourceCodeFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llRemoveSelectedSourceCodeFile_LinkClicked);
             // 
-            // tcTabControlWithRulesSource
+            // ascx_LogViewer1
             // 
-            this.tcTabControlWithRulesSource.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tcTabControlWithRulesSource.Controls.Add(this.tpNoRulesLoaded);
-            this.tcTabControlWithRulesSource.Location = new System.Drawing.Point(3, 17);
-            this.tcTabControlWithRulesSource.Name = "tcTabControlWithRulesSource";
-            this.tcTabControlWithRulesSource.SelectedIndex = 0;
-            this.tcTabControlWithRulesSource.Size = new System.Drawing.Size(394, 436);
-            this.tcTabControlWithRulesSource.TabIndex = 0;
+            this.ascx_LogViewer1.BackColor = System.Drawing.Color.Gainsboro;
+            this.ascx_LogViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ascx_LogViewer1.Location = new System.Drawing.Point(0, 0);
+            this.ascx_LogViewer1.Name = "ascx_LogViewer1";
+            this.ascx_LogViewer1.Size = new System.Drawing.Size(394, 96);
+            this.ascx_LogViewer1.TabIndex = 0;
             // 
-            // tpNoRulesLoaded
+            // toolStripLabel1
             // 
-            this.tpNoRulesLoaded.Controls.Add(this.label1);
-            this.tpNoRulesLoaded.Location = new System.Drawing.Point(4, 22);
-            this.tpNoRulesLoaded.Name = "tpNoRulesLoaded";
-            this.tpNoRulesLoaded.Padding = new System.Windows.Forms.Padding(3);
-            this.tpNoRulesLoaded.Size = new System.Drawing.Size(386, 410);
-            this.tpNoRulesLoaded.TabIndex = 0;
-            this.tpNoRulesLoaded.Text = "no rules loaded";
-            this.tpNoRulesLoaded.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(143, 143);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 96);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Choose rule to edit from XRules Database";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(45, 22);
+            this.toolStripLabel1.Text = "backup:";
+            this.toolStripLabel1.Click += new System.EventHandler(this.toolStripLabel1_Click);
             // 
             // ascx_XRules_Editor
             // 
@@ -408,7 +400,6 @@ namespace O2.Core.XRules.Ascx
             this.scTopLevel.Panel1.ResumeLayout(false);
             this.scTopLevel.Panel1.PerformLayout();
             this.scTopLevel.Panel2.ResumeLayout(false);
-            this.scTopLevel.Panel2.PerformLayout();
             this.scTopLevel.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -423,6 +414,10 @@ namespace O2.Core.XRules.Ascx
             this.groupBox2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.scRightPanel.Panel1.ResumeLayout(false);
+            this.scRightPanel.Panel1.PerformLayout();
+            this.scRightPanel.Panel2.ResumeLayout(false);
+            this.scRightPanel.ResumeLayout(false);
             this.tcTabControlWithRulesSource.ResumeLayout(false);
             this.tpNoRulesLoaded.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -452,11 +447,9 @@ namespace O2.Core.XRules.Ascx
         private System.Windows.Forms.ToolStripTextBox tbFileToOpen;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripButton btBackupLocalFiles;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
-        private System.Windows.Forms.ToolStripButton btSyncViaSvn;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel4;
-        private System.Windows.Forms.ToolStripButton btBrowseSVN;
+        private System.Windows.Forms.SplitContainer scRightPanel;
+        private O2.Views.ASCX.Ascx.MainGUI.ascx_LogViewer ascx_LogViewer1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     }
 }

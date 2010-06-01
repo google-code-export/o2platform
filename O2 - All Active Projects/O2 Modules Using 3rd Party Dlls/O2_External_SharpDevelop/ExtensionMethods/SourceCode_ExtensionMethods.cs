@@ -545,7 +545,20 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return codeEditor;
         }
 
-      
+        public static ascx_SourceCodeViewer showFilesInSourceCodeViewer(this TreeView treeView)
+        {
+            var splitterDistance = (treeView.width() / 3) * 2;
+            var sourceViewer = treeView.insert_Right<Panel>(splitterDistance).add_SourceCodeViewer();
+            treeView.afterSelect<string>(
+                (fileOrText) =>
+                {
+                    if (fileOrText.fileExists())
+                        sourceViewer.open(fileOrText);
+                    else
+                        sourceViewer.editor().set_Text(fileOrText);
+                });
+            return sourceViewer;
+        }
 
     }
 }

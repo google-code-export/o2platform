@@ -40,7 +40,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>79</ApplicationRevision>
+    <ApplicationRevision>82</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -277,7 +277,7 @@
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>
-    <None Include="_tempDevFiles\Extra_methods.cs" />
+    <Compile Include="_Rules\Stub_Namespaces.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="H2Logo.ico" />
@@ -318,6 +318,9 @@
       <Project>{7226283F-7C31-4EBB-9940-97AB0F676319}</Project>
       <Name>O2_API_Visualization</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="_tempDevFiles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

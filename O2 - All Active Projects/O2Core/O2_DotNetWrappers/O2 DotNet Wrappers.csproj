@@ -61,7 +61,7 @@
     <Compile Include="ExtensionMethods\NamedPipes_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2Controls_ExtensioMethods.cs" />
     <Compile Include="ExtensionMethods\O2Findings_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\Objects_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Sleep_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Processes_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\RegEx_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\SavingData_ExtensionMethods.cs" />

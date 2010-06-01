@@ -23,7 +23,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             //return hostControl.add_XRule("ascx_GraphWithInspector");
         }*/
         
-        public static Control add_ProcessDetails(this Control hostControl)
+        /*public static Control add_ProcessDetails(this Control hostControl)
         {
             return hostControl.add_XRule("ascx_Running_Processes_Details");
         }
@@ -31,28 +31,28 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static Control add_ProcessStop(this Control hostControl)
         {
             return hostControl.add_XRule("ascx_Processes_Stop");
-        }
+        }*/
 
-        public static Control add_ServicesStop(this Control hostControl)
+        /*public static Control add_ServicesStop(this Control hostControl)
         {
             return hostControl.add_XRule("ascx_Services_Stop");
-        }
+        }*/
 
-        public static Control add_StartTools(this Control hostControl)
+        /*public static Control add_StartTools(this Control hostControl)
         {
             return hostControl.add_XRule("ascx_Start_Tools");
-        }
+        }*/
 
-        public static Control add_XRule(this Control hostControl, string xRuleName)
+        /*public static Control add_XRule(this Control hostControl, string xRuleName)
         {
             return hostControl.add_XRuleDatabase_Control(xRuleName);
-        }
+        }*/
 
-        public static Control add_XRuleDatabase_Control(this Control hostControl, string xRuleName)
+        /*public static Control add_XRuleDatabase_Control(this Control hostControl, string xRuleName)
         {
             var controlType = "O2_XRules_Database.exe".type(xRuleName);
             return hostControl.add_Control(controlType);
-        }
+        }*/
 
 
         public static Control add_ControlUsingExtensionMethod(this Control hostControl, string assembly, string extensionMethodClass, string ctorMethod, object ctorData, string setMethod, object setData)

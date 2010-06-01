@@ -112,26 +112,31 @@ namespace O2.Core.XRules.Ascx
                 () => new Wizard_SyncViaSvn().runWizard(SvnApi.svnO2DatabaseRulesFolder, XRules_Config.PathTo_XRulesDatabase_fromO2));
         }
 
-        private void btBrowseSVN_Click(object sender, EventArgs e)
+        /*private void btBrowseSVN_Click(object sender, EventArgs e)
         {
             O2Thread.mtaThread(
                 () => 
                     "O2_XRules_Database.exe".type("ascx_SvnBrowser").invokeStatic("openInFloatWindow",DI.SvnXRulesDatabaseUrl));
-        }
+        }*/
 
         private void toolStripLabel3_Click(object sender, EventArgs e)
         {
             btSyncViaSvn_Click(null, null); 
         }
 
-        private void toolStripLabel4_Click(object sender, EventArgs e)
+        /*private void toolStripLabel4_Click(object sender, EventArgs e)
         {
             btBrowseSVN_Click(null, null);
-        }
+        }*/
 
         private void toolStripLabel1_Click(object sender, EventArgs e)
         {
             btBackupLocalFiles_Click(null, null);
+        }
+
+        private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
+        {
+                
         }      
     }
 }
