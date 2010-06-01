@@ -16,6 +16,7 @@ using O2.DotNetWrappers.Network;
 using O2.Views.ASCX;
 using O2.Views.ASCX.CoreControls;
 using O2.Views.ASCX.classes;
+//O2Ref:O2_External_WinFormsUI.dll
 using O2.External.WinFormsUI.Forms;
 using O2.External.SharpDevelop.Ascx;
 using O2.Views.ASCX.MerlinWizard;

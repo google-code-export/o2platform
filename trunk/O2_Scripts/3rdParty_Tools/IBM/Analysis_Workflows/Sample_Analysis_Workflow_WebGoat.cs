@@ -12,6 +12,7 @@ using O2.XRules.Database.Interfaces;
 using NUnit.Framework;
 //O2File:IAnalysisArtifacts.cs
 //O2File:Analysis_Workflow.cs
+//O2File:XUtils_AnalysisWorkflow.cs
 
 namespace O2.XRules.Database._Rules.IBM.Analysis_Workflows
 {

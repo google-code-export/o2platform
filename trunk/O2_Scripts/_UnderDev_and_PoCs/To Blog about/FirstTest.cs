@@ -4,9 +4,9 @@ using System.Windows.Forms;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using Irony.Parsing;
-using O2.Script;
-
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_VisualizationAPI.cs
+using O2.XRules.Database.Utils.O2;
+//O2File:Scripts_ExtensionMethods.cs
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 
 // based on the code in http://www.codeproject.com/KB/recipes/YourFirstDSL.aspx
 // with the code updated using snipptets from http://blogs.msdn.com/kirillosenkov/archive/2009/10/31/irony.aspx

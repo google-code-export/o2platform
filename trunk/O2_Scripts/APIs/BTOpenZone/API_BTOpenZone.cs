@@ -20,8 +20,7 @@ using O2.XRules.Database.Utils.O2;
 //O2Ref:Interop.SHDocVw.dll
 //O2Ref:WatiN.Core.1x.dll
  
- 
-namespace O2.Script
+namespace O2.XRules.Database.APIs
 {
     public class API_BTOpenZone
     {    

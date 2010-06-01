@@ -20,7 +20,6 @@ using O2.Views.ASCX;
 using O2.Views.ASCX.DataViewers;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.API.Visualization.Ascx;
-using O2.XRules.Database.O2Utils;
 //O2Ref:GraphSharp.Controls.dll 
 using GraphSharp.Controls;
 //O2Ref:GraphSharp.dll
@@ -29,7 +28,10 @@ using QuickGraph;
 //O2Ref:WPFExtensions.dll
 using WPFExtensions.Controls;
 using O2.API.Visualization.ExtensionMethods;
-using O2.XRules.Database.ExtensionMethods;
+//O2Ref:O2_API_Visualization.dll
+using O2.XRules.Database.Utils.O2;
+//O2File:ascx_Simple_Script_Editor.cs.o2
+//O2File:Scripts_ExtensionMethods.cs
 
 namespace O2.Script
 {

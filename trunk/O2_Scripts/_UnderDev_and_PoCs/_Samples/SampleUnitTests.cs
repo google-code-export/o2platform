@@ -9,8 +9,6 @@ using O2.Kernel;
 using O2.Kernel.Interfaces.XRules;
 using O2.DotNetWrappers.Windows;
 
-
-using O2.XRules.Database._Rules;
 //O2Ref:nunit.framework.dll
 using NUnit.Framework;
 
