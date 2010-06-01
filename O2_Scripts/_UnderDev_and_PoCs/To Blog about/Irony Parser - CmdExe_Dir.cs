@@ -8,11 +8,11 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.External.SharpDevelop.ExtensionMethods;
-using O2.XRules.Database.ExtensionMethods;
 using Irony.Parsing;
-using O2.Script;
+using O2.XRules.Database.Utils.O2;
 
-//O2File:C:\O2\_XRules_Local\ExtensionMethods\extra_VisualizationAPI.cs
+//O2File:Scripts_ExtensionMethods.cs
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 
 namespace O2.Script
 {

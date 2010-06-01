@@ -23,7 +23,7 @@ using O2.XRules.Database.Utils.O2;
 
  
  
-namespace O2.Script
+namespace O2.XRules.Database.APIs
 {
     public class API_GMail
     {    
