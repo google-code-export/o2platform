@@ -64,20 +64,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AxInterop.WMPLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_3rdPartyDlls\AxInterop.WMPLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Cecil.Decompiler, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_3rdPartyDlls\Cecil.Decompiler.dll</HintPath>
-    </Reference>
     <Reference Include="Cropper">
       <HintPath>..\_3rdPartyDlls\Cropper.exe</HintPath>
-    </Reference>
-    <Reference Include="Dimebrain.TweetSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\_3rdPartyDlls\Dimebrain.TweetSharp.dll</HintPath>
     </Reference>
     <Reference Include="GraphSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -229,14 +217,6 @@
     <Reference Include="WPFExtensions, Version=1.0.3437.34043, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\O2_APIs\O2_API_Visualization\_externalDlls\WPFExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="_HostLocalWebsite %28O2 Tool%29, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\O2_Binaries\_HostLocalWebsite (O2 Tool).exe</HintPath>
-    </Reference>
-    <Reference Include="_SearchEngine %28O2 Tool%29, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\O2_Binaries\_SearchEngine (O2 Tool).exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
