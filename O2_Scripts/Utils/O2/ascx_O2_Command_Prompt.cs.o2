@@ -1,5 +1,4 @@
 ﻿using O2.External.SharpDevelop.ExtensionMethods;
-using O2.External.IE.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.CoreControls;
