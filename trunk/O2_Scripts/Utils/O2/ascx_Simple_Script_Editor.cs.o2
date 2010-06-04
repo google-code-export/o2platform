@@ -35,8 +35,6 @@ using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;   
 using O2.DotNetWrappers.H2Scripts;
 using O2.Views.ASCX.Ascx.MainGUI;
-//O2Ref:O2_External_IE.dll
-using O2.External.IE.ExtensionMethods;
 using O2.Views.ASCX.DataViewers;
 using O2.Views.ASCX.CoreControls;
 using O2.API.AST.ExtensionMethods.CSharp;
@@ -412,6 +410,12 @@ namespace O2.XRules.Database.Utils.O2
                 compileCodeSnippet(Code);
                 
             }
+            if (e.Modifiers == Keys.Control && e.KeyValue == 'S')           // Ctrl+B compiles code
+            {
+                "Saving Script".debug();
+                saveScript();
+                
+            }
             else if (e.KeyValue == 116 ||                                       // F5 (key 116) and 
                 (e.Modifiers == Keys.Control && e.KeyValue == 'R') ||           // Ctrl+R  executes it
                 (e.Modifiers == Keys.Control && e.KeyValue == 13))              // Ctrl+Enter  executes it
@@ -440,12 +444,12 @@ namespace O2.XRules.Database.Utils.O2
 
      		if (result == null)
      			result = "[null value]";
-            else if (result is string && false == result.str().isFile() && result.str().isUri())
+            /*else if (result is string && false == result.str().isFile() && result.str().isUri())
             {
                 result_Panel.visible(true);
                 result_Panel.add_WebBrowser().open(result.str().uri());
                 return;
-            }
+            }*/
             // displaying the files by default was causing a lot of nasty side effects (namely for large files)
             /*else if (result is string && result.str().isFile())
             {
@@ -485,7 +489,10 @@ namespace O2.XRules.Database.Utils.O2
      	public void saveScript()
      	{
             if (commandsToExecute.editor().getFullPathTOCurrentSourceCodeFile().fileExists())
+            {
+            	"Script saved to: {0}".info(commandsToExecute.editor().getFullPathTOCurrentSourceCodeFile());
                 commandsToExecute.editor().saveSourceCode();
+            }
             else
                 this.invokeOnThread(
                     () =>

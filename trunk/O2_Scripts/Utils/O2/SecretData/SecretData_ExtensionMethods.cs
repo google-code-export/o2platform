@@ -91,7 +91,9 @@ namespace O2.XRules.Database.Utils.O2
         
         public static string username(this ICredential credential)
         {
-            return credential.UserName;
+        	if (credential.notNull())
+            	return credential.UserName;
+            return "";
         }
 
         #endregion
