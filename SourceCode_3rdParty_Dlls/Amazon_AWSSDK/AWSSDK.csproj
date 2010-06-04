@@ -1,0 +1,2432 @@
+﻿<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>local</ProjectType>
+    <ProjectVersion>7.10.3077</ProjectVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A78D680F-AB18-4771-A7E8-C1578FCDF54D}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyName>Amazon_AWSSDK</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>0.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\O2 - All Active Projects\_3rdPartyDlls\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugSymbols>true</DebugSymbols>
+    <NoStdLib>false</NoStdLib>
+    <Optimize>false</Optimize>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>TRACE</DefineConstants>
+    <DebugSymbols>false</DebugSymbols>
+    <NoStdLib>false</NoStdLib>
+    <Optimize>true</Optimize>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>none</DebugType>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.Xml</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Amazon\AutoScaling\AmazonAutoScaling.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\AmazonAutoScalingClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\AmazonAutoScalingConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\AmazonAutoScalingException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\Activity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\AutoScalingGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\BlockDeviceMapping.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\CreateAutoScalingGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\CreateAutoScalingGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\CreateLaunchConfigurationRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\CreateLaunchConfigurationResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\CreateOrUpdateScalingTriggerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\CreateOrUpdateScalingTriggerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DeleteAutoScalingGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DeleteAutoScalingGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DeleteLaunchConfigurationRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DeleteLaunchConfigurationResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DeleteTriggerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DeleteTriggerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeAutoScalingGroupsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeAutoScalingGroupsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeAutoScalingGroupsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeLaunchConfigurationsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeLaunchConfigurationsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeLaunchConfigurationsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeScalingActivitiesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeScalingActivitiesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeScalingActivitiesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeTriggersRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeTriggersResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\DescribeTriggersResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\Dimension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\Instance.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\LaunchConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\SetDesiredCapacityRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\SetDesiredCapacityResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\TerminateInstanceInAutoScalingGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\TerminateInstanceInAutoScalingGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\TerminateInstanceInAutoScalingGroupResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\Trigger.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\UpdateAutoScalingGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AutoScaling\Model\UpdateAutoScalingGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\AWSClientFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\AmazonCloudFront.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\AmazonCloudFrontClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\AmazonCloudFrontConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\AmazonCloudFrontException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontDistribution.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontDistributionBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontDistributionConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontDistributionConfigBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontOriginAccessIdentity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontOriginAccessIdentityConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontQueryParameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontStreamingDistribution.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CloudFrontStreamingDistributionConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CreateDistributionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CreateDistributionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CreateOriginAccessIdentityRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CreateOriginAccessIdentityResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CreateStreamingDistributionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\CreateStreamingDistributionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\DeleteDistributionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\DeleteDistributionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\DeleteOriginAccessIdentityRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\DeleteOriginAccessIdentityResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\DeleteStreamingDistributionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\DeleteStreamingDistributionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetDistributionConfigRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetDistributionConfigResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetDistributionInfoRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetDistributionInfoResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetOriginAccessIdentityConfigRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetOriginAccessIdentityConfigResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetOriginAccessIdentityInfoRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetOriginAccessIdentityInfoResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetStreamingDistributionConfigRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetStreamingDistributionConfigResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetStreamingDistributionInfoRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\GetStreamingDistributionInfoResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\ListDistributionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\ListDistributionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\ListOriginAccessIdentitiesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\ListOriginAccessIdentitiesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\ListStreamingDistributionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\ListStreamingDistributionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\SetDistributionConfigRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\SetDistributionConfigResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\SetOriginAccessIdentityConfigRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\SetOriginAccessIdentityConfigResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\SetStreamingDistributionConfigRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\SetStreamingDistributionConfigResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\Signer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\Tuple!2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Model\UrlTrustedSigners.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Util\AmazonCloudFrontUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudFront\Util\CloudFrontConstants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\AmazonCloudWatch.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\AmazonCloudWatchClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\AmazonCloudWatchConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\AmazonCloudWatchException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\Datapoint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\Dimension.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\GetMetricStatisticsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\GetMetricStatisticsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\GetMetricStatisticsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\ListMetricsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\ListMetricsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\ListMetricsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\Metric.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\CloudWatch\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\AmazonEC2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\AmazonEC2Client.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\AmazonEC2Config.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\AmazonEC2Exception.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Address.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AllocateAddressRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AllocateAddressResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AllocateAddressResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AssociateAddressRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AssociateAddressResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AssociateDhcpOptionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AssociateDhcpOptionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Attachment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AttachVolumeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AttachVolumeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AttachVolumeResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AttachVpnGatewayRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AttachVpnGatewayResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AttachVpnGatewayResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AuthorizeSecurityGroupIngressRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AuthorizeSecurityGroupIngressResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\AvailabilityZone.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\BlockDeviceMapping.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\BundleInstanceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\BundleInstanceResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\BundleInstanceResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\BundleTask.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\BundleTaskError.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CancelBundleTaskRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CancelBundleTaskResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CancelBundleTaskResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CancelledSpotInstanceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CancelSpotInstanceRequestsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CancelSpotInstanceRequestsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CancelSpotInstanceRequestsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ConfirmProductInstanceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ConfirmProductInstanceResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ConfirmProductInstanceResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ConsoleOutput.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateCustomerGatewayRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateCustomerGatewayResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateCustomerGatewayResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateDhcpOptionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateDhcpOptionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateDhcpOptionsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateImageRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateImageResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateImageResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateKeyPairRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateKeyPairResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateKeyPairResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSecurityGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSecurityGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSnapshotRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSnapshotResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSnapshotResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSpotDatafeedSubscriptionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSpotDatafeedSubscriptionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSpotDatafeedSubscriptionResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSubnetRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSubnetResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateSubnetResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVolumePermission.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVolumeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVolumeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVolumeResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpcRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpcResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpcResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpnConnectionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpnConnectionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpnConnectionResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpnGatewayRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpnGatewayResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CreateVpnGatewayResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\CustomerGateway.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteCustomerGatewayRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteCustomerGatewayResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteDhcpOptionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteDhcpOptionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteKeyPairRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteKeyPairResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteSecurityGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteSecurityGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteSnapshotRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteSnapshotResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteSpotDatafeedSubscriptionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteSpotDatafeedSubscriptionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteSubnetRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteSubnetResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteVolumeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteVolumeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteVpcRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteVpcResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteVpnConnectionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteVpnConnectionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteVpnGatewayRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeleteVpnGatewayResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeregisterImageRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DeregisterImageResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeAddressesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeAddressesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeAddressesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeAvailabilityZonesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeAvailabilityZonesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeAvailabilityZonesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeBundleTasksRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeBundleTasksResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeBundleTasksResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeCustomerGatewaysRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeCustomerGatewaysResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeCustomerGatewaysResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeDhcpOptionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeDhcpOptionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeDhcpOptionsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeImageAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeImageAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeImageAttributeResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeImagesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeImagesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeImagesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeInstanceAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeInstanceAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeInstanceAttributeResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeKeyPairsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeKeyPairsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeKeyPairsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeRegionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeRegionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeRegionsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeReservedInstancesOfferingsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeReservedInstancesOfferingsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeReservedInstancesOfferingsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeReservedInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeReservedInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeReservedInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSecurityGroupsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSecurityGroupsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSecurityGroupsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSnapshotAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSnapshotAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSnapshotAttributeResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSnapshotsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSnapshotsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSnapshotsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotDatafeedSubscriptionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotDatafeedSubscriptionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotDatafeedSubscriptionResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotInstanceRequestsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotInstanceRequestsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotInstanceRequestsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotPriceHistoryRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotPriceHistoryResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSpotPriceHistoryResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSubnetsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSubnetsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeSubnetsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVolumesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVolumesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVolumesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpcsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpcsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpcsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpnConnectionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpnConnectionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpnConnectionsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpnGatewaysRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpnGatewaysResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DescribeVpnGatewaysResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DetachVolumeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DetachVolumeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DetachVolumeResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DetachVpnGatewayRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DetachVpnGatewayResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DhcpConfiguration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DhcpOptions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DisassociateAddressRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\DisassociateAddressResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\EbsBlockDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Filter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\GetConsoleOutputRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\GetConsoleOutputResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\GetConsoleOutputResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\GetPasswordDataRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\GetPasswordDataResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\GetPasswordDataResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Image.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ImageAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\InstanceAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\InstanceBlockDeviceMapping.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\InstanceBlockDeviceMappingParameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\InstanceEbsBlockDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\InstanceEbsBlockDeviceParameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\InstanceMonitoring.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\InstanceState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\InstanceStateChange.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\IpPermission.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\KeyPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\LaunchPermission.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\LaunchSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ModifyImageAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ModifyImageAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ModifyInstanceAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ModifyInstanceAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ModifySnapshotAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ModifySnapshotAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Monitoring.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\MonitoringSpecification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\MonitorInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\MonitorInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\MonitorInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\PasswordData.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Placement.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\PurchaseReservedInstancesOfferingRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\PurchaseReservedInstancesOfferingResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\PurchaseReservedInstancesOfferingResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RebootInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RebootInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Region.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RegisterImageRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RegisterImageResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RegisterImageResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ReleaseAddressRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ReleaseAddressResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RequestSpotInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RequestSpotInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RequestSpotInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Reservation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ReservedInstances.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ReservedInstancesOffering.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ResetImageAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ResetImageAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ResetInstanceAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ResetInstanceAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ResetSnapshotAttributeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ResetSnapshotAttributeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RevokeSecurityGroupIngressRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RevokeSecurityGroupIngressResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RunInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RunInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RunInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\RunningInstance.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\S3Storage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\SecurityGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Snapshot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\SnapshotAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\SpotDatafeedSubscription.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\SpotInstanceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\SpotInstanceStateFault.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\SpotPriceHistory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\StartInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\StartInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\StartInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\StateReason.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\StopInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\StopInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\StopInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Storage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Subnet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\TerminateInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\TerminateInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\TerminateInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\UnmonitorInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\UnmonitorInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\UnmonitorInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\UserIdGroupPair.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Volume.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\Vpc.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\VpcAttachment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\VpnConnection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Model\VpnGateway.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\EC2\Util\S3UploadPolicy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\AmazonElasticLoadBalancing.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\AmazonElasticLoadBalancingClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\AmazonElasticLoadBalancingConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\AmazonElasticLoadBalancingException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\AppCookieStickinessPolicy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\ConfigureHealthCheckRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\ConfigureHealthCheckResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\ConfigureHealthCheckResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\CreateAppCookieStickinessPolicyRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\CreateAppCookieStickinessPolicyResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\CreateLBCookieStickinessPolicyRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\CreateLBCookieStickinessPolicyResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\CreateLoadBalancerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\CreateLoadBalancerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\CreateLoadBalancerResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DeleteLoadBalancerPolicyRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DeleteLoadBalancerPolicyResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DeleteLoadBalancerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DeleteLoadBalancerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DeleteLoadBalancerResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DeregisterInstancesFromLoadBalancerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DeregisterInstancesFromLoadBalancerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DeregisterInstancesFromLoadBalancerResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DescribeInstanceHealthRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DescribeInstanceHealthResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DescribeInstanceHealthResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DescribeLoadBalancersRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DescribeLoadBalancersResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DescribeLoadBalancersResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DisableAvailabilityZonesForLoadBalancerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DisableAvailabilityZonesForLoadBalancerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\DisableAvailabilityZonesForLoadBalancerResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\EnableAvailabilityZonesForLoadBalancerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\EnableAvailabilityZonesForLoadBalancerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\EnableAvailabilityZonesForLoadBalancerResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\HealthCheck.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\Instance.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\InstanceState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\LBCookieStickinessPolicy.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\Listener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\ListenerDescription.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\LoadBalancerDescription.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\Policies.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\RegisterInstancesWithLoadBalancerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\RegisterInstancesWithLoadBalancerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\RegisterInstancesWithLoadBalancerResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\SetLoadBalancerPoliciesOfListenerRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticLoadBalancing\Model\SetLoadBalancerPoliciesOfListenerResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\AmazonElasticMapReduce.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\AmazonElasticMapReduceClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\AmazonElasticMapReduceConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\AmazonElasticMapReduceException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\AddJobFlowStepsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\AddJobFlowStepsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\BootstrapActionConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\BootstrapActionDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\DescribeJobFlowsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\DescribeJobFlowsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\DescribeJobFlowsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\HadoopJarStepConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\JobFlowDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\JobFlowExecutionStatusDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\JobFlowInstancesConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\JobFlowInstancesDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\KeyValue.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\PlacementType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\RunJobFlowRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\RunJobFlowResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\RunJobFlowResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\ScriptBootstrapActionConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\StepConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\StepDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\StepExecutionStatusDetail.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\TerminateJobFlowsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\ElasticMapReduce\Model\TerminateJobFlowsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\AmazonRDS.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\AmazonRDSClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\AmazonRDSConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\AmazonRDSException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\AuthorizeDBSecurityGroupIngressRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\AuthorizeDBSecurityGroupIngressResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\AuthorizeDBSecurityGroupIngressResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBInstanceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBInstanceResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBInstanceResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBParameterGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBParameterGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBParameterGroupResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBSecurityGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBSecurityGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBSecurityGroupResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBSnapshotRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBSnapshotResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\CreateDBSnapshotResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DBInstance.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DBParameterGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DBParameterGroupStatus.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DBSecurityGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DBSecurityGroupMembership.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DBSnapshot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBInstanceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBInstanceResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBInstanceResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBParameterGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBParameterGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBSecurityGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBSecurityGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBSnapshotRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBSnapshotResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DeleteDBSnapshotResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBInstancesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBInstancesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBInstancesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBParameterGroupsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBParameterGroupsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBParameterGroupsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBParametersRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBParametersResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBParametersResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBSecurityGroupsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBSecurityGroupsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBSecurityGroupsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBSnapshotsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBSnapshotsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeDBSnapshotsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeEngineDefaultParametersRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeEngineDefaultParametersResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeEngineDefaultParametersResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeEventsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeEventsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\DescribeEventsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\EC2SecurityGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\Endpoint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\EngineDefaults.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\Event.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\IPRange.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ModifyDBInstanceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ModifyDBInstanceResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ModifyDBInstanceResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ModifyDBParameterGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ModifyDBParameterGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ModifyDBParameterGroupResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\Parameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\PendingModifiedValues.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RebootDBInstanceRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RebootDBInstanceResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RebootDBInstanceResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ResetDBParameterGroupRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ResetDBParameterGroupResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ResetDBParameterGroupResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RestoreDBInstanceFromDBSnapshotRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RestoreDBInstanceFromDBSnapshotResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RestoreDBInstanceFromDBSnapshotResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RestoreDBInstanceToPointInTimeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RestoreDBInstanceToPointInTimeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RestoreDBInstanceToPointInTimeResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RevokeDBSecurityGroupIngressRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RevokeDBSecurityGroupIngressResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\RDS\Model\RevokeDBSecurityGroupIngressResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\AmazonS3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\AmazonS3Client.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\AmazonS3Config.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\AmazonS3Exception.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\ComparatorGrant.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\CopyObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\CopyObjectResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\DeleteBucketRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\DeleteBucketResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\DeleteObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\DeleteObjectResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\DisableBucketLoggingRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\DisableBucketLoggingResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\EnableBucketLoggingRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\EnableBucketLoggingResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetACLRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetACLResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetBucketLocationRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetBucketLocationResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetBucketLoggingRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetBucketLoggingResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetBucketVersioningRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetBucketVersioningResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetObjectMetadataRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetObjectMetadataResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetObjectResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\GetPreSignedUrlRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\HttpVerb.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\ListBucketsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\ListBucketsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\ListObjectsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\ListObjectsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\ListVersionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\ListVersionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\Owner.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\Protocol.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\PutBucketRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\PutBucketResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\PutObjectProgressArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\PutObjectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\PutObjectResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3AccessControlList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Bucket.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3BucketLoggingConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3BucketVersioningConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3CannedACL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Grant.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Grantee.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3MetadataDirective.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Object.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3ObjectVersion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Permission.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3QueryParameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Region.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Request.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3Response.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\S3StorageClass.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\SetACLRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\SetACLResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\SetBucketVersioningRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\SetBucketVersioningResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Model\Tuple!2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Util\AmazonS3Util.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\S3\Util\S3Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\AmazonSimpleDB.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\AmazonSimpleDBClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\AmazonSimpleDBConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\AmazonSimpleDBException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\Attribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\BatchPutAttributesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\BatchPutAttributesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\CreateDomainRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\CreateDomainResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\DeleteAttributesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\DeleteAttributesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\DeleteDomainRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\DeleteDomainResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\DomainMetadataRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\DomainMetadataResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\DomainMetadataResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\GetAttributesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\GetAttributesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\GetAttributesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\Item.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\ListDomainsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\ListDomainsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\ListDomainsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\PutAttributesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\PutAttributesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\ReplaceableAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\ReplaceableItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\SelectRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\SelectResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\SelectResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Model\UpdateCondition.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleDB\Util\AmazonSimpleDBUtil.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\AmazonSimpleNotificationService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\AmazonSimpleNotificationServiceClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\AmazonSimpleNotificationServiceConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\AmazonSimpleNotificationServiceException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\AddPermissionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\AddPermissionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ConfirmSubscriptionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ConfirmSubscriptionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ConfirmSubscriptionResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\CreateTopicRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\CreateTopicResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\CreateTopicResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\DeleteTopicRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\DeleteTopicResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\GetTopicAttributesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\GetTopicAttributesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\GetTopicAttributesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListSubscriptionsByTopicRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListSubscriptionsByTopicResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListSubscriptionsByTopicResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListSubscriptionsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListSubscriptionsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListSubscriptionsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListTopicsRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListTopicsResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ListTopicsResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\PublishRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\PublishResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\PublishResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\RemovePermissionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\RemovePermissionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\SetTopicAttributesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\SetTopicAttributesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\SubscribeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\SubscribeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\SubscribeResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\Subscription.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\Topic.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\TopicAttribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\UnsubscribeRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SimpleNotificationService\Model\UnsubscribeResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\AmazonSQS.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\AmazonSQSClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\AmazonSQSConfig.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\AmazonSQSException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\AddPermissionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\AddPermissionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\Attribute.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ChangeMessageVisibilityRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ChangeMessageVisibilityResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\CreateQueueRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\CreateQueueResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\CreateQueueResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\DeleteMessageRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\DeleteMessageResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\DeleteQueueRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\DeleteQueueResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\Error.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ErrorResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\GetQueueAttributesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\GetQueueAttributesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\GetQueueAttributesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ListQueuesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ListQueuesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ListQueuesResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\Message.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ReceiveMessageRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ReceiveMessageResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ReceiveMessageResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\RemovePermissionRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\RemovePermissionResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\ResponseMetadata.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\SendMessageRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\SendMessageResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\SendMessageResult.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\SetQueueAttributesRequest.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\SQS\Model\SetQueueAttributesResponse.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Amazon\Util\AWSSDKUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Global.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="AWSSDK.Amazon.AutoScaling.Model.ResponseTransformer.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.CreateDistributionResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.CreateOriginAccessIdentityResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.CreateStreamingDistributionResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.GetDistributionConfigResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.GetDistributionInfoResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.GetOriginAccessIdentityConfigResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.GetOriginAccessIdentityInfoResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.GetStreamingDistributionConfigResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.GetStreamingDistributionInfoResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.ListDistributionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.ListOriginAccessIdentitiesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.ListStreamingDistributionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.SetDistributionConfigResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.SetOriginAccessIdentityConfigResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudFront.Model.SetStreamingDistributionConfigResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.CloudWatch.Model.ResponseTransformer.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.AllocateAddressResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.AssociateAddressResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.AssociateDhcpOptionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.AttachVolumeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.AttachVpnGatewayResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.AuthorizeSecurityGroupIngressResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.BundleInstanceResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CancelBundleTaskResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CancelSpotInstanceRequestsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.ConfirmProductInstanceResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateCustomerGatewayResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateDhcpOptionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateImageResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateKeyPairResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateSecurityGroupResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateSnapshotResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateSpotDatafeedSubscriptionResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateSubnetResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateVolumeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateVpcResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateVpnConnectionResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.CreateVpnGatewayResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteCustomerGatewayResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteDhcpOptionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteKeyPairResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteSecurityGroupResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteSnapshotResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteSpotDatafeedSubscriptionResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteSubnetResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteVolumeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteVpcResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteVpnConnectionResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeleteVpnGatewayResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DeregisterImageResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeAddressesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeAvailabilityZonesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeBundleTasksResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeCustomerGatewaysResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeDhcpOptionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeImageAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeImagesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeInstanceAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeKeyPairsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeRegionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeReservedInstancesOfferingsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeReservedInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeSecurityGroupsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeSnapshotAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeSnapshotsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeSpotDatafeedSubscriptionResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeSpotInstanceRequestsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeSpotPriceHistoryResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeSubnetsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeVolumesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeVpcsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeVpnConnectionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DescribeVpnGatewaysResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DetachVolumeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DetachVpnGatewayResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.DisassociateAddressResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.GetConsoleOutputResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.GetPasswordDataResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.ModifyImageAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.ModifyInstanceAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.ModifySnapshotAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.MonitorInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.PurchaseReservedInstancesOfferingResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.RebootInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.RegisterImageResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.ReleaseAddressResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.RequestSpotInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.ResetImageAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.ResetInstanceAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.ResetSnapshotAttributeResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.RevokeSecurityGroupIngressResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.RunInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.StartInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.StopInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.TerminateInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.EC2.Model.UnmonitorInstancesResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.ElasticLoadBalancing.Model.ResponseTransformer.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.ElasticMapReduce.Model.ResponseTransformer.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.RDS.Model.ResponseTransformer.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.CopyObjectResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.GetACLResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.GetBucketLocationResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.GetBucketLoggingResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.GetBucketVersioningResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.ListBucketsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.ListObjectsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.ListVersionsResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.S3.Model.S3ErrorResponse.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.SimpleDB.Model.ResponseTransformer.xslt" />
+    <EmbeddedResource Include="AWSSDK.Amazon.SimpleNotificationService.Model.ResponseTransformer.xslt" />
+    <EmbeddedResource Include="AWSSDK.amazonaws.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

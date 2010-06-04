@@ -1,0 +1,36 @@
+﻿namespace Amazon.EC2.Model
+{
+    using System;
+    using System.Xml.Serialization;
+
+    [XmlRoot(Namespace="http://ec2.amazonaws.com/doc/2009-11-30/", IsNullable=false)]
+    public class CreateSnapshotResult
+    {
+        private Amazon.EC2.Model.Snapshot snapshotField;
+
+        public bool IsSetSnapshot()
+        {
+            return (this.snapshotField != null);
+        }
+
+        public CreateSnapshotResult WithSnapshot(Amazon.EC2.Model.Snapshot snapshot)
+        {
+            this.snapshotField = snapshot;
+            return this;
+        }
+
+        [XmlElement(ElementName="Snapshot")]
+        public Amazon.EC2.Model.Snapshot Snapshot
+        {
+            get
+            {
+                return this.snapshotField;
+            }
+            set
+            {
+                this.snapshotField = value;
+            }
+        }
+    }
+}
+
