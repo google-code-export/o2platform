@@ -1,16 +1,25 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>if (panel.tag&lt;WatiN_IE&gt;().isNull())
-{
-	panel.clear();
-	panel.tag(panel.add_IE());
-} 
-var ie = panel.tag&lt;WatiN_IE&gt;();
-if (ie.url().valid().isFalse())
-	ie.open("http://www.google.com");  
-return ie.links();
-  
-//O2File:Ref:WatiN_IE_ExtensionMethods.cs
+  <SourceCode>panel.clear();
+var topPanel = O2Gui.open&lt;Panel&gt;("EventBrite API", 500,500);
+var ie = topPanel.add_IE();
+ie.silent(true); 
+var eventBrite = new API_EventBrite(ie); 
+var actionsPanel = topPanel.insert_Above&lt;Panel&gt;(20); 
+
+actionsPanel.add_Link("login", 2,0, ()=&gt; eventBrite.login())
+			.append_Link("logout", ()=&gt; eventBrite.logout())
+			.append_Link("my events", ()=&gt; eventBrite.myEvents())
+			.append_Link("create event", ()=&gt; eventBrite.createEvent());
+eventBrite.homePage();			 
+return null;
+
+ 
+
+//using WatiN.Core
+//using WatiN.Core.Interfaces
+//O2File:API_EventBrite.cs
+//O2File:WatiN_IE_ExtensionMethods.cs
 //O2Ref:WatiN.Core.1x.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

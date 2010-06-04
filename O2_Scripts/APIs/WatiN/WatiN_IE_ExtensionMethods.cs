@@ -137,6 +137,14 @@ namespace O2.XRules.Database.APIs
     		return watinIe.InternetExplorer;
     	}
  
+ 		public static WatiN_IE silent(this WatiN_IE watinIe, bool value)
+ 		{
+ 			if (watinIe.IE.InternetExplorer != null)
+ 				if (watinIe.IE.InternetExplorer is IWebBrowser2)
+ 					(watinIe.IE.InternetExplorer as IWebBrowser2).Silent = value;
+ 			return watinIe; 			
+ 		}
+		 
 		public static WatiN_IE open(this WatiN_IE watinIe, string url)
 		{
 			return watinIe.open(url,0);
@@ -583,7 +591,7 @@ namespace O2.XRules.Database.APIs
     			textField.Value = value;    	
     		return textField;
  		}
- 
+  	
     	public static TextField value(this TextField textField, string value)
     	{
     		if (textField!= null)    		
@@ -622,7 +630,12 @@ namespace O2.XRules.Database.APIs
 			return watinIe.value(textFieldId, text);
 		}
  
- 
+ 		public static WatiN_IE field(this WatiN_IE watinIe, string textFieldId, string text)
+ 		{
+ 			return watinIe.value(textFieldId, text);
+ 		}
+ 		
+ 		
 		public static WatiN_IE value(this WatiN_IE watinIe, string textFieldId, string text)
 		{
 			var textField = watinIe.textField(textFieldId);
@@ -1035,4 +1048,45 @@ namespace O2.XRules.Database.APIs
     
     }
      
+    public static class WatiN_IE_ExtensionMethods_Screenshot
+    {
+    	public static System.Drawing.Image screenshot(this WatiN_IE watinIe)
+    	{
+    		if (watinIe.InternetExplorer.isNull())
+    			"Screenshots can only be taken when IE is in a separate process".error();
+    		else
+    			"taking screenshot".info();
+    		return null;
+    	}
+    }
+    
+    public static class WatiN_IE_ExtensionMethods_TestRecorder
+    {
+    
+    	public static WatiN_IE startRecorder(this WatiN_IE watinIe)
+    	{
+    		return watinIe.testRecorder(true);
+    	}
+    	
+    	public static WatiN_IE testRecorder(this WatiN_IE watinIe)
+    	{
+    		return watinIe.testRecorder(true);
+    	}
+    	
+    	public static WatiN_IE testRecorder(this WatiN_IE watinIe, bool executeInNewProcess)
+    	{
+    		if (executeInNewProcess)
+    			Processes.startProcess("Test Recorder");
+    		else
+    		{
+    			O2Thread.staThread(()=>{ "Test Recorder".assembly()
+    													.type("Program")
+    													.invokeStatic("Main", new string[] {});
+    									});
+	
+    		}
+    		return watinIe;
+    	}
+    }
+    
 }

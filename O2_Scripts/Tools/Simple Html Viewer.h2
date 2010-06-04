@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var panel = O2Gui.open&lt;Panel&gt;("Simple Html Viewer",500,300);
+var controls = panel.add_1x1();
+var browser = controls[1].add_Browser();
+controls[0].add_TextArea()
+		   .onTextChange((text)=&gt; browser.set_Text(text));</SourceCode>
+  <ReferencedAssemblies />
+</H2>
