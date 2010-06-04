@@ -36,7 +36,7 @@ namespace O2.XRules.Database.APIs
  
     	public API_BTOpenZone login()
     	{
-    		return login("");
+    		return login(@"C:\O2\_USERDATA\BtOpenZone.xml");
     	}
  
     	public API_BTOpenZone login(string fileWithLoginDetails)
