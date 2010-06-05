@@ -21,18 +21,19 @@ namespace O2.Kernel.CodeUtils
 
         public void tryToFetchAssemblyFromO2SVN(string assemblyToLoad)
         {
+            string localFilePath = "";
             var thread = O2Kernel_O2Thread.mtaThread(
                 () =>
                 {
-                    //if (AssembliesCheckedIfExists.Contains(assemblyToLoad))     // for performace reasons only check this once
-                    //    return;
+                    if (AssembliesCheckedIfExists.Contains(assemblyToLoad))     // for performace reasons only check this once
+                        return;
                     "Trying to fetch assembly from O2's SVN repository: {0}".info(assemblyToLoad);
                     AssembliesCheckedIfExists.Add(assemblyToLoad);
                     if (Path.GetExtension(assemblyToLoad) == ".dll" ||
                         Path.GetExtension(assemblyToLoad) == ".exe")  // if there is no valid extension is it most likely a GAC reference
                     {
                         var currentApplicationPath = PublicDI.config.CurrentExecutableDirectory;
-                        var localFilePath = Path.Combine(currentApplicationPath, assemblyToLoad);
+                        localFilePath = Path.Combine(currentApplicationPath, assemblyToLoad);
                         if (File.Exists(localFilePath))
                             return;
                         var webLocation1 = "{0}{1}".format(O2SVN_ExternalDlls, assemblyToLoad);
@@ -55,10 +56,14 @@ namespace O2.Kernel.CodeUtils
                         }
                     }
                 });
-            var maxWait = 60;
+            var maxWait = 30;
             if (thread.Join(maxWait * 1000) == false)
             {
-                "error while tring to fetchAssembly: {0} (max wait of {1} seconds reached)".error(assemblyToLoad, maxWait);
+                if (File.Exists(localFilePath))                
+                    "TimeOut (of {1} secs) was reached, but Assembly was sucessfully fetched from O2SVN: {0}".info(maxWait,localFilePath);                                    
+                else
+                    "error while tring to fetchAssembly: {0} (max wait of {1} seconds reached)".error(assemblyToLoad, maxWait);
+                return;
             }
             //var localPath = Path.Combine
             //return false;

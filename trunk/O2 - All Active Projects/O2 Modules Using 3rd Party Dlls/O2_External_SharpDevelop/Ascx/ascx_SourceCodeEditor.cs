@@ -15,8 +15,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         public ascx_SourceCodeEditor()
         {
-            InitializeComponent();            
-            showAstDetails = new Ast_CSharp_ShowDetailsInViewer(tecSourceCode, tcSourceInfo);                
+            InitializeComponent();                              
         }
 
         public ascx_SourceCodeEditor(String sFileToOpen) : this()
@@ -420,8 +419,17 @@ namespace O2.External.SharpDevelop.Ascx
         {
             set
             {
-                showAstDetails.enabled = value;
-                this.invokeOnThread(() => scCodeAndAst.Panel2Collapsed = ! value);
+                // the idea is to skip the creation of the Ast_CSharp_ShowDetailsInViewer unless the user choses to view it
+                if (showAstDetails != null || value != false)
+                {
+                    // create it, if this is the first time we use showAstDetails
+                    if (showAstDetails == null)
+                        showAstDetails = new Ast_CSharp_ShowDetailsInViewer(tecSourceCode, tcSourceInfo);
+
+                    showAstDetails.enabled = value;
+
+                    this.invokeOnThread(() => scCodeAndAst.Panel2Collapsed = !value);
+                }
             }
 
             get

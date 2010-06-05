@@ -222,8 +222,8 @@ namespace O2.DotNetWrappers.DotNet
                 PublicDI.log.debug("Compilated OK to: {0}", compiledAssembly.Location);
                 return compiledAssembly;
             }
-            foreach (var assembly in referencedAssemblies)
-                "R: {0}".info(assembly);
+            //foreach (var assembly in referencedAssemblies)
+            //    "R: {0}".info(assembly);
             PublicDI.log.error("Compilation failed: {0}", errorMessages);
             return null;
         }
@@ -634,7 +634,7 @@ namespace O2.DotNetWrappers.DotNet
             var currentExecutablePath = PublicDI.config.CurrentExecutableDirectory;
             foreach (var reference in referencedAssemblies)
             {
-                "Reference: {0}".debug(reference);
+                //"Reference: {0}".debug(reference);
                 if (reference.fileExists())
                 {
                     var expectedFile = currentExecutablePath.pathCombine(reference.fileName());

@@ -40,18 +40,23 @@ namespace O2.Kernel.CodeUtils
                 targetFile = Path.Combine(targetFileOrFolder, Path.GetFileName(urlOfFileToFetch));
 
             PublicDI.log.debug("Downloading Binary File {0}", urlOfFileToFetch);
-            var webClient = new WebClient();
-            try
+            using (WebClient webClient = new WebClient())
             {
-                byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
-                O2Kernel_Files.WriteFileContent(targetFile, pageData);
-                PublicDI.log.debug("Downloaded File saved to: {0}", targetFile);
-                return targetFile;
+                try
+                {
+                    byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
+                    O2Kernel_Files.WriteFileContent(targetFile, pageData);
+                    PublicDI.log.debug("Downloaded File saved to: {0}", targetFile);
+
+                    GC.Collect();       // because of WebClient().GetRequestStream prob
+                    return targetFile;
+                }
+                catch (Exception ex)
+                {
+                    PublicDI.log.ex(ex);
+                }
             }
-            catch (Exception ex)
-            {
-                PublicDI.log.ex(ex);
-            }
+            GC.Collect();       // because of WebClient().GetRequestStream prob
             return null;
         }
 
