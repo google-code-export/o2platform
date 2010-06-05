@@ -236,6 +236,26 @@ namespace O2.DotNetWrappers.Network
         	}
         	return "";
         }
-      
+        public bool httpFileExists(string url)
+        {
+            return httpFileExists(url, false);
+        }
+
+        public bool httpFileExists(string url, bool showError)
+        {
+            var webRequest = (HttpWebRequest)HttpWebRequest.Create(url);
+            webRequest.Method = "HEAD";
+            try
+            {
+                var webResponse = (HttpWebResponse)webRequest.GetResponse();
+                return (webResponse.StatusCode == HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                if (showError)
+                    ex.log("in Web.httpFileExists");
+                return false;
+            }
+        }
     }
 }

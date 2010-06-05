@@ -677,12 +677,14 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             try
             {
+                new O2Svn().tryToFetchAssemblyFromO2SVN(assemblyToLoad);
+
                 return Assembly.LoadFrom(assemblyToLoad);
             }
             catch (Exception ex1)
             {
             	try
-            	{
+            	{                                        
             		var assembly = Assembly.LoadWithPartialName(assemblyToLoad);
             		if (assembly != null)
             		{

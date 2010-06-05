@@ -16,7 +16,7 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
-using System.Linq;
+//using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -33,8 +33,8 @@ using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.DotNetWrappers.H2Scripts;
 using O2.DotNetWrappers.Network;
-using O2.Core.XRules.XRulesEngine;
-using O2.Core.XRules._Wizards;
+//using O2.Core.XRules.XRulesEngine;
+//using O2.Core.XRules._Wizards;
 using O2.Views.ASCX.Ascx.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 //using O2.XRules.Database.O2Utils;
@@ -44,6 +44,7 @@ namespace O2.XRules.Database
 { 
     public class ascx_Execute_Scripts: UserControl
     {
+        
         public string welcomeMessage = "Hello! To start right-click on the logo";
         public string pathToPictureBox = "";    
     	public string currentScript = "";
@@ -134,7 +135,7 @@ namespace O2.XRules.Database
 
             contextMenu.add_MenuItem("SVN O2 Scripts")
                         .add_MenuItem("ReSync Scripts from O2's Svn (using SVN client)", ()=> execute("ReSync SVN Rules",() => syncO2ViaSvn()))
-                        .add_MenuItem("Manual Sync Scripts from O2's Svn (using HTTP) ", ()=> execute("Trying Manual SVN Sync via HTTP",() => new Wizard_SyncViaSvn().runWizard()))
+                        //.add_MenuItem("Manual Sync Scripts from O2's Svn (using HTTP) ", ()=> execute("Trying Manual SVN Sync via HTTP",() => new Wizard_SyncViaSvn().runWizard()))
                         .add_MenuItem(@"Delete local O2 Scripts folder (C:\O2\O2Scripts_Database)", deleteLocalScriptsFolder);
 
             contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());
@@ -267,7 +268,8 @@ namespace O2.XRules.Database
      	public void showAvailableScripts()
      	{     		
             status("Showing available scripts");
-            var path = XRules_Config.PathTo_XRulesDatabase_fromO2;
+            //var path = XRules_Config.PathTo_XRulesDatabase_fromO2;
+            var path = SvnApi.localRulesDatabase;
 
             Action<TreeView, TreeNode> mapFoldersAndFiles =
                 (targetTreeView, treeNode) =>

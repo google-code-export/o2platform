@@ -11,12 +11,13 @@ using HTMLparserLibDotNet20.O2ExtraCode;
 using System.Xml.Linq;
 using System;
 using SharpSvn;
-using O2.Core.XRules.XRulesEngine;
+//using O2.Core.XRules.XRulesEngine;
 
 namespace O2.Core.XRules.Classes
 {
     public class SvnApi
     {
+        public static string localRulesDatabase = @"C:\O2\O2Scripts_Database\_Scripts";
         public static string svnO2RootFolder = "http://o2platform.googlecode.com/svn/trunk/";		
         //public static string svnO2DatabaseRulesFolder = "http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules";
         public static string svnO2DatabaseRulesFolder = "http://o2platform.googlecode.com/svn/trunk/O2_Scripts/";
@@ -28,7 +29,8 @@ namespace O2.Core.XRules.Classes
             try
             {
                 "in SyncLocalFolderWithO2XRulesDatabase".debug();
-                var targetLocalDir = XRules_Config.PathTo_XRulesDatabase_fromO2;
+                //var targetLocalDir = XRules_Config.PathTo_XRulesDatabase_fromO2;
+                var targetLocalDir = localRulesDatabase;
                 var o2XRulesSvn = svnO2DatabaseRulesFolder;
 
                 "starting Sync with XRules Database to {0}".info(targetLocalDir);

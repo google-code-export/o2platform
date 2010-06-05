@@ -54,6 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeUtils\O2Kernel_Web.cs" />
+    <Compile Include="CodeUtils\O2Svn.cs" />
     <Compile Include="exec.cs" />
     <Compile Include="ExtensionMethods\Logging_ExtensionMethods.cs" />
     <Compile Include="CodeUtils\O2Kernel_Serialize.cs" />

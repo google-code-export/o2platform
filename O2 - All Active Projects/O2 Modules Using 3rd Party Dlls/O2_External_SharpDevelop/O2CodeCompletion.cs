@@ -157,13 +157,13 @@ namespace O2.External.SharpDevelop.Ascx
                     mapDotNetReferencesForCodeComplete();
 
                     // for GraphSharp
-                    addReference("ICSharpCode.AvalonEdit.dll");
+                /*    addReference("ICSharpCode.AvalonEdit.dll");
                     addReference("GraphSharp.dll");
                     addReference("QuickGraph.dll");
                     addReference("GraphSharp.Controls.dll");
                     // for twitter
                     addReference("Newtonsoft.Json.dll");
-                    addReference("Dimebrain.TweetSharp.dll");
+                    addReference("Dimebrain.TweetSharp.dll");*/
                                         
                     foreach (var reference in CompileEngine.getListOfO2AssembliesInExecutionDir())
                         addReference(reference);
