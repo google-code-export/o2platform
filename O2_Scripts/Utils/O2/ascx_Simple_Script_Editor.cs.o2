@@ -158,7 +158,7 @@ namespace O2.XRules.Database.Utils.O2
         	result_Panel = outputPanel.add_Panel();
         	        	
         }
-        
+         
         public void configureGui()
         {
         	result_Panel.visible(false);
@@ -190,7 +190,8 @@ namespace O2.XRules.Database.Utils.O2
 
                        .add_MenuItem("force compilation", (menuitem) => forceCompilation())
                        .add_MenuItem("replace with generated source code", (menuitem) => replaceMainCodeWithGeneratedSource())
-                       .add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode());
+                       .add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode())
+                       .add_MenuItem("reset assembly  download list", () => CompileEngine.CachedCompiledAssemblies = new Dictionary<string,string>());
             contextMenu.add_MenuItem("execution options")
                        .add_MenuItem("execute", (menuitem) => execute())
                        .add_MenuItem("enable /disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter)
@@ -344,7 +345,10 @@ namespace O2.XRules.Database.Utils.O2
                 commandsToExecute.editor().vScroolBar_Enabled(true);
                 commandsToExecute.editor().hScroolBar_Enabled(true);
         	}
-     		commandsToExecute.editor().clearBookmarksAndMarkers();     		
+     		commandsToExecute.editor().clearBookmarksAndMarkers();     	
+     		var currentFile = commandsToExecute.editor().getFullPathTOCurrentSourceCodeFile();
+     		if (currentFile.fileExists())
+     			csharpCompiler.SourceCodeFile = currentFile;
      		csharpCompiler.compileSnippet(codeSnippet);
      	}     	
      	

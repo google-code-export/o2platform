@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 //O2File:KAnalysisArtifacts.cs
 //O2Ref:O2_Interfaces.dll
+//O2Ref:NUnit.Framework.dll
 
 namespace O2.XRules.Database.Interfaces
 {

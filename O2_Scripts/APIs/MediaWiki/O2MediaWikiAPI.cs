@@ -21,7 +21,13 @@ using System.Drawing.Imaging;
 using O2.External.IE.Wrapper;
 using O2.External.IE.ExtensionMethods;
 using O2.XRules.Database.Utils.ExtensionMethods;
+
 //O2File:HtmlAgilityPack_ExtensionMethods.cs
+
+//O2Ref:O2_External_IE.dll
+//O2Ref:System.Xml.Linq.dll
+//O2Ref:System.Xml.dll
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 
 namespace O2.XRules.Database.APIs
 {

@@ -11,8 +11,13 @@ using O2.DotNetWrappers.ExtensionMethods;
 
 using JoeBlogs;
 using JoeBlogs.Structs;
-//O2Ref:WordPress_XmlRpc_JoeBlogs.dll
+
 //O2File:O2MediaWikiApi.cs
+
+//O2Ref:WordPress_XmlRpc_JoeBlogs.dll
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
+//O2Ref:System.Xml.Linq.dll
+//O2Ref:System.Xml.dll
 
 namespace O2.XRules.Database.APIs
 {
