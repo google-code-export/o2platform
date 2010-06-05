@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Drawing;
 using O2.DotNetWrappers.DotNet;
-//O2File:ascx_SimpleTaskGui_ExtensionMethods.cs
+
 namespace O2.XRules.Database._Rules.APIs.Tasks
 {
     public class ascx_SimpleTaskGui : Control

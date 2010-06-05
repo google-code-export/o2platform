@@ -6,6 +6,8 @@ using System.Xml.Serialization;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 //O2File:SecretData_ExtensionMethods.cs
+//O2Ref:System.Xml.Linq.dll
+//O2Ref:System.Xml.dll
 
 namespace O2.XRules.Database.Utils.O2
 {    

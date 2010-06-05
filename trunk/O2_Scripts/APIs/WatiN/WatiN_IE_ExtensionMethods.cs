@@ -10,7 +10,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Reflection;
 using System.Text;
-using O2.Interfaces.O2Core;
+using O2.Interfaces.O2Core; 
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
@@ -25,14 +25,20 @@ using O2.XRules.Database.Utils.O2;
 using WatiN.Core;
 using WatiN.Core.Interfaces;
 using SHDocVw;
-using mshtml;
-//O2Ref:WatiN.Core.1x.dll
-//O2Ref:Interop.SHDocVw.dll
-//O2Ref:Microsoft.mshtml.dll
+using mshtml; 
+
 //O2File:WatiN_IE.cs
 //O2File:ascx_CaptchaQuestion.cs
 //O2File:ascx_AskUserForLoginDetails.cs
 //O2File:ISecretData.cs
+
+//O2Ref:O2_External_IE.dll
+//O2Ref:WatiN.Core.1x.dll
+//O2Ref:Interop.SHDocVw.dll
+//O2Ref:Microsoft.mshtml.dll
+//O2Ref:System.Xml.Linq.dll
+//O2Ref:System.Xml.dll
+//O2Ref:O2_API_Ast.dll
 
 namespace O2.XRules.Database.APIs
 {

@@ -19,6 +19,7 @@ foreach(var file in @"C:\O2\O2Scripts_Database\_Scripts".files("*.cs",true))
 }
  
 //O2Ref:System.Data.dll
+//O2Ref:System.Xml.dll
 //using O2.Views.ASCX.Ascx.MainGUI</SourceCode>
   <ReferencedAssemblies />
 </H2>

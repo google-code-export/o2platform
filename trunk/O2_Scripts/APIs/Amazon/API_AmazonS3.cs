@@ -17,9 +17,11 @@ using O2.XRules.Database.Utils.O2;
 using Amazon.S3.Model;
 using Amazon.S3;
 using Amazon;
-//O2Ref:C:\_O2_SVN\O2 - All Active Projects\_3rdPartyDlls\Amazon_AWSSDK.dll
+
 //O2File:ISecretData.cs
 //O2File:SecretData_ExtensionMethods.cs
+
+//O2Ref:AWSSDK.dll
 
 namespace O2.XRules.Database.APIs
 {	

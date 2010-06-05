@@ -18,6 +18,10 @@ using NUnit.Framework;
 using O2.Views.ASCX.classes;
 using O2.DotNetWrappers.Network;
 using O2.Core.XRules.Ascx;
+//O2Ref:O2_Core_XRules.dll
+
+//O2File:ascx_SvnBrower.cs.o2
+
 
 namespace O2.Script
 {	

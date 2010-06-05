@@ -21,6 +21,9 @@ using O2.Views.ASCX;
 using GraphSharp.Controls;
 using O2.XRules.Database.Utils.O2;
 
+//O2File:ascx_Simple_Script_Editor.cs.o2
+//O2File:Scripts_ExtensionMethods.cs
+
 //O2Ref:GraphSharp.dll
 //O2Ref:GraphSharp.Controls.dll
 //O2Ref:QuickGraph.dll
@@ -30,9 +33,11 @@ using O2.XRules.Database.Utils.O2;
 //O2Ref:ICSharpCode.AvalonEdit.dll
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:O2_API_Visualization.dll
+//O2Ref:O2_API_AST.dll
+//O2Ref:System.Xml.Linq.dll
+//O2Ref:System.Xml.dll
 
-//O2File:ascx_Simple_Script_Editor.cs.o2
-//O2File:Scripts_ExtensionMethods.cs
+
 
 namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 {

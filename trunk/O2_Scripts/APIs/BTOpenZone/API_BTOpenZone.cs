@@ -19,7 +19,11 @@ using O2.XRules.Database.Utils.O2;
 //O2File:WatiN_IE.cs
 //O2Ref:Interop.SHDocVw.dll
 //O2Ref:WatiN.Core.1x.dll
- 
+//O2Ref:O2_External_IE.dll
+//O2Ref:System.Xml.Linq.dll
+//O2Ref:System.Xml.dll
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
+
 namespace O2.XRules.Database.APIs
 {
     public class API_BTOpenZone

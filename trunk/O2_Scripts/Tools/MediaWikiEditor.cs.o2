@@ -24,10 +24,11 @@ using O2.XRules.Database.Utils.O2;
 //O2File:O2PlatformWikiAPI.cs
 //O2File:WordPressAPI.cs
 //O2File:ISecretData.cs
-
+//O2Ref:WordPress_XmlRpc_JoeBlogs.dll
+//O2Ref:O2_External_IE.dll
 
 namespace O2.XRules.Database.Tools
-{
+{ 
     public class MediaWikiEditor : Control
     {     
     	public String FileWithSecretData {get; set;}

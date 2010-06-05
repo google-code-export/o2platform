@@ -19,6 +19,9 @@ using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI; 
 
+//O2Ref:O2_API_AST.dll
+
+ 
 namespace O2.Script
 {
     public class O2_DotNet_Ast_Scanner : Control

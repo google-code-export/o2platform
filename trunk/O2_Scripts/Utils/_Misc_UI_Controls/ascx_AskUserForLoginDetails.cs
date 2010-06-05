@@ -14,6 +14,7 @@ using O2.Views.ASCX.classes.MainGUI;
 using O2.External.IE.ExtensionMethods;
 using O2.XRules.Database.Utils.O2;
 //O2File:ISecretData.cs
+//O2Ref:O2_External_IE.dll
 
 namespace O2.XRules.Database.Utils
 {

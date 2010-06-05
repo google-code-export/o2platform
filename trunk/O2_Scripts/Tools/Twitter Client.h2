@@ -89,6 +89,7 @@ return "done";
  
 //using O2.XRules.Database._Rules._Interfaces
 //using O2.XRules.Database._Rules.APIs 
-//O2File:O2TwitterAPI.cs</SourceCode>
+//O2File:O2TwitterAPI.cs
+//O2Ref:Dimebrain.TweetSharp.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

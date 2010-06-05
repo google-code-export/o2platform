@@ -37,10 +37,23 @@ using O2.XRules.Database.Utils.O2;
 //O2File:HtmlAgilityPack_ExtensionMethods.cs 
 //O2File:Scripts_ExtensionMethods.cs   
 //O2File:ascx_GraphAst_MethodCalls.cs 
+
 //O2Ref:System.Data.dll 
 //O2Ref:O2_API_Visualization.dll 
+//O2Ref:O2_API_AST.dll
+//O2Ref:O2_External_IE.dll
+//O2Ref:System.Xml.Linq.dll
+//O2Ref:System.Xml.dll
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
- 
+//O2Ref:GraphSharp.dll
+//O2Ref:GraphSharp.Controls.dll
+//O2Ref:PresentationFramework.dll 
+//O2Ref:PresentationCore.dll 
+//O2Ref:QuickGraph.dll
+//O2Ref:WindowsBase.dll
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:ICSharpCode.AvalonEdit.dll
+
 namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 {
     public class O2_DotNet_Ast_Engine : UserControl
