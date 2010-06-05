@@ -39,6 +39,7 @@ using mshtml;
 //O2Ref:System.Xml.Linq.dll
 //O2Ref:System.Xml.dll
 //O2Ref:O2_API_Ast.dll
+//O2Ref:Microsoft.mshtml.dll
 
 namespace O2.XRules.Database.APIs
 {
