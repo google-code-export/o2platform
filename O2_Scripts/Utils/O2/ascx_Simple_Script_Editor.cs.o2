@@ -187,11 +187,11 @@ namespace O2.XRules.Database.Utils.O2
             contextMenu.add_MenuItem("current source code")
                        .add_MenuItem("compile", (menuitem) => compile())
                        .add_MenuItem("save", (menuitem) => saveScript())
-
                        .add_MenuItem("force compilation", (menuitem) => forceCompilation())
                        .add_MenuItem("replace with generated source code", (menuitem) => replaceMainCodeWithGeneratedSource())
-                       .add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode())
-                       .add_MenuItem("reset assembly  download list", () => CompileEngine.CachedCompiledAssemblies = new Dictionary<string,string>());
+                       .add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode());
+                       //.add_MenuItem("[Internal Debugging]",false, (menuitem) => swapGeneratedCodeViewMode())
+                       //.add_MenuItem("reset assembly  download list", () => {  new O2.Kernel.CodeUtils.O2Svn.clear_AssembliesCheckedIfExists();  }); 
             contextMenu.add_MenuItem("execution options")
                        .add_MenuItem("execute", (menuitem) => execute())
                        .add_MenuItem("enable /disable Execute on enter", (menuitem) => ExecuteOnEnter = !ExecuteOnEnter)
