@@ -222,6 +222,8 @@ namespace O2.DotNetWrappers.DotNet
                 PublicDI.log.debug("Compilated OK to: {0}", compiledAssembly.Location);
                 return compiledAssembly;
             }
+            foreach (var assembly in referencedAssemblies)
+                "R: {0}".info(assembly);
             PublicDI.log.error("Compilation failed: {0}", errorMessages);
             return null;
         }
@@ -435,8 +437,8 @@ namespace O2.DotNetWrappers.DotNet
         {
             // let's add everything in the current executabled dir :)
             var referencedAssemblies = new List<string>();
-            referencedAssemblies.AddRange(getListOfO2AssembliesInExecutionDir());
-            referencedAssemblies.AddRange(lsGACExtraReferencesToAdd); // the a couple from the GAC
+            referencedAssemblies.add_OnlyNewItems(getListOfO2AssembliesInExecutionDir());
+            referencedAssemblies.add_OnlyNewItems(lsGACExtraReferencesToAdd); // the a couple from the GAC
             return referencedAssemblies;
         }
 
@@ -625,6 +627,25 @@ namespace O2.DotNetWrappers.DotNet
                 return assembly.Location;
             }
             return "";
+        }
+
+        public static void tryToResolveReferencesForCompilation(List<string> referencedAssemblies)
+        {
+            var currentExecutablePath = PublicDI.config.CurrentExecutableDirectory;
+            foreach (var reference in referencedAssemblies)
+            {
+                "Reference: {0}".debug(reference);
+                if (reference.fileExists())
+                {
+                    var expectedFile = currentExecutablePath.pathCombine(reference.fileName());
+                    if (expectedFile.fileExists().isFalse())
+                        Files.Copy(reference, expectedFile);
+                }
+                else
+                {
+                    new O2Svn().tryToFetchAssemblyFromO2SVN(reference);
+                }
+            }
         }
     }
 }

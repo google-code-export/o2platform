@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using O2.Kernel.InterfacesBaseImpl;
+using System.Text;
 
 namespace O2.Kernel.CodeUtils
 {
@@ -79,5 +80,69 @@ namespace O2.Kernel.CodeUtils
                 fs.Close();
             return strContent;
         }
+
+        public static bool WriteFileContent(string targetFile, string newFileContent)
+        {
+            return WriteFileContent(targetFile, newFileContent, false);
+        }
+
+        public static bool WriteFileContent(string targetFile, string newFileContent, bool dontWriteIfTargetFileIsTheSameAsString)
+        {
+            if (O2.Kernel.ExtensionMethods.String_ExtensionMethods.empty(newFileContent))
+                return false;
+            if (File.Exists(targetFile) && dontWriteIfTargetFileIsTheSameAsString)
+            {
+                var existingFileContents = getFileContents(targetFile);
+                if (existingFileContents == newFileContent)
+                    return true;
+            }
+            return WriteFileContent(targetFile, new UTF8Encoding(true).GetBytes(newFileContent));
+        }
+
+        public static bool WriteFileContent(string strFile, Byte[] abBytes)
+        {
+            try
+            {
+                if (File.Exists(strFile))
+                    deleteFile(strFile);
+
+                using (FileStream fs = File.Create(strFile))
+                {
+                    fs.Write(abBytes, 0, abBytes.Length);
+                    fs.Close();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                PublicDI.log.error("Error WriteFileContent {0}", ex.Message);
+            }
+            return false;
+        }
+
+        public static bool deleteFile(String fileToDelete)
+        {
+            return deleteFile(fileToDelete, false);
+        }
+
+        public static bool deleteFile(String fileToDelete, bool logFileDeletion)
+        {
+            try
+            {
+                if (File.Exists(fileToDelete))
+                {
+                    File.Delete(fileToDelete);
+                    if (logFileDeletion)
+                        PublicDI.log.error("Deleted File :{0}:", fileToDelete);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                PublicDI.log.error("In deleteFile:{0}:", ex.Message);
+            }
+            return false;
+        }
+
     }
 }

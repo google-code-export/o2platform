@@ -82,6 +82,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return false;
         }
 
+        public static bool exists(this Uri uri)
+        {
+            return new Web().httpFileExists(uri.str());
+        }
+
         public static string getUrlContents(this Uri uri)
         {
             return uri.getUrlContents(null);

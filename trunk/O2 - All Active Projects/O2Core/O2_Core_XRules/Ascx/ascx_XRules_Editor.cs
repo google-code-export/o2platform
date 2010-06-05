@@ -9,7 +9,7 @@ using O2.Kernel.ExtensionMethods;
 using O2.Kernel.CodeUtils;
 using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX._Wizards;
-using O2.Core.XRules._Wizards;
+//using O2.Core.XRules._Wizards;
 using O2.Core.XRules.Classes;
 
 namespace O2.Core.XRules.Ascx
@@ -106,11 +106,11 @@ namespace O2.Core.XRules.Ascx
                 () => new Wizard_BackupFolder().runWizard(directoryWithXRulesDatabase.getCurrentDirectory()));
         }
 
-        private void btSyncViaSvn_Click(object sender, EventArgs e)
+       /* private void btSyncViaSvn_Click(object sender, EventArgs e)
         {
             O2Thread.mtaThread(
                 () => new Wizard_SyncViaSvn().runWizard(SvnApi.svnO2DatabaseRulesFolder, XRules_Config.PathTo_XRulesDatabase_fromO2));
-        }
+        }*/
 
         /*private void btBrowseSVN_Click(object sender, EventArgs e)
         {
@@ -119,10 +119,10 @@ namespace O2.Core.XRules.Ascx
                     "O2_XRules_Database.exe".type("ascx_SvnBrowser").invokeStatic("openInFloatWindow",DI.SvnXRulesDatabaseUrl));
         }*/
 
-        private void toolStripLabel3_Click(object sender, EventArgs e)
+       /* private void toolStripLabel3_Click(object sender, EventArgs e)
         {
             btSyncViaSvn_Click(null, null); 
-        }
+        }*/
 
         /*private void toolStripLabel4_Click(object sender, EventArgs e)
         {

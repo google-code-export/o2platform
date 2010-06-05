@@ -91,19 +91,19 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2.DotNetWrappers.Windows")
                                      .add("O2.DotNetWrappers.DotNet")
                                      .add("O2.DotNetWrappers.Network")
-                                     .add("O2.External.IE.ExtensionMethods")
-                                     //.add("O2.XRules.Database.ExtensionMethods")
-                                     //.add("O2.XRules.Database._Rules._Interfaces")
-                                     //.add("O2.XRules.Database._Rules.APIs")
-                                     //.add("O2.XRules.Database.O2Utils")
+                // .add("O2.External.IE.ExtensionMethods")
+                //.add("O2.XRules.Database.ExtensionMethods")
+                //.add("O2.XRules.Database._Rules._Interfaces")
+                //.add("O2.XRules.Database._Rules.APIs")
+                //.add("O2.XRules.Database.O2Utils")
                                      .add("O2.External.SharpDevelop.ExtensionMethods")
                                      .add("O2.External.SharpDevelop.Ascx")
                 //O2 XRules Database
                                      .add("O2.XRules.Database.APIs")
                                      .add("O2.XRules.Database.Utils")
-                                     .add("O2.XRules.Database.Utils.O2")
+                                     .add("O2.XRules.Database.Utils.O2");
                 //GraphSharp related
-                                     //.add("O2.Script")
+/*                                     //.add("O2.Script")
                                      .add("GraphSharp.Controls")
                                      .add("O2.API.Visualization.ExtensionMethods")
                                      .add("O2.API.AST.Graph")
@@ -115,7 +115,7 @@ namespace O2.External.SharpDevelop.AST
                 //Scanning AST Engine related
                                      .add("ICSharpCode.NRefactory")
                                      .add("ICSharpCode.NRefactory.Ast")
-                                     .add("ICSharpCode.SharpDevelop.Dom");                
+                                     .add("ICSharpCode.SharpDevelop.Dom"); */
            
 
         }
@@ -129,12 +129,12 @@ namespace O2.External.SharpDevelop.AST
                                      .add("O2_Interfaces.dll")
                                      .add("O2_DotNetWrappers.dll")
                                      .add("O2_Views_Ascx.dll")
-                                     .add("O2_External_IE.dll")
+                //.add("O2_External_IE.dll")
                                      .add("O2_XRules_Database.exe")
                                      .add("O2_External_SharpDevelop.dll")
-                                     .add("O2SharpDevelop.dll")
+                                     .add("O2SharpDevelop.dll");
                 //GraphSharp related
-                                     .add("O2_Api_Visualization.dll")
+/*                                     .add("O2_Api_Visualization.dll")
                                      .add("O2_Api_AST.dll")
                                      .add("QuickGraph.dll")
                                      .add("GraphSharp.dll")
@@ -150,7 +150,7 @@ namespace O2.External.SharpDevelop.AST
                 //Linq to Xsd
                                      .add("System.Xml.dll")
                                      .add("System.Xml.Linq.dll")
-                                     .add("O2_Misc_Microsoft_MPL_Libs.dll");                                     
+                                     .add("O2_Misc_Microsoft_MPL_Libs.dll"); */
         }
 
 		public Dictionary<string,object> getDefaultInvocationParameters()
@@ -442,13 +442,7 @@ namespace O2.External.SharpDevelop.AST
             resolveFileLocationsOfExtraSourceCodeFilesToCompile();                        
 
             //make sure the referenced assemblies are in the current execution directory
-            foreach(var reference in ReferencedAssemblies)
-                if (reference.fileExists())
-                {
-                    var expectedFile = PublicDI.config.CurrentExecutableDirectory.pathCombine(reference.fileName());
-                    if (expectedFile.fileExists().isFalse())
-                        Files.Copy(reference, expectedFile);
-                }
+            CompileEngine.tryToResolveReferencesForCompilation(ReferencedAssemblies);            
 
             if (onlyAddReferencedAssemblies.isFalse())
             {

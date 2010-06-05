@@ -107,7 +107,6 @@
     <Compile Include="Ascx\ascx_XRules_UnitTests.Designer.cs">
       <DependentUpon>ascx_XRules_UnitTests.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\SvnApi.cs" />
     <Compile Include="Classes\UnitTestExecution.cs" />
     <Compile Include="Classes\UnitTestExecutionViewHelpers.cs" />
     <Compile Include="Classes\UnitTestSupport.cs" />
@@ -126,7 +125,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Include="_UnitTests\_Test_XRules_Config.cs" />
-    <Compile Include="_Wizards\Wizard_SyncViaSvn.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ascx\ascx_XRules_Editor.resx">
@@ -176,6 +174,9 @@
       <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
       <Name>O2_Views_ASCX</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="_Wizards\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
