@@ -505,7 +505,8 @@ namespace O2.External.SharpDevelop.AST
                     {
                         var extensionMethod = ExtraSourceCodeFilesToCompile[i].replace(".cs","_ExtensionMethods.cs");
                         if (extensionMethod.fileExists() && ExtraSourceCodeFilesToCompile.contains(extensionMethod).isFalse())
-                            ExtraSourceCodeFilesToCompile.Add(extensionMethod);
+                            if (this.SourceCodeFile !=  extensionMethod)
+                                ExtraSourceCodeFilesToCompile.Add(extensionMethod);
                     }
 
                 }
