@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<H2>
-  <SourceCode>var svnUrl = @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules/";
-var o2BrowserIE = O2Gui.open&lt;O2BrowserIE&gt;("Browse O2 Rules in SVN", 600,200);
-o2BrowserIE.invoke("open",svnUrl);
-//ref O2_External_IE.dll
-//using O2.External.IE.Wrapper</SourceCode>
-  <ReferencedAssemblies />
-</H2>
