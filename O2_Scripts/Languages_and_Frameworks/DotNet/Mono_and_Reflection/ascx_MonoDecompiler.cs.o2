@@ -22,20 +22,14 @@ using O2.External.SharpDevelop.Ascx;
 using O2.DotNetWrappers.Filters;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
+//O2Ref:System.Xml.dll
+//O2Ref:System.Xml.Linq.dll
+//O2Ref:Cecil.Decompiler.dll
+//O2Ref:PostSharp.Laos.dll
+//O2Ref:O2_External_PostSharp.dll
 
 namespace O2.Script
-//O2File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Windows\Ascx_ExtensionMethods_2.cs
-
 {
-
-/*	public class debugTest
-	{
-		public static void test()
-		{
-			O2AscxGUI.launch();
-			new test_ascx_MonoDecompiler().openAscxInNewWindow();
-		}
-	}*/
 
 	[TestFixture]
     public class test_ascx_MonoDecompiler
