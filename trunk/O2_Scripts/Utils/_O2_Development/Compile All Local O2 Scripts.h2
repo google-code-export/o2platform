@@ -29,7 +29,7 @@ foreach(var file in targetFiles)
 							? compiler1Result 
 							: (new O2.DotNetWrappers.DotNet.CompileEngine().compileSourceFile(file) != null); 
 	var rowId = file.extension(".h2")
-							? dataGridView.add_Row(file,compiler1Result, "N/A")
+							? dataGridView.add_Row(file,compiler1Result, compiler1Result)
 							: dataGridView.add_Row(file,compiler1Result, compiler2Result);
 	dataGridView.get_Row(rowId).Cells[0].Style.ForeColor = (compiler1Result &amp;&amp; compiler2Result) ? Color.Green : Color.Red;
 	dataGridView.get_Row(rowId).Cells[1].Style.ForeColor = (compiler1Result) ? Color.Green : Color.Red;
