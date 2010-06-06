@@ -9,9 +9,13 @@ using O2.Core.FileViewers.Struts_1_5;
 //O2Ref:O2_Core_FileViewers.dll
 //O2Ref:nunit.framework.dll
 using NUnit.Framework;
-using O2.XRules.Database._Rules.J2EE.Struts;
 using O2.Interfaces.XRules;
 using O2.Interfaces.O2Findings;
+//O2File:XUtils_Findings_v0_1.cs
+//O2File:XRule_Findings_Filter.cs
+//O2File:XUtils_Struts_v0_1.cs
+using O2.XRules.Database._Rules.J2EE.Struts;
+//O2File:XRule_Struts.cs
 
 namespace O2.XRules.Database._Rules._Samples
 {
