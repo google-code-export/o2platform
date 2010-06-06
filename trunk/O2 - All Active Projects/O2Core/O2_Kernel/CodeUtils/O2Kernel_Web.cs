@@ -10,6 +10,20 @@ namespace O2.Kernel.CodeUtils
 {
     public class O2Kernel_Web
     {
+
+        //need these settings of the WebClient and GetResponseStream Http .NET clients methods will hang
+        //for more references see:
+        //  http://www.cnblogs.com/anders06/archive/2007/01/23/627698.html
+        //  http://blogs.msdn.com/b/darrenj/archive/2005/03/07/386655.aspx
+        //  http://stackoverflow.com/questions/1043234/strange-timeout-webexception-in-http-get-using-webclient 
+        //  http://stackoverflow.com/questions/1485508/the-operation-has-timed-out-with-webclient-downloadfile-and-correct-urls 
+        //   
+        public static void ApplyNetworkConnectionHack()
+        {
+            System.Net.ServicePointManager.DefaultConnectionLimit = 100;
+            System.Net.ServicePointManager.CheckCertificateRevocationList = true;
+        }
+
         public bool httpFileExists(string url)
         {
             return httpFileExists(url, false);
@@ -40,20 +54,28 @@ namespace O2.Kernel.CodeUtils
                 targetFile = Path.Combine(targetFileOrFolder, Path.GetFileName(urlOfFileToFetch));
 
             PublicDI.log.debug("Downloading Binary File {0}", urlOfFileToFetch);
-            using (WebClient webClient = new WebClient())
+            lock (this)
             {
-                try
+                using (WebClient webClient = new WebClient())
                 {
-                    byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
-                    O2Kernel_Files.WriteFileContent(targetFile, pageData);
-                    PublicDI.log.debug("Downloaded File saved to: {0}", targetFile);
+                    int a, b;
+                    System.Threading.ThreadPool.GetMaxThreads(out a, out b);
+                    "GetMaxThreads a={0}, b={1}".error(a, b);
+                    try
+                    {                                                
+                        byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
+                        O2Kernel_Files.WriteFileContent(targetFile, pageData);
+                        PublicDI.log.debug("Downloaded File saved to: {0}", targetFile);
 
-                    GC.Collect();       // because of WebClient().GetRequestStream prob
-                    return targetFile;
-                }
-                catch (Exception ex)
-                {
-                    PublicDI.log.ex(ex);
+                        webClient.Dispose();
+
+                        GC.Collect();       // because of WebClient().GetRequestStream prob
+                        return targetFile;
+                    }
+                    catch (Exception ex)
+                    {
+                        PublicDI.log.ex(ex);
+                    }
                 }
             }
             GC.Collect();       // because of WebClient().GetRequestStream prob

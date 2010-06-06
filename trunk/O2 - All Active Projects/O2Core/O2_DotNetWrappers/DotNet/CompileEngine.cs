@@ -642,7 +642,7 @@ namespace O2.DotNetWrappers.DotNet
                         Files.Copy(reference, expectedFile);
                 }
                 else
-                {
+                {                                                                            
                     new O2Svn().tryToFetchAssemblyFromO2SVN(reference);
                 }
             }

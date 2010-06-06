@@ -12,14 +12,9 @@ namespace O2.Kernel
     internal static class DI
     {        
         static DI()
-        {
-            //O2KernelProcessName = "Generic O2 Kernel Process";
-            //config = PublicDI.config;
-            //log = PublicDI.log;
-            //reflection = PublicDI.reflection;
-            //o2MessageQueue = PublicDI.o2MessageQueue;
-            //appDomainsControledByO2Kernel = PublicDI.appDomainsControledByO2Kernel;
-            //AppDomainUtils.registerCurrentAppDomain();
+        {               
+            //Apply .NET Network Connection hack
+            O2Kernel_Web.ApplyNetworkConnectionHack();
 
             // all these variables need to be setup
             appDomainsControledByO2Kernel = new Dictionary<string, O2AppDomainFactory>();
@@ -27,7 +22,6 @@ namespace O2.Kernel
             reflection = new KReflection();
             o2MessageQueue = KO2MessageQueue.getO2KernelQueue();
             
-
             // before we load the O2Config data (which is loaded from the local disk)
             config = O2ConfigLoader.getKO2Config();
 
