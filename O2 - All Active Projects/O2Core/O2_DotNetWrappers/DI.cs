@@ -31,7 +31,7 @@ namespace O2.DotNetWrappers
 
             sourceCodeMappingFileName = "SourceCodeMappingsFile.xml";
             sourceCodeMappings = SourceCodeMappingsUtils.getSourceCodeMappings();
-            PathToGac = Path.Combine(Environment.GetEnvironmentVariable("windir") ?? "", "Assembly\\GAC_MSIL");
+            PathToGac = Path.Combine(Environment.GetEnvironmentVariable("windir") ?? "", "Assembly\\GAC_MSIL");            
         }
 
         // DI Targets

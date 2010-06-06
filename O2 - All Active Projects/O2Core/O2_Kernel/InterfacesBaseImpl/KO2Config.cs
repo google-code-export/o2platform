@@ -179,7 +179,8 @@ namespace O2.Kernel.InterfacesBaseImpl
         public void closeO2Process()
         {
             PublicDI.log.info("Received request to close down current O2 Process");
-            System.Windows.Forms.Application.Exit();
+            O2Kernel_Processes.KillCurrentO2Process(2000); // wait 2 seconds before killing the process
+            System.Windows.Forms.Application.Exit();            
         }
     }
 
