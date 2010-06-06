@@ -29,8 +29,8 @@ using NUnit.Framework;
 //O2Ref:merlin.dll
 using Merlin;
 using MerlinStepLibrary;
-//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\MerlinWizard_ExtensionMethods_2.cs
-//O2_File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\O2Wizard.cs
+//O2Ref:System.Xml.dll
+//O2Ref:System.Xml.Linq.dll
 
 
 namespace O2.Script

@@ -16,6 +16,8 @@ using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX;
 
 //O2File:extra.cs
+//O2Ref:System.Xml.dll
+//O2Ref:System.Xml.Linq.dll
 
 namespace O2.Script
 {

@@ -26,10 +26,7 @@ using Merlin;
 
 //O2Ref:System.Windows.Forms.dll
 //O2Ref:System.Drawing.dll
-//O2__File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_DotNetWrappers\Network\Netsh.cs
-//O2__File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\MerlinUtils.cs
-//O2__File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\O2Wizard.cs
-//O2__File:C:\O2\O2 - All Active Projects\O2 - All Active Projects\O2Core\O2_Views_ASCX\MerlinWizard\MerlinWizard_ExtensionMethods.cs
+//O2Ref:System.Data.dll
 
 namespace O2.Script
 {
