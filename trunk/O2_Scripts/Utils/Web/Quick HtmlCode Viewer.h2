@@ -106,6 +106,13 @@ foreach(var xPathQuery in sampleXPathQueries)
 
 pageToOpen.sendKeys(defaultPage.line());
 
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs</SourceCode>
+
+//O2File:HtmlAgilityPack_ExtensionMethods.cs
+//using O2.XRules.Database.Utils.ExtensionMethods
+//using O2.External.IE.ExtensionMethods
+//O2Ref:O2_External_IE.dll
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
+//O2Ref:System.Xml.dll
+//O2Ref:System.Xml.Linq.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>
