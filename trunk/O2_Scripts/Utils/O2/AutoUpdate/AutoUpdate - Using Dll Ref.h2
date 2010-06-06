@@ -5,7 +5,7 @@
 	ApplicationDeployment updateCheck = ApplicationDeployment.CurrentDeployment;
 	if (updateCheck == null)
 	{
-		"UpdateCheck object was null, aborting auto update check".error;
+		"UpdateCheck object was null, aborting auto update check".error();
 		return;
 	}
 	UpdateCheckInfo updateCheckInfo = updateCheck.CheckForDetailedUpdate();
@@ -38,8 +38,9 @@ catch(Exception ex)
 {
 	ex.log("in AutoUpdate - Using Dll Ref");
 }
-//return null;
+
 //using System.Deployment.Application
-//O2Ref:System.Deployment.dll</SourceCode>
+//O2Ref:System.Deployment.dll
+</SourceCode>
   <ReferencedAssemblies />
 </H2>
