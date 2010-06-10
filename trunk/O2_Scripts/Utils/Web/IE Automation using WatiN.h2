@@ -5,7 +5,7 @@
 //var ie = topPanel.add_IE();
 var script = topPanel.insert_Below&lt;Panel&gt;().add_Script(false);
 script.InvocationParameters.Add("panel",topPanel); 
-
+script.onCompileExecuteOnce();
 var defaultScript = "// persist the ie objects accross multiple executions".line() +
 					"var ie = panel.tag&lt;WatiN_IE&gt;();".line() +
 					"if (ie == null)".line() +
@@ -33,7 +33,6 @@ script.set_Command(defaultScript);
 
 //O2File:ascx_Simple_Script_Editor.cs.o2
 //O2File:Scripts_ExtensionMethods.cs
-//O2Ref:C:\O2\_tempDir\6-10-2010\tmp57FD.tmp.dll
 
 //using O2.XRules.Database.Utils.O2
 //using WatiN.Core
