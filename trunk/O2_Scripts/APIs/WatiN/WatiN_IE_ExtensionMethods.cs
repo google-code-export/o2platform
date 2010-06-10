@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using System.Reflection;
+using System.Reflection; 
 using System.Text;
 using O2.Interfaces.O2Core; 
 using O2.Kernel;
@@ -235,6 +235,24 @@ namespace O2.XRules.Database.APIs
 			return (image != null)
 					? image.Src
 					: "";
+    	}
+    	
+    	public static List<Uri> uris(this List<WatiN.Core.Image> images)
+    	{
+			return (from image in images
+					select image.Uri).toList();
+    	}
+    	
+    	public static List<string> urls(this List<WatiN.Core.Image> images)
+    	{
+			return (from image in images
+					select image.Uri.str()).toList();
+    	}
+    	
+    	public static List<string> scrs(this List<WatiN.Core.Image> images)
+    	{
+			return (from image in images
+					select image.Src).toList();
     	}
  
  	}
