@@ -249,7 +249,7 @@ namespace O2.XRules.Database.APIs
 					select image.Uri.str()).toList();
     	}
     	
-    	public static List<string> scrs(this List<WatiN.Core.Image> images)
+    	public static List<string> srcs(this List<WatiN.Core.Image> images)
     	{
 			return (from image in images
 					select image.Src).toList();

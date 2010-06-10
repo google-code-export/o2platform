@@ -15,20 +15,33 @@ var defaultScript = "// persist the ie objects accross multiple executions".line
 					"}".line() +
 					"// *********** &lt;start of IE automation script&gt;  ***********".line() +
 					"".line() +
-					"".line() +
+					"".line() +					
 					"ie.open(\"http://www.google.com\");".line() +
-					"ie.link(\"About Google\").flash();".line() +
-					"ie.click(\"About Google\");".line() +
-					"return ie.links();".line() +
+					"ie.link(\"Images\").flash().click();".line() +
+					"ie.field(\"q\").flash().value(\"OWASP\");".line() +
+					"ie.button(\"Search Images\").flash().click();".line() +
+					"foreach(var image in ie.images())".line() +
+					"{".line() +
+					"	image.htmlElement().style.visibility = \"hidden\";".line() +
+					"	this.sleep(100,false);".line() +
+					"	image.htmlElement().style.visibility = \"\";	".line() +
+					"	(image.htmlElement().style as IHTMLStyle3).zoom = \"50%\";".line() +
+					"	this.sleep(100,false);	".line() +
+					"	(image.htmlElement().style as IHTMLStyle3).zoom = \"100%\";	".line() +
+					"}".line() +
+					"//return ie.images().urls();  ".line() +
 					"".line() +
 					"".line() +
 					"// *********** &lt;end of IE automation script&gt;  ***********".line() +
 					"".line() +
 					"//using O2.XRules.Database.APIs".line() +
 					"//using O2.XRules.Database.Utils.O2".line() +
+					"//using mshtml".line() +
 					"".line() +
 					"//O2File:Ref:WatiN_IE_ExtensionMethods.cs ".line() +
-					"//O2Ref:WatiN.Core.1x.dll";
+					"//O2Ref:WatiN.Core.1x.dll".line() + 
+					"//O2Ref:Microsoft.mshtml.dll";
+					
 script.set_Command(defaultScript);
 
 //O2File:ascx_Simple_Script_Editor.cs.o2
