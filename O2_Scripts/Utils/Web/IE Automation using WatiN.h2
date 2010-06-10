@@ -29,7 +29,7 @@ var defaultScript = "// persist the ie objects accross multiple executions".line
 					"	this.sleep(100,false);	".line() +
 					"	(image.htmlElement().style as IHTMLStyle3).zoom = \"100%\";	".line() +
 					"}".line() +
-					"//return ie.images().urls();  ".line() +
+					"return ie.images().urls();  ".line() +
 					"".line() +
 					"".line() +
 					"// *********** &lt;end of IE automation script&gt;  ***********".line() +
