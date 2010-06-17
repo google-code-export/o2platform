@@ -53,6 +53,7 @@ script.set_Command(defaultScript);
 
 //O2Ref:WatiN.Core.1x.dll
 //O2Ref:Interop.SHDocVw.dll
-//O2Ref:Microsoft.mshtml.dll</SourceCode>
+//O2Ref:Microsoft.mshtml.dll
+//O2Ref:O2_External_IE.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>
