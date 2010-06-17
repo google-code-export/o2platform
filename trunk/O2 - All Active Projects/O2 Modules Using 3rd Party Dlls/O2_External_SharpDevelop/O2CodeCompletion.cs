@@ -243,7 +243,7 @@ namespace O2.External.SharpDevelop.Ascx
             try {
             //    if (file.exists())
                     textEditor.Document.FoldingManager.UpdateFoldings(this.DummyFileName, parseInformation);
-            } catch (Exception ex)
+            } catch //(Exception ex)
             {
                 //ex.log(ex);
             }
@@ -308,7 +308,7 @@ namespace O2.External.SharpDevelop.Ascx
                     }
                     catch (Exception ex)
                     {
-                        "in O2CodeCompletion.TextAreaKeyEventHandler".log();
+                        ex.log("in O2CodeCompletion.TextAreaKeyEventHandler");
                     }
                   //  o2Timer.stop();
                 //});
@@ -637,7 +637,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         public int calculateFirstMethodOffset()
         {
-            var offset = 0;            
+            //var offset = 0;            
             var lines = CodeCompleteTargetText.lines();
             var linesToRemove = lines.size() - CodeCompleteCaretLocationOffset.Line +1;
             lines.RemoveRange(CodeCompleteCaretLocationOffset.Line -1, linesToRemove);            

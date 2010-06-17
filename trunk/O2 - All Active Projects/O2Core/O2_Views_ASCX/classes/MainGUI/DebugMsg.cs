@@ -107,7 +107,7 @@ namespace O2.Views.ASCX.classes.MainGUI
                 if (bShowError)
                     insertText("ERROR: " + String.Format(sFormat, oArgs), Color.Red);
             }
-            catch (Exception ex)
+            catch 
             {
                 if (sFormat!= null)
                     insertText("ERROR: " + sFormat, Color.Red);

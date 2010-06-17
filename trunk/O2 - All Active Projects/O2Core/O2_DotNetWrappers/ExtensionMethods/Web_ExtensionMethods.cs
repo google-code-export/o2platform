@@ -23,12 +23,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string htmlEncode(this String stringToEncode)
         {
-            return WebEncoding.urlEncode(stringToEncode);
+            return WebEncoding.htmlEncode(stringToEncode);
         }
 
         public static string htmlDecode(this String stringToEncode)
         {
-            return WebEncoding.urlEncode(stringToEncode);
+            return WebEncoding.htmlDecode(stringToEncode);
         }
 
         public static Uri web(this string _string)

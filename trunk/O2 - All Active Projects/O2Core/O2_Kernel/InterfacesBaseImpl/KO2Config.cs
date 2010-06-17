@@ -78,8 +78,13 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             get
             {
-                var entryAssemblyLocation = Assembly.GetEntryAssembly().Location;
-                return Path.GetDirectoryName(entryAssemblyLocation);                                
+                var entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly != null)
+                {
+                    var entryAssemblyLocation = Assembly.GetEntryAssembly().Location;
+                    return Path.GetDirectoryName(entryAssemblyLocation);
+                }
+                return AppDomain.CurrentDomain.BaseDirectory;                
             }
             set { }
         }

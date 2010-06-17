@@ -6,39 +6,42 @@ using System.Reflection;
 using System.Security;
 using System.Security.Permissions;
 using O2.Kernel.CodeUtils;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.Kernel.Objects
 {
     [Serializable]
     public class O2AppDomainFactory
-    {        
-
-        public AppDomain appDomain;
+    {
+        public String BaseDirectory { get; set; }
+        public AppDomain appDomain { get; set; }
 
         public O2AppDomainFactory(AppDomain _appDomain)
         {
             appDomain = _appDomain;
         }
 
-        // if none is provide then create one a tempfolder in the O2 Temp Dir
+        // if none is provide then create one a tempfolder in the O2 Temp Dir * give it a random name
         public O2AppDomainFactory()
+            : this(DI.config.TempFolderInTempDirectory, Path.GetFileName(DI.config.TempFolderInTempDirectory))
         {
-            string appDomainBaseDirectory = DI.config.TempFolderInTempDirectory;
+            /*string appDomainBaseDirectory = DI.config.TempFolderInTempDirectory;
             var appDomainSetup = new AppDomainSetup {ApplicationBase = appDomainBaseDirectory};
             string appDomainName = Path.GetFileName(appDomainBaseDirectory);
-            createAppDomain(appDomainName, appDomainSetup);
+            createAppDomain(appDomainName, appDomainSetup);*/
         }
 
-        public O2AppDomainFactory(string appDomainName)
-        {
-            // if no tempDirectory is provided default to the current appDomain base dir
-            var appDomainSetup = new AppDomainSetup {ApplicationBase = AppDomain.CurrentDomain.BaseDirectory};
-            createAppDomain(appDomainName, appDomainSetup);
+        public O2AppDomainFactory(string appDomainName) : this (appDomainName, AppDomain.CurrentDomain.BaseDirectory)
+        {        
         }
 
         public O2AppDomainFactory(string appDomainName, string baseDirectory)
         {
-            var appDomainSetup = new AppDomainSetup {ApplicationBase = baseDirectory};
+            var appDomainSetup = new AppDomainSetup {
+                                                        ApplicationBase = baseDirectory,
+                                                        PrivateBinPath = baseDirectory, //PublicDI.config.CurrentExecutableDirectory,
+                                                        ShadowCopyFiles = "true"                                                        
+                                                    };            
             createAppDomain(appDomainName, appDomainSetup);            
         }
 
@@ -46,9 +49,7 @@ namespace O2.Kernel.Objects
             : this(appDomainName, baseDirectory)
         {
             loadAssembliesIntoAppDomain(assembliesToLoadInNewAppDomain);
-        }        
-
-        public String BaseDirectory { get; set; }
+        }               
 
         public AppDomain createAppDomain(string appDomainName)
         {
@@ -77,6 +78,7 @@ namespace O2.Kernel.Objects
                     
                     //Create domain
                     appDomain = AppDomain.CreateDomain(appDomainName, null, appDomainSetup, permissionSet);
+            //        appDomain.AssemblyResolve += new ResolveEventHandler(assemblyResolve);
                     BaseDirectory = appDomain.BaseDirectory;
                     return appDomain;
                 }
@@ -87,6 +89,13 @@ namespace O2.Kernel.Objects
             }
             return null;
         }
+
+        /*static Assembly assemblyResolve(object sender, ResolveEventArgs args)
+        {
+
+            //return Assembly.LoadFile(GetAssemblyFileName());
+            return null;
+        } */
 
         public void loadAssembliesIntoAppDomain(List<string> assembliesToLoad)
         {
@@ -355,22 +364,47 @@ namespace O2.Kernel.Objects
             {
                 // copy if asked to
                 if (copyToAppDomainBaseDirectoryBeforeLoad)
-                    if (File.Exists(pathToAssemblyToLoad))
-                        O2Kernel_Files.Copy(pathToAssemblyToLoad, appDomain.BaseDirectory);
-                    else
-                        DI.log.error(
-                            "copyToAppDomainBaseDirectoryBeforeLoad was set but pathToAssemblyToLoad was set to a file that didn't exist: {0}",
-                            pathToAssemblyToLoad);
-
+                    try
+                    {
+                        if (File.Exists(pathToAssemblyToLoad))
+                            O2Kernel_Files.Copy(pathToAssemblyToLoad, appDomain.BaseDirectory);
+                        else
+                            DI.log.error(
+                                "copyToAppDomainBaseDirectoryBeforeLoad was set but pathToAssemblyToLoad was set to a file that didn't exist: {0}",
+                                pathToAssemblyToLoad);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.log("in load copyToAppDomainBaseDirectoryBeforeLoad");
+                    }
                 // load assembly into AppDomain
-                appDomain.Load(fullAssemblyName);
-                return true;
+                //First try directly
+                appDomain.Load(fullAssemblyName);                
             }
-            catch (Exception ex)
+            catch (Exception ex1)
             {
-                DI.log.ex(ex, "could not load assembly: " + fullAssemblyName);
-                return false;
+                //then try using AssemblyName
+                try
+                {
+                    appDomain.Load(AssemblyName.GetAssemblyName(fullAssemblyName));
+                }
+                catch (Exception ex2)
+                {
+                    // last change load assembly into current appdomain to get its full name and try again
+                    try
+                    {
+                        appDomain.Load(Kernel.ExtensionMethods.Reflection_ExtensionMethods.assembly(fullAssemblyName).FullName);
+                    }
+                    catch (Exception ex3)
+                    {
+                        DI.log.ex(ex1, "could not load assembly (method1): " + fullAssemblyName);
+                        DI.log.ex(ex2, "could not load assembly (method2): " + fullAssemblyName);
+                        DI.log.ex(ex3, "could not load assembly (method3): " + fullAssemblyName);
+                        return false;
+                    }
+                }
             }
+            return true;
         }
 
         public object createAndUnWrap(string dllWithType, string typeToCreateAndUnwrap)
@@ -381,11 +415,19 @@ namespace O2.Kernel.Objects
         public List<String> getAssemblies(bool showFulName)
         {
             var assemblies = new List<String>();
-            foreach (Assembly assembly in appDomain.GetAssemblies())
-                if (showFulName)
-                    assemblies.Add(assembly.FullName);
-                else
-                    assemblies.Add(assembly.GetName().Name);
+            try
+            {
+                if (appDomain != null)
+                    foreach (Assembly assembly in appDomain.GetAssemblies())
+                        if (showFulName)
+                            assemblies.Add(assembly.FullName);
+                        else
+                            assemblies.Add(assembly.GetName().Name);
+            }
+            catch (Exception ex)
+            {
+                DI.log.ex(ex,"in O2AppDomainFactory getAssemblies");
+            }
             return assemblies;
         }
 
@@ -490,7 +532,9 @@ namespace O2.Kernel.Objects
             try
             {
                 DI.log.info("Unloading appDomain: {0}", Name);
-                AppDomain.Unload(appDomain);
+                if (DI.appDomainsControledByO2Kernel.ContainsKey(this.Name))
+                    DI.appDomainsControledByO2Kernel.Remove(this.Name);                
+                AppDomain.Unload(appDomain);                
                 return true;
             }
             catch (Exception ex)

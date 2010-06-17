@@ -17,6 +17,18 @@ namespace O2.Kernel
             return directory;
         }
 
+        public static Control directory(string startDir)
+        {
+            return directory(startDir, true);
+        }
+
+        public static Control directory(string startDir, bool watchFolder)
+        {
+            var control = directory();
+            control.invoke("openDirectory", startDir);
+            control.prop("_WatchFolder", watchFolder);
+            return control;
+        }
         public static TextBox file(string fileToView)
         {
             var title = "Text file: " + fileToView;

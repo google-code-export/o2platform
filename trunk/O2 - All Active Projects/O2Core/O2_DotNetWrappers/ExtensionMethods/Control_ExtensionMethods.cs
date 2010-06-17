@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
@@ -265,7 +266,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
-        public static Control mapToWidth(this Control hostControl, Control control, bool alignToTop)
+        public static T mapToWidth<T>(this Control hostControl, T control, bool alignToTop)
+            where T : Control
         {
             if (alignToTop)
                 control.anchor_TopLeftRight();
@@ -314,6 +316,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return control.controls(false);
         }
 
+        public static List<T> controls<T>(this Control control, bool recursiveSearch)
+            where T : Control
+        {
+            return (from childControl in control.controls(recursiveSearch)
+                    where childControl is T
+                    select (T)childControl).toList();
+        }
+
         public static List<Control> controls(this Control control, bool recursiveSearch)
         {
             if (recursiveSearch)
@@ -343,11 +353,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return allControls;
         }
 
+        public static List<T> controls<T>(this List<Control> controls)
+            where T : Control
+        {
+            return (from control in controls
+                    where control is T
+                    select (T)control).toList();            
+        }
+
         public static List<Control> controls(this List<Control> controls)
         {
             return controls.controls(false);
         }
-
+        
         public static List<Control> controls(this List<Control> controls, bool includeRoot)
         {
             var allControls = new List<Control>();
@@ -548,9 +566,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
             control.ContextMenuStrip = null;
         }
 
-        public static Control clear(this Control control)
+        public static T clear<T>(this T control)
+            where T : Control
         {
-            return (Control)control.invokeOnThread(
+            return (T)control.invokeOnThread(
                 () =>
                 {
                     if (control.Controls.IsReadOnly)
@@ -587,24 +606,28 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region Control - location
 
-        public static Control location(this Control control, int top)
+        public static T location<T>(this T control, int top)
+            where T : Control
         {
             return control.location(top, -1, -1, -1);
         }
 
-        public static Control location(this Control control, int top, int left)
+        public static T location<T>(this T control, int top, int left)
+            where T : Control
         {
             return control.location(top, left, -1, -1);
         }
 
-        public static Control location(this Control control, int top, int left, int width)
+        public static T location<T>(this T control, int top, int left, int width)
+            where T : Control
         {
             return control.location(top, left, width, -1);
         }
 
-        public static Control location(this Control control, int top, int left, int width, int height)
+        public static T location<T>(this T control, int top, int left, int width, int height)
+            where T : Control
         {
-            return (Control)control.invokeOnThread(
+            return (T)control.invokeOnThread(
                 () =>
                 {
                     control.Dock = DockStyle.None;
@@ -625,14 +648,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
         #endregion
 
         #region Control - align
-        public static Control align_Left(this Control control, Control controlToAlignWith)
+        public static T align_Left<T>(this T control, Control controlToAlignWith)
+            where T : Control
         {
             return control.align_Left(controlToAlignWith, 0);
         }
 
-        public static Control align_Left(this Control control, Control controlToAlignWith, int border)
+        public static T align_Left<T>(this T control, Control controlToAlignWith, int border)
+            where T : Control
         {
-            return (Control)control.invokeOnThread(
+            return (T)control.invokeOnThread(
                 () =>
                 {
                     control.Dock = DockStyle.None;
@@ -642,14 +667,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
-        public static Control align_Right(this Control control, Control controlToAlignWith)
+        public static T align_Right<T>(this T control, Control controlToAlignWith)
+            where T : Control
         {
             return control.align_Right(controlToAlignWith, 0);
         }
 
-        public static Control align_Right(this Control control, Control controlToAlignWith, int border)
+        public static T align_Right<T>(this T control, Control controlToAlignWith, int border)
+            where T : Control
         {
-            return (Control)control.invokeOnThread(
+            return (T)control.invokeOnThread(
                         () =>
                         {
                             control.Dock = DockStyle.None;
@@ -659,14 +686,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         });
         }
 
-        public static Control align_Top(this Control control, Control controlToAlignWith)
+        public static T align_Top<T>(this T control, Control controlToAlignWith)
+            where T : Control
         {
             return control.align_Top(controlToAlignWith, 0);
         }
 
-        public static Control align_Top(this Control control, Control controlToAlignWith, int border)
+        public static T align_Top<T>(this T control, Control controlToAlignWith, int border)
+            where T : Control
         {
-            return (Control)control.invokeOnThread(
+            return (T)control.invokeOnThread(
                         () =>
                         {
                             control.Dock = DockStyle.None;
@@ -676,14 +705,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         });
         }
 
-        public static Control align_Bottom(this Control control, Control controlToAlignWith)
+        public static T align_Bottom<T>(this T control, Control controlToAlignWith)
+            where T : Control
         {
             return control.align_Bottom(controlToAlignWith, 0);
         }
 
-        public static Control align_Bottom(this Control control, Control controlToAlignWith, int border)
+        public static T align_Bottom<T>(this T control, Control controlToAlignWith, int border)
+            where T : Control
         {
-            return (Control)control.invokeOnThread(
+            return (T)control.invokeOnThread(
                         () =>
                         {
                             control.Dock = DockStyle.None;
@@ -698,73 +729,85 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region Control - anchor
 
-        public static Control anchor(this Control control)
+        public static T anchor<T>(this T control)
+            where T : Control
         {
             control.Anchor = AnchorStyles.None;
             return control;
         }
 
-        public static Control top(this Control control)
+        public static T top<T>(this T control)
+            where T : Control
         {
             control.Anchor = control.Anchor | AnchorStyles.Top;
             return control;
         }
 
-        public static Control bottom(this Control control)
+        public static T bottom<T>(this T control)
+            where T : Control
         {
             control.Anchor = control.Anchor | AnchorStyles.Bottom;
             return control;
         }
 
-        public static Control left(this Control control)
+        public static T left<T>(this T control)
+            where T : Control
         {
             control.Anchor = control.Anchor | AnchorStyles.Left;
             return control;
         }
 
-        public static Control right(this Control control)
+        public static T right<T>(this T control)
+            where T : Control
         {
             control.Anchor = control.Anchor | AnchorStyles.Right;
             return control;
         }
 
-        public static Control anchor_TopLeft(this Control control)
+        public static T anchor_TopLeft<T>(this T control)
+            where T : Control
         {
             control.anchor().top().left();
             return control;
         }
 
-        public static Control anchor_BottomLeft(this Control control)
+        public static T anchor_BottomLeft<T>(this T control)
+            where T : Control
         {
             control.anchor().bottom().left();
             return control;
         }
 
-        public static Control anchor_TopRight(this Control control)
+        public static T anchor_TopRight<T>(this T control)
+            where T : Control
         {
             control.anchor().top().right();
             return control;
         }
 
-        public static Control anchor_BottomRight(this Control control)
+        public static T anchor_BottomRight<T>(this T control)
+            where T : Control
         {
             control.anchor().bottom().right();
             return control;
         }
 
-        public static Control anchor_TopLeftRight(this Control control)
+        public static T anchor_TopLeftRight<T>(this T control)
+            where T : Control
         {
             control.anchor().top().left().right();
             return control;
         }
 
-        public static Control anchor_BottomLeftRight(this Control control)
+        public static T anchor_BottomLeftRight<T>(this T control)
+            where T : Control
         {
             control.anchor().bottom().left().right();
             return control;
         }
 
-        public static Control anchor_All(this Control control)
+        public static T anchor_All<T>(this T control)
+            where T : Control
         {
             control.anchor().top().right().bottom().left();
             return control;

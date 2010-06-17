@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.O2Misc;
+using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel;
 
@@ -26,7 +27,7 @@ namespace O2.DotNetWrappers.Windows
         }
         public static String Copy(String sSourceFile, String sTargetFileOrFolder, bool overrideFile)
         {
-            string sTargetFile = sTargetFileOrFolder;
+            string sTargetFile = sTargetFileOrFolder;            
             if (Directory.Exists(sTargetFile))
                 sTargetFile = Path.Combine(sTargetFile, Path.GetFileName(sSourceFile));
             try
@@ -620,11 +621,12 @@ namespace O2.DotNetWrappers.Windows
 
         public static void copyFolder(string sourceFolder, string targetFolder)
         {
-            copyFolder(sourceFolder, targetFolder, true /*copyRecursively*/);
+            copyFolder(sourceFolder, targetFolder, true /*copyRecursively*/ , false /*dontCreateSourceFolderInTarget */, "" /*ignoreFolderWith*/);
         }
 
-        public static void copyFolder(string sourceFolder, string targetFolder, bool copyRecursively)
+        public static void copyFolder(string sourceFolder, string targetFolder, bool copyRecursively, bool dontCreateSourceFolderInTarget, string ignoreFolderWith)
         {
+            "Copying folder {0} to  {1}   (copyRecursively: {2} dontCreateSourceFolderInTarget : {3})".format(sourceFolder, targetFolder, copyRecursively, dontCreateSourceFolderInTarget).info() ;
             if (false == Directory.Exists(sourceFolder))
                 PublicDI.log.error("in copyFolder , sourceFolder doesn't exist: {0}", sourceFolder);
             else if (false == Directory.Exists(targetFolder))
@@ -634,15 +636,25 @@ namespace O2.DotNetWrappers.Windows
                 List<string> foldersToCreate = getListOfAllDirectoriesFromDirectory(sourceFolder, copyRecursively);
                 foldersToCreate.Add(sourceFolder);
                 //var filesToCopy = getListOfAllFilesFromDirectory(sourceFolder, copyRecursively);
+                var pathReplaceString = (dontCreateSourceFolderInTarget) 
+                                            ? sourceFolder
+                                            :Path.GetDirectoryName(sourceFolder);
                 foreach (string folder in foldersToCreate)
                 {
-                    string folderToCopyFiles = targetFolder + folder.Replace(Path.GetDirectoryName(sourceFolder), "");
-                    if (false == Directory.Exists(folderToCopyFiles))
-                        Directory.CreateDirectory(folderToCopyFiles);
-
-                    List<string> filesToCopy = getListOfAllFilesFromDirectory(folder, false /*searchRecursively*/);
-                    foreach (string file in filesToCopy)
-                        Copy(file, folderToCopyFiles);
+                    if (ignoreFolderWith.valid().isFalse() || folder.contains(ignoreFolderWith).isFalse())
+                    {
+                        string folderToCopyFiles = targetFolder.pathCombine(folder.Replace(pathReplaceString, ""));
+                        if (false == Directory.Exists(folderToCopyFiles))
+                            Directory.CreateDirectory(folderToCopyFiles);
+                        if (folderToCopyFiles.dirExists())
+                        {
+                            List<string> filesToCopy = getListOfAllFilesFromDirectory(folder, false /*searchRecursively*/);
+                            foreach (string file in filesToCopy)
+                                Copy(file, folderToCopyFiles);
+                        }
+                        else
+                            "in Files.copyFolder, it was not possible to created folder to copy files: {0}".error(folderToCopyFiles);
+                    }
                 }
             }
         }

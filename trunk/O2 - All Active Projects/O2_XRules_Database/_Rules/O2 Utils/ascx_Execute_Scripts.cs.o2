@@ -117,11 +117,13 @@ namespace O2.XRules.Database
             contextMenu.add_MenuItem("View available scripts", () => showAvailableScripts());
             contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());
             contextMenu.add_MenuItem("O2 Script Development &&  Debug")
+                       .add_MenuItem("Open Source Code Editor", () => openSourceCodeEditor())
                        .add_MenuItem("Open Simple Script Editor", () => openSimpleScriptEditor())
                        .add_MenuItem("Open Quick development gui", () => executeScript("Opening Quick Development GUI","ascx_Quick_Development_GUI.cs.o2"))
-                       .add_MenuItem("Open 'Graph' development gui", () => executeScript("Opening Graph With Inspector)", "ascx_GraphWithInspector.cs"))
+                       .add_MenuItem("Open 'Graph' development gui", () => executeScript("Opening Graph With Inspector)", "ascx_GraphWithInspector.cs"))                                              
                        .add_MenuItem("Open XRules/Script Editor", () => open.scriptEditor())
-                       .add_MenuItem("O2 Object Model", () => open.o2ObjectModel())
+                       .add_MenuItem("Show O2 Object Model", () => open.o2ObjectModel())
+                       .add_MenuItem("Show O2 Executable Directry", () => open.directory(PublicDI.config.CurrentExecutableDirectory,true))                       
                        .add_MenuItem("Current Script", false)
                                     .add_MenuItem("View loaded script source Code", () => showLoadedScriptSourceCode())
                                     .add_MenuItem("Execute Again", () => executeCompiledCode());                       
@@ -306,6 +308,13 @@ namespace O2.XRules.Database
             mapFoldersAndFiles(treeView, rootNode);
             treeView.expand(rootNode);            
      	}
+
+        public void openSourceCodeEditor()
+        {
+            var sourceCodeEditor = O2Gui.open<Panel>("Source Code Editor",600,400).add_SourceCodeEditor();
+            var defaultSourceCode = CompileEngine.findScriptOnLocalScriptFolder("Hello_O2_World.cs").fileContents();                                    
+            sourceCodeEditor.open(defaultSourceCode.saveWithExtension(".cs"));
+        }
 
         public void openO2CommandPromt()
         {
