@@ -46,6 +46,11 @@ namespace O2.Views.ASCX.DataViewers
         public void show(object _object)
         {
             buildGui();
+            if (propertyGrid == null)
+            {
+                "in show, propertyGrid was null)".error();
+                return;
+            }
             if (_object is IEnumerable)
             {
                 this.invokeOnThread(

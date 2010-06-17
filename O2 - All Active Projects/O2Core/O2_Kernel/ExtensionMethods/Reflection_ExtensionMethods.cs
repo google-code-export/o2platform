@@ -62,6 +62,8 @@ namespace O2.Kernel.ExtensionMethods
 
         public static Type type(this object _object)
         {
+            if (_object.isNull())
+                return null;
             return _object.GetType();
         }
 

@@ -424,7 +424,10 @@ namespace O2.External.SharpDevelop.Ascx
                 {
                     // create it, if this is the first time we use showAstDetails
                     if (showAstDetails == null)
+                    {
                         showAstDetails = new Ast_CSharp_ShowDetailsInViewer(tecSourceCode, tcSourceInfo);
+                        showAstDetails.update();
+                    }
 
                     showAstDetails.enabled = value;
 
@@ -485,6 +488,7 @@ namespace O2.External.SharpDevelop.Ascx
         private void btSeachAndViewAst_Click(object sender, EventArgs e)
         {
             scCodeAndAst.Panel2Collapsed = !scCodeAndAst.Panel2Collapsed;
+            _ShowSearchAndAstDetails = ! scCodeAndAst.Panel2Collapsed;
         }
 
         private void llPutFilePathInClipboard_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

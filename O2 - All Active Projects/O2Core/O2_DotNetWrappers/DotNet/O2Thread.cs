@@ -1,6 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System.Threading;
 using System;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.DotNetWrappers.DotNet
 {
@@ -36,7 +37,17 @@ namespace O2.DotNetWrappers.DotNet
         public static Thread staThread(FuncVoid codeToExecute, ThreadPriority threadPriority)            
         {
             var stackTrace = getCurrentStackTrace();    // used for cross thread debugging purposes
-            var staThread = new Thread(() => codeToExecute());
+            var staThread = new Thread(()=>{
+                                                try 
+	                                            {	        
+                                                    codeToExecute();
+	                                            }
+	                                            catch (Exception ex)
+	                                            {
+		                                            ex.log("in staThread");
+                                                }
+	                                        });
+   
             staThread.SetApartmentState(ApartmentState.STA);
             staThread.Priority = threadPriority;
             staThread.Start();            

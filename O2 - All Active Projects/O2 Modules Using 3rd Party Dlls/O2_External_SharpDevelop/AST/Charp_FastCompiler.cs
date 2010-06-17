@@ -81,6 +81,9 @@ namespace O2.External.SharpDevelop.AST
                                      .add("System.Drawing")
                                      .add("System.Windows.Forms")
                                      .add("System.Collections.Generic")
+                                     .add("System.Xml")
+                                     .add("System.Xml.Linq")
+                                     .add("System.Linq")
                                      .add("O2.Interfaces")
                                      .add("O2.Kernel")
                                      .add("O2.Kernel.ExtensionMethods")
@@ -124,6 +127,8 @@ namespace O2.External.SharpDevelop.AST
             return new List<string>().add("System.dll")
                                      .add("System.Drawing.dll")
                                      .add("System.Core.dll")
+                                     .add("System.Xml.dll")
+                                     .add("System.Xml.Linq.dll")
                                      .add("System.Windows.Forms.dll")
                                      .add("O2_Kernel.dll")
                                      .add("O2_Interfaces.dll")
@@ -204,9 +209,9 @@ namespace O2.External.SharpDevelop.AST
                 });
         }
 
-        private void compileSourceCode(string sourceCode, bool compiledFromSnipptet)
+        private void compileSourceCode(string sourceCode, bool createdFromSnipptet)
         {
-            compiledFromSnipptet = compiledFromSnipptet;
+            this.CreatedFromSnipptet = createdFromSnipptet;
             compileStack.Push(sourceCode);
             compileSourceCode();
         }
@@ -412,7 +417,7 @@ namespace O2.External.SharpDevelop.AST
         public void mapCodeO2References(Ast_CSharp astCSharp)
         {            
             bool onlyAddReferencedAssemblies = false;
-            generateDebugSymbols = false; // default to not generating debug symbols and creating the assembly only in memory
+//            generateDebugSymbols = false; // default to not generating debug symbols and creating the assembly only in memory
             ExtraSourceCodeFilesToCompile = new List<string>();        	
         	var compilationUnit = astCSharp.CompilationUnit;
             ReferencedAssemblies = new List<string>();
@@ -460,7 +465,7 @@ namespace O2.External.SharpDevelop.AST
         {
             if (ExtraSourceCodeFilesToCompile.size() > 0)
             {                
-                List<string> o2LocalScriptFiles = null;
+                //List<string> o2LocalScriptFiles = null;
                 // try to resolve local file references
                 try
                 {

@@ -67,7 +67,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                    });
         }
 
-        public static Control add_Button(this Control control, string text, int top, int left, MethodInvoker onClick)
+        public static Button add_Button(this Control control, string text, int top, int left, MethodInvoker onClick)
         {
             return control.add_Button(text, top, left, -1, -1, onClick);
         }
@@ -520,7 +520,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
-        public static Control add_SplitContainer_1x1(this Control control, Control childControl_1, string title_2,
+        public static GroupBox add_SplitContainer_1x1(this Control control, Control childControl_1, string title_2,
                                                      bool verticalSplit, int spliterDistance)
         {
             SplitContainer splitControl_1 = control.add_SplitContainer(
@@ -533,14 +533,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return groupBox_2;
         }
 
-        public static Control add_SplitContainer_1x1(this Control control, string title_1, Control childControl_2,
+        public static GroupBox add_SplitContainer_1x1(this Control control, string title_1, Control childControl_2,
                                                      bool verticalSplit, int spliterDistance)
         {
             SplitContainer splitControl_1 = control.add_SplitContainer(
                 verticalSplit, //setOrientationToHorizontal
                 true, // setDockStyleoFill
                 true); // setBorderStyleTo3D
-            return (Control)splitControl_1.invokeOnThread(
+            return (GroupBox)splitControl_1.invokeOnThread(
                 () =>
                 {
                     splitControl_1.SplitterDistance = spliterDistance;
@@ -550,7 +550,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
-        public static Control add_SplitContainer_1x1(this Control control, Control childControl_1,
+        public static SplitContainer add_SplitContainer_1x1(this Control control, Control childControl_1,
                                                      Control childControl_2, bool verticalSplit, int spliterDistance)
         {
             SplitContainer splitControl_1 = control.add_SplitContainer(

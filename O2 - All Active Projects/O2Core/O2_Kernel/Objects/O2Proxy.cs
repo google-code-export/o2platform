@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
+using O2.Kernel.CodeUtils;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.Kernel.Objects
 {
     public class O2Proxy : MarshalByRefObject
-    {        
+    {
+        public bool InvokeInStaThread { get; set; }
+        public bool InvokeInMtaThread { get; set; }
         //  public AppDomain appDomain = AppDomain.CurrentDomain;
 
         /*  public O2AppDomainFactory getO2AppDomainFactoryWithCurrentAppDomain() // use this to get an proxy into the current AppDomain
@@ -163,7 +167,16 @@ namespace O2.Kernel.Objects
                             if (method == null)
                                 DI.log.error("in instanceInvocation method was null : {0} {1}", type, methodToExecute);
                             else
+                            {
+                                if (InvokeInStaThread)
+                                    return O2Kernel_O2Thread.staThread(
+                                        ()=> DI.reflection.invoke(typeObject, method, methodParams));
+                                if (InvokeInMtaThread)
+                                    return O2Kernel_O2Thread.mtaThread(
+                                        () => DI.reflection.invoke(typeObject, method, methodParams));
+
                                 return DI.reflection.invoke(typeObject, method, methodParams);
+                            }
                         }
                     }
                 }
@@ -190,7 +203,8 @@ namespace O2.Kernel.Objects
         {
             try
             {
-                Assembly assembly = AppDomain.CurrentDomain.Load(assemblyToUse);
+                //Assembly assembly = AppDomain.CurrentDomain.Load(assemblyToUse);
+                var assembly = assemblyToUse.assembly();
                 if (assembly == null)
                     DI.log.error("in staticInvocation assembly was null : {0} {1}", assemblyToUse);
                 else
@@ -205,7 +219,14 @@ namespace O2.Kernel.Objects
                             DI.log.error("in staticInvocation method was null : {0} {1}", type, methodToExecute);
                         else
                         {
-                            return DI.reflection.invoke(null, method, methodParams);
+                            if (InvokeInStaThread)
+                                O2Kernel_O2Thread.staThread(
+                                    () => DI.reflection.invoke(null, method, methodParams));
+                            else if (InvokeInMtaThread)
+                                O2Kernel_O2Thread.mtaThread(
+                                    () => DI.reflection.invoke(null, method, methodParams));
+                            else
+                                return DI.reflection.invoke(null, method, methodParams);
                         }
                     }
                 }
@@ -218,5 +239,15 @@ namespace O2.Kernel.Objects
         }
 
         #endregion
+
+
+        public bool staThread()
+        {
+            return InvokeInStaThread;
+        }
+        public void staThread(bool value)
+        {
+            InvokeInStaThread = value;
+        }
     }
 }

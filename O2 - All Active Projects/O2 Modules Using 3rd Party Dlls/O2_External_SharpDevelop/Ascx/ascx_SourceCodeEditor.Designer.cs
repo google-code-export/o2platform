@@ -37,6 +37,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCompileEvery10SecondsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -111,7 +112,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.tcSourceInfo = new System.Windows.Forms.TabControl();
             this.scCodeAndAst = new System.Windows.Forms.SplitContainer();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -138,7 +138,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.compileSettingsToolStripMenuItem,
             this.enableCodeCompleteToolStripMenuItem});
             this.menuStripForSourceEdition.Name = "menuStripForSourceEdition";
-            this.menuStripForSourceEdition.Size = new System.Drawing.Size(354, 268);
+            this.menuStripForSourceEdition.Size = new System.Drawing.Size(354, 246);
             this.menuStripForSourceEdition.Opening += new System.ComponentModel.CancelEventHandler(this.menuStripForSourceEdition_Opening);
             // 
             // compileToolStripMenuItem
@@ -177,6 +177,13 @@ namespace O2.External.SharpDevelop.Ascx
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(353, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem
+            // 
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Name = "enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem";
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Size = new System.Drawing.Size(384, 22);
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Text = "Enable or Disable Auto Backup on Compile Sucess (for CSharp)";
+            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Click += new System.EventHandler(this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem_Click);
             // 
             // openFileToolStripMenuItem
             // 
@@ -694,7 +701,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btSelectedLineHistory.Image = ((System.Drawing.Image)(resources.GetObject("btSelectedLineHistory.Image")));
             this.btSelectedLineHistory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btSelectedLineHistory.Name = "btSelectedLineHistory";
-            this.btSelectedLineHistory.Size = new System.Drawing.Size(23, 22);
+            this.btSelectedLineHistory.Size = new System.Drawing.Size(23, 20);
             this.btSelectedLineHistory.Text = "View Selected Line History";
             this.btSelectedLineHistory.Click += new System.EventHandler(this.btSelectedLineHistory_Click);
             // 
@@ -709,14 +716,14 @@ namespace O2.External.SharpDevelop.Ascx
             this.btShowLogs.Image = ((System.Drawing.Image)(resources.GetObject("btShowLogs.Image")));
             this.btShowLogs.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btShowLogs.Name = "btShowLogs";
-            this.btShowLogs.Size = new System.Drawing.Size(23, 22);
+            this.btShowLogs.Size = new System.Drawing.Size(23, 20);
             this.btShowLogs.Text = "Show Logs";
             this.btShowLogs.Click += new System.EventHandler(this.showLogs_Click);
             // 
             // lbSampleScripts
             // 
             this.lbSampleScripts.Name = "lbSampleScripts";
-            this.lbSampleScripts.Size = new System.Drawing.Size(74, 22);
+            this.lbSampleScripts.Size = new System.Drawing.Size(74, 13);
             this.lbSampleScripts.Text = "sample scripts";
             this.lbSampleScripts.Visible = false;
             // 
@@ -724,7 +731,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.cBoxSampleScripts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxSampleScripts.Name = "cBoxSampleScripts";
-            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 25);
+            this.cBoxSampleScripts.Size = new System.Drawing.Size(121, 21);
             this.cBoxSampleScripts.Visible = false;
             this.cBoxSampleScripts.SelectedIndexChanged += new System.EventHandler(this.cBoxSampleScripts_SelectedIndexChanged);
             // 
@@ -739,7 +746,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btOpenFile.Image = ((System.Drawing.Image)(resources.GetObject("btOpenFile.Image")));
             this.btOpenFile.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btOpenFile.Name = "btOpenFile";
-            this.btOpenFile.Size = new System.Drawing.Size(23, 22);
+            this.btOpenFile.Size = new System.Drawing.Size(23, 20);
             this.btOpenFile.Text = "Open File";
             this.btOpenFile.Click += new System.EventHandler(this.btOpenFile_Click);
             // 
@@ -954,13 +961,6 @@ namespace O2.External.SharpDevelop.Ascx
             this.scCodeAndAst.Size = new System.Drawing.Size(960, 406);
             this.scCodeAndAst.SplitterDistance = 291;
             this.scCodeAndAst.TabIndex = 53;
-            // 
-            // enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem
-            // 
-            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Name = "enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem";
-            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Size = new System.Drawing.Size(384, 22);
-            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Text = "Enable or Disable Auto Backup on Compile Sucess (for CSharp)";
-            this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem.Click += new System.EventHandler(this.enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem_Click);
             // 
             // ascx_SourceCodeEditor
             // 

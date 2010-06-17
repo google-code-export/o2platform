@@ -13,7 +13,13 @@ namespace O2.External.SharpDevelop.ExtensionMethods
     {
         public static Assembly compile(this string pathToFileToCompile)
         {
+            return pathToFileToCompile.compile(false);
+        }
+
+        public static Assembly compile(this string pathToFileToCompile, bool generateDebugSymbols)
+        {
             var csharpCompiler = new CSharp_FastCompiler();
+            csharpCompiler.generateDebugSymbols= generateDebugSymbols;
             var compileProcess = new System.Threading.AutoResetEvent(false);
             csharpCompiler.compileSourceCode(pathToFileToCompile.contents());
             csharpCompiler.onCompileFail = () => compileProcess.Set();
@@ -21,10 +27,15 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             compileProcess.WaitOne();
             return csharpCompiler.assembly();
         }
-
         public static Assembly compile_CodeSnippet(this string codeSnipptet)
         {
+            return codeSnipptet.compile_CodeSnippet(false);
+        }
+
+        public static Assembly compile_CodeSnippet(this string codeSnipptet, bool generateDebugSymbols)
+        {
             var csharpCompiler = new CSharp_FastCompiler();
+            csharpCompiler.generateDebugSymbols= generateDebugSymbols;
             var compileProcess = new System.Threading.AutoResetEvent(false);
             //csharpCompiler.compileSourceCode(pathToFileToCompile.contents());
             csharpCompiler.compileSnippet(codeSnipptet);
@@ -32,6 +43,16 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             csharpCompiler.onCompileOK = () => compileProcess.Set();
             compileProcess.WaitOne();
             return csharpCompiler.assembly();
+        }
+
+        public static Assembly compile_H2Script(this string h2Script)
+        {
+            var sourceCode = "";
+            if (h2Script.extension(".h2"))
+                sourceCode = H2.load(h2Script).SourceCode;            
+            if (sourceCode.valid())
+                return sourceCode.compile_CodeSnippet();
+            return null;
         }
 
         public static Assembly assembly(this CSharp_FastCompiler csharpCompiler)
@@ -56,14 +77,14 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             return assembly;
         }
 
-        public static Assembly compile(this string pathToFileToCompile, bool compileToFileAndWithDebugSymbols)
+        /*public static Assembly compile(this string pathToFileToCompile, bool compileToFileAndWithDebugSymbols)
         {
             string generateDebugSymbolsTag = @"//debugSymbols".line();
             if (pathToFileToCompile.fileContains(generateDebugSymbolsTag).isFalse())
                 pathToFileToCompile.fileInsertAt(0, generateDebugSymbolsTag);
             return pathToFileToCompile.compile();
 
-        }        
+        } */       
 
         public static object executeFirstMethod(this string pathToFileToCompileAndExecute)
         {
@@ -91,7 +112,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 return executeH2Script(pathToFileToCompileAndExecute);
             else
             {
-                var assembly = pathToFileToCompileAndExecute.compile();
+                var assembly = pathToFileToCompileAndExecute.compile(true /* generatedDebug symbols */);
                 return assembly.executeFirstMethod(parameters);
             }
         }
@@ -140,8 +161,24 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 ex.log("in CSharp_FastCompiler.executeMethod");
                 return null;
             }
-        }        
-
+        }
+        public static object executeCodeSnippet(this string sourceCodeToExecute)
+        {
+            return sourceCodeToExecute.executeCodeSnippet();
+        }
+        public static object executeSourceCode(this string sourceCodeToExecute)
+        {
+            try
+            {
+                var assembly = sourceCodeToExecute.compile_CodeSnippet(true);
+                return assembly.executeFirstMethod();
+            }
+            catch (Exception ex)
+            {
+                ex.log("in CSharp_FastCompiler.executeSourceCode");
+                return null;
+            }            
+        }
         public static object executeH2Script(this string h2ScriptFile)
         {
             try

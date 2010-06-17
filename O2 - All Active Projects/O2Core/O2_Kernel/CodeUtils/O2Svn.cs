@@ -56,7 +56,7 @@ namespace O2.Kernel.CodeUtils
                         }
                     }
                 });
-            var maxWait = 30;
+            var maxWait = 60;
             if (thread.Join(maxWait * 1000) == false)
             {
                 if (File.Exists(localFilePath))                

@@ -57,10 +57,7 @@ namespace O2.Kernel.CodeUtils
             lock (this)
             {
                 using (WebClient webClient = new WebClient())
-                {
-                    int a, b;
-                    System.Threading.ThreadPool.GetMaxThreads(out a, out b);
-                    "GetMaxThreads a={0}, b={1}".error(a, b);
+                {        
                     try
                     {                                                
                         byte[] pageData = webClient.DownloadData(urlOfFileToFetch);

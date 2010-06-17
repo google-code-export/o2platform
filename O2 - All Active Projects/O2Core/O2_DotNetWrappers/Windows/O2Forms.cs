@@ -335,6 +335,7 @@ namespace O2.DotNetWrappers.Windows
                 {
                     if (sDirectoryToProcess != "")
                     {
+                        tvTargetTreeView.Visible = false;
                         tvTargetTreeView.Nodes.Clear();
                         String sPreviousDirectory = Path.GetFullPath(Path.Combine(sDirectoryToProcess, ".."));
                         if (Directory.Exists(sPreviousDirectory))
@@ -366,6 +367,7 @@ namespace O2.DotNetWrappers.Windows
                                     tvTargetTreeView.Nodes.Add(newTreeNode(Path.GetFileName(sFile), sFile, 1, sFile));
                             }
                         }
+                        tvTargetTreeView.Visible = true;
 
                         //   if (null != lCurrentLoadedDirectory)
                         //       lCurrentLoadedDirectory.Text = Path.GetFileName(sDirectoryToProcess);

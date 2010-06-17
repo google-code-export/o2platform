@@ -13,6 +13,9 @@ namespace O2.Kernel.InterfacesBaseImpl
 	
     public class KReflection : IReflection
     {
+        public const BindingFlags BindingFlagsAll = BindingFlags.Public | BindingFlags.NonPublic |
+                                                             BindingFlags.Instance | BindingFlags.Static;
+
         public const BindingFlags BindingFlagsAllDeclared = BindingFlags.Public | BindingFlags.NonPublic |
                                                              BindingFlags.Instance | BindingFlags.Static |
                                                              BindingFlags.DeclaredOnly;
@@ -251,11 +254,18 @@ namespace O2.Kernel.InterfacesBaseImpl
         {
             var methods = getMethods(type);
             var results = new List<MethodInfo>();
-            foreach(var method in methods)
+            try
             {
-                var attributes = getAttributes(method);
-                if (attributes.Contains(attribute))
-                    results.Add(method);
+                foreach (var method in methods)
+                {
+                    var attributes = getAttributes(method);
+                    if (attributes.Contains(attribute))
+                        results.Add(method);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in KReflection.getMethods(Type type, Attribute attribute)");
             }
             return results;
         }
@@ -304,7 +314,7 @@ namespace O2.Kernel.InterfacesBaseImpl
 
         public List<MethodInfo> getMethods(Type type)
         {
-            return (type == null) ? new List<MethodInfo>() : new List<MethodInfo>(type.GetMethods());
+            return (type == null) ? new List<MethodInfo>() : new List<MethodInfo>(type.GetMethods(BindingFlagsAllDeclared));
         }
 
         public MethodInfo getMethod(string pathToAssembly, string methodName)
@@ -675,6 +685,7 @@ namespace O2.Kernel.InterfacesBaseImpl
 
         public Assembly loadAssembly(string assemblyToLoad)
         {
+            // try with load method #1
             try
             {
                 new O2Svn().tryToFetchAssemblyFromO2SVN(assemblyToLoad);
@@ -683,21 +694,30 @@ namespace O2.Kernel.InterfacesBaseImpl
             }
             catch (Exception ex1)
             {
-            	try
-            	{                                        
-            		var assembly = Assembly.LoadWithPartialName(assemblyToLoad);
-            		if (assembly != null)
-            		{
-            			//PublicDI.log.info("load using partial name ('{0}') assembly: {1}",assemblyToLoad, assembly.Location); 
-            			return assembly;
-            		}
-            		PublicDI.log.error("load using partial name ('{0}') returned null",assemblyToLoad);
-            	}
-            	catch  (Exception ex2)
-            	{
-            		PublicDI.log.error("in loadAssembly (Assembly.LoadFrom) :{0}", ex1.Message);
-            		PublicDI.log.error("in loadAssembly (Assembly.Load) :{0}", ex2.Message);
-            	}            	                
+                // try with load method #2
+                try
+                {
+                    return Assembly.Load(AssemblyName.GetAssemblyName(assemblyToLoad).FullName);
+                }
+                catch (Exception ex2)
+                {
+                    // try with load method #3
+            	    try
+            	    {                                        
+            		    var assembly = Assembly.LoadWithPartialName(assemblyToLoad);
+            		    if (assembly != null)
+            		    {
+            			    //PublicDI.log.info("load using partial name ('{0}') assembly: {1}",assemblyToLoad, assembly.Location); 
+            			    return assembly;
+            		    }
+            		    PublicDI.log.error("load using partial name ('{0}') returned null",assemblyToLoad);
+            	    }                	
+                    catch  (Exception ex3)
+            	    {
+            		    PublicDI.log.error("in loadAssembly (Assembly.LoadFrom) :{0}", ex1.Message);
+            		    PublicDI.log.error("in loadAssembly (Assembly.Load) :{0}", ex2.Message);
+            	    }
+                }
             }
             return null;
         }
@@ -989,8 +1009,8 @@ namespace O2.Kernel.InterfacesBaseImpl
                 var constructorArgumentTypes = new List<Type>();
                 if (constructorArguments != null)
                     foreach (object argument in constructorArguments)
-                        constructorArgumentTypes.Add(argument.GetType());                                            
-                ConstructorInfo constructor = type.GetConstructor(constructorArgumentTypes.ToArray());
+                        constructorArgumentTypes.Add(argument.GetType());
+                ConstructorInfo constructor = type.GetConstructor(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance, null, constructorArgumentTypes.ToArray(), null);
                 if (constructor == null)
                 {                	
                 	"In createObject, could not find constructor for type: {0}"
