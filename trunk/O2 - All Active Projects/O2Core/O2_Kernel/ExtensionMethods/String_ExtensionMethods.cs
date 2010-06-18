@@ -63,10 +63,17 @@ namespace O2.Kernel.ExtensionMethods
 
         public static bool contains(this string targetString, List<string> stringsToFind)
         {
-            if (stringsToFind != null)
+            return targetString.contains(stringsToFind.ToArray());
+        }
+
+        public static bool contains(this string targetString, params string[] stringsToFind)
+        {
+            if (stringsToFind.notNull())
+            {
                 foreach (var stringToFind in stringsToFind)
-                    if (targetString.contains(stringToFind))
+                    if (targetString.Contains(stringToFind))
                         return true;
+            }
             return false;
         }
    

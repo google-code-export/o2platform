@@ -217,7 +217,7 @@
 
         /// <summary>
         /// INS key
-        /// </summary>
+        /// </summary>"start X:{0}".info();
         INSERT = 0x2D,
 
         /// <summary>
