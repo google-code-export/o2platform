@@ -65,6 +65,12 @@ using Fusion8.Cropper.Core;
 
 #endregion
 
+
+
+using Splicer.WindowsMedia;
+using Splicer.Renderer;
+using Splicer.Timeline;
+
 namespace Fusion8.Cropper
 {
 	/// <summary>
@@ -80,6 +86,35 @@ namespace Fusion8.Cropper
 		[STAThread]
 		public static void Main()
 		{
+
+
+            //var outputFile = PublicDI.config.getTempFileInTempDirectory(".wmv");
+            
+            var imagesFolder = @"C:\Documents and Settings\Administrator\My Documents\Downloads\splicer-49146\src\";
+            var outputFile = imagesFolder + "aaab.wmv";
+            //var images = imagesFolder.files("*.jpg");
+            var timeline = new DefaultTimeline();
+            var group = timeline.AddVideoGroup(32 /*bitCount*/, 160 /*width*/ , 100 /*height*/);
+            var videoTrack = group.AddTrack();
+            var clip1 = videoTrack.AddImage(imagesFolder + "image1.jpg", 0 /*offset*/ , 2/*clipEnd*/);
+            var clip2 = videoTrack.AddImage(imagesFolder + "image2.jpg", 0, 2);
+            var clip3 = videoTrack.AddImage(imagesFolder + "image3.jpg", 0, 2);
+            var clip4 = videoTrack.AddImage(imagesFolder + "image4.jpg", 0, 2);
+
+            //show.info(timeline);
+            var audioTrack = timeline.AddAudioGroup().AddTrack();
+            //var audio = audioTrack.AddAudio(imagesFolder.pathCombine("testinput.wav"),videoTrack.Duration);
+
+            var renderer = new WindowsMediaRenderer(timeline, outputFile, WindowsMediaProfiles.HighQualityVideo);
+            //"before render".debug();
+            renderer.Render();
+            //"after render".debug();
+            //  "file exists:{0}".info(outputFile.fileExists());
+
+
+
+            return;
+
             bool isFirstInstance;
             Mutex mutex = new Mutex(false, "Local\\Cropper", out isFirstInstance);
             if (Configuration.Current.AllowMultipleInstances || isFirstInstance)

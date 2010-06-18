@@ -54,7 +54,7 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
@@ -133,6 +133,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
+    <Content Include="_ExtraProjects\Splicer\ASL - Apache Software Foundation License.txt" />
+    <Content Include="_ExtraProjects\Splicer\Utilities\Audio\Formats.txt" />
     <Compile Include="Core\CircularQueue%271.cs" />
     <Compile Include="Core\Configuration.cs" />
     <Compile Include="Core\ConfigurationPersistence.cs" />
@@ -260,6 +262,121 @@
     </Compile>
     <Compile Include="Settings\SharedAssemblyInfo.cs" />
     <Compile Include="Settings\VersionAssemblyInfo.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\amstream.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\amvideo.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\atscpsipparser.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\austream.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\AxCore.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\AXExtend.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\BDAIface.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Bdatif.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\BDATypes.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Control.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\DES.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\DevEnum.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\DMODShow.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\dsattrib.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\DsUtils.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\dvbsiparser.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\DVDIf.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\DynGraph.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\encdec.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\EvCode.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\IL21Dec.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\MediaObj.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\MediaParam.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Misc.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Mixerocx.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\mmstream.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\mpconfig.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Mpeg2Data.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\mpeg2psiparser.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Mpeg2Structs.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\other.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\PlayList.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\QEdit.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\qnetwork.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\RegBag.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Sbe.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Tuner.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\TvRatings.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Uuids.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Vidcap.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\VidPort.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\Vmr9.cs" />
+    <Compile Include="_ExtraProjects\DirectShowLibV2-1\VmRender.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="_ExtraProjects\Splicer\Renderer\AbstractProgressParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\AbstractRenderer.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\AbstractSampleGrabbingParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\AbstractWatermarkParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\AviFileRenderer.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\CallbackHandler.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\ConsoleProgressParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\ICallbackParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\ImagesToDiskParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\ImageWatermarkParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\IRenderer.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\NativeMethods.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\NullRenderer.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\PercentageProgressParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\RendererAsyncResult.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\RenderProgressEventArgs.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\SampleTimeWatermarkParticipant.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\WavFileRenderer.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\WindowRenderer.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Renderer\WindowsMediaRenderer.cs" />
+    <Compile Include="_ExtraProjects\Splicer\SplicerException.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\AbstractComposition.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\AudioVideoClipPair.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Clip.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Composition.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\DefaultTimeline.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Effect.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\EffectDefinition.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\EffectParameters.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Group.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\GroupType.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Interfaces.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Interval.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\IntervalMode.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\KeyTransitionParameter.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\KeyTransitionType.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\MediaFile.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Parameter.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\StandardEffects.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\StandardFilters.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\StandardTransitions.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\TimelineBuilder.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Track.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\Transition.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\TransitionDefinition.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Timeline\VirtualClip.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\AddOnlyCollection.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\Audio\AudioCompressor.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\Audio\AudioCompressorFactory.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\Audio\AudioEncoder.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\Audio\AudioEncoderCollection.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\Audio\AudioFormat.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\Audio\WavFormatInfo.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\Audio\WavFormatInfoCollection.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\Audio\WavFormatInfoTools.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\DisposalCleanup.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\FilterGraphTools.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\LibraryRegistration.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\MediaFileRegistration.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\MediaInspector.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\MediaTypeTools.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\NativeMethods.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\PinQueryInfo.cs" />
+    <Compile Include="_ExtraProjects\Splicer\Utilities\RegisteredMediaExtension.cs" />
+    <Compile Include="_ExtraProjects\Splicer\WindowsMedia\IWmProfileManager.cs" />
+    <Compile Include="_ExtraProjects\Splicer\WindowsMedia\NativeMethods.cs" />
+    <Compile Include="_ExtraProjects\Splicer\WindowsMedia\WindowsMediaProfiles.cs" />
     <EmbeddedResource Include="Core\HotKeySelection.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -304,6 +421,11 @@
       <DependentUpon>SR.strings</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="_ExtraProjects\Splicer\Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Splicer.Properties</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="Core\Resources\SR.strings">
@@ -317,6 +439,21 @@
       <LastGenOutput>SR.cs</LastGenOutput>
       <CustomToolNamespace>Fusion8.Cropper</CustomToolNamespace>
     </None>
+    <EmbeddedResource Include="_ExtraProjects\Splicer\WindowsMedia\BiggerHighQualityVideo.prx">
+      <CustomToolNamespace>Splicer.WindowsMedia</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_ExtraProjects\Splicer\WindowsMedia\HighQualityVideo.prx">
+      <CustomToolNamespace>Splicer.WindowsMedia</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_ExtraProjects\Splicer\WindowsMedia\LowQualityAudio.prx">
+      <CustomToolNamespace>Splicer.WindowsMedia</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_ExtraProjects\Splicer\WindowsMedia\LowQualityVideo.prx">
+      <CustomToolNamespace>Splicer.WindowsMedia</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="_ExtraProjects\Splicer\WindowsMedia\MediumQualityAudio.prx">
+      <CustomToolNamespace>Splicer.WindowsMedia</CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
