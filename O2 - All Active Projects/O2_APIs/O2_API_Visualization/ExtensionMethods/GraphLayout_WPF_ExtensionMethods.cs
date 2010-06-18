@@ -24,7 +24,7 @@ using System.Windows.Controls;
 namespace O2.API.Visualization.ExtensionMethods
 {
     public static class GraphLayout_WPF_ExtensionMethods
-    {
+    {        
 
         #region adding and creating
 
@@ -88,8 +88,8 @@ namespace O2.API.Visualization.ExtensionMethods
 		{
             var button = graphLayout.add_UIElement<Button>();
 			button.set(text);
-			button.width(width);
-			button.height(height);
+			button.width_Wpf(width);
+			button.height_Wpf(height);
 			return button;
 		}
 		
@@ -115,9 +115,9 @@ namespace O2.API.Visualization.ExtensionMethods
 						var bitmap = new BitmapImage(uri);
 						image.Source = bitmap; 
 						if (width > -1)
-							image.width(width);
+							image.width_Wpf(width);
 						if (height > -1)
-							image.height(height);
+                            image.height_Wpf(height);
 						return image;
 					});
 		}

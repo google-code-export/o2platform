@@ -85,6 +85,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="classes\MainGUI\WinFormsUILog.cs" />
+    <Compile Include="ExtensionMethods\ascx_TableList_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CoreControls_ExtensionMethods.cs" />
     <Compile Include="classes\CreateDataTable.cs" />
     <Compile Include="classes\ImagesLists.cs" />
@@ -93,8 +94,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="classes\MainGUI\WinForms.cs" />
-    <Compile Include="ExtensionMethods\DataViewers_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\FindingsViewer_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\MainGui_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\WinForms_ExtensionMethods.cs" />
     <Compile Include="classes\O2CoreResources.Designer.cs">
       <DependentUpon>O2CoreResources.resx</DependentUpon>

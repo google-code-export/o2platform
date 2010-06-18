@@ -64,6 +64,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
         #endregion
 
+
         public static string fileName(this string file)
         {
             if (file.valid())
@@ -172,6 +173,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static bool isFolder(this string path)
         {
             return path.dirExists();
+        }
+
+        public static bool isBinaryFormat(this string file)
+        {
+            return file.fileContents().Contains("\0");
         }
 
         public static bool dirExists(this string path)

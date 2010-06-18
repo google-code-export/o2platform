@@ -5,31 +5,67 @@ using System.Text;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.ExtensionMethods;
+using System.Drawing;
+using System.IO;
 
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class Web_ExtensionMethods
-    {  
-        public static string urlEncode(this String stringToEncode)
+    {
+
+        #region get data (via web requests)
+
+        public static string getHtml(this Uri uri, bool showDebugMessage)
         {
-            return WebEncoding.urlEncode(stringToEncode);
+            showDebugMessage.ifInfo("Downloading html code for: {0}", uri.str());
+            return uri.getHtml();
+        }        
+
+        public static string getUrlContents(this Uri uri)
+        {
+            return uri.getUrlContents(null);
         }
 
-        public static string urlDecode(this String stringToEncode)
+        public static string getUrlContents(this Uri uri, string cookies)
         {
-            return WebEncoding.urlDecode(stringToEncode);
+            return new Web().getUrlContents(uri.str(), cookies, false);
         }
 
-        public static string htmlEncode(this String stringToEncode)
+        public static string getHtml(this Uri uri)
         {
-            return WebEncoding.htmlEncode(stringToEncode);
+            return uri.getUrlContents();
         }
 
-        public static string htmlDecode(this String stringToEncode)
+        public static string getHtmlAndSave(this Uri uri)
         {
-            return WebEncoding.htmlDecode(stringToEncode);
+            return uri.getHtmlAndSaveOnFolder(uri.o2Temp2Dir());
         }
+
+        public static string getHtmlAndSaveOnFolder(this Uri uri, string targetFolder)
+        {
+            var html = uri.getHtml();
+            if (html.valid())
+            {
+                var targeFileName = targetFolder.pathCombine(uri.fileNameFriendly());
+                return html.save(targeFileName);
+            }
+            return "";
+        }
+
+        public static Bitmap getImageAsBitmap(this Uri uri)
+        {
+            var webClient = new System.Net.WebClient();
+            var imageBytes = webClient.DownloadData(uri);
+            "image size :{0}".info(imageBytes.size());
+            var memoryStream = new MemoryStream(imageBytes);
+            var bitmap = new Bitmap(memoryStream);
+            return bitmap;
+        }
+
+        #endregion
+
+        #region uri and web links
 
         public static Uri web(this string _string)
         {
@@ -82,45 +118,42 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return false;
         }
 
-        public static bool exists(this Uri uri)
-        {
-            return new Web().httpFileExists(uri.str());
-        }
-
-        public static string getUrlContents(this Uri uri)
-        {
-            return uri.getUrlContents(null);
-        }
-
-        public static string getUrlContents(this Uri uri, string cookies)
-        {
-            return new Web().getUrlContents(uri.str(), cookies,false);
-        }
-
-        public static string getHtml(this Uri uri)
-        {
-            return uri.getUrlContents();
-        }
-
         public static string fileNameFriendly(this Uri uri)
         {
             return Files.getSafeFileNameString(uri.str());
         }
 
-        public static string getHtmlAndSave(this Uri uri)
+        public static bool exists(this Uri uri)
         {
-            return uri.getHtmlAndSaveOnFolder(uri.o2Temp2Dir());
+            return new Web().httpFileExists(uri.str());
         }
 
-        public static string getHtmlAndSaveOnFolder(this Uri uri, string targetFolder)
-        {            
-            var html = uri.getHtml();
-            if (html.valid())
-            {
-                var targeFileName = targetFolder.pathCombine(uri.fileNameFriendly());
-                return html.save(targeFileName);
-            }
-            return "";
+        public static string hostUrl(this Uri uri)
+        {
+            return "{0}://{1}".format(uri.Scheme, uri.Host);
+        }
+        #endregion 
+        
+        #region encode/decode
+
+        public static string urlEncode(this String stringToEncode)
+        {
+            return WebEncoding.urlEncode(stringToEncode);
+        }
+
+        public static string urlDecode(this String stringToEncode)
+        {
+            return WebEncoding.urlDecode(stringToEncode);
+        }
+
+        public static string htmlEncode(this String stringToEncode)
+        {
+            return WebEncoding.htmlEncode(stringToEncode);
+        }
+
+        public static string htmlDecode(this String stringToEncode)
+        {
+            return WebEncoding.htmlDecode(stringToEncode);
         }
 
         public static byte[] asciiBytes(this string stringToConvert)
@@ -178,6 +211,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return null;
             }
         }
+
+        #endregion
 
 
     }

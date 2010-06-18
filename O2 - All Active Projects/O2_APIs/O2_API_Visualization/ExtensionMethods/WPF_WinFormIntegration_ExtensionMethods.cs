@@ -100,7 +100,7 @@ namespace O2.API.Visualization.ExtensionMethods
 
 		#region ElementHost
 		
-		public static T add_Control<T>(this ElementHost elementHost) where T : UIElement
+		public static T add_Control_Wpf<T>(this ElementHost elementHost) where T : UIElement
     	{
     		return (T)elementHost.invokeOnThread(
     			()=>{
@@ -136,7 +136,7 @@ namespace O2.API.Visualization.ExtensionMethods
 		
 		public static GraphLayout add_Graph(this ElementHost elementHost)
     	{
-    		var graphLayout = elementHost.add_Control<GraphLayout>();    		
+            var graphLayout = elementHost.add_Control_Wpf<GraphLayout>();    		
     		graphLayout.background(Brushes.White);
     		graphLayout.newGraph();  			
 			return graphLayout;
@@ -144,7 +144,7 @@ namespace O2.API.Visualization.ExtensionMethods
 		    	
     	public static ZoomControl add_Zoom(this ElementHost elementHost)
     	{
-    		return elementHost.add_Control<ZoomControl>();    		    		    					
+            return elementHost.add_Control_Wpf<ZoomControl>();    		    		    					
     	}    	    	    	
     	    	
     	#endregion
@@ -197,9 +197,9 @@ namespace O2.API.Visualization.ExtensionMethods
 		{
 			return (T)graphLayout.wpfInvoke(
     			()=>{
-    					var controlHost = graphLayout.add_UIElement<WindowsFormsHost>(); 
-						controlHost.width(width);
-						controlHost.height(height);
+    					var controlHost = graphLayout.add_UIElement<WindowsFormsHost>();
+                        controlHost.width_Wpf(width);
+                        controlHost.height_Wpf(height);
 						var winFormsControl = (System.Windows.Forms.Control)typeof(T).ctor();	
 						winFormsControl.Dock = System.Windows.Forms.DockStyle.Fill;
 						controlHost.Child = winFormsControl;
@@ -230,13 +230,90 @@ namespace O2.API.Visualization.ExtensionMethods
  * */
     	
     	
-    	#region WinForms to WPF host - Web Browser
+    	#region WinForms inside WPF 
     		
 		public static O2BrowserIE add_WebBrowser(this GraphLayout graphLayout)
 		{
 			return (O2BrowserIE)graphLayout.add_WinForm<O2BrowserIE>(800,400);
 		}
-		
+
+        public static System.Windows.Forms.Panel add_WinForms_Panel(this UIElement uiElement)
+        {
+            return uiElement.add_WinFormToWPF<System.Windows.Forms.Panel>();
+        }
+
+        public static T add_WinFormToWPF<T>(this UIElement uiElement)
+            where T : System.Windows.Forms.Control
+        {
+            return (T)uiElement.wpfInvoke(
+            () =>
+            {
+                try
+                {
+                    var controlHost = uiElement.add_Control_Wpf<WindowsFormsHost>();
+                    var winFormsControl = (System.Windows.Forms.Control)typeof(T).ctor();
+                    if (winFormsControl.isNull())
+                        "in UIElement add_WinFormToWPF, new control of Type {0} could not be created".error(typeof(T).typeFullName());
+                    else
+                    {
+                        winFormsControl.width(400) 		// give the panel a decent size to that it doesn't cause problems during the new T Control dynamic Gui creation
+                                       .height(400);
+                        //"in UIElement add_WinFormToWPF, new control created ok: {0}".info(typeof(T).typeFullName());
+                        winFormsControl.Dock = System.Windows.Forms.DockStyle.Fill;
+                        controlHost.Child = winFormsControl;
+                        return (T)winFormsControl;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.log("in UIElement add_WinFormToWPF");
+
+                }
+                return null;
+            });
+        }
+
+
+
+        // WPF Winforms TreeView
+        public static System.Windows.Forms.TreeView showStructureInTreeView(this UIElement uiElement, System.Windows.Forms.TreeView treeView)
+        {
+            treeView.clear();
+            uiElement.showStructureInTreeNode(treeView.rootNode());
+            return treeView;
+        }
+
+        public static System.Windows.Forms.TreeNode showStructureInTreeNode(this UIElement uiElement, System.Windows.Forms.TreeNode treeNode)
+        {
+            var uiElementNode = treeNode.add_Node(uiElement.typeName());
+            uiElement.wpfInvoke(
+                () =>
+                {
+                    if (uiElement is ContentControl)
+                    {
+                        var content = (uiElement as ContentControl).Content;
+                        if (content is UIElement)
+                            (content as UIElement).showStructureInTreeNode(uiElementNode);
+                    }
+                    if (uiElement is Panel)
+                    {
+                        var children = (uiElement as Panel).Children;
+                        foreach (var child in children)
+                            if (child is UIElement)
+                                (child as UIElement).showStructureInTreeNode(uiElementNode);
+
+                        //if (content is UIElement)
+                        //	(content as UIElement).showStructureInTreeNode(uiElementNode);
+                        //uiElementNode.add_Node("{0} children".format(children.size()));
+                    }
+                });
+            return uiElementNode;
+        }
+
 		#endregion
+
+
+
+
     }
 }

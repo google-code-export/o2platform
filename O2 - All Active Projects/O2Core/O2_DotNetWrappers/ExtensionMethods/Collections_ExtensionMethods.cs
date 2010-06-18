@@ -9,6 +9,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class Collections_ExtensionMethods
     {
+        #region IEnumerable
+
         public static string toString<T>(this IEnumerable<T> sequence) where T : class
         {
             var value = "";
@@ -28,37 +30,37 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 action(item);
         }
 
+        public static void forEach<T>(this IEnumerable collection, Action<T> action)
+        {
+            foreach (var item in collection)
+                if (item is T)
+                    action((T)item);
+        }
+
+        public static List<T> toList<T>(this IEnumerable<T> collection)
+        {
+            return (collection != null) ? collection.ToList() : null;
+        }
+
+        public static List<T> toList<T>(this IEnumerable list)
+        {
+            var results = new List<T>();
+            foreach (var item in list)
+                results.Add((T)item);
+            return results;
+        }
+
+
+        #endregion
+        
+        #region List
+
         public static void createTypeAndAddToList<T>(this List<T> sequence, params object[] values)
         {
             var t = (T)typeof(T).ctor();
             var properties = t.type().properties();
             Loop.nTimes(values.Length, i => t.prop(properties[i], values[i]));            
             sequence.Add(t);
-        }
-
-        public static int size(this ICollection colection)
-        {
-            return colection.Count;
-        }
-
-        public static T first<T>(this ICollection<T> collection)
-        {
-            //collection.GetEnumerator().Reset();
-            var enumerator = collection.GetEnumerator();
-            enumerator.Reset();
-            if (enumerator.MoveNext())            
-                return enumerator.Current;
-            return default(T);
-        }
-        
-        public static bool size(this ICollection colection, int value)
-        {
-            return colection.size() == value;
-        }
-
-        public static List<string> lines(this string targetString)
-        {
-            return StringsAndLists.fromTextGetLines(targetString);
         }
 
         public static List<string> split_onLines(this string targetString)
@@ -83,56 +85,28 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return list.split(" ");
         }
-  
+
         public static List<List<string>> split(this List<string> list, string splitString)
         {
             var result = new List<List<string>>();
             foreach (var item in list)
                 result.Add(item.split(splitString));
             return result;
-        }        
-
-        public static List<object> values(this Dictionary<string, object> dictionary)
-        {
-            var results = new List<object>();
-            results.AddRange(dictionary.Values);
-            return results;
         }
 
-        public static object[] valuesArray(this Dictionary<string, object> dictionary)
+        public static List<string> lines(this string targetString)
         {
-            return dictionary.values().ToArray();
+            return StringsAndLists.fromTextGetLines(targetString);
         }
 
         public static string str(this List<String> list)
-        {            
+        {
             return StringsAndLists.fromStringList_getText(list);
         }
-        
+
         public static T[] array<T>(this List<T> list)
         {
             return list.ToArray();
-        }
-
-        public static void forEach<T>(this IEnumerable collection, Action<T> action)
-        {
-            foreach (var item in collection)
-                if (item is T)
-                    action((T)item);
-        }
-
-        public static List<T> add_Key<T>(this Dictionary<string, List<T>> items, string keyToAdd)
-        {
-            if (items.ContainsKey(keyToAdd).isFalse())
-                items.Add(keyToAdd, new List<T>());
-            return items[keyToAdd];
-        }
-
-        public static bool hasKey<T, T1>(this Dictionary<T, T1> dictionary, T key)
-        {
-            if (dictionary != null && key != null)
-                return dictionary.ContainsKey(key);
-            return false;
         }
 
         public static bool contains(this List<String> list, string text)
@@ -143,10 +117,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         public static List<string> add_OnlyNewItems(this List<string> targetList, List<string> itemsToAdd)
-        {            
+        {
             foreach (var item in itemsToAdd)
                 if (targetList.Contains(item).isFalse())
-                    targetList.add(item);            
+                    targetList.add(item);
             return targetList;
         }
 
@@ -161,6 +135,66 @@ namespace O2.DotNetWrappers.ExtensionMethods
             foreach (var item in sourceList)
                 targetList.Add(item);
             return targetList;
+        }
+
+        public static List<String> sort(this List<String> list)
+        {
+            list.Sort();
+            return list;
+        }
+    
+        #endregion
+
+        #region ICollection
+
+        public static int size(this ICollection colection)
+        {
+            return colection.Count;
+        }
+
+        public static T first<T>(this ICollection<T> collection)
+        {
+            //collection.GetEnumerator().Reset();
+            var enumerator = collection.GetEnumerator();
+            enumerator.Reset();
+            if (enumerator.MoveNext())            
+                return enumerator.Current;
+            return default(T);
+        }
+        
+        public static bool size(this ICollection colection, int value)
+        {
+            return colection.size() == value;
+        }
+
+        #endregion 
+
+        #region Dictionary
+
+        public static List<object> values(this Dictionary<string, object> dictionary)
+        {
+            var results = new List<object>();
+            results.AddRange(dictionary.Values);
+            return results;
+        }
+
+        public static object[] valuesArray(this Dictionary<string, object> dictionary)
+        {
+            return dictionary.values().ToArray();
+        }
+
+        public static List<T> add_Key<T>(this Dictionary<string, List<T>> items, string keyToAdd)
+        {
+            if (items.ContainsKey(keyToAdd).isFalse())
+                items.Add(keyToAdd, new List<T>());
+            return items[keyToAdd];
+        }
+
+        public static bool hasKey<T, T1>(this Dictionary<T, T1> dictionary, T key)
+        {
+            if (dictionary != null && key != null)
+                return dictionary.ContainsKey(key);
+            return false;
         }
 
         public static Dictionary<T, T1> add<T, T1>(this Dictionary<T, T1> dictionary, T key, T1 value)
@@ -181,19 +215,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return dictionary;
         }
 
-        public static List<T> toList<T>(this IEnumerable<T> collection)
+        public static Dictionary<string, T> filter_By_ToString<T>(this List<T> list)
         {
-            return (collection != null) ? collection.ToList() : null;
-        }
-
-        public static List<T> toList<T>(this IEnumerable list)
-        {
-            var results = new List<T>();
+            var results = new Dictionary<string, T>();
             foreach (var item in list)
-                results.Add((T)item);
+            {
+                var key = item.str();
+                if (key.notNull())
+                    results.add(key, item);
+            }
             return results;
-        }
-        
+        }        	
+
         public static Dictionary<string, List<T>> indexOnToString<T>(this List<T> items)
         {
             return items.indexOnToString("");
@@ -234,11 +267,53 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return result;
         }
 
-        public static List<String> sort(this List<String> list)
+
+
+        #endregion 
+
+        #region KeyValuePair
+
+        public static List<KeyValuePair<T, T1>> add<T, T1>(this List<KeyValuePair<T, T1>> valuePairList, T key, T1 value)
         {
-            list.Sort();
-            return list;
+            valuePairList.Add(new KeyValuePair<T, T1>(key, value));
+            return valuePairList;
         }
-        
+
+        public static int totalValueSize(this List<KeyValuePair<string, string>> keyValuePairs)
+        {
+            var total = 0;
+            foreach (var item in keyValuePairs)
+                total += item.Value.size();
+            return total;
+        }
+
+        public static List<T1> values<T, T1>(this List<KeyValuePair<T, T1>> keyValuePairs)
+        {
+            return (from item in keyValuePairs
+                    select item.Value).toList();
+        }
+
+        public static List<T> keys<T, T1>(this List<KeyValuePair<T, T1>> keyValuePairs)
+        {
+            return (from item in keyValuePairs
+                    select item.Key).toList();
+        }
+
+        public static T1 value<T, T1>(this List<KeyValuePair<T, T1>> keyValuePairs, int index)
+        {
+            if (index < keyValuePairs.size())
+                return keyValuePairs[index].Value;
+            return default(T1);
+        }
+
+        public static T key<T, T1>(this List<KeyValuePair<T, T1>> keyValuePairs, int index)
+        {
+            if (index < keyValuePairs.size())
+                return keyValuePairs[index].Key;
+            return default(T);
+        }
+
+        #endregion 
+
     }
 }

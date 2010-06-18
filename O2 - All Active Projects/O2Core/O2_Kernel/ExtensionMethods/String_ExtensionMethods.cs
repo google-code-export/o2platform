@@ -336,6 +336,22 @@ namespace O2.Kernel.ExtensionMethods
 
         }
 
+        public static string replaceLast(this string stringToSearch, string findString, string replaceString)
+        {
+            var lastIndexOf = stringToSearch.LastIndexOf(findString);
+            lastIndexOf.str().info();
+            if (lastIndexOf > -1)
+            {
+                var beforeSubstring = stringToSearch.Substring(0, lastIndexOf);
+                var afterString_StartPosition = (lastIndexOf + findString.size());
+                var afterString = (afterString_StartPosition < stringToSearch.size())
+                                    ? stringToSearch.Substring(afterString_StartPosition)
+                                    : "";
+                return "{0}{1}{2}".format(beforeSubstring, replaceString, afterString);
+            }
+            return "";
+        }
+
         public static string appendGuid(this string _string)
         {
             return "{0} {1}".format(_string, Guid.NewGuid());
@@ -398,6 +414,12 @@ namespace O2.Kernel.ExtensionMethods
                 return -1;
             }
         }
-        
+
+        public static string repeat(this char charToRepeat, int count)
+        {
+            if (count > 0)
+                return new String(charToRepeat, count);
+            return "";
+        }
     }
 }
