@@ -38,7 +38,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
 
             return newType;
 
-            return namespaceDeclaration.add_Type(iClass.Name);
+            //return namespaceDeclaration.add_Type(iClass.Name);
         }
 
         /*public static TypeDeclaration add_Type(this CompilationUnit compilationUnit, IReturnType iReturnType)

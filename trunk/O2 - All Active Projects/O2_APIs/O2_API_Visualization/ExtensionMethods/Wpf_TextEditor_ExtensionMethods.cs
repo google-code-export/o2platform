@@ -25,12 +25,12 @@ namespace O2.API.Visualization.ExtensionMethods
 
         public static WpfTextEditor add_WpfTextEditor(this ContentControl control)
         {
-            return control.add_Control<WpfTextEditor>();
+            return control.add_Control_Wpf<WpfTextEditor>();
         }
 
         public static WpfTextEditor add_WpfTextEditor(this ElementHost control)
         {
-            return control.add_Control<WpfTextEditor>();
+            return control.add_Control_Wpf<WpfTextEditor>();
         }
 
         public static WpfTextEditor add_WpfTextEditor(this ascx_Xaml_Host control)

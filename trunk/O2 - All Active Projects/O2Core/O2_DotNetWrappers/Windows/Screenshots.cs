@@ -87,7 +87,7 @@ namespace O2.DotNetWrappers.Windows
 			Bitmap WorkingImage = null;
         	Graphics WorkingGraphics = null;
         	Rectangle TargetArea = Screen.PrimaryScreen.WorkingArea;
-        	Image ReturnImage = null;
+        	//Image ReturnImage = null;
         	WorkingImage = new Bitmap(TargetArea.Width,TargetArea.Height);
 
             WorkingGraphics = Graphics.FromImage(WorkingImage);

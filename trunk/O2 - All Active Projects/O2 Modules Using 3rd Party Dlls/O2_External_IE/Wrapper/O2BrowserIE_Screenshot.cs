@@ -31,7 +31,7 @@ namespace O2.External.IE.Wrapper
         public static int default_Width = 1024;
         public static int default_Height = 800;
         public static int wait = 25000;
-        public string Url { get; set; }
+        public new string Url { get; set; }
         public int Width_Browser { get; set; }
         public int Height_Browser { get; set; }
         public int Width_Bitmap { get; set; }
@@ -76,7 +76,7 @@ namespace O2.External.IE.Wrapper
             return getScreenshot(Url);
         }
 
-        public  static Bitmap open(Uri uri)
+        public new static Bitmap open(Uri uri)
         {
             return getScreenshot(uri.ToString());
         }

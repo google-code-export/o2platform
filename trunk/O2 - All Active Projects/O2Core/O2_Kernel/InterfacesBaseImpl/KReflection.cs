@@ -716,6 +716,7 @@ namespace O2.Kernel.InterfacesBaseImpl
             	    {
             		    PublicDI.log.error("in loadAssembly (Assembly.LoadFrom) :{0}", ex1.Message);
             		    PublicDI.log.error("in loadAssembly (Assembly.Load) :{0}", ex2.Message);
+                        PublicDI.log.error("in loadAssembly (Assembly.LoadWithPartialName) :{0}", ex3.Message);
             	    }
                 }
             }

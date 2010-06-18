@@ -79,7 +79,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #endregion
 
-        
+        #region XmlDocument
+
+        public static string xmlString(this XmlDocument xmlDocument)
+        {
+            var stringBuilder = new StringBuilder();
+            var stringWriter = new StringWriter(stringBuilder);
+            xmlDocument.Save(stringWriter);
+            return stringWriter.str();
+        }
+
+        #endregion
 
     }
 }

@@ -1,18 +1,18 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Threading;
 using O2.Kernel;
+using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
-//O2Ref:PresentationCore.dll
-//O2Ref:PresentationFramework.dll
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System;
 using System.Windows.Markup;
-
-//O2File:WPF_Threading_ExtensionMethods.cs
+using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
 
 namespace O2.API.Visualization.ExtensionMethods
 {
@@ -21,7 +21,73 @@ namespace O2.API.Visualization.ExtensionMethods
 	
 		#region generic methods								
     	
-    	public static T add_Control<T>(this ContentControl uiElement) where T : UIElement
+        public static T createInThread_Wpf<T>(this UIElement uiElement)
+        {
+            return (T)uiElement.wpfInvoke(() => typeof(T).ctor());
+        }
+
+        public static T add_Control_Wpf<T>(this UIElement uiElement, T uiElementToAdd)
+            where T : UIElement
+        {
+            if ((uiElement is IAddChild).isFalse())
+            {
+                "in add_Control_Wpf, the host control must implement the IAddChild interface, and '{0}' did not".error(typeof(T).name());
+                return null;
+            }
+            return (T)uiElement.wpfInvoke(
+                () =>
+                {
+                    try
+                    {
+                        if (uiElementToAdd != null)
+                            (uiElement as IAddChild).AddChild(uiElementToAdd);
+                        return uiElementToAdd;
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.log("in add_Wpf_Control");
+                        return null;
+                    }
+                });
+
+        }
+
+        public static T add_Control_Wpf<T>(this UIElement uiElement)
+            where T : UIElement
+        {
+            if (uiElement.isNull())
+            {
+                "in add_Wpf_Control, the host control was null".error();
+                return null;
+            }
+            if ((uiElement is IAddChild).isFalse())
+            {
+                "in add_Wpf_Control, the host control must implement the IAddChild interface, and '{0}' did not".error(typeof(T).name());
+                return null;
+            }
+            return (T)uiElement.wpfInvoke(
+                () =>
+                {
+                    try
+                    {
+                        var newControl = typeof(T).ctor();
+                        if (newControl.isNull())
+                        {
+                            "in add_Wpf_Control, could not create control of type: {0}".error(typeof(T).name());
+                            return null;
+                        }
+                        (uiElement as IAddChild).AddChild(newControl);
+                        return newControl;
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.log("in add_Wpf_Control");
+                        return null;
+                    }
+                });
+        }
+
+    	/*public static T add_Control<T>(this ContentControl uiElement) where T : UIElement
     	{
     		return (T)uiElement.wpfInvoke(
     			()=>{
@@ -41,7 +107,7 @@ namespace O2.API.Visualization.ExtensionMethods
 			            return null;			    				
     				});     		
     	}
-
+        */
 		public static T set<T>(this ContentControl control) where T : UIElement
 		{
 			return (T)control.wpfInvoke(
@@ -111,12 +177,22 @@ namespace O2.API.Visualization.ExtensionMethods
                 });
         }
 
-        public static string get_Text<T>(this T control)
+        /*public static string get_Text<T>(this T control)
             where T : ContentControl
         {
             return (string)control.wpfInvoke(() => control.Content);
         }
+        */
 
+        public static string get_Text_Wpf<T>(this T control)
+            where T : ContentControl
+        {
+            return (string)control.wpfInvoke(
+                () =>
+                {
+                    return control.Content;
+                });
+        }
         /* unfortunatly I can't seem to be call this set_Text able to do this since there are conflits when WPF and WinForms Extension methods are
          * used at the same time */
         public static T set_Text_Wpf<T>(this T control, string value)
@@ -141,7 +217,57 @@ namespace O2.API.Visualization.ExtensionMethods
             return (Brush)control.wpfInvoke(() => control.Foreground);
         }
 		#endregion
-		
+
+        #region WPF child controls
+
+        	public static List<T> allUIElements<T>(this UIElement uiElement)
+       		where T : UIElement
+       	{
+			return (from element in uiElement.allUIElements()
+					where element is T
+					select (T)element).toList();
+       	}
+       	
+        public static List<UIElement> allUIElements(this UIElement uiElement)
+        {        	
+        	return (List<UIElement>)uiElement.wpfInvoke(
+        		()=>{
+        				var uiElements = new List<UIElement>();        				        				
+        				
+        				uiElements.Add(uiElement);
+        				
+        				if (uiElement is ContentControl)
+        				{
+        					var content = (uiElement as ContentControl).Content;
+        					if (content is UIElement)
+        						uiElements.AddRange((content as UIElement).allUIElements());
+        				}
+        				if (uiElement is Panel)
+        				{
+        					var children = (uiElement as Panel).Children;
+        					foreach(var child in children)
+        						if (child is UIElement)
+        							uiElements.AddRange((child as UIElement).allUIElements()); 
+        				}
+        				return uiElements;
+					});        			        	                	
+        }
+        
+        public static List<T> controls_Wpf<T>(this UIElement uiElement)
+        	where T : UIElement
+        {
+        	return uiElement.allUIElements<T>();
+        }    
+    
+        public static List<UIElement> controls_Wpf(this UIElement uiElement)
+        {
+        	return uiElement.allUIElements();
+        }
+
+
+
+        #endregion
+
         #region generic events
 
         public static T onMouseDoubleClick<T1, T>(this T control, Action<T1> callback)
@@ -176,7 +302,37 @@ namespace O2.API.Visualization.ExtensionMethods
     		textBox.wpfInvoke(()=> textBox.Text = value);    		
 			return textBox;
     	}
-    	
+
+        public static string get_Text_Wpf(this TextBox textBox)
+        {
+            return (string)textBox.wpfInvoke(
+                () =>
+                {
+                    return textBox.Text;
+                });
+        }
+
+        public static TextBox set_Text_Wpf(this TextBox textBox, string text)
+        {
+            return (TextBox)textBox.wpfInvoke(
+                () =>
+                {
+                    textBox.Text = text;
+                    return textBox;
+                });
+        }
+
+        public static TextBox multiLine(this TextBox textBox)
+        {
+            return (TextBox)textBox.wpfInvoke(
+                () =>
+                {
+                    textBox.TextWrapping = TextWrapping.Wrap;
+                    textBox.AcceptsReturn = true;
+                    textBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    return textBox;
+                });
+        }
     	#endregion
                
         #region FrameworkElement
@@ -191,8 +347,56 @@ namespace O2.API.Visualization.ExtensionMethods
     	
     	
     	// specific to frameworkElement
-    	
-    	public static T width<T>(this T frameworkElement, double value) where T : FrameworkElement
+
+        public static T width_Wpf<T>(this T frameworkElement, double width)
+            where T : FrameworkElement
+        {
+            return (T)frameworkElement.wpfInvoke(
+                () =>
+                {
+                    if (width > -1)
+                        frameworkElement.Width = width;
+                    return frameworkElement;
+                });
+        }
+
+        public static T height_Wpf<T>(this T frameworkElement, double height)
+            where T : FrameworkElement
+        {
+            return (T)frameworkElement.wpfInvoke(
+                () =>
+                {
+                    if (height > -1)
+                        frameworkElement.Height = height;
+                    return frameworkElement;
+                });
+        }
+
+        public static T left_Wpf<T>(this T frameworkElement, double left)
+            where T : FrameworkElement
+        {
+            return (T)frameworkElement.wpfInvoke(
+                () =>
+                {
+                    if (left > -1)
+                        frameworkElement.SetValue(Canvas.LeftProperty, (double)left);
+                    return frameworkElement;
+                });
+        }
+
+        public static T top_Wpf<T>(this T frameworkElement, double top)
+            where T : FrameworkElement
+        {
+            return (T)frameworkElement.wpfInvoke(
+                () =>
+                {
+                    if (top > -1)
+                        frameworkElement.SetValue(Canvas.TopProperty, (double)top);
+                    return frameworkElement;
+                });
+        }
+
+    	/*public static T width<T>(this T frameworkElement, double value) where T : FrameworkElement
     	{
     		return frameworkElement.prop("Width",value); 
     	}
@@ -201,7 +405,7 @@ namespace O2.API.Visualization.ExtensionMethods
     	{
     		return frameworkElement.prop("Height",value); 
     	}
-
+        */
         public static double width(this FrameworkElement frameworkElement)
         {
             return (double)frameworkElement.wpfInvoke(() => { return frameworkElement.Width; });
@@ -223,11 +427,18 @@ namespace O2.API.Visualization.ExtensionMethods
     		return canvas.prop("Background",value); 
     	}
     	// specific to Control    	
-    	public static T background<T>(this T frameworkElement, Brush value) where T : Control
+    	public static T background<T>(this T frameworkElement, Brush value) 
+            where T : Control
     	{
     		return frameworkElement.prop("Background",value); 
     	}
-    	
+
+        public static T backColor<T>(this T frameworkElement, Brush value)
+            where T : FrameworkElement
+        {
+            return frameworkElement.prop<T>("Background", value);
+        }
+
     	public static T fontSize<T>(this T frameworkElement, double value) where T : Control
     	{
     		return frameworkElement.prop("FontSize",value); 
@@ -525,6 +736,139 @@ textBox1.prop("",true);
 
         #endregion
 
+        #region Image
+
+        public static Image open(this Image image, string imageLocation)
+        {
+            return image.open(imageLocation.uri(), -1, -1);
+        }
+
+        public static Image open(this Image image, string imageLocation, int width, int height)
+        {
+            return image.open(imageLocation.uri(), width, height);
+        }
+
+        public static Image open(this Image image, Uri imageLocation)
+        {
+            return image.open(imageLocation, -1, -1);
+        }
+
+        public static Image open(this Image image, Uri imageLocation, int width, int height)
+        {
+            return (Image)image.wpfInvoke(
+                () =>
+                {
+                    if (imageLocation.notNull())
+                    {
+                        var bitmap = new BitmapImage(imageLocation);
+                        image.Source = bitmap;
+                        if (width > -1)
+                        {
+                            image.width_Wpf<Image>((double)width);
+                        }
+                        if (height > -1)
+                        {
+                            image.height_Wpf<Image>((double)height);
+                        }
+                    }
+                    return image;
+                });
+        }
+
+        #endregion
+
+        #region ComboBox
+
+        public static ComboBox add_Item(this ComboBox comboBox, string itemText)
+        {
+            return comboBox.add_Items(itemText);
+        }
+
+        public static ComboBox add_Items(this ComboBox comboBox, params string[] itemTexts)
+        {
+            return (ComboBox)comboBox.wpfInvoke(
+                () =>
+                {
+                    foreach (var itemText in itemTexts)
+                    {
+                        var comboBoxItem = new ComboBoxItem();
+                        comboBoxItem.Content = itemText;
+                        comboBox.Items.Add(comboBoxItem);
+                    }
+                    return comboBox;
+                });
+        }
+
+        public static ComboBox selectFirst(this ComboBox comboBox)
+        {
+            return (ComboBox)comboBox.wpfInvoke(
+                () =>
+                {
+                    if (comboBox.Items.size() > 0)
+                        comboBox.SelectedIndex = 0;
+                    return comboBox;
+                });
+        }
+
+        public static string get_Text_Wpf(this ComboBox comboBox)
+        {
+            return (string)comboBox.wpfInvoke(
+                () =>
+                {
+                    if (comboBox.SelectedItem.notNull() && comboBox.SelectedItem is ComboBoxItem)
+                        return (comboBox.SelectedItem as ComboBoxItem).Content;
+                    return "";
+                });
+        }
+
+        #endregion
+
+        #region Button
+
+        public static Button onClick_Wpf(this Button button, Action callback)
+        {
+            return (Button)button.wpfInvoke(
+                () =>
+                {
+                    button.Click += (sender, e) => callback();
+                    return button;
+                });
+        }
+
+        #endregion
+
+        #region StackPanel
+
+        public static StackPanel add_StackPanel(this UIElement uiElement)
+        {
+            return uiElement.add_Control_Wpf<StackPanel>();
+        }
+
+        #endregion
+
+        #region Grid
+
+        public static Grid add_Grid(this UIElement uiElement)
+        {
+            return uiElement.add_Control_Wpf<Grid>();
+        }
+
+        #endregion
+
+        #region WebBrowser (WPF one which is a wrapper on the WinForms one)
+
+        public static WebBrowser open(this WebBrowser webBrowser, string url)
+        {
+            if (url.isUri())
+            {
+                "[WPF WebBrowser] opening page: {0}".debug(url);
+                webBrowser.wpfInvoke(() => webBrowser.Navigate(url.uri()));
+            }
+            return webBrowser;
+        }
+
+        #endregion
+
         #region Control - foreground text Color
 
         public static T color<T>(this T control, string colorName) where T : Control
@@ -552,5 +896,64 @@ textBox1.prop("",true);
         }
       
         #endregion
+
+        #region Animation
+
+        public static T rotate<T>(this T uiElement)
+            where T : UIElement
+        {
+            return uiElement.rotate(0, 360, 3, false);
+        }
+
+        public static T rotate<T>(this T uiElement, bool loopAnimation)
+            where T : UIElement
+        {
+            return uiElement.rotate(0, 360, 3, loopAnimation);
+        }
+
+        public static T rotate<T>(this T uiElement, double fromValue, double toValue, int durationInSeconds, bool loopAnimation)
+            where T : UIElement
+        {
+            return (T)uiElement.wpfInvoke(
+                () =>
+                {
+                    DoubleAnimation doubleAnimation = new DoubleAnimation(fromValue, toValue, new Duration(TimeSpan.FromSeconds(durationInSeconds)));
+                    RotateTransform rotateTransform = new RotateTransform();
+                    uiElement.RenderTransform = rotateTransform;
+                    uiElement.RenderTransformOrigin = new System.Windows.Point(0.5, 0.5);
+                    if (loopAnimation)
+                        doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+                    rotateTransform.BeginAnimation(RotateTransform.AngleProperty, doubleAnimation);
+                    return uiElement;
+                });
+        }
+
+        public static T fadeIn<T>(this T uiElement, int durationInSeconds)
+            where T : UIElement
+        {
+            return uiElement.fadeFromTo(0, 1, durationInSeconds, false);
+        }
+
+        public static T fadeOut<T>(this T uiElement, int durationInSeconds)
+            where T : UIElement
+        {
+            return uiElement.fadeFromTo(1, 0, durationInSeconds, false);
+        }
+
+        public static T fadeFromTo<T>(this T uiElement, double fromOpacity, double toOpacity, int durationInSeconds, bool loopAnimation)
+            where T : UIElement
+        {
+            return (T)uiElement.wpfInvoke(() =>
+            {
+                var doubleAnimation = new DoubleAnimation(fromOpacity, toOpacity, new Duration(TimeSpan.FromSeconds(durationInSeconds)));
+                if (loopAnimation)
+                    doubleAnimation.RepeatBehavior = RepeatBehavior.Forever;
+                uiElement.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
+                return uiElement;
+            });
+        }
+
+        #endregion
+
     }
 }

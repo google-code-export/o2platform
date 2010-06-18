@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using O2.Interfaces.CIR;
 using O2.Kernel;
-
+using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.ExtensionMethods;
 //using Mono.Cecil;
 //using O2.o2AppDomainProxy;
 
@@ -134,7 +135,7 @@ namespace O2.DotNetWrappers.Filters
             }
             catch (Exception ex)
             {
-                PublicDI.log.error("in populateSignatureObjectsFromMethodInfo, could not filter signature for method: {0}", methodInfo.Name);
+                ex.log("in populateSignatureObjectsFromMethodInfo, could not filter signature for method: {0}".format(methodInfo.Name));
             }
         }
 

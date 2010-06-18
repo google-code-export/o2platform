@@ -2257,6 +2257,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return pictureBox.load(pathToImage);
         }
 
+        public static PictureBox show(this PictureBox pictureBox, string pathToImage)
+        {
+            return pictureBox.load(pathToImage);
+        }
+
+        public static PictureBox open(this PictureBox pictureBox, string pathToImage)
+        {
+            return pictureBox.load(pathToImage);
+        }
+
         public static PictureBox load(this PictureBox pictureBox, string pathToImage)
         {
             if (pathToImage.fileExists())
@@ -2268,6 +2278,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return null;
         }
 
+        public static PictureBox loadFromUri(this PictureBox pictureBox, Uri uri)
+        {
+            "loading image from Uri into PictureBox".debug();
+            pictureBox.Image = uri.getImageAsBitmap();
+            return pictureBox;
+        }
         #endregion
 
         #region ProgressBar
@@ -2650,6 +2666,25 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return label;
                 });
         }
+
+        public static ToolStripStatusLabel add_StatusStrip(this Control control)
+        {
+            if (control is UserControl)
+                return (control as UserControl).add_StatusStrip(Color.FromName("Control"));
+            return null;
+        }
+
+        public static ToolStripStatusLabel add_StatusStrip(this System.Windows.Forms.Form form, bool spring)
+        {
+            var statusStrip = form.add_StatusStrip();
+            form.invokeOnThread(() => statusStrip.Spring = spring); // make it align left	
+            return statusStrip;
+        }
+     
+        public static ToolStripStatusLabel add_StatusStrip(this System.Windows.Forms.Form form)
+        {
+            return form.add_StatusStrip(Color.FromName("Control"));
+        }				
 
         public static ToolStripStatusLabel set_Text(this ToolStripStatusLabel label, string message)
         {
