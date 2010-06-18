@@ -137,6 +137,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                    });
         }
 
+        public static System.Windows.Forms.Label append_Label<T>(this T control, string text)
+            where T : Control
+        {
+            return control.append_Control<System.Windows.Forms.Label>().set_Text(text);
+        }
+
         public static Label set_Text(this Label label, string text)
         {
             return (Label)label.invokeOnThread(
@@ -145,6 +151,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                         label.Text = text;
                                         return label;
                                     });
+        }
+
+        public static Label append_Text(this Label label, string text)
+        {
+            return (System.Windows.Forms.Label)label.invokeOnThread(
+                () =>
+                {
+                    label.Text += text;
+                    return label;
+                });
+
         }
 
         public static string get_Text(this Label label)
@@ -166,6 +183,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static Label autoSize(this Label label)
+        {
+            label.invokeOnThread(() => label.AutoSize = true);
+            return label;
+        }
+        
         #endregion
 
         #region LinkLabel
@@ -1340,6 +1363,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return treeView;
         }
 
+        public static TreeView selectNode(this TreeView treeView, TreeNode treeNode)
+        {
+            return (TreeView)treeView.invokeOnThread(
+                () =>
+                {
+                    treeView.SelectedNode = treeNode;
+                    return treeView;
+                });
+        }
+
         public static TreeView selectedNode(this TreeView treeView, TreeNode treeNode)
         {
             return (TreeView)treeView.invokeOnThread(
@@ -1529,6 +1562,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 treeView.add_Node(objectToShow.str(), objectToShow, true);
             }
             return treeView;
+        }
+
+        public static TreeNode show_Object(this TreeNode treeNode, object objectToShow)
+        {
+            if (objectToShow != null)
+            {
+                treeNode.treeView().autoExpandObjects();
+                treeNode.add_Node(objectToShow.str(), objectToShow, true);
+            }
+            return treeNode;
         }
 
         public static TreeView autoExpandObjects(this TreeView treeView)
@@ -1863,7 +1906,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 treeView.add_Node(item.Key, item.Value, addDummyNode);
             return treeView;
         }
-        
+
+        public static int index(this TreeNode treeNode)
+        {
+            return (int)treeNode.treeView().invokeOnThread(() => { return treeNode.Index; });
+        }
+
         #endregion
 
         #region RichTextBox
@@ -2145,6 +2193,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return fileMenuItem;
                 });
         }
+
+        // since we can't have two different return types the dummyValue is there for the cases where we want to get the reference to the 
+        // ContextMenuStrip and not the menu item created
+        public static ContextMenuStrip add_MenuItem(this ContextMenuStrip contextMenu, string text, bool dummyValue, MethodInvoker onClick)
+        {
+            if (dummyValue.isFalse())
+                "invalid value in ContextMenuStrip add_MenuItem, only true creates the expected behaviour".error();
+            contextMenu.add_MenuItem(text, onClick);
+            return contextMenu;
+        }
+
         #endregion
 
         #region PictureBox
@@ -2823,6 +2882,36 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static List<object> items(this ComboBox comboBox)
+        {
+            return (List<object>)comboBox.invokeOnThread(
+                () =>
+                {
+                    var items = new List<object>();
+                    foreach (var item in comboBox.Items)
+                        items.add(item);
+                    return items;
+                });
+
+        }
+
+        public static ComboBox selectFirst(this ComboBox comboBox)
+        {
+            if (comboBox.items().size() > 0)
+                comboBox.select_Item(0);
+            return comboBox;
+        }
+
+        public static ComboBox dropDownList(this ComboBox comboBox)
+        {
+            return (ComboBox)comboBox.invokeOnThread(
+                () =>
+                {
+                    comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                    return comboBox;
+                });
+        }
+
         #endregion
 
         #region FlowLayoutPanel
@@ -2859,6 +2948,81 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion
+
+        #region Multiple Control creation helpers
+
+        public static T add_LabelAndTextAndButton<T>(this T control, string labelText, string textBoxText, string buttonText, Action<string> onButtonClick)
+            where T : Control
+        {
+            //create controls
+            var label = control.add_Label(labelText);
+            var textBox = label.append_Control<TextBox>();
+            var button = textBox.append_Control<System.Windows.Forms.Button>();
+
+            //set text (the label needs to set on the ctor so that the append_Control puts the textbox on its right
+            textBox.set_Text(textBoxText);
+            button.set_Text(buttonText);
+
+            //position controls
+            button.anchor_TopRight();
+            button.left(control.width() - button.width());
+            textBox.align_Right(control);
+            textBox.width(textBox.width() - button.width());
+
+            //final tweaks
+            label.topAdd(3);
+            textBox.widthAdd(-5);
+            button.widthAdd(-2);
+            button.heightAdd(-2);
+
+            //events
+            button.onClick(() => onButtonClick(textBox.get_Text()));
+            textBox.onEnter((text) => onButtonClick(text));
+            return control;
+        }
+
+        public static T add_LabelAndComboBoxAndButton<T>(this T control, string labelText, string comboBoxText, string buttonText, Action<string> onButtonClick)
+            where T : Control
+        {
+            //create controls
+            var label = control.add_Label(labelText);
+            var comboBox = label.append_Control<ComboBox>();
+            var button = comboBox.append_Control<System.Windows.Forms.Button>();
+
+            //set text (the label needs to set on the ctor so that the append_Control puts the textbox on its right
+            comboBox.set_Text(comboBoxText);
+            button.set_Text(buttonText);
+
+            //position controls
+            button.anchor_TopRight();
+            button.left(control.width() - button.width());
+            comboBox.align_Right(control);
+            comboBox.width(comboBox.width() - button.width());
+
+            //final tweaks
+            label.topAdd(3);
+            comboBox.widthAdd(-5);
+            button.widthAdd(-2);
+            button.heightAdd(-2);
+
+            Action<String> onNewItem =
+                (newItem) =>
+                {
+                    if (comboBox.items().Contains(newItem).isFalse())
+                        comboBox.insert_Item(newItem);
+                    onButtonClick(newItem);
+                };
+
+
+            //events
+            button.onClick(() => onNewItem(comboBox.get_Text()));
+            comboBox.onEnter((text) => onNewItem(text));
+            comboBox.onSelection(() => onNewItem(comboBox.get_Text()));
+            return control;
+        }
+
+        #endregion
+
 
     }
 }

@@ -21,6 +21,7 @@ namespace O2.DotNetWrappers.DotNet
 {
     public class CompileEngine
     {        
+        static string defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
         static string onlyAddReferencedAssemblies = "O2Tag_OnlyAddReferencedAssemblies";
         static List<string> specialO2Tag_ExtraReferences = new List<string>() {"//O2Tag_AddReferenceFile:", "//O2Ref:"};
         static List<string> specialO2Tag_ExtraSourceFile = new List<string>() { "//O2Tag_AddSourceFile:", "//O2File:" };
@@ -582,9 +583,30 @@ namespace O2.DotNetWrappers.DotNet
             }
         }
 
+        public static string findFileOnLocalScriptFolder(string file)
+        {           
+            if (CompileEngine.LocalScriptFileMappings.hasKey(file))
+                return CompileEngine.LocalScriptFileMappings[file];
+            var mappedFilePath = "";
+
+            var filesToSearch = defaultLocalScriptsFolder.files(true);
+            foreach (var localScriptFile in filesToSearch)
+            {
+                if (localScriptFile.fileName().ToLower().StartsWith(file.ToLower()))
+                {
+                    PublicDI.log.debug("in CompileEngin, file reference '{0}' was mapped to local O2 Script file '{1}'", file, localScriptFile);
+                    mappedFilePath = localScriptFile;
+                    break;
+                }
+            }
+            if (mappedFilePath.valid())
+                CompileEngine.LocalScriptFileMappings.add(file, mappedFilePath);
+            return mappedFilePath;
+        }
+
         public static string findScriptOnLocalScriptFolder(string file)
         {
-            string defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
+            //string defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
 
             if (LocalScriptFileMappings.hasKey(file))
                 return LocalScriptFileMappings[file];

@@ -12,6 +12,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
 {
     public static class SavingData_ExtensionMethods
     {
+        #region bitmap
+
         public static string save(this Bitmap bitmap)
         {
             return bitmap.save(PublicDI.config.getTempFileInTempDirectory("jpeg"),ImageFormat.Jpeg);
@@ -21,8 +23,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return bitmap.save(targetFile, ImageFormat.Jpeg);
         }
-
-
 
         public static string save(this Bitmap bitmap, string targetFile,  ImageFormat imageFormat)
         {
@@ -37,6 +37,36 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return null;
             }        
         }
+
+        public static string gif(this Bitmap bitmap)
+        {
+            var tempGif = PublicDI.config.getTempFileInTempDirectory(".gif");
+            return bitmap.save(tempGif, ImageFormat.Gif);
+        }
+
+        public static string jpg(this Bitmap bitmap)
+        {
+            return bitmap.jpeg();
+        }
+
+        public static string jpeg(this Bitmap bitmap)
+        {
+            var tempGif = PublicDI.config.getTempFileInTempDirectory(".jpeg");
+            return bitmap.save(tempGif, ImageFormat.Jpeg);
+        }
+
+        public static string png(this Bitmap bitmap)
+        {
+            var tempGif = PublicDI.config.getTempFileInTempDirectory(".png");
+            return bitmap.save(tempGif, ImageFormat.Png);
+        }
+
+        public static string icon(this Bitmap bitmap)
+        {
+            var tempGif = PublicDI.config.getTempFileInTempDirectory(".icon");
+            return bitmap.save(tempGif, ImageFormat.Icon);
+        }
+
 
         public static Bitmap thumbnail(this Bitmap bitmap)
         {
@@ -71,6 +101,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             O2.Kernel.show.image(bitmap);
         }
-
+        
+        #endregion 
     }
 }

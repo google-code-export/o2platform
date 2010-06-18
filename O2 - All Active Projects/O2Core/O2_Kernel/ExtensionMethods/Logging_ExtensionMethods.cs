@@ -123,5 +123,18 @@ namespace O2.Kernel.ExtensionMethods
         {
             PublicDI.log.ex(ex, text, true);
         }
+        
+        //ints
+
+        public static string info(this int value)
+        {
+            return value.str().info();
+        }
+
+        public static string debug(this int value)
+        {
+            return value.str().debug();
+        }
+
     }
 }

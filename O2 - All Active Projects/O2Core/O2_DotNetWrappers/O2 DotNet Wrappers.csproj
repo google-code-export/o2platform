@@ -56,8 +56,10 @@
     <Compile Include="DotNet\DevUtils.cs" />
     <Compile Include="DotNet\DnD.cs" />
     <Compile Include="ExtensionMethods\Clipboard_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\CompileEngine_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Crypto_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Data_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\Form_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\NamedPipes_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2Controls_ExtensioMethods.cs" />
     <Compile Include="ExtensionMethods\O2Findings_ExtensionMethods.cs" />

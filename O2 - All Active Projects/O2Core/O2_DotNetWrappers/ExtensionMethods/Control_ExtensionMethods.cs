@@ -143,6 +143,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return createFunction();
         }
 
+        public static Control parent(this Control control)
+        {
+            return (Control)control.invokeOnThread(
+                () =>
+                {
+                    if (control.notNull())
+                        return control.Parent;
+                    return null;
+                });
+        }
+
         public static T parent<T>(this List<Control> controls) where T : Control
         {
             foreach (var control in controls)
@@ -166,6 +177,27 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return (T)match;
             }
             return null;
+        }
+
+        public static string get_Text(this Control control)
+        {
+            return (string)control.invokeOnThread(() => { return control.Text; });
+        }
+
+        public static T text<T>(this List<T> controls, string textToFind)
+            where T : Control
+        {
+            foreach (var control in controls)
+                if (control.get_Text() == textToFind)
+                    return control;
+            return null;
+        }
+
+        public static List<string> texts<T>(this List<T> controls)
+            where T : Control
+        {
+            return (from control in controls
+                    select control.get_Text()).toList();
         }
 
         #endregion
@@ -213,12 +245,28 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static Form newFormInThread(this Control control)
+        {
+            return control.newFormInThread("New Form in thread of: {0}".format(control.get_Text()));
+        }
+
+        public static Form newFormInThread(this Control control, string text)
+        {
+            return (Form)control.invokeOnThread(
+                () =>
+                {
+                    var newForm = new Form();
+                    newForm.Text = text;
+                    newForm.Show();
+                    return newForm;
+                });
+        }
+
         public static T fill<T>(this T control)
             where T : Control
         {
             return control.fill(true);
         }
-
 
         public static T fill<T>(this T control, bool status)
             where T : Control
@@ -396,6 +444,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return null;
         }
 
+        public static T control<T>(this Control control)
+            where T : Control
+        {
+            return control.control<T>(true);
+        }
+
+        public static T control<T>(this Control control, bool searchRecursively)
+            where T : Control
+        {
+            foreach (var childControl in control.controls(searchRecursively))
+                if (childControl is T)
+                    return (T)childControl;
+            return null;
+        }
+
         public static List<Control> list(this Control.ControlCollection controlCollection)
         {
             var controls = new List<Control>();
@@ -478,6 +541,54 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 {
                     return control.Height;
                 });
+        }
+
+        public static T widthAdd<T>(this T control, int value)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.width(control.Width + value);
+                    return control;
+                });
+
+        }
+
+        public static T heightAdd<T>(this T control, int value)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.height(control.Height + value);
+                    return control;
+                });
+
+        }
+
+        public static T topAdd<T>(this T control, int value)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.top(control.Top + value);
+                    return control;
+                });
+
+        }
+
+        public static T leftAdd<T>(this T control, int value)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.left(control.Left + value);
+                    return control;
+                });
+
         }
 
         public static Bitmap fromClipboardGetImage(this Control control)
@@ -662,7 +773,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 {
                     control.Dock = DockStyle.None;
                     control.Left = controlToAlignWith.Left + border;
-                    control.left();
+                    control.anchor_Left();
                     return control;
                 });
         }
@@ -681,7 +792,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         {
                             control.Dock = DockStyle.None;
                             control.Width = controlToAlignWith.Width - control.Left - border;
-                            control.right();
+                            control.anchor_Right();
                             return control;
                         });
         }
@@ -700,7 +811,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         {
                             control.Dock = DockStyle.None;
                             control.Top = controlToAlignWith.Top + border;
-                            control.top();
+                            control.anchor_Top();
                             return control;
                         });
         }
@@ -721,7 +832,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                             PublicDI.log.debug("controlToAlignWith.Height: {0}", controlToAlignWith.Height);
                             PublicDI.log.debug("control.Top: {0}", control.Top);
                             control.Height = controlToAlignWith.Height - control.Top - border;
-                            control.bottom();
+                            control.anchor_Bottom();
                             return control;
                         });
         }
@@ -736,80 +847,80 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return control;
         }
 
-        public static T top<T>(this T control)
+        public static T anchor_Top<T>(this T control)
             where T : Control
         {
             control.Anchor = control.Anchor | AnchorStyles.Top;
             return control;
         }
 
-        public static T bottom<T>(this T control)
+        public static T anchor_Bottom<T>(this T control)
             where T : Control
         {
             control.Anchor = control.Anchor | AnchorStyles.Bottom;
             return control;
         }
 
-        public static T left<T>(this T control)
+        public static T anchor_Left<T>(this T control)
             where T : Control
         {
             control.Anchor = control.Anchor | AnchorStyles.Left;
             return control;
         }
 
-        public static T right<T>(this T control)
+        public static T anchor_Right<T>(this T control)
             where T : Control
         {
             control.Anchor = control.Anchor | AnchorStyles.Right;
             return control;
         }
-
+        
         public static T anchor_TopLeft<T>(this T control)
             where T : Control
         {
-            control.anchor().top().left();
+            control.anchor().anchor_Top().anchor_Left();
             return control;
         }
 
         public static T anchor_BottomLeft<T>(this T control)
             where T : Control
         {
-            control.anchor().bottom().left();
+            control.anchor().anchor_Bottom().anchor_Left();
             return control;
         }
 
         public static T anchor_TopRight<T>(this T control)
             where T : Control
         {
-            control.anchor().top().right();
+            control.anchor().anchor_Top().anchor_Right();
             return control;
         }
 
         public static T anchor_BottomRight<T>(this T control)
             where T : Control
         {
-            control.anchor().bottom().right();
+            control.anchor().anchor_Bottom().anchor_Right();
             return control;
         }
 
         public static T anchor_TopLeftRight<T>(this T control)
             where T : Control
         {
-            control.anchor().top().left().right();
+            control.anchor().anchor_Top().anchor_Left().anchor_Right();
             return control;
         }
 
         public static T anchor_BottomLeftRight<T>(this T control)
             where T : Control
         {
-            control.anchor().bottom().left().right();
+            control.anchor().anchor_Bottom().anchor_Left().anchor_Right();
             return control;
         }
 
         public static T anchor_All<T>(this T control)
             where T : Control
         {
-            control.anchor().top().right().bottom().left();
+            control.anchor().anchor_Top().anchor_Right().anchor_Bottom().anchor_Left();
             return control;
         }
 
