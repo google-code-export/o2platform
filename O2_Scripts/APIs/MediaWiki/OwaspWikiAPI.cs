@@ -22,10 +22,16 @@ namespace O2.XRules.Database.APIs
 	public class OwaspWikiAPI : O2MediaWikiAPI
 	{
 		public bool AllOk {get;set;}
-        public OwaspWikiAPI() 
+        
+        public OwaspWikiAPI() : this(true)
+		{
+			
+		}
+		
+		public OwaspWikiAPI(bool loadStylesFromWebsite)
 		{
 			init("http://www.owasp.org/api.php");
-			this.Styles = owaspStyles();
+			this.Styles = (loadStylesFromWebsite) ? owaspStyles() : "";
 		}
 		
 		//TODO: add detection to see if we are a)online and b) able to access the www.owasp.org website

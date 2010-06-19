@@ -22,6 +22,7 @@ using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods; 
 using O2.XRules.Database.Utils;
 using O2.XRules.Database.Utils.O2;
+using O2.XRules.Database.Languages_and_Frameworks.DotNet;
 using WatiN.Core;
 using WatiN.Core.Interfaces;
 using SHDocVw;
@@ -31,6 +32,7 @@ using mshtml;
 //O2File:ascx_CaptchaQuestion.cs
 //O2File:ascx_AskUserForLoginDetails.cs
 //O2File:ISecretData.cs
+//O2File:DotNet_Viewstate.cs
 
 //O2Ref:O2_External_IE.dll
 //O2Ref:WatiN.Core.1x.dll
@@ -83,6 +85,28 @@ namespace O2.XRules.Database.APIs
     {
     	// uri & url
  
+ 		public static string html(this WatiN_IE ie)
+    	{
+    		try
+    		{
+	    		if (ie.IE.InternetExplorer.notNull() && ie.IE.InternetExplorer is IWebBrowser2)
+	    		{
+	    			var webBrowser = (IWebBrowser2)ie.IE.InternetExplorer;
+	    			if (webBrowser.Document.notNull() && webBrowser.Document is HTMLDocumentClass)
+	    			{
+	    				var htmlDocument = (HTMLDocumentClass)webBrowser.Document;
+	    				if (htmlDocument.documentElement.notNull())
+	    					return htmlDocument.documentElement.outerHTML;
+	    			}    			
+	    		}    		
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in WatiN_IE html()");
+    		}
+    		return "";
+    	}
+    	
     	public static Uri uri(this WatiN_IE watinIe)
     	{
     		return watinIe.IE.Uri;
@@ -708,13 +732,19 @@ namespace O2.XRules.Database.APIs
     				select element.TagName).Distinct().toList();
     	}
  
-    	public static Dictionary<string, List<Element>> indexedByTagName(this List<Element> elements)
+ 		public static Dictionary<string, List<Element>> indexedByTagName(this List<Element> elements)
+ 		{
+ 			return elements.indexedByTagName(true);
+ 		}
+ 		
+ 		public static Dictionary<string, List<Element>> indexedByTagName(this List<Element> elements, bool includeEmptyFields)
     	{
     		var result = new Dictionary<string,List<Element>>();
     		foreach(var element in elements)
-    			result.add(element.TagName, element);
+    			if (includeEmptyFields || element.str().valid())
+    				result.add(element.TagName, element);
     		return result;
-    	}
+    	}     	
   
     	public static string tagName(this Element element)
     	{
@@ -922,7 +952,20 @@ namespace O2.XRules.Database.APIs
 			return null;			
 		}
 
- 
+ 		public static List<String> strs(this List<Element> elements)
+    	{
+    		return (from element in elements
+    				where element.str().valid()
+    				select element.str()).toList();    
+    	}
+    	
+    	public static Element str(this List<Element> elements, string text)
+		{
+			foreach(var element in elements)
+				if (element.str() == text)
+					return element;
+			return null;
+		}
  
     }
     
@@ -1053,7 +1096,14 @@ namespace O2.XRules.Database.APIs
 		public static T flash<T>(this T element, int timesToFlash)
 			where T : Element
 		{
-			element.Flash(timesToFlash);
+			try
+			{
+				element.Flash(timesToFlash);
+			}
+			catch(Exception ex)
+			{
+				ex.log("in WatiN Element flash");
+			}
 			return element;
 		}
  
@@ -1066,7 +1116,14 @@ namespace O2.XRules.Database.APIs
 		public static T highlight<T>(this T element)
 			where T : Element
 		{
-			element.Highlight(true);
+			try
+			{
+				element.Highlight(true);
+			}
+			catch(Exception ex)
+			{
+				ex.log("in WatiN Element highlight");
+			}
 			return element;
  
 		}
@@ -1114,4 +1171,134 @@ namespace O2.XRules.Database.APIs
     	}
     }
     
+    public static class WatiN_IE_ExtensionMethods_Events
+    {
+    	public static WatiN_IE onNavigate(this WatiN_IE ie, MethodInvoker callback, string expectedPage)
+    	{
+    		(ie.IE.InternetExplorer as DWebBrowserEvents2_Event).NavigateComplete2 += 
+ 				(object pDisp, ref object url)=>
+ 					{
+ 						if (url.str() == expectedPage) 						
+	 						O2Thread.mtaThread(()=>callback());
+	 				};
+ 			return ie;
+    	}
+   
+   		public static WatiN_IE onNavigate(this WatiN_IE ie, MethodInvoker callback)
+    	{
+    		(ie.IE.InternetExplorer as DWebBrowserEvents2_Event).NavigateComplete2 += 
+ 				(object pDisp, ref object url)=> O2Thread.mtaThread(()=>callback());
+ 			return ie;
+    	}
+    	
+    	public static WatiN_IE onNavigate(this WatiN_IE ie, Action<string> callback)
+    	{
+    		(ie.IE.InternetExplorer as DWebBrowserEvents2_Event).NavigateComplete2 += 
+ 				(object pDisp, ref object url)=> 
+ 					{
+ 						var pageUrl = url.str(); // need to pin down this value
+ 						O2Thread.mtaThread(()=>callback(pageUrl));
+ 					};
+ 			return ie;
+    	}
+    	
+    	public static WatiN_IE onNavigate(this WatiN_IE ie, Action<IWebBrowser2, string> callback)
+    	{
+    		(ie.IE.InternetExplorer as DWebBrowserEvents2_Event).NavigateComplete2 += 
+ 				(object pDisp, ref object url)=>
+ 					{ 						
+ 						if (pDisp is IWebBrowser2 && url is string)
+ 						{	
+ 							var pageUrl = url.str(); // need to pin down this value
+ 							O2Thread.mtaThread(
+ 								()=> callback(pDisp as IWebBrowser2, pageUrl));	
+ 						}
+ 					};
+ 			return ie;
+    	}
+    	    
+    	public static WatiN_IE beforeNavigate(this WatiN_IE ie, Func<string,bool> callback)
+    	{
+    		(ie.IE.InternetExplorer as DWebBrowserEvents2_Event).BeforeNavigate2 += 
+ 				//(object pDisp, ref object url)
+ 				(object pDisp,  ref object URL, ref object Flags,  ref object TargetFrameName, ref object PostData, ref object Headers, ref bool Cancel)=>
+ 					{ 						
+ 						"in beforeNavigate of url:{0} -> h: {1}".info(URL, Headers);
+ 						Cancel = callback(URL.str()); 						
+ 					};
+ 			return ie;
+    	}
+    }
+    
+    public static class WatiN_IE_ExtensionMethods_Inject_Html
+    {
+    	public static Element injectHtml_beforeBegin(this Element element, string htmlToInject)
+    	{
+    		return element.injectHtml("beforeBegin", htmlToInject);
+    	}
+    	
+    	public static Element injectHtml_afterBegin(this Element element, string htmlToInject)
+    	{
+    		return element.injectHtml("afterBegin", htmlToInject);
+    	}
+    	
+    	public static Element injectHtml_beforeEnd(this Element element, string htmlToInject)
+    	{
+    		return element.injectHtml("beforeEnd", htmlToInject);
+    	}
+    	
+    	public static Element injectHtml_afterEnd(this Element element, string htmlToInject)
+    	{
+    		return element.injectHtml("afterEnd", htmlToInject);
+    	}
+    	
+    	public static Element injectHtml(this Element element, string location, string htmlToInject)
+    	{
+    		try
+    		{
+    			element.htmlElement().insertAdjacentHTML(location,htmlToInject);
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in WatiN Element injectHtml -> location:{0} payload:{1} ".format(location,htmlToInject));
+    		}
+    		return element;
+    	}
+    
+    }
+    
+    public static class WatiN_ASPNET_ExtensionMethods
+    {    
+    	public static DotNet_ViewState viewState(this WatiN_IE ie)
+    	{
+    		return new DotNet_ViewState(ie.viewStateRaw());
+    	}
+    	public static string viewStateRaw(this WatiN_IE ie)
+    	{
+    		return ie.field("__VIEWSTATE").value();
+    	}
+    	
+    	public static T showViewState<T>(this T control, WatiN_IE ie, bool showDetailedView)
+    		where T : System.Windows.Forms.Control
+    	{
+    		if (showDetailedView)
+    			control.showViewState(ie);
+    		else
+    			control.showViewStateValues(ie);
+    		return control;
+    	}
+    	
+    	public static T showViewState<T>(this T control, WatiN_IE ie)
+    		where T : System.Windows.Forms.Control
+    	{    		    		    		
+    		return ie.viewState().show(control);    		
+    	}
+
+
+		public static T showViewStateValues<T>(this T control, WatiN_IE ie)
+    		where T : System.Windows.Forms.Control
+    	{    		    		    		
+    		return ie.viewState().showValues(control);    		
+    	}    	    	   	
+	}
 }

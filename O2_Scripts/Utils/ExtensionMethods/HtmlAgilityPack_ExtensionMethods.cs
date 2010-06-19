@@ -91,7 +91,12 @@ namespace O2.XRules.Database.Utils.ExtensionMethods
         {
             return htmlNodes.innerHtml();
         }
-
+		
+		public static string value(this HtmlAgilityPack.HtmlAttribute attribute)
+        {
+            return attribute.Value;
+        }
+        
         public static List<HtmlAgilityPack.HtmlAttribute> attributes(this List<HtmlAgilityPack.HtmlNode> htmlNodes)
         {
             return htmlNodes.attributes("");
@@ -118,6 +123,13 @@ namespace O2.XRules.Database.Utils.ExtensionMethods
             return attributes;
         }
 
+		public static HtmlAgilityPack.HtmlAttribute attribute(this HtmlAgilityPack.HtmlNode htmlNode, string attributeName)
+        {            
+            foreach (var htmlAttribute in htmlNode.Attributes)
+                if (attributeName.valid().isFalse() || htmlAttribute.Name == attributeName)
+                    return htmlAttribute;
+            return null;
+        }
         #endregion
 
         #region  HtmlAgilityPack.HtmlAttribute

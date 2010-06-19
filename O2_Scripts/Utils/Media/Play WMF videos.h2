@@ -6,11 +6,19 @@ var fileToPlay = topPanel.insert_Above&lt;TextBox&gt;(18);
 
 Action&lt;string&gt; playFile = 
 	(videoFile)=&gt;{		
-					if (videoFile.fileExists())
-					{	
-						"Loading video:{0}".info(videoFile);
-						fileToPlay.set_Text(videoFile);
-						video.play(videoFile);
+					try
+					{
+						if (videoFile.fileExists())
+						{	
+							"Loading video:{0}".info(videoFile);
+							fileToPlay.set_Text(videoFile);
+							video.play(videoFile);
+							"after play".info();
+						}
+					}
+					catch(Exception ex)
+					{
+						ex.log("[Play WMV videos] in playFile");
 					}
 				  };
 

@@ -32,7 +32,7 @@ using O2.External.IE.WebObjects;
 //O2Ref:System.Drawing.dll
 
 
-namespace O2.Script
+namespace O2.XRules.Database.Utils
 {
     public class ascx_View_WebPage_Details: UserControl
     {    

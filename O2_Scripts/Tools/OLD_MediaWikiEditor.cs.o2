@@ -1,0 +1,270 @@
+// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using O2.Interfaces.O2Core;
+using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.DotNet;
+using O2.Views.ASCX;
+using O2.Views.ASCX.ExtensionMethods;
+using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX.Ascx.MainGUI;
+using O2.External.IE.ExtensionMethods;
+using O2.External.IE.Wrapper;
+using O2.XRules.Database.APIs; 
+using O2.XRules.Database.Utils.O2;
+//O2File:OwaspWikiAPI.cs
+//O2File:O2PlatformWikiAPI.cs
+//O2File:WordPressAPI.cs
+//O2File:ISecretData.cs
+//O2Ref:WordPress_XmlRpc_JoeBlogs.dll
+//O2Ref:O2_External_IE.dll
+
+namespace O2.XRules.Database.Tools
+{ 
+    public class MediaWikiEditor : Control
+    {     
+    	public String FileWithSecretData {get; set;}
+    	
+    	public O2MediaWikiAPI WikiApi {get; set;}
+    	public WordPressAPI WpApi {get; set;}
+    	public TextBox WikiPage_TextBox  {get; set;}
+    	
+    	public RichTextBox WikiTextEditor { get; set; }
+		public O2BrowserIE BrowserPreview { get; set; }
+		public O2BrowserIE BrowserCurrent { get; set; }
+    	
+    	public static MediaWikiEditor launch()
+    	{    		
+    		var wikiEditor = O2Gui.open<MediaWikiEditor>("O2 MediaWiki Editor",750,500);
+    		wikiEditor.setMediaWikiTo_O2Platform();
+    		return wikiEditor;
+    	}
+    	
+    	public MediaWikiEditor()
+    	{
+    		FileWithSecretData = @"C:\O2\_USERDATA\O2TestUsers.xml";
+    		//setMediaWikiTo_O2Platform();
+    		//setMediaWikiTo_OWASP();
+    	}    	    	
+    	
+    	public void setMediaWikiTo_O2Platform()
+    	{
+    		WikiApi = new O2PlatformWikiAPI();
+    		this.buildGui();
+    	}
+    	
+    	public void setMediaWikiTo_OWASP()
+    	{
+    		WikiApi = new OwaspWikiAPI();
+    		this.buildGui();
+    	}
+    	
+    	public void loginToWikiAndWordPress()
+    	{
+    		// MediaWiki Api Object    				
+			var secretData = FileWithSecretData.deserialize<SecretData>();
+			var username = secretData.username("O2Platform-Wiki");
+			var password = secretData.password("O2Platform-Wiki");
+			WikiApi.login(username,password); 			
+			
+			// WordPress Api Object
+			WpApi = new WordPressAPI("http://use-o2.com");
+			//WpApi.login(secretData.username("O2Platform-WordPress"), secretData.password("O2Platform-WordPress"));			
+    	}    					        
+
+        public void buildGui()
+        {
+        	this.clear();
+        	//loginToWikiAndWordPress();
+        	// add Controls
+        	//var panel = O2Gui.open<Panel>("MediaWiki Editor", 750,500);			 
+        	var topLevel = this.add_1x1();
+        	buildSidePanel(topLevel[0]);
+        	buildMainPanel(topLevel[1]); 
+        }
+        
+        public void buildMainPanel(Control mainPanel)
+        {        	
+			var controls = mainPanel.add_1x2("WikiText","Preview","Live data (Wiki or WordPress)",true,500,300); 
+			WikiTextEditor = controls[0].add_RichTextBox();
+			BrowserPreview = controls[1].add_Browser();
+			BrowserCurrent = controls[2].add_Browser(); 
+			
+			WikiPage_TextBox = WikiTextEditor.insert_Above<TextBox>(50);
+			var bottomPanel = WikiPage_TextBox.insert_Below<Panel>(30);  			
+			
+			WikiTextEditor.insert_Below<ascx_LogViewer>(130);
+			
+			//Events			
+			WikiTextEditor.onKeyPress((key)=> 			// add suport to paste images form Clipboard
+				{
+					if (key == (Keys.Control | Keys.V))		
+						if (Clipboard.ContainsImage())
+						{ 
+							"Image in Clipboard".debug();
+							O2Thread.mtaThread( 
+								()=>{
+										var imageUrl = WikiApi.uploadImage_FromClipboard();
+										var wikiTextForImage = WikiApi.getWikiTextForImage(imageUrl);					
+										WikiTextEditor.insertText(wikiTextForImage); 
+									});
+							return true;
+						}		 			 
+					return false;
+				}); 
+				
+						
+			BrowserPreview.silent(true);
+			BrowserCurrent.silent(true);
+						
+			//default values
+			WikiPage_TextBox.set_Text("Test");			 			
+			
+			// add buttons	& its events	 
+			
+			bottomPanel.add_Button("Post To WordPress",0, 350).onClick(
+				()=>{
+						var pageToEdit = WikiPage_TextBox.get_Text();																				
+						var postId = WpApi.post_from_MediaWiki(WikiApi,pageToEdit);
+						var postUrl = "{0}/?p={1}".format(WpApi.WordPressServer,postId);
+						BrowserCurrent.open(postUrl);
+					})
+					  .append_Link("Reset network connection", ()=> System.GC.Collect());
+						
+			
+			bottomPanel.add_Button("Load",0).onClick(
+				()=>{
+						O2Thread.mtaThread(()=>
+						{			
+							var pageToEdit =  WikiPage_TextBox.get_Text();	
+							loadPage(pageToEdit);							
+						});
+					}).click();
+			
+			
+			bottomPanel.add_Button("Preview",0,100).onClick(
+				()=>{
+						O2Thread.mtaThread( 
+								()=>{
+										BrowserPreview.set_Text(WikiApi.parseText(WikiTextEditor.get_Text(),true));
+									});
+					});
+					
+			bottomPanel.add_Button("Save",0,200).onClick(
+				()=>{
+						var currentPage =  WikiPage_TextBox.get_Text();
+						// save content
+						WikiApi.save(currentPage, WikiTextEditor.get_Text()); 
+						 
+						// reload content and show it
+						var wikiText = WikiApi.wikiText(currentPage);					
+						BrowserPreview.set_Text(WikiApi.parseText(wikiText,true));
+						BrowserCurrent.set_Text(WikiApi.html(currentPage));	  			
+					}); 
+			
+			WikiTextEditor.onKeyPress(Keys.Enter, 
+				(code)=>{
+							O2Thread.mtaThread(()=>
+							{			
+								BrowserPreview.set_Text(WikiApi.parseText(code,true));
+							});
+						});
+		}
+		
+		public void buildSidePanel(Control sidePanel)
+		{
+			var defaultSecretDataLocation =  @"C:\O2\_USERDATA\O2TestUsers.xml";
+			var defaultAccountType = "O2Platform-Wiki";
+			
+			//var treeView = browser.insert_Left<TreeView>(350);
+			var treeView = sidePanel.add_TreeView();
+			treeView.showSelection();	 	
+						
+			//Chose Wiki targe
+			treeView.insert_Above<Panel>(20)
+			        .add_Link("O2Platform WIKI", 0,0 , setMediaWikiTo_O2Platform )
+			        .append_Link("OWASP WIKI", setMediaWikiTo_OWASP );
+			
+			
+			//Secret Data Panel
+			var credentialsPanel = treeView.insert_Below<Panel>(75); 
+			var secretFileTextBox = credentialsPanel.add_Label("Secrets File:    ",3).append_TextBox(defaultSecretDataLocation);
+			secretFileTextBox.align_Right(credentialsPanel); 
+			var accountTypeTextBox = credentialsPanel.add_Label("Account Type: ", 25).append_TextBox(defaultAccountType);
+			accountTypeTextBox.align_Right(credentialsPanel); 
+			
+			var loginStatus = credentialsPanel.add_Label("not logged in", 48,170);
+			credentialsPanel.add_Button("login", 45,84, 
+				()=>{
+						var secretData = secretFileTextBox.get_Text().deserialize<SecretData>();
+						var accountType = accountTypeTextBox.get_Text();
+						WikiApi.login(secretData.username(accountType),secretData.password(accountType));
+						if (WikiApi.loggedIn())
+							loginStatus.set_Text("Logged in as: {0}".format(secretData.username(accountType))).textColor(Color.Green);
+						else
+							loginStatus.set_Text("Login failded for: {0}".format(secretData.username(accountType))).textColor(Color.Red);
+						return;
+					});
+					
+			// Context menu
+			var contextMenu = treeView.add_ContextMenu(); 
+			contextMenu.add_MenuItem("delete selected page",
+							()=>{
+									var pageToDelete = treeView.selected().get_Text();
+									if (pageToDelete.valid()) 
+										if (WikiApi.deletePage(pageToDelete)) 
+											treeView.remove_Node(treeView.selected());													
+								});	
+								
+			contextMenu.add_MenuItem("reload all pages",
+							()=>{
+									treeView.clear();
+									treeView.add_Nodes(WikiApi.allPages());
+								}); 
+								
+			var renameMenuItem = contextMenu.add_MenuItem("rename");
+			var renameTextBox = renameMenuItem.add_TextBox("rename");		   					   
+			
+			renameMenuItem.add_MenuItem("rename page with new title (set above)",
+					()=> {
+							var currentTitle = treeView.selected().get_Text();
+							var newTitle = renameTextBox.get_Text(); 
+							if (WikiApi.movePage(currentTitle, newTitle))
+							{
+								treeView.clear();
+								treeView.add_Nodes(WikiApi.allPages());
+							}
+							//"renaming page '{0}' to '{1}'".info(currentTitle, newTitle);
+						});
+						
+			treeView.add_Nodes(WikiApi.allPages()).afterSelect<string>(
+					(page)=> 
+							{
+								WikiPage_TextBox.set_Text(page);
+								loadPage(page);
+								renameTextBox.set_Text(page);
+								renameTextBox.width(page.size() * 7);
+								//browser.set_Text(wikiApi.getPageHtml(page));
+							});
+
+		}		
+		
+		public void loadPage(string pageToLoad)
+		{
+			var wikiText = WikiApi.wikiText(pageToLoad);
+							//wikiTextEditor.set_Text(wikiApi.wikiText(pageToEdit));
+			WikiTextEditor.set_Text(wikiText);
+			BrowserPreview.set_Text(WikiApi.parseText(wikiText,true));
+			BrowserCurrent.set_Text(WikiApi.html(pageToLoad));	  
+		}
+    }
+    
+}
