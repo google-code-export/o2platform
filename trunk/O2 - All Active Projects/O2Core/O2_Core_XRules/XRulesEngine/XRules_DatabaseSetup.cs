@@ -11,10 +11,10 @@ namespace O2.Core.XRules.XRulesEngine
         // Todo: change this function to reflect the new XRules SVN Sync wizard
         public static void installXRulesDatabase()
         {
-            if (XRules_Config.xRulesDatabase != null)
-                XRules_Config.xRulesDatabase.installXRulesDatabase(XRules_Config.PathTo_XRulesDatabase_fromO2, XRules_Config.PathTo_XRulesTemplates);
-            else
-                DI.log.info("There is no xRulesDatabase available");
+           // if (XRules_Config.xRulesDatabase != null)
+           //     XRules_Config.xRulesDatabase.installXRulesDatabase(XRules_Config.PathTo_XRulesDatabase_fromO2, XRules_Config.PathTo_XRulesTemplates);
+           // else
+           //     DI.log.info("There is no xRulesDatabase available");
         }
         
         public static void loadXRulesTemplates(ListBox lbTargetListBox)

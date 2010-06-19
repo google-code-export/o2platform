@@ -348,26 +348,31 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void saveSourceCodeFile(String sTargetLocation)
         {
-            try
-            {
-                tecSourceCode.SaveFile(sTargetLocation);
-                if (sPathToFileLoaded != sTargetLocation)
+            this.invokeOnThread(
+                () =>
                 {
-                    sPathToFileLoaded = sTargetLocation;
+                    try
+                    {
+                        tecSourceCode.SaveFile(sTargetLocation);
+                        if (sPathToFileLoaded != sTargetLocation)
+                        {
+                            sPathToFileLoaded = sTargetLocation;
 
-                }
+                        }
 
-                PublicDI.log.info("Source code saved to: {0}", sTargetLocation);
-                tbSourceCode_FileLoaded.Text = Path.GetFileName(sTargetLocation);
-                lbSource_CodeFileSaved.Visible = true;
-                lbSourceCode_UnsavedChanges.Visible = false;
-                btSaveFile.Enabled = false;
-                tecSourceCode.LineViewerStyle = LineViewerStyle.None;
-            }
-            catch (Exception ex)
-            {
-                PublicDI.log.error("in saveSourceCodeFile {0}", ex.Message);
-            }
+                        PublicDI.log.info("Source code saved to: {0}", sTargetLocation);
+                        tbSourceCode_FileLoaded.Text = Path.GetFileName(sTargetLocation);
+                        lbSource_CodeFileSaved.Visible = true;
+                        lbSourceCode_UnsavedChanges.Visible = false;
+                        btSaveFile.Enabled = false;
+                        tecSourceCode.LineViewerStyle = LineViewerStyle.None;
+                    }
+                    catch (Exception ex)
+                    {
+                        PublicDI.log.error("in saveSourceCodeFile {0}", ex.Message);
+                    }
+                    return;
+                });
         }
 
         public bool loadSourceCodeFile(String pathToSourceCodeFileToLoad)
@@ -805,11 +810,15 @@ namespace O2.External.SharpDevelop.Ascx
             {
                 saveSourceCode(); // always save before compiling  
                 var csharpCompiler = new AST.CSharp_FastCompiler();
-                                
-
+                csharpCompiler.onAstFail +=
+                    ()=>{
+                            "AST Creation for provided source code failed".error();
+                        };   
+                //csharpCompiler.generateDebugSymbols = true;
                 csharpCompiler.compileSnippet(sourceCode);
-                csharpCompiler.waitForCompilationComplete();                
-                return csharpCompiler.CompilerResults.CompiledAssembly;
+                csharpCompiler.waitForCompilationComplete();
+                if (csharpCompiler.CompilerResults != null && csharpCompiler.CompilerResults.Errors.Count ==0)
+                    return csharpCompiler.CompilerResults.CompiledAssembly;
             }
             return null;
         }
@@ -826,9 +835,12 @@ namespace O2.External.SharpDevelop.Ascx
                 compiledAssembly = compileEngine.compiledAssembly ?? null;
             }
 
-            
-            btShowHideCompilationErrors.Visible = tvCompilationErrors.Visible = lbCompilationErrors.Visible =
-                compiledAssembly==null && compileEngine.sbErrorMessage != null;
+            var state = compiledAssembly == null && compileEngine.sbErrorMessage != null;
+            //btShowHideCompilationErrors.visible(state);
+            btShowHideCompilationErrors.prop("Visible",state);
+            tvCompilationErrors.visible(state);
+            lbCompilationErrors.prop("Visible", state);
+                
             
 
             clearBookmarksAndMarkers();
@@ -844,45 +856,54 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void compileDotNetCode()
         {
-            try
-            {                
-
-                var compiledAssembly = sPathToFileLoaded.extension(".h2") ? compileH2File()  : compileCSSharpFile();
-                
-                // set gui options depending on compilation result
-                var assemblyCreated = compiledAssembly != null;
-
-                btDebugMethod.Visible = executeSelectedMethodToolStripMenuItem.Visible =
-                                btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
-                                lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible
-                                = assemblyCreated;
-
-                cboxCompliledSourceCodeMethods.Items.Clear();    
-                if (compiledAssembly!= null)
+            O2Thread.mtaThread (
+                () =>
                 {
-                    autoBackup();
-                    var previousExecutedMethod = cboxCompliledSourceCodeMethods.Text;                     
-                    O2Messages.dotNetAssemblyAvailable(compiledAssembly.Location);
-                    foreach (var method in PublicDI.reflection.getMethods(compiledAssembly))
-                        if (false == method.IsAbstract && false == method.IsSpecialName)
-                            cboxCompliledSourceCodeMethods.Items.Add(new Reflection_MethodInfo(method));
-                    // remap the previously executed method
-                    if (cboxCompliledSourceCodeMethods.Items.Count > 0)
-                    {
-                        foreach (var method in cboxCompliledSourceCodeMethods.Items)
-                            if (method.ToString() == previousExecutedMethod)
-                            {
-                                cboxCompliledSourceCodeMethods.SelectedItem = method;
-                            }
-                        cboxCompliledSourceCodeMethods.SelectedIndex = 0;
+                    try
+                    {   
+                        //start the compilation in a separate thread
+                        var compiledAssembly = sPathToFileLoaded.extension(".h2") ? compileH2File() : compileCSSharpFile();
+                        // then continue on the gui thread
+
+                        this.invokeOnThread(() =>
+                           {
+                               // set gui options depending on compilation result
+                               var assemblyCreated = compiledAssembly != null;
+
+                               btDebugMethod.Visible = executeSelectedMethodToolStripMenuItem.Visible =
+                                               btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
+                                               lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible
+                                               = assemblyCreated;
+
+                               cboxCompliledSourceCodeMethods.Items.Clear();
+                               if (compiledAssembly != null)
+                               {
+                                   autoBackup();
+                                   var previousExecutedMethod = cboxCompliledSourceCodeMethods.Text;
+                                   O2Messages.dotNetAssemblyAvailable(compiledAssembly.Location);
+                                   foreach (var method in PublicDI.reflection.getMethods(compiledAssembly))
+                                       if (false == method.IsAbstract && false == method.IsSpecialName)
+                                           cboxCompliledSourceCodeMethods.Items.Add(new Reflection_MethodInfo(method));
+                                   // remap the previously executed method
+                                   if (cboxCompliledSourceCodeMethods.Items.Count > 0)
+                                   {
+                                       foreach (var method in cboxCompliledSourceCodeMethods.Items)
+                                           if (method.ToString() == previousExecutedMethod)
+                                           {
+                                               cboxCompliledSourceCodeMethods.SelectedItem = method;
+                                           }
+                                       cboxCompliledSourceCodeMethods.SelectedIndex = 0;
+                                   }
+                               }
+                               refresh();
+                           });
+                        //tecSourceCode.Refresh();
                     }
-                }
-                tecSourceCode.Refresh();
-            }
-            catch (Exception ex)
-            {
-                PublicDI.log.error("in compileDotNetCode:{0}", ex.Message);
-            }
+                    catch (Exception ex)
+                    {
+                        PublicDI.log.error("in compileDotNetCode:{0}", ex.Message);
+                    }
+                });
         }
         
         private void autoBackup()

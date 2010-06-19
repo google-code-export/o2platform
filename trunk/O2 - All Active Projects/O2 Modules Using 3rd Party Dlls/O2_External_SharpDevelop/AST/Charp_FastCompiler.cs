@@ -279,10 +279,11 @@ namespace O2.External.SharpDevelop.AST
                                     foreach (CompilerError error in CompilerResults.Errors)
                                     {
                                         //CompilationErrors.Add(CompilationErrors.line(error.ToString());
-                                        CompilationErrors =
-                                            CompilationErrors.line(String.Format("{0}::{1}::{2}::{3}::{4}", error.Line,
+                                        var errorMessage = String.Format("{0}::{1}::{2}::{3}::{4}", error.Line,
                                                                                  error.Column, error.ErrorNumber,
-                                                                                 error.ErrorText, error.FileName));
+                                                                                 error.ErrorText, error.FileName);
+                                        CompilationErrors = CompilationErrors.line(errorMessage);
+                                        "[CSharp_FastCompiler] Compilation Error: {0}".error(errorMessage);
                                     }
                                     DebugMode.ifError("Compilation failed");
                                     this.invoke(onCompileFail);
@@ -565,6 +566,9 @@ namespace O2.External.SharpDevelop.AST
 
         public void waitForCompilationComplete()
         {
+            //"Current Thread: {0}".info(System.Threading.Thread.CurrentThread.Name);
+            if (FinishedCompilingCode.WaitOne(20 * 1000).isFalse())
+                "in CSharp_FastCompiler, the compilation lasted more than 20 seconds".error();
             FinishedCompilingCode.WaitOne();
         }
     }

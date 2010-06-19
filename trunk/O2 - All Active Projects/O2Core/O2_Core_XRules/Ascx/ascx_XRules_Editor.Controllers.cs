@@ -33,7 +33,7 @@ namespace O2.Core.XRules.Ascx
         {
             directoryWithXRulesDatabase.openDirectory(XRules_Config.PathTo_XRulesDatabase_fromO2);
             directoryWithLocalXRules.openDirectory(XRules_Config.PathTo_XRulesDatabase_fromLocalDisk);
-            XRules_DatabaseSetup.installXRulesDatabase();
+            //XRules_DatabaseSetup.installXRulesDatabase();
             XRules_DatabaseSetup.loadXRulesTemplates(lbCurrentXRulesTemplates);
         }
 
