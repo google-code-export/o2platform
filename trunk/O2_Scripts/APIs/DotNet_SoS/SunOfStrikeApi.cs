@@ -36,6 +36,13 @@ namespace O2.Script
    		public string extraExecutionCommand = ".o2.";
     	//public string cmdDefaultDebuggedProcess = "calc.exe";    
     	
+    	public static void launchO2UnderDebugger()
+    	{
+    	 	var pathToO2Exe =  PublicDI.config.CurrentExecutableDirectory.pathCombine(PublicDI.config.CurrentExecutableFileName);
+    	 	"launching O2 under debugger: {0}".info(pathToO2Exe);
+    		new SonOfStrikeGui().launch(pathToO2Exe);
+    	}
+    	
     	public SonOfStrikeGui()
     	{
     		try
@@ -55,6 +62,11 @@ namespace O2.Script
     	
     	public void launch(string executableToLaunch)
     	{
+    		if (pathToCdb.fileExists().isFalse())
+    		{
+    			"Aborting launch since could not find .NET Debugger (cdb.exe) in the expected path: {0}".error(pathToCdb);
+    			return ;    		
+    		}
 			cmdApi = new CmdExeApi(pathToCdb, executableToLaunch , dataReceived);
     		cmdApi.MinimizeHostWindow = true;    		    			
     		cmdApi.start();    			    		    		
