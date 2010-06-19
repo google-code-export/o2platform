@@ -15,6 +15,7 @@ using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes.MainGUI;
 using WindowsInput;
+using WindowsInput.Native;
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 
 namespace O2.Script
@@ -118,6 +119,7 @@ namespace O2.Script
     
     public class CmdExeApi
     {
+    	public InputSimulator Input_Simulator {get; set;}
     	public string PipeName { get; set;}
     	public string FullPipeName { get; set;}
     	public string ProcessToStart { get; set;}
@@ -134,6 +136,7 @@ namespace O2.Script
     	
     	public CmdExeApi()
     	{
+    		Input_Simulator= new InputSimulator();
     		PipeName = 64000.random().str();	// give it a random name
     		FullPipeName = @"\\.\pipe\"+ PipeName;
     		ProcessToStart = "cmd";				// default
@@ -225,7 +228,7 @@ namespace O2.Script
     		if (windowHandle == null || windowHandle.ToInt32() == 0)
     			"in CmdExeApi.selectWindow provided windowHandle was 0)".error();
     		else    		
-    			InputSimulator.SetForegroundWindow(windowHandle); 
+    			NativeMethods.SetForegroundWindow(windowHandle); 
     		return this;
     	}    	
     	
@@ -249,13 +252,13 @@ namespace O2.Script
     	    	
     	public CmdExeApi showHost()
     	{
-    		InputSimulator.ShowWindow((int)HostHandle, (int)InputSimulator.SW.SHOW);
+    		NativeMethods.ShowWindow((int)HostHandle, (int)NativeMethods.SW.SHOW);
     		return this;
     	}
     	
     	public CmdExeApi hideHost()
     	{
-    		InputSimulator.ShowWindow((int)HostHandle, (int)InputSimulator.SW.HIDE);
+    		NativeMethods.ShowWindow((int)HostHandle, (int)NativeMethods.SW.HIDE);
     		return this;
     	}
 
@@ -276,7 +279,7 @@ namespace O2.Script
     		// now select the host so that the cmdString text is sent to it
     		selectHost();
     		// send text
-    		InputSimulator.SimulateTextEntry(cmdString.line());
+    		Input_Simulator.Keyboard.TextEntry(cmdString.line());
     		// option to run delay (useful for debugging and demos)
     		if (postExecutionDelay > 0)
     			this.sleep(postExecutionDelay);
@@ -297,7 +300,7 @@ namespace O2.Script
     	{
     		saveUsersWindow();
     		selectHost();
-    		InputSimulator.SimulateModifiedKeyStroke(VirtualKeyCode.CONTROL,VirtualKeyCode.VK_C);
+    		Input_Simulator.Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL,VirtualKeyCode.VK_C);
     		restoreUsersWindow();    	   	
     		return this;
     	}
