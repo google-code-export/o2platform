@@ -1579,7 +1579,7 @@
             Assembly assembly = Assembly.GetAssembly(t);
             string str = assembly.FullName.Split(separator)[0];
             string str2 = t.Namespace;
-            string name = str + "." + str2 + ".Model." + actionName + "Response.xslt";
+            string name = str + "." + str2 + ".Model." + actionName + "Response.xslt";            
             using (XmlTextReader reader = new XmlTextReader(assembly.GetManifestResourceStream(name)))
             {
                 transform.Load(reader);

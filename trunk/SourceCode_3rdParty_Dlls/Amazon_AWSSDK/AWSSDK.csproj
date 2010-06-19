@@ -6,7 +6,7 @@
     <ProjectGuid>{A78D680F-AB18-4771-A7E8-C1578FCDF54D}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <AssemblyName>Amazon_AWSSDK</AssemblyName>
+    <AssemblyName>AWSSDK</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>

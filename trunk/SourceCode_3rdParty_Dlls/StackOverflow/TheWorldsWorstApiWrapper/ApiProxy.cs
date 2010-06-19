@@ -108,7 +108,7 @@ namespace TheWorldsWorst.ApiWrapper
             _client.Headers[HttpRequestHeader.UserAgent] = DefaultUserAgent;
             if (DownloadUsingGzipEncoding)
             {
-            	"Downloading using Gzip encoding".error();
+            	//"Downloading using Gzip encoding".error();
             	_client.Headers[HttpRequestHeader.AcceptEncoding] = "gzip";
             }
             _client.Encoding = Encoding.UTF8;
