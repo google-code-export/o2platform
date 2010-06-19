@@ -11,6 +11,7 @@ using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.InterfacesBaseImpl;
 using System.IO;
+using O2.DotNetWrappers.DotNet;
 
 namespace O2.DotNetWrappers
 {
@@ -31,7 +32,7 @@ namespace O2.DotNetWrappers
 
             sourceCodeMappingFileName = "SourceCodeMappingsFile.xml";
             sourceCodeMappings = SourceCodeMappingsUtils.getSourceCodeMappings();
-            PathToGac = Path.Combine(Environment.GetEnvironmentVariable("windir") ?? "", "Assembly\\GAC_MSIL");            
+            PathToGac = Path.Combine(Environment.GetEnvironmentVariable("windir") ?? "", "Assembly");//\\GAC_MSIL");                        
         }
 
         // DI Targets

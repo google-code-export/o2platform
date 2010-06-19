@@ -217,6 +217,7 @@ namespace O2.DotNetWrappers.DotNet
             sourceCodeFiles = sourceCodeFiles.onlyValidFiles();
             if (sourceCodeFiles.size() == 0)  // means there are no files to compile
                 return null;
+            tryToResolveReferencesForCompilation(referencedAssemblies);                 // try to make sure all assemblies are available for compilation
             if (compileSourceFiles(sourceCodeFiles, referencedAssemblies.ToArray(), ref compiledAssembly, ref errorMessages, false
                 /*verbose*/, mainClass, outputAssemblyName))
             {
@@ -289,7 +290,7 @@ namespace O2.DotNetWrappers.DotNet
             // find the extra files to add
             foreach (var sourceCodeFile in sourceCodeFiles)
             {
-                if (sourceCodeFile.valid())
+                if (sourceCodeFile.valid() && sourceCodeFile.extension(".h2").isFalse())
                 {
                     var fileLines = Files.getFileLines(sourceCodeFile);
                     foreach (var fileLine in fileLines)
@@ -606,6 +607,9 @@ namespace O2.DotNetWrappers.DotNet
 
         public static string findScriptOnLocalScriptFolder(string file)
         {
+            if (file.contains("/", @"\"))       // currenlty relative paths are not supported
+                return "";
+
             //string defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
 
             if (LocalScriptFileMappings.hasKey(file))
@@ -664,10 +668,17 @@ namespace O2.DotNetWrappers.DotNet
                         Files.Copy(reference, expectedFile);
                 }
                 else
-                {                                                                            
+                {
+                    populateCachedListOfGacAssemblies();                                                     
                     new O2Svn().tryToFetchAssemblyFromO2SVN(reference);
                 }
             }
+        }
+
+        public static void populateCachedListOfGacAssemblies()
+        {
+            if (O2Svn.AssembliesCheckedIfExists.size() < 50)
+                O2Svn.AssembliesCheckedIfExists.add_OnlyNewItems(GacUtils.assemblyNames());
         }
     }
 }

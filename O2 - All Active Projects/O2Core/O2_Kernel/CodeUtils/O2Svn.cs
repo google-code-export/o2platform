@@ -10,9 +10,10 @@ namespace O2.Kernel.CodeUtils
 {
     public class O2Svn
     {
-        public static List<string> AssembliesCheckedIfExists = new List<string>();
+        public static List<string> AssembliesCheckedIfExists = new List<string>() {"System.Deployment"};
         public static string O2SVN_ExternalDlls = "http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/_3rdPartyDlls/";
         public static string O2SVN_Binaries = "http://o2platform.googlecode.com/svn/trunk/O2_Binaries/";
+        
 
         public static void clear_AssembliesCheckedIfExists()
         {
@@ -20,13 +21,14 @@ namespace O2.Kernel.CodeUtils
         }
 
         public void tryToFetchAssemblyFromO2SVN(string assemblyToLoad)
-        {
+        {            
             string localFilePath = "";
             var thread = O2Kernel_O2Thread.mtaThread(
                 () =>
                 {
-                    if (AssembliesCheckedIfExists.Contains(assemblyToLoad))     // for performace reasons only check this once
+                    if (AssembliesCheckedIfExists.Contains(assemblyToLoad) || AssembliesCheckedIfExists.Contains(Path.GetFileNameWithoutExtension(assemblyToLoad)))     // for performace reasons only check this once
                         return;
+
                     "Trying to fetch assembly from O2's SVN repository: {0}".info(assemblyToLoad);
                     AssembliesCheckedIfExists.Add(assemblyToLoad);
                     if (Path.GetExtension(assemblyToLoad) == ".dll" ||
