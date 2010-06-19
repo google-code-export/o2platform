@@ -250,6 +250,8 @@ namespace O2.XRules.Database.APIs
     	
     	public static string token(this O2MediaWikiAPI wikiApi, string action, string page)
     	{
+    		if (wikiApi.loggedIn().isFalse())
+    			return "";
     		var xmlData = wikiApi.getApiPhp("action=query&prop=info&intoken={0}&titles={1}&format=xml".format(action,page));
             var attributeName = "{0}token".format(action);
             return xmlData.xRoot().elementsAll().element("page").attribute(attributeName).value();
@@ -260,6 +262,15 @@ namespace O2.XRules.Database.APIs
 			var postData = @"action=login&lgname={0}&lgpassword={1}&format=xml".format(username,password);			
 			var login = wikiApi.postApiPhp(postData).xRoot().element("login");
 			wikiApi.Login_Result = login.attribute("result").value();
+			
+			if (wikiApi.Login_Result == "NeedToken")
+			{
+				var token=login.attribute("token").value();
+				postData = "{0}&lgtoken={1}".format(postData, token);
+				login = wikiApi.postApiPhp(postData).xRoot().element("login");
+				wikiApi.Login_Result = login.attribute("result").value();
+			}
+			
 			if (wikiApi.Login_Result == "Success")
 			{
 				wikiApi.Login_UserId = login.attribute("lguserid").value();
@@ -292,8 +303,11 @@ namespace O2.XRules.Database.APIs
 		//note: the createonly option doesn't seem to be working
 		public static string createPage(this O2MediaWikiAPI wikiApi,string page, string pageContent)
     	{
-    		var urlData = "action=edit&format=xml&createonly&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(),page.urlEncode(),pageContent.urlEncode()); 
-    		return wikiApi.postApiPhp(urlData);
+    		if (wikiApi.loggedIn().isFalse())
+    			return "";
+    		
+			var urlData = "action=edit&format=xml&createonly&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(),page.urlEncode(),pageContent.urlEncode()); 
+			return wikiApi.postApiPhp(urlData);    		
     	}
 
         public static string save(this O2MediaWikiAPI wikiApi, string page, string pageContent)
@@ -303,10 +317,8 @@ namespace O2.XRules.Database.APIs
 
         public static string editPage(this O2MediaWikiAPI wikiApi,string page, string pageContent)
     	{
-    		//var urlData = "action=edit&format=xml&nocreate&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(),page.urlEncode(),pageContent.urlEncode()); 
-    		//return wikiApi.postApiPhp(urlData);
-            //   return wikiApi.editPage(page, pageContent, "", "");
-    	    //}                 
+    		if (wikiApi.loggedIn().isFalse())
+    			return "";    		
             try
             {
                 var response = wikiApi.editPage(page, pageContent, "", "");
@@ -334,6 +346,8 @@ namespace O2.XRules.Database.APIs
 
         public static string editPage(this O2MediaWikiAPI wikiApi, string page, string pageContent, string captchaId, string captchaWord)
         {
+	        if (wikiApi.loggedIn().isFalse())
+    			return "";
             var urlData = "action=edit&format=xml&nocreate&token={0}&title={1}&text={2}".format(wikiApi.editToken(page).urlEncode(), page.urlEncode(), pageContent.urlEncode());
             if (captchaId.valid() && captchaWord.valid())
                 urlData = "{0}&captchaid={1}&captchaword={2}".format(urlData, captchaId, captchaWord);
@@ -384,7 +398,7 @@ namespace O2.XRules.Database.APIs
 
         public static List<string> categories(this O2MediaWikiAPI wikiApi)
         {
-            return wikiApi.categories(true);
+            return wikiApi.categories(false);
         }
 
         public static List<string> categories(this O2MediaWikiAPI wikiApi, bool autoRemoveCategoryPrefix)
@@ -425,7 +439,7 @@ namespace O2.XRules.Database.APIs
 
         public static List<string> pagesInCategory(this O2MediaWikiAPI wikiApi, string category)
         {
-            return wikiApi.pagesInCategory(category, true);
+            return wikiApi.pagesInCategory(category,false);
         }
 
         public static List<string> pagesInCategory(this O2MediaWikiAPI wikiApi, string category, bool autoAddCategoryPrefix)
@@ -458,7 +472,7 @@ namespace O2.XRules.Database.APIs
             var maxToFetchPerRequest = 500;
             var maxItemsToFetch = 5000;
             return wikiApi.getIndexPhp_UsingXPath_AttributeValues("title=Special:UncategorizedPages",
-                                                                  "//div[@class='mw-spcontent']//li//a", "href",
+                                                                  "//div[@class='mw-spcontent']//li//a", "",
                                                                   "limit", maxToFetchPerRequest,
                                                                   "offset", maxItemsToFetch);
         }
@@ -493,10 +507,16 @@ namespace O2.XRules.Database.APIs
     	{
     		return wikiApi.getPageHtml(page);
     	}
-    	    	
+		
+		public static string htmlRaw(this O2MediaWikiAPI wikiApi, string page)
+    	{    	
+    		return wikiApi.getIndexPhp("action=render&title={0}".format(page));    		
+    	}
+		
     	public static string getPageHtml(this O2MediaWikiAPI wikiApi, string page)
     	{    	
-    		var htmlCode = wikiApi.getIndexPhp("action=render&title={0}".format(page));
+    		//var htmlCode = wikiApi.getIndexPhp("action=render&title={0}".format(page));
+    		var htmlCode = wikiApi.htmlRaw(page);
     		return wikiApi.wrapOnHtmlPage(htmlCode);
     	}
 
@@ -850,7 +870,9 @@ namespace O2.XRules.Database.APIs
                 var htmlCode = wikiApi.getIndexPhp(getRequest);
                 //"uncategorizedPages GET request: {0}".info(getRequest);
                 var htmlDocument = htmlCode.htmlDocument();
-                var pages = htmlDocument.select(xPathQuery).attributes(xPathAttribute).values();
+                var pages = (xPathAttribute.valid()) 
+                				? htmlDocument.select(xPathQuery).attributes(xPathAttribute).values()
+                				: htmlDocument.select(xPathQuery).values();
                 result.add(pages);
                 if (pages.size() == 0 || pages.size() < maxToFetchPerRequest)
                     break;
@@ -1030,7 +1052,69 @@ namespace O2.XRules.Database.APIs
         }
 
         #endregion
-
+		
+		#region fetch from Namespace (templates, users, categories, users)
+		
+		public static List<String> templatePages(this O2MediaWikiAPI wikiApi)
+    	{
+    		return wikiApi.allPagesFromNamespace(10);
+    	}
+    	
+    	public static List<String> users(this O2MediaWikiAPI wikiApi)
+    	{
+    		return wikiApi.userPages();
+    	}
+    	
+    	public static List<String> userPages(this O2MediaWikiAPI wikiApi)
+    	{
+    		return wikiApi.allPagesFromNamespace(2);
+    	}
+    	
+    	public static List<String> categoryPages(this O2MediaWikiAPI wikiApi)
+    	{
+    		return wikiApi.allPagesFromNamespace(14);
+    	}
+    	
+    	public static List<String> allPagesFromNamespace(this O2MediaWikiAPI wikiApi, int namespaceID)
+    	{
+    		var results = new List<string>();
+    		try
+    		{
+    			
+				Func<HtmlAgilityPack.HtmlDocument,string> resolveNextLink = 
+					(htmlDocument)=>{		 
+										var nextLink = "";
+										foreach(var link in htmlDocument.select("//td[@id='mw-prefixindex-nav-form']//a"))
+											if (link.value().starts("Next page ("))  
+											{ 
+												nextLink = link.attribute("href").value().remove("/index.php?");
+												nextLink = System.Web.HttpUtility.HtmlDecode(nextLink);
+											break;
+											}
+										return nextLink;
+									};
+									
+				var nextRequest = "title=Special:PrefixIndex&from=&namespace={0}".format(namespaceID);
+												
+				
+				while(nextRequest.valid()) 
+				{					
+					var html = wikiApi.getIndexPhp(nextRequest); 		
+					var htmlDocument = html.htmlDocument();
+					results.AddRange(htmlDocument.select("//table[@id='mw-prefixindex-list-table']//a").attributes("title").values());
+					"there are {0} results".info(results.size()); 
+					nextRequest = resolveNextLink(htmlDocument);	
+				}
+			}
+			catch (Exception ex)
+			{
+				ex.log("[O2MediaWikiAPI] in allPagesFromNamespace");
+				
+			}			
+			return results;
+    	}
+		
+		#endregion
 
     }
  }

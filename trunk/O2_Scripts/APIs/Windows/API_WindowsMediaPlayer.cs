@@ -18,7 +18,7 @@ using AxWMPLib;
 
 namespace O2.XRules.Database.APIs
 {
-    public class API_WindowsMediaPlayer : Control
+    public class API_WindowsMediaPlayer : Panel
     {    
     	public AxWindowsMediaPlayer MediaPlayer { get; set; }
 
@@ -107,8 +107,22 @@ namespace O2.XRules.Database.APIs
     	
     	public static API_WindowsMediaPlayer add_WindowsMediaPlayer<T>(this T control)
     		where T : Control
-    	{    		
+    	{    		    		
     		return control.add_Control<API_WindowsMediaPlayer>();
+    	}
+    	
+    	public static AxWindowsMediaPlayer add_WindowsMediaPlayers<T>(this T control)
+    		where T : Control
+    	{    		
+    		return (AxWindowsMediaPlayer)control.invokeOnThread(
+    			()=>{
+    					var mediaPlayer = new AxWindowsMediaPlayer(); 
+						mediaPlayer.fill();
+						control.add_Control(mediaPlayer);
+						return mediaPlayer;
+    				});
+    			
+				    		
     	}
     }
 }

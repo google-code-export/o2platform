@@ -50,6 +50,26 @@ namespace O2.XRules.Database.Utils.O2
             return null;
         }
         
+        public static List<Credential> credentials(this string fileWithSecretData)
+    	{
+    		if (fileWithSecretData.fileExists())
+            {
+            	var secretData = fileWithSecretData.deserialize<SecretData>();
+    			return secretData.Credentials;
+            }
+           	return new List<Credential>();
+    	}
+    	
+    	public static List<Credential> credentialTypes(this string fileWithSecretData, string credentialType)
+    	{
+    		if (fileWithSecretData.fileExists())
+            {
+    			var secretData = fileWithSecretData.deserialize<SecretData>();
+    			return secretData.credentialTypes(credentialType);
+    		}
+    		return new List<Credential>();
+    	}
+        
                 
         #endregion
         
@@ -155,6 +175,7 @@ namespace O2.XRules.Database.Utils.O2
             return credential.Password;
         }
         #endregion
+
 
     }   
 }

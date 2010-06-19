@@ -8,7 +8,7 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.ExtensionMethods;
 
-namespace O2.XRules.Database._Rules.DotNet
+namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
     public class DotNet_SDK
     {

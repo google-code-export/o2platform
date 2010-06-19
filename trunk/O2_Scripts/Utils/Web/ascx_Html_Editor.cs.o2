@@ -37,13 +37,13 @@ using O2.External.IE.ExtensionMethods;
 
 using O2.External.SharpDevelop.Ascx;
 using O2.External.SharpDevelop.ExtensionMethods;
-//O2Ref:C:\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll
+//O2Ref:Microsoft.mshtml.dll
 using mshtml;
 
 
 using System.Threading;
 
-namespace O2.Script
+namespace O2.XRules.Database.Utils
 {
     public class ascx_Html_Editor: UserControl
     {    
@@ -70,14 +70,17 @@ namespace O2.Script
     
         private void buildGui()
         {
-        	var groupBoxes = this.add_SplitContainer_2x2("Directory","WebEditor","Config","HtmlCode",true, 100,40,40);
-        	directory = groupBoxes[0].add_Directory(startDir);        	
-        	browser = groupBoxes[1].add_WebBrowserWithLocationBar();
-        	htmlCode = groupBoxes[3].add_SourceCodeViewer();
+        	//var groupBoxes = this.add_SplitContainer_2x2("Directory","WebEditor","Config","HtmlCode",true, 100,40,40);
+        	var groupBoxes = this.add_1x1("WebEditor (Edit on page)","HtmlCode (see results in code)");
+        	browser = groupBoxes[0].add_WebBrowserWithLocationBar();
+        	htmlCode = groupBoxes[1].add_SourceCodeViewer();
+        	//directory = groupBoxes[0].add_Directory(startDir);        	
+        	//browser = groupBoxes[1].add_WebBrowserWithLocationBar();
+        	//htmlCode = groupBoxes[3].add_SourceCodeViewer();
         	htmlCode.astDetails(false);
         	
         	// build config
-        	groupBoxes[2].add_Link("toggle edit mode", 20 ,10,()=> setEditMode(!getEditMode()) );
+        	/*groupBoxes[2].add_Link("toggle edit mode", 20 ,10,()=> setEditMode(!getEditMode()) );
         	groupBoxes[2].add_Link("refresh", 40 ,10,()=> updateHtmlPage() );
         	groupBoxes[2].add_Link("take screenshot", 60 ,10,()=> takeScreenShot() );
         	
@@ -86,11 +89,12 @@ namespace O2.Script
         	takeScreenShot();
         	// setup controls events
         	directory._onDirectoryDoubleClick+=selectedFileOrFolder;       	
+        	*/
         	browser.onDocumentCompleted +=onDocumentCompleted;
         	//htmlCode.eDocumentDataChanged += htmlTextChanged;
         	// fine tune loaded controls behaviour
-        	directory._WatchFolder = true;
-        	directory.AllowDrop = false;
+        	//directory._WatchFolder = true;
+        	//directory.AllowDrop = false;
         	htmlCode.editor().colorCodeForExtension(".html");
         	
         	// remove on next code Sync
