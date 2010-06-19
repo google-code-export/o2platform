@@ -8,6 +8,35 @@ namespace WindowsInput.Native
     /// </summary>
     public static class NativeMethods
     {
+        // DC Extra ones to FindWindow  & SetForegroundWindow
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport("user32")]
+        public static extern int SetForegroundWindow(IntPtr hwnd);
+        public enum SW
+        {
+            FORCEMINIMIZE = 11,
+            HIDE = 0,
+            MAXIMIZE = 3,
+            MINIMIZE = 6,
+            RESTORE = 9,
+            SHOW = 5,
+            SHOWDEFAULT = 10,
+            SHOWMAXIMIZED = 3,
+            SHOWMINIMIZED = 2,
+            SHOWMINNOACTIVE = 7,
+            SHOWNA = 8,
+            SHOWNOACTIVATE = 4,
+            SHOWNORMAL = 1
+        }
+
+        [DllImport("user32.dll")]
+        public static extern int ShowWindow(int hwnd, int cmdShow);
+        
+        //DC - end of extra methods
+
         /// <summary>
         /// The GetAsyncKeyState function determines whether a key is up or down at the time the function is called, and whether the key was pressed after a previous call to GetAsyncKeyState. (See: http://msdn.microsoft.com/en-us/library/ms646293(VS.85).aspx)
         /// </summary>
