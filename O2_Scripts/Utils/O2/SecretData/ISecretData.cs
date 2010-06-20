@@ -69,6 +69,8 @@ namespace O2.XRules.Database.Utils.O2
 
         public override string ToString()
         {
+        	if (CredentialType.valid())
+        		return "{0} : {1}".format(CredentialType, UserName);
             return UserName ?? base.ToString();
         }
     }    
