@@ -450,47 +450,54 @@ namespace Fusion8.Cropper.Core
         /// the specified coordinates.</returns> 
         internal static Image GetDesktopBitmap(int x, int y, int width, int height)
         {
+            
             //Create the image and graphics to capture the portion of the desktop.
             Image destinationImage = new Bitmap(width, height);
-            Graphics destinationGraphics = Graphics.FromImage(destinationImage);
-
-            IntPtr destinationGraphicsHandle = IntPtr.Zero;
-
-            try
+            try     //DC
             {
-                //Pointers for window handles
-                destinationGraphicsHandle = destinationGraphics.GetHdc();
-                IntPtr windowDC = GetDC(IntPtr.Zero);
+                Graphics destinationGraphics = Graphics.FromImage(destinationImage);
 
-                //Get the screencapture
-                int dwRop = SRCCOPY;
-                if (Configuration.Current.HideFormDuringCapture)
-                    dwRop |= CAPTUREBLT;
+                IntPtr destinationGraphicsHandle = IntPtr.Zero;
 
-                BitBlt(destinationGraphicsHandle, 0, 0, width, height, windowDC, x, y, dwRop);
+                try
+                {
+                    //Pointers for window handles
+                    destinationGraphicsHandle = destinationGraphics.GetHdc();
+                    IntPtr windowDC = GetDC(IntPtr.Zero);
+
+                    //Get the screencapture
+                    int dwRop = SRCCOPY;
+                    if (Configuration.Current.HideFormDuringCapture)
+                        dwRop |= CAPTUREBLT;
+
+                    BitBlt(destinationGraphicsHandle, 0, 0, width, height, windowDC, x, y, dwRop);
+                }
+                finally
+                {
+                    destinationGraphics.ReleaseHdc(destinationGraphicsHandle);
+                }
+
+                if (Configuration.Current.IncludeMouseCursorInCapture)
+                {
+                    CURSORINFO cursorInfo;
+                    cursorInfo.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+                    GetCursorInfo(out cursorInfo);
+
+                    ICONINFO iconInfo;
+                    GetIconInfo(cursorInfo.hCursor, out iconInfo);
+
+                    Icon mouseCursor = Icon.FromHandle(CopyIcon(cursorInfo.hCursor));
+                    destinationGraphics.DrawIcon(mouseCursor, cursorInfo.ptScreenPos.X - x - iconInfo.xHotspot, cursorInfo.ptScreenPos.Y - y - iconInfo.yHotspot);
+
+                    DeleteObject(iconInfo.hbmColor);
+                    DeleteObject(iconInfo.hbmMask);
+                    DestroyIcon(cursorInfo.hCursor);
+                }
             }
-            finally
+            catch (Exception ex)
             {
-                destinationGraphics.ReleaseHdc(destinationGraphicsHandle);
+                        
             }
-
-            if (Configuration.Current.IncludeMouseCursorInCapture)
-            {
-                CURSORINFO cursorInfo;
-                cursorInfo.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
-                GetCursorInfo(out cursorInfo);
-
-                ICONINFO iconInfo;
-                GetIconInfo(cursorInfo.hCursor, out iconInfo);
-
-                Icon mouseCursor = Icon.FromHandle(CopyIcon(cursorInfo.hCursor));
-                destinationGraphics.DrawIcon(mouseCursor, cursorInfo.ptScreenPos.X - x - iconInfo.xHotspot, cursorInfo.ptScreenPos.Y - y - iconInfo.yHotspot);
-
-                DeleteObject(iconInfo.hbmColor);
-                DeleteObject(iconInfo.hbmMask);
-                DestroyIcon(cursorInfo.hCursor);
-            }
-
             // Don't forget to dispose this image
             return destinationImage;
         }
