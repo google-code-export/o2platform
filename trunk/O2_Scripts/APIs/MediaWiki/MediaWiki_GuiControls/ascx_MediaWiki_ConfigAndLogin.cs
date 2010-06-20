@@ -14,7 +14,7 @@ using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.XRules.Database.Utils.O2;
 
-//O2File:O2MediaWikiApi.cs
+//O2File:O2MediaWikiAPI.cs
 //O2File:O2PlatformWikiApi.cs
 //O2File:OwaspWikiAPI.cs
 //O2File:ISecretData.cs
@@ -39,7 +39,15 @@ namespace O2.XRules.Database.APIs
 		public TextBox MediaWiki_Index_php_TextBox { get; set; }
 		public Label LoggedInStatus_Label { get; set; }
 		public Label MediaWikiUrlCheck_Label { get; set; }	    
-	    public string defaultSecretsFile = @"C:\O2\_USERDATA\Accounts.xml";
+		public string defaultSecretsFolder = @"C:\O2\_USERDATA\";
+	    public string defaultSecretsFile = "Accounts.xml";
+	    
+	    public static void launchGui()
+	    {
+	    	O2Gui.open<ascx_MediaWiki_ConfigAndLogin>("MediaWiki Config and Login", 400,400)
+	    		.buildGui(new O2MediaWikiAPI(), (wikiApi)=>{});
+	    }
+	    
 	    
 	    public ascx_MediaWiki_ConfigAndLogin()
 	    {
@@ -85,9 +93,11 @@ namespace O2.XRules.Database.APIs
 			//loginDetails_Panel			
 			loginDetails_Panel.add_Label("A) Login using local config file:",20,10);
 			SecretsFile_TextBox = loginDetails_Panel.add_TextBox(40,102,false)
-												    .set_Text(defaultSecretsFile)
+												    .set_Text(defaultSecretsFolder.pathCombine(defaultSecretsFile))
 												    .onEnter(loadCredentials);
-			Credential_ComboBox = loginDetails_Panel.add_ComboBox(60,102);
+												    			
+			
+			Credential_ComboBox = loginDetails_Panel.add_ComboBox(60,102).width(220).sorted();			
 			
 			Credential_ComboBox.onSelection<ICredential>(loadCredentialDetails);
 			loginDetails_Panel.add_Label("B) Login using username & password: ",100,10);
@@ -97,7 +107,22 @@ namespace O2.XRules.Database.APIs
 											   	 .append_TextBox("")
 											   	 .isPasswordField();
 						
-			SecretsFile_TextBox.align_Right(loginDetails_Panel).widthAdd(-5);
+			SecretsFile_TextBox.align_Right(loginDetails_Panel).widthAdd(-40);
+						
+			SecretsFile_TextBox.append_Control<Button>()	
+							   .set_Text("...")
+							   .width(30)
+							   .heightAdd(-2)
+							   .anchor_TopRight()
+							   .onClick(()=>{ 
+							   					var file = this.askUserForFileToOpen(defaultSecretsFolder,"Xml Files | *.xml");
+							   					if (file.valid())
+							   					{
+							   						SecretsFile_TextBox.set_Text(file);
+							   						loadCredentials(file);
+							   					}
+							   				});;
+			
 			UserName_TextBox.width(200);
 			Password_TextBox.width(200);
 									

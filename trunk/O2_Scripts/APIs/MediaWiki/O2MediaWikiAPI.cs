@@ -47,6 +47,8 @@ namespace O2.XRules.Database.APIs
 		public string Login_SessionId { get; set; }    	
 		public string Login_Cookie { get; set; }		
 		
+		public Web LastWebRequest { get; set; }		
+		
 		public O2MediaWikiAPI()
 		{
 			
@@ -56,7 +58,12 @@ namespace O2.XRules.Database.APIs
     	{
     	  	init(apiPhp);
     	}
-    	
+ 
+ 		public Web web()
+ 		{
+ 			LastWebRequest = new Web();
+ 			return LastWebRequest;
+ 		}
     	public void init(string apiPhp)
     	{
     		init(apiPhp.lower().replace("api.php",""), apiPhp,apiPhp.lower().replace("api.php","index.php"));
@@ -87,7 +94,7 @@ namespace O2.XRules.Database.APIs
     	
     	public string apiSpec()
     	{
-            return new Web().getUrlContents(ApiPhp);
+            return web().getUrlContents(ApiPhp);
     	}
     	
     	public void format(string returnFormat)
@@ -203,7 +210,8 @@ namespace O2.XRules.Database.APIs
 			try
 			{
 				"sending GET request with: {0}".format(uri.str()).debug();
-                var responseData = new Web().getUrlContents(uri.str(), Login_Cookie, false);
+				
+                var responseData = web().getUrlContents(uri.str(), Login_Cookie, false);
 				if (responseData != null && responseData.valid())
 					"responseData size: {0}".format(responseData.size()).info(); 
 				else
@@ -222,7 +230,7 @@ namespace O2.XRules.Database.APIs
 			try
 			{
 				"sending POST request with: {0}".format(postData).debug();
-                return new Web().getUrlContents_POST(ApiPhp, Login_Cookie, postData);
+                return web().getUrlContents_POST(ApiPhp, Login_Cookie, postData);
 			}		
 			catch(Exception ex)
 			{
@@ -265,6 +273,7 @@ namespace O2.XRules.Database.APIs
 			
 			if (wikiApi.Login_Result == "NeedToken")
 			{
+				"NEEDS TOKEN".info();
 				var token=login.attribute("token").value();
 				postData = "{0}&lgtoken={1}".format(postData, token);
 				login = wikiApi.postApiPhp(postData).xRoot().element("login");
