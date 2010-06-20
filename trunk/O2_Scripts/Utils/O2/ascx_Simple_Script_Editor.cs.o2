@@ -248,23 +248,16 @@ namespace O2.XRules.Database.Utils.O2
 	    public void setCompilerEnvironment()
 	    {                     
 	    	csharpCompiler = new CSharp_FastCompiler();     
-			
-			//csharpCompiler.InvocationParameters = this.InvocationParameters;
-				
-			//csharpCompiler.InvocationParameters.Add("testNumber",12); 
-			
+					
 			csharpCompiler.beforeSnippetAst = 
      		 	()=>{
      		 			csharpCompiler.InvocationParameters = this.InvocationParameters;
-     		 			//csharpCompiler.InvocationParameters.Add("testNumber",12); 
-     		 			//csharpCompiler.InvocationParameters.Add("testString","Hello World"); 
      		 		};	    	
      		
      		
 	    	csharpCompiler.onAstFail = 
-     			()=>{        					
-     					//csharpCompiler.AstErrors.runForEachAstParsingError( 
-     					//						  (row,col)=> commandsToExecute.editor().setSelectedText(row,col, true,false));
+     			()=>{        					     					
+     					//"AST creation failed".error();
      					sourceCodeViewer.enabled(false);    	 				
 	     				executeButton.enabled(false);
     	 				result_RichTextBox.textColor(Color.Red)
@@ -278,13 +271,13 @@ namespace O2.XRules.Database.Utils.O2
 	     				sourceCodeViewer.enabled(true);
 	     				commandsToExecute.invokeOnThread(()=>commandsToExecute.Refresh());;
 	     				GeneratedCode = csharpCompiler.SourceCode;                        
-                        commandsToExecute.updateCodeComplete(csharpCompiler);
-	     				//if (isGeneratedSourceCodeVisible())
+                        commandsToExecute.updateCodeComplete(csharpCompiler);	     				
 						sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
      		 		};     		      		 
      		 		
      		 csharpCompiler.onCompileFail = 
      		 	()=>{
+     		 			//"AST OK, but compilation failed".error();
                         executeButton.enabled(false);
                         Location codeOffset = csharpCompiler.getGeneratedSourceCodeMethodLineOffset();
      		 			csharpCompiler.CompilationErrors.runForEachCompilationError( 
@@ -306,6 +299,7 @@ namespace O2.XRules.Database.Utils.O2
      		 		};
      		 csharpCompiler.onCompileOK =
      		 	()=>{
+     		 			"Compilation OK".debug();
      		 			commandsToExecute.editor().refresh();
      		 			sourceCodeViewer.editor().refresh();
      		 			result_RichTextBox.set_Text("Compilation OK:\r\n\r\n")
@@ -350,6 +344,9 @@ namespace O2.XRules.Database.Utils.O2
      		if (currentFile.fileExists())
      			csharpCompiler.SourceCodeFile = currentFile;
      		csharpCompiler.compileSnippet(codeSnippet);
+
+            commandsToExecute.editor().o2CodeCompletion.addReferences(csharpCompiler.ReferencedAssemblies);            
+
      	}     	
      	
      	public void forceCompilation()
