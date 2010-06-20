@@ -28,6 +28,11 @@ namespace O2.XRules.Database.APIs
     public class API_Cropper : Control			// make this a windows form so that we get the STA thread from it 
     {        	
         public ImageCapture CropperImageCapture { get; set;}
+        public Image LastImage { get; set; }
+		public int MaxImageCaptureWait  { get; set; }
+		public AutoResetEvent captureComplete;		
+		public Action<Image> onCapture;
+		
 		
 		public API_Cropper()
 		{			
@@ -36,8 +41,18 @@ namespace O2.XRules.Database.APIs
 		
 		public API_Cropper setup()
 		{			
+			captureComplete = new AutoResetEvent(false);
+			MaxImageCaptureWait = 2000; // 2 seconds
 			var configuration = Configuration.Current;								
 			CropperImageCapture = new ImageCapture();	
+			
+			CropperImageCapture.ImageCaptured+= 
+				(sender,e)=>{
+								LastImage = new Bitmap(e.FullSizeImage);								
+								if (onCapture.notNull())
+									onCapture(LastImage);
+								captureComplete.Set();
+							};
 			return this;
 		}	
 		
@@ -46,6 +61,13 @@ namespace O2.XRules.Database.APIs
 			var timeline = new DefaultTimeline(); 					
 			var audioTrack = timeline.add_AudioTrack();
 			return timeline;
+		}
+		
+		public API_Cropper waitForCapture()
+		{
+			if (captureComplete.WaitOne(MaxImageCaptureWait).isFalse())
+				"in API_Cropper waitForCapture(), MaxImageCaptureWait reached".error();			
+			return this;
 		}
     }
     
@@ -74,7 +96,7 @@ namespace O2.XRules.Database.APIs
     	
     	public static API_Cropper toClipboard(this API_Cropper cropper)
     	{    		
-    		cropper.CropperImageCapture.ImageFormat = ImageCapture.ImageOutputs["Clipboard"];
+    		cropper.CropperImageCapture.ImageFormat = ImageCapture.ImageOutputs["Clipboard"];    		
     		return cropper;
     	}
     	
@@ -92,9 +114,12 @@ namespace O2.XRules.Database.APIs
     					//"__current ApartmentState: {0}".info(System.Threading.Thread.CurrentThread.GetApartmentState());
     					try	
     					{    							    					
-	    					cropper.toClipboard();	    					
-	    					cropper.CropperImageCapture.Capture(x,  y,  width,  height);			
-							return cropper.fromClipboardGetImage();
+	    					cropper.toClipboard();
+	    					cropper.captureComplete.Reset();
+	    					cropper.CropperImageCapture.Capture(x,  y,  width,  height);
+	    					cropper.waitForCapture();	    					
+	    					return cropper.LastImage;
+							//return cropper.fromClipboardGetImage();
 						}
 						catch(Exception ex)
 						{
@@ -122,6 +147,13 @@ namespace O2.XRules.Database.APIs
     					var location = control.PointToScreen(Point.Empty); 
     					return cropper.capture(location.X, location.Y, control.Width, control.Height);
     				});
+    	}
+    	
+    	
+    	public static Bitmap screenshot<T>(this T control)
+    		where T : Control
+    	{
+    		return control.capture<T>();
     	}
     	
     	public static Bitmap bitmap<T>(this T control)
@@ -249,8 +281,7 @@ namespace O2.XRules.Database.APIs
    			catch(Exception ex)
    			{
    				ex.log("in API_Cropper videoTrack renderVideo");
-   				return "";
-   				return null;
+   				return "";   				
    			}
    			   			   			
 		}
