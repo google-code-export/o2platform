@@ -2947,6 +2947,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static ComboBox sorted(this ComboBox comboBox)
+        {
+            return comboBox.sorted(true);    
+        }
+
+        public static ComboBox sorted(this ComboBox comboBox, bool value)
+        {
+            return (ComboBox)comboBox.invokeOnThread(
+                () =>
+                {
+                    comboBox.Sorted = value;
+                    return comboBox;
+                });            
+        }
+
         #endregion
 
         #region FlowLayoutPanel

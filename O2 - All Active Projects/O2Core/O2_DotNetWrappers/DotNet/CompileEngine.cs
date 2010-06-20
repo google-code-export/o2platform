@@ -678,7 +678,12 @@ namespace O2.DotNetWrappers.DotNet
         public static void populateCachedListOfGacAssemblies()
         {
             if (O2Svn.AssembliesCheckedIfExists.size() < 50)
-                O2Svn.AssembliesCheckedIfExists.add_OnlyNewItems(GacUtils.assemblyNames());
+            {
+                var gacAssemblies = GacUtils.assemblyNames();   
+                if (gacAssemblies.contains("Microsoft.mshtml"))     // have to hard-code this one since there are cases where this is in the GAC but the load fails
+                    gacAssemblies.Remove("Microsoft.mshtml");
+                O2Svn.AssembliesCheckedIfExists.add_OnlyNewItems(gacAssemblies);
+            }
         }
     }
 }

@@ -164,8 +164,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         public static bool fileExists(this string file)
-        {
-            if (file.valid())
+        {            
+            if (file.size() < 256 && file.valid())
                 return File.Exists(file);
             return false;
         }

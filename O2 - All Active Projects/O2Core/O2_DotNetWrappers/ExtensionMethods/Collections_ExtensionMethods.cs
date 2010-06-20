@@ -267,8 +267,30 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return result;
         }
 
+        public static T1 value<T, T1>(this Dictionary<T, T1> dictionary, T key)
+        {
+            return dictionary.get(key);
+        }
+
+        public static T1 get<T, T1>(this Dictionary<T, T1> dictionary, T key)
+        {
+            if (dictionary.hasKey(key))
+                return dictionary[key];
+            return default(T1);
+        }
 
 
+        public static Dictionary<T, T1> remove<T, T1>(this Dictionary<T, T1> dictionary, T key)
+        {
+            return dictionary.delete(key);
+        }
+
+        public static Dictionary<T, T1> delete<T, T1>(this Dictionary<T, T1> dictionary, T key)
+        {
+            if (dictionary.hasKey(key))
+                dictionary.Remove(key);
+            return dictionary;
+        }
         #endregion 
 
         #region KeyValuePair
