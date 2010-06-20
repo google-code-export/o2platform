@@ -283,7 +283,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static List<string> files(this string folder, bool recursiveSearch)
         {
-            return folder.files(recursiveSearch, "");
+            return folder.files(recursiveSearch, "*.*");
         }
 
         public static List<string> files(this string folder, bool recursiveSearch, string filter)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.NRefactory;
+using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 
 namespace O2.API.AST.ExtensionMethods.CSharp
@@ -29,6 +30,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
 
         public static UsingDeclaration add_Using(this CompilationUnit compilationUnit, string @namespace)
         {
+            @namespace = @namespace.remove(";").trim();
             var currentUsingDeclaration = compilationUnit.@using(@namespace);
             if (currentUsingDeclaration != null)
                 // these UsingDeclaration & Using classes are a bit of a mess (need to normalize this later)

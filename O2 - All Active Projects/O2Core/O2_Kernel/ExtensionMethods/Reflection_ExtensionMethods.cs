@@ -119,6 +119,32 @@ namespace O2.Kernel.ExtensionMethods
             return PublicDI.reflection.getComObjectTypeName(_object);
         }
 
+        public static List<Type> baseTypes(this Type type)
+        {
+            var baseType = new List<Type>();
+            if (type.BaseType.notNull())
+            {
+                baseType.Add(type.BaseType);
+                baseType.AddRange(baseTypes(type.BaseType));                
+            }
+            return baseType;
+        }
+
+        public static List<Type> withBaseType<T>(this Assembly assembly)
+        {
+            var matches = new List<Type>();
+            foreach (var type in assembly.types())
+                if (type.baseTypes().Contains(typeof(Control)))
+                    matches.Add(type);
+            return matches;
+        }
+
+        public static List<string> typesNames(this Assembly assembly)
+        {
+            return (from type in assembly.types()
+                    select type.Name).ToList();
+        }
+
         #endregion
 
         #region properties

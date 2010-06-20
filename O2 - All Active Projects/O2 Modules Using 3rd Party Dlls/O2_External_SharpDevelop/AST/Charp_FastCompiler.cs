@@ -167,13 +167,16 @@ namespace O2.External.SharpDevelop.AST
         {
             try
             {
-                FinishedCompilingCode.Reset();
-                createAstStack = new Stack<string>();
-          //      createAstStack.Clear();
-                if (createAstStack.Count == 0)
-                    creatingAst = false;
-                createAstStack.Push(codeSnippet);
-                compileSnippet();
+                if (codeSnippet.valid())
+                {
+                    FinishedCompilingCode.Reset();
+                    createAstStack = new Stack<string>();
+                    //      createAstStack.Clear();
+                    if (createAstStack.Count == 0)
+                        creatingAst = false;
+                    createAstStack.Push(codeSnippet);
+                    compileSnippet();
+                }
             }
             catch (Exception ex)
             {

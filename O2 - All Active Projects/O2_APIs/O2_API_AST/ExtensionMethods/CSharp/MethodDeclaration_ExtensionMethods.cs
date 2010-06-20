@@ -85,8 +85,15 @@ namespace O2.API.AST.ExtensionMethods.CSharp
                 methodDeclaration.TypeReference = new TypeReference("void", true);
             else
             {
-                var returnValue = blockStatement.getLastReturnValue() ?? new object();
-                methodDeclaration.TypeReference = new TypeReference(returnValue.typeFullName(), true);
+                if (methodDeclaration.iNodes<ReturnStatement>().size() > 1) // if there are more than one return statement default to return object
+                {
+                    methodDeclaration.TypeReference = new TypeReference("System.Object", true);
+                }
+                else
+                {
+                    var returnValue = blockStatement.getLastReturnValue() ?? new object();  // see if we can resolve it to a known type (or default to object)
+                    methodDeclaration.TypeReference = new TypeReference(returnValue.typeFullName(), true);
+                }
             }
             return methodDeclaration.TypeReference;
         }
