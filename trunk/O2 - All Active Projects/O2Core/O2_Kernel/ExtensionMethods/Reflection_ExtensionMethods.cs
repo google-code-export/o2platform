@@ -45,7 +45,14 @@ namespace O2.Kernel.ExtensionMethods
         {
             return type.Assembly.Location;
         }
-    
+
+        public static string version(this Assembly assembly)
+        {
+            if (assembly.notNull())
+                return assembly.GetName().Version.ToString();
+            return "";
+        }
+            
         #endregion
 
         #region type

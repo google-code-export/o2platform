@@ -6,6 +6,7 @@ using O2.DotNetWrappers.DotNet;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using System.Drawing;
+using O2.DotNetWrappers.Windows;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -1293,5 +1294,36 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion 
+
+        public static string askUserForFileToOpen(this Control control)
+        {
+            return (string)control.invokeOnThread(
+                () => O2Forms.askUserForFileToOpen());
+        }
+
+        public static string askUserForFileToOpen(this Control control,string baseDirectory)
+        {
+            return (string)control.invokeOnThread(
+                () => O2Forms.askUserForFileToOpen(baseDirectory));
+        }
+
+        public static string askUserForFileToOpen(this Control control, string baseDirectory, string filter)
+        {
+            return (string)control.invokeOnThread(
+                () => O2Forms.askUserForFileToOpen(baseDirectory, filter));
+        }
+
+
+        public static string askUserForFileToSave(this Control control, string baseDirectory)
+        {
+            return (string)control.invokeOnThread(
+                () => O2Forms.askUserForFileToSave(baseDirectory));
+        }
+
+        public static string askUserForDirectory(this Control control, string baseDirectory)
+        {
+            return (string)control.invokeOnThread(
+                () => O2Forms.askUserForDirectory(baseDirectory));
+        }
     }
 }

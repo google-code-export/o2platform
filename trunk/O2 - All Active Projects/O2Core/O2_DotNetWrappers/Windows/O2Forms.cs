@@ -9,9 +9,10 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using O2.DotNetWrappers.DotNet;
-using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 
 namespace O2.DotNetWrappers.Windows
 {
@@ -652,21 +653,45 @@ namespace O2.DotNetWrappers.Windows
 
         public static String askUserForDirectory(String sStartDir)
         {
-            using (var fbdFolderBrowserDialog = new FolderBrowserDialog {SelectedPath = sStartDir})
+            try
             {
-                DialogResult drDialogResult = fbdFolderBrowserDialog.ShowDialog();
-                return drDialogResult == DialogResult.OK ? fbdFolderBrowserDialog.SelectedPath : "";
+                using (var fbdFolderBrowserDialog = new FolderBrowserDialog {SelectedPath = sStartDir})
+                {
+                    DialogResult drDialogResult = fbdFolderBrowserDialog.ShowDialog();
+                    return drDialogResult == DialogResult.OK ? fbdFolderBrowserDialog.SelectedPath : "";
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in askUserForDirectory");
+                return "";
             }
         }
-
+        public static String askUserForFileToOpen()
+        {
+            return askUserForFileToOpen(Environment.CurrentDirectory,"");
+        }
 
         public static String askUserForFileToOpen(String proposedFolder)
         {
-            var openFileDialog = new OpenFileDialog {InitialDirectory = proposedFolder};
-            DialogResult drDialogResult = openFileDialog.ShowDialog();
-            if (drDialogResult == DialogResult.OK)
-                return openFileDialog.FileName;
-
+            return askUserForFileToOpen(proposedFolder, "");
+        }
+    
+        public static String askUserForFileToOpen(String proposedFolder, string filter)
+        {
+            try
+            {
+                var openFileDialog = new OpenFileDialog { InitialDirectory = proposedFolder };
+                if (filter.valid())
+                    openFileDialog.Filter = filter;
+                DialogResult drDialogResult = openFileDialog.ShowDialog();
+                if (drDialogResult == DialogResult.OK)
+                    return openFileDialog.FileName;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in askUserForFileToOpen");
+            }
             return "";
         }
 
@@ -677,17 +702,24 @@ namespace O2.DotNetWrappers.Windows
 
         public static String askUserForFileToSave(string proposedFolder, string proposedFile)
         {
-            string extension = Path.GetExtension(proposedFile);
-            var openFileDialog = new SaveFileDialog
-                                     {
-                                         InitialDirectory = proposedFolder,
-                                         FileName = proposedFile,
-                                         Filter = string.Format("{0} files (*{0})|*{0}", extension)
-                                     };
-            DialogResult drDialogResult = openFileDialog.ShowDialog();
-            if (drDialogResult == DialogResult.OK)
-                return openFileDialog.FileName;
-
+            try
+            {
+                string extension = Path.GetExtension(proposedFile);
+                var openFileDialog = new SaveFileDialog
+                                         {
+                                             InitialDirectory = proposedFolder,
+                                             FileName = proposedFile,
+                                             Filter = string.Format("{0} files (*{0})|*{0}", extension)
+                                         };
+                DialogResult drDialogResult = openFileDialog.ShowDialog();
+                if (drDialogResult == DialogResult.OK)
+                    return openFileDialog.FileName;
+                }
+                catch (Exception ex)
+                {
+                    ex.log("in askUserForFileToSave");
+                    return "";
+                }
             return "";
         }
 

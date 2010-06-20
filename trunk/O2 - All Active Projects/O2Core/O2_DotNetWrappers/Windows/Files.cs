@@ -306,17 +306,18 @@ namespace O2.DotNetWrappers.Windows
                         lsFiles.AddRange(Directory.GetFiles(sStartDirectory));
                     else
                     {
-                        String[] sFileMatches = Directory.GetFiles(sStartDirectory, sSearchPattern);
+                        var searchOptions = (bSearchRecursively) ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+                        String[] sFileMatches = Directory.GetFiles(sStartDirectory, sSearchPattern, searchOptions);
                         if (bVerbose)
                             foreach (String sFile in sFileMatches)
                                 PublicDI.log.debug("File matched filter: {0}", sFile);
                         lsFiles.AddRange(sFileMatches);
                     }
-                    if (bSearchRecursively)
+                    /*if (bSearchRecursively)
                         foreach (String sDirectory in Directory.GetDirectories(sStartDirectory))
-                            getListOfAllFilesFromDirectory(lsFiles, sDirectory, true /*bSearchRecursively*/,
+                            getListOfAllFilesFromDirectory(lsFiles, sDirectory, true,
                                                            sSearchPattern,
-                                                           bVerbose);
+                                                           bVerbose);*/
                 }
             }
             catch (Exception ex)

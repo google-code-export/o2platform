@@ -9,12 +9,63 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
 using O2.Kernel;
+using System.Collections.Specialized;
 
 namespace O2.DotNetWrappers.Network
 {
     public class Web
     {
-        public static int DefaultHttpWebRequestTimeout = 1000 * 10;
+        public static int DefaultHttpWebRequestTimeout = 1000 * 30;     //(30 seconds)
+
+        public Dictionary<string, string> Headers_Request { get; set; }
+        public Dictionary<string, string> Headers_Response { get; set; }
+        //public List<string> RequestHistory { get; set; }
+        //public string LastRequest { get; set; }
+        //public string LastResponse { get; set; }
+
+        public Web()
+        {
+            Headers_Request = new Dictionary<string, string>();
+            Headers_Response = new Dictionary<string, string>();
+            //RequestHistory = new List<string>();
+            //LastRequest = "";
+            //LastResponse = "";
+        }
+
+        public Dictionary<string,string> set_Cookies(string value)
+        {
+            Headers_Request.add("Cookie", value);
+            return Headers_Request;
+        }
+
+        public string get_Cookies()
+        {
+            return Headers_Request.value("Cookie");            
+        }
+
+        public Dictionary<string,string> add_Header(string name, string value)
+        {
+            Headers_Request.add(name, value);
+            return Headers_Request;
+        }
+        public string get_Header(string name)
+        {
+            return Headers_Request.value(name);            
+        }
+
+        public Dictionary<string, string> delete_Header(string name)
+        {
+            Headers_Request.delete(name);
+            return Headers_Request;
+        }
+
+        public void updateHeadersResponse(WebHeaderCollection webHeaders)
+        {
+            Headers_Response = new Dictionary<string, string>();
+            foreach (string key in webHeaders.Keys)
+                Headers_Response.Add(key, webHeaders[key]);
+
+        }
 
         public string saveUrlContents(string urlToFetch)
         {
@@ -70,9 +121,17 @@ namespace O2.DotNetWrappers.Network
                 HttpWebRequest webRequest = WebRequest.Create(urlToFetch) as HttpWebRequest;
                 webRequest.Timeout = Web.DefaultHttpWebRequestTimeout;
                 webRequest.ReadWriteTimeout = Web.DefaultHttpWebRequestTimeout;
-                if (cookies!= null && cookies.valid())
-                    webRequest.Headers.Add("Cookie", cookies);
-                WebResponse rResponse = webRequest.GetResponse();
+
+                //setup headers (& cookies)
+                if (cookies != null && cookies.valid())
+                    Headers_Request.add("Cookie", cookies);
+                foreach (var header in Headers_Request)
+                    webRequest.Headers.Add(header.Key, header.Value);
+
+                WebResponse rResponse = webRequest.GetResponse();                
+
+                updateHeadersResponse(rResponse.Headers);               // store response headers
+
                 Stream sStream = rResponse.GetResponseStream();
                 var srStreamReader = new StreamReader(sStream);
                 string sHtml = srStreamReader.ReadToEnd();
@@ -113,12 +172,16 @@ namespace O2.DotNetWrappers.Network
             {
                 // the Timeout and GC calls below were introduced due to GetResponseStream() hangs                
                 HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create(urlToFetch);
-
                 webRequest.Timeout = Web.DefaultHttpWebRequestTimeout;
                 webRequest.ReadWriteTimeout = Web.DefaultHttpWebRequestTimeout;
-                // setup POST details:
+
+                //setup headers (& cookies)   
                 if (cookies != null && cookies.valid())
-                    webRequest.Headers.Add("Cookie", cookies);
+                    Headers_Request.add("Cookie", cookies);
+                foreach (var header in Headers_Request)
+                    webRequest.Headers.Add(header.Key, header.Value);
+                
+                // setup POST details:
                 webRequest.Method = "POST";
                 webRequest.ContentLength = postData.Length;
                 webRequest.ContentType = "application/x-www-form-urlencoded";
@@ -130,6 +193,7 @@ namespace O2.DotNetWrappers.Network
                 }
                 using (WebResponse rResponse = webRequest.GetResponse())
                 {
+                    updateHeadersResponse(rResponse.Headers);               // store response headers
                     using (Stream sStream = rResponse.GetResponseStream())
                     {
                         var srStreamReader = new StreamReader(sStream);
@@ -174,10 +238,17 @@ namespace O2.DotNetWrappers.Network
         	PublicDI.log.debug("Downloading Binary File {0}", urlOfFileToFetch);
             var webClient = new WebClient();
             try
-            {                
+            {
+                //setup headers
+                foreach (var header in Headers_Request)
+                    webClient.Headers.Add(header.Key, header.Value);
+
                 byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
                 Files.WriteFileContent(targetFile, pageData);
                 PublicDI.log.debug("Downloaded File saved to: {0}", targetFile);
+
+                updateHeadersResponse(webClient.ResponseHeaders);               // store response headers
+
                 return targetFile;
             }
             catch (Exception ex)
@@ -192,6 +263,10 @@ namespace O2.DotNetWrappers.Network
             var webClient = new WebClient();
             try
             {
+                //setup headers
+                foreach (var header in Headers_Request)
+                    webClient.Headers.Add(header.Key, header.Value);
+
                 string tempFileName = String.Format("{0}_{1}.zip", PublicDI.config.TempFileNameInTempDirectory,
                                                     Path.GetFileNameWithoutExtension(urlOfFileToFetch));
                 byte[] pageData = webClient.DownloadData(urlOfFileToFetch);

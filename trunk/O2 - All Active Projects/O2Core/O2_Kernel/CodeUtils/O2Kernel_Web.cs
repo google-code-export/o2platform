@@ -20,7 +20,7 @@ namespace O2.Kernel.CodeUtils
         //   
         public static void ApplyNetworkConnectionHack()
         {
-            System.Net.ServicePointManager.DefaultConnectionLimit = 100;
+            System.Net.ServicePointManager.DefaultConnectionLimit = 4096;
             System.Net.ServicePointManager.CheckCertificateRevocationList = true;
         }
 

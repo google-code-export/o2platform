@@ -194,7 +194,7 @@ namespace O2.External.SharpDevelop.Ascx
         {
             //if (O2Messages.IsGuiLoaded())
             //{
-            btShowLogs.Visible = O2Messages.isGuiLoaded();
+            //btShowLogs.Visible = O2Messages.isGuiLoaded();
             //}
         }
 
