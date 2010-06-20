@@ -49,7 +49,9 @@ namespace O2.External.SharpDevelop.Ascx
     	public Action<string> statusMessage;
         public bool OnlyShowCodeCompleteResulstFromO2Namespace { get; set; }
         public bool UseParseCodeThread { get; set; }
-        public ExpressionResult currentExpression; 
+        public ExpressionResult currentExpression;
+        public List<String> loadedReferences { get; set; }
+        public List<String> gacAssemblies { get; set; }
 
     	public O2CodeCompletion(TextEditorControl _textEditor)
     		: this(_textEditor,(text)=>text.info())
@@ -62,6 +64,8 @@ namespace O2.External.SharpDevelop.Ascx
             UseParseCodeThread = true;
             extraSourceCodeToProcess = new List<string>();
             mappedCompilationUnits = new Dictionary<string, ICompilationUnit>();
+            gacAssemblies = GacUtils.assemblyNames(true);
+            loadedReferences = new List<string>();
 
     		_textEditor.invokeOnThread(
     			()=>{
@@ -134,9 +138,9 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void mapDotNetReferencesForCodeComplete()
         {
-            statusMessage("Loading MsCorlib");
+            statusMessage("Loading Code Complete Reference: MsCorlib");
             this.myProjectContent.AddReferencedContent(this.pcRegistry.Mscorlib);
-            addReference("System.Windows.Forms");
+            /*addReference("System.Windows.Forms");
             addReference("System");
             addReference("System.Data");
             addReference("System.Drawing");
@@ -145,7 +149,7 @@ namespace O2.External.SharpDevelop.Ascx
             addReference("PresentationCore");
             addReference("PresentationFramework");
             addReference("WindowsBase");
-            addReference("WindowsFormsIntegration");
+            addReference("WindowsFormsIntegration");*/
         }
 
     	public void startAddReferencesThread()
@@ -165,17 +169,38 @@ namespace O2.External.SharpDevelop.Ascx
                     addReference("Newtonsoft.Json.dll");
                     addReference("Dimebrain.TweetSharp.dll");*/
                                         
-                    foreach (var reference in CompileEngine.getListOfO2AssembliesInExecutionDir())
-                        addReference(reference);
+                    //foreach (var reference in CompileEngine.getListOfO2AssembliesInExecutionDir())
+                    //    addReference(reference);
                                    
-                    statusMessage("Dependencies loaded");
+                    //statusMessage("Dependencies loaded");
                 });
     	}
     	
     	public void addReference(string referenceAssembly)
     	{
-    		this.myProjectContent.add_Reference(this.pcRegistry, referenceAssembly, statusMessage);			
+            try
+            {
+                if (loadedReferences.contains(referenceAssembly).isFalse())
+                {
+                    var assemblyWithoutExtension = Path.GetFileNameWithoutExtension(referenceAssembly);
+                    if (gacAssemblies.contains(assemblyWithoutExtension))
+                        this.myProjectContent.add_Reference(this.pcRegistry, assemblyWithoutExtension, statusMessage);
+                    else
+                        this.myProjectContent.add_Reference(this.pcRegistry, referenceAssembly, statusMessage);
+                    loadedReferences.Add(referenceAssembly);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in O2CodeCompletion addReference:{0}".format(referenceAssembly));
+            }
     	}
+
+        public void addReferences(List<string> referencesToAdd)
+        {            
+            foreach (var referencedAssembly in referencesToAdd)
+                addReference(referencedAssembly);            
+        }
     
     	// this will regularly parse the current source code so that we have code completion for its methods 
 		public void startParseCodeThread()
@@ -872,7 +897,7 @@ namespace O2.External.SharpDevelop.Ascx
     	{
             try
             {
-                debugMessage("Loading: {0}".format(assemblyToLoad));
+                debugMessage("Loading Code Completion Reference: {0}".format(assemblyToLoad));
                 //if (!assemblyToLoad.fileExists())
                 //	"file doesn't exist".error();    		
                 IProjectContent referenceProjectContent = pcRegistry.GetProjectContentForReference(assemblyToLoad, assemblyToLoad);

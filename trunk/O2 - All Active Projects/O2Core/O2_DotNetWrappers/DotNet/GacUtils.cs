@@ -15,13 +15,22 @@ namespace O2.DotNetWrappers.DotNet
 {
     public class GacUtils
     {
+        public static List<string> chachedListOfGacAssembliesNames;
+
         public static string getPathToGac()
         {
             return DI.PathToGac;
         }
-
-        public static List<string> assemblyNames()        
+        public static List<string> assemblyNames()
         {
+            return assemblyNames(true);
+        }
+
+        public static List<string> assemblyNames(bool useCachedVersion)        
+        {
+            if (useCachedVersion && chachedListOfGacAssembliesNames.notNull())
+                return chachedListOfGacAssembliesNames;
+
             return (from gacAssembly in currentGacAssemblies()
                     select gacAssembly.name).toList();
         }
