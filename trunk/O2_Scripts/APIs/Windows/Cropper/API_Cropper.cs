@@ -20,9 +20,6 @@ using Splicer.Timeline;
 
 //O2Ref:Cropper.exe
 
-using O2.Script;
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs
-
 namespace O2.XRules.Database.APIs
 {
     public class API_Cropper : Control			// make this a windows form so that we get the STA thread from it 
@@ -129,7 +126,7 @@ namespace O2.XRules.Database.APIs
 					});
     	}
     	
-    	public static Bitmap captureDesktop(this API_Cropper cropper)
+    	public static Bitmap capture_Desktop(this API_Cropper cropper)
     	{
     		return (Bitmap)cropper.invokeOnThread(
     			()=>{
@@ -178,7 +175,7 @@ namespace O2.XRules.Database.APIs
     		return (Bitmap)control.invokeOnThread(
     			()=>{
     					var cropper = new API_Cropper();        					
-    					return 	cropper.captureDesktop();
+    					return 	cropper.capture_Desktop();
     				});
     	}
     	
