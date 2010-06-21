@@ -7,11 +7,19 @@ namespace O2.XRules.Database.APIs
     public class XamlCode
     {   
     
-    	public static string simple_Button()
+    	public static string Simple_Button()
     	{
-    		var xamlCode =  "  <Button Content=\"click me\"/>";
+    		var xamlCode =  "<Button>".line() + 
+    					    " click me".line() + 
+    					    "</Button>";
     		return xamlCode;
     	}
+    	
+    	public static string Button_With_Style()
+    	{
+    		return new_Button("Click me with sytle");
+    	}
+    	
 		public static string new_Button(string text)
 		{
 			var button_Height = "30";

@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <H2>
   <SourceCode>var mainPanel = O2Gui.open&lt;WinForms.Panel&gt;("DiagramDesigner inside O2",1000,700);						
-			
+
+
 var optionsPanel = mainPanel.insert_Above&lt;WinForms.Panel&gt;(25);
-var stencilsPanel = mainPanel.insert_Right&lt;WinForms.Panel&gt;(240);
+var stencilsPanel = mainPanel.insert_Right&lt;WinForms.Panel&gt;(240); 
 var designerCanvas = mainPanel.add_DesignerCanvas();
+
+//return designerCanvas.PointToScreen(Point.Empty);
 
 var statusLabel = mainPanel.parentForm().add_StatusStrip(System.Drawing.Color.FromName("Control"));
 
@@ -39,7 +42,7 @@ fileName.onDrop(
 							statusLabel.set_Text("Loading droppped diagram file: {0}".format(fileOrFolder));
 							fileName.set_Text(fileOrFolder);
 							designerCanvas.load(fileOrFolder);
-						}
+						} 
 					});
 fileName.onEnter(
 	(fileOrFolder)=&gt;{
@@ -50,8 +53,33 @@ fileName.onEnter(
 						}
 					});								
 
+designerCanvas.width_Wpf(600);
+designerCanvas.height_Wpf(480);
+
 fileName.append_Link("Save Diagram",saveDiagram).top(5)
-		.append_Link("Load Diagram", loadDiagram);
+		.append_Link("Load Diagram", loadDiagram)
+		.append_Label("Canvas Width:")
+		.append_TextBox(designerCanvas.ActualWidth.str())
+			.width(40)
+			.onTextChange((text)=&gt;designerCanvas.width_Wpf(text.toInt()))
+		.append_Label("Canvas Hight:").append_TextBox(designerCanvas.ActualHeight.str())
+			.width(40)
+			.onTextChange((
+				text)=&gt;designerCanvas.height_Wpf(text.toInt()))
+		.append_Link("Copy Canvas to Clipboard",
+			()=&gt;{ 
+					var xamlHost = mainPanel.control&lt;O2.API.Visualization.Ascx.ascx_Xaml_Host&gt;();
+					var xamlHostPosition = xamlHost.PointToScreen(xamlHost.Location);;//[0].typeFullName(); 
+					int width = (int)designerCanvas.ActualWidth;
+					int height = (int)designerCanvas.ActualHeight;
+					int top = xamlHostPosition.Y + ((xamlHost.height() - height) /2);   
+					//int top = mainPanel.height() - height; 
+					int left = xamlHostPosition.X + ((xamlHost.width() - width) /2);    
+					  
+					mainPanel.capture(left, top, width, height); 
+					"Current canvas copied to the clipboard,,,( {0}x{1} -&gt; {2}x{3} ".info(top,xamlHostPosition.Y, xamlHost.height(), height); 
+					//"Current canvas copied to the clipboard,,,( {0}x{1} -&gt; {2}x{3} ".info(left,top,width,height);
+				});
 
 //var temp = @"C:\O2\_tempDir\serializedDiagramDesigner\2 shapes and a connector.xml";
 //designerCanvas.open(temp);
@@ -70,7 +98,7 @@ imageDropArea.onDrop(
  					});
 
 stencilsPanel.add_Link("paste image from clipboard", 50,0,
-	()=&gt;{
+	()=&gt;{		
 			var bitmap = stencilsPanel.fromClipboardGetImage();
 			if (bitmap.notNull())
 			{
@@ -86,19 +114,38 @@ stencilsPanel.add_Link("paste image from clipboard", 50,0,
 
 
 //XAML code
-stencilsPanel.add_Label("Template XAML Controls",100,0);  
 var xamlControls = stencilsPanel.add_ComboBox(120,0); 
+Dictionary&lt;string,string&gt; xamls = null;
+var xmlCodeFile = "XamlCode.cs".local();
+ xmlCodeFile.info(); 
+MethodInvoker loadXmlControls = 
+	()=&gt;{
+			xamlControls.clear();//.Clear();
+			xamls = new Dictionary&lt;string,string&gt;();
+			foreach(var method in xmlCodeFile.compile().methods()) 
+				if (method.parameters().size() == 0) 
+					xamls.add(method.Name,method.invoke().str());   
+			//xamls.add("Button (simple)",XamlCode.simple_Button());
+			//xamls.add("Button (with style)",XamlCode.new_Button("click me"));
+			foreach(var key in xamls.Keys)
+				xamlControls.add_Item(key);
+			xamlControls.select_Item(0); 	
+		}; 
 
-var xamls = new Dictionary&lt;string,string&gt;();
-xamls.add("Button (simple)",XamlCode.simple_Button());
-xamls.add("Button (with style)",XamlCode.new_Button("click me"));
-foreach(var key in xamls.Keys)
-	xamlControls.add_Item(key);
+loadXmlControls(); 
+ 
+stencilsPanel.add_Label("Template XAML Controls",100,0)
+			 .append_Link("refresh",loadXmlControls)
+			 .append_Link("edit",
+			 	()=&gt; O2Gui.open&lt;Panel&gt;("Editing XmlCode.cs file",400,400)
+			 			  .add_SourceCodeEditor()
+			 			  .open(xmlCodeFile));
+
 
 var xamlCode = stencilsPanel.add_SourceCodeViewer(); 
 xamlCode.top(150).height(200); 
 xamlControls.onSelection(()=&gt; xamlCode.set_Text(xamls[xamlControls.selected().str()],"a.xml")); 
-xamlControls.select_Item(0); 
+
  
 stencilsPanel.add_Link("Create WPF from XAML and add to canvas",  350,0,
 	()=&gt;{
@@ -106,19 +153,49 @@ stencilsPanel.add_Link("Create WPF from XAML and add to canvas",  350,0,
 		});
 
 // WPF controls
-stencilsPanel.add_Label("Wpf Controls",380,0); 
+
 var wpfControls = stencilsPanel.add_ComboBox(400,0); 
 
 WinForms.MethodInvoker refreshComboBoxWithWpfControls =
 	()=&gt;{
 			wpfControls.clear();
-			wpfControls.add_Items(designerCanvas.controls_Wpf());
+			foreach(var wpfControl in designerCanvas.controls_Wpf())
+				if ((wpfControl is DiagramDesigner.DesignerItem).isFalse())
+				wpfControls.add_Item(wpfControl);
 			wpfControls.select_Item(0); 
 		};
 
-var propertyGrid = stencilsPanel.add_Control&lt;PropertyGrid&gt;(420,0);
+stencilsPanel.add_Label("Wpf Controls",380,0)
+			 .append_Link("refresh", refreshComboBoxWithWpfControls)
+			 .append_Link("show XAML", 
+			 	()=&gt;{
+			 			var selected = wpfControls.selected();
+			 			if (selected is System.Windows.UIElement) 
+			 			{
+			 				var xaml = (selected as System.Windows.UIElement).xaml()
+			 																 .xmlFormat();
+			 				xamlCode.set_Text(xaml, "a.xml");
+			 			}
+			 		});
+ 
+var selectedControlContent = stencilsPanel.add_Label("Content:",430,0)
+										  .append_TextBox("")
+										  .onTextChange(
+										  	((text)=&gt;{
+										  				var selected = wpfControls.selected();
+														if (selected is WPF.ContentControl) 
+															(selected as WPF.ContentControl).set_Text_Wpf(text); 
+										  			 }));
+			  
+var propertyGrid = stencilsPanel.add_Control&lt;PropertyGrid&gt;(450,0);
 			
-wpfControls.onSelection(()=&gt;propertyGrid.show(wpfControls.selected()));  
+wpfControls.onSelection(
+	()=&gt;{
+			var selected = wpfControls.selected();
+			if (selected is WPF.ContentControl) 
+				selectedControlContent.set_Text((selected as WPF.ContentControl).get_Text_Wpf());
+			propertyGrid.show(selected);
+		});
 
 //alignment
 imageDropArea.align_Right(stencilsPanel);
@@ -127,6 +204,7 @@ xamlCode.align_Right(stencilsPanel);
 wpfControls.align_Right(stencilsPanel);
 propertyGrid.align_Right(stencilsPanel)
 			.align_Bottom(stencilsPanel); 
+selectedControlContent.align_Right(stencilsPanel);	
 
 			 
 //Default values 
@@ -135,11 +213,17 @@ designerCanvas.add_Label("This is new DesignerCanvas", 120,100).fontSize(20);
 
 refreshComboBoxWithWpfControls();
 
+
+
+return null;
+
 //using O2.XRules.Database.APIs
 //using WinForms = System.Windows.Forms
+//using WPF = System.Windows.Controls
 //using O2.API.Visualization.ExtensionMethods
 //O2File:DiagramDesigner_ExtensionMethods.cs
 //O2File:XamlCode.cs
+//O2File:API_Cropper.cs
 
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:System.Xml.dll
@@ -153,7 +237,9 @@ refreshComboBoxWithWpfControls();
 //O2Ref:PresentationFramework.dll
 //O2Ref:O2_API_Visualization.dll 
 //O2Ref:DiagramDesigner.exe
+//O2Ref:Cropper.exe 
 
-//O2Ref:O2_API_AST.dll</SourceCode>
+//O2Ref:O2_API_AST.dll
+</SourceCode>
   <ReferencedAssemblies />
 </H2>
