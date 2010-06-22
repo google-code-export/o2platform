@@ -89,8 +89,8 @@ namespace O2.XRules.Database.APIs
 			return this;
 		}
 				
-    }
-
+    }	
+	
 	public static class API_AForge_ExtensionMethods_API_AForge_Video
 	{
 	
@@ -128,6 +128,30 @@ namespace O2.XRules.Database.APIs
 			aforgeVideo.VideoWriter.AddFrame(image);	
 			return aforgeVideo;
 		}
+		
+		public static API_AForge_Video add_Bitmap(this API_AForge_Video aforgeVideo, Bitmap bitmap)
+		{
+			aforgeVideo.add_Image(bitmap);	
+			return aforgeVideo;
+		}
+		
+		public static API_AForge_Video add_Bitmaps(this API_AForge_Video aforgeVideo, List<Bitmap> bitmaps)
+		{
+			foreach(var bitmap in bitmaps)
+				aforgeVideo.add_Bitmap(bitmap);
+			return aforgeVideo;
+		}
+
+
+		public static string createVideo(this API_AForge_Video aforgeVideo, List<Bitmap> bitmaps)
+		{
+			show.info(bitmaps);
+			aforgeVideo.newVideo();
+			aforgeVideo.add_Bitmaps(bitmaps);
+			aforgeVideo.saveAndClose();
+			"Created Video: {0}".info(aforgeVideo.PathToAviVideo);
+			return aforgeVideo.PathToAviVideo;
+		}				
 		
 		public static string createVideo(this API_AForge_Video aforgeVideo, List<string> pathToImages)
 		{
