@@ -13,6 +13,7 @@ using System;
 using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
+using System.IO;
 
 namespace O2.API.Visualization.ExtensionMethods
 {
@@ -348,6 +349,26 @@ namespace O2.API.Visualization.ExtensionMethods
     	
     	// specific to frameworkElement
 
+        public static double width_Wpf<T>(this T frameworkElement)
+            where T : FrameworkElement
+        {
+            return (double)frameworkElement.wpfInvoke(
+                () =>
+                {
+                    return frameworkElement.Width;
+                });
+        }
+
+        public static double height_Wpf<T>(this T frameworkElement)
+            where T : FrameworkElement
+        {
+            return (double)frameworkElement.wpfInvoke(
+                () =>
+                {
+                    return frameworkElement.Height;
+                });
+
+        }
         public static T width_Wpf<T>(this T frameworkElement, double width)
             where T : FrameworkElement
         {
@@ -406,7 +427,7 @@ namespace O2.API.Visualization.ExtensionMethods
     		return frameworkElement.prop("Height",value); 
     	}
         */
-        public static double width(this FrameworkElement frameworkElement)
+        /*public static double width(this FrameworkElement frameworkElement)
         {
             return (double)frameworkElement.wpfInvoke(() => { return frameworkElement.Width; });
         }
@@ -414,7 +435,7 @@ namespace O2.API.Visualization.ExtensionMethods
         public static double height(this FrameworkElement frameworkElement)
         {
             return (double)frameworkElement.wpfInvoke(() => { return frameworkElement.Height; });
-        }
+        }*/
     	
     	public static T tag<T>(this T frameworkElement, object value) where T : FrameworkElement
     	{
@@ -775,6 +796,129 @@ textBox1.prop("",true);
                 });
         }
 
+
+        public static Image add_Image_Wpf<T>(this  T uiElement)
+            where T : UIElement
+        {
+            return (Image)uiElement.wpfInvoke(
+            () =>
+            {
+                return uiElement.add_Control_Wpf<Image>();
+            });
+        }
+
+        public static Image add_Image_Wpf<T>(this  T uiElement, string pathToImage)
+            where T : UIElement
+        {
+            return uiElement.add_Image_Wpf(pathToImage, -1, -1);
+        }
+
+        public static Image add_Image_Wpf<T>(this  T uiElement, string pathToImage, int width, int height)
+            where T : UIElement
+        {
+            return (Image)uiElement.wpfInvoke(
+                () =>
+                {
+                    var image = pathToImage.image_Wpf(width, height);
+                    if (image.notNull())
+                        uiElement.add_Control_Wpf(image);
+                    return image;
+                });
+        }
+
+        public static Image image_Wpf(this string pathToImage)
+        {
+            return pathToImage.image_Wpf(-1, -1);
+        }
+
+        public static Image image_Wpf(this string pathToImage, int width, int height)
+        {
+            try
+            {
+                var image = new Image().open(pathToImage);
+                if (width > -1)
+                    image.width_Wpf(width);
+                if (height > -1)
+                    image.height_Wpf(height);
+                return image;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in pathToImage image_Wpf");
+                return null;
+            }
+        }
+        public static List<Image> images_Wpf(this List<string> pathToImages)
+        {
+            return pathToImages.images_Wpf(-1, -1);
+        }
+
+        public static List<Image> images_Wpf(this List<string> pathToImages, int width, int height)
+        {
+            var images = new List<Image>();
+            foreach (var pathToImage in pathToImages)
+            {
+                var image = pathToImage.image_Wpf(width, height);
+                if (image.notNull())
+                    images.Add(image);
+            }
+            return images;
+        }
+
+        public static Image show(this Image targetImage, Image sourceImage)
+        {
+            return (Image)targetImage.wpfInvoke(
+                () =>
+                {
+                    targetImage.Source = sourceImage.Source;
+                    return targetImage;
+                });
+        }
+
+        public static List<string> saveAs_Gifs(this List<Image> images)
+        {
+            var files = new List<string>();
+            foreach (var image in images)
+            {
+                var file = image.saveAs_Gif();
+                if (file.valid())
+                    files.Add(file);
+            }
+            return files;
+        }
+
+        public static string saveAs_Gif(this Image image)
+        {
+            return image.saveAs_Gif(PublicDI.config.getTempFileInTempDirectory(".gif"));
+        }
+        
+        public static string saveAs_Gif(this Image image, string pathToSaveImage)
+        {
+            return (string)image.wpfInvoke(
+                () =>
+                {
+                    try
+                    {
+                        using (FileStream outStream = new FileStream(pathToSaveImage, FileMode.Create))
+                        {
+                            var gifBitmapEncoder = new GifBitmapEncoder();
+                            gifBitmapEncoder.Frames.Add(BitmapFrame.Create((BitmapImage)image.Source));//BitmapFrame.Create(image));
+
+                            gifBitmapEncoder.Save(outStream);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.log("in WPF Image saveas_Gif");
+                    }
+                    if (pathToSaveImage.fileExists())
+                        return pathToSaveImage;
+                    return "";
+                });
+
+
+        }
+
         #endregion
 
         #region ComboBox
@@ -835,6 +979,205 @@ textBox1.prop("",true);
                 });
         }
 
+        #endregion
+
+        #region ListView        
+
+        public static ListView add_ListView_Wpf<T>(this  T uiElement)
+            where T : UIElement
+        {
+            return uiElement.add_Control_Wpf<ListView>();
+        }
+
+        public static ListView add_Item(this ListView listView, string text)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    listView.Items.Add(text);
+                    return listView;
+                });
+
+        }
+
+        public static ListView add_Item<T>(this ListView listView, T item)
+            where T : UIElement
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    listView.Items.Add(item);
+                    return listView;
+                });
+        }
+
+        public static ListView add_Image_Wpf(this ListView listView, string pathToImage)
+        {
+            return listView.add_Image_Wpf(pathToImage, -1, -1);
+        }
+
+        public static ListView add_Image_Wpf(this ListView listView, string pathToImage, int width, int height)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    var image = new Image().open(pathToImage);
+                    if (image.isNull())
+                        return listView;
+                    if (width > -1)
+                        image.width_Wpf(width);
+                    if (height > -1)
+                        image.height_Wpf(height);
+                    listView.add_Item(image);
+                    return listView;
+                });
+        }
+
+        public static ListView add_Images_Wpf(this ListView listView, List<string> pathToImages)
+        {
+            return listView.add_Images_Wpf(pathToImages, -1, -1);
+        }
+
+        public static ListView add_Images_Wpf(this ListView listView, List<string> pathToImages, int width, int height)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    foreach (var image in pathToImages.images_Wpf(width, height))
+                        listView.Items.Add(image);
+                    return listView;
+                });
+        }
+
+        public static object selected(this ListView listView)
+        {
+            return (object)listView.wpfInvoke(() => listView.SelectedValue);
+        }
+
+        /*public static object selected_Items(this ListView listView)
+        {
+            return (object)listView.wpfInvoke(()=> listView.SelectedItems);					
+        }*/
+
+
+        public static T selected<T>(this ListView listView)
+        {
+            return (T)listView.wpfInvoke(
+                () =>
+                {
+                    if (listView.SelectedValue is T)
+                        return (T)listView.SelectedValue;
+                    return default(T);
+                });
+        }
+
+        public static ListView afterSelect(this ListView listView, Action callback)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    listView.SelectionChanged += (sender, e) => callback();
+                    return listView;
+                });
+        }
+
+        public static ListView afterSelect<T>(this ListView listView, Action<T> callback)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    listView.SelectionChanged +=
+                        (sender, e) =>
+                        {
+                            listView.wpfInvoke(
+                                () =>
+                                {
+                                    if (listView.SelectedValue is T)
+                                        callback((T)listView.SelectedValue);
+                                });
+                        };
+                    return listView;
+                });
+        }
+
+        public static ListView remove_Selected(this ListView listView)
+        {
+            return (ListView)listView.wpfInvoke(() => listView.remove_Item(listView.selected()));
+        }
+
+        public static ListView remove_Item(this ListView listView, object itemToRemove)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    if (itemToRemove.notNull())
+                        listView.Items.Remove(itemToRemove);
+                    return listView;
+                });
+        }
+
+        public static ListView remove_Items(this ListView listView, List<object> itemsToRemove)
+        {
+            foreach (var itemToRemove in itemsToRemove)
+                listView.remove_Item(itemToRemove);
+            return listView;
+        }
+
+        public static List<object> items(this ListView listView)
+        {
+            return (List<object>)listView.wpfInvoke(
+                () =>
+                {
+                    return (from object item in listView.Items
+                            select item).toList();
+                });
+        }
+
+        public static List<T> items<T>(this ListView listView)
+        {
+            return (List<T>)listView.wpfInvoke(
+                () =>
+                {
+                    return (from object item in listView.Items
+                            where item is T
+                            select (T)item).toList();
+                });
+
+        }
+
+        public static ListView clear(this ListView listView)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    listView.Items.Clear();
+                    return listView;
+                });
+        }
+
+        public static ListView remove_All(this ListView listView)
+        {
+            return listView.clear();
+        }
+
+        public static ListView selectIndex(this ListView listView, int index)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                    var items = listView.items();
+                    if (index > -1 && index < items.size())
+                        listView.SelectedIndex = index;
+                    return listView;
+                });
+        }
+
+        public static ListView selectFirst(this ListView listView)
+        {
+            return listView.selectIndex(0);
+
+        }
+		
         #endregion
 
         #region StackPanel
