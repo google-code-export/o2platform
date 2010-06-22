@@ -13,7 +13,7 @@ var statusLabel = mainPanel.parentForm().add_StatusStrip(System.Drawing.Color.Fr
 
 var fileName = optionsPanel.add_Label("Current Diagram File").top(5)
 					       .append_TextBox("")
-					       .width(250);
+					       .width(200);
 
 WinForms.MethodInvoker saveDiagram = 
 	()=&gt;{
@@ -35,6 +35,12 @@ WinForms.MethodInvoker loadDiagram =
 			}
 		};
 
+WinForms.MethodInvoker newDiagram = 
+	()=&gt;{
+			designerCanvas.open("emptyDiagram.xml".local()); 	 	
+		};
+
+
 fileName.onDrop(
 	(fileOrFolder)=&gt;{
 						if (fileOrFolder.fileExists())
@@ -53,33 +59,58 @@ fileName.onEnter(
 						}
 					});								
 
-designerCanvas.width_Wpf(600);
+//set canvas size
+designerCanvas.width_Wpf(640);
 designerCanvas.height_Wpf(480);
+designerCanvas.prop("RenderSize", new System.Windows.Size(640,480));  // also needs these two or working with 600x480 images will paste with an extra board
+//designerCanvas.prop("MaxWidth",600);								  // these don't seem to have an effect
+//designerCanvas.prop("MaxHeight",480);
 
 fileName.append_Link("Save Diagram",saveDiagram).top(5)
 		.append_Link("Load Diagram", loadDiagram)
+		.append_Link("New Diagram", newDiagram)
 		.append_Label("Canvas Width:")
 		.append_TextBox(designerCanvas.ActualWidth.str())
+			.width(40)		
+			.leftAdd(-20)
+			.bringToFront() 
+			.onTextChange(
+				(text)=&gt;{
+							var newWidth = text.toInt();
+							if (newWidth &gt; 0)
+							{
+								designerCanvas.width_Wpf(newWidth);
+								designerCanvas.prop("MaxWidth",newWidth);
+							}
+						})
+		.append_Label("Canvas Height:")
+		    .top(5)
+		    .append_TextBox(designerCanvas.ActualHeight.str())
 			.width(40)
-			.onTextChange((text)=&gt;designerCanvas.width_Wpf(text.toInt()))
-		.append_Label("Canvas Hight:").append_TextBox(designerCanvas.ActualHeight.str())
-			.width(40)
+			.leftAdd(-20)
+			.bringToFront() 
 			.onTextChange((
-				text)=&gt;designerCanvas.height_Wpf(text.toInt()))
+				text)=&gt;{
+							var newHeight = text.toInt();
+							designerCanvas.height_Wpf(newHeight);
+							designerCanvas.prop("MaxHeight",newHeight);
+					   })
 		.append_Link("Copy Canvas to Clipboard",
-			()=&gt;{ 
-					var xamlHost = mainPanel.control&lt;O2.API.Visualization.Ascx.ascx_Xaml_Host&gt;();
+			()=&gt;{ 					
+					var xamlHost = mainPanel.control&lt;O2.API.Visualization.Ascx.ascx_Xaml_Host&gt;(); 
 					var xamlHostPosition = xamlHost.PointToScreen(xamlHost.Location);;//[0].typeFullName(); 
-					int width = (int)designerCanvas.ActualWidth;
-					int height = (int)designerCanvas.ActualHeight;
+					int width = (int)designerCanvas.width_Wpf(); //(int)designerCanvas.ActualWidth;
+					int height = (int)designerCanvas.height_Wpf();  //(int)designerCanvas.ActualHeight;
+					//designerCanvas.prop("RenderSize", new System.Windows.Size(width,height)); 
 					int top = xamlHostPosition.Y + ((xamlHost.height() - height) /2);   
 					//int top = mainPanel.height() - height; 
 					int left = xamlHostPosition.X + ((xamlHost.width() - width) /2);    
-					  
+					   
 					mainPanel.capture(left, top, width, height); 
-					"Current canvas copied to the clipboard,,,( {0}x{1} -&gt; {2}x{3} ".info(top,xamlHostPosition.Y, xamlHost.height(), height); 
-					//"Current canvas copied to the clipboard,,,( {0}x{1} -&gt; {2}x{3} ".info(left,top,width,height);
-				});
+					//"Current canvas copied to the clipboard,,,( {0}x{1} -&gt; {2}x{3} ".info(top,xamlHostPosition.Y, xamlHost.height(), height); 
+					"Current canvas copied to the clipboard( {0}x{1} -&gt; {2}x{3} ".info(left,top,width,height);
+				})
+		.top(5);
 
 //var temp = @"C:\O2\_tempDir\serializedDiagramDesigner\2 shapes and a connector.xml";
 //designerCanvas.open(temp);
@@ -96,6 +127,8 @@ imageDropArea.onDrop(
 						designerCanvas.add_Image(fileOrFolder,0,0,200,200);											
 					}
  					});
+ 					
+var pasteImageWithOriginalSize = false;
 
 stencilsPanel.add_Link("paste image from clipboard", 50,0,
 	()=&gt;{		
@@ -104,20 +137,28 @@ stencilsPanel.add_Link("paste image from clipboard", 50,0,
 			{
 				var tempImageFile = bitmap.save();
 				statusLabel.set_Text("Note: Clipboard image saved to: {0}".format(tempImageFile));
-				designerCanvas.add_Image(tempImageFile,0,0,200,200); 
+				if (pasteImageWithOriginalSize)
+					designerCanvas.add_Image(tempImageFile,0,0,bitmap.Width,bitmap.Height); 
+				else
+					designerCanvas.add_Image(tempImageFile,0,0,200,200); 
 			}
 			else
 				statusLabel.set_Text("Note: the Clipboard did not contain an image");
 		});
-		stencilsPanel.add_Label("(with image saved locally)",65,0); 
+		
+stencilsPanel.add_CheckBox("original size", 50,140,(value) =&gt; pasteImageWithOriginalSize = value);			
+stencilsPanel.add_Label("(with image saved locally)",65,0); 
 
 
 
 //XAML code
 var xamlControls = stencilsPanel.add_ComboBox(120,0); 
+var xamlCode = stencilsPanel.add_SourceCodeViewer(); 
+xamlCode.top(150).height(200); 
 Dictionary&lt;string,string&gt; xamls = null;
 var xmlCodeFile = "XamlCode.cs".local();
- xmlCodeFile.info(); 
+xamlControls.onSelection(()=&gt; xamlCode.set_Text(xamls[xamlControls.selected().str()],"a.xml")); 
+
 MethodInvoker loadXmlControls = 
 	()=&gt;{
 			xamlControls.clear();//.Clear();
@@ -142,14 +183,14 @@ stencilsPanel.add_Label("Template XAML Controls",100,0)
 			 			  .open(xmlCodeFile));
 
 
-var xamlCode = stencilsPanel.add_SourceCodeViewer(); 
-xamlCode.top(150).height(200); 
-xamlControls.onSelection(()=&gt; xamlCode.set_Text(xamls[xamlControls.selected().str()],"a.xml")); 
+
+
+
 
  
 stencilsPanel.add_Link("Create WPF from XAML and add to canvas",  350,0,
 	()=&gt;{
-			designerCanvas.add_XamlElement(xamlCode.get_Text());
+			var uiElement = designerCanvas.add_XamlElement(xamlCode.get_Text());			
 		});
 
 // WPF controls
@@ -240,6 +281,9 @@ return null;
 //O2Ref:Cropper.exe 
 
 //O2Ref:O2_API_AST.dll
-</SourceCode>
+
+
+//O2File:C:\O2\_XRules_Local\Extra_WPF_ExtensionMethods.cs
+//using O2.Local.Script</SourceCode>
   <ReferencedAssemblies />
 </H2>

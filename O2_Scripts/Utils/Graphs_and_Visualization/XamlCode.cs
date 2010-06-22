@@ -6,7 +6,17 @@ namespace O2.XRules.Database.APIs
 {
     public class XamlCode
     {   
-    
+    	public static string Rectangle()
+    	{
+    		return  "<Rectangle".line()+
+					"    Width=\"200\"".line()+
+					"    Height=\"100\"".line()+
+					"    Fill=\"Blue\"".line()+
+					"    Stroke=\"Black\"".line()+
+					"    Opacity=\"0.2\"".line()+
+					"    StrokeThickness=\"3\" />".line();
+    	}
+    	
     	public static string Simple_Button()
     	{
     		var xamlCode =  "<Button>".line() + 
