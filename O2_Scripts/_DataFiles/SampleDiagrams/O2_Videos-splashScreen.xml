@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <DesignerItems>
+    <DesignerItem>
+      <Left>179</Left>
+      <Top>26</Top>
+      <Width>NaN</Width>
+      <Height>NaN</Height>
+      <ID>cbf6b21b-6f61-4cab-9708-16d96ea16e65</ID>
+      <zIndex>2</zIndex>
+      <IsGroup>false</IsGroup>
+      <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
+      <Content>&lt;Label FontFamily="Verdana" FontSize="100" IsHitTestVisible="False" InputMethod.IsInputMethodEnabled="True" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"&gt;VIDEOS&lt;/Label&gt;</Content>
+    </DesignerItem>
+    <DesignerItem>
+      <Left>0</Left>
+      <Top>0</Top>
+      <Width>200</Width>
+      <Height>200</Height>
+      <ID>f75215a1-3839-425f-8f13-6bb0438ab15b</ID>
+      <zIndex>0</zIndex>
+      <IsGroup>false</IsGroup>
+      <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
+      <Content>&lt;Image Source="file:///C:/O2/_tempDir/O2_Logo.gif" IsHitTestVisible="False" InputMethod.IsInputMethodEnabled="True" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" /&gt;</Content>
+    </DesignerItem>
+    <DesignerItem>
+      <Left>44</Left>
+      <Top>205</Top>
+      <Width>528.31000000000006</Width>
+      <Height>169.00000000000003</Height>
+      <ID>de04f7bb-3bd6-45f0-9fe3-7040d448643a</ID>
+      <zIndex>1</zIndex>
+      <IsGroup>false</IsGroup>
+      <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
+      <Content>&lt;Button FontSize="30" Height="80" Margin="2,2,2,2" IsHitTestVisible="False" InputMethod.IsInputMethodEnabled="True" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:s="clr-namespace:System;assembly=mscorlib"&gt;&lt;Button.Template&gt;&lt;ControlTemplate TargetType="Button"&gt;&lt;Border CornerRadius="10,10,10,10" Background="#FFADD8E6" Name="Border"&gt;&lt;ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" HorizontalAlignment="Center" VerticalAlignment="Center" /&gt;&lt;/Border&gt;&lt;ControlTemplate.Triggers&gt;&lt;Trigger Property="UIElement.IsMouseOver"&gt;&lt;Setter Property="Panel.Background" TargetName="Border"&gt;&lt;Setter.Value&gt;&lt;SolidColorBrush&gt;#FFF0FFFF&lt;/SolidColorBrush&gt;&lt;/Setter.Value&gt;&lt;/Setter&gt;&lt;Trigger.Value&gt;&lt;s:Boolean&gt;True&lt;/s:Boolean&gt;&lt;/Trigger.Value&gt;&lt;/Trigger&gt;&lt;Trigger Property="ButtonBase.IsPressed"&gt;&lt;Setter Property="Panel.Background" TargetName="Border"&gt;&lt;Setter.Value&gt;&lt;SolidColorBrush&gt;#FFFFA500&lt;/SolidColorBrush&gt;&lt;/Setter.Value&gt;&lt;/Setter&gt;&lt;Trigger.Value&gt;&lt;s:Boolean&gt;True&lt;/s:Boolean&gt;&lt;/Trigger.Value&gt;&lt;/Trigger&gt;&lt;/ControlTemplate.Triggers&gt;&lt;/ControlTemplate&gt;&lt;/Button.Template&gt;Installing O2 Platform v1.0 Beta&lt;/Button&gt;</Content>
+    </DesignerItem>
+    <DesignerItem>
+      <Left>366</Left>
+      <Top>438</Top>
+      <Width>NaN</Width>
+      <Height>NaN</Height>
+      <ID>e217c742-b33a-4234-8499-462cd066f715</ID>
+      <zIndex>0</zIndex>
+      <IsGroup>false</IsGroup>
+      <ParentID>00000000-0000-0000-0000-000000000000</ParentID>
+      <Content>&lt;Label FontSize="20" IsHitTestVisible="False" InputMethod.IsInputMethodEnabled="True" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"&gt;This is new DesignerCanvas&lt;/Label&gt;</Content>
+    </DesignerItem>
+  </DesignerItems>
+  <Connections />
+</Root>
