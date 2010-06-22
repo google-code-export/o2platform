@@ -29,44 +29,15 @@ using DiagramDesigner;
 //O2Ref:DiagramDesigner.exe
 
 namespace O2.XRules.Database.APIs
-{
-	public class ExtraAppDomain_Script
-	{
-		public static void executeInAppDomain(string appDomainName,string scriptToExecute)
-		{
-				O2Thread.mtaThread(
-					()=>{
-							var o2AppDomain =  new O2.Kernel.Objects.O2AppDomainFactory(appDomainName);
-							try
-							{
-								o2AppDomain.load("O2_XRules_Database"); 	
-								o2AppDomain.load("O2_Kernel");
-								o2AppDomain.load("O2_DotNetWrappers");
-							
-								var o2Proxy =  (O2Proxy)o2AppDomain.getProxyObject("O2Proxy");
-								 
-								o2Proxy.InvokeInStaThread = true;
-								o2Proxy.staticInvocation("O2_External_SharpDevelop","FastCompiler_ExtensionMethods","executeSourceCode",new object[]{ scriptToExecute });								
-							}
-							catch(Exception ex)
-							{
-								ex.log("inside new AppDomain"); 
-							}
-							
-							PublicDI.log.showMessageBox("Click OK to close the '{0}' AppDomain (and close all open windows)".format(appDomainName));							
-							o2AppDomain.unLoadAppDomain();
-						});
-		  }
-	}
-	
+{		
     public class DiagramDesigner_NewAppDomain
     {    
     	public static void launchInNewAppDomain()
     	{
     		var script = "DiagramDesigner_NewAppDomain.launchDiagramDesignerGui(true); ".line() + 
 						"//using: O2.XRules.Database.APIs".line() + 
-						@"//O2File:C:\O2\_XRules_Local\DiagramDesigner\DiagramDesigner_NewAppDomain.cs";
-									
+						@"//O2File:" + "DiagramDesigner_NewAppDomain.cs".local();
+			"Executing script in new appdomain:{0}".info(script.lineBefore());							
     		ExtraAppDomain_Script.executeInAppDomain("AppDomain for DiagramDesigner",script);
     	}
     	
@@ -108,7 +79,35 @@ namespace O2.XRules.Database.APIs
 						
 						//System.Windows.Application.Current.run
 					});
-		}
-			  				
+		}			  				
     }
+    
+    public class ExtraAppDomain_Script
+	{
+		public static void executeInAppDomain(string appDomainName,string scriptToExecute)
+		{
+				O2Thread.mtaThread(
+					()=>{
+							var o2AppDomain =  new O2.Kernel.Objects.O2AppDomainFactory(appDomainName);
+							try
+							{
+								o2AppDomain.load("O2_XRules_Database"); 	
+								o2AppDomain.load("O2_Kernel");
+								o2AppDomain.load("O2_DotNetWrappers");
+							
+								var o2Proxy =  (O2Proxy)o2AppDomain.getProxyObject("O2Proxy");
+								 
+								o2Proxy.InvokeInStaThread = true;
+								o2Proxy.staticInvocation("O2_External_SharpDevelop","FastCompiler_ExtensionMethods","executeSourceCode",new object[]{ scriptToExecute });								
+							}
+							catch(Exception ex)
+							{
+								ex.log("inside new AppDomain"); 
+							}
+							
+							PublicDI.log.showMessageBox("Click OK to close the '{0}' AppDomain (and close all open windows)".format(appDomainName));							
+							o2AppDomain.unLoadAppDomain();
+						});
+		  }
+	}
 }

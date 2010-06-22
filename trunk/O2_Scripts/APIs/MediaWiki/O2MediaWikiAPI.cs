@@ -272,8 +272,12 @@ namespace O2.XRules.Database.APIs
 			wikiApi.Login_Result = login.attribute("result").value();
 			
 			if (wikiApi.Login_Result == "NeedToken")
-			{
-				"NEEDS TOKEN".info();
+			{								
+				if (wikiApi.LastWebRequest.Headers_Response.hasKey("Set-Cookie"))
+				{
+					var setCookie = wikiApi.LastWebRequest.Headers_Response.value("Set-Cookie");
+					wikiApi.Login_Cookie = setCookie;					
+				}
 				var token=login.attribute("token").value();
 				postData = "{0}&lgtoken={1}".format(postData, token);
 				login = wikiApi.postApiPhp(postData).xRoot().element("login");
