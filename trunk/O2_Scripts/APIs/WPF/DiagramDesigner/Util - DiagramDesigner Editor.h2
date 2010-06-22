@@ -160,7 +160,15 @@ imageDropArea.onDrop(
 (fileOrFolder)=&gt;{
 					if (fileOrFolder.fileExists())
 					{
-						designerCanvas.add_Image(fileOrFolder,0,0,200,200);											
+						var droppedImage = fileOrFolder.bitmap();
+						if (droppedImage.notNull())
+						{
+							if (pasteImageWithOriginalSize)
+								designerCanvas.add_Image(fileOrFolder,0,0,droppedImage.Width,droppedImage.Height); 
+							else
+								designerCanvas.add_Image(fileOrFolder,0,0,200,200); 
+							//designerCanvas.add_Image(fileOrFolder,0,0,200,200);	
+						}
 					}
  					}); 				
 
@@ -309,10 +317,6 @@ return null;
 //O2Ref:DiagramDesigner.exe
 //O2Ref:Cropper.exe 
 
-//O2Ref:O2_API_AST.dll
-
-
-//O2File:C:\O2\_XRules_Local\Extra_WPF_ExtensionMethods.cs
-//using O2.Local.Script</SourceCode>
+//O2Ref:O2_API_AST.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>
