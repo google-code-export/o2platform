@@ -77,8 +77,13 @@ topControlBar.add_Link("Start capture",30,5,
 			.append_Link("Delete all images",
 				()=&gt;{
 						listView.clear();
-					})
-			.append_Link("Open image Editor", ()=&gt; "Util - DiagramDesigner Editor.h2".local().executeH2Script());
+					});
+			/*.append_Link("Open image Editor", 
+				()=&gt;{
+						var diagramDesignerScript = "Util - DiagramDesigner Editor.h2".local();
+						"Executing diagram designer script: {0}".info(diagramDesignerScript);						
+						diagramDesignerScript.executeH2Script(); 
+					}); */
 				
 
 listView.enableDrag(); 

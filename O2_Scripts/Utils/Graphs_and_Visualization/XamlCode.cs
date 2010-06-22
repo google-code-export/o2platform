@@ -6,6 +6,13 @@ namespace O2.XRules.Database.APIs
 {
     public class XamlCode
     {   
+    	public static string Label()
+    	{
+    		return  "<Label ".line() +
+					"	FontSize=\"20\">".line() +
+					"	This is new DesignerCanvas".line() +
+					"</Label>";
+    	}
     	public static string Rectangle()
     	{
     		return  "<Rectangle".line()+
