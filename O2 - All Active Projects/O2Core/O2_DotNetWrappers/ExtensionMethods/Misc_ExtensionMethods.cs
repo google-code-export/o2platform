@@ -49,6 +49,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return "{0:000.00} kb".format(value.gBytes());
         }
 
+        public static bool eq(this int value1, int value2)
+        {
+            return value1 == value2;
+        }
+
+        public static bool neq(this int value1, int value2)
+        {
+            return value1 != value2;
+        }
+
         #endregion
 
         #region bool

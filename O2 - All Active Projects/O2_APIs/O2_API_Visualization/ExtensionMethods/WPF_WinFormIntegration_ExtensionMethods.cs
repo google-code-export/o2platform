@@ -95,6 +95,8 @@ namespace O2.API.Visualization.ExtensionMethods
     	{
     		return (ElementHost)elementHost.invokeOnThread(()=> elementHost.Child = null);
     	}
+
+
     	    
     	#endregion
 
@@ -120,6 +122,11 @@ namespace O2.API.Visualization.ExtensionMethods
 			            return null;			    				
     				});     		
     	}
+
+        public static ListView add_ListView_Wpf(this ElementHost elementHost)
+        {
+            return elementHost.add_Control_Wpf<ListView>();
+        }
 
 		#endregion    	
 		

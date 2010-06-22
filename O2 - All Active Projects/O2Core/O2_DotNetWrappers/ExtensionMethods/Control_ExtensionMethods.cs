@@ -592,6 +592,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         }
 
+        public static T putBitmapOnClipboard<T>(this T control, Bitmap bitmap)
+            where T : Control
+        {
+            control.invokeOnThread(() => Clipboard.SetImage(bitmap));
+            return control;
+        }
+
         public static Bitmap fromClipboardGetImage(this Control control)
         {
             return (Bitmap)control.invokeOnThread(
