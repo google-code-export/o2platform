@@ -20,14 +20,12 @@ using AForge.Video.DirectShow;
 
 //O2File:API_Cropper.cs
 
+//O2Ref:Cropper.exe
 //O2Ref:AForge.dll
 //O2Ref:AForge.Video.VFW.dll
 //O2Ref:AForge.Video.DirectShow.dll
 //O2Ref:AForge.Controls.dll
 //O2Ref:AForge.Video.dll
-
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs
-using O2.Local.Script;
 
 namespace O2.XRules.Database.APIs
 {

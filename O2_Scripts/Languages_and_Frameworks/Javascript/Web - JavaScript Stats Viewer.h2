@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode> var topPanel = O2Gui.open&lt;Panel&gt;("JavaScript Stats viewer",950,600);
+  <SourceCode> var topPanel = O2Gui.open&lt;Panel&gt;("JavaScript Stats viewer",1002,502);
 
 var openUsingWebBrowser = false;
 
