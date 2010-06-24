@@ -132,9 +132,6 @@ return "done";
 */
 return null; 
  
-//O2File:C:\O2\_XRules_Local\Extra_WPF_ExtensionMethods.cs
-//using O2.Local.Script
- 
 //O2File:API_AForge_Video_WPF_Image.cs 
 
  

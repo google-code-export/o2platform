@@ -156,8 +156,7 @@ MethodInvoker publishExploit =
 							    "  target.flash();".line() +  
 								"  target.injectHtml(\"" + injectionMethod + "\"," + payload.encodeAsO2ScriptText("",5).trim() + ");".line();  
 								
-			exploitScript += @"//O2File:C:\O2\_XRules_Local\ExtraExMethods.cs".lineBeforeAndAfter();
-			exploitScript += "//using O2.Script".line(); 
+			
 			var exploitGui = O2Gui.open&lt;ascx_IE_ScriptExecution&gt;("Xss Exploit",600,600); 
 			exploitGui.buildGui(exploitScript); 
 			//var scriptEngine = exploitGui.add_Script(); 			
