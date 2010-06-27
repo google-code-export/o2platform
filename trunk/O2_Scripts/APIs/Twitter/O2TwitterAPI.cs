@@ -208,10 +208,28 @@ namespace O2.XRules.Database.APIs
     		return users;
     	}
     	
+    	public static bool ok(this TwitterResult result)
+        {
+            return result.ResponseHttpStatusDescription == "OK";
+        }        
+	}
+
+	public static class Twitter_ExtensionClasses_Search
+	{    	
+		public static List<string> search(this O2TwitterAPI twitterAPI, string searchText)
+		{
+			//twitterAPI.Twitter.
+			return null;
+		}
+	}
+	
+	public static class Twitter_ExtensionClasses_NewTweets
+	{    	
     	public static bool newTweet(this O2TwitterAPI twitterAPI, string tweetText)
     	{
     		return twitterAPI.update(tweetText);
     	}
+    	
 		public static bool update(this O2TwitterAPI twitterAPI, string updateString)
         {	
         	// not sure why I can 't user the twitterAPI.Statuses for this (but I'm getting an error on the next request to user_timeline)
@@ -219,13 +237,11 @@ namespace O2.XRules.Database.APIs
             						  .Update(updateString).AsJson().Request();
             return result.ok();
         }
-        
-        public static bool ok(this TwitterResult result)
-        {
-            return result.ResponseHttpStatusDescription == "OK";
-        }
-        
-        // GUI
+                                
+	}
+	
+	public static class Twitter_ExtensionClasses_WinForms
+	{
         
         public static T add_TableList_With_Tweets<T>(this T control, List<TwitterStatus> twitterStatuses)
         	where T : Control

@@ -75,21 +75,33 @@ namespace O2.XRules.Database.Utils.O2
                           "graph.edge(200,blueLabel);" .line() + 
                           "var redLabel = graph.add_UIElement<WPF.TextBox>().set_Text(\"red textbox\").color(\"Red\");" .line() +
                           "graph.edge(blueLabel,redLabel);".line() + 
-                          "//graph.edgeToAll(200);".line()
-                          .line() +
+                          "//graph.edgeToAll(200);".line() + 
                           "graph.defaultLayout();".line() + 
                           "//graph.overlapRemovalParameters(20, 50);".line() +  
 						  "graph.showAllLayouts(2000);".line() + 
-						  "graph.circular();".line()
-                          .line() + 
-                          "return graph;";
+						  "graph.circular();".line().line() + 
+                          "return graph;".line() + 
+						  "//using System.Xml.Linq".line()+
+						  "//using System.Linq".line()+
+						  "//using WPF=System.Windows.Controls".line() + 
+						  "//using O2.API.Visualization.ExtensionMethods".line()+
+						  "//O2Ref:System.Xml.dll".line()+
+						  "//O2Ref:System.Xml.Linq.dll".line()+
+						  "//O2Ref:O2_API_Visualization.dll".line()+
+						  "//O2Ref:PresentationCore.dll".line()+
+						  "//O2Ref:PresentationFramework.dll".line()+
+						  "//O2Ref:WindowsBase.dll   ".line()+
+						  "//O2Ref:System.Core.dll".line()+
+						  "//O2Ref:WindowsFormsIntegration.dll".line()+
+						  "//O2Ref:GraphSharp.dll".line()+
+						  "//O2Ref:QuickGraph.dll".line()+
+						  "//O2Ref:GraphSharp.Controls.dll".line()+
+						  "//O2Ref:ICSharpCode.AvalonEdit.dll".line();
 
 			script.InvocationParameters.Add("graph", graph);
 			script.InvocationParameters.Add("elementHost", xamlHost.element());
             script.onCompileExecuteOnce();
             script.compileCodeSnippet(script.Code);
-
-        }
-    	    	    	    	    
+        }    	    	    	    	    
     }
 }
