@@ -10,10 +10,7 @@ namespace O2.Kernel.CodeUtils
 {
     public class O2Svn
     {
-        public static List<string> AssembliesCheckedIfExists = new List<string>() {"System.Deployment"};
-        public static string O2SVN_ExternalDlls = "http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/_3rdPartyDlls/";
-        public static string O2SVN_Binaries = "http://o2platform.googlecode.com/svn/trunk/O2_Binaries/";
-        
+        public static List<string> AssembliesCheckedIfExists = new List<string>() {"System.Deployment"};        
 
         public static void clear_AssembliesCheckedIfExists()
         {
@@ -40,14 +37,14 @@ namespace O2.Kernel.CodeUtils
                             localFilePath = Path.Combine(currentApplicationPath, assemblyToLoad);
                             if (File.Exists(localFilePath))
                                 return;
-                            var webLocation1 = "{0}{1}".format(O2SVN_ExternalDlls, assemblyToLoad);
+                            var webLocation1 = "{0}{1}".format(PublicDI.config.O2SVN_ExternalDlls, assemblyToLoad);
                             if (new O2Kernel_Web().httpFileExists(webLocation1))
                             {
                                 new O2Kernel_Web().downloadBinaryFile(webLocation1, localFilePath);
                             }
                             else
                             {
-                                var webLocation2 = "{0}{1}".format(O2SVN_Binaries, assemblyToLoad);
+                                var webLocation2 = "{0}{1}".format(PublicDI.config.O2SVN_Binaries, assemblyToLoad);
                                 if (new O2Kernel_Web().httpFileExists(webLocation2))
                                 {
                                     new O2Kernel_Web().downloadBinaryFile(webLocation2, localFilePath);

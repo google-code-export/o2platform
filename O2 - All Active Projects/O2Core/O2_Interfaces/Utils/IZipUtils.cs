@@ -6,8 +6,8 @@ namespace O2.Interfaces.Utils
 {
     public interface IZipUtils
     {
-        void zipFile(string strFileToZip, string strTargetZipFileName);
-        void zipFolder(string strPathOfFolderToZip, string strTargetZipFileName);
+        string zipFile(string strFileToZip, string strTargetZipFileName);
+        string zipFolder(string strPathOfFolderToZip, string strTargetZipFileName);
         List<String> getListOfFilesInZip(String sZipFileToLoad);
         string unzipFile(string fileToUnzip);
         string unzipFile(string fileToUnzip, string targetFolder);

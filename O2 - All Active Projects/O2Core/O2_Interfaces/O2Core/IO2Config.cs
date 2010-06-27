@@ -12,6 +12,11 @@ namespace O2.Interfaces.O2Core
         string hardCodedO2LocalSourceCodeDir { get; set; }
         
         string O2TempDir { get; set; }
+        string LocalScriptsFolder { get; set; }
+        string SvnO2RootFolder { get; set; }
+        string SvnO2DatabaseRulesFolder { get; set; }
+        string O2SVN_ExternalDlls { get; set; }
+        string O2SVN_Binaries { get; set; }
         string Version { get; }
         string O2ConfigFile { get; set; }
         string CurrentExecutableDirectory { get; }
@@ -20,6 +25,7 @@ namespace O2.Interfaces.O2Core
         string TempFileNameInTempDirectory { get; }
         string TempFolderInTempDirectory { get; }
         string O2KernelAssemblyName { get; }
+        
         //String setDefaultDir_TempFolder();
 
         string getTempFileInTempDirectory(string extension);

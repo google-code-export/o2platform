@@ -17,11 +17,6 @@ namespace O2.Core.XRules.Classes
 {
     public class SvnApi
     {
-        public static string localRulesDatabase = @"C:\O2\O2Scripts_Database\_Scripts";
-        public static string svnO2RootFolder = "http://o2platform.googlecode.com/svn/trunk/";		
-        //public static string svnO2DatabaseRulesFolder = "http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/O2_XRules_Database/_Rules";
-        public static string svnO2DatabaseRulesFolder = "http://o2platform.googlecode.com/svn/trunk/O2_Scripts/";
-
     	private static IO2Log log = PublicDI.log;
 
         public static void SyncLocalFolderWithO2XRulesDatabase()
@@ -30,8 +25,8 @@ namespace O2.Core.XRules.Classes
             {
                 "in SyncLocalFolderWithO2XRulesDatabase".debug();
                 //var targetLocalDir = XRules_Config.PathTo_XRulesDatabase_fromO2;
-                var targetLocalDir = localRulesDatabase;
-                var o2XRulesSvn = svnO2DatabaseRulesFolder;
+                var targetLocalDir = PublicDI.config.LocalScriptsFolder;
+                var o2XRulesSvn = PublicDI.config.SvnO2DatabaseRulesFolder;
 
                 "starting Sync with XRules Database to {0}".info(targetLocalDir);
                 using (SvnClient client = new SvnClient())

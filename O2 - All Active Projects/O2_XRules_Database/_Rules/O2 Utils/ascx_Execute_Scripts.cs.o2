@@ -66,6 +66,7 @@ namespace O2.XRules.Database
             			if (scriptToExecute.fileExists())      
                 			executeScripts.loadFile(scriptToExecute);            
     				});
+            executeScripts.checkForFirstRunAndUnzipDefaultScripts();
     	}    	
     	
     	public ascx_Execute_Scripts()
@@ -77,6 +78,21 @@ namespace O2.XRules.Database
 		    	pathToPictureBox = new Web().checkIfFileExistsAndDownloadIfNot(logoFile, @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
 		    else
 		    	pathToPictureBox = tempPath;		    
+        }
+
+        public void checkForFirstRunAndUnzipDefaultScripts()
+        {
+            if (PublicDI.config.LocalScriptsFolder.dirExists().isFalse())
+            {
+                var zippedScriptedFile = PublicDI.config.CurrentExecutableDirectory.pathCombine("_Scripts.zip");
+                if (zippedScriptedFile.fileExists().isFalse())
+                    "in checkForFirstRunAndUnzipDefaultScripts, could not find file: {0}".error(zippedScriptedFile);
+                else
+                {
+                    var targetFolder = PublicDI.config.LocalScriptsFolder.directoryName();
+                    zippedScriptedFile.unzip_File(targetFolder);
+                }
+            }
         }
 
         private void handleSpecialControlKeys()
@@ -138,7 +154,7 @@ namespace O2.XRules.Database
             contextMenu.add_MenuItem("SVN O2 Scripts")
                         .add_MenuItem("ReSync Scripts from O2's Svn (using SVN client)", ()=> execute("ReSync SVN Rules",() => syncO2ViaSvn()))
                         //.add_MenuItem("Manual Sync Scripts from O2's Svn (using HTTP) ", ()=> execute("Trying Manual SVN Sync via HTTP",() => new Wizard_SyncViaSvn().runWizard()))
-                        .add_MenuItem(@"Delete local O2 Scripts folder (C:\O2\O2Scripts_Database)", deleteLocalScriptsFolder);
+                        .add_MenuItem(@"Delete local O2 Scripts folder ({0})".format(PublicDI.config.LocalScriptsFolder), deleteLocalScriptsFolder);
 
             contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());
             contextMenu.add_MenuItem("Exit Application (and close all windows)", () => PublicDI.config.closeO2Process());
@@ -177,12 +193,11 @@ namespace O2.XRules.Database
 
         private void deleteLocalScriptsFolder()
         {
-            var localScriptsFolder = @"C:\O2\O2Scripts_Database\Scripts";
-            var userQuestion = "Are you sure you want to deleted the local scripts folder: " + localScriptsFolder;
+            var userQuestion = "Are you sure you want to deleted the local scripts folder: " + PublicDI.config.LocalScriptsFolder;
             if (userQuestion.askUserQuestion())
             {
-                "Deleting Folder: ".debug(localScriptsFolder);
-                Files.deleteFolder(localScriptsFolder, true);
+                "Deleting Folder: ".debug(PublicDI.config.LocalScriptsFolder);
+                Files.deleteFolder(PublicDI.config.LocalScriptsFolder, true);
             }
         }
 
@@ -271,7 +286,7 @@ namespace O2.XRules.Database
      	{     		
             status("Showing available scripts");
             //var path = XRules_Config.PathTo_XRulesDatabase_fromO2;
-            var path = SvnApi.localRulesDatabase;
+            var path = PublicDI.config.LocalScriptsFolder;
 
             Action<TreeView, TreeNode> mapFoldersAndFiles =
                 (targetTreeView, treeNode) =>
