@@ -24,7 +24,15 @@ namespace O2.Kernel
             
             // before we load the O2Config data (which is loaded from the local disk)
             config = O2ConfigLoader.getKO2Config();
-
+            
+            //make sure theses values are set (could be a prob due to changed location of these values)
+            if (config.LocalScriptsFolder == null)
+            {
+                config.LocalScriptsFolder = KO2Config.defaultLocalScriptFolder;
+                config.SvnO2RootFolder = KO2Config.defaultSvnO2RootFolder;
+                config.SvnO2DatabaseRulesFolder = KO2Config.defaultSvnO2DatabaseRulesFolder;
+            }
+            
             O2KernelProcessName = "Generic O2 Kernel Process"; ;
             AppDomainUtils.registerCurrentAppDomain();
         }

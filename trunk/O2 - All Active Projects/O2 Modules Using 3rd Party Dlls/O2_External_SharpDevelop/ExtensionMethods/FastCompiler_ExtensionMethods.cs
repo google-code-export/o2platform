@@ -6,6 +6,7 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.DotNet;
 using System;
 using O2.DotNetWrappers.H2Scripts;
+using O2.Kernel;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -95,18 +96,8 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         {
             if (pathToFileToCompileAndExecute.fileExists().isFalse())
             { 
-                // if we were not provided a complete path, try to find it on the local o2 script folder
-                var defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
-                var o2LocalScriptFiles = defaultLocalScriptsFolder.files("*.cs".wrapOnList().add("*.o2").add("*.h2"), true);
-                foreach (var localScriptFile in o2LocalScriptFiles)
-                {
-                    if (localScriptFile.fileName().lower().starts(pathToFileToCompileAndExecute.lower()))                  
-                    {
-                        "The script to execute was resolved from '{0}' to '{1}'".debug(pathToFileToCompileAndExecute, localScriptFile);
-                        pathToFileToCompileAndExecute = localScriptFile;
-                        break;
-                    }
-                }
+                // if we were not provided a complete path, try to find it on the local o2 script folder                
+                pathToFileToCompileAndExecute = pathToFileToCompileAndExecute.local();                
             }
             if (pathToFileToCompileAndExecute.extension(".h2"))
                 return executeH2Script(pathToFileToCompileAndExecute);

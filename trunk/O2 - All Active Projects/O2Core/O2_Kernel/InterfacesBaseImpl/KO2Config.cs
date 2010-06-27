@@ -12,7 +12,13 @@ using O2.Kernel.CodeUtils;
 namespace O2.Kernel.InterfacesBaseImpl
 {
     public class KO2Config : IO2Config
-    {   
+    {
+        public static string defaultLocalScriptFolder = @"C:\O2\O2Scripts_Database\_Scripts";
+        public static string defaultSvnO2RootFolder = @"http://o2platform.googlecode.com/svn/trunk/";
+        public static string defaultSvnO2DatabaseRulesFolder = @"http://o2platform.googlecode.com/svn/trunk/O2_Scripts/";
+        public static string defaultO2SVN_ExternalDlls = "http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/_3rdPartyDlls/";
+        public static string defaultO2SVN_Binaries = "http://o2platform.googlecode.com/svn/trunk/O2_Binaries/";
+        
         const string  defaultO2LocalTempFolder = @"C:\O2\_tempDir\";
 
         public KO2Config()
@@ -20,12 +26,17 @@ namespace O2.Kernel.InterfacesBaseImpl
             hardCodedO2LocalTempFolder = defaultO2LocalTempFolder;
             O2TempDir = hardCodedO2LocalTempFolder;                 // default to this one since there are a couple cases where in Visual Studio the loading of o2.config files causes a problem
             hardCodedO2LocalBuildDir = @"E:\O2\_Bin_(O2_Binaries)\";
-            hardCodedO2LocalSourceCodeDir = @"E:\O2\_SourceCode_O2";
+            hardCodedO2LocalSourceCodeDir = @"E:\O2\_SourceCode_O2";            
             O2FindingsFileExtension = ".O2Findings";
             extraSettings = new List<Setting>();
             dependenciesInjection = new List<DependencyInjection>();
+            LocalScriptsFolder = defaultLocalScriptFolder;            
+            SvnO2RootFolder = defaultSvnO2RootFolder;
+            SvnO2DatabaseRulesFolder = defaultSvnO2DatabaseRulesFolder;
+            O2SVN_ExternalDlls = defaultO2SVN_ExternalDlls;
+            O2SVN_Binaries = defaultO2SVN_Binaries;
         }
-
+                       
         public KO2Config(string o2ConfigFile) :this ()
         {       
             O2ConfigFile = o2ConfigFile;            
@@ -43,7 +54,7 @@ namespace O2.Kernel.InterfacesBaseImpl
         public string hardCodedO2LocalSourceCodeDir { get; set; }
         public static string dependencyInjectionTest { get; set; }
 
-        
+        //interaface properties
 
         public string O2TempDir
         {
@@ -63,6 +74,12 @@ namespace O2.Kernel.InterfacesBaseImpl
 
             }
         }
+
+        public string LocalScriptsFolder { get; set; }
+        public string SvnO2RootFolder { get; set; }
+        public string SvnO2DatabaseRulesFolder { get; set; }
+        public string O2SVN_ExternalDlls { get; set; }
+        public string O2SVN_Binaries { get; set; }
 
         public string Version 
         {

@@ -197,9 +197,16 @@ namespace O2.External.SharpDevelop.Ascx
     	}
 
         public void addReferences(List<string> referencesToAdd)
-        {            
-            foreach (var referencedAssembly in referencesToAdd)
-                addReference(referencedAssembly);            
+        {
+            try
+            {
+                foreach (var referencedAssembly in referencesToAdd)
+                    addReference(referencedAssembly);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in O2Completion addRefrences");
+            }
         }
     
     	// this will regularly parse the current source code so that we have code completion for its methods 

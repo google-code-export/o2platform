@@ -35,7 +35,7 @@ namespace O2.Core.XRules._Wizards
 
         public Thread runWizard()
         {
-            return runWizard(SvnApi.svnO2DatabaseRulesFolder, testTargetFolder);        	
+            return runWizard(PublicDI.config.SvnO2DatabaseRulesFolder, testTargetFolder);        	
         }
         [StartWizard]
         public Thread runWizard(string svnUrl, string targetFolder)

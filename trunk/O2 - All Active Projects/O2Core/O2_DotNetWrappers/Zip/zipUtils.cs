@@ -8,25 +8,28 @@ using O2.DotNetWrappers.Windows;
 using O2.Interfaces.Utils;
 
 namespace O2.DotNetWrappers.Zip
-{
+{    
+
     public class zipUtils : IZipUtils
     {
-        public void zipFile(string strFileToZip, string strTargetZipFileName)
+        public string zipFile(string strFileToZip, string strTargetZipFileName)
         {
             var zpZipFile = new ZipFile(strTargetZipFileName);
             zpZipFile.AddFile(strFileToZip, "");
             //zpZipFile.TrimVolumeFromFullyQualifiedPaths = true;            
             zpZipFile.Save();
             zpZipFile.Dispose();
+            return strTargetZipFileName;
         }
 
-        public void zipFolder(string strPathOfFolderToZip, string strTargetZipFileName)
+        public string zipFolder(string strPathOfFolderToZip, string strTargetZipFileName)
         {
             var zpZipFile = new ZipFile(strTargetZipFileName);
             zpZipFile.AddDirectory(strPathOfFolderToZip, "");
             //zpZipFile.TrimVolumeFromFullyQualifiedPaths = true;
             zpZipFile.Save();
             zpZipFile.Dispose();
+            return strTargetZipFileName;
         }
 
         public List<String> getListOfFilesInZip(String sZipFileToLoad)
@@ -78,8 +81,7 @@ namespace O2.DotNetWrappers.Zip
             oZipStream.Finish();
             oZipStream.Close();
         }
-*/
-
+*/        
 
         public string unzipFile(string fileToUnzip)
         {

@@ -20,8 +20,7 @@ using O2.Kernel.CodeUtils;
 namespace O2.DotNetWrappers.DotNet
 {
     public class CompileEngine
-    {        
-        static string defaultLocalScriptsFolder = @"C:\O2\O2Scripts_Database\_Scripts";
+    {                
         static string onlyAddReferencedAssemblies = "O2Tag_OnlyAddReferencedAssemblies";
         static List<string> specialO2Tag_ExtraReferences = new List<string>() {"//O2Tag_AddReferenceFile:", "//O2Ref:"};
         static List<string> specialO2Tag_ExtraSourceFile = new List<string>() { "//O2Tag_AddSourceFile:", "//O2File:" };
@@ -590,7 +589,7 @@ namespace O2.DotNetWrappers.DotNet
                 return CompileEngine.LocalScriptFileMappings[file];
             var mappedFilePath = "";
 
-            var filesToSearch = defaultLocalScriptsFolder.files(true);
+            var filesToSearch = PublicDI.config.LocalScriptsFolder.files(true);
             foreach (var localScriptFile in filesToSearch)
             {
                 if (localScriptFile.fileName().ToLower().StartsWith(file.ToLower()))
@@ -616,8 +615,8 @@ namespace O2.DotNetWrappers.DotNet
                 return LocalScriptFileMappings[file];
             var mappedFilePath = "";
 
-            var filesToSearch = defaultLocalScriptsFolder.files(true, "*.cs");
-            filesToSearch.add(defaultLocalScriptsFolder.files(true, "*.o2"));
+            var filesToSearch = PublicDI.config.LocalScriptsFolder.files(true, "*.cs");
+            filesToSearch.add(PublicDI.config.LocalScriptsFolder.files(true, "*.o2"));
             foreach (var localScriptFile in filesToSearch)
             {
                 if (localScriptFile.fileName().ToLower().StartsWith(file.ToLower()))
