@@ -41,26 +41,28 @@ namespace O2.Core.XRules._Wizards
 
         public static string testTargetFolder = XRules_Config.PathTo_XRulesDatabase_fromO2; //PublicDI.config.getTempFolderInTempDirectory("Svn To Sync");
 
-        public Thread runWizard()
+        public void runWizard()
         {
-            return runWizard(SvnApi.svnO2DatabaseRulesFolder, testTargetFolder);        	
+            runWizard(PublicDI.config.SvnO2DatabaseRulesFolder, testTargetFolder);        	
         }
+        
         [StartWizard]
-        public Thread runWizard(string svnUrl, string targetFolder)
+        public void runWizard(string svnUrl, string targetFolder)
         {
-            var o2Wizard = new O2Wizard("Sync Rules Database via SVN");
-        	//var steps = new List<IStep>();
-        	var message = string.Format("This workflow will Syncronize the local copy of O2's Rule Database with the lastest version at O2's SVN code repository" + 
-        								"{0}{0}SVN Url = {1}" + 
-        								"{0}{0}Local Folder = {2}" + 
-        								"{0}{0}Note that the local O2 Rule Database will be deleted!", Environment.NewLine, svnUrl.Replace("%20"," ") , targetFolder);
-            o2Wizard.Steps.add_Message("Confirm", message);
-            o2Wizard.Steps.add_Action("Download Files", (step) => downloadFiles(step, svnUrl, targetFolder));
-            o2Wizard.Steps.add_Directory("Downloaded Files", targetFolder);
-            return o2Wizard.start();
-            //return o2Wizard.start();
-
-        	//return steps.startWizard("Sync Rules Database via SVN");            
+        	"SvnO2DatabaseRulesFolder: {0}".info(svnUrl); 
+        	O2Thread.staThread( 
+        		()=>{
+			            var o2Wizard = new O2Wizard("Sync Rules Database via SVN");
+			        	//var steps = new List<IStep>();
+			        	var message = string.Format("This workflow will Syncronize the local copy of O2's Rule Database with the lastest version at O2's SVN code repository" + 
+			        								"{0}{0}SVN Url = {1}" + 
+			        								"{0}{0}Local Folder = {2}" + 
+			        								"{0}{0}Note that the local O2 Rule Database will be deleted!", Environment.NewLine, svnUrl.Replace("%20"," ") , targetFolder);
+			            o2Wizard.Steps.add_Message("Confirm", message);
+			            o2Wizard.Steps.add_Action("Download Files", (step) => downloadFiles(step, svnUrl, targetFolder));
+			            o2Wizard.Steps.add_Directory("Downloaded Files", targetFolder);
+		           		o2Wizard.start();	                      
+	        });
         }
         
         public void downloadFiles(IStep step, string svnUrl, string targetFolder)

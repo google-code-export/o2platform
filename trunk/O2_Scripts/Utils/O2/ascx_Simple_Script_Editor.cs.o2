@@ -201,7 +201,7 @@ namespace O2.XRules.Database.Utils.O2
                        .add_MenuItem("enable / disable Auto Save on compile success", (menuitem) => AutoSaveOnCompileSuccess = !AutoSaveOnCompileSuccess);                            
             contextMenu.add_MenuItem("code complete")                       
                        .add_MenuItem("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete())
-                       .add_MenuItem("disable / enable 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = !commandsToExecute.editor().o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace);
+                       .add_MenuItem("enable /disabled 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => enableDisableFullCodeComplete());
             contextMenu.add_MenuItem("code snippets (helper)")
                        .add_MenuItem("generate debug symbols (and create temp assembly)", (menuitem) => insertCodeSnipptet(menuitem.Text))
                        .add_MenuItem("when compiling, only add referenced assemblies", (menuitem) => insertCodeSnipptet(menuitem.Text))
@@ -213,7 +213,7 @@ namespace O2.XRules.Database.Utils.O2
             contextMenu.add_MenuItem("show Log Viewer", (menuitem) => showLogViewer());
             
 
-     	}
+     	}     	
 
         public void insertCodeSnipptet(string snippetToInsert)
         {
@@ -332,21 +332,27 @@ namespace O2.XRules.Database.Utils.O2
 
 		public void compileCodeSnippet(string codeSnippet)
      	{     		 
-     		result_RichTextBox.visible(true);
-     		result_Panel.visible(false);
-     		if (codeSnippet.size() > 200)
+     		try
      		{
-                commandsToExecute.editor().vScroolBar_Enabled(true);
-                commandsToExecute.editor().hScroolBar_Enabled(true);
-        	}
-     		commandsToExecute.editor().clearBookmarksAndMarkers();     	
-     		var currentFile = commandsToExecute.editor().getFullPathTOCurrentSourceCodeFile();
-     		if (currentFile.fileExists())
-     			csharpCompiler.SourceCodeFile = currentFile;
-     		csharpCompiler.compileSnippet(codeSnippet);
-
-            commandsToExecute.editor().o2CodeCompletion.addReferences(csharpCompiler.ReferencedAssemblies);            
-
+	     		result_RichTextBox.visible(true);
+	     		result_Panel.visible(false);
+	     		if (codeSnippet.size() > 200)
+	     		{
+	                commandsToExecute.editor().vScroolBar_Enabled(true);
+	                commandsToExecute.editor().hScroolBar_Enabled(true);
+	        	}
+	     		commandsToExecute.editor().clearBookmarksAndMarkers();     	
+	     		var currentFile = commandsToExecute.editor().getFullPathTOCurrentSourceCodeFile();
+	     		if (currentFile.fileExists())
+	     			csharpCompiler.SourceCodeFile = currentFile;
+	     		csharpCompiler.compileSnippet(codeSnippet);
+				if (commandsToExecute.editor().o2CodeCompletion.notNull())
+	            	commandsToExecute.editor().o2CodeCompletion.addReferences(csharpCompiler.ReferencedAssemblies);            
+			}
+			catch(Exception ex)
+			{
+				ex.log("in ascx_Simple_Script_Editor compileCodeSnippet",true);
+			}
      	}     	
      	
      	public void forceCompilation()
@@ -537,6 +543,13 @@ namespace O2.XRules.Database.Utils.O2
             commandsToExecute.enableCodeComplete();
             commandsToExecute.editor().o2CodeCompletion.UseParseCodeThread = false;
         }
+        
+        public void enableDisableFullCodeComplete()
+		{
+			var o2CodeCompletion = commandsToExecute.editor().o2CodeCompletion;
+			if (o2CodeCompletion.notNull())
+				o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = !o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace;
+		}
 
      	public string Code 
      	{

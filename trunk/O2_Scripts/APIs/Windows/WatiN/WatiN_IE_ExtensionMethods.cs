@@ -80,6 +80,21 @@ namespace O2.XRules.Database.APIs
 			return new WatiN_IE(webBrowser);						
 		}
  	}
+ 	public static class WatiN_IE_ExtensionMethods_InternetExplorer
+ 	{
+ 		public static WatiN_IE  fullScreen(this WatiN_IE ie)
+ 		{
+ 			return ie.fullScreen(true);
+ 		}
+ 		public static WatiN_IE  fullScreen(this WatiN_IE ie, bool value)
+ 		{
+ 			var internetExplorer = ie.internetExplorer();
+ 			if (internetExplorer.notNull())
+ 				internetExplorer.FullScreen = value;
+ 			return ie;
+ 		}
+ 	}
+ 	
  	
  	public static class WatiN_IE_ExtensionMethods_Misc
     {
@@ -1079,7 +1094,18 @@ namespace O2.XRules.Database.APIs
     	public static WatiN_IE add_IE(this Control control)
     	{
     		var browser = control.add_Control<System.Windows.Forms.WebBrowser>();
-    		return browser.ie();    		
+    		var ie = browser.ie();    		
+    		var parentForm = control.parentForm();
+    		if (parentForm.notNull())
+    		{
+    			parentForm.Closed += 
+    				(sender,e)=> {
+    								"Parent form closed to detaching and close WatiN_IE".info();
+    								ie.detach();
+    								ie.close();
+    							 };
+    		}
+    		return ie;
     	}
  
      }
@@ -1121,7 +1147,7 @@ namespace O2.XRules.Database.APIs
 				element.Highlight(true);
 			}
 			catch(Exception ex)
-			{
+			{ 
 				ex.log("in WatiN Element highlight");
 			}
 			return element;
@@ -1132,13 +1158,21 @@ namespace O2.XRules.Database.APIs
      
     public static class WatiN_IE_ExtensionMethods_Screenshot
     {
-    	public static System.Drawing.Image screenshot(this WatiN_IE watinIe)
+    	public static string screenshot(this WatiN_IE watinIe)
     	{
     		if (watinIe.InternetExplorer.isNull())
+    		{
     			"Screenshots can only be taken when IE is in a separate process".error();
+    			return null;
+    		}
     		else
+    		{
     			"taking screenshot".info();
-    		return null;
+    			var targetFile = PublicDI.config.getTempFileInTempDirectory(".jpg"); 
+				"JPG File: {0}".info(targetFile);
+				watinIe.IE.CaptureWebPageToFile(targetFile); 
+				return targetFile;
+			}    		
     	}
     }
     

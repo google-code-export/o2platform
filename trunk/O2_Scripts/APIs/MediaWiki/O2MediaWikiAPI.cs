@@ -270,18 +270,19 @@ namespace O2.XRules.Database.APIs
 			var postData = @"action=login&lgname={0}&lgpassword={1}&format=xml".format(username,password);			
 			var login = wikiApi.postApiPhp(postData).xRoot().element("login");
 			wikiApi.Login_Result = login.attribute("result").value();
+			var setCookie = "";			
 			
 			if (wikiApi.Login_Result == "NeedToken")
-			{								
+			{					
 				if (wikiApi.LastWebRequest.Headers_Response.hasKey("Set-Cookie"))
 				{
-					var setCookie = wikiApi.LastWebRequest.Headers_Response.value("Set-Cookie");
+					setCookie = wikiApi.LastWebRequest.Headers_Response.value("Set-Cookie");
 					wikiApi.Login_Cookie = setCookie;					
 				}
 				var token=login.attribute("token").value();
 				postData = "{0}&lgtoken={1}".format(postData, token);
 				login = wikiApi.postApiPhp(postData).xRoot().element("login");
-				wikiApi.Login_Result = login.attribute("result").value();
+				wikiApi.Login_Result = login.attribute("result").value();				
 			}
 			
 			if (wikiApi.Login_Result == "Success")
@@ -292,9 +293,10 @@ namespace O2.XRules.Database.APIs
 				wikiApi.Login_CookiePrefix = login.attribute("cookieprefix").value();
 				wikiApi.Login_SessionId = login.attribute("sessionid").value();																
 
-				wikiApi.Login_Cookie = "{0}UserName={1};{0}UserID={2};{0}Token={3};{0}_session={4}".format(
+				wikiApi.Login_Cookie = "{0}UserName={1};{0}UserID={2};{0}Token={3};{0}_session={4};".format(
 										wikiApi.Login_CookiePrefix, wikiApi.Login_Username,wikiApi.Login_UserId,
 										wikiApi.Login_Token, wikiApi.Login_SessionId);																		
+				wikiApi.Login_Cookie += setCookie;  // append any cookies we got from the NeedToken request
 				return true;
 			}
 			else
@@ -372,8 +374,18 @@ namespace O2.XRules.Database.APIs
 			return wikiApi.raw(page).valid();
 		}
 
+		public static bool deletePages(this O2MediaWikiAPI wikiApi, List<string> pagesToDelete)
+		{
+			var result = true;
+			foreach(var pageToDelete in pagesToDelete)			
+				if (wikiApi.deletePage(pageToDelete).isFalse())
+					result = false;
+		return result;			
+				
+		}
         public static bool deletePage(this O2MediaWikiAPI wikiApi, string pageToDelete)
         {
+        	"[O2MediaWikiAPI] deleting page: {0}".info(pageToDelete);
             var deleteToken = wikiApi.token("delete", pageToDelete).urlEncode();
             if (deleteToken.valid())
             {
@@ -769,11 +781,12 @@ namespace O2.XRules.Database.APIs
     	{
     		return wikiApi.action_query_prop("langlinks",pages).xRoot();
     	}
-    	
-    	public static List<XElement> images(this O2MediaWikiAPI wikiApi, string pages)
+    	//var xml = wikiApi.parsePage_Raw(targetPage).xmlFormat(); 
+		//xRoot.element("parse").element("images").elements("img").values();
+    	public static List<string> images(this O2MediaWikiAPI wikiApi, string pages)
     	{
     		var xml =  wikiApi.action_query_prop("images",pages);
-    		return xml.xRoot().elementsAll("im");
+    		return xml.xRoot().elementsAll("im").attributes("title").values();
     	}
     	
     	public static XElement imageinfo(this O2MediaWikiAPI wikiApi, string pages)
@@ -857,7 +870,18 @@ namespace O2.XRules.Database.APIs
 	
 		}				
 		
-		public static string exUrlUsage(this O2MediaWikiAPI wikiApi, string url)
+		public static List<string> exUrlUsage(this O2MediaWikiAPI wikiApi, string url)
+		{
+			var xml =  wikiApi.exUrlUsageRaw(url);
+			var xRoot = xml.xRoot();
+			return xRoot.element("query")
+						.element("exturlusage")
+						.elements("eu")
+						.attributes("title")
+						.values();
+		}
+		
+		public static string exUrlUsageRaw(this O2MediaWikiAPI wikiApi, string url)
 		{
 			var queryList = "exturlusage&euquery={0}".format(url);
 			return wikiApi.action_query_list(queryList);
@@ -956,9 +980,13 @@ namespace O2.XRules.Database.APIs
         }
 
         public static string uploadImage(this O2MediaWikiAPI wikiApi, string fileToUpload)
-        {
+        {        	
             if (fileToUpload.fileExists().isFalse())
+            {
+            	"[O2MediaWikiAPI] could not find file to upload: {0}".error(fileToUpload);
                 return "";
+			}
+			"[O2MediaWikiAPI] uploading as Image: {0}".info(fileToUpload);
             var fileName = fileToUpload.fileName();
             var fileContents = fileToUpload.fileContents_AsByteArray();
             return wikiApi.uploadImage(fileName, fileContents);
@@ -967,7 +995,10 @@ namespace O2.XRules.Database.APIs
         public static string uploadImage(this O2MediaWikiAPI wikiApi, string fileName, byte[] fileContents)
         {
             if (wikiApi.loggedIn().isFalse())
+            {
+            	"[O2MediaWikiAPI] cannot upload images if user is not logged in: {0}".error(fileName);
                 return "";
+            }
             try
             {
                 string sessionId = wikiApi.Login_SessionId; // "__c451ccaca794893f041024657b8ed498";
@@ -979,7 +1010,8 @@ namespace O2.XRules.Database.APIs
                 string fileFormat = fileName.extension();
                 string fileContentType = "image/" + fileFormat;
                 string userAgent = "O2 Platform";
-                string cookies = "wiki_db_session={0}; wiki_dbUserID={1}; wiki_dbUserName={2}".format(sessionId, userId, userName);
+                //string cookies = "wiki_db_session={0}; wiki_dbUserID={1}; wiki_dbUserName={2};{3}".format(sessionId, userId, userName);
+                var cookies = wikiApi.Login_Cookie;
 
                 string postedFileHttpFieldName = "wpUploadFile";
                 var postParameters = new Dictionary<string, object>();
@@ -987,8 +1019,7 @@ namespace O2.XRules.Database.APIs
                 postParameters.Add("wpDestFile", fileName);
                 postParameters.Add("wpUpload", "Upload File");
                 postParameters.Add("wpIgnoreWarning", "True");
-                postParameters.Add("wpUploadDescription", uploadDescription);
-
+                postParameters.Add("wpUploadDescription", uploadDescription);				
                 var httpWebResponse = new HttpMultiPartForm().uploadFile(fileContents, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
                 if (httpWebResponse != null)
                     if (httpWebResponse.ResponseUri.AbsoluteUri.extension() == fileName.extension())
