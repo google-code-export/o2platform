@@ -104,7 +104,8 @@ namespace O2.XRules.Database.APIs
     		IAsymmetricCipherKeyPairGenerator kpg = GeneratorUtilities.GetKeyPairGenerator("RSA");
 
             kpg.Init(new RsaKeyGenerationParameters(
-				BigInteger.ValueOf(0x10001), new SecureRandom(), 1024, 25));
+				//BigInteger.ValueOf(0x10001), new SecureRandom(), 1024, 25));
+				BigInteger.ValueOf(0x10001), new SecureRandom(), 2048, 25));
 
             AsymmetricCipherKeyPair kp = kpg.GenerateKeyPair();
             
@@ -344,15 +345,22 @@ namespace O2.XRules.Database.APIs
 	                PgpObjectFactory plainFact = new PgpObjectFactory(clear);
 	
 	                PgpObject message = plainFact.NextPgpObject();
-	
+					
+					PgpObjectFactory pgpFact = null;
+					
 	                if (message is PgpCompressedData)
 	                {
 	                    PgpCompressedData cData = (PgpCompressedData)message;
-	                    PgpObjectFactory pgpFact = new PgpObjectFactory(cData.GetDataStream());
+	                    pgpFact = new PgpObjectFactory(cData.GetDataStream());
 	
 	                    message = pgpFact.NextPgpObject();
 	                }
-	
+					
+					if (message is PgpOnePassSignatureList)		// DC
+					{											// DC
+						message = pgpFact.NextPgpObject();		// DC
+					}											// DC
+					
 	                if (message is PgpLiteralData)
 	                {	                	
 	                    PgpLiteralData ld = (PgpLiteralData)message;
@@ -364,12 +372,13 @@ namespace O2.XRules.Database.APIs
 	                }
 	                else if (message is PgpOnePassSignatureList)
 	                {
-	                    "[API_OpenPgp][DecryptFile] encrypted message contains a signed message - not literal data.".error();
-	                    return ;
+	                    "[API_OpenPgp][DecryptFile] encrypted message contains a signed message - not literal data.".error();	                  
+	                    return ;	                    
 	                }
 	                else
 	                {
 	                    "[API_OpenPgp][DecryptFile] message is not a simple encrypted file - type unknown.".error();
+	                    return;
 	                }
 	
 	                if (pbe.IsIntegrityProtected())
