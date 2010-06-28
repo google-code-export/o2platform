@@ -2,16 +2,16 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using WpfWindows = System.Windows; 
+using WpfControls = System.Windows.Controls;
+using WpfMedia = System.Windows.Media;
+using WpfImaging = System.Windows.Media.Imaging;
 using System.Text;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
-
+using O2.API.Visualization.ExtensionMethods;
 //O2Ref:O2_API_Visualization.dll
 //O2Ref:PresentationCore.dll
 //O2Ref:PresentationFramework.dll
@@ -24,13 +24,12 @@ using O2.Views.ASCX.ExtensionMethods;
 
 namespace O2.XRules.Database.APIs
 {
-    public class API_AForge_Video_Image : Image
+    public class API_AForge_Video_Image : WpfControls.Image
 	{
 		//public Image FrameImage { get; set; }
 		public System.Drawing.Bitmap OriginalBitmap { get; set; }
 		public int FrameCount { get; set; }
-				
-		
+						
 		/*public API_AForge_Video_Image(Image image, int frameCount) : this (image, null, frameCount) 
 		{
 			
@@ -47,14 +46,14 @@ namespace O2.XRules.Database.APIs
 	public static class API_AForge_Video_Image_ExtensionMethods
 	{
 	
-		public static ListView add_Video_Image_Wpf(this ListView listView, string pathToImage)
+		public static WpfControls.ListView add_Video_Image_Wpf(this WpfControls.ListView listView, string pathToImage)
 		{
 			return listView.add_Video_Image_Wpf(pathToImage,-1,-1);
 		}
 		
-		public static ListView add_Video_Image_Wpf(this ListView listView, string pathToImage, int width, int height)
+		public static WpfControls.ListView add_Video_Image_Wpf(this WpfControls.ListView listView, string pathToImage, int width, int height)
 		{
-			return (ListView)listView.wpfInvoke(
+			return (WpfControls.ListView)listView.wpfInvoke(
 				()=>{									
 						var image = new API_AForge_Video_Image().open(pathToImage);
 						if (image.isNull())

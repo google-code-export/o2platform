@@ -17,7 +17,7 @@ var defaultScript = "// persist the ie objects accross multiple executions".line
 					"".line() +
 					"".line() +					
 					"ie.open(\"http://www.google.com\");".line() +
-					"ie.link(\"Images\").flash().click();".line() +
+					"/*ie.link(\"Images\").flash().click();".line() +
 					"ie.field(\"q\").flash().value(\"OWASP\");".line() +
 					"ie.button(\"Search Images\").flash().click();".line() +
 					"foreach(var image in ie.images())".line() +
@@ -28,7 +28,7 @@ var defaultScript = "// persist the ie objects accross multiple executions".line
 					"	(image.htmlElement().style as IHTMLStyle3).zoom = \"50%\";".line() +
 					"	this.sleep(100,false);	".line() +
 					"	(image.htmlElement().style as IHTMLStyle3).zoom = \"100%\";	".line() +
-					"}".line() +
+					"}*/".line() +
 					"return ie.images().urls();  ".line() +
 					"".line() +
 					"".line() +

@@ -71,7 +71,7 @@ namespace O2.Core.XRules._Wizards
         	
         	var link = step.add_Link("Test: Checkout O2's XRules Database", 140,20,
         		()=>{        				
-        				svnUrl_TextBox.set_Text(WebEncoding.urlDecode(SvnApi.svnO2DatabaseRulesFolder));
+        				svnUrl_TextBox.set_Text(WebEncoding.urlDecode(PublicDI.config.SvnO2DatabaseRulesFolder));
         				targetFolder_TextBox.set_Text(PublicDI.config.getTempFolderInTempDirectory("O2_SVN_XRules_Database"));
         			});
         	
