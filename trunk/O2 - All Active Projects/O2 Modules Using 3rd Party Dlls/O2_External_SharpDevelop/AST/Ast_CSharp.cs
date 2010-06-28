@@ -61,8 +61,13 @@ namespace O2.External.SharpDevelop.AST
     
         public void createAst(string _sourceCode)
         {
-            SourceCode = (_sourceCode.fileExists()) ? _sourceCode.fileContents() : _sourceCode;    		
-            Parser = ParserFactory.CreateParser(language, new StringReader(SourceCode));
+            //if (.isFalse())
+              //  return;
+            SourceCode = (_sourceCode.fileExists()) ? _sourceCode.fileContents() : _sourceCode;
+            if (_sourceCode.valid() && _sourceCode.extension(".vb"))
+                Parser = ParserFactory.CreateParser(SupportedLanguage.VBNet, new StringReader(SourceCode));
+            else
+                Parser = ParserFactory.CreateParser(language, new StringReader(SourceCode));
             Parser.Parse();
             Errors = (Parser.Errors.Count > 0) ?  Parser.Errors.ErrorOutput : "";                                     
         }

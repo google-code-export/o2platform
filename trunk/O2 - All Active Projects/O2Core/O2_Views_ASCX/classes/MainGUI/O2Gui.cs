@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 
 namespace O2.Views.ASCX.classes.MainGUI
@@ -25,7 +26,14 @@ namespace O2.Views.ASCX.classes.MainGUI
 
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
+            try
+            {
+                base.Dispose(disposing);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in O2Gui dispose");
+            }
         }
 
         public O2Gui(int width, int height) : this(width, height, false)
@@ -59,7 +67,7 @@ namespace O2.Views.ASCX.classes.MainGUI
         	    O2Thread.staThread(()=>ShowDialog());
             else
                 ShowDialog();
-            formLoaded.WaitOne();
+            //formLoaded.WaitOne();
         }
 
         public void show()
