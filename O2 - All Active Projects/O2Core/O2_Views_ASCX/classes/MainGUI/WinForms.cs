@@ -49,6 +49,7 @@ namespace O2.Views.ASCX.classes.MainGUI
 
                             o2Gui.Controls.Add(control);
                             o2Gui.Load += (sender, e) => controlCreation.Set();
+                            //o2Gui.showDialog(false);
                             o2Gui.showDialog(false);
                         }
                         else

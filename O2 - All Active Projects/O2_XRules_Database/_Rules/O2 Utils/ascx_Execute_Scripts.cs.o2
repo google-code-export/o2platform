@@ -147,7 +147,7 @@ namespace O2.XRules.Database
                        .add_MenuItem("Image Screenshot tool", () => screenShotTool())
                        .add_MenuItem("MediaWiki Editor", () => executeScript("Opening MediaWiki Client)", "MediaWikiEditor.cs.o2"))
                        .add_MenuItem("Twitter Client", () => executeScript("Opening Twitter Client)", "Twitter Client.h2"))
-                       .add_MenuItem("Simple Text Editor", () => executeScript("Opening Simple Text Editor", "O2 Simple Text Editor.h2"))                       
+                       .add_MenuItem("Simple Text Editor", () => executeScript("Opening Simple Text Editor", "Simple Text Editor.h2"))                       
                        .add_MenuItem("O2 'Secret Data' Editor", () => executeScript("Opening 'Secret Data Editor'", "SecretDataEditor.cs.o2"));           
                        //.add_MenuItem("O2 'Secret Data' Editor", () => new SecretDataEditor().showGui());
 

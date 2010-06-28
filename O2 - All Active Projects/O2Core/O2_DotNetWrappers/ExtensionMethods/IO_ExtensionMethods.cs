@@ -88,7 +88,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string extension(this string file)
         {
-            if (file.valid())
+            if (file.valid() && file.size() < 256)
                 return Path.GetExtension(file).ToLower();
             return "";
         }
