@@ -113,7 +113,7 @@ selectFile.onEnter(
 
 // ContextMenu
 
-filesTreeView.add_ContextMenu().add_MenuItem("Refresh", refreshFileView);
+filesContextMenu.add_MenuItem("Refresh", refreshFileView);
 
 var folders = amazonS3.folders(); 
 foldersTreeView.add_Nodes(folders);	
