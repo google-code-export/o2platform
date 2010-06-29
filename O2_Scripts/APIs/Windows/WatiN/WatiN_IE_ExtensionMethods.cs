@@ -80,6 +80,7 @@ namespace O2.XRules.Database.APIs
 			return new WatiN_IE(webBrowser);						
 		}
  	}
+ 	
  	public static class WatiN_IE_ExtensionMethods_InternetExplorer
  	{
  		public static WatiN_IE  fullScreen(this WatiN_IE ie)
@@ -94,8 +95,7 @@ namespace O2.XRules.Database.APIs
  			return ie;
  		}
  	}
- 	
- 	
+ 		
  	public static class WatiN_IE_ExtensionMethods_Misc
     {
     	// uri & url
@@ -206,6 +206,37 @@ namespace O2.XRules.Database.APIs
     				});
     		return watinIe;
     	}
+    	
+    	public static WatiN_IE openWithBasicAuthentication(this WatiN_IE watinIe, string url, string username, string password)
+    	{
+    		var encodedHeader = "Authorization: Basic " + "{0}:{1}".format(username, password).base64Encode();
+    		return watinIe.openWithExtraHeader(url, encodedHeader);
+    	}
+    	public static WatiN_IE openWithExtraHeader(this WatiN_IE watinIe, string url, string extraHeader)
+    	{
+    		try
+    		{
+    			object headerObject = extraHeader.line();
+    			object flags = null;
+    			(watinIe.IE.InternetExplorer as IWebBrowser2).Navigate(url, 
+    																   ref flags, 
+    																   ref flags, 
+    																   ref flags, 
+    																   ref headerObject);
+				watinIe.IE.WaitForComplete();
+			}
+    		catch(Exception ex)
+    		{
+    			ex.log("in WatiN_IE openWithExtraHeader(...)");
+    		}
+
+    		return watinIe;
+    	}
+    	
+    	
+    	
+    	
+    	
  
     	public static WatiN_IE wait(this WatiN_IE watinIe)
     	{
@@ -1112,7 +1143,18 @@ namespace O2.XRules.Database.APIs
      
     public static class WatiN_IE_ExtensionMethods_Highlight
     {
-    
+    	public static WatiN_IE enableFlashing(this WatiN_IE watinIe)
+    	{
+    		WatiN_IE.FlashingEnabled = true;
+    		return watinIe;
+    	}
+    	
+    	public static WatiN_IE disableFlashing(this WatiN_IE watinIe)
+    	{
+    		WatiN_IE.FlashingEnabled = false;
+    		return watinIe;
+    	}
+    	
     	public static T flash<T>(this T element)
 		where T : Element
 		{
@@ -1123,8 +1165,12 @@ namespace O2.XRules.Database.APIs
 			where T : Element
 		{
 			try
-			{
-				element.Flash(timesToFlash);
+			{				
+				if (WatiN_IE.FlashingEnabled)
+				{
+					element.scrollIntoView();				
+					element.Flash(timesToFlash);
+				}
 			}
 			catch(Exception ex)
 			{
@@ -1152,6 +1198,21 @@ namespace O2.XRules.Database.APIs
 			}
 			return element;
  
+		}
+		
+		public static T scrollIntoView<T>(this T element)
+			where T : Element
+		{
+			try
+			{
+				var htmlElement= element.htmlElement();
+				htmlElement.scrollIntoView(null);
+			}
+			catch(Exception ex)
+			{
+				ex.log("in WatiN scrollIntoView");
+			}
+			return element;
 		}
     
     }

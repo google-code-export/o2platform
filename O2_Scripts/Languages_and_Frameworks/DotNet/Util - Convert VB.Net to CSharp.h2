@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <H2>
   <SourceCode>
-var topPanel = O2Gui.open&lt;Panel&gt;("Util - Convert VB to CSharp (or CSharp to VB)",700,500);
+var topPanel = O2Gui.open&lt;Panel&gt;("Util - Convert VB to CSharp (or CSharp to VB)",640,480);
 var mainGui = topPanel.add_1x1("Files", "Source Code",true, 200); 
 var code = mainGui[1].add_1x1("CSharp", "VB.Net",false); 
 var sourceFiles = mainGui[0].add_TreeView().showSelection();
