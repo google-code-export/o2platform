@@ -65,13 +65,11 @@
     <Compile Include="Ascx\ascx_AssemblyInvoke.Designer.cs">
       <DependentUpon>ascx_AssemblyInvoke.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExtensionMethods\TextEditor_O2CodeStream_ExtensionMethods.cs" />
     <Compile Include="O2CodeCompletion.cs" />
     <Compile Include="AST\Charp_FastCompiler.cs" />
     <Compile Include="AST\TextToCodeMappings.cs" />
     <Compile Include="ExtensionMethods\FastCompiler_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Linq_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\O2MappedAstData_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\SourceCode_ExtensionMethods.cs" />
     <Compile Include="Ascx\ascx_SourceCodeViewer.Controllers.cs">
       <SubType>UserControl</SubType>
