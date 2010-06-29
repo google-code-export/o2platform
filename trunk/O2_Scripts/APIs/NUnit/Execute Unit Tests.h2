@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//panel.clear(); 
+  <SourceCode>
+//panel.clear(); 
 //var topPanel = panel.add_Panel();
 var topPanel = O2Gui.open&lt;Panel&gt;("Unit Test Execution", 400,500);
 var unitTest = topPanel.add_Control&lt;ascx_XRules_UnitTests&gt;();  
@@ -20,6 +21,6 @@ textBox.onDrop(
 //return unitTest.type().methods(); 
 //using O2.Core.XRules.Ascx
 //O2Ref:O2_Core_XRules.dll
-</SourceCode>
+//O2Ref:O2_External_O2Mono.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

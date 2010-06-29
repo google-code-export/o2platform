@@ -36,13 +36,17 @@ namespace O2.XRules.Database.APIs
 		public SHDocVw.InternetExplorerClass InternetExplorer { get; set; }
 		public AutoResetEvent WaitForIELaunch {get;set;}
 		public AutoResetEvent WaitForIEClose {get;set;}
- 
+ 		public static bool FlashingEnabled { get; set; }
+ 		
 		public int maxExecutionWaitTime = 5000;
  
+ 		
+ 		
 		public WatiN_IE()
 		{
 			WaitForIEClose = new AutoResetEvent(false);
 			WaitForIELaunch = new AutoResetEvent(false);			
+			FlashingEnabled = true;
 		}				
  
 		public WatiN_IE(InternetExplorer ieInstanceToAttach) : this()
