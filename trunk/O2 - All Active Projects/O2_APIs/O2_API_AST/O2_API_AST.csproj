@@ -114,11 +114,7 @@
     <Compile Include="ExtensionMethods\CSharp\PropertyDeclaration_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CSharp\VariableDeclaration_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\IAstVisitor_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\O2CodeStreamTaintRules_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\O2CodeStream_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CodeStreamGraphNode_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\O2MappedAstData_ExtensionMethods.cs" />
-    <Compile Include="ExtensionMethods\O2MethodStream_ExtensionMethods.cs" />
     <Compile Include="Graph\AstMethodFinder.cs" />
     <Compile Include="Graph\CodeStreamGraphNode.cs" />
     <Compile Include="Visitors\FindIdentifierUsage.cs" />
