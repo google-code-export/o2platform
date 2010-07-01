@@ -1158,7 +1158,7 @@ namespace O2.XRules.Database.APIs
     	public static T flash<T>(this T element)
 		where T : Element
 		{
-			return element.flash(2);
+			return element.flash(WatiN_IE.FlashingCount);
 		}
  
 		public static T flash<T>(this T element, int timesToFlash)
@@ -1168,7 +1168,8 @@ namespace O2.XRules.Database.APIs
 			{				
 				if (WatiN_IE.FlashingEnabled)
 				{
-					element.scrollIntoView();				
+					if (WatiN_IE.ScrollOnFlash)
+						element.scrollIntoView();				
 					element.Flash(timesToFlash);
 				}
 			}

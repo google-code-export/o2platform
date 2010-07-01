@@ -20,12 +20,15 @@ using ICSharpCode.SharpDevelop.Dom;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Views.ASCX;
+
+//O2File:Ast_Engine_ExtensionMethods.cs
+
 //O2Ref:QuickGraph.dll
 //O2Ref:O2_API_AST.dll
 //O2Ref:System.Xml.Linq.dll
 //O2Ref:System.Xml.dll
 
-namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
+namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
     public class ascx_Interactive_MethodCalls : System.Windows.Forms.Control
     {        	

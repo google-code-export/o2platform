@@ -37,6 +37,8 @@ namespace O2.XRules.Database.APIs
 		public AutoResetEvent WaitForIELaunch {get;set;}
 		public AutoResetEvent WaitForIEClose {get;set;}
  		public static bool FlashingEnabled { get; set; }
+ 		public static bool ScrollOnFlash { get; set; } 		
+ 		public static int FlashingCount { get; set; }
  		
 		public int maxExecutionWaitTime = 5000;
  
@@ -47,6 +49,8 @@ namespace O2.XRules.Database.APIs
 			WaitForIEClose = new AutoResetEvent(false);
 			WaitForIELaunch = new AutoResetEvent(false);			
 			FlashingEnabled = true;
+			ScrollOnFlash = false;
+			FlashingCount = 3;
 		}				
  
 		public WatiN_IE(InternetExplorer ieInstanceToAttach) : this()

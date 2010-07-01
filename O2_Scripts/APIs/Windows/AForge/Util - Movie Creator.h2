@@ -18,6 +18,13 @@ var statusLabel = topPanel.parentForm().add_StatusStrip();
 topPanel.insert_Below&lt;Panel&gt;(100).add_LogViewer();
 //topControlBar
 
+Action&lt;string&gt; addImageFromFile = 
+	(file)=&gt;{
+				var bitmap = file.bitmap();
+				if (bitmap.notNull())
+					listView.add_Video_Image_Wpf(bitmap,100,100);
+			};
+
 topControlBar.add_Link("add image from clipboard",5,5,
 				()=&gt;{
 						var bitmap = topPanel.fromClipboardGetImage();
@@ -108,6 +115,15 @@ wpfHost.add_ContextMenu()
 	   			});
 
 listView.selectFirst(); 
+
+mainGui[0].onDrop(
+	(fileOrFolder)=&gt;{
+				if (fileOrFolder.fileExists())
+					addImageFromFile(fileOrFolder);
+				if (fileOrFolder.dirExists())
+					foreach(var file in fileOrFolder.files())
+						addImageFromFile(file);					
+			});
 return "done"; 
 
 

@@ -1,11 +1,12 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
+
 using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
@@ -33,7 +34,14 @@ using GraphSharp.Controls;
 using O2.XRules.Database.Utils.ExtensionMethods;
 using O2.XRules.Database.Utils.O2;
 
+//O2File:Ast_Engine_ExtensionMethods.cs
+//O2File:SharpDevelop_O2MappedAstData_ExtensionMethods.cs
+//O2File:TextEditor_O2CodeStream_ExtensionMethods.cs
+
 //O2File:ascx_GraphAst_MethodCalls.cs
+//O2File:ascx_WriteRule.cs
+//O2File:ascx_ManualMethodStreams.cs
+
 //O2File:HtmlAgilityPack_ExtensionMethods.cs 
 //O2File:Scripts_ExtensionMethods.cs   
 //O2File:ascx_GraphAst_MethodCalls.cs 
@@ -54,8 +62,8 @@ using O2.XRules.Database.Utils.O2;
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:ICSharpCode.AvalonEdit.dll
 
-namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
-{
+namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
+{	
     public class O2_DotNet_Ast_Engine : UserControl
 	{	 			
 	 	public Panel HostPanel { get; set; }
@@ -68,7 +76,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 	 	public O2MappedAstData AstData { get; set; }
 	 	//public List<IO2Finding> CreatedO2Findings  { get; set; }
 
-		public Step_WriteRule WriteRule_Step { get; set; }
+		public ascx_WriteRule WriteRule_Step { get; set; }
+		
+		public ascx_ManualMethodStreams ManualMethodStreams_Step  { get; set; }
 	
 		//public Dictionary<IMethod, string> MethodStreams { get; set; }
 
@@ -162,15 +172,33 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			return new Step_MethodStreams(this);
 		}				
 		
-		public Step_ManualMethodStream step_ManualMethodStream()
+		public ascx_ManualMethodStreams step_ManualMethodStream()
 		{
-			return new Step_ManualMethodStream(this);
+			this.HostPanel.clear();
+			if (ManualMethodStreams_Step.isNull())
+			{
+				ManualMethodStreams_Step = this.HostPanel.add_Control<ascx_ManualMethodStreams>();
+				ManualMethodStreams_Step.buildGui();
+			}
+			else
+				this.HostPanel.add_Control(ManualMethodStreams_Step);
+			//WriteRule_Step
+			return ManualMethodStreams_Step;
 		}
 		
 		
-		public Step_WriteRule step_WriteRule()
+		public ascx_WriteRule step_WriteRule()
 		{
-			WriteRule_Step = new Step_WriteRule(this);
+			//WriteRule_Step = this.newInThread< new ascx_WriteRule();
+			this.HostPanel.clear();
+			if (WriteRule_Step.isNull())
+			{
+				WriteRule_Step = this.HostPanel.add_Control<ascx_WriteRule>();
+				WriteRule_Step.buildGui(this.AstData);
+			}
+			else
+				this.HostPanel.add_Control(WriteRule_Step);
+			//WriteRule_Step
 			return WriteRule_Step;
 		}
 		
@@ -211,31 +239,15 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			o2Timer.stop().TimeSpanString.info();;
 			//calculateMethodsStreams();
 			//
-		}
-		
-		public void calculateMethodsStreams()
-		{			
-			var targerFolder = PublicDI.config.getTempFolderInTempDirectory("_MethodStream");
-			
-			var iMethods = AstData.iMethods(AstData.methodDeclarations()); 
-			TopProgressBar.maximum(iMethods.size());
-			int count = 0;
-			int total = iMethods.size();
-			//this.MethodStreams = new Dictionary<IMethod, string>();    		
-			foreach(var iMethod in iMethods)
-			{
-				TopProgressBar.increment(1);				
-				AstData.createO2MethodStreamFile(iMethod,targerFolder);
-				
-    			//MethodStreams.Add(iMethod,AstData.createO2MethodStream(iMethod).csharpCode());    						
-				statusMessage("calculating methodStream: {0}/{1}".format(count++, total));
-			}						
-		}
+		}				
 		
 		public void resetLoadedData()
 		{
+			if (AstData.notNull())
+				AstData.Dispose();
+				
 			AstData = new O2MappedAstData();
-			ReferencedAssemblies = new Dictionary<string, Assembly>();			
+			ReferencedAssemblies.Clear();// = new Dictionary<string, Assembly>();			
 		}
 		
 		public void statusMessage(string message)
@@ -332,15 +344,18 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 			
 			public void addReferenceAssembly(string assembly)
 			{				
+				References_TreeView.backColor(Color.DarkGray);
+				References_TreeView.enabled(false);
 				O2Thread.mtaThread( 
 					()=>{
 							AstEngine.ReferencedAssemblies.Add(assembly,null);				
 							"...loading reference assembly: {0}".debug(assembly);
-							References_TreeView.backColor(Color.DarkGray);
-							AstEngine.AstData.O2AstResolver.addReference(assembly);
-							References_TreeView.backColor(Color.White);
+							
+							AstEngine.AstData.O2AstResolver.addReference(assembly);							
 							"...load complete".debug();
 							loadDataInGui();
+							References_TreeView.backColor(Color.White);
+							References_TreeView.enabled(true);
 						});
 			}
 			
@@ -834,7 +849,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 							
 				CodeViewer.open(MethodStreamFile);
 				CodeStreamCodeViewer.open(MethodStreamFile);								
-				
+				if (AstData_MethodStream.notNull())
+					AstData_MethodStream.Dispose();
 				AstData_MethodStream = new O2MappedAstData(); 							
 				AstData_MethodStream.loadFile(MethodStreamFile);								
 			}
@@ -878,304 +894,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
 						});
 								
 			}
-		}
-		
-		public class Step_ManualMethodStream
-		{
-			public O2_DotNet_Ast_Engine AstEngine { get; set; }
-		
-			public O2MappedAstData AstData_MethodStream { get; set; }
-			//public O2MethodStream MethodStream { get; set; }
-			//public O2CodeStream CodeStream { get; set; }			
-			//public O2CodeStreamTaintRules TaintRules { get; set; }
-			public String MethodStreamFile { get; set; }
-			public INode CurrentINode { get; set; }
-			
-			//public TreeView MethodsTreeView  { get; set; }
-			public TreeView ParametersTreeView  { get; set; }
-			public TreeView MethodsCalledTreeView { get; set; }
-			public ascx_SourceCodeViewer CodeViewer { get; set; }			
-			public GraphLayout CodeStreamGraph { get; set; }	
-			public TreeView CodeStreamTreeView { get; set; }	
-			public TabPage CodeStreamGraphTab { get; set; }
-			public TabPage CodeStreamTreeViewTab { get; set; }
-			public Label CurrentINodeLabel { get; set; }
-			
-			public LinkLabel SaveCodeLink { get; set; }
-			public LinkLabel showINodeLink { get; set; }
-			//public String MethodsFilter { get; set; }
-			public ascx_SourceCodeViewer CodeStreamCodeViewer  { get; set; }	
-			
-			public Step_ManualMethodStream(O2_DotNet_Ast_Engine astEngine)
-			{
-				AstEngine = astEngine;
-				buildGui();
-				loadDataInGui();
-				//TaintRules = new O2CodeStreamTaintRules(); 
-				//TaintRules.add_TaintPropagator("System.String.Concat");
-			}	
-			
-			public void buildGui()
-			{
-				AstEngine.HostPanel.clear();												
-
-				var topPanel = AstEngine.HostPanel.add_1x1("Methods & Parameters", "Source Code", true, 700);
-				var tabControl = topPanel[1].add_TabControl(); 
-				//CodeViewer = tabControl.add_Tab("Source Code").add_SourceCodeViewer();				
-				CodeViewer = topPanel[0].add_SourceCodeViewer();
-				CodeViewer.editor().colorCodeForExtension(".cs");
-				CodeStreamTreeViewTab = tabControl.add_Tab("CodeStream TreeView");
-				//CodeStreamGraphTab = tabControl.add_Tab("CodeStream Graph");
-				//CodeStreamGraphTab.backColor(Color.White);				
-				//CodeStreamCodeViewer = CodeStreamTreeViewTab.add_SourceCodeViewer();
-				//CodeStreamTreeView = CodeStreamCodeViewer.insert_Left<TreeView>(200);
-				CodeStreamTreeView = CodeStreamTreeViewTab.add_TreeView();
-				//CodeStreamGraph = CodeStreamGraphTab.add_Panel().add_Graph(); 
-				
-				ParametersTreeView =  CodeViewer.insert_Below<TreeView>(100);
-				MethodsCalledTreeView =  ParametersTreeView.insert_Right<TreeView>(200);
-				var commandsPanel = ParametersTreeView.insert_Left<Panel>(100);
-				SaveCodeLink = commandsPanel.add_Link("save code", 0,0, ()=> saveEditorContents());
-				CurrentINodeLabel = commandsPanel.add_Label("current INode: ", 25,0); 				
-				
-				showINodeLink = commandsPanel.add_Link("show INode CodeStream", 50,0, ()=> showCurrentINodeCodeStream());
-				 
-				// context menu
-				 
-				/*MethodsCalledTreeView.add_ContextMenu()
-						  		     .add_MenuItem("Show Method Stream Details", ()=> showMethodStreamDetails(CodeViewer.get_Text()));
-				*/	
-				//events
-				
-				CodeStreamTreeView.afterSelect<O2CodeStreamNode>
-				 	((streamNode)=> CodeViewer.editor().setSelectionText(streamNode.INode.StartLocation, streamNode.INode.EndLocation));				
-				
-				MethodsCalledTreeView.afterSelect<INode>((iNode)=>createAndShowCodeStream(iNode));
-				ParametersTreeView.afterSelect<INode>((iNode)=>createAndShowCodeStream(iNode));
-				
-				CodeViewer.onCaretMove((caret)=> findINodeAtCaretLocation(caret));
-				//CodeViewer.editor().eDocumentDataChanged += (text)=> saveEditorContents();
-								
-			}
-			
-			public void loadDataInGui()
-			{
-			
-			}
-			
-			public void saveEditorContents()
-			{
-				
-				if (MethodStreamFile.fileExists())
-					Files.deleteFile(MethodStreamFile);			// delete previous file since we don't need it anymore
-								
-				var code = CodeViewer.get_Text();				
-				MethodStreamFile = code.saveWithExtension(".cs");
-				"saving editor contents: {0}".info(MethodStreamFile);	
-				
-				//O2AstResolver cachedO2AstResolver = null;
-				//if (AstData_MethodStream != null)
-				//	cachedO2AstResolver = AstData_MethodStream.O2AstResolver;
-				
-				AstData_MethodStream = new O2MappedAstData(); 														
-				
-					
-				
-				AstData_MethodStream.loadFile(MethodStreamFile);	
-			}
-			
-			public void findINodeAtCaretLocation(ICSharpCode.TextEditor.Caret caret)
-			{	
-				
-				if (AstData_MethodStream!=null)
-				{
-					var iNode = AstData_MethodStream.iNode(MethodStreamFile, caret);
-					if (iNode != null)	
-					{
-						//CodeViewer.editor().selectTextWithColor(iNode);	
-						if (iNode is TypeReference)
-							iNode = iNode.Parent;
-							
-						CurrentINode = iNode;
-						CurrentINodeLabel.set_Text("current iNode:{0}".format(iNode.typeName()));						
-						
-						//"current iNode:{0} : {1}".debug(iNode.typeName(), iNode);	
-						
-						//createAndShowCodeStream(iNode);
-					}
-				}				
-			}
-			
-			/*public void showMethodStreamDetails(string code)
-			{
-				code.info();				
-								
-				
-				AstData_MethodStream = new O2MappedAstData(); 							
-				AstData_MethodStream.loadFile(MethodStreamFile);	
-				AstData_MethodStream.showMethodStreamDetailsInTreeViews(ParametersTreeView, MethodsCalledTreeView);
-			}*/
-			
-			public void showCurrentINodeCodeStream()
-			{
-				createAndShowCodeStream(CurrentINode);
-			}
-			
-			public void createAndShowCodeStream(INode iNode)
-			{
-				if (iNode != null)
-				{
-					CodeViewer.editor().selectTextWithColor(iNode);	
-					
-					var taintRules = new O2CodeStreamTaintRules();
-					//taintRules.add_TaintPropagator("System.Int32.Parse");					
-					var codeStream = AstData_MethodStream.createO2CodeStream(taintRules, MethodStreamFile,iNode);
-					//var codeStream = AstData_MethodStream.createO2CodeStream(MethodStreamFile,iNode);
-					if (codeStream.hasPaths())
-						showCodeStream(codeStream);
-				}
-			}
-			
-			public void showCodeStream(O2CodeStream codeStream)
-			{							
-				codeStream.show(CodeViewer.editor());
-				codeStream.show(CodeStreamTreeView);
-				CodeStreamTreeView.expand();
-			}
-			
-		}
-		
-		public class Step_WriteRule
-		{
-			public O2_DotNet_Ast_Engine AstEngine { get; set; }
-			
-			public ascx_Simple_Script_Editor MethodStreamScript { get; set; }
-			public ascx_Simple_Script_Editor CodeStreamScript { get; set; }
-			public ascx_Simple_Script_Editor FindingsScript { get; set; }
-			
-			public TreeView MethodStreamViewer { get; set; }
-			public TreeView CodeStreamViewer { get; set; }
-			
-			public ascx_FindingsViewer RawFindingsViewer { get; set; }
-			public ascx_FindingsViewer FinalFindingsViewer { get; set; }
-			/*public TreeView CommentsTreeView  { get; set; }
-			public ascx_SourceCodeViewer CodeViewer { get; set; }
-			
-			public String CommentsFilter { get; set; }
-			*/
-				
-			public Step_WriteRule(O2_DotNet_Ast_Engine astEngine)
-			{
-				AstEngine = astEngine;
-				//CommentsFilter = "";				
-				buildGui();
-				loadDataInGui();
-			}	
-			
-			public void buildGui()
-			{
-				AstEngine.HostPanel.clear();	
-				
-				//var controls = AstEngine.HostPanel.add_1x1x1();     
-				var tabControl = AstEngine.HostPanel.add_TabControl();
-   				var tabPages = new List<TabPage>();
-   				tabPages.Add(tabControl.add_Tab("Step 1: Create Method Streams"));
-   				tabPages.Add(tabControl.add_Tab("Step 2: Create Code Streams"));
-   				tabPages.Add(tabControl.add_Tab("Step 1: Create Final Findings"));
-   				var controls = tabPages;
-				var MethodStreamPanel  = controls[0].add_1x1("Create MethodStream","MethodStreams", false);
-				var CodeStreamPanel = controls[1].add_1x1("Create CodeStreams", "CodeStreams", false); 
-				var FindingsPanel = controls[2].add_1x1("Create Findings", "Final Findings",false);
-				
-				// MethodStreamPanel  
-				MethodStreamScript = MethodStreamPanel[0].add_Script(false);   
-				MethodStreamViewer = MethodStreamPanel[1].add_MethodStreamViewer();																			
-								
-				//CodeStreamPanel    
-				CodeStreamScript = CodeStreamPanel[0].add_Script(false);  
-				var CodeStreamScriptResult = CodeStreamPanel[1].add_1x1("Code Streams", "Raw Findings", true, CodeStreamScript.width()/2);
-				
-				CodeStreamViewer =  CodeStreamScriptResult[0].add_CodeStreamViewer();   
-				RawFindingsViewer = CodeStreamScriptResult[1].add_FindingsViewer();
+		}				
 				
 				
-				//RawFindingsViewer = FindingsPanel[1].add_FindingsViewer();				
-				//CodeStreamViewer = MethodStreamPanel[1].add_CodeStreamViewer();   
-				
-				
-				// FindingsPanel
-				FindingsScript = FindingsPanel[0].add_Script(false);				
-				FinalFindingsViewer = FindingsPanel[1].add_FindingsViewer();
-				
-				//var controls2 = host[1].add_1x1x1(true);  
-	
-				// extra vars
-								
-				// script parameters				
-				var scriptParameters = new Dictionary<string,object>(); 				
-				scriptParameters.Add("methodStreamViewer", MethodStreamViewer);  
-				scriptParameters.Add("codeStreamViewer", CodeStreamViewer); 
-				
-				scriptParameters.Add("rawFindingsViewer", RawFindingsViewer); 
-				scriptParameters.Add("finalFindingsViewer", FinalFindingsViewer); 
-				
-				scriptParameters.Add("astData", AstEngine.AstData); 				
-				
-				MethodStreamScript.InvocationParameters.AddRange(scriptParameters);				
-				CodeStreamScript.InvocationParameters.AddRange(scriptParameters);
-				FindingsScript.InvocationParameters.AddRange(scriptParameters);
-
-
-			}
-			
-			public void loadDataInGui()
-			{
-				var defaultUsingAndFileRef		 = "";//"//using ICSharpCode.NRefactory".line() + 
-													//"//using ICSharpCode.NRefactory.Ast".line() + 
-													//"//using ICSharpCode.SharpDevelop.Dom".line() + 
-													//@"//O2File:C:\O2\_XRules_Local\Extra_methods.cs".line();
-													
-				var scriptFor_MethodStreamScript = 	"methodStreamViewer.clear();".line() + 
-												   	"var iMethods = new List<IMethod>();".line() + 
-
-												   	"foreach(var attribute in astData.attributes())".line() + 			
-														"if (attribute.name() == \"WebMethod\")".line() + 
-														"{".line() +  			
-															"var methodDeclaration = attribute.parent<MethodDeclaration>();".line() + 															
-															"if (methodDeclaration.parameters().size() > 0)".line() + 
-																"iMethods.Add(astData.iMethod(methodDeclaration));".line() + 
-														"}".line() +  
-
-													"astData.showMethodStreams(iMethods, methodStreamViewer);".line() + 
-													"".line() + 
-													defaultUsingAndFileRef;
-													
-				var scriptFor_CodeStreamScript = 	"codeStreamViewer.clear();".line() +
-													"var iMethods = (List<IMethod>)methodStreamViewer.Tag;".line() +
-													"".line() +
-													"var o2Findings = astData.createAndShowCodeStreams(iMethods,codeStreamViewer);".line() +
-													
-													"rawFindingsViewer.show(o2Findings);".line() + 
-													defaultUsingAndFileRef;
-													
-				var scriptFor_FindingsScript = 		"var o2Findings = rawFindingsViewer.o2Findings();".line() + 
-													"var filteredFindings = o2Findings.filter_SinkStartsWith(\"constructor: public System.Data.SqlClient.SqlCommand.SqlCommand\");".line() + 
-													"".line() + 
-													"filteredFindings.set_VulnName(\"System.Data.SqlClient.SqlCommand.SqlCommand\");".line() + 
-													"filteredFindings.set_VulnType(\"Sql Injection\");".line() + 
-													"".line() + 
-													"finalFindingsViewer.show(filteredFindings);".line() + 													
-													//"return finalFindingsViewer.save();".line() + 
-													defaultUsingAndFileRef;
-												
-				MethodStreamScript.set_Command(scriptFor_MethodStreamScript);
-				CodeStreamScript.set_Command(scriptFor_CodeStreamScript);
-				FindingsScript.set_Command(scriptFor_FindingsScript);
-				//FindingsScript.compile();
-				//CodeStreamScript.compile();
-			}
-		}
-		
 		public class Step_ViewFindings
 		{
 			public O2_DotNet_Ast_Engine AstEngine { get; set; }
