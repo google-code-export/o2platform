@@ -21,6 +21,7 @@ using O2.Views.ASCX;
 using GraphSharp.Controls;
 using O2.XRules.Database.Utils.O2;
 
+//O2File:Ast_Engine_ExtensionMethods.cs
 //O2File:ascx_Simple_Script_Editor.cs.o2
 //O2File:Scripts_ExtensionMethods.cs
 
@@ -39,7 +40,7 @@ using O2.XRules.Database.Utils.O2;
 
 
 
-namespace O2.XRules.Database.Languages_and_Frameworks.DotNet.DotNet_Ast_Scanner
+namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
     public class ascx_GraphAst_MethodCalls : System.Windows.Forms.Control
     {        	
