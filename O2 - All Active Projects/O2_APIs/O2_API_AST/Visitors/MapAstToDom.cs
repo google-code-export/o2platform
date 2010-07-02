@@ -78,7 +78,14 @@ namespace O2.API.AST.Visitors // was ICSharpCode.NRefactory.Visitors
         //DC
         public void loadCompilationUnit(CompilationUnit compilationUnit)
         {
-            compilationUnit.AcceptVisitor(this, null);
+            try
+            {
+                compilationUnit.AcceptVisitor(this, null);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in MapAstToDom loadCompilationUnit");
+            }
         }
         //DC
         public void mapCompilationUnit(CompilationUnit compilationUnit, CodeNamespace codeNamespace)
@@ -1197,9 +1204,14 @@ namespace O2.API.AST.Visitors // was ICSharpCode.NRefactory.Visitors
                         op = CodeBinaryOperatorType.BitwiseAnd;
                         break;
                 }
-
-                System.Diagnostics.Debug.Assert(!binaryOperatorExpression.Left.IsNull);
-                System.Diagnostics.Debug.Assert(!binaryOperatorExpression.Right.IsNull);
+                //DC
+                if (binaryOperatorExpression.Left.IsNull || binaryOperatorExpression.Right.IsNull)
+                {
+                    "in VisitBinaryOperatorExpression, one of binaryOperatorExpression operators was null".error();
+                    //return null;
+                }
+                //System.Diagnostics.Debug.Assert(!binaryOperatorExpression.Left.IsNull);
+                //System.Diagnostics.Debug.Assert(!binaryOperatorExpression.Right.IsNull);
 
                 var cboe = new CodeBinaryOperatorExpression(
                     (CodeExpression)binaryOperatorExpression.Left.AcceptVisitor(this, data),
@@ -1405,7 +1417,9 @@ namespace O2.API.AST.Visitors // was ICSharpCode.NRefactory.Visitors
 					}
 
 				default:
-					throw new NotSupportedException("CodeDom does not support Unary Operators");
+					//throw new NotSupportedException("CodeDom does not support Unary Operators");
+                    "(in MapAstToDom.VisitUnaryOperatorExpression : CodeDom does not support Unary Operators".error();
+                    return null;
 			}
 		}
 
@@ -1475,63 +1489,69 @@ namespace O2.API.AST.Visitors // was ICSharpCode.NRefactory.Visitors
 
 		public override object VisitUsingStatement(UsingStatement usingStatement, object data)
 		{
-			// using (new expr) { stmts; }
-			//
-			// emulate with
-			//      object _dispose;
-			//      try
-			//      {
-			//          _dispose = new expr;
-			//
-			//          stmts;
-			//      }
-			//      finally
-			//      {
-			//          if (((_dispose != null)
-			//              && (typeof(System.IDisposable).IsInstanceOfType(_dispose) == true)))
-			//          {
-			//              ((System.IDisposable)(_dispose)).Dispose();
-			//          }
-			//      }
-			//
+            try
+            {
+                // using (new expr) { stmts; }
+                //
+                // emulate with
+                //      object _dispose;
+                //      try
+                //      {
+                //          _dispose = new expr;
+                //
+                //          stmts;
+                //      }
+                //      finally
+                //      {
+                //          if (((_dispose != null)
+                //              && (typeof(System.IDisposable).IsInstanceOfType(_dispose) == true)))
+                //          {
+                //              ((System.IDisposable)(_dispose)).Dispose();
+                //          }
+                //      }
+                //
 
-			usingId++; // in case nested using() statements
-			string name = "_dispose" + usingId.ToString();
+                usingId++; // in case nested using() statements
+                string name = "_dispose" + usingId.ToString();
 
-			CodeVariableDeclarationStatement disposable = new CodeVariableDeclarationStatement("System.Object", name, new CodePrimitiveExpression(null));
+                CodeVariableDeclarationStatement disposable = new CodeVariableDeclarationStatement("System.Object", name, new CodePrimitiveExpression(null));
 
-			AddStmt(disposable);
+                AddStmt(disposable);
 
-			CodeTryCatchFinallyStatement tryStmt = new CodeTryCatchFinallyStatement();
+                CodeTryCatchFinallyStatement tryStmt = new CodeTryCatchFinallyStatement();
 
-			CodeVariableReferenceExpression left1 = new CodeVariableReferenceExpression(name);
+                CodeVariableReferenceExpression left1 = new CodeVariableReferenceExpression(name);
 
-			codeStack.Push(NullStmtCollection); // send statements to nul Statement collection
-			CodeExpression right1 = (CodeExpression)usingStatement.ResourceAcquisition.AcceptVisitor(this, data);
-			codeStack.Pop();
+                codeStack.Push(NullStmtCollection); // send statements to nul Statement collection
+                CodeExpression right1 = (CodeExpression)usingStatement.ResourceAcquisition.AcceptVisitor(this, data);
+                codeStack.Pop();
 
-			CodeAssignStatement assign1 = new CodeAssignStatement(left1, right1);
+                CodeAssignStatement assign1 = new CodeAssignStatement(left1, right1);
 
-			tryStmt.TryStatements.Add(assign1);
-			tryStmt.TryStatements.Add(new CodeSnippetStatement());
+                tryStmt.TryStatements.Add(assign1);
+                tryStmt.TryStatements.Add(new CodeSnippetStatement());
 
-			codeStack.Push(tryStmt.TryStatements);
-			usingStatement.EmbeddedStatement.AcceptChildren(this, data);
-			codeStack.Pop();
+                codeStack.Push(tryStmt.TryStatements);
+                usingStatement.EmbeddedStatement.AcceptChildren(this, data);
+                codeStack.Pop();
 
-			CodeMethodInvokeExpression isInstanceOfType = new CodeMethodInvokeExpression(new CodeTypeOfExpression(typeof(IDisposable)), "IsInstanceOfType", new CodeExpression[] { left1 });
+                CodeMethodInvokeExpression isInstanceOfType = new CodeMethodInvokeExpression(new CodeTypeOfExpression(typeof(IDisposable)), "IsInstanceOfType", new CodeExpression[] { left1 });
 
-			CodeConditionStatement if1 = new CodeConditionStatement();
-			if1.Condition = new CodeBinaryOperatorExpression(new CodeBinaryOperatorExpression(left1, CodeBinaryOperatorType.IdentityInequality, new CodePrimitiveExpression(null)),
-			                                                 CodeBinaryOperatorType.BooleanAnd,
-			                                                 new CodeBinaryOperatorExpression(isInstanceOfType, CodeBinaryOperatorType.IdentityEquality, new CodePrimitiveExpression(true)));
-			if1.TrueStatements.Add(new CodeMethodInvokeExpression(new CodeCastExpression(typeof(IDisposable),left1), "Dispose", new CodeExpression[] { }));
+                CodeConditionStatement if1 = new CodeConditionStatement();
+                if1.Condition = new CodeBinaryOperatorExpression(new CodeBinaryOperatorExpression(left1, CodeBinaryOperatorType.IdentityInequality, new CodePrimitiveExpression(null)),
+                                                                 CodeBinaryOperatorType.BooleanAnd,
+                                                                 new CodeBinaryOperatorExpression(isInstanceOfType, CodeBinaryOperatorType.IdentityEquality, new CodePrimitiveExpression(true)));
+                if1.TrueStatements.Add(new CodeMethodInvokeExpression(new CodeCastExpression(typeof(IDisposable), left1), "Dispose", new CodeExpression[] { }));
 
-			tryStmt.FinallyStatements.Add(if1);
+                tryStmt.FinallyStatements.Add(if1);
 
-			// Add Statement to Current Statement Collection
-			AddStmt(tryStmt);
-
+                // Add Statement to Current Statement Collection
+                AddStmt(tryStmt);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in MapAstToDom VisitUsingStatement");
+            }
 			return null;
 		}
 		

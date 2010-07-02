@@ -7,6 +7,7 @@ using System.CodeDom;
 using O2.API.AST.Visitors;
 using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
+using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using ICSharpCode.SharpDevelop.Dom;
 using O2.API.AST.CSharp;
@@ -15,7 +16,7 @@ using ICSharpCode.NRefactory;
 
 namespace O2.API.AST.CSharp
 {
-    public class O2MappedAstData
+    public class O2MappedAstData : IDisposable
     {    	
         public O2AstResolver O2AstResolver { get; set; }
         public MapAstToDom MapAstToDom { get; set; }
@@ -75,6 +76,12 @@ namespace O2.API.AST.CSharp
                 }
                 // get compilation unit
                 var parser = codeToLoad.csharpAst();
+                if (parser.Errors.Count > 0)
+                {
+                    "[O2MappedAstData][loadFile] Parser error for file: {0}".error("fileOrCode");
+                    for(int i=0; i < parser.Errors.Count; i++)
+                        "   {0}".error(parser.Errors.ErrorOutput);
+                }
                 var specials = parser.Lexer.SpecialTracker.RetrieveSpecials();
                 var compilationUnit = parser.CompilationUnit;
                 //processCompilationUnit
@@ -157,5 +164,25 @@ namespace O2.API.AST.CSharp
             methods.AddRange(MapAstToNRefactory.IMethodToConstructorDeclaration.Keys.ToList());            
             return methods;
         }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            O2AstResolver.pcRegistry.Dispose();
+            O2AstResolver.myProjectContent.Dispose();
+            O2AstResolver = null;
+            //"added reference to MsCorLib.dll and System.dll".info();
+            MapAstToDom = null;
+            MapAstToNRefactory = null;
+            FileToINodes.Clear();
+            FileToINodes = null;
+            FileToCompilationUnit.Clear();
+            FileToCompilationUnit = null;
+            FileToSpecials.Clear();
+            FileToSpecials = null;
+        }
+
+        #endregion
     }
 }

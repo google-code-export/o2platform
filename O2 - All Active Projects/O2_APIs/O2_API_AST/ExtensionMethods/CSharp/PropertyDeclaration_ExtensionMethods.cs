@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using O2.Kernel.ExtensionMethods;
 using ICSharpCode.SharpDevelop.Dom;
 using ICSharpCode.NRefactory.Ast;
 
@@ -29,7 +30,11 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             property = ICSharpCode.SharpDevelop.Dom.Refactoring.CodeGenerator.ConvertMember(iProperty, classFinder);
             if (property != null)
                 typeDeclaration.Children.Insert(0, property);
-            return (PropertyDeclaration)property;
+            if (property is PropertyDeclaration)
+                return (PropertyDeclaration)property;
+
+            "in add_Property could not convert property into PropertyDeclaration, because it is: {0}".error(property.typeName());
+            return null;
         }
 
         public static PropertyDeclaration add_Property(this TypeDeclaration typeDeclaration, string propertyType, string propertyName)

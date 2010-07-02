@@ -21,7 +21,7 @@ namespace O2.API.Visualization.Xaml
         {
             this.Width = 100;
             this.Width = 100;
-            this.csharp();                        
+            //this.csharp();                        
         }
 
         #region thread-safe version of TextEditor functions
