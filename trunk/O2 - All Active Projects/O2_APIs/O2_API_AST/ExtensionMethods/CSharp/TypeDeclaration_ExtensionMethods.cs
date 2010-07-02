@@ -8,7 +8,7 @@ using ICSharpCode.SharpDevelop.Dom;
 using O2.Kernel.ExtensionMethods;
 
 namespace O2.API.AST.ExtensionMethods.CSharp
-{
+{   
     public static class TypeDeclaration_ExtensionMethods
     {
         #region create
