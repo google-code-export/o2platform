@@ -2103,6 +2103,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
         #region ContextMenuStrip
         public static ContextMenuStrip add_ContextMenu(this Control control)
         {
+            if (control.isNull())
+                return null;
             var contextMenu = new ContextMenuStrip();
             control.ContextMenuStrip = contextMenu;
             return contextMenu;
@@ -2120,6 +2122,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static ToolStripMenuItem add_MenuItem(this ContextMenuStrip contextMenu, string text, Action<ToolStripMenuItem> onClick)
         {
+            if (contextMenu.isNull())
+                return null;
             var menuItem = new ToolStripMenuItem {Text = text};
             contextMenu.Items.Add(menuItem);
             menuItem.Click += (sender, e) => O2Thread.mtaThread(() => onClick(menuItem));
@@ -2153,6 +2157,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static ToolStripMenuItem add_MenuItem(this ToolStripMenuItem menuItem, string text, bool returnParentMenuItem, Action<ToolStripMenuItem> onClick)
         {
+            if (menuItem.isNull())
+                return null;
             var clildMenuItem = new ToolStripMenuItem { Text = text };            
             clildMenuItem.Click +=
                 (sender, e) => O2Thread.mtaThread(() => onClick(clildMenuItem)); 
@@ -2637,7 +2643,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return _control.add_StatusStrip(Color.LightGray);
         }
 
-        public static ToolStripStatusLabel add_StatusStrip(this UserControl _control, Color backColor)
+        /*public static ToolStripStatusLabel add_StatusStrip(this UserControl _control, Color backColor)
         {
             return (ToolStripStatusLabel)_control.invokeOnThread(
                 () =>
@@ -2649,11 +2655,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     }
                     return _control.ParentForm.add_StatusStrip(backColor);
                 });
-        }        
+        } */
 
-        public static ToolStripStatusLabel add_StatusStrip(this Form form, Color backColor)
+        public static ToolStripStatusLabel add_StatusStrip(this ContainerControl containerControl, Color backColor)
         {
-            return (ToolStripStatusLabel)form.invokeOnThread(
+            return (ToolStripStatusLabel)containerControl.invokeOnThread(
                 () =>
                 {
                     var label = new ToolStripStatusLabel();
@@ -2662,7 +2668,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     if (backColor != null)
                         statusStrip.BackColor = backColor;
                     statusStrip.Items.Add(label);
-                    form.Controls.Add(statusStrip);
+                    containerControl.Controls.Add(statusStrip);
                     return label;
                 });
         }

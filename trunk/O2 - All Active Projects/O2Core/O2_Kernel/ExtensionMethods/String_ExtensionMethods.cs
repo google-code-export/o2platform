@@ -205,7 +205,9 @@ namespace O2.Kernel.ExtensionMethods
 
         public static int size(this string _string)
         {
-            return _string.Length;
+            if (_string.valid())
+                return _string.Length;
+            return 0;
         }
 
         public static string line(this string firstString, string secondString)

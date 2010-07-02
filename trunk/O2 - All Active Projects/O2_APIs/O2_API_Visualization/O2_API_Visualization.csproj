@@ -84,7 +84,9 @@
     <Compile Include="Ascx\ascx_Xaml_Host.Designer.cs">
       <DependentUpon>ascx_Xaml_Host.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExtensionMethods\WPF_Threading_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\WPF_Threading_ExtensionMethods.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GraphFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Xaml\Blank.xaml.cs">

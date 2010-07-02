@@ -232,12 +232,6 @@
         "Entry"
         {
         "MsmKey" = "8:_8DE5AC389BFE4D5F9E4A78B207F25A83"
-        "OwnerKey" = "8:_BDDE8E78BDBFB43D7FD572C7F58B2958"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8DE5AC389BFE4D5F9E4A78B207F25A83"
         "OwnerKey" = "8:_6534D4249FAC15FD7CD21A3BF2927DB4"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -1362,7 +1356,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:OWASP O2 Platform (v1.0 Beta)"
         "ProductCode" = "8:{CEB5335E-70C4-4D4D-8687-CC95DA1B5820}"
-        "PackageCode" = "8:{537A4CAC-E9B3-4A8F-A6D7-4226A1C1C389}"
+        "PackageCode" = "8:{D6B25EE4-972C-4018-9BAA-C21254B58B04}"
         "UpgradeCode" = "8:{4AB6E547-C472-428D-9176-9535C2D299D9}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -2070,6 +2064,34 @@
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{83957D55-86AB-4C26-9F82-6182999F09E8}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8B8D53FB542748B68F45A5C9CF91490B"
+            {
+            "SourcePath" = "8:"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E48D74D0F08D4155A5112C0E735480D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:ContentFiles"
             "OutputProjectGuid" = "8:{83957D55-86AB-4C26-9F82-6182999F09E8}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
