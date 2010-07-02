@@ -106,7 +106,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			var progressBar = optionsPanel.add_ProgressBar(25,0).align_Right(optionsPanel);
 			optionsPanel.add_LabelAndTextAndButton("Target Directory", targerFolder,"Create",
 				(text)=>{
-							AstData.createAllMethodsStreams(text, progressBar, PublicDI.log.info);
+							AstData.createAllMethodsStreams(text, progressBar, null);
 							foreach(var file in targerFolder.files())
 								treeView.add_Node(file.fileName(), file);
 							treeView.selectFirst();
