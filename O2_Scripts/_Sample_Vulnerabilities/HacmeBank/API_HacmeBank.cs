@@ -16,14 +16,26 @@ using SHDocVw;
 using WatiN.Core;
 using O2.XRules.Database.Utils.O2;
 using O2.XRules.Database.APIs;
-using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.ExtensionMethods;
+using O2.Interfaces.O2Findings;
+using O2.Views.ASCX.O2Findings;
+using O2.XRules.Database.Findings;
+using O2.DotNetWrappers.O2Findings;
+using O2.XRules.Database.Languages_and_Frameworks.DotNet; 
+using O2.API.AST.CSharp;
+using O2.API.AST.ExtensionMethods;
+using O2.API.AST.ExtensionMethods.CSharp;
+
+//O2File:Findings_ExtensionMethods.cs
+//O2File:Ast_Engine_ExtensionMethods.cs
 
 //O2File:WatiN_IE_ExtensionMethods.cs    
 //O2File:WatiN_IE.cs
+//O2File:DotNet_ViewState.cs
 //O2Ref:Interop.SHDocVw.dll
 //O2Ref:WatiN.Core.1x.dll
-//O2File:DotNet_ViewState.cs
+//O2Ref:O2_API_AST.dll   
+ 
  
 namespace O2.XRules.Database.HacmeBank
 {
@@ -102,6 +114,128 @@ namespace O2.XRules.Database.HacmeBank
 			ie.set_Value("_ctl3:txtResponse", response); 
 			ie.click("Login");
 			return this;
+    	}
+    }
+    
+    public class API_HacmeBank_CustomScanner
+    {
+    
+    	public static List<IO2Finding> calculate_Url_to_EntryMethod_Mappings(string pathWithSourceFiles)
+    	{
+    		return calculate_Url_to_EntryMethod_Mappings(pathWithSourceFiles, "22222", null);
+    	}
+		public static List<IO2Finding> calculate_Url_to_EntryMethod_Mappings(string pathWithSourceFiles, string port, ProgressBar progressBar)
+		{			
+			var urlBase = "http://localhost:{0}/Hacmebank_v2/main.aspx?TargetPage={1}";			
+			return calculate_Url_to_EntryMethod_Mappings(pathWithSourceFiles, urlBase, port, progressBar);
+		}
+		
+    	public static List<IO2Finding> calculate_Url_to_EntryMethod_Mappings(string pathWithSourceFiles, string urlBase, string port, ProgressBar progressBar)
+    	{
+    		var o2Findings = new List<IO2Finding>();
+			var filesToAnalyze = pathWithSourceFiles.files("*.cs",true);
+			progressBar.maximum(filesToAnalyze.size());
+			foreach(var file in filesToAnalyze)
+			{	
+					"Processing file:{0}".info(file);
+				var url = urlBase.format(port, file.replace(pathWithSourceFiles,"").replace(".ascx.cs",""));
+				
+				foreach(var type in file.csharpAst().types(true))
+					foreach(var baseType in type.BaseTypes)			
+						if (baseType.str() == "System.Web.UI.UserControl")				
+						{
+							var astData = new O2MappedAstData();
+							astData.loadFile(file);
+							foreach(var iMethod in astData.iMethods())
+							{
+								var o2Finding = new O2Finding();
+								o2Finding.vulnName = url;
+								o2Finding.vulnType = "Web EntryPoint";
+								var source = new O2Trace(url);
+								var sink = new O2Trace(iMethod.fullName());
+								source.traceType = TraceType.Source;
+								sink.traceType = TraceType.Known_Sink;					
+								source.childTraces.Add(sink);
+								o2Finding.o2Traces.Add(source);					
+								o2Findings.Add(o2Finding);
+							}									
+						}	
+				progressBar.increment(1);				
+			}		
+			return o2Findings;
+    	}
+    	
+    	public static List<IO2Finding> calculate_WebLayer_tracesInto_WebServices_with_URL_as_Source(List<IO2Finding> sourceO2Findings, List<IO2Finding> urlMappings)
+    	{
+    		var webLayerFindingsWithUrl = new List<IO2Finding>();
+
+			var mappedFindings = sourceO2Findings.getFindingsWith_WebServicesInvoke()
+												 .makeSinks_WebServicesInvokeTarget();
+												 
+			var indexedByRootMethod = mappedFindings.indexBy(
+				(o2Finding)=>{
+								if (o2Finding.o2Traces[0].childTraces.size() > 1)
+									return o2Finding.o2Traces[0].childTraces[1].context;
+								else
+									return "no root method";
+							 });
+									
+			 
+			foreach(var sinkValue in urlMappings.indexBy_Sink())
+			{
+				if (indexedByRootMethod.hasKey(sinkValue.Key))
+				{
+					foreach(var findingA in sinkValue.Value)
+						foreach(var findingB in indexedByRootMethod[sinkValue.Key])
+						{				
+							//var newFinding = findingA.copy();
+							var newFinding = OzasmtGlue.createCopyAndGlueTraceSinkWithTrace(findingA, findingB.o2Traces);
+							webLayerFindingsWithUrl.add(newFinding);
+						}		
+				} 
+			//	sinkValue.Key.info(); 
+			}
+			webLayerFindingsWithUrl.removeFirstSource();
+			return webLayerFindingsWithUrl;
+    	}
+    	
+    	public static List<IO2Finding> join_WebLayer_traces_with_WebServices_traces(List<IO2Finding> sourceO2Findings, List<IO2Finding> webLayerFindingsWithUrl)
+    	{
+    		var bySink = webLayerFindingsWithUrl.indexBy_Sink();
+			var bySource = sourceO2Findings.indexBy_Source();
+			
+			var jointFindings = new List<IO2Finding>();
+			foreach(var source in bySource) 
+			{
+				var fixedSource = source.Key.replace("HacmeBank_v2_WS.WS_UserManagement", "WS_UserManagement");
+				fixedSource = fixedSource.replace("HacmeBank_v2_WS.WS_AccountManagement", "WS_AccountManagement");
+				fixedSource = fixedSource.replace("HacmeBank_v2_WS.WS_UsersCommunity", "WS_UsersCommunity");
+				if (fixedSource.contains("Login"))
+				{
+					fixedSource.info();
+					//source.Key.info();
+				}
+				if (bySink.hasKey(fixedSource))
+				{
+					foreach(var findingA in bySink[fixedSource]) 
+						foreach(var findingB in source.Value) 			
+						{
+							var newFinding = OzasmtGlue.createCopyAndGlueTraceSinkWithTrace(findingA, findingB.o2Traces);
+							jointFindings.add(newFinding);
+						}
+				}				
+			}
+			return jointFindings; 
+    	}
+    	
+    	public static List<IO2Finding> create_SqlInjection_Findings(List<IO2Finding> jointFindings)
+    	{
+    		var sqlInjectionFindings = jointFindings.whereSink_Contains("Sql");
+    		var finalFindings = sqlInjectionFindings.whereSource_Contains("field ->").add(
+    				            sqlInjectionFindings.whereSource_Contains("method ->"));
+    		
+    		finalFindings. set_VulnType("HacmeBank -> SQL Injection (via Web Site)");
+    		return finalFindings;
     	}
     }
 }

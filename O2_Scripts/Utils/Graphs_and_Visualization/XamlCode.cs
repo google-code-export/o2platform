@@ -70,5 +70,34 @@ namespace O2.XRules.Database.APIs
 							"  </Button>".line();
 			return xamlCode;
 		}
+		
+		public static string link()
+		{
+			return link("Click me");
+		}
+		
+		public static string link(string text)
+		{
+			return  "<Button Margin=\"5\" Content=\"{0}\" Cursor=\"Hand\" Focusable=\"False\">".format(text).line()+
+					 "        <Button.Template>".line()+
+					 "            <ControlTemplate TargetType=\"Button\">".line()+
+					 "                <TextBlock TextDecorations=\"Underline\">".line()+
+					 "                    <ContentPresenter />".line()+
+					 "                </TextBlock>".line()+
+					 "            </ControlTemplate>".line()+
+					 "        </Button.Template>".line()+
+					 "        <Button.Style>".line()+
+					 "            <Style TargetType=\"Button\">".line()+
+					 "                <Setter Property=\"Foreground\" Value=\"Blue\" />".line()+
+					 "                <Style.Triggers>".line()+
+					 "                    <Trigger Property=\"IsMouseOver\" Value=\"true\">".line()+
+					 "                        <Setter Property=\"Foreground\" Value=\"Red\" />".line()+
+					 "                    </Trigger>".line()+
+					 "                </Style.Triggers>".line()+
+					 "            </Style>".line()+
+					 "        </Button.Style>".line()+
+					 "    </Button>".line();
+
+		}
     }      
 }
