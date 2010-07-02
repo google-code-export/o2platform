@@ -81,7 +81,7 @@ namespace O2.XRules.Database
         }
 
         public void checkForFirstRunAndUnzipDefaultScripts()
-        {
+        {            
             if (PublicDI.config.LocalScriptsFolder.dirExists().isFalse())
             {
                 var zippedScriptedFile = PublicDI.config.CurrentExecutableDirectory.pathCombine("_Scripts.zip");
@@ -95,6 +95,17 @@ namespace O2.XRules.Database
             }
         }
 
+        public bool is32Bit()
+        { 
+            if (@"C:\Program Files (x86)".dirExists())
+            {
+                "This is a 64bit OS".debug();
+                return false;
+            }
+            return true;
+
+        }
+
         private void handleSpecialControlKeys()
         {
             if (Control.ModifierKeys == Keys.Shift)
@@ -104,7 +115,7 @@ namespace O2.XRules.Database
         private void buildGui()
         {               
         	// add controls    
-            statusLabel = this.add_StatusStrip(Color.White);            
+            statusLabel = this.parentForm().add_StatusStrip(Color.White);            
             this.BackColor = Color.White;
 			var topPanel = this.add_Panel();         			
         	var pictureBox = (PictureBox)topPanel.add_PictureBox();
@@ -173,8 +184,8 @@ namespace O2.XRules.Database
             
         	// put this on menu item
         	//this.add_Link("reload",10,2,()=>loadH2Script());
-
-            syncO2ViaSvn();
+            if (is32Bit())
+                syncO2ViaSvn();
      	}
 
         public ascx_Execute_Scripts execute(string infoMessage, MethodInvoker codeToExecute)
