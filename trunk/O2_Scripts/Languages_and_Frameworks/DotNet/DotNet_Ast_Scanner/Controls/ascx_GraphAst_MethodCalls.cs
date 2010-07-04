@@ -19,8 +19,9 @@ using O2.API.AST.ExtensionMethods.CSharp;
 using O2.API.Visualization.ExtensionMethods;
 using O2.Views.ASCX;
 using GraphSharp.Controls;
-using O2.XRules.Database.Utils.O2;
+using O2.XRules.Database.Utils;
 
+//O2File:WPF_ExtensionMethods.cs
 //O2File:Ast_Engine_ExtensionMethods.cs
 //O2File:ascx_Simple_Script_Editor.cs.o2
 //O2File:Scripts_ExtensionMethods.cs

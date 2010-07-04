@@ -27,7 +27,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
     public static class Ast_Engine_ExtensionMethods
     {    
-    
+      
     	public static string createAllMethodsStreams(this O2MappedAstData astData)
 		{
 			var targetFolder = PublicDI.config.getTempFolderInTempDirectory("_MethodStream");

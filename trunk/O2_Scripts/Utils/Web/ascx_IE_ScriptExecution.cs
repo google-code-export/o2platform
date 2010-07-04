@@ -12,7 +12,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 
-using O2.XRules.Database.Utils.O2;
+using O2.XRules.Database.Utils;
 
 //O2File:ascx_Simple_Script_Editor.cs.o2
 //O2File:Scripts_ExtensionMethods.cs

@@ -19,7 +19,7 @@ using O2.API.Visualization.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
 using DiagramDesigner;
 
-//O2File:Ref:WPF_ExtensionMethods.cs
+//O2File:WPF_ExtensionMethods.cs
 
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:ICSharpCode.AvalonEdit.dll

@@ -16,6 +16,8 @@ using AvalonDock;
 using O2.API.Visualization.ExtensionMethods;
 using WPF = System.Windows.Controls;
 
+//O2File:Ref:WPF_ExtensionMethods.cs
+
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:ICSharpCode.AvalonEdit.dll
 //O2Ref:QuickGraph.dll

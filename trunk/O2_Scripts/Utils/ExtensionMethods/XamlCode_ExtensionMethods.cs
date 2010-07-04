@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using O2.API.Visualization.ExtensionMethods;
 
+//O2File:WPF_ExtensionMethods.cs
 //O2File:XamlCode.cs
 
 //O2Ref:O2_API_Visualization.dll

@@ -13,6 +13,8 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.API.Visualization.ExtensionMethods;
 
+//O2File:Ref:WPF_ExtensionMethods.cs
+
 //O2Ref:O2_API_Visualization.dll
 //O2Ref:PresentationCore.dll
 //O2Ref:PresentationFramework.dll
@@ -22,10 +24,6 @@ using O2.API.Visualization.ExtensionMethods;
 //O2Ref:GraphSharp.dll
 //O2Ref:QuickGraph.dll 
 //O2Ref:GraphSharp.Controls.dll
-
-//O2File:C:\O2\_XRules_Local\Extra_WPF_ExtensionMethods.cs
-
-using O2.Local.Script;
 
 namespace O2.XRules.Database.APIs
 {
