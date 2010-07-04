@@ -124,7 +124,9 @@ namespace O2.External.SharpDevelop.AST
         }
 		public List<string> getDefaultReferencedAssemblies()
         {
-            return new List<string>().add("System.dll")
+            return CompileEngine.lsGACExtraReferencesToAdd;
+
+            /*return new List<string>().add("System.dll")
                                      .add("System.Drawing.dll")
                                      .add("System.Core.dll")
                                      .add("System.Xml.dll")
@@ -137,7 +139,7 @@ namespace O2.External.SharpDevelop.AST
                 //.add("O2_External_IE.dll")
                                      .add("O2_XRules_Database.exe")
                                      .add("O2_External_SharpDevelop.dll")
-                                     .add("O2SharpDevelop.dll");
+                                     .add("O2SharpDevelop.dll");*/
                 //GraphSharp related
 /*                                     .add("O2_Api_Visualization.dll")
                                      .add("O2_Api_AST.dll")
@@ -478,18 +480,8 @@ namespace O2.External.SharpDevelop.AST
                         var fileToResolve = ExtraSourceCodeFilesToCompile[i].trim();
 
                         //handle the File:xxx:Ref:xxx case
-                        if (fileToResolve.starts("Ref:"))
-                        {
-                            fileToResolve= fileToResolve.remove("Ref:");
-                            var fileRef = CompileEngine.getCachedCompiledAssembly(fileToResolve);
-                            
-                            if (fileRef.valid() && fileRef.fileExists())
-                            {
-                                if (ReferencedAssemblies.contains(fileRef).isFalse())
-                                    ReferencedAssemblies.add(fileRef);
-                            }
-                            ExtraSourceCodeFilesToCompile[i] = "";                                                        
-                        }
+                        if (CompileEngine.isFileAReferenceARequestToUseThePrevioulsyCompiledVersion(fileToResolve,ReferencedAssemblies))
+                            ExtraSourceCodeFilesToCompile[i] = "";
                         else
                         {
 

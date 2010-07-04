@@ -833,6 +833,8 @@ namespace O2.External.SharpDevelop.Ascx
                 // always save before compiling                                                
                 compileEngine.compileSourceFile(sPathToFileLoaded);
                 compiledAssembly = compileEngine.compiledAssembly ?? null;
+                if (compiledAssembly.notNull() & o2CodeCompletion.notNull())
+                    o2CodeCompletion.addReferences(compileEngine.cpCompilerParameters.ReferencedAssemblies.toList());  
             }
 
             var state = compiledAssembly == null && compileEngine.sbErrorMessage != null;
@@ -870,10 +872,13 @@ namespace O2.External.SharpDevelop.Ascx
                                // set gui options depending on compilation result
                                var assemblyCreated = compiledAssembly != null;
 
-                               btDebugMethod.Visible = executeSelectedMethodToolStripMenuItem.Visible =
-                                               btDragAssemblyCreated.Visible = btExecuteSelectedMethod.Visible =
-                                               lbExecuteCode.Visible = cboxCompliledSourceCodeMethods.Visible
-                                               = assemblyCreated;
+                               //btDebugMethod.Visible = 
+                               executeSelectedMethodToolStripMenuItem.Visible =
+                                               btDragAssemblyCreated.Visible = 
+                                               btExecuteSelectedMethod.Visible =
+                                               lbExecuteCode.Visible =
+                                               cboxCompliledSourceCodeMethods.Visible = 
+                                               assemblyCreated;
 
                                cboxCompliledSourceCodeMethods.Items.Clear();
                                if (compiledAssembly != null)
@@ -1330,10 +1335,12 @@ namespace O2.External.SharpDevelop.Ascx
         public O2CodeCompletion enableCodeComplete()
         {
             if (o2CodeCompletion == null)
-                o2CodeCompletion = new O2CodeCompletion(tecSourceCode);
-            else
             {
-                o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = false;
+                o2CodeCompletion = new O2CodeCompletion(tecSourceCode);
+            //else
+            //{
+                o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = true;
+                compile_Click(null, null);
             }
             return o2CodeCompletion;
         }        

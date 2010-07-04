@@ -218,8 +218,11 @@ namespace O2.Kernel.CodeUtils
 
         public static bool isDebuggerAvailable()
         {
+            return false;
+            // need to do this a different way
+            /*
             try
-            {
+            {                                
                 if (DI.reflection.getType("O2MDbgUtils") == null) // first see if the assembly O2_External_WinFormsUI is loaded 
                     return false;
                 var o2AppDomainFactory = AppDomainUtils.getO2AppDomainFactoryForCurrentO2Kernel();
@@ -228,7 +231,7 @@ namespace O2.Kernel.CodeUtils
             catch (Exception)
             {
                 return false;
-            }
+            }*/
 
         }
     }

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
@@ -423,5 +422,11 @@ namespace O2.Kernel.ExtensionMethods
                 return new String(charToRepeat, count);
             return "";
         }
+
+        public static string tempFile(this string postfixString)
+        {
+            return PublicDI.config.getTempFileInTempDirectory(postfixString);
+        }
+        
     }
 }

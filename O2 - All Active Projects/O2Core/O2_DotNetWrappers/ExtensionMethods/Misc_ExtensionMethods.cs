@@ -59,6 +59,21 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return value1 != value2;
         }
 
+        public static uint uInt(this int _int)
+        {
+            return (uint)_int;
+        }
+
+        public static bool isEven(this int value)
+        {
+            return (value % 2) == 0;
+        }
+
+        public static bool isOdd(this int value)
+        {
+            return (value % 2) != 0;
+        }
+
         #endregion
 
         #region bool

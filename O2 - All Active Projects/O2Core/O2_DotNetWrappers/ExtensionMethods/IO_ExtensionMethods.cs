@@ -88,8 +88,15 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string extension(this string file)
         {
-            if (file.valid() && file.size() < 256)
-                return Path.GetExtension(file).ToLower();
+            try
+            {
+                if (file.valid() && file.size() < 256)
+                    return Path.GetExtension(file).ToLower();
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
             return "";
         }
 
@@ -272,7 +279,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
         public static List<string> files(this string path, List<string> searchPatterns)
         {
             return path.files(searchPatterns, false);
-        }       
+        }
+
+        public static List<string> files(this string path, bool recursive, params string[] searchPatterns)
+        {
+            return path.files(searchPatterns.toList(), recursive);
+        }
 
         public static List<string> files(this string path, List<string> searchPatterns, bool recursive)
         {

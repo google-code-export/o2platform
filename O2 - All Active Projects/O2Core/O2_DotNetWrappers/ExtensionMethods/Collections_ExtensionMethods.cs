@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel.ExtensionMethods;
+using System.Collections.Specialized;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -50,6 +51,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return results;
         }
 
+        public static List<string> toList(this StringCollection stringCollection)
+        {
+            var results = new List<string>();
+            foreach (var item in stringCollection)
+                results.Add(item);
+            return results;
+        }
+
 
         #endregion
         
@@ -92,6 +101,15 @@ namespace O2.DotNetWrappers.ExtensionMethods
             foreach (var item in list)
                 result.Add(item.split(splitString));
             return result;
+        }
+
+        public static string tabRight(this string targetString)
+        {
+            var newLines = new List<string>();
+            foreach (var line in targetString.lines())
+                newLines.Add("\t{0}".format(line));
+            return StringsAndLists.fromStringList_getText(newLines);
+
         }
 
         public static List<string> lines(this string targetString)

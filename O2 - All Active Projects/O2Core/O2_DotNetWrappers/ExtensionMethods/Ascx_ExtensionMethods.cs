@@ -1683,20 +1683,28 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static TreeView add_TreeViewWithFilter(this Control control, List<string> itemsToShow)
         {
+            return control.add_TreeViewWithFilter("", itemsToShow);
+        }
+
+        public static TreeView add_TreeViewWithFilter(this Control control, string baseFolder, List<string> itemsToShow)
+        {
             var treeView = control.add_TreeView();
 
-            treeView.insert_Above<TextBox>(25).onEnter(
-                (text) =>
-                {
-                    var skipRegexFilter = text.valid().isFalse();
-                    treeView.clear();
-                    foreach (var item in itemsToShow)
-                        if (skipRegexFilter || item.regEx(text))
-                            treeView.add_Node(item, item);
-                });
+            Action<string> populateTreeView = 
+                (filter)=>{
+                            var skipRegexFilter = filter.valid().isFalse();
+                            treeView.clear();
+                            foreach (var item in itemsToShow)
+                                if (skipRegexFilter || item.regEx(filter))
+                                {
+                                    var nodeText = baseFolder.valid() ? item.remove(baseFolder) : item;
+                                    treeView.add_Node(nodeText, item);
+                                }
+                          };
 
+            treeView.insert_Above<TextBox>(25).onEnter(populateTreeView);
 
-            treeView.add_Nodes(itemsToShow);
+            populateTreeView("");
             return treeView;
         }
 
