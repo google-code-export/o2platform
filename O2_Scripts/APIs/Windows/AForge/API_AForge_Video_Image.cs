@@ -12,6 +12,9 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.API.Visualization.ExtensionMethods;
+
+//O2File:Ref:WPF_ExtensionMethods.cs
+
 //O2Ref:O2_API_Visualization.dll
 //O2Ref:PresentationCore.dll
 //O2Ref:PresentationFramework.dll

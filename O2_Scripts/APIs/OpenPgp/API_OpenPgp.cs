@@ -20,9 +20,6 @@ using O2.DotNetWrappers.Windows;
 //O2Ref:O2_DotNetWrappers.dll
 //O2Ref:O2_Kernel.dll
 
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs
-using O2.Local.Script;
-
 namespace O2.XRules.Database.APIs
 {
 	

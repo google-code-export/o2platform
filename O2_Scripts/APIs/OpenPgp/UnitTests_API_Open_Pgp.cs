@@ -16,8 +16,6 @@ using O2.DotNetWrappers.Windows;
 //O2File:API_OpenPgp.cs
 //O2Ref:NUnit.Framework.dll
 
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs
-using O2.Local.Script;
 
 
 namespace O2.XRules.Database.APIs

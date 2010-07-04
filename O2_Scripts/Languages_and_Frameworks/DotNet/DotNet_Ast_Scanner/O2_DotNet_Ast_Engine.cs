@@ -32,7 +32,7 @@ using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
 using GraphSharp.Controls;
 using O2.XRules.Database.Utils.ExtensionMethods;
-using O2.XRules.Database.Utils.O2;
+using O2.XRules.Database.Utils;
 
 //O2File:Ast_Engine_ExtensionMethods.cs
 //O2File:SharpDevelop_O2MappedAstData_ExtensionMethods.cs

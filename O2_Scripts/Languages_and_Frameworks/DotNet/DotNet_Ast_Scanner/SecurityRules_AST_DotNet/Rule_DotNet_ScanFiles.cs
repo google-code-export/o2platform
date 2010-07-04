@@ -14,6 +14,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
     public class Rule_DotNet_ScanFiles: IAST_Rules
     {    
+    	public O2CodeStreamTaintRules TaintRules { get; set;}
     	public static void test()
     	{
     	}
