@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using O2.DotNetWrappers.Windows;
 using O2.Interfaces.XRules;
+using O2.Kernel;
 
 namespace O2.Core.XRules.XRulesEngine
 {
@@ -12,9 +13,9 @@ namespace O2.Core.XRules.XRulesEngine
         
         static XRules_Config()
         {
-            PathTo_XRulesDatabase_fromO2 = @"C:\O2\O2Scripts_Database\_Scripts";
-            PathTo_XRulesDatabase_fromLocalDisk = @"C:\O2\_XRules_Local";
-            PathTo_XRulesTemplates = PathTo_XRulesDatabase_fromO2 + @"\_Templates";
+            PathTo_XRulesDatabase_fromO2 = PublicDI.config.LocalScriptsFolder; // @"C:\O2\O2Scripts_Database\_Scripts";
+            PathTo_XRulesDatabase_fromLocalDisk = PublicDI.config.LocallyDevelopedScriptsFolder; //@"C:\O2\_XRules_Local";
+            PathTo_XRulesTemplates = PublicDI.config.LocallyDevelopedTemplatesFolder; //  PathTo_XRulesDatabase_fromO2 + @"\_Templates";
             PathTo_XRulesCompiledDlls = PathTo_XRulesDatabase_fromO2 + @"\..\_CompiledDlls";
             Files.checkIfDirectoryExistsAndCreateIfNot(PathTo_XRulesDatabase_fromO2);
             Files.checkIfDirectoryExistsAndCreateIfNot(PathTo_XRulesDatabase_fromLocalDisk);            
