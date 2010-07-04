@@ -65,6 +65,15 @@
     <Compile Include="Ascx\ascx_AssemblyInvoke.Designer.cs">
       <DependentUpon>ascx_AssemblyInvoke.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ascx\ascx_XRules_Editor.Controllers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_XRules_Editor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ascx\ascx_XRules_Editor.Designer.cs">
+      <DependentUpon>ascx_XRules_Editor.cs</DependentUpon>
+    </Compile>
     <Compile Include="O2CodeCompletion.cs" />
     <Compile Include="AST\Charp_FastCompiler.cs" />
     <Compile Include="AST\TextToCodeMappings.cs" />
@@ -164,6 +173,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ascx\ascx_SourceCodeViewer.resx">
       <DependentUpon>ascx_SourceCodeViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ascx\ascx_XRules_Editor.resx">
+      <DependentUpon>ascx_XRules_Editor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

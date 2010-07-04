@@ -26,11 +26,7 @@ namespace O2.Kernel.ExtensionMethods
         {
             return _object.tempO2Dir();
         }
-
-        public static uint uInt(this int _int)
-        {
-            return (uint)_int;
-        }
+        
 
         public static int hash(this object _object)
         {

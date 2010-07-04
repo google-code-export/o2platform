@@ -13,6 +13,8 @@ namespace O2.Interfaces.O2Core
         
         string O2TempDir { get; set; }
         string LocalScriptsFolder { get; set; }
+        string LocallyDevelopedScriptsFolder { get; set; }
+        string LocallyDevelopedTemplatesFolder { get; set; }        
         string SvnO2RootFolder { get; set; }
         string SvnO2DatabaseRulesFolder { get; set; }
         string O2SVN_ExternalDlls { get; set; }

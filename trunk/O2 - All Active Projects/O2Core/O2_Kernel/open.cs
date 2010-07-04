@@ -100,7 +100,7 @@ namespace O2.Kernel
 */
         public static object scriptEditor()
         {
-            var graphControlType = "O2_Core_XRules.dll".type("ascx_XRules_Editor");
+            var graphControlType = "O2_External_SharpDevelop".type("ascx_XRules_Editor");
             return graphControlType.openControlAsForm("XRules/Script Editor", 1024, 600);
         }
         

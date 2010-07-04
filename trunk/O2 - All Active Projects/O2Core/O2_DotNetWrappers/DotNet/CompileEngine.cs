@@ -28,14 +28,16 @@ namespace O2.DotNetWrappers.DotNet
         static List<string> specialO2Tag_DontCompile= new List<string>() { "//O2NoCompile"};
 
         public Assembly compiledAssembly;
+        public CompilerParameters cpCompilerParameters;
         public CompilerResults crCompilerResults;
+        public CSharpCodeProvider cscpCSharpCodeProvider;
         public StringBuilder sbErrorMessage;
         public bool DebugMode;
 
         public static Dictionary<string, string> LocalScriptFileMappings = new Dictionary<string, string>();
         public static Dictionary<string, string> CachedCompiledAssemblies = new Dictionary<string, string>();
 
-        public List<String> lsGACExtraReferencesToAdd = new List<string>(new []
+        public static List<String> lsGACExtraReferencesToAdd = new List<string>(new []
                                                                                  {
                                                                                      "System.Windows.Forms.dll",
                                                                                      "System.Drawing.dll",
@@ -45,7 +47,24 @@ namespace O2.DotNetWrappers.DotNet
                                                                                      "System.Core.dll",
                                                                                      "System.Xml.Linq.dll",
                                                                                      "System.Xml.dll",
-                                                                                     "System.dll"});     
+                                                                                     "System.dll",
+                                                                                 //O2Related
+                                                                                     "O2_Kernel.dll",
+                                                                                     "O2_Interfaces.dll",
+                                                                                     "O2_DotNetWrappers.dll",
+                                                                                     "O2_Views_Ascx.dll",
+                                                                                     "O2_XRules_Database.exe",
+                                                                                     "O2_External_SharpDevelop.dll",
+                                                                                     "O2SharpDevelop.dll",
+                                                                                 //WPF 
+                                                                                    "PresentationCore.dll",
+                                                                                    "PresentationFramework.dll",
+                                                                                    "WindowsBase.dll",
+                                                                                    "System.Core.dll"
+                                                                                 });     
+                                     
+                                     
+                                                                          
 
         public void addErrorsListToListBox(ListBox lbSourceCode_CompilationResult)
         {
@@ -232,14 +251,14 @@ namespace O2.DotNetWrappers.DotNet
         public void mapReferencesIncludedInSourceCode(string sourceCodeFile, List<string> referencedAssemblies)
         {
             var sourceCodeFiles = new List<string> { sourceCodeFile };
-            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles);
+            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
             addReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
             
         }
 
         public void mapReferencesIncludedInSourceCode(List<string> sourceCodeFiles, List<string> referencedAssemblies)
         {
-            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles);
+            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
             addReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
 
             if (sourceCodeFiles.Count > 1)
@@ -272,7 +291,7 @@ namespace O2.DotNetWrappers.DotNet
             return sourceCodeFiles;                
         }
 
-        public static void addSourceFileOrFolderIncludedInSourceCode(List<string> sourceCodeFiles)
+        public static void addSourceFileOrFolderIncludedInSourceCode(List<string> sourceCodeFiles, List<string> referencedAssemblies)
         {
             var currentSourceDirectories = new List<string>(); // in case we need to resolve file names below
             foreach (var file in sourceCodeFiles)
@@ -301,7 +320,10 @@ namespace O2.DotNetWrappers.DotNet
                             var file = fileLine.Replace(match, "").Trim();
                             if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
                             {
-                                filesToAdd.Add(file);
+                                //handle the File:xxx:Ref:xxx case
+                                if (CompileEngine.isFileAReferenceARequestToUseThePrevioulsyCompiledVersion(file, referencedAssemblies)
+                                                 .isFalse())
+                                    filesToAdd.Add(file);
                             }
                         }
                         //else if (fileLine.StartsWith(specialO2Tag_ExtraFolder))
@@ -358,7 +380,7 @@ namespace O2.DotNetWrappers.DotNet
                         if (false == sourceCodeFiles.Contains(filePath))
                         {
                             sourceCodeFiles.Add(filePath);
-                            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles); // we need to recursively add new new dependencies 
+                            addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles, referencedAssemblies); // we need to recursively add new new dependencies 
                         }
                     }
                 }               
@@ -438,12 +460,11 @@ namespace O2.DotNetWrappers.DotNet
         {
             // let's add everything in the current executabled dir :)
             var referencedAssemblies = new List<string>();
-            referencedAssemblies.add_OnlyNewItems(getListOfO2AssembliesInExecutionDir());
+            //referencedAssemblies.add_OnlyNewItems(getListOfO2AssembliesInExecutionDir());
             referencedAssemblies.add_OnlyNewItems(lsGACExtraReferencesToAdd); // the a couple from the GAC
             return referencedAssemblies;
         }
-
-        private CSharpCodeProvider cscpCSharpCodeProvider;
+        
         public bool compileSourceFiles(List<String> sourceCodeFiles, String[] sReferenceAssembliesToAdd,
                                              ref Assembly aCompiledAssembly, ref String sErrorMessages,
                                              bool bVerbose, string exeMainClass, string outputAssemblyName)
@@ -466,7 +487,7 @@ namespace O2.DotNetWrappers.DotNet
                     var providerOptions = new Dictionary<string, string> {{"CompilerVersion", "v3.5"}};
                     cscpCSharpCodeProvider = new CSharpCodeProvider(providerOptions);
                 }
-                var cpCompilerParameters = new CompilerParameters
+                cpCompilerParameters = new CompilerParameters
                                                {
                                                    GenerateInMemory = false,
                                                    IncludeDebugInformation = true,
@@ -573,7 +594,7 @@ namespace O2.DotNetWrappers.DotNet
                 treeNode.Nodes.Clear();
                 // this will get the list of files to compile (which includes the extra files referenced in the source code that we want to add to this treeview)
                 var filesToCompile = new List<string> {file};
-                addSourceFileOrFolderIncludedInSourceCode(filesToCompile);
+                addSourceFileOrFolderIncludedInSourceCode(filesToCompile, new List<string>());
                 filesToCompile.Remove(file);
                 foreach (var extraFile in filesToCompile)
                 {                    
@@ -683,6 +704,24 @@ namespace O2.DotNetWrappers.DotNet
                     gacAssemblies.Remove("Microsoft.mshtml");
                 O2Svn.AssembliesCheckedIfExists.add_OnlyNewItems(gacAssemblies);
             }
+        }
+
+        public static bool isFileAReferenceARequestToUseThePrevioulsyCompiledVersion(string fileToResolve, List<string> ReferencedAssemblies)
+        {
+            if (fileToResolve.starts("Ref:"))
+            {
+                fileToResolve = fileToResolve.remove("Ref:");
+                var fileRef = CompileEngine.getCachedCompiledAssembly(fileToResolve);
+
+                if (fileRef.valid() && fileRef.fileExists())
+                {
+                    if (ReferencedAssemblies.contains(fileRef).isFalse())
+                        ReferencedAssemblies.add(fileRef);
+                }                
+                return true;
+            }
+            else
+                return false;
         }
     }
 }

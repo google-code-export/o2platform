@@ -381,30 +381,13 @@ namespace O2.External.SharpDevelop.Ascx
 
         private void menuStripForSourceEdition_Opening(object sender, CancelEventArgs e)
         {
-            addBreakpointOnCurrentLineToolStripMenuItem.Visible = O2Messages.isDebuggerAvailable();
+            //addBreakpointOnCurrentLineToolStripMenuItem.Visible = O2Messages.isDebuggerAvailable();
         }
 
         private void tvCompilationErrors_AfterSelect(object sender, TreeViewEventArgs e)
         {
             showSelectedErrorOnSourceCodeFile();
-        }
-
-        private void openCurrentFileInEditorWithCodeCompleteSupportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // quick hack to show PoC
-            if (sPathToFileLoaded != null)
-            {
-                CSharpEditor.MainForm.addReferencedAssembly(CompileEngine.getListOfO2AssembliesInExecutionDir());
-                O2Thread.staThread(
-                    () =>
-                    {
-                        var form = new O2SharpDevelop.CodeCompletion.form_O2EditorWithCodeComplete(sPathToFileLoaded);
-                        form.setSaveMenuItemSaveState(true);
-                        form.ShowDialog();
-                        form.Dispose();
-                    });
-            }
-        }
+        }       
 
         private void listinLogViewCurrentAssemblyRefernecesAutomaticallyAddedToolStripMenuItem_Click(object sender, EventArgs e)
         {
