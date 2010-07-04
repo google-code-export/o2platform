@@ -19,17 +19,13 @@ using O2.API.Visualization.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
 using DiagramDesigner;
 
+//O2File:Ref:WPF_ExtensionMethods.cs
 
 //O2Ref:WindowsFormsIntegration.dll
-//O2Ref:System.Xml.dll
-//O2Ref:System.Xml.Linq.dll
 //O2Ref:ICSharpCode.AvalonEdit.dll
 //O2Ref:QuickGraph.dll   
 //O2Ref:GraphSharp.dll
 //O2Ref:GraphSharp.Controls.dll
-//O2Ref:PresentationCore.dll
-//O2Ref:WindowsBase.dll
-//O2Ref:PresentationFramework.dll
 //O2Ref:O2_API_Visualization.dll 
 //O2Ref:DiagramDesigner.exe
 

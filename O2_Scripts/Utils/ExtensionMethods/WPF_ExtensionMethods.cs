@@ -2,7 +2,12 @@
 using System;
 
 //O2File:WPF_Controls_ExtensionMethods.cs
-
+//O2File:ElementHost_ExtensionMethods.cs
+//O2File:WPF_WinFormIntegration_ExtensionMethods.cs
+//O2File:GraphLayout_O2CodeStream_ExtensionMethods.cs
+//O2File:VerticesAndEdges_ExtensionMethods.cs
+//O2File:Wpf_TextEditor_ExtensionMethods.cs
+//O2File:XamlCode_ExtensionMethods.cs
 namespace O2.XRules.Database.Utils
 {
     public static class WPF_ExtensionMethods
