@@ -13,8 +13,11 @@ using System.Windows.Controls;
 using O2.API.Visualization.ExtensionMethods;
 using Odyssey.Controls;
 
+//O2File:WPF_Controls_ExtensionMethods.cs
+//O2File:WPF_WinFormIntegration_ExtensionMethods.cs
+//O2File:ElementHost_ExtensionMethods.cs
 
-//O2Ref:C:\_Downloads\odyssey-24878\Odyssey\Demos\bin\Debug\Odyssey.dll
+//O2Ref:Odyssey.dll
 //O2Ref:O2_API_AST.dll
 //O2Ref:O2_API_Visualization.dll
 //O2Ref:PresentationCore.dll
@@ -36,7 +39,7 @@ namespace O2.XRules.Database.APIs
 		
     	public static void launchGui()
     	{
-    	
+    	 
     		var wpfGui = O2Gui.open<WPF_GUI>("O2 WPF Gui");
     		
     		wpfGui.add_OutlookSection("Main", "This is an intro text");

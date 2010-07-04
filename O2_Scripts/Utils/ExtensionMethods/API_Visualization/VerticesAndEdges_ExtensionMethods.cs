@@ -1,18 +1,22 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System.Linq;
 using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+
+using QuickGraph;
+using GraphSharp.Controls;
+using O2.DotNetWrappers.ExtensionMethods;
+
+//O2File:GraphSharp_ExtensionMethods.cs
+
+//O2Ref:GraphSharp.Controls.dll 
+//O2Ref:GraphSharp.dll
+//O2Ref:QuickGraph.dll
 //O2Ref:WindowsBase.dll
 //O2Ref:PresentationCore.dll
 //O2Ref:PresentationFramework.dll
-using System.Windows;
-using System.Windows.Controls;
-//O2Ref:GraphSharp.Controls.dll 
-using GraphSharp.Controls;
-//O2Ref:GraphSharp.dll
-//O2Ref:QuickGraph.dll
-using QuickGraph;
-//O2File:GraphSharp_ExtensionMethods.cs
-using O2.DotNetWrappers.ExtensionMethods;
+
 
 namespace O2.API.Visualization.ExtensionMethods
 {

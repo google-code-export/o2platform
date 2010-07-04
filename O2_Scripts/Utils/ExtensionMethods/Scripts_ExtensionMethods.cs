@@ -11,7 +11,7 @@ using O2.Views.ASCX.Ascx.MainGUI;
 //O2Ref:System.Xml.dll
 //O2Ref:System.Xml.Linq.dll
 
-namespace O2.XRules.Database.Utils.O2
+namespace O2.XRules.Database.Utils
 {
     public static class Scripts_ExecutionMethods
     {

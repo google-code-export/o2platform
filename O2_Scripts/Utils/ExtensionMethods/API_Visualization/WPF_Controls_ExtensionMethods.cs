@@ -15,6 +15,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 using System.IO;
 
+//O2File:WPF_WinFormIntegration_ExtensionMethods.cs
+
+//O2Ref:O2_API_Visualization.dll
+
 namespace O2.API.Visualization.ExtensionMethods
 {
     public static class WPF_Controls_ExtensionMethods

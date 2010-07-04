@@ -12,7 +12,7 @@ using O2.XRules.Database.Utils.O2;
 //O2Ref:O2SharpDevelop.dll
 //O2Ref:O2_External_SharpDevelop.dll
 
-namespace O2.XRules.Database.Utils.O2
+namespace O2.XRules.Database.Utils
 {
     public class ascx_Panel_With_Inspector : Control
     {

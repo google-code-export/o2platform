@@ -32,7 +32,7 @@ using O2.Core.XRules.Classes;
 using O2.Core.XRules.XRulesEngine;
 using O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods;
 
-namespace O2.Core.XRules._Wizards
+namespace O2.XRules.Database.Utils
 {		
     [O2Wizard]
 	public class Wizard_SyncXRulesViaSvn
