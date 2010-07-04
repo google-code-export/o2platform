@@ -11,6 +11,13 @@ using GraphSharp.Controls;
 using O2.API.Visualization.Xaml;
 using O2.API.Visualization.ExtensionMethods;
 
+//O2File:Xaml_ExtensionMethods.cs
+//O2File:WPF_Controls_ExtensionMethods.cs
+//O2File:GraphSharp_ExtensionMethods.cs
+
+//O2Ref:ICSharpCode.AvalonEdit.dll
+//O2Ref:WindowsFormsIntegration.dll
+
 namespace O2.API.Visualization.ExtensionMethods
 {
     public static class WPF_TextEditor_ExtensionMethods

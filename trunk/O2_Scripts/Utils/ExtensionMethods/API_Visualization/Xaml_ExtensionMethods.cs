@@ -11,6 +11,13 @@ using System.Windows.Controls;
 using System.IO;
 using System.Xml;
 
+//O2File:WPF_Controls_ExtensionMethods.cs
+
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:GraphSharp.dll
+//O2Ref:QuickGraph.dll
+//O2Ref:GraphSharp.Controls.dll 
+
 namespace O2.API.Visualization.ExtensionMethods
 {
     public static class Xaml_ExtensionMethods

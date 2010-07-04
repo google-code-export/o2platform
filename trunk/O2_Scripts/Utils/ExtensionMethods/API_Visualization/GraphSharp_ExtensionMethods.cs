@@ -1,24 +1,30 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
-using System.Linq;
-using System.Collections.Generic;
-using O2.Kernel.ExtensionMethods;
-using O2.DotNetWrappers.ExtensionMethods;
-//O2Ref:GraphSharp.Controls.dll 
-using GraphSharp.Controls;
-//O2Ref:GraphSharp.dll
-//O2Ref:QuickGraph.dll
-using QuickGraph;
-//O2Ref:PresentationCore.dll
-//O2Ref:PresentationFramework.dll
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System;
-using O2.API.AST.ExtensionMethods;
+using System.Linq;
+using System.Collections.Generic;
+using GraphSharp.Controls;
+using QuickGraph;
 using GraphSharp.Algorithms.Layout.Simple.Tree;
 using GraphSharp.Algorithms.Layout;
-//O2File:WPF_Threading_ExtensionMethods.cs
-//O2File:GraphFactory.cs
+using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.API.AST.ExtensionMethods;
+using O2.API.Visualization.ExtensionMethods;
+
+
+//O2File:WPF_Controls_ExtensionMethods.cs
+//O2File:GraphLayout_WPF_ExtensionMethods.cs
+
+//O2Ref:GraphSharp.dll
+//O2Ref:QuickGraph.dll
+//O2Ref:GraphSharp.Controls.dll 
+//O2Ref:PresentationCore.dll
+//O2Ref:PresentationFramework.dll
+//O2Ref:O2_API_AST.dll
+//O2Ref:O2_API_Visualization.dll
 
 namespace O2.API.Visualization.ExtensionMethods
 {

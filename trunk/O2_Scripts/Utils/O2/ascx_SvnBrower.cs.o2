@@ -31,7 +31,7 @@ using System.IO;
 using O2.Kernel.CodeUtils;
 using System.Threading;
 
-namespace O2.Core.XRules.Ascx
+namespace O2.XRules.Database.Utils
 {	    
   	public class ascx_SvnBrowser : UserControl
 	{

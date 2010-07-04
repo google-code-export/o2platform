@@ -1,7 +1,12 @@
 using System;
+using System.Xml;
 using System.Web;
+using System.Data;
 using System.Web.UI.WebControls;
 using System.Web.Services.Protocols;
+//O2Ref:System.Web.Services.dll
+//O2Ref:System.Data.dll
+
 namespace HacmeBank_v2_Website.ascx.admin
 {
 	public class Sql_Query : System.Web.UI.UserControl
@@ -10,8 +15,7 @@ namespace HacmeBank_v2_Website.ascx.admin
 		protected System.Web.UI.WebControls.DataGrid dgQueryResult;
 		protected System.Web.UI.WebControls.TextBox txtSqlQueryToExecute;
 		protected void btExecuteQuery_Click(object sender, System.EventArgs e)
-		{
-			txtSqlQueryToExecute = sender;
+		{			
 			populateDataGridWithSqlQueryResults();
 		}
 		private void populateDataGridWithSqlQueryResults()
@@ -69,10 +73,11 @@ namespace System.Web.Services.Protocols
 			throw new System.Exception("O2 Auto Generated Method");
 		}
 	}
+	/*
 	public class SoapParameterStyle : System.Enum, System.IComparable, System.IFormattable, System.IConvertible
 	{
 		//public static const System.Web.Services.Protocols.SoapParameterStyle Wrapped;
-	}
+	}*/
 }
 namespace System.Web.UI.WebControls
 {
@@ -91,6 +96,7 @@ namespace System.Web.UI.WebControls
 			throw new System.Exception("O2 Auto Generated Method");
 		}
 	}
+	/*
 	public class DataGridColumn : System.Web.UI.IStateManager
 	{
 		public virtual string HeaderText {
@@ -101,7 +107,7 @@ namespace System.Web.UI.WebControls
 				throw new NotImplementedException();
 			}
 		}
-	}
+	}*/
 }
 namespace System.Web
 {
@@ -117,7 +123,7 @@ namespace System.Web
 		}
 	}
 }
-namespace System
+/*namespace System
 {
 	public class Int32 : System.ValueType, System.IComparable, System.IFormattable, System.IConvertible, System.IComparable, System.IEquatable
 	{
@@ -135,13 +141,14 @@ namespace System
 		}
 	}
 }
+
 namespace System.Web.Services.Description
 {
 	public class SoapBindingUse : System.Enum, System.IComparable, System.IFormattable, System.IConvertible
 	{
 		//public static const System.Web.Services.Description.SoapBindingUse Literal;
 	}
-}
+}*/
 namespace HacmeBank_v2_Website
 {
 	public class Global : System.Web.HttpApplication
@@ -149,7 +156,8 @@ namespace HacmeBank_v2_Website
 		public static WS_AccountManagement objAccountManagement;
 	}
 }
-namespace System.Web.UI
+
+/*namespace System.Web.UI
 {
 	public class UserControl : System.Web.UI.TemplateControl, System.ComponentModel.IComponent, System.IDisposable, System.Web.UI.IParserAccessor, System.Web.UI.IUrlResolutionService, System.Web.UI.IDataBindingsAccessor, System.Web.UI.IControlBuilderAccessor, System.Web.UI.IControlDesignerAccessor, System.Web.UI.IExpressionsAccessor, System.Web.UI.INamingContainer, System.Web.UI.IFilterResolutionService, System.Web.UI.IAttributeAccessor, System.Web.UI.INonBindingContainer, System.Web.UI.IUserControlDesignerAccessor
 	{
@@ -159,4 +167,4 @@ namespace System.Web.UI
 			}
 		}
 	}
-}
+}*/

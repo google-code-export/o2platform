@@ -8,6 +8,16 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.API.AST.Graph;
 
+//O2File:WPF_Controls_ExtensionMethods.cs
+//O2File:GraphLayout_WPF_ExtensionMethods.cs
+//O2File:GraphSharp_ExtensionMethods.cs
+
+//O2Ref:Quickgraph.dll
+//O2Ref:GraphSharp.dll
+//O2Ref:GraphSharp.Controls.dll
+//O2Ref:O2_API_AST.dll
+
+
 namespace O2.API.Visualization.ExtensionMethods
 {
     public static class GraphLayout_O2CodeStream_ExtensionMethods
