@@ -16,18 +16,6 @@ namespace O2.Core.XRules.XRulesEngine
            // else
            //     DI.log.info("There is no xRulesDatabase available");
         }
-        
-        public static void loadXRulesTemplates(ListBox lbTargetListBox)
-        {
-            lbTargetListBox.invokeOnThread(
-                () =>
-                    {
-                        lbTargetListBox.Items.Clear();
-                        lbTargetListBox.Items.AddRange(
-                            Files.getFilesFromDir(XRules_Config.PathTo_XRulesTemplates).ToArray());
-                        if (lbTargetListBox.Items.Count > 0)
-                            lbTargetListBox.SelectedIndex = 0;
-                    });
-        }
+                
     }
 }
