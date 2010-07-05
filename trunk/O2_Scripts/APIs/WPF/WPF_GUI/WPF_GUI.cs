@@ -206,11 +206,14 @@ namespace O2.XRules.Database.APIs
     		wpf_Gui.statusMessage("Showing YouTube Video with Id:{0}",youTubeVideoId);
     		wpf_Gui.WinFormPanel.clear();    		
 			wpf_Gui.WinFormPanel.add_Control(wpf_Gui.O2Browser);
-			var code = 	"<objec ><param name=\"movie\" "+
-						"value=\"http://www.youtube.com/v/1bbKNvyvLO0&amp;hl=en_GB&amp;fs=1\"></param><param name=\"allowFullScreen\" "+
-						"value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed "+
-						"src=\"http://www.youtube.com/v/1bbKNvyvLO0&amp;hl=en_GB&amp;fs=1\" type=\"application/x-shockwave-flash\" "+
-						"allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"480\" height=\"385\"></embed></object>";
+			var code = ("<html><body cellspacing=\"0\" cellpadding=\"0\">" + 
+					    "<object><param name=\"movie\" width=\"450\" height=\"380\" "+
+						"value=\"http://www.youtube.com/v/{0}&amp;hl=en_GB&amp;fs=1\"></param><param name=\"allowFullScreen\" "+
+						"value=\"false\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed "+
+						"src=\"http://www.youtube.com/v/{0}&amp;hl=en_GB&amp;fs=1\" type=\"application/x-shockwave-flash\" "+
+						"allowscriptaccess=\"always\" allowfullscreen=\"false\" width=\"450\" height=\"380\"></embed></object>"  + 
+						"</body></html>")
+						.format(youTubeVideoId);
 			wpf_Gui.O2Browser.set_Text(code);
 			return wpf_Gui;
     	}    	    	
@@ -271,7 +274,7 @@ namespace O2.XRules.Database.APIs
 		
 		public static WPF_GUI_Section add_Label(this WPF_GUI_Section section, string labelText)
 		{
-			return section.add_Label(labelText,true);
+			return section.add_Label(labelText,false);
 		}
 		
 		public static WPF_GUI_Section add_Label(this WPF_GUI_Section section, string labelText, bool bold)
