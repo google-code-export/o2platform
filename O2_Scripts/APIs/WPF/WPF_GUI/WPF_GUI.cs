@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using WinForms = System.Windows.Forms;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.IE.ExtensionMethods;
@@ -14,6 +15,7 @@ using O2.External.IE.Wrapper;
 using System.Windows;
 using System.Windows.Controls;
 using O2.API.Visualization.ExtensionMethods;
+using O2.XRules.Database;
 using Odyssey.Controls;
 
 //O2File:WPF_Controls_ExtensionMethods.cs
@@ -43,8 +45,10 @@ namespace O2.XRules.Database.APIs
     	public OutlookBar GUI_OutlookBar { get; set; }
 		public WinForms.Panel WinFormPanel { get; set; }
 		public O2BrowserIE O2Browser { get; set; }
-		//public List<WPF_GUI_Section> Sections { get; set;}
+		public List<WPF_GUI_Section> GuiSections { get; set;}
 		public O2PlatformWikiAPI Wiki_O2 { get; set; }
+		public WinForms.ToolStripStatusLabel StatusLabel { get; set; }
+		public ascx_Execute_Scripts ExecuteScripts { get; set; }
 		
     	public static void testGui()
     	{    	 
@@ -59,19 +63,16 @@ namespace O2.XRules.Database.APIs
 			wpfGui.add_Section("Section 6");
 			wpfGui.add_Section("Section 7");			
 			
-			
-			
-
-			
     	}
     
     	public WPF_GUI()
     	{
     		this.Width = 640;    		
-    		this.Height = 320;    		
+    		this.Height = 420;    		
     		//buildGui();
-    		//Sections= new List<WPF_GUI_Section>();
+    		GuiSections = new List<WPF_GUI_Section>();
     		Wiki_O2 = new O2PlatformWikiAPI();
+    		ExecuteScripts = new ascx_Execute_Scripts();
     	}
     	
     	/*public WPF_GUI buildGui(List<WPF_GUI_Section> sections)
@@ -100,12 +101,12 @@ namespace O2.XRules.Database.APIs
 						
 						var userControl = dockPanel.add_WinForms_Panel()
 												   .add_Control<WinForms.UserControl>();
-						var statusLabel = userControl.add_StatusStrip(Color.White);									   
+						StatusLabel = userControl.add_StatusStrip(Color.White);									   
 						WinFormPanel = userControl.add_Panel();						
 						
 						O2Browser  = WinFormPanel.add_Browser();
     					O2Browser.silent(true);
-    					
+    					statusMessage("WPF GUI built");
 						//WinFormPanel.backColor(Color.White);			
 						/**add_Sections();
 						if (Sections.size() > 0 && Sections[0].WinFormsControl.notNull())
@@ -113,15 +114,31 @@ namespace O2.XRules.Database.APIs
 						return this;
 					});
     	}
-				
+		
+		public WPF_GUI statusMessage(string messageFormat, params object[] messageParams)
+		{
+			return statusMessage(messageFormat.format(messageParams));
+		}
+		
+		public WPF_GUI statusMessage(string message)
+		{
+			StatusLabel.set_Text(message);		
+			return this;
+		}			
     	
     	public WPF_GUI_Section add_Section(string name)
     	{
     		return add_Section(name, "");
     	}
+    	
     	public WPF_GUI_Section add_Section(string name, string introText)
     	{
     		return add_Section(new WPF_GUI_Section(name,introText));
+    	}
+    	
+    	public WPF_GUI_Section add_Section(string name, string introText,  Func<WinForms.Control> winFormsCtor)
+    	{
+    		return add_Section(new WPF_GUI_Section(name,introText,winFormsCtor));
     	}
     	
     	public WPF_GUI_Section add_Section(WPF_GUI_Section section)
@@ -129,7 +146,8 @@ namespace O2.XRules.Database.APIs
     		section.Wpf_Gui = this;
 			return (WPF_GUI_Section)this.invokeOnThread(
     			()=>{
-    					var outlookSection = new  OutlookSection();
+    					var outlookSection = new  OutlookSection();    				
+    					
     					section.SectionInGui = outlookSection;
 						outlookSection.Header = section.Name;
 						var stackPanel = outlookSection.add_StackPanel();						
@@ -154,16 +172,9 @@ namespace O2.XRules.Database.APIs
 												WinFormPanel.add_Control(section.WinFormsControl);
 											}
 										};
-						//wrapPanel.add_Control_Wpf<Button>();
-						
-						
-						
-						
-						//outlookSection.Visibility = Visibility.Hidden;
-						//outlookSection
 						
 						GUI_OutlookBar.Sections.Add(outlookSection);												
-						
+						GuiSections.Add(section);
 						return section;
 					});
 		}    	    	    	    	
@@ -171,9 +182,19 @@ namespace O2.XRules.Database.APIs
     
     public static class WPF_GUI_ExtensionMethods_Show
     {
+    	public static WPF_GUI showFirstWinFormsPanel(this WPF_GUI wpf_Gui)
+    	{
+    		foreach(var section in wpf_Gui.GuiSections)
+    			if (section.WinFormsControl.notNull())
+    				wpf_Gui.WinFormPanel.clear()
+    									.add_Control(section.WinFormsControl);
+			return wpf_Gui;
+    	}
+   
     
     	public static WPF_GUI show_Url(this WPF_GUI wpf_Gui, string url)
     	{
+    		wpf_Gui.statusMessage("Showing URL:{0}",url);
     		wpf_Gui.WinFormPanel.clear();    		
 			wpf_Gui.WinFormPanel.add_Control(wpf_Gui.O2Browser);
     		wpf_Gui.O2Browser.open(url);
@@ -182,6 +203,9 @@ namespace O2.XRules.Database.APIs
     	
     	public static WPF_GUI show_YouTubeVideo(this WPF_GUI wpf_Gui,string youTubeVideoId)
     	{
+    		wpf_Gui.statusMessage("Showing YouTube Video with Id:{0}",youTubeVideoId);
+    		wpf_Gui.WinFormPanel.clear();    		
+			wpf_Gui.WinFormPanel.add_Control(wpf_Gui.O2Browser);
 			var code = 	"<objec ><param name=\"movie\" "+
 						"value=\"http://www.youtube.com/v/1bbKNvyvLO0&amp;hl=en_GB&amp;fs=1\"></param><param name=\"allowFullScreen\" "+
 						"value=\"true\"></param><param name=\"allowscriptaccess\" value=\"always\"></param><embed "+
@@ -193,7 +217,15 @@ namespace O2.XRules.Database.APIs
     	
     	public static WPF_GUI show_O2Wiki(this WPF_GUI wpf_Gui,string wikiPageToShow)
     	{
+    		wpf_Gui.statusMessage("Showing O2Platform Wiki page: {0}",wikiPageToShow);
     		wpf_Gui.O2Browser.set_Text(wpf_Gui.Wiki_O2.html(wikiPageToShow));//"O2_Videos_on_YouTube"));    		
+    		return wpf_Gui;
+    	}
+    	
+    	public static WPF_GUI start_Process(this WPF_GUI wpf_Gui,string processToStart)
+    	{
+    		wpf_Gui.statusMessage("Starting process: {0}",processToStart);
+    		Processes.startProcess(processToStart);
     		return wpf_Gui;
     	}
     }
@@ -208,11 +240,17 @@ namespace O2.XRules.Database.APIs
     	public WrapPanel ContentPanel { get; set;}
     	public OutlookSection SectionInGui { get; set;}
     	    	
-    	public WPF_GUI_Section (string name, string introText)
+    	public WPF_GUI_Section (string name, string introText) : this (name,introText,null)
+    	{    		
+    	}
+    	
+    	public WPF_GUI_Section (string name, string introText, Func<WinForms.Control> winFormsCtor)
     	{
     		Name = name;    	 	
     	 	IntroText = introText;
+    	 	WinFormsCtor = winFormsCtor;
     	}
+    	
     	
     }
     
@@ -230,6 +268,17 @@ namespace O2.XRules.Database.APIs
 			sections.Add(newSection);
 			return newSection;
     	}
+		
+		public static WPF_GUI_Section add_Label(this WPF_GUI_Section section, string labelText)
+		{
+			return section.add_Label(labelText,true);
+		}
+		
+		public static WPF_GUI_Section add_Label(this WPF_GUI_Section section, string labelText, bool bold)
+		{				
+			section.ContentPanel.add_Label_Wpf(labelText, bold);			
+			return section;
+		}
 		
 		public static WPF_GUI_Section add_Link(this WPF_GUI_Section section, string linkText, Action onCLick)
 		{			
@@ -254,19 +303,16 @@ namespace O2.XRules.Database.APIs
 		{			
 			return section.add_Link(linkText, ()=> section.Wpf_Gui.show_O2Wiki(wikiPageToShow));						
 		}
-				
-		/*		public static WPF_GUI_Section add_WebLink(this WPF_GUI_Section section, string linkText, string linkUrl)
+		
+		public static WPF_GUI_Section add_Link_Process(this WPF_GUI_Section section, string linkText, string processToStart)
 		{			
-			return (WPF_GUI_Section)section.SectionInGui.wpfInvoke(
-				()=>{
-						section.ContentPanel.add_Xaml_Link(linkText,()=> section.Wpf_Gui.showUrl(linkUrl));
-						return section;
-					});								
+			return section.add_Link(linkText, ()=> section.Wpf_Gui.start_Process(processToStart));						
 		}
 		
-		public static 
+		public static WPF_GUI_Section add_Link_O2Script(this WPF_GUI_Section section, string linkText, string o2ScriptToExecute)
+		{			
+			return section.add_Link(linkText,()=> section.Wpf_Gui.ExecuteScripts.loadFile(o2ScriptToExecute.local()));
+		}
 		
-
-		*/
     }
 }
