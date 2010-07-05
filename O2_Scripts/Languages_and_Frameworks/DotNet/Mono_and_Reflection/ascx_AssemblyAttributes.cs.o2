@@ -14,7 +14,6 @@ using O2.Interfaces.Views;
 using O2.Kernel.InterfacesBaseImpl;
 using O2.Kernel.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
-//O2File:extra.cs
 //O2Ref:System.Xml.dll
 //O2Ref:System.Xml.Linq.dll
 

@@ -31,6 +31,13 @@ namespace O2.XRules.Database.APIs
     		button.onClick_Wpf(onClickCallback);
     		return button;
     	}
+    	
+    	public static Button add_Xaml_Link(this UIElement uiElement, string linkText, Action onClickCallback)
+    	{
+    		var link = uiElement.xaml_CreateUIElement<Button>(XamlCode.link(linkText));	 
+    		link.onClick_Wpf(onClickCallback);
+    		return link;
+    	}    	    	    	
     }
     
 }
