@@ -67,6 +67,14 @@
     <Reference Include="Cropper">
       <HintPath>..\_3rdPartyDlls\Cropper.exe</HintPath>
     </Reference>
+    <Reference Include="GraphSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\GraphSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphSharp.Controls, Version=1.0.3438.42543, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\GraphSharp.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="HTMLparserLibDotNet20, Version=3.1.4.235, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\HTMLparserLibDotNet20.dll</HintPath>
@@ -78,6 +86,14 @@
     <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
+    </Reference>
+    <Reference Include="Odyssey, Version=1.4.22.23608, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Odyssey.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\QuickGraph.dll</HintPath>
     </Reference>
     <Reference Include="SharpSvn, Version=1.6006.1373.40218, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -96,6 +112,10 @@
     <Reference Include="WatiN.Core.1x, Version=1.3.0.4000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\WatiN.Core.1x.dll</HintPath>
+    </Reference>
+    <Reference Include="WPFExtensions, Version=1.0.3437.34043, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\WPFExtensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +194,10 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_IE\O2_External_IE.csproj">
+      <Project>{F6942664-5E64-4182-B3EB-11F481F461FB}</Project>
+      <Name>O2_External_IE</Name>
+    </ProjectReference>
     <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
       <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
       <Name>O2_External_SharpDevelop</Name>
@@ -193,6 +217,10 @@
     <ProjectReference Include="..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
       <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
       <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_APIs\O2_API_Visualization\O2_API_Visualization.csproj">
+      <Project>{7226283F-7C31-4EBB-9940-97AB0F676319}</Project>
+      <Name>O2_API_Visualization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
