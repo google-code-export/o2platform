@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>//panel.clear();
+var wpfGui = O2Gui.open&lt;WPF_GUI&gt;("O2 WPF Gui");
+//var wpfGui = panel.add_Control&lt;WPF_GUI&gt;();  
+wpfGui.buildGui();
+
+wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform. If you are looking where to start, select one of the areas below and follow the links")
+	  .add_Link_Web("bbc","http://news.bbc.co.uk")
+	  .add_Link_YouTube("you tube video","http://news.bbc.co.uk")
+	  .add_Link_O2Wiki("Documentation","Documentation");
+wpfGui.add_Section("Penetration Testing");
+	    //.add_Link("aaaa","asdasda");		
+		
+wpfGui.add_Section("Source-Code Reviews");										
+wpfGui.add_Section("Productivity Tools")
+	  .add_Link_Web("google","http://www.google.com");					 
+wpfGui.add_Section("OWASP Projects");
+wpfGui.add_Section("API Development Environment");
+wpfGui.add_Section("Videos");
+wpfGui.add_Section("Help");
+
+/*
+wpfGui.add_OutlookSection("Main", "Welcome to the OWASP O2 Platform. If you are looking where to start, select one of the areas below and follow the links");
+
+*/
+return null;
+
+//O2File:WPF_Gui.cs
+//O2Ref:Odyssey.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
