@@ -21,9 +21,8 @@ using System.IO;
 
 namespace O2.API.Visualization.ExtensionMethods
 {
-    public static class WPF_Controls_ExtensionMethods
-    {    
-	
+    public static class WPF_Controls_ExtensionMethods_Generic
+    {    	
 		#region generic methods								
     	
         public static T createInThread_Wpf<T>(this UIElement uiElement)
@@ -222,7 +221,10 @@ namespace O2.API.Visualization.ExtensionMethods
             return (Brush)control.wpfInvoke(() => control.Foreground);
         }
 		#endregion
-
+	}
+	
+	public static class WPF_Controls_ExtensionMethods_WPF_Child_Controls
+	{
         #region WPF child controls
 
         	public static List<T> allUIElements<T>(this UIElement uiElement)
@@ -289,6 +291,10 @@ namespace O2.API.Visualization.ExtensionMethods
 
         #endregion
 
+	}
+	
+	public static class WPF_Controls_ExtensionMethods_Label
+	{	
         #region Label
 
         public static Label set_Text(this Label label, string value)
@@ -299,7 +305,11 @@ namespace O2.API.Visualization.ExtensionMethods
     	}
     	
     	#endregion
-    	    	        	
+ 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_TextBox
+	{
     	#region TextBox
 		
 		public static TextBox set_Text(this TextBox textBox, string value)
@@ -339,7 +349,10 @@ namespace O2.API.Visualization.ExtensionMethods
                 });
         }
     	#endregion
-               
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_FrameworkElement
+	{               
         #region FrameworkElement
 
         // this is the generic one
@@ -546,6 +559,10 @@ textBox1.prop("",true);
     	
     	#endregion
 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_TreeView
+	{
         #region TreeView
 
         public static TreeView add_WPF_TreeView(this System.Windows.Forms.Control control)
@@ -761,6 +778,11 @@ textBox1.prop("",true);
 
         #endregion
 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_Image
+	{
+	
         #region Image
 
         public static Image open(this Image image, string imageLocation)
@@ -925,6 +947,11 @@ textBox1.prop("",true);
 
         #endregion
 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_ComboBox
+	{
+	
         #region ComboBox
 
         public static ComboBox add_Item(this ComboBox comboBox, string itemText)
@@ -971,6 +998,12 @@ textBox1.prop("",true);
 
         #endregion
 
+
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_Button
+	{
+	
         #region Button
 
         public static Button onClick_Wpf(this Button button, Action callback)
@@ -984,6 +1017,11 @@ textBox1.prop("",true);
         }
 
         #endregion
+
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_ListView
+	{
 
         #region ListView        
 
@@ -1184,6 +1222,10 @@ textBox1.prop("",true);
 		
         #endregion
 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_StackPanel
+	{	
         #region StackPanel
 
         public static StackPanel add_StackPanel(this UIElement uiElement)
@@ -1193,6 +1235,47 @@ textBox1.prop("",true);
 
         #endregion
 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_WrapPanel
+	{	
+        #region WrapPanel
+
+        public static WrapPanel add_WrapPanel(this UIElement uiElement)
+        {
+            return uiElement.add_Control_Wpf<WrapPanel>();
+        }
+
+        #endregion
+
+ 	}
+ 	
+ 	public static class WPF_Controls_ExtensionMethods_TextBlock
+	{	
+        #region WrapPanel
+
+        public static TextBlock add_TextBlock(this UIElement uiElement)
+        {
+            var textBlock = uiElement.add_Control_Wpf<TextBlock>();
+            textBlock.TextWrapping = TextWrapping.Wrap;
+            textBlock.Padding = new Thickness(4);
+            return textBlock;
+        }
+        
+        public static TextBlock set_Text_Wpf(this TextBlock textBlock, string text)
+        {
+        	
+        	textBlock.wpfInvoke(()=> textBlock.Text = text);
+            return textBlock;
+        }
+
+        #endregion
+
+ 	}
+
+	public static class WPF_Controls_ExtensionMethods_Grid
+	{
+	
         #region Grid
 
         public static Grid add_Grid(this UIElement uiElement)
@@ -1202,6 +1285,11 @@ textBox1.prop("",true);
 
         #endregion
 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_WebBrowser
+	{
+	
         #region WebBrowser (WPF one which is a wrapper on the WinForms one)
 
         public static WebBrowser open(this WebBrowser webBrowser, string url)
@@ -1216,6 +1304,10 @@ textBox1.prop("",true);
 
         #endregion
 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_Control
+	{
         #region Control - foreground text Color
 
         public static T color<T>(this T control, string colorName) where T : Control
@@ -1244,6 +1336,10 @@ textBox1.prop("",true);
       
         #endregion
 
+ 	}
+	
+	public static class WPF_Controls_ExtensionMethods_Animation
+	{
         #region Animation
 
         public static T rotate<T>(this T uiElement)

@@ -15,26 +15,40 @@ var targetFiles = localScriptFolder.files("*.cs",true);
 targetFiles.add(localScriptFolder.files("*.o2",true));
 targetFiles.add(localScriptFolder.files("*.h2",true));
 var filesToCompile = targetFiles.size(); 
+var compiledFiles = 0;
 progressBar.maximum(filesToCompile); 
 "There are {0} files to compile".info(filesToCompile);
-var compiledFiles = 0;
+
 foreach(var file in targetFiles) 
 {				
 	"[{0}/{1}] Compiling: {2}".info(compiledFiles++, filesToCompile, file);
-	var compiler1Result = file.extension(".h2")
-							? (file.compile_H2Script() != null)
-							: (file.compile() != null);
+	var compiler1Result = true;
+	var compiler2Result = true;
+	var rowId = 0;
+	
+	if (file.extension(".h2"))
+		compiler1Result = file.compile_H2Script() != null;
+	else
+		if (file.extension(".o2")) 
+			compiler1Result = (file.compile() != null);
 		
-	var compiler2Result = file.extension(".h2")
-							? compiler1Result 
-							: (new O2.DotNetWrappers.DotNet.CompileEngine().compileSourceFile(file) != null); 
-	var rowId = file.extension(".h2")
-							? dataGridView.add_Row(file,compiler1Result, compiler1Result)
-							: dataGridView.add_Row(file,compiler1Result, compiler2Result);
+	if (file.extension(".h2").isFalse())
+		compiler2Result = (new O2.DotNetWrappers.DotNet.CompileEngine().compileSourceFile(file) != null); 
+							
+	if (file.extension(".h2"))
+		rowId = dataGridView.add_Row(file,compiler1Result, compiler1Result);
+	else
+		if (file.extension(".o2"))	
+			rowId = dataGridView.add_Row(file,compiler1Result, compiler2Result);
+		else
+			rowId = dataGridView.add_Row(file,compiler2Result, compiler2Result);
+			
 	dataGridView.get_Row(rowId).Cells[0].Style.ForeColor = (compiler1Result &amp;&amp; compiler2Result) ? Color.Green : Color.Red;
 	dataGridView.get_Row(rowId).Cells[1].Style.ForeColor = (compiler1Result) ? Color.Green : Color.Red;
 	dataGridView.get_Row(rowId).Cells[2].Style.ForeColor = (compiler2Result) ? Color.Green : Color.Red;
 	progressBar.increment(1); 		
+//	if (compiledFiles &gt; 50)
+//		break;
 }
  
 //O2Ref:System.Data.dll

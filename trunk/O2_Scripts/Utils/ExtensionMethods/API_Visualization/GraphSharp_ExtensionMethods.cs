@@ -21,8 +21,6 @@ using O2.API.Visualization.ExtensionMethods;
 //O2Ref:GraphSharp.dll
 //O2Ref:QuickGraph.dll
 //O2Ref:GraphSharp.Controls.dll 
-//O2Ref:PresentationCore.dll
-//O2Ref:PresentationFramework.dll
 //O2Ref:O2_API_AST.dll
 //O2Ref:O2_API_Visualization.dll
 
