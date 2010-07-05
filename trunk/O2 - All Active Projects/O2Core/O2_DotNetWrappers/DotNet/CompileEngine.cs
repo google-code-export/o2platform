@@ -405,8 +405,10 @@ namespace O2.DotNetWrappers.DotNet
             foreach( var sourceCodeFile in sourceCodeFiles)
             {
                 // handle special case where we want (for performace & other reasons) be explicit on the references we add to the current script
+                // note that the special tag must be the first line of the source code file
+                // (this case is a bit of a legacy from the earlier versions of this code which did not had good support for References)
                 var sourceCode = Files.getFileContents(sourceCodeFile);
-                if (sourceCode.Contains(onlyAddReferencedAssemblies))
+                if (sourceCode.starts("//"+ onlyAddReferencedAssemblies))
                 {
                     referencedAssemblies.Clear();
                     break;              // once one the files has the onlyAddReferencedAssemblies ref, we can clear the referencedAssemblies and break the loop

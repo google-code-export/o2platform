@@ -48,11 +48,22 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static Assembly compile_H2Script(this string h2Script)
         {
-            var sourceCode = "";
-            if (h2Script.extension(".h2"))
-                sourceCode = H2.load(h2Script).SourceCode;            
-            if (sourceCode.valid())
-                return sourceCode.compile_CodeSnippet();
+            try
+            {                
+                var sourceCode = "";
+                if (h2Script.extension(".h2"))
+                {
+                    if (h2Script.fileExists().isFalse())
+                        h2Script = h2Script.local();
+                    sourceCode = H2.load(h2Script).SourceCode;
+                }
+                if (sourceCode.valid())
+                    return sourceCode.compile_CodeSnippet();
+            }
+            catch (Exception ex)
+            {
+                ex.log("in string compile_H2Script");
+            }
             return null;
         }
 
