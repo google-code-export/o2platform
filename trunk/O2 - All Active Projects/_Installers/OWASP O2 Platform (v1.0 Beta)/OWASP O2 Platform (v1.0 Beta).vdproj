@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:OWASP O2 Platform (v1.0 Beta)"
+"ProjectName" = "8:OWASP O2 Platform (v1.1 Beta)"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -117,6 +117,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4A95A3A3F22FE4F71AB39B116E3D68B5"
+        "OwnerKey" = "8:_8DC1BC186D4342D7BB8A89529A9EB024"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5CED0AB6556956CA94368DBE33E5624E"
         "OwnerKey" = "8:_63CEABA2E6684CB9B10A0A6702006562"
         "MsmSig" = "8:_UNDEFINED"
@@ -197,6 +203,18 @@
         {
         "MsmKey" = "8:_7A852A56F0F4E5C9DCF9078CA08D2066"
         "OwnerKey" = "8:_63CEABA2E6684CB9B10A0A6702006562"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8DC1BC186D4342D7BB8A89529A9EB024"
+        "OwnerKey" = "8:_63CEABA2E6684CB9B10A0A6702006562"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8DC1BC186D4342D7BB8A89529A9EB024"
+        "OwnerKey" = "8:_F3D4B0C6A0AC86B1441BC14B7DF32DBF"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -321,6 +339,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F3D4B0C6A0AC86B1441BC14B7DF32DBF"
+        "OwnerKey" = "8:_63CEABA2E6684CB9B10A0A6702006562"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_FA592703FA2F5D2CF673D4AB2A34EA2F"
         "OwnerKey" = "8:_63CEABA2E6684CB9B10A0A6702006562"
         "MsmSig" = "8:_UNDEFINED"
@@ -388,6 +412,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F3D4B0C6A0AC86B1441BC14B7DF32DBF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_5CED0AB6556956CA94368DBE33E5624E"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -442,6 +472,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_8DC1BC186D4342D7BB8A89529A9EB024"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_1CEDBCF49E6666933002491622DC8CAD"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -459,11 +495,11 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:..\\..\\..\\_O2_Installers\\OWASP O2 Platform (v1.0 Beta).msi"
+        "OutputFilename" = "8:..\\..\\..\\_O2_Installers\\OWASP O2 Platform (v1.1 Beta).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
-        "Compression" = "3:2"
+        "Compression" = "3:3"
         "SignOutput" = "11:FALSE"
         "CertificateFile" = "8:"
         "PrivateKeyFile" = "8:"
@@ -793,6 +829,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4A95A3A3F22FE4F71AB39B116E3D68B5"
+            {
+            "SourcePath" = "8:shdocvw.dll"
+            "TargetName" = "8:shdocvw.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_E48D74D0F08D4155A5112C0E735480D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:4"
+            "Exclude" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5CED0AB6556956CA94368DBE33E5624E"
             {
             "AssemblyRegister" = "3:1"
@@ -915,6 +971,37 @@
                     }
                 }
             "SourcePath" = "8:Ionic.Zip.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E48D74D0F08D4155A5112C0E735480D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8DC1BC186D4342D7BB8A89529A9EB024"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Interop.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_8DC1BC186D4342D7BB8A89529A9EB024"
+                    {
+                    "Name" = "8:Interop.SHDocVw.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Interop.SHDocVw.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_E48D74D0F08D4155A5112C0E735480D9"
@@ -1169,6 +1256,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F3D4B0C6A0AC86B1441BC14B7DF32DBF"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:WatiN.Core.1x, Version=1.3.0.4000, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_F3D4B0C6A0AC86B1441BC14B7DF32DBF"
+                    {
+                    "Name" = "8:WatiN.Core.1x.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:WatiN.Core.1x.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E48D74D0F08D4155A5112C0E735480D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FA592703FA2F5D2CF673D4AB2A34EA2F"
             {
             "AssemblyRegister" = "3:1"
@@ -1354,9 +1472,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:OWASP O2 Platform (v1.0 Beta)"
+        "ProductName" = "8:OWASP O2 Platform (v1.1 Beta)"
         "ProductCode" = "8:{CEB5335E-70C4-4D4D-8687-CC95DA1B5820}"
-        "PackageCode" = "8:{D6B25EE4-972C-4018-9BAA-C21254B58B04}"
+        "PackageCode" = "8:{80E66B5B-20FB-4CDE-ABE0-78CCC308B7DF}"
         "UpgradeCode" = "8:{4AB6E547-C472-428D-9176-9535C2D299D9}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -1366,7 +1484,7 @@
         "Manufacturer" = "8:OWASP O2 Platform"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.o2-platform.com"
-        "Title" = "8:OWASP O2 Platform (v1.0 Beta)"
+        "Title" = "8:OWASP O2 Platform (v1.1 Beta)"
         "Subject" = "8:"
         "ARPCONTACT" = "8:OWASP O2 Platform"
         "Keywords" = "8:"
@@ -1477,7 +1595,7 @@
         {
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_5A23AE660BA74E86A03DC6723D1848FC"
             {
-            "Name" = "8:OWASP O2 Platform (v1.0 Beta)"
+            "Name" = "8:OWASP O2 Platform (v1.1 Beta)"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
@@ -1491,7 +1609,7 @@
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_857DCB4321E84E12BE9DEE9D184E007A"
             {
-            "Name" = "8:OWASP O2 Platform (v1.0 Beta)"
+            "Name" = "8:OWASP O2 Platform (v1.1 Beta)"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
