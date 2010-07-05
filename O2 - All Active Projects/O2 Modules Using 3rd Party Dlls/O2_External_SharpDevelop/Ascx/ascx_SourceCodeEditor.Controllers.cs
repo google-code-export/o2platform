@@ -1339,7 +1339,7 @@ namespace O2.External.SharpDevelop.Ascx
                 o2CodeCompletion = new O2CodeCompletion(tecSourceCode);
             //else
             //{
-                o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = true;
+                o2CodeCompletion.OnlyShowCodeCompleteResulstFromO2Namespace = false;
                 compile_Click(null, null);
             }
             return o2CodeCompletion;

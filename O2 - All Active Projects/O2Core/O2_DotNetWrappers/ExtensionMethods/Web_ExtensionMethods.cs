@@ -214,6 +214,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #endregion
 
+        #region ping
 
+        public static bool ping(this string address)
+        {
+            return new Ping().ping(address);
+        }
+
+        public static bool online(this object _object)
+        {
+            return new Ping().ping("www.google.com");
+        }
+
+        #endregion
     }
 }

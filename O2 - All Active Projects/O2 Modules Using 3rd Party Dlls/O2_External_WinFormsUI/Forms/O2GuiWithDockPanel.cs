@@ -82,7 +82,7 @@ namespace O2.External.WinFormsUI.Forms
         private void requestHelpFromO2SupportToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             var rpReportBug = new ReportBug {fParentForm = this};
-            rpReportBug.setFromEmail("o2User@ouncelabs.com");
+            rpReportBug.setFromEmail("o2User@owasp.org");
             rpReportBug.setSubject("[Comment from O2 user] ");
             rpReportBug.setMessage(Mail.getUserDetailsAsEmailFormat() + " says:" + Environment.NewLine +
                                    "Hello O2 Support, " + Environment.NewLine + Environment.NewLine);

@@ -59,14 +59,39 @@ namespace O2.XRules.Database
     	{   
             var formTitle = "O2 XRules Database ({0})".format("O2_XRules_Database.exe".assembly().version());
             var executeScripts = (ascx_Execute_Scripts)typeof(ascx_Execute_Scripts).showAsForm(formTitle, 240, 200);            
-    		executeScripts.invokeOnThread(
-    			()=>{
+    		//executeScripts.invokeOnThread(
+    		//	()=>{
+                        executeScripts.checkForFirstRunAndUnzipDefaultScripts();
     					executeScripts.buildGui();
             			var scriptToExecute = ClickOnceDeployment.getClickOnceScriptPath();
-            			if (scriptToExecute.fileExists())      
-                			executeScripts.loadFile(scriptToExecute);            
-    				});
-            executeScripts.checkForFirstRunAndUnzipDefaultScripts();
+                        if (scriptToExecute.fileExists())
+                            executeScripts.loadFile(scriptToExecute);
+                        else
+                        {
+                            var newGuiScript = "O2 Main WPF GUI.h2".local();
+                            if (newGuiScript.fileExists())
+                            {
+                                // There is a race condition here with the posibility of the SVN update completing after the new gui is launched
+                                executeScripts.welcomeMessage = "New O2 GUI detected, launching it now...";
+                                executeScripts.status(executeScripts.welcomeMessage);
+                                {
+                                    O2Thread.mtaThread(() =>
+                                        {
+                                            var newGui = newGuiScript.compile_H2Script();
+                                            if (newGui.notNull())
+                                            {
+
+                                                newGui.executeFirstMethod();
+                                                executeScripts.close();
+                                            }
+                                            else
+                                                executeScripts.status("There was an error compiling the new GUI!");
+                                        });
+                                }
+                            }
+                        }
+    		//		});                        
+
     	}    	
     	
     	public ascx_Execute_Scripts()
@@ -113,80 +138,96 @@ namespace O2.XRules.Database
         }
     
         private void buildGui()
-        {               
-        	// add controls    
-            statusLabel = this.parentForm().add_StatusStrip(Color.White);            
-            this.BackColor = Color.White;
-			var topPanel = this.add_Panel();         			
-        	var pictureBox = (PictureBox)topPanel.add_PictureBox();
-        							 //.location(20,20)
-        							 //.align_Bottom(this, 50)
-        							 //.align_Right(this,20);        	
-        			              	
-        	/*statusLabel = (Label)topPanel.add_Label("Drop script on logo")
-        						  		 .location(this.Height - 40,60)
-        						  		 .anchor()
-        						  		 .bottom();*/
-        						  		 
-			//statusLabel.Font = new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Regular);
-            statusLabel.IsLink = true;
-            statusLabel.LinkBehavior = LinkBehavior.NeverUnderline;            
-            statusLabel.set_Text(welcomeMessage).textColor(this,Color.Black);
+        {
+            this.invokeOnThread(
+                () =>
+                {
 
-        	results_RichTextBox = this.add_RichTextBox();        
-        					   
-        	mainSplitContainer = topPanel.insert_Below(results_RichTextBox,100)
-        							     .get<SplitContainer>();        	         	                
-        	        
-        	mainSplitContainer.panel2Collapsed(true);
-        	
-        	var contextMenu = pictureBox.add_ContextMenu();
+                    // add controls    
+                    statusLabel = this.parentForm().add_StatusStrip(Color.White);
+                    this.BackColor = Color.White;
+                    var topPanel = this.add_Panel();
+                    var pictureBox = (PictureBox)topPanel.add_PictureBox();
+                    //.location(20,20)
+                    //.align_Bottom(this, 50)
+                    //.align_Right(this,20);        	
+
+                    /*statusLabel = (Label)topPanel.add_Label("Drop script on logo")
+                                                 .location(this.Height - 40,60)
+                                                 .anchor()
+                                                 .bottom();*/
+
+                    //statusLabel.Font = new System.Drawing.Font("Arial", 10, System.Drawing.FontStyle.Regular);
+                    statusLabel.IsLink = true;
+                    statusLabel.LinkBehavior = LinkBehavior.NeverUnderline;
+                    statusLabel.set_Text(welcomeMessage).textColor(this, Color.Black);
+
+                    results_RichTextBox = this.add_RichTextBox();
+
+                    mainSplitContainer = topPanel.insert_Below(results_RichTextBox, 100)
+                                                 .get<SplitContainer>();
+
+                    mainSplitContainer.panel2Collapsed(true);
+
+                    setupPictureBoxContextMenu(pictureBox);
+
+
+                    // load data map actions
+                    if (pathToPictureBox.fileExists())
+                        pictureBox.load(pathToPictureBox);
+
+
+                    this.onDrop((file) => loadFile(file));
+
+                    statusLabel.Click += (sender, e) => openSimpleScriptEditor();
+                    //statusLabel.textColor(this, Color.Black);
+
+                    // put this on menu item
+                    //this.add_Link("reload",10,2,()=>loadH2Script());
+                    if (is32Bit())
+                        syncO2ViaSvn();
+
+                    return;         // to make this run in sync mode
+                });
+     	}
+
+        public void setupPictureBoxContextMenu(PictureBox pictureBox)
+        {
+            pictureBox.onDrop((file) => loadFile(file));
+            pictureBox.DoubleClick += (sender, e) => showAvailableScripts();            
+
+            var contextMenu = pictureBox.add_ContextMenu();
             contextMenu.add_MenuItem("View available scripts", () => showAvailableScripts());
             contextMenu.add_MenuItem("Open O2 Command Prompt", () => openO2CommandPromt());
             contextMenu.add_MenuItem("O2 Script Development &&  Debug")
                        .add_MenuItem("Open Source Code Editor", () => openSourceCodeEditor())
                        .add_MenuItem("Open Simple Script Editor", () => openSimpleScriptEditor())
-                       .add_MenuItem("Open Quick development gui", () => executeScript("Opening Quick Development GUI","ascx_Quick_Development_GUI.cs.o2"))
-                       .add_MenuItem("Open 'Graph' development gui", () => executeScript("Opening Graph With Inspector)", "ascx_GraphWithInspector.cs"))                                              
+                       .add_MenuItem("Open Quick development gui", () => executeScript("Opening Quick Development GUI", "ascx_Quick_Development_GUI.cs.o2"))
+                       .add_MenuItem("Open 'Graph' development gui", () => executeScript("Opening Graph With Inspector)", "ascx_GraphWithInspector.cs"))
                        .add_MenuItem("Open XRules/Script Editor", () => open.scriptEditor())
                        .add_MenuItem("Show O2 Object Model", () => open.o2ObjectModel())
-                       .add_MenuItem("Show O2 Executable Directry", () => open.directory(PublicDI.config.CurrentExecutableDirectory,true))                       
+                       .add_MenuItem("Show O2 Executable Directry", () => open.directory(PublicDI.config.CurrentExecutableDirectory, true))
                        .add_MenuItem("Current Script", false)
                                     .add_MenuItem("View loaded script source Code", () => showLoadedScriptSourceCode())
-                                    .add_MenuItem("Execute Again", () => executeCompiledCode());                       
+                                    .add_MenuItem("Execute Again", () => executeCompiledCode());
             contextMenu.add_MenuItem("Tools")
                        .add_MenuItem("Image Screenshot tool", () => screenShotTool())
                        .add_MenuItem("MediaWiki Editor", () => executeScript("Opening MediaWiki Client)", "MediaWikiEditor.cs.o2"))
                        .add_MenuItem("Twitter Client", () => executeScript("Opening Twitter Client)", "Twitter Client.h2"))
-                       .add_MenuItem("Simple Text Editor", () => executeScript("Opening Simple Text Editor", "Simple Text Editor.h2"))                       
-                       .add_MenuItem("O2 'Secret Data' Editor", () => executeScript("Opening 'Secret Data Editor'", "SecretDataEditor.cs.o2"));           
-                       //.add_MenuItem("O2 'Secret Data' Editor", () => new SecretDataEditor().showGui());
+                       .add_MenuItem("Simple Text Editor", () => executeScript("Opening Simple Text Editor", "Simple Text Editor.h2"))
+                       .add_MenuItem("O2 'Secret Data' Editor", () => executeScript("Opening 'Secret Data Editor'", "SecretDataEditor.cs.o2"));
+            //.add_MenuItem("O2 'Secret Data' Editor", () => new SecretDataEditor().showGui());
 
             contextMenu.add_MenuItem("SVN O2 Scripts")
-                        .add_MenuItem("ReSync Scripts from O2's Svn (using SVN client)", ()=> execute("ReSync SVN Rules",() => syncO2ViaSvn()))
-                        //.add_MenuItem("Manual Sync Scripts from O2's Svn (using HTTP) ", ()=> execute("Trying Manual SVN Sync via HTTP",() => new Wizard_SyncViaSvn().runWizard()))
+                        .add_MenuItem("ReSync Scripts from O2's Svn (using SVN client)", () => execute("ReSync SVN Rules", () => syncO2ViaSvn()))
+                //.add_MenuItem("Manual Sync Scripts from O2's Svn (using HTTP) ", ()=> execute("Trying Manual SVN Sync via HTTP",() => new Wizard_SyncViaSvn().runWizard()))
                         .add_MenuItem(@"Delete local O2 Scripts folder ({0})".format(PublicDI.config.LocalScriptsFolder), deleteLocalScriptsFolder);
 
             contextMenu.add_MenuItem("Open O2 Log Viewer", () => openO2LogViewer());
             contextMenu.add_MenuItem("Exit Application (and close all windows)", () => PublicDI.config.closeO2Process());
-            
-        	
-        	// load data map actions
-			if (pathToPictureBox.fileExists())
-        		pictureBox.load(pathToPictureBox);
+        }
 
-            pictureBox.onDrop((file) => loadFile(file));
-            this.onDrop((file) => loadFile(file));
-
-            pictureBox.DoubleClick += (sender, e) => showAvailableScripts();            
-            statusLabel.Click += (sender, e) => openSimpleScriptEditor();            
-            //statusLabel.textColor(this, Color.Black);
-            
-        	// put this on menu item
-        	//this.add_Link("reload",10,2,()=>loadH2Script());
-            if (is32Bit())
-                syncO2ViaSvn();
-     	}
+        
 
         public ascx_Execute_Scripts execute(string infoMessage, MethodInvoker codeToExecute)
         {
