@@ -1,24 +1,63 @@
 <?xml version="1.0"?>
 <H2>
   <SourceCode>//panel.clear();
-var wpfGui = O2Gui.open&lt;WPF_GUI&gt;("O2 WPF Gui");
-//var wpfGui = panel.add_Control&lt;WPF_GUI&gt;();  
+var formTitle = "OWASP O2 Platform (v{0} Beta)".format("O2_XRules_Database.exe".assembly().version());
+var wpfGui = O2Gui.open&lt;WPF_GUI&gt;(formTitle);
+//var wpfGui = panel.add_Control&lt;WPF_GUI&gt;();    
+
+var executeScripts = new ascx_Execute_Scripts();
+
 wpfGui.buildGui();
 
-wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform. If you are looking where to start, select one of the areas below and follow the links")
-	  .add_Link_Web("bbc","http://news.bbc.co.uk")
-	  .add_Link_YouTube("you tube video","http://news.bbc.co.uk")
-	  .add_Link_O2Wiki("Documentation","Documentation");
+wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform. If you are looking where to start, select one of the areas below and follow the links",
+	   ()=&gt; {
+	   			var sidePanel = new Panel().fill().backColor(Color.White);
+	   			var pictureBox = sidePanel.add_PictureBox()
+			   							  .show("O2_Logo.gif".local())
+			   							  .fill(false)
+			   							  .anchor_TopLeftRight()
+			   							  .width(220)
+			   							  .height(260)	   							  
+			   							  .topAdd(40);
+			   	executeScripts.setupPictureBoxContextMenu(pictureBox);
+			   	
+				return sidePanel;
+	   		})
+	  .add_Link("O2 Log Viewer",executeScripts.openO2LogViewer);	  
+	  
+	  
 wpfGui.add_Section("Penetration Testing");
 	    //.add_Link("aaaa","asdasda");		
 		
-wpfGui.add_Section("Source-Code Reviews");										
-wpfGui.add_Section("Productivity Tools")
-	  .add_Link_Web("google","http://www.google.com");					 
-wpfGui.add_Section("OWASP Projects");
+wpfGui.add_Section("Source-Code Reviews", "If you are performing securitiy reviews and have access to the source code, here are a number of O2 Modules that will help you")
+	  .add_Label(".Net:")
+	  .add_Label("Javascript:")
+	  .add_Label("Java:");
+	  
+wpfGui.add_Section("Productivity Tools", "Here are a number of links to multiple O2 tools and commonly accessed resources" ) 
+	  .add_Label("websites:")
+	  .add_Link_Web("google.com","http://www.google.com")
+	  .add_Link_Web("stackoverflow.com","http://www.stackoverflow.com") 
+	  .add_Label("windows executables:")
+	  .add_Link_Process("notepad","notepad")
+	  .add_Link_Process("cmd.exe","cmd.exe")
+	  .add_Link_Process("calc.exe","calc.exe");
+	  
+wpfGui.add_Section("OWASP Projects", "Here are several examples of OWASP Projects that O2 already provides an API for (or are currently on the roadmap for being supported)");
+
 wpfGui.add_Section("API Development Environment");
-wpfGui.add_Section("Videos");
-wpfGui.add_Section("Help");
+
+wpfGui.add_Section("Videos")
+	  .add_Link_YouTube("you tube video","http://news.bbc.co.uk");
+	  
+wpfGui.add_Section("Help", "If you are looking for help, here are the best places to start")
+	  
+	  .add_Link_O2Wiki("O2 Documentation","Documentation")
+	  .add_Link_Web("O2 Mainling List","")
+	  .add_Link_Web("O2Platform.com website","http://www.o2platform.com");
+ 
+wpfGui.showFirstWinFormsPanel();	  
+wpfGui.statusMessage("Welcome to the OWASP O2 Platform");
 
 /*
 wpfGui.add_OutlookSection("Main", "Welcome to the OWASP O2 Platform. If you are looking where to start, select one of the areas below and follow the links");
@@ -26,7 +65,12 @@ wpfGui.add_OutlookSection("Main", "Welcome to the OWASP O2 Platform. If you are 
 */
 return null;
 
+
+
+//using O2.XRules.Database
+
 //O2File:WPF_Gui.cs
+
 //O2Ref:Odyssey.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

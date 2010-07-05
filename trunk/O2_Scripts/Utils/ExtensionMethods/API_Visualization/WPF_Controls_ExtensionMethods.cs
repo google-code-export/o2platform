@@ -111,7 +111,7 @@ namespace O2.API.Visualization.ExtensionMethods
 			            return null;			    				
     				});     		
     	}
-        */
+        */        
 		public static T set<T>(this ContentControl control) where T : UIElement
 		{
 			return (T)control.wpfInvoke(
@@ -293,16 +293,57 @@ namespace O2.API.Visualization.ExtensionMethods
 
 	}
 	
+	
+	
+	
+	public static class WPF_Controls_ExtensionMethods_ContentControl
+	{
+		public static T bold<T>(this T contentControl)
+			where T : ContentControl
+    	{
+    		return contentControl.bold(true);
+    	}
+    	
+		public static T bold<T>(this T contentControl, bool value)
+			where T : ContentControl
+    	{
+    		contentControl.wpfInvoke(
+    			()=>{
+    					if (value)
+    						contentControl.FontWeight = FontWeights.Bold;
+    					else
+    						contentControl.FontWeight = FontWeights.Normal;    					
+    				});
+			return contentControl;
+    	}
+		
+	}
+	
 	public static class WPF_Controls_ExtensionMethods_Label
 	{	
         #region Label
 
         public static Label set_Text(this Label label, string value)
     	{
-            label.set_Text_Wpf(value);
-    		//label.wpfInvoke(()=> label.Content = value);    		
+            label.set_Text_Wpf(value);    		
 			return label;
     	}
+    	
+    	public static Label add_Label_Wpf<T>(this  T uiElement, string text)
+    		where T : UIElement
+    	{
+    		return uiElement.add_Label_Wpf(text,false);
+    	}
+    	
+    	public static Label add_Label_Wpf<T>(this  T uiElement, string text, bool bold)
+            where T : UIElement
+        {
+        	var label = uiElement.add_Control_Wpf<Label>();
+        	if (bold) 
+        		label.bold();
+        	label.set_Text_Wpf(text);
+        	return label;
+        }                	
     	
     	#endregion
  
@@ -1256,10 +1297,13 @@ textBox1.prop("",true);
 
         public static TextBlock add_TextBlock(this UIElement uiElement)
         {
-            var textBlock = uiElement.add_Control_Wpf<TextBlock>();
-            textBlock.TextWrapping = TextWrapping.Wrap;
-            textBlock.Padding = new Thickness(4);
-            return textBlock;
+        	return (TextBlock)uiElement.wpfInvoke(
+        		()=>{
+			            var textBlock = uiElement.add_Control_Wpf<TextBlock>();
+			            textBlock.TextWrapping = TextWrapping.Wrap;
+			            textBlock.Padding = new Thickness(4);
+			            return textBlock;
+			        });
         }
         
         public static TextBlock set_Text_Wpf(this TextBlock textBlock, string text)

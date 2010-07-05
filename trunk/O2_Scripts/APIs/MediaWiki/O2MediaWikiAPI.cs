@@ -665,7 +665,7 @@ namespace O2.XRules.Database.APIs
             var rvlimit = 500;          
             var response = wikiApi.getQueryContinueResults("", "aplimit", rvlimit, "list", propertyName, continueVarName, "", dataElement, -1, false);
             return response;
-            response.size().str().info();
+            //response.size().str().info();
             //return response.attibute("title");
         }
     	
