@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>panel.clear(); 
+var button1 = panel.add_Button("This is a button ",30,100);
+var textBox = button1.append_TextBox("");
+button1.onClick(()=&gt;{"I was clicked".info();});
+	
+var inputSimulator = new API_InputSimulator();	
+inputSimulator.Move_SkipValue= 3;			// makes it faster
+var startPosition = inputSimulator.mouse_CurrentPosition();
+inputSimulator.mouse_moveTo(button1,false).mouse_Click()
+			  .mouse_moveTo(textBox).mouse_Click()
+			  .text_Send("this is a test")
+			  .mouse_moveBy(100,20)
+			  .mouse_moveTo(button1).mouse_Click()
+			  .mouse_moveBy(-100,-20)
+			  .mouse_moveTo(startPosition);
+		      
+return inputSimulator.mouse_CurrentPosition();
+
+//O2File:API_InputSimulator.cs
+//using WindowsInput.Native
+//using System.Threading
+//using WindowsInput
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
