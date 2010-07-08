@@ -31,6 +31,7 @@ wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform.".line().line() +
 wpfGui.add_Section("Penetration Testing", "If you are performing security penetration tests (also called BlackBox security reviews) , here are a number of O2 Modules that will help you")
 	  .add_Label("IE Automation:")
 	  .add_Link_O2Script("Simple IE Scripting","ascx_IE_ScriptExecution.cs")
+	  .add_Link_O2Script("IE Automation Development","IE Automation using WatiN.h2")
 	  .add_Link_O2Script("WatiN Recorder","WatiN - Open 'Test Recorder' in new process.h2")	  
 	  
 	  .add_Label("Javascript:")
@@ -119,12 +120,12 @@ wpfGui.add_Section("3rd Party Tools (Closed &amp; Open Source)")
 
 wpfGui.add_Section("API Development Environment", "There are a number of development environments in O2, each is designed for a particular talk/workflow")
 	//.add_Label("[Dev GUIs]:")	
-	.add_Link("Simple Script Editor",wpfGui.ExecuteScripts.openSourceCodeEditor)
+	.add_Link("Source Code Editor",wpfGui.ExecuteScripts.openSourceCodeEditor)
+	.add_Link_O2Script("Simple Script Editor","ascx_Simple_Script_Editor.cs.o2")
 	.add_Link_O2Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")
 		
 	.add_Link("XRules/Script Editor",() =&gt; open.scriptEditor())
 	.add_Link_O2Script("'Graph' development gui","ascx_GraphWithInspector.cs")	
-	.add_Link_O2Script("IE Automation Development","IE Automation using WatiN.h2")
 	
 	.add_Label("Utils:")
 	.add_Link("O2 Object Model", () =&gt; open.o2ObjectModel())

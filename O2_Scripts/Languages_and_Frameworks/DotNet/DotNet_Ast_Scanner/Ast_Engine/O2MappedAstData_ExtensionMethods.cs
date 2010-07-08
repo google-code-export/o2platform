@@ -825,9 +825,17 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
         public static string file(this O2MappedAstData o2MappedAstData, CompilationUnit compilationUnit)
         {
-            foreach (var file in o2MappedAstData.FileToCompilationUnit)
-                if (file.Value == compilationUnit)
-                    return file.Key;
+        	try
+        	{
+        		if (o2MappedAstData.FileToCompilationUnit.notNull())
+            		foreach (var file in o2MappedAstData.FileToCompilationUnit)
+            		    if (file.Value == compilationUnit)
+            		        return file.Key;
+			}
+			catch(Exception ex)
+			{
+				ex.log("in o2MappedAstData.file(...)");
+			}
             return null;
         }
 
