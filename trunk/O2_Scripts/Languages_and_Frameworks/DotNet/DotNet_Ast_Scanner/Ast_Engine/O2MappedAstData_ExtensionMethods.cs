@@ -217,6 +217,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		
         public static List<IMethod> iMethods(this O2MappedAstData o2MappedAstData, string file)
         {
+        	if (o2MappedAstData.isNull() || file.isNull())
+        		return new List<IMethod> ();
             var methodDeclarations = o2MappedAstData.iNodes<MethodDeclaration>(file);
             return o2MappedAstData.iMethods(methodDeclarations);
         }
@@ -917,6 +919,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
         public static O2MappedAstData showMethodStreamDetailsInTreeViews(this O2MappedAstData astData, TreeView ParametersTreeView, TreeView MethodsCalledTreeView)
         {
+        	if (astData == null)
+        		return astData;
             ParametersTreeView.clear();
             MethodsCalledTreeView.clear();
 
