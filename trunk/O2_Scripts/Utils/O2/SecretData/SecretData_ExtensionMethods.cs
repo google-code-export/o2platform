@@ -7,7 +7,7 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 //O2File:ISecretData.cs
 
-namespace O2.XRules.Database.Utils.O2
+namespace O2.XRules.Database.Utils
 {
 
 	public static class SecretData_ExtensionMethods

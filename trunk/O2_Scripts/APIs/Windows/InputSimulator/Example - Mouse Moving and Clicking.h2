@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>panel.clear(); 
-var button1 = panel.add_Button("This is a button ",30,100);
+  <SourceCode>//panel.clear(); 
+//var topPanel = panel;
+var topPanel = O2Gui.open&lt;Panel&gt;("Mouse move PoC",300,300); 
+var button1 = topPanel.add_Button("This is a button ",30,30);
 var textBox = button1.append_TextBox("");
 button1.onClick(()=&gt;{"I was clicked".info();});
 	

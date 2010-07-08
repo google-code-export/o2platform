@@ -12,7 +12,7 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
-using O2.XRules.Database.Utils.O2;
+using O2.XRules.Database.Utils;
 
 //O2File:O2MediaWikiAPI.cs
 //O2File:O2PlatformWikiApi.cs

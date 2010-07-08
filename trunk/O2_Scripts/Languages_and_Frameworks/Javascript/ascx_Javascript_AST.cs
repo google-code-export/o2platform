@@ -122,7 +122,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.Javascript
 									  				sourceCode.editor().invoke("searchForTextInTextEditor_findNext", text);
 									  			 });
 									  					  
-tabControl.select_Tab(searchTab);
+			//tabControl.select_Tab(searchTab);
 			javaScriptLoadMessage = javascriptCode.insert_Below<Panel>(20);
 													  
 			allAST.insert_Below<Panel>(25)

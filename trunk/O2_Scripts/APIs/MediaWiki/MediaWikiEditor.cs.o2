@@ -19,7 +19,7 @@ using O2.Views.ASCX.Ascx.MainGUI;
 using O2.External.IE.ExtensionMethods;
 
 using O2.XRules.Database.APIs; 
-using O2.XRules.Database.Utils.O2;
+using O2.XRules.Database.Utils;
 using O2.API.Visualization.ExtensionMethods;
 using AvalonDock;
 

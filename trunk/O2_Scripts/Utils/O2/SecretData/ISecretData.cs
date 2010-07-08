@@ -9,7 +9,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 //O2Ref:System.Xml.Linq.dll
 //O2Ref:System.Xml.dll
 
-namespace O2.XRules.Database.Utils.O2
+namespace O2.XRules.Database.Utils
 {    
     public interface ISecretData
     {        
