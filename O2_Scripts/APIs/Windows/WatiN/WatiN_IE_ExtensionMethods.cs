@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Threading;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -25,6 +26,7 @@ using O2.XRules.Database.Utils.O2;
 using O2.XRules.Database.Languages_and_Frameworks.DotNet;
 using WatiN.Core;
 using WatiN.Core.Interfaces;
+using WatiN.Core.DialogHandlers;
 using SHDocVw;
 using mshtml; 
 
@@ -95,7 +97,53 @@ namespace O2.XRules.Database.APIs
  			return ie;
  		}
  	}
+ 	
+ 	public static class WatiN_IE_ExtensionMethods_Cookies
+ 	{
+ 		public static string cookiesRaw(this WatiN_IE ie)
+ 		{
+ 			try
+ 			{
+ 				return ie.IE.HtmlDocument.cookie;
+ 			}
+ 			catch(Exception ex)
+ 			{
+ 				ex.log("in WatiN_IE.cookiesRaw");
+ 				return "";
+ 			}
+ 		}
  		
+ 		public static List<string> cookies(this WatiN_IE ie)
+ 		{
+ 			return (from cookie in ie.cookiesRaw().split(";")
+ 					select cookie.trim()).toList();
+ 		}
+ 		
+ 		//Need to find a better way to do this  (check what happens if the cookie name has a space between name & =
+ 		public static string cookie(this WatiN_IE ie, string cookieName)
+ 		{
+ 			var stringToFind = cookieName + "=";
+ 			foreach(var cookie in ie.cookies()) 			
+ 				if (cookie.starts(stringToFind))
+ 					return cookie.Substring(stringToFind.size());
+			return "";
+ 		}
+ 		
+ 		public static WatiN_IE cookies_Clear(this WatiN_IE ie)
+ 		{
+ 			ie.IE.ClearCache();
+ 			ie.IE.ClearCookies();
+ 			return ie;
+ 		}
+ 		
+ 		public static WatiN_IE cookies_Clear(this WatiN_IE ie, string url)
+ 		{
+ 			ie.IE.ClearCache();
+ 			ie.IE.ClearCookies(url);
+ 			return ie;
+ 		}
+ 	}
+ 	
  	public static class WatiN_IE_ExtensionMethods_Misc
     {
     	// uri & url
@@ -207,6 +255,26 @@ namespace O2.XRules.Database.APIs
     		return watinIe;
     	}
     	
+    	public static WatiN_IE open_usingPOST(this WatiN_IE watinIe, string postUrl,string postData)
+    	{    		
+    		try
+    		{
+    			"[WatIN] open using POST: {0} ({1} bytes)".info(postUrl, postData.size());
+				var browser = (watinIe.IE.InternetExplorer as IWebBrowser2); 
+				
+				object PostDataByte = (object)Encoding.UTF8.GetBytes(postData);
+				object AdditionalHeaders = "Content-Type: application/x-www-form-urlencoded" + Environment.NewLine;
+				object nullValue = null;
+				browser.Navigate(postUrl, ref nullValue, ref nullValue, ref PostDataByte, ref AdditionalHeaders);
+				watinIe.IE.WaitForComplete();
+			}
+			catch(Exception ex)
+			{
+				ex.log("in WatiN_IE open_usingPOST");
+			}
+			return watinIe;
+    	}
+    	
     	public static WatiN_IE openWithBasicAuthentication(this WatiN_IE watinIe, string url, string username, string password)
     	{
     		var encodedHeader = "Authorization: Basic " + "{0}:{1}".format(username, password).base64Encode();
@@ -216,6 +284,7 @@ namespace O2.XRules.Database.APIs
     	{
     		try
     		{
+    			"[WatIN] open with extra Header: {0} ({1} bytes)".info(url, extraHeader.size());
     			object headerObject = extraHeader.line();
     			object flags = null;
     			(watinIe.IE.InternetExplorer as IWebBrowser2).Navigate(url, 
@@ -234,9 +303,17 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	
-    	
-    	
-    	
+    	public static WatiN_IE setTimeout(this WatiN_IE watinIe, int timeout)
+    	{
+    		Settings.WaitForCompleteTimeOut = timeout;
+    		return watinIe;
+    	}
+    	    	
+    	public static WatiN_IE resetTimeout(this WatiN_IE watinIe)
+    	{
+    		Settings.WaitForCompleteTimeOut = 30;
+    		return watinIe;
+    	}
  
     	public static WatiN_IE wait(this WatiN_IE watinIe)
     	{
@@ -266,6 +343,105 @@ namespace O2.XRules.Database.APIs
     		return element;
     	}
  
+ 		public static WatiN_IE waitForComplete(this WatiN_IE watinIe)
+ 		{
+ 			watinIe.IE.WaitForComplete(); 
+ 			return watinIe;
+ 		}
+ 	}
+ 	
+ 	
+ 	public static class WatiN_IE_ExtensionMethods_DialogHandlers
+ 	{
+ 	
+ 	// this is kind of working by needs more test
+ 	/*
+ 		//using WatiN.Core.DialogHandlers
+
+			var promptDialogHandler  = ie.dialogHandler<PromptDialogHandler>();
+			if (promptDialogHandler.isNull())
+			{
+				promptDialogHandler = new PromptDialogHandler(false); 
+				ie.IE.AddDialogHandler(promptDialogHandler); 
+			}				
+			
+			var fileDownloadHandler = ie.dialogHandler<FileDownloadHandler>();
+			if (fileDownloadHandler.isNull())
+			{
+				fileDownloadHandler = new FileDownloadHandler(@"C:\_Work\CAT\temp.xml"); 
+				ie.IE.AddDialogHandler(fileDownloadHandler); 
+			}
+			//dialogWatcher.clear();  
+			//return WatiN.Core.Settings.WaitForCompleteTimeOut; 
+	*/
+	
+ 		public static WatiN_IE setDialogWatcher(this WatiN_IE watinIe)
+ 		{ 			
+ 			if (watinIe.IE.DialogWatcher == null)
+			{				
+				var dialogWatcher = DialogWatcher.GetDialogWatcherForProcess(Processes.getCurrentProcessID());
+				dialogWatcher.CloseUnhandledDialogs = false; 
+				//set the value of _dialogWatcher with the current inproc IE dialogWatcher
+				var field = PublicDI.reflection.getField(typeof(DomContainer),"_dialogWatcher"); 
+				PublicDI.reflection.setField(field, watinIe.IE, dialogWatcher);
+			}
+			return watinIe;
+ 		}
+ 		
+ 		public static DialogWatcher getDialogWatcher(this WatiN_IE watinIe)
+ 		{
+ 			setDialogWatcher(watinIe);
+ 			return watinIe.IE.DialogWatcher;
+ 		}
+ 		
+ 		public static DialogWatcher clear(this DialogWatcher dialogWatcher)
+ 		{
+ 			dialogWatcher.Clear();
+ 			return dialogWatcher;
+ 		}
+ 		
+ 		public static ArrayList dialogHandlers(this WatiN_IE watinIe)
+ 		{
+ 			watinIe.setDialogWatcher();			// make sure this is set
+ 			return (ArrayList)watinIe.IE.DialogWatcher.field("handlers");
+ 		}
+ 		
+ 		public static T dialogHandler<T>(this WatiN_IE watinIe)
+ 			where T : BaseDialogHandler 
+ 		{
+ 			foreach(var dialogHandler in watinIe.dialogHandlers())
+ 				if (dialogHandler is T)
+ 					return (T)dialogHandler;
+ 			return null;
+ 		}
+ 		
+ 		public static AlertAndConfirmDialogHandler getAlertsHandler(this WatiN_IE watinIe)
+ 		{
+ 			var alertHandler = watinIe.dialogHandler<AlertAndConfirmDialogHandler>();
+ 			if (alertHandler.isNull())
+ 			{
+ 				alertHandler = new AlertAndConfirmDialogHandler();
+				watinIe.IE.AddDialogHandler(alertHandler); 
+			}
+			return alertHandler;
+ 		}
+ 		
+ 		public static AlertAndConfirmDialogHandler reset(this AlertAndConfirmDialogHandler alertHandler)
+ 		{
+ 			alertHandler.Clear();
+ 			return alertHandler;
+ 		}
+ 		
+ 		public static List<string> alerts(this AlertAndConfirmDialogHandler alertHandler)
+ 		{
+ 			return alertHandler.Alerts.toList(); 			
+ 		}
+ 		
+ 		public static string lastAlert(this AlertAndConfirmDialogHandler alertHandler)
+ 		{
+ 			return alertHandler.alerts().Last();
+ 		}
+ 		
  	}
  	
 	public static class WatiN_IE_ExtensionMethods_Image
@@ -1013,6 +1189,37 @@ namespace O2.XRules.Database.APIs
 			return null;
 		}
  
+ 		public static List<IHTMLDOMAttribute> attributesRaw(this Element element)
+ 		{ 
+			var domAttributes = new List<IHTMLDOMAttribute>();  
+			if (element.notNull() && element.htmlElement() is IHTMLDOMNode)
+			{						
+				var domNode = (IHTMLDOMNode)element.htmlElement();
+				foreach(var attribute in (IHTMLAttributeCollection)domNode.attributes)
+				{		
+					var domAttribute = attribute as IHTMLDOMAttribute; 
+					if (domAttribute.notNull() && domAttribute.specified)																	
+							domAttributes.Add(domAttribute);
+				}						
+			}
+			return domAttributes; 
+		}
+
+		public static Dictionary<string,string> attributes(this Element element)
+		{
+			var attributeValues = new Dictionary<string,string>();
+			foreach(IHTMLDOMAttribute attribute in attributesRaw(element)) 
+				attributeValues.add(attribute.nodeName.str(), attribute.nodeValue.str());
+			return attributeValues;
+		}
+		
+		public static string attribute(this Element element, string attributeName)
+		{
+			var attributes = element.attributes();
+			if (attributes.hasKey(attributeName))
+				return attributes[attributeName];
+			return "";
+		}
     }
     
     public static class WatiN_IE_ExtensionMethods_Divs

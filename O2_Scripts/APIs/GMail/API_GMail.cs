@@ -14,7 +14,7 @@ using O2.Views.ASCX.classes.MainGUI;
 using O2.External.IE.ExtensionMethods;
 using SHDocVw;
 using WatiN.Core;
-using O2.XRules.Database.Utils.O2;
+using O2.XRules.Database.Utils;
 //O2File:WatiN_IE_ExtensionMethods.cs
 //O2File:WatiN_IE.cs
 //O2File:ISecretData.cs

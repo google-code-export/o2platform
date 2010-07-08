@@ -10,7 +10,7 @@ using O2.Views.ASCX.ExtensionMethods;
 using TweetSharp.Fluent;
 using TweetSharp.Model;
 using TweetSharp.Extensions;
-using O2.XRules.Database.Utils.O2;
+using O2.XRules.Database.Utils;
 
 //O2File:ISecretData.cs
 
