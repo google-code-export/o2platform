@@ -159,15 +159,15 @@ step1_SourceCodeFiles.onDrop(
 						else
 						{
 							//step1_SourceCodeFiles.clear();
-							foreach(var file in fileOrFolder.files("*.cs",true))
+							foreach(var file in fileOrFolder.files(true, "*.cs","*.vb"))
 								step1_SourceCodeFiles.add_Node(file.fileName(),file);
 						}
 					});
 
 //Data
 targetFolder.set_Text_Wpf(PublicDI.config.getTempFolderInTempDirectory("_O2_AST_Scanner_Results"));
-step1_SourceCodeFiles.add_Node("HacmeBank_v2_Website.ascx.admin.Sql_Query.btExecuteQuery_Click.cs", "HacmeBank_v2_Website.ascx.admin.Sql_Query.btExecuteQuery_Click.cs".local());
-step1_SourceCodeFiles.add_Node("HacmeBank_v2_WS.WS_UsersCommunity.PostMessage.cs", "HacmeBank_v2_WS.WS_UsersCommunity.PostMessage.cs".local());
+//step1_SourceCodeFiles.add_Node("HacmeBank_v2_Website.ascx.admin.Sql_Query.btExecuteQuery_Click.cs", "HacmeBank_v2_Website.ascx.admin.Sql_Query.btExecuteQuery_Click.cs".local());
+//step1_SourceCodeFiles.add_Node("HacmeBank_v2_WS.WS_UsersCommunity.PostMessage.cs", "HacmeBank_v2_WS.WS_UsersCommunity.PostMessage.cs".local());
 step2_References.set_Text_Wpf("System.Web".line() +
 							  "System.Web.Services".line() + 
 							  "System.Data".line() + 

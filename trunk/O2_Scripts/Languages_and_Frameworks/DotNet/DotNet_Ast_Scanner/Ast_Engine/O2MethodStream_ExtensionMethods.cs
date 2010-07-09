@@ -39,9 +39,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
         public static string createO2MethodStreamFile(this O2MappedAstData o2MappedAstData, IMethod iMethod, string targetFolder)
         {
-
             var targetFile = targetFolder.pathCombine(iMethod.DotNetName + ".cs");
-            o2MappedAstData.createO2MethodStream(iMethod).csharpFile(targetFile);
+            if (targetFile.fileExists())
+                "in O2MappedAstData.createO2MethodStreamFile, target method stream already exists: {0}".debug(iMethod.DotNetName);
+            else
+                o2MappedAstData.createO2MethodStream(iMethod).csharpFile(targetFile);
             return targetFile;
         }
 

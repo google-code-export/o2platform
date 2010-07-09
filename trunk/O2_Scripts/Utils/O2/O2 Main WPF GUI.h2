@@ -2,12 +2,12 @@
 <H2>
   <SourceCode>//panel.clear();
 var formTitle = "OWASP O2 Platform (v{0} Beta)".format("O2_XRules_Database.exe".assembly().version());
-var wpfGui = O2Gui.open&lt;WPF_GUI&gt;(formTitle, 800,500);
+var wpfGui = O2Gui.open&lt;WPF_GUI&gt;(formTitle, 800,700);
 //var wpfGui = panel.add_Control&lt;WPF_GUI&gt;();    
-
+  
 wpfGui.buildGui();
-
-wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform.".line().line() +  
+  
+wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform!".line().line() +  
 						   "If you are looking where to start, select one of the areas below and follow the links.".line().line() +   
 						   "On the big O2 logo on the right, you can also: double-click to see the available scripts, right-click to see a context menu and drag'n'drop scripts for auto compile+execution",
 	   ()=&gt; {
@@ -17,7 +17,7 @@ wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform.".line().line() +
 			   							  .fill(false)
 			   							  .anchor_TopLeftRight()
 			   							  .width(220)
-			   							  .height(260)	   							  
+			   							  .height(360)	   							  
 			   							  .topAdd(40);
 			   	wpfGui.ExecuteScripts.invoke("setupPictureBoxContextMenu",pictureBox);
 			   	wpfGui.ExecuteScripts.statusLabel = wpfGui.StatusLabel;
