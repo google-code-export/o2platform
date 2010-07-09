@@ -54,7 +54,11 @@ namespace O2.XRules.Database.APIs
     	{    	 
     		var wpfGui = O2Gui.open<WPF_GUI>("Test - O2 WPF Gui");			
 			wpfGui.buildGui();			
-			wpfGui.add_Section("Main", "This is the intro text. Put here an explanation of what this module is all about");				
+			wpfGui.add_Section("Main", "This is the intro text. Put here an explanation of what this module is all about")
+				  .add_Label("this is a label 1")				  
+				  .add_Link("link",()=>{})
+				  .add_Link("link 123",()=>{});
+				  
 			wpfGui.add_Section("Section 1", "Text that describes Section 1");
 			wpfGui.add_Section("Section 2");
 			wpfGui.add_Section("Section 3");
@@ -156,7 +160,8 @@ namespace O2.XRules.Database.APIs
 							var textBlock = stackPanel.add_TextBlock();
 							textBlock.set_Text_Wpf(section.IntroText);
 						}
-						section.ContentPanel = stackPanel.add_WrapPanel();						
+						//section.ContentPanel = stackPanel.add_WrapPanel();						
+						section.ContentPanel = stackPanel.add_StackPanel();						
 						
 						
 						if (section.WinFormsCtor.notNull())
@@ -240,7 +245,8 @@ namespace O2.XRules.Database.APIs
     	public Func<WinForms.Control> WinFormsCtor { get; set;}
     	public string Name { get; set;}
     	public string IntroText { get; set;}
-    	public WrapPanel ContentPanel { get; set;}
+    	//public WrapPanel ContentPanel { get; set;}
+    	public StackPanel ContentPanel { get; set;}
     	public OutlookSection SectionInGui { get; set;}
     	    	
     	public WPF_GUI_Section (string name, string introText) : this (name,introText,null)
@@ -287,7 +293,7 @@ namespace O2.XRules.Database.APIs
 		{			
 			return (WPF_GUI_Section)section.SectionInGui.wpfInvoke(
 				()=>{
-						section.ContentPanel.add_Xaml_Link(linkText,onCLick);
+						section.ContentPanel.add_Xaml_Link(linkText,"20 5 5 5", onCLick);						
 						return section;
 					});								
 		}

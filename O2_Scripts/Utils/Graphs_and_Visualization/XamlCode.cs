@@ -73,12 +73,12 @@ namespace O2.XRules.Database.APIs
 		
 		public static string link()
 		{
-			return link("Click me");
+			return link("Click me","5");
 		}
 		
-		public static string link(string text)
+		public static string link(string text, string margin)
 		{
-			return  "<Button Margin=\"5\" Content=\"{0}\" Cursor=\"Hand\" Focusable=\"False\">".format(text).line()+
+			return  "<Button Margin=\"{0}\" Content=\"{1}\" Cursor=\"Hand\" Focusable=\"False\">".format(margin, text).line()+
 					 "        <Button.Template>".line()+
 					 "            <ControlTemplate TargetType=\"Button\">".line()+
 					 "                <TextBlock TextDecorations=\"Underline\">".line()+

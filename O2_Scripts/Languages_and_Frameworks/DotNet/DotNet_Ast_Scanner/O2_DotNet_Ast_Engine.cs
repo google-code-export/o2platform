@@ -214,8 +214,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 				loadSourceFiles(fileOrFolder.wrapOnList());
 			else if (fileOrFolder.dirExists())
 			{
-				statusMessage("Finding (recursively) all *.cs to process in: {0}".format(fileOrFolder));
-				loadSourceFiles(fileOrFolder.files("*.cs",true));		
+				statusMessage("Finding (recursively) all *.cs and *.vb to process in: {0}".format(fileOrFolder));
+				loadSourceFiles(fileOrFolder.files("*.cs",true));
+                loadSourceFiles(fileOrFolder.files("*.vb", true));		
 			}
 				
 			//Step_1_TreeView_SourceFiles.clear();

@@ -35,9 +35,8 @@ path.onDrop(
 						loadFiles(fileOrFolder);
 					});
 
-var defaultPath = @"C:\O2\_XRules_Local";						
-path.set_Text(defaultPath);
-loadFiles(defaultPath); 
+path.set_Text(PublicDI.config.LocalScriptsFolder);
+loadFiles(PublicDI.config.LocalScriptsFolder); 
 
 								
 

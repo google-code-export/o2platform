@@ -62,7 +62,8 @@ scriptEditor.Code =
 				"var targetFile = methodStreams.selected().get_Text();".line()+
 				"//O2File:Rule_DotNet_FindSources.cs".line()+
 				"var rule = new Rule_DotNet_FindSources();//.execute(targetFile.wrapOnList(),\"\");".line()+
-				"var codeStream = rule.createCodeStream(targetFile);".line()+
+				"var codeStreams = rule.createCodeStreams(targetFile);".line()+
+				"var codeStream = codeStreams[0];".line()+
 				"if (codeStream.hasPaths()) ".line()+
 				"{".line()+
 				"	codeStream.show(sourceCodeViewer.editor());".line()+
