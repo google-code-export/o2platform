@@ -69,18 +69,69 @@ namespace O2.XRules.Database.Findings
 			return OzasmtUtils.getListWithAllTraces(iO2Finding.o2Finding());
 		}
 		
+		public static List<IO2Trace> allTraces(this List<IO2Finding> iO2Findings)
+		{
+			var allTraces = new List<IO2Trace>();
+			foreach(var iO2Finding in iO2Findings)
+				allTraces.AddRange(OzasmtUtils.getListWithAllTraces(iO2Finding.o2Finding()));
+			return allTraces;
+		}
+		
+		public static List<string> allTraces_SourceCode(this IO2Finding iO2Finding)
+		{			
+			var sourceCodes = new List<string>();
+			foreach(O2Trace o2Trace in OzasmtUtils.getListWithAllTraces(iO2Finding.o2Finding()))
+			{
+				var sourceCode = o2Trace.SourceCode.trim();
+				if (sourceCode.valid() && sourceCodes.contains(sourceCode).isFalse())
+					sourceCodes.Add(sourceCode);
+			}
+			return sourceCodes;
+		}
+		
+		public static List<string> allTraces_SourceCode(this List<IO2Finding> iO2Findings)
+		{
+			var sourceCodes = new List<string>();
+			foreach(var iO2Finding in iO2Findings)
+				sourceCodes.add_OnlyNewItems(iO2Finding.allTraces_SourceCode());
+			return sourceCodes;
+		}
+		
 	}
 	
+	public static class Findings_ExtensionMethods_IO2Trace
+	{
+		public static List<string> values(this List<IO2Trace> iO2Traces)
+		{
+			return iO2Traces.signatures();
+		}
+		
+		public static List<string> signatures(this List<IO2Trace> iO2Traces)
+		{
+			return (from iO2Trace in iO2Traces
+				    select iO2Trace.signature).toList();
+		}
+	}
  
     public static class Findings_ExtensionMethods_OpenAndLoad
     {        
 
 		public static ascx_FindingsViewer add_FindingsViewer(this Control control)
+		{
+			return control.add_FindingsViewer(false);
+		}
+		public static ascx_FindingsViewer add_FindingsViewer(this Control control, bool includeSourceCodeViewer)
         {
             "O2_ImportExport_OunceLabs.dll".assembly()
                                            .type("OunceAvailableEngines")
                                            .invokeStatic("addAvailableEnginesToControl", new object[] {typeof(ascx_FindingsViewer)});
             var findingsViewer = control.add_Control<ascx_FindingsViewer>();
+            if (includeSourceCodeViewer)
+			{
+				var codeViewer = findingsViewer.insert_Right<Panel>(control.width()/2).add_SourceCodeViewer();
+				findingsViewer._onTraceSelected += 
+					(trace)=> codeViewer.show(trace);
+			}
             return findingsViewer;
         }
 
@@ -451,6 +502,33 @@ namespace O2.XRules.Database.Findings
                  where o2Finding.context.IndexOf(text) > -1
                  select (IO2Finding)o2Finding).ToList();
         }
+        
+		public static List<IO2Finding> whereTracesSourceCode_Contains(this List<IO2Finding> o2Findings, string text)
+		{
+		return(from o2Finding in o2Findings
+                   where o2Finding.tracesSourceCode_Contains(text)
+                   select (IO2Finding)o2Finding).ToList();			
+		}
+		
+		public static bool tracesSourceCode_Contains(this IO2Finding iO2Finding, string text)
+		{
+			return iO2Finding.allTraces_SourceCode().filter(text).size() > 0;
+		}
+		
+		
+		public static List<IO2Finding> whereTraces_Contains(this List<IO2Finding> o2Findings, string text)
+        {
+            return(from O2Finding o2Finding in o2Findings
+                   where o2Finding.trace_Contains(text)
+                   select (IO2Finding)o2Finding).ToList();
+        }
+        
+		public static bool trace_Contains(this IO2Finding iO2Finding, string text)
+		{
+			return iO2Finding.allTraces().values().filter(text).size() > 0;
+		}
+		
+		
 
         //[XRule(Name = "Only.findings.where.SourceAndSink.CONTAINS.Regex")]
         /*(public static  List<IO2Finding> whereSourceAndSink_ContainsRegex(List<IO2Finding> o2Findings, string source, string sink )
@@ -458,8 +536,7 @@ namespace O2.XRules.Database.Findings
             return o2Findings.calculateFindings(source, sink);
         }*/
 	}
-	
-	
+		
 	public static class Findings_ExtensionMethods_Joining
 	{
 		public static IO2Finding copy(this IO2Finding o2Finding)

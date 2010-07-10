@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
 using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
@@ -33,8 +32,10 @@ using ICSharpCode.SharpDevelop.Dom;
 using GraphSharp.Controls;
 using O2.XRules.Database.Utils.ExtensionMethods;
 using O2.XRules.Database.Utils;
+using O2.XRules.Database.Findings;
 
 //O2File:Ast_Engine_ExtensionMethods.cs
+//O2File:Findings_ExtensionMethods.cs
 //O2File:SharpDevelop_O2MappedAstData_ExtensionMethods.cs
 //O2File:TextEditor_O2CodeStream_ExtensionMethods.cs
 
