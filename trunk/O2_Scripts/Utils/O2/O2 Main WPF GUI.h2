@@ -1,32 +1,51 @@
 <?xml version="1.0"?>
 <H2>
   <SourceCode>//panel.clear();
-var formTitle = "OWASP O2 Platform (v{0} Beta)".format("O2_XRules_Database.exe".assembly().version());
-var wpfGui = O2Gui.open&lt;WPF_GUI&gt;(formTitle, 800,700);
+var currentVersion = "v1.2 Beta";
+var defaultWebsiteOnMainTab = "http://o2-platform.com/wiki/OWASP O2 Platform {0}".format(currentVersion);
+var formTitle = "OWASP O2 Platform {0} ({1})".format(currentVersion,"O2_XRules_Database.exe".assembly().version());
+var wpfGui = O2Gui.open&lt;WPF_GUI&gt;(formTitle,1020,700); 
+wpfGui.parentForm()
+	  .top(10)
+	  .left(10);
 //var wpfGui = panel.add_Control&lt;WPF_GUI&gt;();    
-  
+wpfGui.SideBarWidth = 190;       
 wpfGui.buildGui();
   
 wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform!".line().line() +  
 						   "If you are looking where to start, select one of the areas below and follow the links.".line().line() +   
-						   "On the big O2 logo on the right, you can also: double-click to see the available scripts, right-click to see a context menu and drag'n'drop scripts for auto compile+execution",
+						   "On the O2 logo on the top right, you can also: double-click to see the available scripts, right-click to see a context menu and drag'n'drop scripts for auto compile+execution".line(),
 	   ()=&gt; {
 	   			var sidePanel = new Panel().fill().backColor(Color.White);
+	   			sidePanel.height(700);
+	   			sidePanel.width(300);
 	   			var pictureBox = sidePanel.add_PictureBox()
 			   							  .show("O2_Logo.gif".local())
 			   							  .fill(false)
-			   							  .anchor_TopLeftRight()
-			   							  .width(220)
-			   							  .height(360)	   							  
-			   							  .topAdd(40);
+			   							  .anchor()
+			   							  .anchor_Top()
+			   							  .width(260)
+			   							  .height(180)
+			   							  .leftAdd(30);
 			   	wpfGui.ExecuteScripts.invoke("setupPictureBoxContextMenu",pictureBox);
 			   	wpfGui.ExecuteScripts.statusLabel = wpfGui.StatusLabel;
-			   	
+			   	var browser = sidePanel.add_Browser()			   	         
+						   	         .left(0).top(160).fill(false)
+						   	         //.width(sidePanel.width()-2)						   	         
+						   	         .align_Right(sidePanel)
+						   	         .align_Bottom(sidePanel)
+						   	         .heightAdd(-22)
+						   	         .widthAdd(-2)
+						   	         .bringToFront();
+								
+				browser.set_Text("");	// (to show the scroolbars)							
+			   	browser.open(defaultWebsiteOnMainTab);
 				return sidePanel;
 	   		})
 	  .add_Link("Available Scripts",wpfGui.ExecuteScripts.showAvailableScripts) 		
 	  .add_Link("O2 Log Viewer",wpfGui.ExecuteScripts.openO2LogViewer) 
-	  .add_Link("O2 Command Prompt",wpfGui.ExecuteScripts.openO2CommandPromt);	  	  
+	  .add_Link("O2 Command Prompt",wpfGui.ExecuteScripts.openO2CommandPromt)
+	  .add_Upgrade_Link(currentVersion, "http://code.google.com/p/o2platform/downloads/list");
 	  
 wpfGui.add_Section("Penetration Testing", "If you are performing security penetration tests (also called BlackBox security reviews) , here are a number of O2 Modules that will help you")
 	  .add_Label("IE Automation:")
@@ -122,11 +141,9 @@ wpfGui.add_Section("API Development Environment", "There are a number of develop
 	//.add_Label("[Dev GUIs]:")	
 	.add_Link("Source Code Editor",wpfGui.ExecuteScripts.openSourceCodeEditor)
 	.add_Link_O2Script("Simple Script Editor","ascx_Simple_Script_Editor.cs.o2")
-	.add_Link_O2Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")
-		
-	.add_Link("XRules/Script Editor",() =&gt; open.scriptEditor())
-	.add_Link_O2Script("'Graph' development gui","ascx_GraphWithInspector.cs")	
-	
+	.add_Link_O2Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")			
+	.add_Link_O2Script("'Graph' development gui","ascx_GraphWithInspector.cs")		
+	.add_Link("O2 Development Environment",() =&gt; open.scriptEditor())
 	.add_Label("Utils:")
 	.add_Link("O2 Object Model", () =&gt; open.o2ObjectModel())
 	.add_Link("O2 Executable Directry", () =&gt; open.directory(PublicDI.config.CurrentExecutableDirectory, true))
@@ -140,7 +157,7 @@ wpfGui.add_Section("Videos", "Mostly created using O2's Movie Editor tool, here 
 	  .add_Link_YouTube("Javascript: AST Viewer","_pqY_6-P-xU")	  
 	  .add_Link_YouTube("DotNet: O2 .NET Ast Engine","j0d3F3wqfRU")
 	  .add_Link_YouTube("DotNet: Convert C#-&gt;VBNet","3eVeG2Pwa4U")
-	  .add_Link_YouTube("IE: Using WatiN to create a GMail account","rTD31e7HY4E")
+	  .add_Link_YouTube("IE: Create a GMail account","rTD31e7HY4E")
 	  .add_Link_YouTube("API: Amazon S3 Browser","bFOWs42cF3Q");
 	  
 	  
@@ -171,9 +188,11 @@ wpfGui.statusMessage("Welcome to the OWASP O2 Platform");
 return null;
 
 
+//using O2.External.IE.ExtensionMethods
 
 //O2File:WPF_Gui.cs
 
-//O2Ref:Odyssey.dll</SourceCode>
+//O2Ref:Odyssey.dll
+//O2Ref:O2_External_IE.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

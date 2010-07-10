@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Reflection;
 using System.Collections.Generic;
 using WinForms = System.Windows.Forms;
+using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
@@ -49,6 +50,7 @@ namespace O2.XRules.Database.APIs
 		public O2PlatformWikiAPI Wiki_O2 { get; set; }
 		public WinForms.ToolStripStatusLabel StatusLabel { get; set; }
 		public ascx_Execute_Scripts ExecuteScripts { get; set; }
+		public int SideBarWidth { get; set; }
 		
     	public static void testGui()
     	{    	 
@@ -57,7 +59,8 @@ namespace O2.XRules.Database.APIs
 			wpfGui.add_Section("Main", "This is the intro text. Put here an explanation of what this module is all about")
 				  .add_Label("this is a label 1")				  
 				  .add_Link("link",()=>{})
-				  .add_Link("link 123",()=>{});
+				  .add_Link("link 123",()=>{})
+				  .add_Upgrade_Link("aaa", "http://code.google.com/p/o2platform/downloads/list");
 				  
 			wpfGui.add_Section("Section 1", "Text that describes Section 1");
 			wpfGui.add_Section("Section 2");
@@ -72,7 +75,8 @@ namespace O2.XRules.Database.APIs
     	public WPF_GUI()
     	{
     		this.Width = 640;    		
-    		this.Height = 420;    		
+    		this.Height = 420; 
+    		SideBarWidth = 250;
     		//buildGui();
     		GuiSections = new List<WPF_GUI_Section>();
     		Wiki_O2 = new O2PlatformWikiAPI();
@@ -99,8 +103,8 @@ namespace O2.XRules.Database.APIs
 						GUI_OutlookBar.IsPopupVisible=true;
 						GUI_OutlookBar.ShowSideButtons=true;
 						GUI_OutlookBar.ShowButtons=true;			
-						GUI_OutlookBar.Width = 300; 
-						GUI_OutlookBar.MaxWidth = 300; 
+						GUI_OutlookBar.Width = SideBarWidth; 
+						//GUI_OutlookBar.MaxWidth = SideBarWidth; 
 						GUI_OutlookBar.ButtonHeight = 21;
 						
 						var userControl = dockPanel.add_WinForms_Panel()
@@ -277,6 +281,17 @@ namespace O2.XRules.Database.APIs
 			sections.Add(newSection);
 			return newSection;
     	}
+
+		public static WPF_GUI_Section add_Upgrade_Link(this WPF_GUI_Section section, string latestVersion, string upgradeLink)
+		{							
+			if (PublicDI.config.CurrentExecutableDirectory.contains("OWASP O2 Platform") &&
+    			PublicDI.config.CurrentExecutableDirectory.contains(latestVersion).isFalse())
+    		{
+    			section.add_Label("There is an UPGRADE AVAILABLE:",true);    			
+    			section.add_Link_Web("download new version", upgradeLink);    			
+    		}
+    		return section;
+		}
 		
 		public static WPF_GUI_Section add_Label(this WPF_GUI_Section section, string labelText)
 		{
@@ -293,7 +308,7 @@ namespace O2.XRules.Database.APIs
 		{			
 			return (WPF_GUI_Section)section.SectionInGui.wpfInvoke(
 				()=>{
-						section.ContentPanel.add_Xaml_Link(linkText,"20 5 5 5", onCLick);						
+						section.ContentPanel.add_Xaml_Link(linkText,"20 0 5 10", onCLick);						
 						return section;
 					});								
 		}
@@ -322,6 +337,6 @@ namespace O2.XRules.Database.APIs
 		{			
 			return section.add_Link(linkText,()=> section.Wpf_Gui.ExecuteScripts.loadFile(o2ScriptToExecute.local()));
 		}
-		
+				
     }
 }
