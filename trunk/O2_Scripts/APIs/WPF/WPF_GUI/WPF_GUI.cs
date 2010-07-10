@@ -284,7 +284,7 @@ namespace O2.XRules.Database.APIs
 
 		public static WPF_GUI_Section add_Upgrade_Link(this WPF_GUI_Section section, string latestVersion, string upgradeLink)
 		{							
-			if (true || PublicDI.config.CurrentExecutableDirectory.contains("OWASP O2 Platform") &&
+			if (PublicDI.config.CurrentExecutableDirectory.contains("OWASP O2 Platform") &&
     			PublicDI.config.CurrentExecutableDirectory.contains(latestVersion).isFalse())
     		{
     			section.add_Label("There is an UPGRADE available",true);    			
