@@ -42,7 +42,7 @@ namespace O2.XRules.Database.Utils
 		{
 			var topPanel = this.add_Panel();			
 
-			var script = topPanel.insert_Below<Panel>().add_Script(false);
+			var script = topPanel.insert_Below<Panel>().add_Script(true);
 			script.InvocationParameters.Add("panel",topPanel); 
 			script.onCompileExecuteOnce();
 			script.set_Command(getScript(customScript));

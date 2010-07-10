@@ -18,9 +18,15 @@ var filesToCompile = targetFiles.size();
 var compiledFiles = 0;
 progressBar.maximum(filesToCompile); 
 "There are {0} files to compile".info(filesToCompile);
-
+var cancelExecution = false;
+dataGridView.add_ContextMenu().add_MenuItem("Cancel Execution", ()=&gt; cancelExecution = true);
 foreach(var file in targetFiles) 
-{				
+{		
+	if (cancelExecution)
+	{
+		"Cancel Execution request received".error();
+		break;
+	}
 	"[{0}/{1}] Compiling: {2}".info(compiledFiles++, filesToCompile, file);
 	var compiler1Result = true;
 	var compiler2Result = true;
@@ -47,8 +53,6 @@ foreach(var file in targetFiles)
 	dataGridView.get_Row(rowId).Cells[1].Style.ForeColor = (compiler1Result) ? Color.Green : Color.Red;
 	dataGridView.get_Row(rowId).Cells[2].Style.ForeColor = (compiler2Result) ? Color.Green : Color.Red;
 	progressBar.increment(1); 		
-//	if (compiledFiles &gt; 50)
-//		break;
 }
  
 //O2Ref:System.Data.dll

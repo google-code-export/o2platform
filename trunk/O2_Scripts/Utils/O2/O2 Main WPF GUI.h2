@@ -181,10 +181,13 @@ wpfGui.add_Section("Help", "If you are looking for help, here are the best place
 	  .add_Link_Web("O2 Mailing List","https://lists.owasp.org/mailman/listinfo/owasp-o2-platform")
 	  .add_Link_Web("Download Source Code","http://code.google.com/p/o2platform/source/checkout")
 	  .add_Link_Web("ClickOnce .NET Installer","http://o2platform.googlecode.com/svn/O2_ClickOnce_Installers/O2_XRules_Database/index.htm")
-	  .add_Link_Web("View O2's Bug Tracking","http://code.google.com/p/o2platform/issues/list")	  
+	  .add_Link_Web("View O2's Bug Tracking","http://code.google.com/p/o2platform/issues/list")	  	  
 	  .add_Label("O2Platform.com Wiki Pages")
 	  .add_Link_O2Wiki("O2 Documentation","Documentation")	  	  
-	  .add_Link_O2Wiki("All Videos","O2_Videos_on_YouTube");
+	  .add_Link_O2Wiki("All Videos","O2_Videos_on_YouTube")
+	  .add_Label("Debug O2")
+	  .add_Link_O2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2");
+	  
 	  
  
 wpfGui.showFirstWinFormsPanel();	  
