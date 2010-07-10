@@ -47,7 +47,7 @@ namespace O2.Core.XRules.Ascx
                 {
                     lbTargetListBox.Items.Clear();
                     lbTargetListBox.Items.AddRange(
-                        Files.getFilesFromDir(PublicDI.config.LocallyDevelopedTemplatesFolder).ToArray());
+                        Files.getFilesFromDir(PublicDI.config.ScriptsTemplatesFolder).ToArray());
                     if (lbTargetListBox.Items.Count > 0)
                         lbTargetListBox.SelectedIndex = 0;
                 });

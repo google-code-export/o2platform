@@ -31,7 +31,7 @@ namespace O2.Core.XRules.Ascx
         {
             if (lbCurrentXRulesTemplates.SelectedItem != null)
             {
-                var templateFile = Path.Combine(PublicDI.config.LocallyDevelopedTemplatesFolder,lbCurrentXRulesTemplates.SelectedItem.ToString());
+                var templateFile = Path.Combine(PublicDI.config.ScriptsTemplatesFolder,lbCurrentXRulesTemplates.SelectedItem.ToString());
                 createNewRuleFromTemplate(templateFile, tbNewRuleName.Text);
             }
         }

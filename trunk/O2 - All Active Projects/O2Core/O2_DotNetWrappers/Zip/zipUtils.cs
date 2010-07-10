@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Ionic.Zip;
+using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers;
 using O2.DotNetWrappers.Windows;
 using O2.Interfaces.Utils;
@@ -93,15 +94,23 @@ namespace O2.DotNetWrappers.Zip
         public string unzipFile(string fileToUnzip, string targetFolder)
         {
            // targetFolder = "C:\\O2\\_tempDir\\tmp10BA_aa";
-            DI.log.info("UnZiping file {0} into folder {1}", fileToUnzip, targetFolder);
-            Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);
-            var zpZipFile = new ZipFile(fileToUnzip);
-            //zpZipFile.ExtractAll(targetFolder, true);
-            zpZipFile.ExtractExistingFile = ExtractExistingFileAction.OverwriteSilently;
-            //var test = zpZipFile.OutputUsedZip64;            
-            zpZipFile.ExtractAll(targetFolder);
-            zpZipFile.Dispose();
-            return targetFolder;
+            try
+            {
+                DI.log.info("UnZiping file {0} into folder {1}", fileToUnzip, targetFolder);
+                Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder);
+                var zpZipFile = new ZipFile(fileToUnzip);
+                //zpZipFile.ExtractAll(targetFolder, true);
+                zpZipFile.ExtractExistingFile = ExtractExistingFileAction.OverwriteSilently;
+                //var test = zpZipFile.OutputUsedZip64;            
+                zpZipFile.ExtractAll(targetFolder);
+                zpZipFile.Dispose();
+                return targetFolder;
+            }
+            catch (Exception ex)
+            { 
+                ex.log("in unzipFile: {0} -> {1}".format(fileToUnzip, targetFolder));
+                return "";
+            }
         }
 
         public List<string> unzipFileAndReturtListOfUnzipedFiles(string fileToUnzip)

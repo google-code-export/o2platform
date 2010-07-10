@@ -40,7 +40,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>106</ApplicationRevision>
+    <ApplicationRevision>109</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -82,6 +82,11 @@
     <Reference Include="Merlin, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\Merlin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Microsoft.mshtml.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -153,9 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
-    <Content Include="_Scripts.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>
     </Compile>

@@ -14,13 +14,14 @@ namespace O2.Kernel.InterfacesBaseImpl
     public class KO2Config : IO2Config
     {
         public static string defaultLocalScriptFolder = @"C:\O2\O2Scripts_Database\_Scripts";
-        public static string defaultLocallyDevelopedScriptsFolder = @"C:\O2\_XRules_Local";
-        public static string LocallyDevelopedScriptsTemplateFolder = defaultLocalScriptFolder + @"\_Templates";
+        public static string defaultLocallyDevelopedScriptsFolder = @"C:\O2\_XRules_Local";        
         public static string defaultSvnO2RootFolder = @"http://o2platform.googlecode.com/svn/trunk/";
         public static string defaultSvnO2DatabaseRulesFolder = @"http://o2platform.googlecode.com/svn/trunk/O2_Scripts/";
         public static string defaultO2SVN_ExternalDlls = "http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/_3rdPartyDlls/";
         public static string defaultO2SVN_Binaries = "http://o2platform.googlecode.com/svn/trunk/O2_Binaries/";
-        
+        public static string defaultO2DownloadLocation = "http://code.google.com/p/o2platform/downloads/list";
+        public static string defaultZippedScriptsFile = "_Scripts v1.x.zip";
+
         const string  defaultO2LocalTempFolder = @"C:\O2\_tempDir\";
 
         public KO2Config()
@@ -32,13 +33,14 @@ namespace O2.Kernel.InterfacesBaseImpl
             O2FindingsFileExtension = ".O2Findings";
             extraSettings = new List<Setting>();
             dependenciesInjection = new List<DependencyInjection>();
-            LocalScriptsFolder = defaultLocalScriptFolder;
-            LocallyDevelopedScriptsFolder = defaultLocallyDevelopedScriptsFolder;
-            LocallyDevelopedTemplatesFolder = LocallyDevelopedScriptsTemplateFolder;            
+            setLocalScriptsFolder(defaultLocalScriptFolder);            
+            ScriptsTemplatesFolder = defaultLocalScriptFolder + @"\_Templates"; ;            
             SvnO2RootFolder = defaultSvnO2RootFolder;
             SvnO2DatabaseRulesFolder = defaultSvnO2DatabaseRulesFolder;
             O2SVN_ExternalDlls = defaultO2SVN_ExternalDlls;
             O2SVN_Binaries = defaultO2SVN_Binaries;
+            ZipppedScriptsFile = defaultZippedScriptsFile;
+            O2DownloadLocation = defaultO2DownloadLocation;
         }
                        
         public KO2Config(string o2ConfigFile) :this ()
@@ -79,13 +81,17 @@ namespace O2.Kernel.InterfacesBaseImpl
             }
         }
 
+
+        public string ZipppedScriptsFile { get; set; }
         public string LocalScriptsFolder { get; set; }
         public string LocallyDevelopedScriptsFolder { get; set; }
-        public string LocallyDevelopedTemplatesFolder { get; set; }
+        public string ScriptsTemplatesFolder { get; set; }
         public string SvnO2RootFolder { get; set; }
         public string SvnO2DatabaseRulesFolder { get; set; }
         public string O2SVN_ExternalDlls { get; set; }
         public string O2SVN_Binaries { get; set; }
+        public string O2DownloadLocation { get; set; }
+        
 
         public string Version 
         {
@@ -95,7 +101,12 @@ namespace O2.Kernel.InterfacesBaseImpl
             }
         }
 
-        
+        public void setLocalScriptsFolder(string newLocalScriptsFolder)
+        {            
+            LocalScriptsFolder = newLocalScriptsFolder;
+            LocallyDevelopedScriptsFolder = defaultLocallyDevelopedScriptsFolder;
+        }
+
 
         public string CurrentExecutableDirectory
         {

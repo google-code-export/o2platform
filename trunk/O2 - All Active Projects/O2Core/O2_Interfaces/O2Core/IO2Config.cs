@@ -13,12 +13,14 @@ namespace O2.Interfaces.O2Core
         
         string O2TempDir { get; set; }
         string LocalScriptsFolder { get; set; }
+        string ZipppedScriptsFile { get; set; }
         string LocallyDevelopedScriptsFolder { get; set; }
-        string LocallyDevelopedTemplatesFolder { get; set; }        
+        string ScriptsTemplatesFolder { get; set; }        
         string SvnO2RootFolder { get; set; }
         string SvnO2DatabaseRulesFolder { get; set; }
         string O2SVN_ExternalDlls { get; set; }
         string O2SVN_Binaries { get; set; }
+        string O2DownloadLocation { get; set; }
         string Version { get; }
         string O2ConfigFile { get; set; }
         string CurrentExecutableDirectory { get; }
@@ -30,6 +32,7 @@ namespace O2.Interfaces.O2Core
         
         //String setDefaultDir_TempFolder();
 
+        void setLocalScriptsFolder(string newLocalScriptsFolder);
         string getTempFileInTempDirectory(string extension);
         string getTempFolderInTempDirectory(string stringToAddToTempDirectoryName);
 
@@ -43,6 +46,6 @@ namespace O2.Interfaces.O2Core
         void addPathToCurrentExecutableEnvironmentPathVariable(String sPathToAdd);
 
         // misc global vars
-        string O2FindingsFileExtension { get; set;}         
+        string O2FindingsFileExtension { get; set;}                 
     }
 }

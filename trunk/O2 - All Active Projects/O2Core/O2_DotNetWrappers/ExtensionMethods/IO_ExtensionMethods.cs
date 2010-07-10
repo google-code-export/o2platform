@@ -93,9 +93,9 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 if (file.valid() && file.size() < 256)
                     return Path.GetExtension(file).ToLower();
             }
-            catch (Exception ex)
+            catch
             {
-                return "";
+                //return "";
             }
             return "";
         }

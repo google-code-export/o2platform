@@ -18,8 +18,8 @@ namespace O2.Views.ASCX.classes.MainGUI
     	{
     		return showAscxInForm(controlType, formTitle, -1, -1);
     	}
-    	
-        public static Control showAscxInForm(Type controlType, string formTitle, int width, int height)
+
+        public static Control showAscxInForm(Type controlType, string formTitle, int width, int height)               
         {
         	var controlCreation = new AutoResetEvent(false);
         	Control control = null;
@@ -45,8 +45,7 @@ namespace O2.Views.ASCX.classes.MainGUI
                                 control.Height = height;
                             else
                                 o2Gui.Height = control.Height + 20;          // if it is not defined resize the form to fit the control
-                            // note: need to double check if the correct values to add to the form (above) are 10 and 20
-
+                            // note: need to double check if the correct values to add to the form (above) are 10 and 20                            
                             o2Gui.Controls.Add(control);
                             o2Gui.Load += (sender, e) => controlCreation.Set();
                             //o2Gui.showDialog(false);

@@ -60,7 +60,7 @@ namespace O2.API.AST.CSharp
         public void loadFile(string fileOrCode)
         {
             var codeToLoad = "";
-            var filePath = "";
+            var filePath = "";            
             try
             {
                 // resolve filename and get code to process                
@@ -75,7 +75,7 @@ namespace O2.API.AST.CSharp
                     filePath = fileOrCode.save();
                 }
                 // get compilation unit
-                var parser = codeToLoad.csharpAst();
+                var parser = filePath.extension(".vb") ? codeToLoad.vbnetAst() :  codeToLoad.csharpAst();
                 if (parser.Errors.Count > 0)
                 {
                     "[O2MappedAstData][loadFile] Parser error for file: {0}".error("fileOrCode");
@@ -169,18 +169,31 @@ namespace O2.API.AST.CSharp
 
         public void Dispose()
         {
-            O2AstResolver.pcRegistry.Dispose();
-            O2AstResolver.myProjectContent.Dispose();
-            O2AstResolver = null;
-            //"added reference to MsCorLib.dll and System.dll".info();
-            MapAstToDom = null;
-            MapAstToNRefactory = null;
-            FileToINodes.Clear();
-            FileToINodes = null;
-            FileToCompilationUnit.Clear();
-            FileToCompilationUnit = null;
-            FileToSpecials.Clear();
-            FileToSpecials = null;
+            try
+            {
+                if (O2AstResolver.notNull())
+                {
+                    O2AstResolver.pcRegistry.Dispose();
+                    O2AstResolver.myProjectContent.Dispose();
+                }
+                O2AstResolver = null;
+                //"added reference to MsCorLib.dll and System.dll".info();
+                MapAstToDom = null;
+                MapAstToNRefactory = null;
+                if (FileToINodes.notNull())
+                    FileToINodes.Clear();
+                FileToINodes = null;
+                if (FileToCompilationUnit.notNull())
+                    FileToCompilationUnit.Clear();
+                FileToCompilationUnit = null;
+                if (FileToSpecials.notNull())
+                    FileToSpecials.Clear();
+                FileToSpecials = null;
+            }
+            catch (Exception ex)
+            {
+                ex.log("in O2MappedAstData.Dispose()");
+            }
         }
 
         #endregion
