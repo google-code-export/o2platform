@@ -1402,6 +1402,23 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     return treeNode;
                 });
         }
+                
+        public static List<TreeNode> allNodes(this TreeView treeView)
+        {
+            return treeView.nodes().allNodes();
+        }
+
+        public static List<TreeNode> allNodes(this List<TreeNode> nodes)
+        {
+            var ltnNodes = new List<TreeNode>();
+            foreach (TreeNode tnNode in nodes)
+            {
+                ltnNodes.Add(tnNode);
+                ltnNodes.AddRange(allNodes(tnNode.nodes()));
+            }
+            return ltnNodes;
+        }
+
 
         public static List<TreeNode> nodes(this TreeView treeView)
         {

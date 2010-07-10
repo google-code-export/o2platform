@@ -451,6 +451,22 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 });
         }
 
+        public static ascx_SourceCodeEditor caret_Column(this ascx_SourceCodeEditor codeEditor, int value)
+        {
+            return codeEditor.caret_Column(value, 3);
+        }
+
+        public static ascx_SourceCodeEditor caret_Column(this ascx_SourceCodeEditor codeEditor, int value, int viewOffset)
+        {
+            return (ascx_SourceCodeEditor)codeEditor.invokeOnThread(
+                () =>
+                {
+                    codeEditor.caret().Column = value + viewOffset;  // so that the selected line is not at the bottom of the screen
+                    codeEditor.caret().Column = value;
+                    return codeEditor;
+                });
+        }
+
         public static ascx_SourceCodeViewer onCaretMove(this ascx_SourceCodeViewer codeViewer, Action<Caret> callback)
         {
             codeViewer.editor().onCaretMove(callback);
@@ -472,6 +488,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 var selection = new ICSharpCode.TextEditor.Document.DefaultSelection(codeEditor.document(), start, end);
                 codeEditor.textArea().SelectionManager.SetSelection(selection);
                 codeEditor.caret_Line(start.Line);
+                codeEditor.caret_Column(start.Column);
                 return codeEditor;
             });
         }

@@ -48,6 +48,9 @@ namespace O2.Views.ASCX.classes.MainGUI
         	    Width = width;
             if (height > -1)
         	    Height = height;
+            
+            Top = 1;
+            Left = 1;
 
             IsMdiContainer = isMdiContainer;
 
@@ -99,7 +102,7 @@ namespace O2.Views.ASCX.classes.MainGUI
         public static T open<T>(string title, int width, int height) where T : Control
         {
             return load<T>(title,width,height);
-        }
+        }        
 
         public static T load<T>() where T : Control
         {
@@ -114,7 +117,7 @@ namespace O2.Views.ASCX.classes.MainGUI
         public static T load<T>(string title, int width, int height) where T : Control
         {
             return (T)WinForms.showAscxInForm(typeof(T), title, width, height);
-        }
+        }        
 
         public static T showAsForm<T>() where T : Control
         {

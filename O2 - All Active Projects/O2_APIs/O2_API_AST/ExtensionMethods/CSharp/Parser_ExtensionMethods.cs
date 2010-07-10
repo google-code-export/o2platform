@@ -25,10 +25,21 @@ namespace O2.API.AST.ExtensionMethods.CSharp
         public static IParser csharpAst(this string csharpCodeOrFile)
         {
             var language = SupportedLanguage.CSharp;
+            return csharpCodeOrFile.ast(language);
+        }
+
+        public static IParser vbnetAst(this string vbnetCodeOrFile)
+        {
+            var language = SupportedLanguage.VBNet;
+            return vbnetCodeOrFile.ast(language);
+        }
+
+        public static IParser ast(this string csharpCodeOrFile,  SupportedLanguage language)
+        {
             var codeToParse = (csharpCodeOrFile.fileExists()) ? csharpCodeOrFile.fileContents() : csharpCodeOrFile;
 
             var parser = ParserFactory.CreateParser(language, new StringReader(codeToParse));
-            
+
             parser.Parse();
             return parser;
         }

@@ -81,7 +81,7 @@ namespace O2.External.IE.Wrapper
             return getScreenshot(uri.ToString());
         }
 
-        public static Bitmap open(string url)
+        public new static Bitmap open(string url)
         {
             return getScreenshot(url);
         }
