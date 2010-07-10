@@ -38,8 +38,13 @@ wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform!".line().line() +
 						   	         .widthAdd(-2)
 						   	         .bringToFront();
 								
-				browser.set_Text("");	// (to show the scroolbars)							
-			   	browser.open(defaultWebsiteOnMainTab);
+				O2Thread.mtaThread(
+					()=&gt;{
+							browser.silent(true);
+							browser.set_Text("");	// (to show the scroolbars)							
+			   				browser.open(defaultWebsiteOnMainTab);
+			   				Application.DoEvents();
+			   			});
 				return sidePanel;
 	   		})
 	  .add_Link("Available Scripts",wpfGui.ExecuteScripts.showAvailableScripts) 		
