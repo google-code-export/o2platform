@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>panel.clear();
-
+  <SourceCode>
 O2Gui.open&lt;Panel&gt;("Download new version of O2",700,500)
       .add_Browser()
 	  .open("http://code.google.com/p/o2platform/downloads/list");

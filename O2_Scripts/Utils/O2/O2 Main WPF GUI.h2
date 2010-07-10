@@ -72,7 +72,7 @@ wpfGui.add_Section("Penetration Testing", "If you are performing security penetr
 		
 wpfGui.add_Section("Source-Code Reviews", "If you are performing securiiy reviews and have access to the source code (also called WhiteBox security reviews), here are a number of O2 Modules that will help you")
 	  .add_Label(".Net Scanner:")
-	  .add_Link_O2Script("Static Analysis Tool (.Net AST Scanner)","O2_DotNet_Ast_Scanner.h2")
+	  .add_Link_O2Script("Static Analysis Tool (.Net AST)","O2_DotNet_Ast_Scanner.h2")
 	  .add_Link_O2Script(".Net AST Engine","O2_DotNet_Ast_Engine.cs")
 	  .add_Link_O2Script("Edit AST Rules","Util - Edit AST Rules.h2")
 	  .add_Link_O2Script("Debug AST Rules","Util - Debug AST Rules.h2")
@@ -115,7 +115,7 @@ wpfGui.add_Section("Windows Tools", "Here are a number of windows utilities and 
 	  .add_Link_O2Script("Running Processes Details","ascx_Running_Processes_Details.cs.o2")
 	  .add_Link_O2Script("Stop Processes","ascx_Processes_Stop.cs.o2")	  	  	  
 	  .add_Link_O2Script("Stop Services","ascx_Services_Stop.cs.o2")	  
-	  .add_Link_O2Script("Disable+Enable Network Interfaces","Wizard - Enable or Disable Network Interfaces.cs.o2")	  	  	  
+	  .add_Link_O2Script("Reset Network Interfaces","Wizard - Enable or Disable Network Interfaces.cs.o2")	  	  	  
 	  .add_Link_O2Script("CmdExe API/Wrapper","CmdExeAPI.cs")	  
 	
 	  .add_Label("windows executables:")
@@ -124,14 +124,14 @@ wpfGui.add_Section("Windows Tools", "Here are a number of windows utilities and 
 	  .add_Link_Process("calc.exe","calc.exe");
 	  
 wpfGui.add_Section("OWASP Projects", "Here are several examples of OWASP Projects that O2 already provides an API for (or are currently on the roadmap for being supported)")	  
-	  .add_Label("WebGoat  (see 'WebGoat BlackBox Exploits' in Demos)",true)
+	  .add_Label("WebGoat  (see Demos)",true)
 	  .add_Label("WebScarab  (soon)",true)
 	  .add_Label("Testing Guide  (soon)",true)
 	  .add_Label("Code Review  (soon)",true)
 	  .add_Label("Tools:")
 	  .add_Link_O2Script("Edit the OWASP Website","MediaWikiEditor.cs.o2");
 
-wpfGui.add_Section("3rd Party Tools (Closed &amp; Open Source)")	  
+wpfGui.add_Section("3rd Party Tools")	  
 	  .add_Label("FindBugs (soon)")
 	  .add_Label("Burp Proxy (soon)")
 	  .add_Label("OunceLabs 6.x (soon)")
@@ -142,7 +142,7 @@ wpfGui.add_Section("3rd Party Tools (Closed &amp; Open Source)")
 	  .add_Label("Maltego (soon)")
 	  .add_Label("NetSparker (soon)");
 
-wpfGui.add_Section("API Development Environment", "There are a number of development environments in O2, each is designed for a particular talk/workflow")
+wpfGui.add_Section("API/Script Development", "There are a number of development environments in O2, each is designed for a particular talk/workflow")
 	//.add_Label("[Dev GUIs]:")	
 	.add_Link("Source Code Editor",wpfGui.ExecuteScripts.openSourceCodeEditor)
 	.add_Link_O2Script("Simple Script Editor","ascx_Simple_Script_Editor.cs.o2")
@@ -152,7 +152,7 @@ wpfGui.add_Section("API Development Environment", "There are a number of develop
 	.add_Label("Utils:")
 	.add_Link("O2 Object Model", () =&gt; open.o2ObjectModel())
 	.add_Link("O2 Executable Directry", () =&gt; open.directory(PublicDI.config.CurrentExecutableDirectory, true))
-	.add_Link("View Loaded Script Source Code",wpfGui.ExecuteScripts.showLoadedScriptSourceCode);	
+	.add_Link("View Loaded Script Source",wpfGui.ExecuteScripts.showLoadedScriptSourceCode);	
 
 wpfGui.add_Section("Videos", "Mostly created using O2's Movie Editor tool, here are a number of videos that show multiple O2 modules in action")	
 	  .add_Link_YouTube("WebGoat: Exploits","1bbKNvyvLO0")
@@ -171,7 +171,7 @@ wpfGui.add_Section("Demos", "If you are unsure on where to start, check out thes
 	  .add_Link_O2Script("WebGoat - BlackBox Exploits","WebGoat_BlackBox_Exploits.cs")
 	  .add_Link_O2Script("HacmeBank - Start WebServer","Wizard - Start HacmeBank.cs.o2")
 	  .add_Link_O2Script("HacmeBank - BlackBox Exploits","HacmeBank_BlackBox_Exploits.cs")
-	  .add_Link_O2Script("HacmeBank - Custom O2 AST Security Scanner","HacmeBank - Custom O2 AST Security Scanner.h2")
+	  .add_Link_O2Script("HacmeBank - Custom Scanner","HacmeBank - Custom O2 AST Security Scanner.h2")
 	  .add_Link_O2Script("HacmeBank - Map EntryPoints","Map HacmeBank Ascx EntryPoints.h2");
 	  
 
@@ -181,7 +181,7 @@ wpfGui.add_Section("Help", "If you are looking for help, here are the best place
 	  .add_Link_Web("O2 Mailing List","https://lists.owasp.org/mailman/listinfo/owasp-o2-platform")
 	  .add_Link_Web("Download Source Code","http://code.google.com/p/o2platform/source/checkout")
 	  .add_Link_Web("ClickOnce .NET Installer","http://o2platform.googlecode.com/svn/O2_ClickOnce_Installers/O2_XRules_Database/index.htm")
-	  .add_Link_Web("File a bug into O2's Bug Tracking System","http://code.google.com/p/o2platform/issues/list")	  
+	  .add_Link_Web("View O2's Bug Tracking","http://code.google.com/p/o2platform/issues/list")	  
 	  .add_Label("O2Platform.com Wiki Pages")
 	  .add_Link_O2Wiki("O2 Documentation","Documentation")	  	  
 	  .add_Link_O2Wiki("All Videos","O2_Videos_on_YouTube");

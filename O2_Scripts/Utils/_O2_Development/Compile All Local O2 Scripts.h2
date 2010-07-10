@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var localScriptFolder = @"C:\O2\O2Scripts_Database\_Scripts";
+  <SourceCode>var localScriptFolder = PublicDI.config.LocalScriptsFolder;
 
 var panel = O2Gui.open&lt;Panel&gt;("Compiling all local O2 Scripts",500,500);
 panel.clear();
