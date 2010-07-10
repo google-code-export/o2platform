@@ -142,7 +142,7 @@ wpfGui.add_Section("3rd Party Tools")
 	  .add_Label("Maltego (soon)")
 	  .add_Label("NetSparker (soon)");
 
-wpfGui.add_Section("API/Script Development", "There are a number of development environments in O2, each is designed for a particular talk/workflow")
+wpfGui.add_Section("API / Script Development", "There are a number of development environments in O2, each is designed for a particular talk/workflow")
 	//.add_Label("[Dev GUIs]:")	
 	.add_Link("Source Code Editor",wpfGui.ExecuteScripts.openSourceCodeEditor)
 	.add_Link_O2Script("Simple Script Editor","ascx_Simple_Script_Editor.cs.o2")
