@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//panel.clear();
+  <SourceCode>//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+
+//panel.clear();
 //var topPanel = panel;
 var aforgeVideo = new API_AForge_Video(); 
 var topPanel = O2Gui.open&lt;Panel&gt;("Movie Creator",1000,700);
@@ -69,12 +71,18 @@ var capturing = false;
 topControlBar.add_Link("Start capture",30,5,
 				()=&gt;{
 						capturing = true;
+						Bitmap lastBitMap = null;
 						while(capturing) 
 						{
 							var bitmap = aforgeVideo.capture(topPanel);
-							listView.add_Video_Image_Wpf(bitmap,100,100); 
+							// only add if the bimap is different from the previous frame
+							if (bitmap.isNotEqualTo(lastBitMap))
+							{
+								listView.add_Video_Image_Wpf(bitmap,100,100); 								
+								"Total Frame count: {0}".info(listView.items().size());
+							}
+							lastBitMap = bitmap;
 							aforgeVideo.frameCaptureDelay();
-							"Total Frame count: {0}".info(listView.items().size());
 						} 
 					})
 			.append_Link("Stop capture",
@@ -94,8 +102,8 @@ topControlBar.add_Link("Start capture",30,5,
 				
 
 listView.enableDrag(); 
-
-listView.enableDrop();  
+listView.enableDrop();
+listView.onDeleteKey_Remove_SelectedItems();  
 //var images = @"C:\O2\_tempDir\6-18-2010\For Video".files("*.jpeg"); 
 //listView.add_Images_Wpf(images,100,100);  
 
@@ -106,7 +114,7 @@ listView.afterSelect&lt;API_AForge_Video_WPF_Image&gt;(
 			 });
 
 wpfHost.add_ContextMenu()
-	   .add_MenuItem("Delete Frame", true,()=&gt;listView.remove_Selected())
+	   .add_MenuItem("Delete Selected Frames", true,()=&gt;listView.remove_SelectedItems())
 	   .add_MenuItem("Copy To Clipboard", 
 	   		()=&gt;{ 
 	   				var currentItem = listView.selected&lt;API_AForge_Video_WPF_Image&gt;();

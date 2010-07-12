@@ -60,6 +60,7 @@ namespace O2.XRules.Database.APIs
 				  .add_Label("this is a label 1")				  
 				  .add_Link("link",()=>{})
 				  .add_Link("link 123",()=>{})
+				  .add_Link_Web("BBC news","http://news.bbc.co.uk")
 				  .add_Upgrade_Link("aaa", "http://code.google.com/p/o2platform/downloads/list");
 				  
 			wpfGui.add_Section("Section 1", "Text that describes Section 1");
@@ -113,7 +114,13 @@ namespace O2.XRules.Database.APIs
 						WinFormPanel = userControl.add_Panel();						
 						
 						O2Browser  = WinFormPanel.add_Browser();
-    					O2Browser.silent(true);
+						O2Browser.fill(false)
+								 .align_Right(WinFormPanel)
+								 .align_Bottom(WinFormPanel)
+								 .heightAdd(-22)
+						         .anchor_All()
+						         .silent(true);						
+    					
     					statusMessage("WPF GUI built");
 						//WinFormPanel.backColor(Color.White);			
 						/**add_Sections();

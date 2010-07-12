@@ -50,6 +50,7 @@ wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform!".line().line() +
 	  .add_Link("Available Scripts",wpfGui.ExecuteScripts.showAvailableScripts) 		
 	  .add_Link("O2 Log Viewer",wpfGui.ExecuteScripts.openO2LogViewer) 
 	  .add_Link("O2 Command Prompt",wpfGui.ExecuteScripts.openO2CommandPromt)
+	  .add_Link_Web("O2Platform.com ({0})".format(currentVersion),defaultWebsiteOnMainTab)
 	  .add_Upgrade_Link(currentVersion, "http://code.google.com/p/o2platform/downloads/list");
 	  
 wpfGui.add_Section("Penetration Testing", "If you are performing security penetration tests (also called BlackBox security reviews) , here are a number of O2 Modules that will help you")
@@ -80,6 +81,7 @@ wpfGui.add_Section("Source-Code Reviews", "If you are performing securiiy review
 	  .add_Link_O2Script("Viewstate Decoder","Util - ViewState_Decoder_ASP.NET 3.0.h2")	  
 	  .add_Link_O2Script("Copy GAC Dlls","Wizard - CopyGacDlls.cs.o2")	  
 	  .add_Link_O2Script("Convert VB.NET into C#","Util - Convert VB.Net to CSharp.h2")
+	  .add_Link_O2Script("Decompile .NET Assemblies","ascx_MonoDecompiler.cs.o2")	  
 	  .add_Link_O2Script("Decompile ASP.NET Dlls","Util - Decompile ASP.NET ASPX pages compiled code.h2")
 	  	  
 	  .add_Label("java:")

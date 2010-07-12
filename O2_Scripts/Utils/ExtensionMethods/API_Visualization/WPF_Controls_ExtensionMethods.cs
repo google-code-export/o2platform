@@ -1,11 +1,13 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Threading;
 using O2.Kernel;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -273,9 +275,32 @@ namespace O2.API.Visualization.ExtensionMethods
 
 
 
-        #endregion
-
-        #region generic events
+        #endregion       
+	}
+	
+	public static class WPF_Controls_ExtensionMethods_Events
+    {
+    	#region generic events
+    	
+    	public static T onKeyPress_Wpf<T>(this T control, Key keyWanted,  Action callback)    		
+    		where T : UIElement
+    	{    		
+    		return control.onKeyPress_Wpf(
+    			(keyPressed)=>{
+    							if (keyPressed == keyWanted)
+    								callback();
+    						  });
+    	}
+    	
+    	public static T onKeyPress_Wpf<T>(this T control, Action<Key> callback)
+    		where T : UIElement
+    	{
+    		control.wpfInvoke(    		
+    			()=>{
+    					control.KeyUp += (sender,e)=> callback(e.Key);
+    				});
+			return control;
+    	}    	
 
         public static T onMouseDoubleClick<T1, T>(this T control, Action<T1> callback)
             where T : Control
@@ -289,13 +314,11 @@ namespace O2.API.Visualization.ExtensionMethods
             return control;
         }
 
-        #endregion
-
+        #endregion	
+		
 	}
 	
-	
-	
-	
+				
 	public static class WPF_Controls_ExtensionMethods_ContentControl
 	{
 		public static T bold<T>(this T contentControl)
@@ -304,7 +327,7 @@ namespace O2.API.Visualization.ExtensionMethods
     		return contentControl.bold(true);
     	}
     	
-		public static T bold<T>(this T contentControl, bool value)
+    	public static T bold<T>(this T contentControl, bool value)
 			where T : ContentControl
     	{
     		contentControl.wpfInvoke(
@@ -316,8 +339,9 @@ namespace O2.API.Visualization.ExtensionMethods
     				});
 			return contentControl;
     	}
-		
-	}
+    
+    
+    }	        
 	
 	public static class WPF_Controls_ExtensionMethods_Label
 	{	
@@ -1072,12 +1096,17 @@ textBox1.prop("",true);
             return uiElement.add_Control_Wpf<ListView>();
         }
 
-        public static ListView add_Item(this ListView listView, string text)
+		public static ListView add_Item(this ListView listView, string text)        
+		{
+			return listView.add_Items(text);
+		}
+		
+		public static ListView add_Items(this ListView listView, params string[] texts)        
         {
             return (ListView)listView.wpfInvoke(
                 () =>
-                {
-                    listView.Items.Add(text);
+                {	foreach(var text in texts) 
+                    	listView.Items.Add(text);
                     return listView;
                 });
 
@@ -1132,9 +1161,21 @@ textBox1.prop("",true);
                 });
         }
 
-        public static object selected(this ListView listView)
+        public static object selectedValue(this ListView listView)
         {
             return (object)listView.wpfInvoke(() => listView.SelectedValue);
+        }
+        
+        public static List<object> selectedValues(this ListView listView)
+        {
+            return (List<object>)listView.wpfInvoke(
+            	()=>{
+            			var selectedValues = new List<Object>();
+            			if (listView.SelectedItems.notNull() && listView.SelectedItems is System.Collections.ICollection)
+            				foreach(var item in listView.SelectedItems)
+            					selectedValues.Add(item);
+            			return selectedValues;
+            		});
         }
 
         /*public static object selected_Items(this ListView listView)
@@ -1183,9 +1224,9 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView remove_Selected(this ListView listView)
+        public static ListView remove_SelectedValue(this ListView listView)
         {
-            return (ListView)listView.wpfInvoke(() => listView.remove_Item(listView.selected()));
+            return (ListView)listView.wpfInvoke(() => listView.remove_Item(listView.selectedValue()));
         }
 
         public static ListView remove_Item(this ListView listView, object itemToRemove)
@@ -1198,6 +1239,18 @@ textBox1.prop("",true);
                     return listView;
                 });
         }
+        
+        public static ListView remove_Item(this ListView listView, List<object> itemsToRemove)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
+                {
+                	foreach(var itemToRemove in itemsToRemove)
+                		if (itemToRemove.notNull())
+                	    	listView.Items.Remove(itemToRemove);	                    
+                    return listView;
+                });
+        }
 
         public static ListView remove_Items(this ListView listView, List<object> itemsToRemove)
         {
@@ -1205,7 +1258,13 @@ textBox1.prop("",true);
                 listView.remove_Item(itemToRemove);
             return listView;
         }
-
+        
+        public static ListView remove_SelectedItems(this ListView listView)
+        {
+            listView.remove_Items(listView.selectedValues());
+            return listView;
+        }
+        
         public static List<object> items(this ListView listView)
         {
             return (List<object>)listView.wpfInvoke(
@@ -1260,6 +1319,12 @@ textBox1.prop("",true);
             return listView.selectIndex(0);
 
         }
+
+		public static ListView onDeleteKey_Remove_SelectedItems(this ListView listView)
+		{
+			listView.onKeyPress_Wpf(Key.Delete, ()=> listView.remove_SelectedItems());
+			return listView;
+		}
 		
         #endregion
 

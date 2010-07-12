@@ -8,6 +8,7 @@ using System.Windows.Forms.Integration;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 //O2Ref:WindowsFormsIntegration.dll
+//O2File:WPF_ExtensionMethods.cs
 
 namespace O2.API.Visualization.ExtensionMethods
 {
@@ -51,6 +52,11 @@ namespace O2.API.Visualization.ExtensionMethods
         public static ListView add_ListView_Wpf(this ElementHost elementHost)
         {
             return elementHost.add_Control_Wpf<ListView>();
+        }
+        
+        public static Label add_Label_Wpf(this ElementHost elementHost, string text)
+        {
+            return elementHost.add_Control_Wpf<Label>().set_Text_Wpf(text);
         }
         #endregion
 

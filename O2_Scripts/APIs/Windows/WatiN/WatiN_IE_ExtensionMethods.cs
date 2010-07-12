@@ -368,7 +368,7 @@ namespace O2.XRules.Database.APIs
 			var fileDownloadHandler = ie.dialogHandler<FileDownloadHandler>();
 			if (fileDownloadHandler.isNull())
 			{
-				fileDownloadHandler = new FileDownloadHandler(@"C:\_Work\CAT\temp.xml"); 
+				//fileDownloadHandler = new FileDownloadHandler(@"{PATH}\temp.xml"); 
 				ie.IE.AddDialogHandler(fileDownloadHandler); 
 			}
 			//dialogWatcher.clear();  
