@@ -94,8 +94,6 @@ treeView.onDrop(loadDllsFromFolder);
 //O2Ref:Cecil.Decompiler.dll
 //O2Ref:O2_External_O2Mono.dll
 //O2Ref:Mono.Cecil.dll
-
-//O2File:C:\O2\_XRules_Local\Extra_methods.cs
-//using O2.Local.Script</SourceCode>
+</SourceCode>
   <ReferencedAssemblies />
 </H2>

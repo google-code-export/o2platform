@@ -18,6 +18,8 @@ using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
 using O2.Views.ASCX.O2Findings;
 
+//O2File:Findings_ExtensionMethods_Gui_Viewers.cs
+
 //O2Ref:O2_ImportExport_OunceLabs.dll
 
 namespace O2.XRules.Database.Findings
@@ -221,6 +223,16 @@ namespace O2.XRules.Database.Findings
 
 	public static class Findings_ExtensionMethods_ascx_FindingsViewer
 	{				
+		public static ascx_FindingsViewer afterSelect_showTrace(this ascx_FindingsViewer findingsViewer,  ascx_TraceTreeView traceViewer)
+		{					
+			findingsViewer._onFindingSelected += 
+				(o2Finding)=>{
+								traceViewer.show(o2Finding);
+								Application.DoEvents();
+								findingsViewer.focus();
+							 };
+			return findingsViewer;
+		}
 	
 		public static ascx_FindingsViewer filter1_Text(this ascx_FindingsViewer findingsViewer, string filterText)
 		{
@@ -337,6 +349,18 @@ namespace O2.XRules.Database.Findings
 			return null;
 		}
 		
+		public static ascx_TraceTreeView selectNodeWithText(this ascx_TraceTreeView traceViewer, string textToMatch)
+		{
+			textToMatch = textToMatch.trim();
+			foreach(var node in traceViewer.nodes())
+				if (node.get_Text().trim() == textToMatch)
+				{
+					node.selected();
+					break;
+				}
+			return traceViewer;
+		}
+		
 		public static ascx_TraceTreeView animate(this ascx_TraceTreeView traceViewer)
 		{
 			return traceViewer.animate(1000);
@@ -358,18 +382,63 @@ namespace O2.XRules.Database.Findings
 
 	public static class Findings_ExtensionMethods_ascx_SourceCodeViewer
 	{
+		public static ascx_SourceCodeViewer show(this ascx_SourceCodeViewer codeViewer, IO2Finding o2Finding)
+		{								
+			"in show".info();
+			codeViewer.open(o2Finding.file);
+			if (o2Finding.lineNumber > 0)
+			{
+				codeViewer.editor().gotoLine((int)o2Finding.lineNumber-1);
+				//codeViewer.editor().caret_Line();
+				codeViewer.editor().caret_Line((int)o2Finding.lineNumber-1);
+				codeViewer.editor().caret_Column((int)o2Finding.columnNumber);
+			}
+			return codeViewer;
+		}
+		
 		public static ascx_SourceCodeViewer show(this ascx_SourceCodeViewer codeViewer, IO2Trace o2Trace)
 		{								
+			"in show".info();
 			codeViewer.open(o2Trace.file);
 			if (o2Trace.lineNumber > 0)
 			{
-				codeViewer.editor().gotoLine((int)o2Trace.lineNumber);
+				codeViewer.editor().gotoLine((int)o2Trace.lineNumber-1);
 				//codeViewer.editor().caret_Line();
-				codeViewer.editor().caret_Line((int)o2Trace.lineNumber);
+				codeViewer.editor().caret_Line((int)o2Trace.lineNumber-1);
 				codeViewer.editor().caret_Column((int)o2Trace.columnNumber);
 			}
 			return codeViewer;
 		}
+
+		
+		public static ascx_FindingsViewer afterSelect_ShowTraceInCodeViewer(this ascx_FindingsViewer findingsViewer , ascx_SourceCodeViewer codeViewer)
+		{
+			findingsViewer._onFindingSelected += 
+				(o2Finding)=>{
+								codeViewer.show(o2Finding);
+								Application.DoEvents();
+								findingsViewer.focus();
+							 };
+			findingsViewer._onTraceSelected += 
+				(o2Trace)=>{
+								codeViewer.show(o2Trace);
+								Application.DoEvents();
+								findingsViewer.focus();
+							};
+			return findingsViewer;
+		}
+		
+		public static ascx_TraceTreeView afterSelect_ShowTraceInCodeViewer(this ascx_TraceTreeView traceViewer , ascx_SourceCodeViewer codeViewer)
+		{
+			traceViewer._onTraceSelected += 
+				(o2Trace)=>{
+								codeViewer.show(o2Trace);
+								Application.DoEvents();
+								traceViewer.focus();
+						   };
+			return traceViewer;
+		}
+		
 	}	
 	
 	public static class Findings_ExtensionMethods_VulnName_VulnType
@@ -529,12 +598,41 @@ namespace O2.XRules.Database.Findings
 		}
 		
 		
-
         //[XRule(Name = "Only.findings.where.SourceAndSink.CONTAINS.Regex")]
         /*(public static  List<IO2Finding> whereSourceAndSink_ContainsRegex(List<IO2Finding> o2Findings, string source, string sink )
         {
             return o2Findings.calculateFindings(source, sink);
         }*/
+        
+        public static Dictionary<string,List<KeyValuePair<IO2Finding, IO2Trace>>> filterBy_Traces_SourceCode(this List<IO2Finding> iO2Findings)
+        {
+        	var propertyName = "SourceCode";
+        	return iO2Findings.filterBy_Traces_Property(propertyName);
+        }
+        
+        public static Dictionary<string,List<KeyValuePair<IO2Finding, IO2Trace>>> filterBy_Traces_Property(this List<IO2Finding> iO2Findings, string propertyName)
+        {
+        	var filteredData = new Dictionary<string,List<KeyValuePair<IO2Finding, IO2Trace>>>();
+        	foreach(var iO2Finding in iO2Findings)
+        		foreach(var iO2Trace in iO2Finding.allTraces())
+        		{
+        			var propertyValue = (iO2Trace as O2Trace).prop(propertyName).str();
+        			if (propertyValue.valid())
+        			{
+        				var keyValuePair = new KeyValuePair<IO2Finding, IO2Trace>(iO2Finding, iO2Trace);        			
+        				filteredData.add(propertyValue.trim(), keyValuePair);        				
+        			}        			
+        		}        
+        	return filteredData;
+        }	
+	
+		public static List<IO2Finding> o2Findings(this List<KeyValuePair<IO2Finding, IO2Trace>> list)
+		{
+			var o2Findings = new List<IO2Finding>();
+			foreach(var item in list)
+				o2Findings.add(item.Key);
+			return o2Findings;
+		}
 	}
 		
 	public static class Findings_ExtensionMethods_Joining
