@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:OWASP O2 Platform (v1.2 Beta)"
+"ProjectName" = "8:OWASP O2 Platform [v1.2 Beta]"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -657,7 +657,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:..\\..\\..\\_O2_Installers\\OWASP O2 Platform (v1.1 Beta).msi"
+        "OutputFilename" = "8:..\\..\\..\\_O2_Installers\\OWASP O2 Platform (v1.2 Beta).msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -669,7 +669,7 @@
         "InstallerBootstrapper" = "3:2"
             "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
             {
-            "Enabled" = "11:TRUE"
+            "Enabled" = "11:FALSE"
             "PromptEnabled" = "11:TRUE"
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
@@ -793,7 +793,7 @@
             "Folder" = "8:_E48D74D0F08D4155A5112C0E735480D9"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
+            "Vital" = "11:FALSE"
             "ReadOnly" = "11:FALSE"
             "Hidden" = "11:FALSE"
             "System" = "11:FALSE"
@@ -1751,6 +1751,29 @@
         }
         "FileType"
         {
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_230C19CE62DC4F84A03928BF3B68F2A7"
+            {
+            "Name" = "8:O2 Scripts"
+            "Description" = "8:"
+            "Extensions" = "8:.o2"
+            "MIME" = "8:"
+            "Icon" = "8:_9A88959AF01F4C359375D6A27DBDECF4"
+            "IconIndex" = "3:0"
+                "Command"
+                {
+                "Command" = "8:_63CEABA2E6684CB9B10A0A6702006562"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_017306CAC26A4E869EC365B8789206CA"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:\"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
         }
         "Folder"
         {
@@ -1902,9 +1925,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:OWASP O2 Platform (v1.2 Beta)"
+        "ProductName" = "8:OWASP O2 Platform [v1.2 Beta]"
         "ProductCode" = "8:{878CEF3E-E5D5-4D40-9D3C-60A1079AC419}"
-        "PackageCode" = "8:{D4F6211C-DB57-4892-8D65-778CAB02369E}"
+        "PackageCode" = "8:{C8A73E16-2304-440C-B5ED-5CDBB1CADC2E}"
         "UpgradeCode" = "8:{4AB6E547-C472-428D-9176-9535C2D299D9}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -1914,7 +1937,7 @@
         "Manufacturer" = "8:OWASP O2 Platform"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://www.o2-platform.com"
-        "Title" = "8:OWASP O2 Platform (v1.2 Beta)"
+        "Title" = "8:OWASP O2 Platform [v1.2 Beta]"
         "Subject" = "8:"
         "ARPCONTACT" = "8:OWASP O2 Platform"
         "Keywords" = "8:"
@@ -2230,7 +2253,7 @@
                     }
                     "{688940B3-5CA9-4162-8DEE-2993FA9D8CBC}:_8263D9282A49486D85977A4F49AF047F"
                     {
-                    "Sequence" = "3:300"
+                    "Sequence" = "3:400"
                     "DisplayName" = "8:Confirm Installation"
                     "UseDynamicProperties" = "11:TRUE"
                     "IsDependency" = "11:FALSE"

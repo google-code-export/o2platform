@@ -180,14 +180,33 @@ namespace O2.XRules.Database
             var msiScriptsFolder = PublicDI.config.CurrentExecutableDirectory.pathCombine(PublicDI.config.ZipppedScriptsFile.remove(".zip"));
             if (pathToLocalZippedFile.fileExists())
             {
-                pathToLocalZippedFile.unzip_File(msiScriptsFolder);
-                Files.deleteFile(pathToLocalZippedFile);
+                if (pathToLocalZippedFile.fileInfo().size() > 10)
+                {
+                    "found pathToLocalZippedFile: {0}".info(pathToLocalZippedFile);
+                    if (msiScriptsFolder.dirExists())
+                        Files.renameFolder(msiScriptsFolder, "{0}_old_{1}".format(msiScriptsFolder, 5.randomLetters()));
+                    pathToLocalZippedFile.unzip_File(msiScriptsFolder);
+                    Files.deleteFile(pathToLocalZippedFile);
+                    
+                }
             }
+            if (pathToLocalZippedFile.fileExists().isFalse())
+            {
+                "Creating empty zipped file: {0}".info(pathToLocalZippedFile);
+                "AAA".saveAs(pathToLocalZippedFile);  // so that the MSI auto repair function is not triggered
+            }
+            //else
+            //   "Did not find pathToLocalZippedFile: {0}".info(pathToLocalZippedFile);
+
             if (msiScriptsFolder.dirExists())
             {
+                "msiScriptsFolder existed: {0}".info(msiScriptsFolder);
+
                 PublicDI.config.setLocalScriptsFolder(msiScriptsFolder);
                 msiExecution = true;
-            }                            
+            }
+            else
+                "msiScriptsFolder did not exist: {0}".info(msiScriptsFolder);             
         }
 
         public bool is32Bit()

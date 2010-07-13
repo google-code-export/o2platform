@@ -765,6 +765,18 @@ namespace O2.DotNetWrappers.Windows
         public static void setCurrentDirectoryToExecutableDirectory()
         {
             Environment.CurrentDirectory = PublicDI.config.CurrentExecutableDirectory;
-        }        
+        }
+
+        public static void renameFolder(string oldName, string newName)
+        {
+            try
+            {
+                System.IO.Directory.Move(oldName, newName);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in Files.renameFolder");
+            }            
+        }
     }
 }

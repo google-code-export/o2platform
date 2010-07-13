@@ -370,5 +370,25 @@ namespace O2.DotNetWrappers.ExtensionMethods
                     where file.fileExists()
                     select file).toList();
         }
+
+        public static FileInfo fileInfo(this string filePath)
+        {
+            try
+            {
+                return new FileInfo(filePath);
+            }
+            catch (Exception ex)
+            {
+                ex.log("in filePath.fileInfo");
+                return null;
+            }
+        }
+
+        public static long size(this FileInfo fileInfo)
+        {
+            if (fileInfo.notNull())
+                return fileInfo.Length;
+            return -1;
+        }
     }
 }
