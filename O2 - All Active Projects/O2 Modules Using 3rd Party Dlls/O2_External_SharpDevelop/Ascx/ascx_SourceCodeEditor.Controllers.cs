@@ -1249,7 +1249,8 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void openO2ObjectModel()
         {
-            O2Messages.openControlInGUI(typeof(ascx_O2ObjectModel), O2DockState.Float, "O2 Object Model");
+            //O2Messages.openControlInGUI(typeof(ascx_O2ObjectModel), O2DockState.Float, "O2 Object Model");
+            O2.Kernel.open.o2ObjectModel();
         }
 
         public void setAutoCompileStatus(bool state)
