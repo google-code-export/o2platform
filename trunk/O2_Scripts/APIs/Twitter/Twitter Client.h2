@@ -44,13 +44,13 @@ optionsTab.add_Label("File with credentials",20,0)
 // timelineTab   
 timelineTab.onSelected(
 	()=&gt;{
-			timelineTab.add_TableList_With_Tweets(twitterAPI.home(10));
+			timelineTab.add_TableList_With_Tweets(twitterAPI.home(500));
 		});
 
 //userTweetsTab 
 userTweetsTab.onSelected(
 	()=&gt;{
-			userTweetsTab.add_TableList_With_Tweets(twitterAPI.tweets(10));
+			userTweetsTab.add_TableList_With_Tweets(twitterAPI.tweets(500));
 		}); 
 		
 //writeTweetTab

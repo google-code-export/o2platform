@@ -51,7 +51,8 @@ namespace O2.XRules.Database.Findings
 			findingsList.afterSelect_showTrace(completeTrace);
 			
 			var filteredData = controls[0].add_TreeViewWithFilter(tracesSourceCode)
-									  	  .showSelection();  
+									  	  .showSelection()
+									  	  .sort();
 									  
 			tracesList.afterSelect<KeyValuePair<IO2Finding, IO2Trace>>(
 				(keyValuePair)=>{						

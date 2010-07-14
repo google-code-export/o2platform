@@ -248,9 +248,10 @@ namespace O2.XRules.Database.APIs
         {
 	        control.clear();
 			var tableList = control.add_TableList();																			
-			tableList.add_Columns(new List<string> {"Date","User","Tweet Text"});
+			tableList.add_Columns(new List<string> {"#","Date","User","Tweet Text"});
+			var item = 1;
 			foreach(var twitterStatus in twitterStatuses)   
-				tableList.add_Row(new List<string> {twitterStatus.CreatedDate.str() ,  twitterStatus.User.Name, twitterStatus.Text });
+				tableList.add_Row(new List<string> {item++.str(), twitterStatus.CreatedDate.str() ,  twitterStatus.User.Name, twitterStatus.Text });
             tableList.makeColumnWidthMatchCellWidth();
         	return control;
         }
@@ -260,10 +261,10 @@ namespace O2.XRules.Database.APIs
         {
 	        control.clear();
 			var tableList = control.add_TableList();																			
-			tableList.add_Columns(new List<string> {"Name","Location","Description"});
-            
+			tableList.add_Columns(new List<string> {"#","Name","Location","Description"});
+            var item = 1;
 			foreach(var twitterUser in twitterUsers)   
-				tableList.add_Row(new List<string> {twitterUser.Name ,  twitterUser.Location, twitterUser.Description});
+				tableList.add_Row(new List<string> {item++.str(), twitterUser.Name ,  twitterUser.Location, twitterUser.Description});
             tableList.makeColumnWidthMatchCellWidth();
         	return control;
         }

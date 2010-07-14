@@ -7,28 +7,31 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.ExtensionMethods;
+//O2Ref:MS_SDK_wsdl.exe
 
 namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
-    public class DotNet_SDK
+    public class DotNet_SDK_WSDL
     {
-    	public static string WSDL_EXE_PATH = @"C:\Program Files\\Microsoft SDKs\Windows\v6.0A\bin\wsdl.exe";
+    	public string Wsdl_Exe { get; set;}
 		//modified
 		
-		public static bool wsdl_exe_exists()
+		public DotNet_SDK_WSDL()
 		{
-			
-			return WSDL_EXE_PATH.fileExists();
+			Wsdl_Exe = PublicDI.config.CurrentExecutableDirectory.pathCombine("MS_SDK_wsdl.exe");
 		}
 		
-        public static string wsdl_CreateCSharp(string sourceFile, string targetFolder)
+		public bool wsdl_exe_exists()
+		{			
+			return Wsdl_Exe.fileExists();
+		}
+		
+        public string wsdl_CreateCSharp(string wsdlSourceFile, string targetFolder)
         {        	
         	if (wsdl_exe_exists())
-        	{
-        		//var expectedFile = targetFolder.pathCombine(Path.ChangeExtension(sourceFile.fileName(),"cs"));
-        		//Files.deleteFile(expectedFile);
-            	var parameters = "\"{0}\" /out:\"{1}\"".format(sourceFile, targetFolder);
-            	var executionResult = Processes.startProcessAsConsoleApplicationAndReturnConsoleOutput(WSDL_EXE_PATH, parameters);            	
+        	{        		
+            	var parameters = "\"{0}\" /out:\"{1}\"".format(wsdlSourceFile, targetFolder);
+            	var executionResult = Processes.startProcessAsConsoleApplicationAndReturnConsoleOutput(Wsdl_Exe, parameters);            	
             	executionResult.info();
             	if (executionResult.valid())
             	{
