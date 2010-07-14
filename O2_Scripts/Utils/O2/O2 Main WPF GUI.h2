@@ -153,7 +153,7 @@ wpfGui.add_Section("API / Script Development", "There are a number of developmen
 	.add_Link("O2 Development Environment",() =&gt; open.scriptEditor())
 	.add_Label("Utils:")
 	.add_Link("O2 Object Model", () =&gt; open.o2ObjectModel())
-	.add_Link("O2 Executable Directry", () =&gt; open.directory(PublicDI.config.CurrentExecutableDirectory, true))
+	.add_Link("O2 Executable Directory", () =&gt; open.directory(PublicDI.config.CurrentExecutableDirectory, true))
 	.add_Link("View Loaded Script Source",wpfGui.ExecuteScripts.showLoadedScriptSourceCode);	
 
 wpfGui.add_Section("Videos", "Mostly created using O2's Movie Editor tool, here are a number of videos that show multiple O2 modules in action")	
