@@ -156,6 +156,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return WebEncoding.htmlDecode(stringToEncode);
         }
 
+        public static byte asciiByte(this char charToConvert)
+        {
+            try
+            {
+                return System.Text.ASCIIEncoding.ASCII.GetBytes(new char[] { charToConvert })[0];
+            }
+            catch
+            {
+                return default(byte);
+            }            
+        }
+
         public static byte[] asciiBytes(this string stringToConvert)
         {
             return System.Text.ASCIIEncoding.ASCII.GetBytes(stringToConvert);
@@ -227,5 +239,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion
+
+        /*#region SSL
+
+        
+        #endregion*/
     }
 }

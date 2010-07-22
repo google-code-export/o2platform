@@ -63,9 +63,9 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return field;
         }
 
-        public static FieldDeclaration add_Field(this TypeDeclaration typeDeclaration, string fieldType, string fieldName)
+/*        public static FieldDeclaration add_Field(this TypeDeclaration typeDeclaration, string fieldType, string fieldName)
         {
             return null;
-        }
+        }*/
     }
 }

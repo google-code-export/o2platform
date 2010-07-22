@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F6942664-5E64-4182-B3EB-11F481F461FB}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -33,8 +33,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\Microsoft.NET\Primary Interop Assemblies\Microsoft.mshtml.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\_3rdPartyDlls\FilesWithNoCode\Microsoft.mshtml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

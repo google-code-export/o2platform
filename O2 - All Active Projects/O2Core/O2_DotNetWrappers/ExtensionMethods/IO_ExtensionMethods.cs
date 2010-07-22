@@ -12,6 +12,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
     public static class IO_ExtensionMethods
     {
         #region save
+
+
+        public static string safeFileName(this string _string)
+        {
+            return _string.safeFileName(false);
+        }
+
+        public static string safeFileName(this string _string, bool prependBase64EncodedString)
+        {
+            return Files.getSafeFileNameString(_string,prependBase64EncodedString);
+        }
+
         public static string save(this string contents)
         {
             return contents.saveAs(PublicDI.config.TempFileNameInTempDirectory);
@@ -63,7 +75,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return filePath;
         }
         #endregion
-
 
         public static string fileName(this string file)
         {
@@ -303,7 +314,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return Files.getFilesFromDir_returnFullPath(folder, filter, recursiveSearch);
         }
 
-
         public static List<string> dirs(this string path)
         {
             return path.folders(false);
@@ -335,14 +345,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return Path.GetFullPath(path);
         }
 
-        public static void createDir(this string directory)
+        public static string createDir(this string directory)
         {
-            Files.checkIfDirectoryExistsAndCreateIfNot(directory);
+            return Files.checkIfDirectoryExistsAndCreateIfNot(directory);
         }
 
-        public static void createFolder(this string folder)
+        public static string createFolder(this string folder)
         {            
-            folder.createDir();
+            return folder.createDir();
         }
 
         public static bool fileContains(this string pathToFileToCompile, string textToFind)

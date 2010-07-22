@@ -192,10 +192,13 @@ namespace O2.Views.ASCX.CoreControls
             {
                 if (tbCurrentDirectoryName.okThread(delegate { openDirectory(sDirectoryToOpen); }))
                 {
-                    Files.checkIfDirectoryExistsAndCreateIfNot(sDirectoryToOpen);
-                    tbCurrentDirectoryName.Text = Path.GetFullPath(sDirectoryToOpen);
-                    setupFolderWatched();
-                    refreshDirectoryView();
+                    if (sDirectoryToOpen.dirExists())
+                    {
+                        //Files.checkIfDirectoryExistsAndCreateIfNot(sDirectoryToOpen);
+                        tbCurrentDirectoryName.Text = Path.GetFullPath(sDirectoryToOpen);
+                        setupFolderWatched();
+                        refreshDirectoryView();
+                    }
                 }
             }
             catch (Exception ex)

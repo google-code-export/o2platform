@@ -286,6 +286,32 @@ namespace O2.Kernel.ExtensionMethods
 
         #region invoke 
 
+        public static void invoke(this Action action)
+        {
+            if (action.notNull())
+                action();
+        }
+
+        public static void invoke<T>(this Action<T> action, T param)
+        {
+            if (action.notNull())
+                action(param);
+        }
+
+        public static T invoke<T>(this Func<T> action)
+        {
+            if (action.notNull())
+                return action();
+            return default(T);
+        }
+
+        public static T2 invoke<T1,T2>(this Func<T1,T2> action, T1 param)
+        {
+            if (action.notNull())
+                return action(param);
+            return default(T2);
+        }
+
         public static object invoke(this object liveObject, string methodName)
         {
             return liveObject.invoke(methodName, new object[] { });

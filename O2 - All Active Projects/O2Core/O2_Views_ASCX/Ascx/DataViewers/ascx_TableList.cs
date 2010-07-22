@@ -216,9 +216,35 @@ namespace O2.Views.ASCX.DataViewers
         }
         public int Compare(object x, object y)
         {
+            var xValue = ((ListViewItem)x).SubItems[column].Text;
+            var yValue = ((ListViewItem)y).SubItems[column].Text;
+            if (xValue == null || yValue == null)
+                return -1;
+            var xInt = 0;
+            var yInt = 0;
+            //see if both x and y are numbers
+            if (Int32.TryParse(xValue,out xInt) && Int32.TryParse(yValue,out yInt))
+            {
+                if (sortOrder == SortOrder.Ascending)
+                    return xInt - yInt;
+                return yInt - xInt;
+            }
+            // now check if both are dates
+            DateTime xDate;
+            DateTime yDate;
+            if (DateTime.TryParse(xValue, out xDate) && DateTime.TryParse(yValue, out yDate))
+            {
+                if (xDate == yDate)
+                    return 0;
+                if (sortOrder == SortOrder.Ascending)
+                    return xDate < yDate ? -1 : 1;
+                return xDate < yDate ? 1 : -1;
+            }
+
+            // finally check do the comparison on the string's values
             if (sortOrder == SortOrder.Ascending)
-                return String.Compare(((ListViewItem)x).SubItems[column].Text, ((ListViewItem)y).SubItems[column].Text);
-            return String.Compare(((ListViewItem)y).SubItems[column].Text, ((ListViewItem)x).SubItems[column].Text);
+                return String.Compare(xValue, yValue);
+            return String.Compare(yValue, xValue);
         }
     }
 }

@@ -150,7 +150,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                                 ? csFile.compile()
                                 : csFile.save().compile();
             return (assembly != null)
-                ? assembly.xsdAssemblyGetRootTypes()
+                ? assembly.xsdAssemblyGetRootTypes()    
                 : null;
         }
 

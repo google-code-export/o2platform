@@ -173,8 +173,16 @@ namespace O2.API.AST.CSharp
             {
                 if (O2AstResolver.notNull())
                 {
+                    
+                    O2AstResolver.myProjectContent.Classes.Clear();
+                    O2AstResolver.myProjectContent.ClassLists.Clear();
+                    //O2AstResolver.myProjectContent.NamespaceNames.Clear();                    
+                    O2AstResolver.myProjectContent.ReferencedContents.Clear();
                     O2AstResolver.pcRegistry.Dispose();
+
+
                     O2AstResolver.myProjectContent.Dispose();
+                    GC.Collect(10, GCCollectionMode.Forced);
                 }
                 O2AstResolver = null;
                 //"added reference to MsCorLib.dll and System.dll".info();

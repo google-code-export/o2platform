@@ -678,18 +678,26 @@ namespace O2.DotNetWrappers.Windows
 
         public static string getSafeFileNameString(string stringToParse)
         {
-           var validCharsRegEx = @"[A-Z]|[a-z]|[0-9]|[\(\)\s]";
+            return getSafeFileNameString(stringToParse, false);
+        }
 
-            var safeSring = new StringBuilder(stringToParse);
-            for(int i=0; i<safeSring.Length;i++)
+        public static string getSafeFileNameString(string stringToParse, bool prependBase64EncodedString)
+        
+        {
+            var validCharsRegEx = @"[A-Z]|[a-z]|[0-9]|[\.]";   //|[\(\)\s]";
+
+            var safeString = new StringBuilder(stringToParse);
+            for(int i=0; i<safeString.Length;i++)
             {
-                if (false == RegEx.findStringInString(safeSring[i].ToString(), validCharsRegEx))
+                if (false == RegEx.findStringInString(safeString[i].ToString(), validCharsRegEx))
                 {
-                    var cc = safeSring[i];
-                    safeSring[i] = '_';
+                    var cc = safeString[i];
+                    safeString[i] = '_';
                 }
-            }               
-            return safeSring.ToString();
+            }
+            if (prependBase64EncodedString)
+                return "{1} - {0}".format(stringToParse.base64Encode(), safeString.ToString());
+            return safeString.ToString();
         }
 
         public static bool deleteFiles(List<string> filesToDelete, bool askUserForConfirmation)

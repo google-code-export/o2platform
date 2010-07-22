@@ -277,17 +277,19 @@ namespace O2.DotNetWrappers.Windows
             treeview.Nodes.Clear();
             foreach (var assemblyInAppDomain in DI.reflection.getAssembliesInCurrentAppDomain())
             {
-                var assemblyLoaded = false;
-                foreach (var assemblyAlreadyLoaded in assembliesAlreadyLoaded)
+                try
                 {
-                    if (assemblyAlreadyLoaded.FullName == assemblyInAppDomain.FullName)
+                    var assemblyLoaded = false;
+                    foreach (var assemblyAlreadyLoaded in assembliesAlreadyLoaded)
                     {
-                        assemblyLoaded = true;
-                        break;
+                        if (assemblyAlreadyLoaded.FullName == assemblyInAppDomain.FullName)
+                        {
+                            assemblyLoaded = true;
+                            break;
+                        }
                     }
-                }
-                //if (false == dontAdd)
-                //{
+                    //if (false == dontAdd)
+                    //{
                     var newNode = newTreeNode(treeview.Nodes, assemblyInAppDomain.GetName().Name, 0, assemblyInAppDomain);
                     if (!string.IsNullOrEmpty(assemblyInAppDomain.Location))
                     {
@@ -297,8 +299,12 @@ namespace O2.DotNetWrappers.Windows
                     }
                     if (assemblyLoaded)
                         newNode.Checked = true;
-                //}
-
+                    //}
+                }
+                catch (Exception ex)
+                {
+                    ex.log("in loadTreeViewWith_AssembliesInCurrentAppDomain");
+                }
             }
             if (showCheckBoxes)
                 treeview.CheckBoxes = true;

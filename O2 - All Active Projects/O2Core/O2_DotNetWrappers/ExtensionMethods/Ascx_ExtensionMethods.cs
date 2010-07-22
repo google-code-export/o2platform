@@ -2721,8 +2721,9 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             //return (ToolStripStatusLabel)label.invokeOnThread(
             // 	()=>{
-                        label.Text = message;
-                        return label;
+            if (label.notNull())
+                label.Text = message;
+            return label;
             //		});
         }
 

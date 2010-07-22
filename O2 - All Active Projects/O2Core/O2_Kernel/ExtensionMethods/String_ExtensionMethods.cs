@@ -263,14 +263,14 @@ namespace O2.Kernel.ExtensionMethods
             if (stringToFix.contains(Environment.NewLine))
                 return stringToFix;
             if (stringToFix.contains("\n"))
-                return stringToFix.replace("\n", Environment.NewLine);
+                return stringToFix.Replace("\n", Environment.NewLine);
             return stringToFix;
         }
     
         public static string ascii(this byte value)
         {
             return Encoding.ASCII.GetString(new[] { value });
-        }
+        }        
 
         public static string ascii(this byte[] bytes)
         {
