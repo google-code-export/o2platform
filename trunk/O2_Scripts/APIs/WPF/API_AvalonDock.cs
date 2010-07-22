@@ -14,6 +14,7 @@ using O2.Views.ASCX.ExtensionMethods;
 
 using AvalonDock;
 using O2.API.Visualization.ExtensionMethods;
+using O2.XRules.Database.Utils;
 using WPF = System.Windows.Controls;
 
 //O2File:WPF_ExtensionMethods.cs

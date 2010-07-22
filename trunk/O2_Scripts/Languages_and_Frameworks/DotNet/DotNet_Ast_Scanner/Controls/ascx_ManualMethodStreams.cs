@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ICSharpCode.SharpDevelop.Dom;
+
 using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
@@ -24,6 +24,7 @@ using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
 using O2.XRules.Database.Utils.ExtensionMethods;
 using O2.XRules.Database.Utils;
+using ICSharpCode.SharpDevelop.Dom;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;
 
@@ -48,7 +49,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			var manualMethodStreams = control.add_Control<ascx_ManualMethodStreams>();
 			
 			manualMethodStreams.buildGui(); 			
-			var testFile = @"C:\O2\DemoData\HacmeBank_WebSite_FLAT_VIEW\HacmeBank_v2_Website.Main.Page_Load.cs";
+			var testFile = @"C:\O2\O2 Demos\HacmeBank_WebSite_FLAT_VIEW\2nd Batch\HacmeBank_v2_Website.Main.Page_Load.cs";
 			manualMethodStreams.loadFile(testFile);
 			
 		}
@@ -111,11 +112,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			MethodsCalledTreeView =  ParametersTreeView.insert_Right<TreeView>(250)
 													   .showSelection()
 													   .sort();
-			var commandsPanel = CodeViewer.insert_Below<Panel>(80);
-			SaveCodeLink = commandsPanel.add_Link("save code", 0,0, ()=> saveEditorContents());
-			CurrentINodeLabel = commandsPanel.add_Label("current INode: ", 25,0); 				
-			
-			showINodeLink = commandsPanel.add_Link("show INode CodeStream", 50,0, ()=> showCurrentINodeCodeStream());
+			var commandsPanel = CodeViewer.insert_Below<Panel>(20);
+			SaveCodeLink = commandsPanel.add_Link("save code", 0,0, ()=> saveEditorContents());										
+			showINodeLink = commandsPanel.add_Link("show INode CodeStream", 0,60, ()=> showCurrentINodeCodeStream());
+			CurrentINodeLabel = commandsPanel.add_Label("current INode: ", 0,200); 
 			 
 			// context menu
 			 
@@ -138,7 +138,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 				(file)=>{
 							if (file.fileExists())
 								loadFile(file);
-						});
+						});									
 		}
 		
 		public void loadDataInGui()
@@ -149,6 +149,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		public void loadFile(string fileToLoad)
 		{
 			CodeViewer.load(fileToLoad);
+			MethodStreamFile = fileToLoad;
 			processCodeViewerContents();
 		}
 		
@@ -157,14 +158,16 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			
 			if (MethodStreamFile.fileExists())
 				Files.deleteFile(MethodStreamFile);			// delete previous file since we don't need it anymore
+			
+			"saving editor contents: {0}".info(MethodStreamFile);	
+			var code = CodeViewer.get_Text();	
+			MethodStreamFile = code.saveWithExtension(".cs");
 			processCodeViewerContents();				
 		}
 		
 		public void processCodeViewerContents()
 		{
-			var code = CodeViewer.get_Text();				
-			MethodStreamFile = code.saveWithExtension(".cs");
-			"saving editor contents: {0}".info(MethodStreamFile);	
+			"Processing source code: {0}".info(MethodStreamFile);									
 			
 			//O2AstResolver cachedO2AstResolver = null;
 			//if (AstData_MethodStream != null)

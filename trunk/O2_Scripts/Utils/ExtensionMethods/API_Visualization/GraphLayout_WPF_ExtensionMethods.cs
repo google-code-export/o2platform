@@ -13,6 +13,7 @@ using System.Windows.Forms.Integration;
 using WPFExtensions.Controls;
 using O2.API.Visualization.Ascx;
 using O2.External.IE.Wrapper;
+using O2.API.Visualization.ExtensionMethods;
 
 //O2File:WPF_Controls_ExtensionMethods.cs
 //O2File:GraphSharp_ExtensionMethods.cs
@@ -26,7 +27,7 @@ using O2.External.IE.Wrapper;
 //O2Ref:O2_API_Visualization.dll
 //O2Ref:O2_External_IE.dll
 
-namespace O2.API.Visualization.ExtensionMethods
+namespace O2.XRules.Database.Utils
 {
     public static class GraphLayout_WPF_ExtensionMethods
     {        

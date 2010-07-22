@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using QuickGraph;
 using GraphSharp.Controls;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.API.Visualization.ExtensionMethods;
 
 //O2File:GraphSharp_ExtensionMethods.cs
 
@@ -18,7 +19,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 //O2Ref:PresentationFramework.dll
 
 
-namespace O2.API.Visualization.ExtensionMethods
+namespace O2.XRules.Database.Utils
 {
     public static class VerticesAndEdges_ExtensionMethods
     {    

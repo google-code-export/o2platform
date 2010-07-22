@@ -18,7 +18,7 @@ using O2.API.Visualization.ExtensionMethods;
 //O2Ref:ICSharpCode.AvalonEdit.dll
 //O2Ref:WindowsFormsIntegration.dll
 
-namespace O2.API.Visualization.ExtensionMethods
+namespace O2.XRules.Database.Utils
 {
     public static class WPF_TextEditor_ExtensionMethods
     {

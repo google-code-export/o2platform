@@ -4,18 +4,16 @@ using O2.Kernel.ExtensionMethods;
 using System.Windows;
 using System.Windows.Controls;
 using O2.API.Visualization.ExtensionMethods;
+using O2.XRules.Database.APIs;
 
 //O2File:WPF_ExtensionMethods.cs
 //O2File:XamlCode.cs
+//O2File:Xaml_ExtensionMethods.cs
 
 //O2Ref:O2_API_Visualization.dll
-//O2Ref:PresentationCore.dll
-//O2Ref:WindowsBase.dll
-//O2Ref:PresentationFramework.dll
 
 
-
-namespace O2.XRules.Database.APIs
+namespace O2.XRules.Database.Utils
 {    
     
     public static class XamlCode_ExtensionMethods

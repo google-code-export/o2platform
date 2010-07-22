@@ -18,7 +18,7 @@ using WindowsInput;
 using WindowsInput.Native;
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 
-namespace O2.Script
+namespace O2.XRules.Database.APIs
 {
     public class CmdExeGui : Control 
     {         	
