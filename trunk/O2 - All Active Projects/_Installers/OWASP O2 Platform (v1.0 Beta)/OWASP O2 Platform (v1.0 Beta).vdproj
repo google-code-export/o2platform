@@ -135,12 +135,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4417491938344D84835498A2E77CE3F1"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_4A0EE9B026F750D6ECCF73BB269998E4"
         "OwnerKey" = "8:_63CEABA2E6684CB9B10A0A6702006562"
         "MsmSig" = "8:_UNDEFINED"
@@ -345,6 +339,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B9FEFC327F3F43309E8A43DA5B7BB830"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BC21FAD4B418B1A8BB1CAF54887E687E"
         "OwnerKey" = "8:_63CEABA2E6684CB9B10A0A6702006562"
         "MsmSig" = "8:_UNDEFINED"
@@ -478,7 +478,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4417491938344D84835498A2E77CE3F1"
+        "OwnerKey" = "8:_B9FEFC327F3F43309E8A43DA5B7BB830"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1042,37 +1042,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4417491938344D84835498A2E77CE3F1"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-                "ScatterAssemblies"
-                {
-                    "_4417491938344D84835498A2E77CE3F1"
-                    {
-                    "Name" = "8:Microsoft.mshtml.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\_3rdPartyDlls\\Microsoft.mshtml.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_E48D74D0F08D4155A5112C0E735480D9"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4A0EE9B026F750D6ECCF73BB269998E4"
             {
             "AssemblyRegister" = "3:1"
@@ -1131,26 +1100,6 @@
             "AssemblyAsmDisplayName" = "8:SharpSvn, Version=1.6006.1373.40218, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_003526BED09D07C2F0741832C8FB776B"
-                    {
-                    "Name" = "8:SharpSvn-DB44-20-Win32.dll"
-                    "Attributes" = "3:1"
-                    }
-                    "_028698256241ADEC5F3CDA755C17F425"
-                    {
-                    "Name" = "8:SharpPlink-Win32.svnExe"
-                    "Attributes" = "3:1"
-                    }
-                    "_34AC5940047C4D10E35FA85F4C551B54"
-                    {
-                    "Name" = "8:SharpSvn-SASL21-23-Win32.dll"
-                    "Attributes" = "3:1"
-                    }
-                    "_5CED0AB6556956CA94368DBE33E5624E"
-                    {
-                    "Name" = "8:SharpSvn.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:SharpSvn.dll"
             "TargetName" = "8:"
@@ -1270,11 +1219,6 @@
             "AssemblyAsmDisplayName" = "8:Interop.SHDocVw, Version=1.1.0.0, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_8DC1BC186D4342D7BB8A89529A9EB024"
-                    {
-                    "Name" = "8:Interop.SHDocVw.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Interop.SHDocVw.dll"
             "TargetName" = "8:"
@@ -1436,6 +1380,37 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B9FEFC327F3F43309E8A43DA5B7BB830"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+                "ScatterAssemblies"
+                {
+                    "_B9FEFC327F3F43309E8A43DA5B7BB830"
+                    {
+                    "Name" = "8:Microsoft.mshtml.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\..\\_3rdPartyDlls\\FilesWithNoCode\\Microsoft.mshtml.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_E48D74D0F08D4155A5112C0E735480D9"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BC21FAD4B418B1A8BB1CAF54887E687E"
@@ -1927,7 +1902,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:OWASP O2 Platform [v1.2 Beta]"
         "ProductCode" = "8:{878CEF3E-E5D5-4D40-9D3C-60A1079AC419}"
-        "PackageCode" = "8:{C8A73E16-2304-440C-B5ED-5CDBB1CADC2E}"
+        "PackageCode" = "8:{02AF9561-4053-4C7F-869A-4FDA55AC288F}"
         "UpgradeCode" = "8:{4AB6E547-C472-428D-9176-9535C2D299D9}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"

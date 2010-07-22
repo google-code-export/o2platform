@@ -18,6 +18,7 @@ namespace O2.Kernel.InterfacesBaseImpl
         public static string defaultSvnO2RootFolder = @"http://o2platform.googlecode.com/svn/trunk/";
         public static string defaultSvnO2DatabaseRulesFolder = @"http://o2platform.googlecode.com/svn/trunk/O2_Scripts/";
         public static string defaultO2SVN_ExternalDlls = "http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/_3rdPartyDlls/";
+        public static string defaultO2SVN_FilesWithNoCode = "http://o2platform.googlecode.com/svn/trunk/O2 - All Active Projects/_3rdPartyDlls/FilesWithNoCode/";
         public static string defaultO2SVN_Binaries = "http://o2platform.googlecode.com/svn/trunk/O2_Binaries/";
         public static string defaultO2DownloadLocation = "http://code.google.com/p/o2platform/downloads/list";
         public static string defaultZippedScriptsFile = "_Scripts v1.x.zip";
@@ -39,6 +40,7 @@ namespace O2.Kernel.InterfacesBaseImpl
             SvnO2DatabaseRulesFolder = defaultSvnO2DatabaseRulesFolder;
             O2SVN_ExternalDlls = defaultO2SVN_ExternalDlls;
             O2SVN_Binaries = defaultO2SVN_Binaries;
+            O2SVN_FilesWithNoCode = defaultO2SVN_FilesWithNoCode;
             ZipppedScriptsFile = defaultZippedScriptsFile;
             O2DownloadLocation = defaultO2DownloadLocation;
         }
@@ -90,6 +92,7 @@ namespace O2.Kernel.InterfacesBaseImpl
         public string SvnO2DatabaseRulesFolder { get; set; }
         public string O2SVN_ExternalDlls { get; set; }
         public string O2SVN_Binaries { get; set; }
+        public string O2SVN_FilesWithNoCode { get; set; }
         public string O2DownloadLocation { get; set; }
         
 

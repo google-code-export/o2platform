@@ -475,7 +475,11 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static ascx_SourceCodeEditor onCaretMove(this ascx_SourceCodeEditor codeEditor, Action<Caret> callback)
         {
-            codeEditor.textArea().Caret.PositionChanged += (sender, e) => callback(codeEditor.caret());
+            codeEditor.textArea().Caret.PositionChanged += 
+                (sender, e)=>{
+                                if (codeEditor.notNull())
+                                    callback(codeEditor.caret());
+                             };
             return codeEditor;
         }
 

@@ -48,7 +48,7 @@ namespace O2.Views.ASCX.DataViewers
             this.lvData.Location = new System.Drawing.Point(0, 22);
             this.lvData.Name = "lvData";
             this.lvData.Size = new System.Drawing.Size(697, 188);
-            this.lvData.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            //this.lvData.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvData.TabIndex = 0;
             this.lvData.UseCompatibleStateImageBehavior = false;
             this.lvData.View = System.Windows.Forms.View.Details;

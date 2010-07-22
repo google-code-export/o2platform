@@ -160,7 +160,25 @@ namespace O2.DotNetWrappers.ExtensionMethods
             list.Sort();
             return list;
         }
-    
+
+        public static bool contains<T>(this List<T> list, T itemToFind)
+        {
+            return list.Contains(itemToFind);
+        }
+
+        public static List<T> remove<T>(this List<T> list, int index)
+        {
+            if (list.size() > index)
+                list.RemoveAt(index);
+            return list;
+        }
+
+        public static List<T> remove<T>(this List<T> list, T itemToRemove)
+        { 
+            if (list.contains(itemToRemove))
+                list.Remove(itemToRemove);
+            return list;
+        }
         #endregion
 
         #region ICollection

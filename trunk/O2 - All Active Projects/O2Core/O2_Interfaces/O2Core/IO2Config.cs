@@ -20,6 +20,7 @@ namespace O2.Interfaces.O2Core
         string SvnO2DatabaseRulesFolder { get; set; }
         string O2SVN_ExternalDlls { get; set; }
         string O2SVN_Binaries { get; set; }
+        string O2SVN_FilesWithNoCode { get; set; }
         string O2DownloadLocation { get; set; }
         string Version { get; }
         string O2ConfigFile { get; set; }

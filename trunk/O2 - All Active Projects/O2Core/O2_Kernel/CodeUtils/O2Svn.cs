@@ -18,6 +18,11 @@ namespace O2.Kernel.CodeUtils
         }
 
         public void tryToFetchAssemblyFromO2SVN(string assemblyToLoad)
+        {
+            tryToFetchAssemblyFromO2SVN(assemblyToLoad, true);
+        }
+
+        public void tryToFetchAssemblyFromO2SVN(string assemblyToLoad, bool useCacheInfo)
         {            
             string localFilePath = "";
             var thread = O2Kernel_O2Thread.mtaThread(
@@ -48,6 +53,14 @@ namespace O2.Kernel.CodeUtils
                                 if (new O2Kernel_Web().httpFileExists(webLocation2))
                                 {
                                     new O2Kernel_Web().downloadBinaryFile(webLocation2, localFilePath);
+                                }
+                                else
+                                {
+                                    var webLocation3 = "{0}{1}".format(PublicDI.config.O2SVN_FilesWithNoCode, assemblyToLoad);
+                                    if (new O2Kernel_Web().httpFileExists(webLocation3))
+                                    {
+                                        new O2Kernel_Web().downloadBinaryFile(webLocation3, localFilePath);
+                                    }
                                 }
                             }
                             if (File.Exists(localFilePath))

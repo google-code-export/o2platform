@@ -53,7 +53,10 @@ namespace O2.XRules.Database
         public string pathToPictureBox = "";    
     	public string currentScript = "";
     	public CSharp_FastCompiler csharpCompiler;
-        
+        public Action csharpCompiler_onAstFail;
+        public Action csharpCompiler_onAstOK;
+        public Action csharpCompiler_onCompileFail;
+        public Action csharpCompiler_onCompileOK;                        
 
     	//public Label statusLabel;
     	public RichTextBox results_RichTextBox;
@@ -385,18 +388,31 @@ namespace O2.XRules.Database
 
                 csharpCompiler = new CSharp_FastCompiler();
 
-                csharpCompiler.onAstFail = () => showError("Ast creation failed", csharpCompiler.AstErrors);
+                csharpCompiler.onAstFail =
+                    ()=>{
+                            showError("Ast creation failed", csharpCompiler.AstErrors);
+                            csharpCompiler_onAstFail.invoke();
+                        };
 
-                csharpCompiler.onAstOK = () => showInfo("Ast creation Ok");
+                csharpCompiler.onAstOK = 
+                    ()=>{
+                            showInfo("Ast creation Ok");
+                            csharpCompiler_onAstOK.invoke();
+                        };
 
-                csharpCompiler.onCompileFail = () => showError("Compilation failed", csharpCompiler.CompilationErrors);
+                csharpCompiler.onCompileFail = 
+                    ()=>{
+                            showError("Compilation failed", csharpCompiler.CompilationErrors);
+                            csharpCompiler_onCompileFail.invoke();
+                        };
 
                 csharpCompiler.onCompileOK =
-                                                () =>
-                                                {
-                                                    showInfo("Compilation Ok: Executing 1st method");
-                                                    executeCompiledCode();                                                    
-                                                };
+                    () =>
+                    {
+                        showInfo("Compilation Ok: Executing 1st method");
+                        csharpCompiler_onCompileOK.invoke();
+                        executeCompiledCode();                                                    
+                    };
 
                 var sourceCode = "";
                 csharpCompiler.SourceCodeFile = scriptToLoad;
@@ -409,8 +425,15 @@ namespace O2.XRules.Database
                 else
                     statusLabel.set_Text("Non supported file").textColor(this, Color.Red);
             });
-     	}     	  
-     	
+     	}
+
+        /*public string currentScript()
+        {
+            if (csharpCompiler.notNull() && csharpCompiler.SourceCodeFile.fileExists())
+                return csharpCompiler.SourceCodeFile.fileName();
+            return "";
+        }*/
+
      	public void showLoadedScriptSourceCode()
      	{
      		if (currentScript.fileExists())

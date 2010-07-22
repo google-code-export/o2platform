@@ -60,10 +60,11 @@ namespace O2.DotNetWrappers.Network
         }
 
         public void updateHeadersResponse(WebHeaderCollection webHeaders)
-        {
+        {            
             Headers_Response = new Dictionary<string, string>();
-            foreach (string key in webHeaders.Keys)
-                Headers_Response.Add(key, webHeaders[key]);
+            if (webHeaders.notNull())
+                foreach (string key in webHeaders.Keys)
+                    Headers_Response.Add(key, webHeaders[key]);
 
         }
 
@@ -149,13 +150,17 @@ namespace O2.DotNetWrappers.Network
 
         public String getUrlContents_POST(String urlToFetch, string postData)
         {
-            return getUrlContents_POST(urlToFetch, null, postData);
-        }  
-        
+            return getUrlContents_POST(urlToFetch, "application/x-www-form-urlencoded", postData);
+        }
 
         public String getUrlContents_POST(String urlToFetch, string cookies, string postData)
         {
-            return getUrlContents_POST(urlToFetch, cookies,  Encoding.ASCII.GetBytes(postData));
+            return getUrlContents_POST(urlToFetch, "application/x-www-form-urlencoded", cookies, postData);
+        }
+
+        public String getUrlContents_POST(String urlToFetch, string contentType, string cookies, string postData)    
+        {
+            return getUrlContents_POST(urlToFetch, contentType, cookies, Encoding.ASCII.GetBytes(postData));
         }
 
         public String getUrlContents_POST(String urlToFetch, byte[] postData)
@@ -163,7 +168,13 @@ namespace O2.DotNetWrappers.Network
             return getUrlContents_POST(urlToFetch, null, postData);
         }
 
+
         public String getUrlContents_POST(String urlToFetch, string cookies, byte[] postData)
+        {
+            return getUrlContents_POST(urlToFetch, "application/x-www-form-urlencoded", cookies, postData);
+        }
+
+        public String getUrlContents_POST(String urlToFetch,string contentType, string cookies, byte[] postData)
         {
             //var thread = O2Thread.mtaThread(
             //    () =>
@@ -180,17 +191,18 @@ namespace O2.DotNetWrappers.Network
                     Headers_Request.add("Cookie", cookies);
                 foreach (var header in Headers_Request)
                     webRequest.Headers.Add(header.Key, header.Value);
-                
+
                 // setup POST details:
                 webRequest.Method = "POST";
                 webRequest.ContentLength = postData.Length;
-                webRequest.ContentType = "application/x-www-form-urlencoded";
+                webRequest.ContentType = contentType;
                 using (Stream dataStream = webRequest.GetRequestStream())
                 {
                     dataStream.Write(postData, 0, postData.Length);
                     dataStream.Close();
                     System.GC.Collect();
                 }
+
                 using (WebResponse rResponse = webRequest.GetResponse())
                 {
                     updateHeadersResponse(rResponse.Headers);               // store response headers
@@ -205,12 +217,16 @@ namespace O2.DotNetWrappers.Network
                     }
                 }
             }
-
+            catch (WebException webEx)
+            {
+                if (webEx.Response.notNull())
+                    updateHeadersResponse(webEx.Response.Headers);                  // store response headers 
+            }
             catch (Exception ex)
             {
-                PublicDI.log.error("Error in getUrlContents: {0}", ex.Message);
-                return "";
+                PublicDI.log.error("Error in getUrlContents: {0}", ex.Message);                
             }
+            return "";
              //   });
             //thread.
         }                 
@@ -331,6 +347,15 @@ namespace O2.DotNetWrappers.Network
                     ex.log("in Web.httpFileExists");
                 return false;
             }
-        }        
+        }
+
+        public class Https
+        {
+            public static void ignoreServerSslErrors()
+            {
+                System.Net.ServicePointManager.ServerCertificateValidationCallback =
+                        (obj, cert, chain, errors) => true;
+            }
+        }
     }
 }
