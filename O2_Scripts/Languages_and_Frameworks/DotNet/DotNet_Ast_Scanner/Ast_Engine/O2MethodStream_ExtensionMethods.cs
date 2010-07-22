@@ -15,6 +15,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
     public static class O2MethodStream_ExtensionMethods
     {
+    	public static Dictionary<IMethod, O2MethodStream> O2MethodStreamCache = new Dictionary<IMethod, O2MethodStream>();
+    
         public static List<string> createO2MethodStreamFiles(this O2MappedAstData o2MappedAstData, List<string> sourceFiles, string targetFolder)
         {
             var createdFiles = new List<String>();
@@ -51,6 +53,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         {
             var o2MethodStream = new O2MethodStream(o2MappedAstData);
             o2MethodStream.add_IMethod(iMethod);
+            
+            //add to O2MethodStreamCache
+            O2MethodStreamCache.add(iMethod, o2MethodStream);
+            
             return o2MethodStream;
         }
 
@@ -168,10 +174,16 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                 }
             }
             return o2MethodStream;
-        }
-
+        }		
+		
         public static O2MethodStream map_IMethod_Dependencies(this O2MethodStream o2MethodStream, IMethod iMethod)
         {
+        	if (O2MethodStream_ExtensionMethods.O2MethodStreamCache.hasKey(iMethod))
+        	{
+        		"Found IMethod in O2MethodStreamCache(merging its data with the current o2MethodStream): {0}".debug(iMethod.DotNetName);
+        		o2MethodStream.add_O2MethodStreamMappings(O2MethodStream_ExtensionMethods.O2MethodStreamCache[iMethod]);
+        		return o2MethodStream;
+        	}
             // map the methods called
             var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
             if (methodDeclaration != null)
@@ -196,6 +208,26 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             o2MethodStream.map_ExternalClasses(iMethod);
             return o2MethodStream;
         }
+        
+		public static O2MethodStream add_O2MethodStreamMappings(this O2MethodStream targetO2MethodStream, O2MethodStream sourceO2MethodStream)
+		{
+			//MappedIMethods
+			foreach(var iMethod in sourceO2MethodStream.MappedIMethods)
+				targetO2MethodStream.MappedIMethods.add(iMethod.Key,iMethod.Value);
+			//ExternalIMethods
+			foreach(var iMethod in sourceO2MethodStream.ExternalIMethods)
+				targetO2MethodStream.ExternalIMethods.add(iMethod.Key,iMethod.Value);
+			//ExternalClasses	
+			foreach(var iReturnType in sourceO2MethodStream.ExternalClasses)
+				targetO2MethodStream.ExternalClasses.add(iReturnType.Key,iReturnType.Value);
+			//Fields	
+			foreach(var field in sourceO2MethodStream.Fields)
+				targetO2MethodStream.Fields.add(field.Key,field.Value);
+			//Properties	
+			foreach(var property in sourceO2MethodStream.Properties)
+				targetO2MethodStream.Properties.add(property.Key,property.Value);			
+			return targetO2MethodStream;
+		}
 
 
         public static O2MethodStream map_Expression<T>(this O2MethodStream o2MethodStream, T expression)

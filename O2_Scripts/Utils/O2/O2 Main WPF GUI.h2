@@ -5,52 +5,62 @@ var currentVersion = "v1.2 Beta";
 var defaultWebsiteOnMainTab = "http://o2-platform.com/wiki/OWASP O2 Platform {0}".format(currentVersion);
 var formTitle = "OWASP O2 Platform {0} ({1})".format(currentVersion,"O2_XRules_Database.exe".assembly().version());
 var wpfGui = O2Gui.open&lt;WPF_GUI&gt;(formTitle,1020,700); 
+wpfGui.setExecuteScriptsEnvironment();
 wpfGui.parentForm()
 	  .top(10)
 	  .left(10);
 //var wpfGui = panel.add_Control&lt;WPF_GUI&gt;();    
 wpfGui.SideBarWidth = 190;       
 wpfGui.buildGui();
+
+Func&lt;Control&gt; buildMainControl =
+ 	()=&gt;{
+ 			var sidePanel = new Panel().fill().backColor(Color.White);
+   			sidePanel.height(700);
+   			sidePanel.width(300);
+   			var pictureBox = sidePanel.add_PictureBox()
+		   							  .show("O2_Logo.gif".local())
+		   							  .fill(false)
+		   							  .anchor()
+		   							  .anchor_Top()
+		   							  .width(260)
+		   							  .height(180)
+		   							  .leftAdd(30);
+		   	wpfGui.ExecuteScripts.invoke("setupPictureBoxContextMenu",pictureBox);
+		   	wpfGui.ExecuteScripts.statusLabel = wpfGui.StatusLabel;
+		   	var browser = sidePanel.add_Browser()			   	         
+					   	         .left(0).top(160).fill(false)
+					   	         //.width(sidePanel.width()-2)						   	         
+					   	         .align_Right(sidePanel)
+					   	         .align_Bottom(sidePanel)
+					   	         .heightAdd(-22)
+					   	         .widthAdd(-2)
+					   	         .bringToFront();
+							
+			O2Thread.mtaThread(
+				()=&gt;{
+						browser.silent(true);
+						browser.set_Text("");	// (to show the scroolbars)
+						if (defaultWebsiteOnMainTab.uri().exists())
+    					{
+		   					browser.open(defaultWebsiteOnMainTab);
+		   				}
+		   				else
+		   					wpfGui.showOffineMessage(browser,"Could not show page: {0}".format(defaultWebsiteOnMainTab));
+		   				Application.DoEvents();
+		   			});
+			return sidePanel;
+		};
   
 wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform!".line().line() +  
 						   "If you are looking where to start, select one of the areas below and follow the links.".line().line() +   
 						   "On the O2 logo on the top right, you can also: double-click to see the available scripts, right-click to see a context menu and drag'n'drop scripts for auto compile+execution".line(),
-	   ()=&gt; {
-	   			var sidePanel = new Panel().fill().backColor(Color.White);
-	   			sidePanel.height(700);
-	   			sidePanel.width(300);
-	   			var pictureBox = sidePanel.add_PictureBox()
-			   							  .show("O2_Logo.gif".local())
-			   							  .fill(false)
-			   							  .anchor()
-			   							  .anchor_Top()
-			   							  .width(260)
-			   							  .height(180)
-			   							  .leftAdd(30);
-			   	wpfGui.ExecuteScripts.invoke("setupPictureBoxContextMenu",pictureBox);
-			   	wpfGui.ExecuteScripts.statusLabel = wpfGui.StatusLabel;
-			   	var browser = sidePanel.add_Browser()			   	         
-						   	         .left(0).top(160).fill(false)
-						   	         //.width(sidePanel.width()-2)						   	         
-						   	         .align_Right(sidePanel)
-						   	         .align_Bottom(sidePanel)
-						   	         .heightAdd(-22)
-						   	         .widthAdd(-2)
-						   	         .bringToFront();
-								
-				O2Thread.mtaThread(
-					()=&gt;{
-							browser.silent(true);
-							browser.set_Text("");	// (to show the scroolbars)							
-			   				browser.open(defaultWebsiteOnMainTab);
-			   				Application.DoEvents();
-			   			});
-				return sidePanel;
-	   		})
+						   buildMainControl)
+						   
 	  .add_Link("Available Scripts",wpfGui.ExecuteScripts.showAvailableScripts) 		
 	  .add_Link("O2 Log Viewer",wpfGui.ExecuteScripts.openO2LogViewer) 
 	  .add_Link("O2 Command Prompt",wpfGui.ExecuteScripts.openO2CommandPromt)
-	  .add_Link_Web("O2Platform.com ({0})".format(currentVersion),defaultWebsiteOnMainTab)
+	  .add_Link_Web("O2Platform.com ({0})".format(currentVersion),defaultWebsiteOnMainTab)	  
 	  .add_Upgrade_Link(currentVersion, "http://code.google.com/p/o2platform/downloads/list");
 	  
 wpfGui.add_Section("Penetration Testing", "If you are performing security penetration tests (also called BlackBox security reviews) , here are a number of O2 Modules that will help you")
@@ -188,7 +198,12 @@ wpfGui.add_Section("Help", "If you are looking for help, here are the best place
 	  .add_Link_O2Wiki("O2 Documentation","Documentation")	  	  
 	  .add_Link_O2Wiki("All Videos","O2_Videos_on_YouTube")
 	  .add_Label("Debug O2")
-	  .add_Link_O2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2");
+	  .add_Link_O2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")
+	  .add_Link("Rebuild Main Control", 
+	  		()=&gt;{
+		  			wpfGui.GuiSections[0].WinFormsControl = buildMainControl();
+		  		});
+	  
 	  
 	  
  
@@ -199,10 +214,15 @@ return null;
 
 
 //using O2.External.IE.ExtensionMethods
-
 //O2File:WPF_Gui.cs
 
 //O2Ref:Odyssey.dll
-//O2Ref:O2_External_IE.dll</SourceCode>
+//O2Ref:O2_External_IE.dll
+//O2Ref:GraphSharp.Controls.dll
+//O2Ref:GraphSharp.dll
+//O2Ref:QuickGraph.dll
+//O2Ref:ICSharpCode.AvalonEdit.dll
+//O2Ref:O2_API_AST.dll
+//O2Ref:O2_API_Visualization.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

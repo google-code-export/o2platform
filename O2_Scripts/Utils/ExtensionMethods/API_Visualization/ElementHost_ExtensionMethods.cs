@@ -7,10 +7,11 @@ using System.Windows.Controls;
 using System.Windows.Forms.Integration;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.API.Visualization.ExtensionMethods;
 //O2Ref:WindowsFormsIntegration.dll
 //O2File:WPF_ExtensionMethods.cs
 
-namespace O2.API.Visualization.ExtensionMethods
+namespace O2.XRules.Database.Utils
 {
     public static class ElementHost_ExtensioMethods
     {
@@ -48,16 +49,26 @@ namespace O2.API.Visualization.ExtensionMethods
 		    	
 
 		#region ElementHost - WPF Controls
+		public static Label add_Label_Wpf(this ElementHost elementHost, string text)
+		{
+			return elementHost.add_Control_Wpf<Label>().set_Text_Wpf(text);
+		}
+		
+		public static Grid add_Grid_Wpf(this ElementHost elementHost)
+		{
+			return elementHost.add_Control_Wpf<Grid>();
+		}
+		
+		public static StackPanel add_StackPanel_Wpf(this ElementHost elementHost)
+		{
+			return elementHost.add_Control_Wpf<StackPanel>();
+		}
 		
         public static ListView add_ListView_Wpf(this ElementHost elementHost)
         {
             return elementHost.add_Control_Wpf<ListView>();
         }
-        
-        public static Label add_Label_Wpf(this ElementHost elementHost, string text)
-        {
-            return elementHost.add_Control_Wpf<Label>().set_Text_Wpf(text);
-        }
+                
         #endregion
 
     }

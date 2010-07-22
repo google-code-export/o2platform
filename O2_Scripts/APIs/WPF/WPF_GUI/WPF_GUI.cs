@@ -7,17 +7,20 @@ using System.Collections.Generic;
 using WinForms = System.Windows.Forms;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.IE.ExtensionMethods;
 using O2.External.IE.Wrapper;
+using O2.External.IE.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using O2.API.Visualization.ExtensionMethods;
 using O2.XRules.Database;
 using Odyssey.Controls;
+using O2.XRules.Database.Utils;
 
 //O2File:WPF_Controls_ExtensionMethods.cs
 //O2File:WPF_WinFormIntegration_ExtensionMethods.cs
@@ -57,8 +60,9 @@ namespace O2.XRules.Database.APIs
     		var wpfGui = O2Gui.open<WPF_GUI>("Test - O2 WPF Gui");			
 			wpfGui.buildGui();			
 			wpfGui.add_Section("Main", "This is the intro text. Put here an explanation of what this module is all about")
-				  .add_Label("this is a label 1")				  
-				  .add_Link("link",()=>{})
+				  .add_Label("this is a label 1")				  				  
+				  .add_Link_O2Script("Util - Simple Html Viewer","Util - Simple Html Viewer.h2")
+				  .add_Link_O2Script("script that doesn't exist","Aaaa.h2")				  
 				  .add_Link("link 123",()=>{})
 				  .add_Link_Web("BBC news","http://news.bbc.co.uk")
 				  .add_Upgrade_Link("aaa", "http://code.google.com/p/o2platform/downloads/list");
@@ -80,16 +84,15 @@ namespace O2.XRules.Database.APIs
     		SideBarWidth = 250;
     		//buildGui();
     		GuiSections = new List<WPF_GUI_Section>();
-    		Wiki_O2 = new O2PlatformWikiAPI();
-    		ExecuteScripts = new ascx_Execute_Scripts();
+    		Wiki_O2 = new O2PlatformWikiAPI();    		    		
     	}
-    	
+   
     	/*public WPF_GUI buildGui(List<WPF_GUI_Section> sections)
     	{
     		Sections = sections;
     		return buildGui();
     	}*/
-    	public WPF_GUI buildGui()    	
+    	public WPF_GUI buildGui()
     	{
     		return (WPF_GUI)this.invokeOnThread(
     			()=>{
@@ -193,8 +196,58 @@ namespace O2.XRules.Database.APIs
 						GuiSections.Add(section);
 						return section;
 					});
-		}    	    	    	    	
+		}    	   
+		
+		public string scriptHelpPage(string scriptName)
+		{
+			return "http://o2platform.com/wiki/O2_Script/{0}".format(scriptName);
+		}
+    }     
+    
+    public static class WPF_GUI_ExtensionMethods_Config
+    {
+        public static WPF_GUI setExecuteScriptsEnvironment(this WPF_GUI wpf_Gui)
+    	{
+    		if (wpf_Gui.ExecuteScripts.isNull())
+    		{    			
+    			wpf_Gui.ExecuteScripts = new ascx_Execute_Scripts();
+    			wpf_Gui.ExecuteScripts.csharpCompiler_onAstOK = 
+    				()=> wpf_Gui.showMessage("Executing script: {0}".format(wpf_Gui.ExecuteScripts.currentScript.fileName()), "Ast was creasted Ok");
+    			wpf_Gui.ExecuteScripts.csharpCompiler_onAstFail = 
+    				()=>{
+    						var scriptName = wpf_Gui.ExecuteScripts.currentScript.fileName();
+    						wpf_Gui.showMessage("Executing script: {0}".format(scriptName), "Ast Creation Failed!", wpf_Gui.scriptHelpPage(scriptName));
+    					};
+    			wpf_Gui.ExecuteScripts.csharpCompiler_onCompileFail = 
+    				()=>{
+    						var compilationErrors = wpf_Gui.ExecuteScripts.csharpCompiler.CompilationErrors;
+    						var errorMessage = "Compilation Failed!".line() + 
+    										   "<br><hr><h4>".line() +
+    										   compilationErrors.Replace("".line(), "<br>") + 
+    										   "</h4><hr>".line();							    										   
+    						wpf_Gui.showMessage("Executing script: {0}".format(wpf_Gui.ExecuteScripts.currentScript.fileName()), errorMessage);
+    					};
+    			wpf_Gui.ExecuteScripts.csharpCompiler_onCompileOK = 
+    				()=>{
+    						var scriptName = wpf_Gui.ExecuteScripts.currentScript.fileName();
+    						wpf_Gui.showMessage("Executing script: {0}".format(scriptName), "Compiled OK, executing first method",wpf_Gui.scriptHelpPage(scriptName));    						
+    					};
+    		}
+    		return wpf_Gui;
+    		//ExecuteScripts.
+    		
+    	/*							show.info(section.Wpf_Gui.ExecuteScripts);
+						var compilationErrors = section.Wpf_Gui.ExecuteScripts.csharpCompiler.CompilationErrors;
+						
+						if (compilationErrors.valid())
+						{
+							
+							section.Wpf_Gui.showMessage("Compilation errors on Script: {0}".format(o2ScriptToExecute),compilationErrors); 
+						}*/
+    	
+    	}
     }
+
     
     public static class WPF_GUI_ExtensionMethods_Show
     {
@@ -207,13 +260,23 @@ namespace O2.XRules.Database.APIs
 			return wpf_Gui;
     	}
    
-    
-    	public static WPF_GUI show_Url(this WPF_GUI wpf_Gui, string url)
+    	public static WPF_GUI show_O2Browser(this WPF_GUI wpf_Gui)
     	{
-    		wpf_Gui.statusMessage("Showing URL:{0}",url);
-    		wpf_Gui.WinFormPanel.clear();    		
-			wpf_Gui.WinFormPanel.add_Control(wpf_Gui.O2Browser);
-    		wpf_Gui.O2Browser.open(url);
+    		if (wpf_Gui.WinFormPanel.controls().contains(wpf_Gui.O2Browser).isFalse())
+    		{    		    			
+				wpf_Gui.WinFormPanel.clear();    		
+				wpf_Gui.WinFormPanel.add_Control(wpf_Gui.O2Browser);				
+			}			
+			return wpf_Gui;
+    	}
+    	public static WPF_GUI show_Url(this WPF_GUI wpf_Gui, string url)
+    	{       		
+			wpf_Gui.show_O2Browser();
+			wpf_Gui.statusMessage("Showing URL:{0}",url);
+    		if (url.uri().exists())    		
+    			wpf_Gui.O2Browser.open(url);    		
+    		else
+    			wpf_Gui.showOffineMessage("Could not open url: {0}".format(url));
     		return wpf_Gui;
     	}
     	
@@ -246,6 +309,54 @@ namespace O2.XRules.Database.APIs
     		wpf_Gui.statusMessage("Starting process: {0}",processToStart);
     		Processes.startProcess(processToStart);
     		return wpf_Gui;
+    	}
+    	
+    	public static WPF_GUI showOffineMessage (this WPF_GUI wpf_Gui,string message)
+    	{
+    		wpf_Gui.show_O2Browser();
+    		return wpf_Gui.showOffineMessage(wpf_Gui.O2Browser,message);
+    	}
+    	    	    	    	
+    	public static WPF_GUI showOffineMessage (this WPF_GUI wpf_Gui,O2BrowserIE browser, string message)
+    	{
+			return wpf_Gui.showMessage(browser,"You are offline at the moment", message);
+    	}    	
+    	
+    	public static WPF_GUI showMessage(this WPF_GUI wpf_Gui, string title, string message)
+    	{
+    		return wpf_Gui.showMessage(title,message,"");
+    	}
+    	    	    	
+    	public static WPF_GUI showMessage (this WPF_GUI wpf_Gui, string title, string message, string url)
+    	{
+    		wpf_Gui.show_O2Browser();
+    		return  wpf_Gui.showMessage(wpf_Gui.O2Browser, title, message,url);
+    	}
+    	
+    	public static WPF_GUI showMessage (this WPF_GUI wpf_Gui,O2BrowserIE browser, string title, string message)
+    	{
+    		return wpf_Gui.showMessage(title, message,"");
+    	}
+    	
+    	public static WPF_GUI showMessage (this WPF_GUI wpf_Gui,O2BrowserIE browser, string title, string message, string url)
+    	{
+    		O2Thread.mtaThread(
+    			()=>{
+			    		var htmlMessage = ("<html><body cellspacing=\"0\" cellpadding=\"0\"><font face=Arial><center>".line() +     						   
+			    						   "   <h2>{1}</h2>".line() + 
+			    						   "   <h3>{2}</h3>".line() + 	
+			    						   "   <img src=\"{0}\"/>" + 
+			    						   "</center>".line() + 
+			    						  ((url).valid() 
+			    						  		? "<div style=\"position:absolute; bottom:0px;width:100%;font-size:xx-small;\"><center>showing help page: <a href=\"{3}\"target=blank>{3}</a></center></div>".line() + 
+			    						  		  "<iframe src =\"{3}\" style=\"position:absolute; bottom:15px; height=70%; width:100%;\"/>".line()
+			    						  		  
+			    						  		: "") + 
+			    						   "</font></body></html>")
+			    						   .format("O2Logo_Small.gif".local(), title, message, url);
+						browser.set_Text(htmlMessage);
+					});
+			return wpf_Gui;
     	}
     }
     
@@ -329,7 +440,7 @@ namespace O2.XRules.Database.APIs
 		{			
 			return section.add_Link(linkText, ()=> section.Wpf_Gui.show_YouTubeVideo(youTubeVideoId));						
 		}
-		
+		 
 		public static WPF_GUI_Section add_Link_O2Wiki(this WPF_GUI_Section section, string linkText, string wikiPageToShow)
 		{			
 			return section.add_Link(linkText, ()=> section.Wpf_Gui.show_O2Wiki(wikiPageToShow));						
@@ -342,7 +453,26 @@ namespace O2.XRules.Database.APIs
 		
 		public static WPF_GUI_Section add_Link_O2Script(this WPF_GUI_Section section, string linkText, string o2ScriptToExecute)
 		{			
-			return section.add_Link(linkText,()=> section.Wpf_Gui.ExecuteScripts.loadFile(o2ScriptToExecute.local()));
+			return section.add_Link(linkText,
+				()=> {										
+						try
+						{
+							section.Wpf_Gui.show_O2Browser();
+							var scriptPath = o2ScriptToExecute.local();
+							if (scriptPath.fileExists())
+							{
+								section.Wpf_Gui.showMessage("Executing script: {0}".format(o2ScriptToExecute), "");
+								section.Wpf_Gui.setExecuteScriptsEnvironment();
+								section.Wpf_Gui.ExecuteScripts.loadFile(scriptPath);
+							}
+							else
+								section.Wpf_Gui.showMessage("Provided script not found: {0}".format(o2ScriptToExecute), "");
+						}
+						catch(Exception ex)
+						{
+							ex.log("in WPF_GUI_Section.add_Link_O2Script");
+						}
+					 });
 		}
 				
     }

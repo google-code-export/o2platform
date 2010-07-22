@@ -10,6 +10,7 @@ using System.Windows.Markup;
 using System.Windows.Controls;
 using System.IO;
 using System.Xml;
+using O2.API.Visualization.ExtensionMethods;
 
 //O2File:WPF_Controls_ExtensionMethods.cs
 
@@ -18,7 +19,7 @@ using System.Xml;
 //O2Ref:QuickGraph.dll
 //O2Ref:GraphSharp.Controls.dll 
 
-namespace O2.API.Visualization.ExtensionMethods
+namespace O2.XRules.Database.Utils
 {
     public static class Xaml_ExtensionMethods
     {

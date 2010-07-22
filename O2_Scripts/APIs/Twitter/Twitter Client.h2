@@ -39,7 +39,15 @@ optionsTab.add_Label("File with credentials",20,0)
           							usersComboBox.select_Item(0);
           						})   
           .set_Text(fileWithCredentials);
- 
+ 		  if (fileWithCredentials.fileExists().isFalse())
+ 		  {
+ 		  	var userProvidedCredential = ascx_AskUserForLoginDetails.ask();     	
+ 		  	if (userProvidedCredential.notNull())
+ 		  	{
+	 		  	usersComboBox.add_Item(userProvidedCredential);
+	 		  	usersComboBox.selectFirst();
+	 		}
+ 		  }
  
 // timelineTab   
 timelineTab.onSelected(
@@ -87,6 +95,7 @@ followingTab.onSelected(
 		});
 return "done";
  
+ //O2File:ascx_AskUserForLoginDetails.cs
 //O2File:O2TwitterAPI.cs
 //O2Ref:Dimebrain.TweetSharp.dll
 //O2Ref:Newtonsoft.Json.dll</SourceCode>

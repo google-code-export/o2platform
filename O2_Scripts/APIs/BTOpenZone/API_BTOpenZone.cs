@@ -54,7 +54,9 @@ namespace O2.XRules.Database.APIs
 				"detected BT Openzone page".info();
 				// get the login details				
 				ICredential credential = fileWithLoginDetails.credential("BtOpenZone");
- 
+				if (credential == null)
+					credential = ie.askUserForUsernameAndPassword();      	
+					
 				if (credential==null)
 				{
 					"no file with credentials provided, or no credential of type BtOpenZone found".debug();

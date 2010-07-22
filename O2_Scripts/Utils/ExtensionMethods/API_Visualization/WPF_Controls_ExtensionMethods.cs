@@ -16,12 +16,13 @@ using System.Windows.Markup;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
 using System.IO;
+using O2.API.Visualization.ExtensionMethods;
 
 //O2File:WPF_WinFormIntegration_ExtensionMethods.cs
 
 //O2Ref:O2_API_Visualization.dll
 
-namespace O2.API.Visualization.ExtensionMethods
+namespace O2.XRules.Database.Utils
 {
     public static class WPF_Controls_ExtensionMethods_Generic
     {    	
@@ -342,7 +343,7 @@ namespace O2.API.Visualization.ExtensionMethods
     
     
     }	        
-	
+			
 	public static class WPF_Controls_ExtensionMethods_Label
 	{	
         #region Label
@@ -1387,7 +1388,7 @@ textBox1.prop("",true);
 	
         #region Grid
 
-        public static Grid add_Grid(this UIElement uiElement)
+        public static Grid add_Grid_Wpf(this UIElement uiElement)
         {
             return uiElement.add_Control_Wpf<Grid>();
         }

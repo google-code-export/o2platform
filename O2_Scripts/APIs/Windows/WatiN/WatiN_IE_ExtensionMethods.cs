@@ -104,7 +104,9 @@ namespace O2.XRules.Database.APIs
  		{
  			try
  			{
- 				return ie.IE.HtmlDocument.cookie;
+ 				if (ie.IE.HtmlDocument.notNull())
+ 					return ie.IE.HtmlDocument.cookie;
+ 				return "";
  			}
  			catch(Exception ex)
  			{
@@ -115,8 +117,11 @@ namespace O2.XRules.Database.APIs
  		
  		public static List<string> cookies(this WatiN_IE ie)
  		{
- 			return (from cookie in ie.cookiesRaw().split(";")
- 					select cookie.trim()).toList();
+ 			if (ie.cookiesRaw().valid())
+ 				return (from cookie in ie.cookiesRaw().split(";")
+ 						select cookie.trim()).toList();
+ 						
+ 			return new List<string>(); 			
  		}
  		
  		//Need to find a better way to do this  (check what happens if the cookie name has a space between name & =
@@ -256,6 +261,11 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	public static WatiN_IE open_usingPOST(this WatiN_IE watinIe, string postUrl,string postData)
+    	{
+    		return watinIe.open_usingPOST(postUrl, "application/x-www-form-urlencoded", postData);
+    	}
+    	
+    	public static WatiN_IE open_usingPOST(this WatiN_IE watinIe, string postUrl, string contentType, string postData)
     	{    		
     		try
     		{
@@ -263,7 +273,7 @@ namespace O2.XRules.Database.APIs
 				var browser = (watinIe.IE.InternetExplorer as IWebBrowser2); 
 				
 				object PostDataByte = (object)Encoding.UTF8.GetBytes(postData);
-				object AdditionalHeaders = "Content-Type: application/x-www-form-urlencoded" + Environment.NewLine;
+				object AdditionalHeaders = "Content-Type: " + contentType.line();;
 				object nullValue = null;
 				browser.Navigate(postUrl, ref nullValue, ref nullValue, ref PostDataByte, ref AdditionalHeaders);
 				watinIe.IE.WaitForComplete();

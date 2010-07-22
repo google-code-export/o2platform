@@ -87,6 +87,126 @@ namespace O2.XRules.Database.Utils
 			return false;
 		}
     }
+    
+    
+    public static class ExtraMethodsToAddToO2CodeBase_Colections
+    {
+    	public static List<T> keys<T, T1>(this Dictionary<T, T1> dictionary)
+        {
+            if (dictionary.notNull())
+            	return dictionary.Keys.toList();
+            return new List<T>();
+        }
+    }
+    
+    public static class ExtraMethodsToAddToO2CodeBase_Serialize_ExtensionMethods
+    {
+    	public static string serialize(this object _object, bool serializeToFile)
+    	{
+    		if (serializeToFile)
+    			return _object.serialize();
+    		return Serialize.createSerializedXmlStringFromObject(_object);
+    	}
+    }
+    
+    
+    public static class ExtraMethodsToAddToO2CodeBase_TreeView
+    {
+    	public static TreeNode select(this TreeView treeView, string text)
+    	{
+    		foreach(var treeNode in treeView.nodes())
+    			if (treeNode.get_Text()==text)
+    				return treeNode.selected();
+    		return null;
+    	}
+    	
+    }
+    
+    public static class ExtraMethodsToAddToO2CodeBase_O2_API_AST
+    {
+    	public static List<INode> iNodes(this List<TypeDeclaration> typeDeclarations)
+    	{
+    		var iNodes = new List<INode>();
+    		foreach(var typeDeclaration in typeDeclarations)
+    			iNodes.AddRange(typeDeclaration.iNodes());
+    		return iNodes;
+    	}
+    	
+    	public static List<T> iNodes<T>(this List<INode> iNodes)
+    		where T : INode
+    	{
+    		var iNodesInT = new List<T>();
+    		foreach(var iNode in iNodes)
+    			iNodesInT.AddRange(iNode.iNodes<T>());
+    		return iNodesInT;    		
+    	}
+    	
+    	public static List<FieldDeclaration> fields(this List<INode> iNodes)
+    	{
+    		return iNodes.iNodes<FieldDeclaration>();
+    	}
+    	
+    	public static List<FieldDeclaration> fields(this List<INode> iNodes, string nameToFind)
+    	{
+    		return(from fieldDeclaration in iNodes.fields()
+    			   from name in fieldDeclaration.names()
+    			   where name == nameToFind
+    			   select fieldDeclaration).toList();    		
+    	}
+    	
+    	public static List<TypeReference> types(this List<FieldDeclaration> fieldDeclarations)
+    	{
+    		return (from fieldDeclaration in fieldDeclarations    			    
+    			    select fieldDeclaration.TypeReference).toList();
+    	}
+    	
+    	public static List<string> names(this List<FieldDeclaration> fieldDeclarations)
+    	{
+    		return (from fieldDeclaration in fieldDeclarations
+    			    from field in fieldDeclaration.Fields
+    			    select field.Name).toList();
+    	}
+    	
+    	public static List<string> names(this FieldDeclaration fieldDeclaration)
+    	{
+    		return (from field in fieldDeclaration.Fields
+    			    select field.Name).toList();
+    	}
+    	
+    	public static List<VariableDeclaration> variables(this List<FieldDeclaration> fieldDeclarations)
+    	{
+    		return (from fieldDeclaration in fieldDeclarations
+    			    from field in fieldDeclaration.Fields
+    			    select field).toList();
+    	}
+    	
+    	public static Dictionary<string, string> values(this List<FieldDeclaration> fieldDeclarations)
+    	{
+    		var values = new Dictionary<string, string>();
+    		foreach(var variable in fieldDeclarations.variables())
+    		{
+    			if (variable.Initializer is PrimitiveExpression)
+    				values.add(variable.Name,(variable.Initializer as PrimitiveExpression).StringValue);
+    			else
+    				values.add(variable.Name,variable.Initializer.str());
+    		}
+    		return values;
+    	}
+    	
+    	
+    	public static Dictionary<string, VariableDeclaration> filtered_ByName(this List<FieldDeclaration> fieldDeclarations)
+    	{
+    		var filtered_ByName = new Dictionary<string, VariableDeclaration>();
+    		foreach(var fieldDeclaration in fieldDeclarations)
+    			foreach(var variable in fieldDeclaration.Fields)    			
+    				filtered_ByName.add(variable.Name, variable);
+    		return filtered_ByName;
+    	}
+    	
+    }
+    
+    
+    
 }
     	
 		

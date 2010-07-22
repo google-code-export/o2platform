@@ -19,6 +19,7 @@ using System.Windows.Forms.Integration;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.IE.ExtensionMethods;
 using O2.External.IE.Wrapper;
+using O2.API.Visualization.ExtensionMethods;
 
 //O2File:WPF_Controls_ExtensionMethods.cs
 
@@ -29,7 +30,7 @@ using O2.External.IE.Wrapper;
 //O2Ref:O2_API_Visualization.dll
 
 
-namespace O2.API.Visualization.ExtensionMethods
+namespace O2.XRules.Database.Utils
 {
     public static class WPF_WinFormIntegration_ExtensionMethods
     {   
@@ -108,6 +109,18 @@ namespace O2.API.Visualization.ExtensionMethods
     		//"in add_Label".debug();
     		return label;
     	} 
+    	
+    	public static Grid add_Grid(this ascx_Xaml_Host xamlHost)
+    	{
+    		return add_Control<Grid>(xamlHost);            
+    	}
+    	
+		public static StackPanel add_StackPanel(this ascx_Xaml_Host xamlHost)
+    	{
+    		return add_Control<StackPanel>(xamlHost);            
+    	}
+    	
+    	
     	#endregion
     	    	    	
     	
