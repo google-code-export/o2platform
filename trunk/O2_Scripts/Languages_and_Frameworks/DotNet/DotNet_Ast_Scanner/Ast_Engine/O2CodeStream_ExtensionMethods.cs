@@ -31,7 +31,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         public static INode createStream(this O2CodeStream o2CodeStream, INode iNode, IdentifierExpression identifier, O2CodeStreamNode parentStreamNode)
         {
             if (iNode != null)
-                if (o2CodeStream.has_INode(iNode).isFalse())
+                if (o2CodeStream.stackContains(iNode).isFalse())
                     switch (iNode.typeName())
                     {
                         case "ParameterDeclarationExpression":
@@ -113,14 +113,25 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                         case "MemberReferenceExpression":
                             var memberReferenceExpression = (MemberReferenceExpression)iNode;                            
                             o2CodeStream.createStream(iNode.Parent, identifier, parentStreamNode);                            // handle the case were we got here via an invocation to this method
-                            //if (memberReferenceExpression.TargetObject != identifier && 
-                            //    (memberReferenceExpression.TargetObject is MemberReferenceExpression).isFalse())  // to avoid circular loops
 
                             //this has quite a number of side effects
-                            //if(memberReferenceExpression.Parent is AssignmentExpression)
-                            //        o2CodeStream.createStream(memberReferenceExpression.TargetObject, null,o2CodeStream.peekStack()); // handle the case were we got here via an assignment
-                            
+                            if (memberReferenceExpression.TargetObject != identifier && 
+                                (memberReferenceExpression.TargetObject is MemberReferenceExpression).isFalse())  // to avoid circular loops                            
+                                if (memberReferenceExpression.Parent is AssignmentExpression)
+                                {
+                                    o2CodeStream.createStream(memberReferenceExpression.TargetObject, null, o2CodeStream.peekStack()); // handle the case were we got here via an assignment
+                                    if (memberReferenceExpression.TargetObject is IdentifierExpression)
+                                    {
+                                        var identifierExpression = (IdentifierExpression)memberReferenceExpression.TargetObject;
+                                        taintAllIdentifiersInParentMethod(o2CodeStream, identifierExpression, identifierExpression.Identifier, identifierExpression.StartLocation);
+                                    }
+                                }
+                                
                             break;
+                        case "IndexerExpression":                            
+                            var indexerExpression = (IndexerExpression)iNode;
+                            o2CodeStream.createStream(indexerExpression.TargetObject,identifier,  parentStreamNode);
+							break;
                         default:
                             if (o2CodeStream.debugMode())
                                 "Unsupported stream Node type (tying its parent):{0}".error(iNode.typeName());
@@ -328,7 +339,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         public static O2CodeStream expandTaint(this O2CodeStream o2CodeStream, ReturnStatement returnStatement, O2CodeStreamNode parentStreamNode)
         {
             //"Tainting the return data".error();
-            var lastMethodDeclaration = o2CodeStream.popStack<MethodDeclaration>();
+            //var lastMethodDeclaration = o2CodeStream.popStack<MethodDeclaration>();
+            
+            var lastMethodDeclaration = o2CodeStream.peekStack<MethodDeclaration>();
+            
             if (lastMethodDeclaration != default(MethodDeclaration))
             {
                 // option to add this method as a tain propagator
@@ -340,7 +354,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                 //"lastMethodDeclaration: {0}".debug(lastMethodDeclaration);    		
 
                 // find who calls this
-                var iNode = o2CodeStream.popStack();
+                //var iNode = o2CodeStream.popStack();
+                var iNode = o2CodeStream.peekStack(lastMethodDeclaration);
+
                 o2CodeStream.expandTaint_of_ParentINode(iNode, parentStreamNode);
 
                 /*var iNodeToTaint = o2CodeStream.getParentINodeThatIsNotAdded(iNode);
@@ -372,9 +388,15 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             {
                 var parameterName = parameter.name();
                 var methodDeclaration = parameter.Parent as MethodDeclaration;
+
+                //var currentStackINode = o2CodeStream.peekStack();       // after each o2CodeStream.createStream below, we need to restore the stack to this position
                 foreach (var identifier in methodDeclaration.iNodes<IdentifierExpression>())
                     if (identifier.Identifier == parameterName)
-                        o2CodeStream.createStream(identifier, parentStreamNode);
+                    {
+                        o2CodeStream.createStream(identifier, parentStreamNode);    // create new stream from here
+                        o2CodeStream.popStack(parameter);                   // restore stack
+                    }
+                
             }
             return o2CodeStream;
         }
@@ -428,12 +450,14 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
                     switch (parent.typeName())
                     {
+                        case "IndexerExpression":
+                            taintAllIdentifiersInParentMethod(o2CodeStream, identifierExpression, identifierExpression.Identifier, identifierExpression.StartLocation);
+                            break;
                         case "InvocationExpression":
                         case "BinaryOperatorExpression":
                         case "ObjectCreateExpression":
                         case "CollectionInitializerExpression":
-                        case "ArrayCreateExpression":
-                        case "IndexerExpression":
+                        case "ArrayCreateExpression":                        
                         case "ParenthesizedExpression":
                         case "CastExpression":
                             o2CodeStream.expandTaint(parent as Expression, identifierExpression, parentStreamNode);
@@ -462,6 +486,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                                 "in Expression.IdentifierExpression.expandTaint unsupported INode parent type: {0}".error(parent.typeName());
                             break;
                     }
+                   
+
                     break;                
                 case "InvocationExpression":
                     var invocationExpression = (InvocationExpression)expression;
@@ -473,28 +499,13 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
                     if (calledIMethod != null)
                     {
+                        // check for taint propagators
                         if (o2CodeStream.TaintRules.isTaintPropagator(calledIMethod.DotNetName))
                         {
                             if (o2CodeStream.debugMode())
                                 "Handling Taint Propagator:{0}".info(calledIMethod.DotNetName);
                             parentStreamNode = o2CodeStream.add_INode(invocationExpression, parentStreamNode);
                             o2CodeStream.expandTaint_of_ParentINode(invocationExpression, parentStreamNode);
-
-                            /*
-                            if (invocationExpression.Parent is InvocationExpression)
-                            {
-                                var taintNode = o2CodeStream.add_INode(invocationExpression, parentStreamNode);
-                                o2CodeStream.expandTaint(invocationExpression.Parent as Expression, identifier, taintNode);
-                            }
-                            else if (invocationExpression.Parent is ObjectCreateExpression)
-                            {
-                                //var taintNode = o2CodeStream.add_INode(invocationExpression, parentStreamNode);
-                                o2CodeStream.createStream(invocationExpression.Parent, parentStreamNode);
-                                //o2CodeStream.expandTaint(invocationExpression.Parent as Expression, (IdentifierExpression)invocationExpression., parentStreamNode);
-                            }
-                            else
-                                o2CodeStream.createStream(invocationExpression.Parent, parentStreamNode);
-                            */
                         }
                         else
                         {
@@ -510,7 +521,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                                 {
                                     if (o2CodeStream.debugMode())
                                         "in IdentifierExpression.InvocationExpression.expandTaint, methodDeclaration.parameters().Count > parameterPosition (adding the method as iNode)".error();
-                                    o2CodeStream.add_INode(methodDeclaration, parentStreamNode);
+                                    var currentStreamNode = o2CodeStream.add_INode(methodDeclaration, parentStreamNode);
+
+                                    //handleAutoTaintOfAutoGeneratedMethods
+                                    o2CodeStream.handleAutoTaintOfAutoGeneratedMethods(methodDeclaration.csharpCode(), invocationExpression, currentStreamNode);
                                 }
                             }
                             else
@@ -529,16 +543,29 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                     var ctorIMethod = o2CodeStream.O2MappedAstData.iMethod(objectCreateExpression);
                     if (ctorIMethod != null)
                     {
-                        var constructorDeclaration = o2CodeStream.O2MappedAstData.constructorDeclaration(ctorIMethod);
-                        if (constructorDeclaration != null)
+                        // check for taint propagators
+                        if (o2CodeStream.TaintRules.isTaintPropagator(ctorIMethod.DotNetName))
                         {
-                            if (parameterPosition > -1 && constructorDeclaration.parameters().Count > parameterPosition)
-                                o2CodeStream.createStream(constructorDeclaration.parameters()[parameterPosition], parentStreamNode);
-                            else
+                            if (o2CodeStream.debugMode())
+                                "Handling Taint Propagator:{0}".info(ctorIMethod.DotNetName);
+                            parentStreamNode = o2CodeStream.add_INode(objectCreateExpression, parentStreamNode);
+                            o2CodeStream.expandTaint_of_ParentINode(objectCreateExpression, parentStreamNode);
+                        }
+                        else
+                        {
+                            var constructorDeclaration = o2CodeStream.O2MappedAstData.constructorDeclaration(ctorIMethod);
+                            if (constructorDeclaration != null)
                             {
-                                if (o2CodeStream.debugMode())
-                                    "in IdentifierExpression.ObjectCreateExpression.expandTaint, constructorDeclaration.parameters().Count > parameterPosition (adding the constructor as iNode)".error();
-                                o2CodeStream.add_INode(constructorDeclaration, parentStreamNode);
+                                if (parameterPosition > -1 && constructorDeclaration.parameters().Count > parameterPosition)
+                                    o2CodeStream.createStream(constructorDeclaration.parameters()[parameterPosition], parentStreamNode);
+                                else
+                                {
+                                    if (o2CodeStream.debugMode())
+                                        "in IdentifierExpression.ObjectCreateExpression.expandTaint, constructorDeclaration.parameters().Count > parameterPosition (adding the constructor as iNode)".error();
+                                    var currentStreamNode = o2CodeStream.add_INode(constructorDeclaration, parentStreamNode);
+                                    //handleAutoTaintOfAutoGeneratedMethods
+                                    o2CodeStream.handleAutoTaintOfAutoGeneratedMethods(constructorDeclaration.csharpCode(), objectCreateExpression, currentStreamNode);
+                                }
                             }
                         }
                     }
@@ -585,14 +612,21 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             // find a taint target
             while (iNode != null)
             {
-                if (o2CodeStream.has_INode(iNode).isFalse())
+                //if (o2CodeStream.has_INode(iNode).isFalse())
+
+                if (o2CodeStream.stackContains(iNode).isFalse())
                 {
                     switch (iNode.typeName())
                     {
                         case "VariableDeclaration":
                         case "InvocationDeclaration":
                         case "ObjectCreateExpression":
+                        case "ReturnStatement":                        
                             o2CodeStream.createStream(iNode, parentStreamNode);
+                            return o2CodeStream;
+                        case "AssignmentExpression":
+                            var assignmentExpression = (AssignmentExpression)iNode;                            
+                            o2CodeStream.createStream(assignmentExpression.Left, parentStreamNode);
                             return o2CodeStream;
                     }
                 }
@@ -602,6 +636,13 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             return o2CodeStream;
         }
 
+        public static void handleAutoTaintOfAutoGeneratedMethods(this O2CodeStream o2CodeStream, string methodSourceCode, Expression expression, O2CodeStreamNode parentStreamNode)
+        {
+            if (methodSourceCode.Contains("throw new System.Exception(\"O2 Auto Generated Method\")") ||
+                methodSourceCode.Contains("throw new NotImplementedException();"))                
+                o2CodeStream.expandTaint_of_ParentINode(expression,  parentStreamNode);
+        }
+                                    
 
         #endregion
             	    	
@@ -614,8 +655,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
     	}
     	
     	public static O2CodeStreamNode add_INode(this O2CodeStream o2CodeStream, INode iNode, O2CodeStreamNode parentStreamNode)
-    	{    		
-    		if (o2CodeStream.has_INode(iNode).isFalse())
+    	{            
+    		//if (o2CodeStream.has_INode(iNode).isFalse())
+            if (o2CodeStream.stackContains(iNode).isFalse())
     		{
                 if (o2CodeStream.debugMode())
     			    "adding INode: {0}".info(iNode.typeName());    			
@@ -623,17 +665,20 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
     			var text = o2CodeStream.getTextForINode(iNode);;
     			    			
     			var streamNode = new O2CodeStreamNode(text,iNode);
+
 				o2CodeStream.O2CodeStreamNodes.add(iNode, streamNode);
 				if (parentStreamNode == null)
 					o2CodeStream.StreamNode_First.Add(streamNode);
 				if (parentStreamNode!= null)
 					parentStreamNode.ChildNodes.Add(streamNode);				
 				return streamNode;
-    		}   
+    		}
+            
     		var existingStreamNode = o2CodeStream.O2CodeStreamNodes[iNode];
-            if (parentStreamNode != null && parentStreamNode != existingStreamNode)
-                if (existingStreamNode.ChildNodes.Contains(parentStreamNode).isFalse()) // to avoid circular references
-				    parentStreamNode.ChildNodes.Add(existingStreamNode);					
+            if (o2CodeStream.stackContains(iNode).isFalse())            // to avoid circular references                    
+                if (parentStreamNode != null && parentStreamNode != existingStreamNode)
+//                 if (existingStreamNode.ChildNodes.Contains(parentStreamNode).isFalse()) 
+                        parentStreamNode.ChildNodes.Add(existingStreamNode);					
     		return existingStreamNode;
         }
 
@@ -682,7 +727,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                         break;
                     case "InvocationExpression":
                         var invocationExpression = iNode as InvocationExpression;
-                        var invocationMethod = o2MappedAstData.iMethod(invocationExpression);
+                        var invocationMethod = o2MappedAstData.iMethod(invocationExpression);                                               
+
                         if (invocationMethod != null)
                             text = "invocation -> {0}".format(invocationMethod.fullName());
                         else if (invocationExpression.TargetObject is MemberReferenceExpression)
@@ -812,6 +858,17 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             return default(T);
         }
 
+        public static INode popStack(this O2CodeStream o2CodeStream, INode iNodeToPopTo)            
+        {
+            while (o2CodeStream.INodeStack.Count > 0)
+            {
+                var iNode = o2CodeStream.INodeStack.Pop();
+                if (iNode == iNodeToPopTo)
+                    return iNode;
+            }
+            return default(INode);
+        }
+
         public static O2CodeStreamNode peekStack(this O2CodeStream codeStream)
         {
             if (codeStream != null && codeStream.INodeStack != null)
@@ -823,6 +880,37 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                             return codeStream.O2CodeStreamNodes[peekINode];
                 }
             return null;
+        }
+
+        public static T peekStack<T>(this O2CodeStream o2CodeStream)
+            where T : INode
+        {
+        	var stackNodes = o2CodeStream.INodeStack.ToArray();
+            for(var i=0 ; i< stackNodes.Length ; i ++)
+            {
+                var iNode = stackNodes[i];
+                if (iNode is T)
+                    return (T)iNode;
+            }
+            return default(T);
+        }
+
+        public static INode peekStack(this O2CodeStream o2CodeStream, INode iNodeToFind)
+            //where T : INode
+        {
+        	var stackNodes = o2CodeStream.INodeStack.ToArray();
+            for (var i = 0; i < stackNodes.Length -1; i++)
+            {
+                var iNode = stackNodes[i];
+                if (iNode == iNodeToFind)
+                    return stackNodes[i+1];
+            }
+            return default(INode);
+        }
+
+        public static bool stackContains(this O2CodeStream o2CodeStream, INode iNodeToFind)
+        {
+            return o2CodeStream.INodeStack.ToArray().Contains(iNodeToFind);
         }
 
         #endregion            	  	    	    	 

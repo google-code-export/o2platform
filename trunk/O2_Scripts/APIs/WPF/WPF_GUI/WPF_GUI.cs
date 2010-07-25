@@ -63,7 +63,13 @@ namespace O2.XRules.Database.APIs
 				  .add_Label("this is a label 1")				  				  
 				  .add_Link_O2Script("Util - Simple Html Viewer","Util - Simple Html Viewer.h2")
 				  .add_Link_O2Script("script that doesn't exist","Aaaa.h2")				  
-				  .add_Link("link 123",()=>{})
+				  .add_Link("test user control",
+				  	()=>{
+				  			"before".info();
+				  			wpfGui.WinFormPanel.clear();
+				  			wpfGui.WinFormPanel.add_TreeView().backColor(Color.LightGray).add_Node("as");				  			
+				  			"after".debug();
+				  		})
 				  .add_Link_Web("BBC news","http://news.bbc.co.uk")
 				  .add_Upgrade_Link("aaa", "http://code.google.com/p/o2platform/downloads/list");
 				  
@@ -112,23 +118,32 @@ namespace O2.XRules.Database.APIs
 						GUI_OutlookBar.ButtonHeight = 21;
 						
 						var userControl = dockPanel.add_WinForms_Panel()
-												   .add_Control<WinForms.UserControl>();
-						StatusLabel = userControl.add_StatusStrip(Color.White);									   
+												   .add_Control<WinForms.UserControl>();												   
+						StatusLabel = userControl.add_StatusStrip(Color.White);
 						WinFormPanel = userControl.add_Panel();						
 						
 						O2Browser  = WinFormPanel.add_Browser();
-						O2Browser.fill(false)
-								 .align_Right(WinFormPanel)
-								 .align_Bottom(WinFormPanel)
+						/*O2Browser.fill(false)
+								 .align_Right(userControl)
+								 .align_Bottom(userControl)
 								 .heightAdd(-22)
 						         .anchor_All()
-						         .silent(true);						
+						         .silent(true);		*/				
+    					
+    					WinFormPanel.fill(false)
+								    .align_Right(userControl)
+								    .align_Bottom(userControl)
+								 	.heightAdd(-22)
+						         	.anchor_All();
     					
     					statusMessage("WPF GUI built");
 						//WinFormPanel.backColor(Color.White);			
 						/**add_Sections();
 						if (Sections.size() > 0 && Sections[0].WinFormsControl.notNull())
 							WinFormPanel.add_Control(Sections[0].WinFormsControl);*/
+							
+					
+							
 						return this;
 					});
     	}
@@ -180,7 +195,7 @@ namespace O2.XRules.Database.APIs
 						
 						if (section.WinFormsCtor.notNull())
 						{
-							section.WinFormsControl = section.WinFormsCtor();
+							section.WinFormsControl = section.WinFormsCtor();							
 						}						
 						
 						outlookSection.Click+=
@@ -188,7 +203,7 @@ namespace O2.XRules.Database.APIs
 											if (section.WinFormsControl.notNull())
 											{
 												WinFormPanel.clear();
-												WinFormPanel.add_Control(section.WinFormsControl);
+												WinFormPanel.add_Control(section.WinFormsControl);												
 											}
 										};
 						
@@ -212,7 +227,7 @@ namespace O2.XRules.Database.APIs
     		{    			
     			wpf_Gui.ExecuteScripts = new ascx_Execute_Scripts();
     			wpf_Gui.ExecuteScripts.csharpCompiler_onAstOK = 
-    				()=> wpf_Gui.showMessage("Executing script: {0}".format(wpf_Gui.ExecuteScripts.currentScript.fileName()), "Ast was creasted Ok");
+    				()=> wpf_Gui.showMessage("Executing script: {0}".format(wpf_Gui.ExecuteScripts.currentScript.fileName()), "Ast was created Ok");
     			wpf_Gui.ExecuteScripts.csharpCompiler_onAstFail = 
     				()=>{
     						var scriptName = wpf_Gui.ExecuteScripts.currentScript.fileName();

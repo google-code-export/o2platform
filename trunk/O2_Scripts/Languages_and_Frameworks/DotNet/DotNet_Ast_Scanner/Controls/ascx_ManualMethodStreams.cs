@@ -80,14 +80,17 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		public LinkLabel showINodeLink { get; set; }
 		//public String MethodsFilter { get; set; }
 		public ascx_SourceCodeViewer CodeStreamCodeViewer  { get; set; }	
+		//taint rules
+		public O2CodeStreamTaintRules TaintRules { get; set; }
+		public TabPage TaintRulesTab { get; set; }
+		public TextBox TaintRulesList { get; set; }
 		
 		public ascx_ManualMethodStreams()//astData astEngine)
 		{
 		//	AstData = astData
 			//buildGui();
 			//loadDataInGui();
-			//TaintRules = new O2CodeStreamTaintRules(); 
-			//TaintRules.add_TaintPropagator("System.String.Concat");
+			TaintRules = new O2CodeStreamTaintRules(); 									
 		}	
 		
 		public void buildGui()
@@ -99,11 +102,13 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			CodeViewer = topPanel[0].add_SourceCodeViewer();
 			CodeViewer.editor().colorCodeForExtension(".cs");
 			CodeStreamTreeViewTab = tabControl.add_Tab("CodeStream TreeView");
+			TaintRulesTab = tabControl.add_Tab("Taint Rules");
 			//CodeStreamGraphTab = tabControl.add_Tab("CodeStream Graph");
 			//CodeStreamGraphTab.backColor(Color.White);				
 			//CodeStreamCodeViewer = CodeStreamTreeViewTab.add_SourceCodeViewer();
 			//CodeStreamTreeView = CodeStreamCodeViewer.insert_Left<TreeView>(200);
 			CodeStreamTreeView = CodeStreamTreeViewTab.add_TreeView();
+			TaintRulesList = TaintRulesTab.add_GroupBox("Taint Propagators").add_TextArea();
 			//CodeStreamGraph = CodeStreamGraphTab.add_Panel().add_Graph(); 
 			
 			ParametersTreeView =  CodeViewer.insert_Below<TreeView>(100)
@@ -139,6 +144,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 							if (file.fileExists())
 								loadFile(file);
 						});									
+						
+			loadDefaultTaintRules();			
 		}
 		
 		public void loadDataInGui()
@@ -173,6 +180,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			//if (AstData_MethodStream != null)
 			//	cachedO2AstResolver = AstData_MethodStream.O2AstResolver;
 			
+			mapTaintRules();
 			AstData_MethodStream = new O2MappedAstData(); 														
 										
 			AstData_MethodStream.loadFile(MethodStreamFile);	
@@ -222,9 +230,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			{
 				CodeViewer.editor().selectTextWithColor(iNode);	
 				
-				var taintRules = new O2CodeStreamTaintRules();
-				//taintRules.add_TaintPropagator("System.Int32.Parse");					
-				var codeStream = AstData_MethodStream.createO2CodeStream(taintRules, MethodStreamFile,iNode);
+				var codeStream = AstData_MethodStream.createO2CodeStream(TaintRules, MethodStreamFile,iNode);
 				//var codeStream = AstData_MethodStream.createO2CodeStream(MethodStreamFile,iNode);
 				if (codeStream.hasPaths())
 					showCodeStream(codeStream);
@@ -238,5 +244,21 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			CodeStreamTreeView.expand();
 		}
 		
+		
+		public void loadDefaultTaintRules()
+		{
+			var defaultTaintRules = new List<string>();	
+			defaultTaintRules.Add("System.String.Concat");
+			defaultTaintRules.Add("System.String.Format");
+			
+			TaintRulesList.set_Text( StringsAndLists.fromStringList_getText(defaultTaintRules));
+				//taintRules.add_TaintPropagator("System.Int32.Parse");					
+			//TaintRules.add_TaintPropagator();
+		}
+		public void mapTaintRules()
+		{
+			TaintRules.TaintPropagators.add_OnlyNewItems(TaintRulesList.get_Text().lines());
+			"There are {0} taint propagators loaded".info(TaintRules.TaintPropagators.size());
+		}
 	}
 }

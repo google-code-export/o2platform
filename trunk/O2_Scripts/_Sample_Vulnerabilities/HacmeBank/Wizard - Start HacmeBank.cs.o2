@@ -33,7 +33,7 @@ using System.Windows.Forms;
 
 using O2.Tool.HostLocalWebsite.classes;
 //O2Ref:_HostLocalWebsite (O2 Tool).exe
-//O2Ref:WebDev.WebServer.exe
+//O2Ref:MS_VS_WebDev.WebServer.exe
 
 namespace O2.Script
 {	

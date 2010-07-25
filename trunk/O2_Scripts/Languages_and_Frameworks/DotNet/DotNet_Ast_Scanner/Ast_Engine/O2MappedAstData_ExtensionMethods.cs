@@ -330,8 +330,55 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                     //else
                     //    "in fromExpressionGetIMethod, could not resolve Expression".error();
                 }
+
+            //return null;
+            return o2MappedAstData.loseFindIMethodFrom_MethodDeclaration(expression);
+        }
+
+        // this handle some special cases where we have the code of this type but the code complete resolver couldn't find it
+        // for example in the cases where there are two classes with the same name
+        public static IMethod loseFindIMethodFrom_MethodDeclaration(this O2MappedAstData o2MappedAstData, Expression expression)
+        {
+            if (expression is InvocationExpression)
+            {
+                var invocationExpression = (expression as InvocationExpression);
+                if (invocationExpression.TargetObject is Expression)                
+                    return o2MappedAstData.loseFindIMethodFrom_MethodDeclaration(invocationExpression.TargetObject as Expression);
+            }
+            // move to loseFindIMethodFrom_MethodDeclartion
+            if (expression is MemberReferenceExpression)
+            {
+                var memberReferenceExpression = (MemberReferenceExpression)expression;                
+                
+               if (memberReferenceExpression.Parent is InvocationExpression)
+               {
+                   var methodName = memberReferenceExpression.MemberName;
+                   var parameterCount = (memberReferenceExpression.Parent as InvocationExpression).Arguments.Count;
+                   var className = "";
+
+                   if (memberReferenceExpression.TargetObject is IdentifierExpression)
+                       className = (memberReferenceExpression.TargetObject as IdentifierExpression).Identifier;
+                   else if (memberReferenceExpression.TargetObject is MemberReferenceExpression)
+                       className = (memberReferenceExpression.TargetObject as MemberReferenceExpression).MemberName;
+
+                   return o2MappedAstData.loseFindIMethod(className, methodName, parameterCount);
+              }
+                //var parametersCount = memberReferenceExpression
+            }
             return null;
         }
+
+        public static IMethod loseFindIMethod(this O2MappedAstData o2MappedAstData, string className, string methodName, int parameterCount)
+        {
+            foreach (var iClass in o2MappedAstData.O2AstResolver.myProjectContent.Classes)
+                if (iClass.Name == className)
+                    foreach (var iMethod in iClass.Methods)
+                        if (iMethod.Name == methodName)
+                            if (iMethod.Parameters.Count == parameterCount)
+                                return iMethod;
+            return null;
+        }
+
 
         public static IMethodOrProperty fromMemberReferenceExpressionGetIMethodOrProperty(this O2MappedAstData o2MappedAstData, MemberReferenceExpression memberReferenceExpression)
         {
