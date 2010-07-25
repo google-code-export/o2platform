@@ -223,49 +223,64 @@ namespace ICSharpCode.TextEditor
 		
 		void CommitUpdateRequested(object sender, EventArgs e)
 		{
-			if (IsInUpdate) {
-				return;
-			}
-			foreach (TextAreaUpdate update in Document.UpdateQueue) {
-				switch (update.TextAreaUpdateType) {
-					case TextAreaUpdateType.PositionToEnd:
-						this.primaryTextArea.TextArea.UpdateToEnd(update.Position.Y);
-						if (this.secondaryTextArea != null) {
-							this.secondaryTextArea.TextArea.UpdateToEnd(update.Position.Y);
-						}
-						break;
-					case TextAreaUpdateType.PositionToLineEnd:
-					case TextAreaUpdateType.SingleLine:
-						this.primaryTextArea.TextArea.UpdateLine(update.Position.Y);
-						if (this.secondaryTextArea != null) {
-							this.secondaryTextArea.TextArea.UpdateLine(update.Position.Y);
-						}
-						break;
-					case TextAreaUpdateType.SinglePosition:
-						this.primaryTextArea.TextArea.UpdateLine(update.Position.Y, update.Position.X, update.Position.X);
-						if (this.secondaryTextArea != null) {
-							this.secondaryTextArea.TextArea.UpdateLine(update.Position.Y, update.Position.X, update.Position.X);
-						}
-						break;
-					case TextAreaUpdateType.LinesBetween:
-						this.primaryTextArea.TextArea.UpdateLines(update.Position.X, update.Position.Y);
-						if (this.secondaryTextArea != null) {
-							this.secondaryTextArea.TextArea.UpdateLines(update.Position.X, update.Position.Y);
-						}
-						break;
-					case TextAreaUpdateType.WholeTextArea:
-						this.primaryTextArea.TextArea.Invalidate();
-						if (this.secondaryTextArea != null) {
-							this.secondaryTextArea.TextArea.Invalidate();
-						}
-						break;
-				}
-			}
-			Document.UpdateQueue.Clear();
-//			this.primaryTextArea.TextArea.Update();
-//			if (this.secondaryTextArea != null) {
-//				this.secondaryTextArea.TextArea.Update();
-//			}
+            try
+            {
+                if (IsInUpdate)
+                {
+                    return;
+                }
+                foreach (TextAreaUpdate update in Document.UpdateQueue)
+                {
+                    switch (update.TextAreaUpdateType)
+                    {
+                        case TextAreaUpdateType.PositionToEnd:
+                            this.primaryTextArea.TextArea.UpdateToEnd(update.Position.Y);
+                            if (this.secondaryTextArea != null)
+                            {
+                                this.secondaryTextArea.TextArea.UpdateToEnd(update.Position.Y);
+                            }
+                            break;
+                        case TextAreaUpdateType.PositionToLineEnd:
+                        case TextAreaUpdateType.SingleLine:
+                            this.primaryTextArea.TextArea.UpdateLine(update.Position.Y);
+                            if (this.secondaryTextArea != null)
+                            {
+                                this.secondaryTextArea.TextArea.UpdateLine(update.Position.Y);
+                            }
+                            break;
+                        case TextAreaUpdateType.SinglePosition:
+                            this.primaryTextArea.TextArea.UpdateLine(update.Position.Y, update.Position.X, update.Position.X);
+                            if (this.secondaryTextArea != null)
+                            {
+                                this.secondaryTextArea.TextArea.UpdateLine(update.Position.Y, update.Position.X, update.Position.X);
+                            }
+                            break;
+                        case TextAreaUpdateType.LinesBetween:
+                            this.primaryTextArea.TextArea.UpdateLines(update.Position.X, update.Position.Y);
+                            if (this.secondaryTextArea != null)
+                            {
+                                this.secondaryTextArea.TextArea.UpdateLines(update.Position.X, update.Position.Y);
+                            }
+                            break;
+                        case TextAreaUpdateType.WholeTextArea:
+                            this.primaryTextArea.TextArea.Invalidate();
+                            if (this.secondaryTextArea != null)
+                            {
+                                this.secondaryTextArea.TextArea.Invalidate();
+                            }
+                            break;
+                    }
+                }
+                Document.UpdateQueue.Clear();
+                //			this.primaryTextArea.TextArea.Update();
+                //			if (this.secondaryTextArea != null) {
+                //				this.secondaryTextArea.TextArea.Update();
+                //			}
+            }
+            catch (Exception ex)
+            { 
+                
+            }
 		}
 		#endregion
 		
