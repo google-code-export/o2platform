@@ -15,8 +15,10 @@ namespace O2.XRules.Database.Utils
         #region credential
 
         public static List<Credential> credentialTypes(this ISecretData secretData, string credentialType)
-        {            
+        {                    
             var credentials = new List<Credential>();
+            if (secretData.isNull())
+            	return credentials;
             if (credentialType.valid().isFalse())
                 if (secretData != null && secretData.Credentials != null)
                     return secretData.Credentials;

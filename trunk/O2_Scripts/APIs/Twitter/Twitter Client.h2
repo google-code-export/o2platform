@@ -2,23 +2,113 @@
 <H2>
   <SourceCode>var fileWithCredentials = @"C:\O2\_USERDATA\TwitterAccounts.xml";
 
-//panel.clear();
-//var tabControl = panel.add_TabControl(); 
-var panel2 = O2Gui.open&lt;Panel&gt;("O2 Twitter Client", 600,400);
-var tabControl = panel2.add_TabControl();
+var wpfGui = O2Gui.open&lt;WPF_GUI&gt;("O2 Twitter Client", 600,400);
+
+wpfGui.buildGui();			
 
 //var credentials = fileWithCredentials.deserialize&lt;SecretData&gt;();
 ISecretData secretData = null; // = fileWithCredentials.deserialize&lt;SecretData&gt;(); 
 var twitterAPI = new O2TwitterAPI(); 
 
 
-var topPanel = tabControl.insert_Above&lt;Panel&gt;(30); 
-topPanel.add_Label("Selected User",5,0);
-var usersComboBox = topPanel.add_ComboBox(0,100)
+var topPanel = wpfGui.insert_Above&lt;Panel&gt;(20); 
+topPanel.add_Label("Current selected User",5,0);
+var usersComboBox = topPanel.add_ComboBox(0,120)
 							.onSelection&lt;ICredential&gt;( 
 							   (credential)=&gt;{
 												twitterAPI.login(credential);												
 											 });
+
+Control userTimeline = null;											 
+
+wpfGui.add_Section("Main", "Welcome to O2's twitter client")
+
+
+// timelineTab   
+.add_Link("User's TimeLine",
+	()=&gt;{
+			if (userTimeline.isNull())
+			{
+				userTimeline = wpfGui.WinFormPanel.add_Panel();
+				userTimeline.add_TableList_With_Tweets(twitterAPI.home(500));
+			}			
+			wpfGui.WinFormPanel.clear();
+			wpfGui.WinFormPanel.add_Control(userTimeline);
+		})
+/*
+//userTweetsTab 
+.add_Link("Options",
+	()=&gt;{
+			userTweetsTab.add_TableList_With_Tweets(twitterAPI.tweets(500));
+		})
+		
+//writeTweetTab
+var maxTweetSize = 140; 
+var tweetText = writeTweetTab.add_TextArea(); 
+var bottomPanel = tweetText.insert_Below&lt;Panel&gt;(20);  
+var textSize = bottomPanel.add_Label("Tweet TextSize: 0",0,0);
+.add_Link(("post tweet",
+	()=&gt;{
+			"in post tweet".debug();
+			var response = twitterAPI.newTweet(tweetText.get_Text()); 
+			if (response)
+				tweetText.set_Text("");
+			"after post tweet".debug();			
+		});
+		
+tweetText.onTextChange((text)=&gt;
+	{		
+		var size = text.size(); 
+		textSize.set_Text("Tweet TextSize: {0}".format(size)); 
+		tweetText.backColor( size &gt; maxTweetSize ? Color.Red : Color.White);
+	});
+
+//followersTab
+followersTab.onSelected( 
+	()=&gt;{
+			followersTab.add_TableList_With_Users(twitterAPI.followers());
+		});
+		
+//followingTab
+followingTab.onSelected( 
+	()=&gt;{
+			followingTab.add_TableList_With_Users(twitterAPI.following());
+		});
+return "done";
+*/
+//Options Tab
+	  .add_Link("Options",
+			  	()=&gt;{
+			  		   wpfGui.WinFormPanel.clear();
+					   wpfGui.WinFormPanel.add_Label("File with credentials",20,0)
+								          .append_TextBox(200)
+								          .onTextChange((text)=&gt;{
+								          							"onTextChange".debug();
+								          							fileWithCredentials = text;
+								          							secretData = fileWithCredentials.deserialize&lt;SecretData&gt;();
+								          							usersComboBox.clear();           	 						
+								          							usersComboBox.add_Items(secretData.usernames("Twitter"));
+								          							usersComboBox.select_Item(0);
+								          						})   
+								          .set_Text(fileWithCredentials);						
+			  		});
+
+
+// Defaut values 
+
+if (fileWithCredentials.fileExists().isFalse())
+{
+	var userProvidedCredential = ascx_AskUserForLoginDetails.ask();     	
+	if (userProvidedCredential.notNull())
+	{
+	  	usersComboBox.add_Item(userProvidedCredential);
+	  	usersComboBox.selectFirst();
+	}
+}													 
+return "ok";
+
+Panel panel2 = null;
+var tabControl = panel2.add_TabControl();											 
 //usersComboBox.add_Items(secretData.usernames());   
 var writeTweetTab = tabControl.add_Tab("Write Tweet");
 var timelineTab = tabControl.add_Tab("Public Timeline");
@@ -95,9 +185,16 @@ followingTab.onSelected(
 		});
 return "done";
  
- //O2File:ascx_AskUserForLoginDetails.cs
+//O2File:ascx_AskUserForLoginDetails.cs
 //O2File:O2TwitterAPI.cs
+//O2File:WPF_GUI.cs
 //O2Ref:Dimebrain.TweetSharp.dll
-//O2Ref:Newtonsoft.Json.dll</SourceCode>
+//O2Ref:Newtonsoft.Json.dll
+//O2Ref:O2_API_Visualization.dll
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:GraphSharp.dll
+//O2Ref:QuickGraph.dll
+//O2Ref:GraphSharp.Controls.dll
+//O2Ref:ICSharpCode.AvalonEdit.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>
