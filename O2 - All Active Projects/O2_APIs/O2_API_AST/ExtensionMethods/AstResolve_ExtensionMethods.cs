@@ -20,6 +20,7 @@ namespace O2.API.AST.ExtensionMethods
 
         public static ResolveResult resolve(this O2AstResolver o2AstResolver, Expression expression)
         {
+            //return o2AstResolver.resolve(expression,null,null);
             return o2AstResolver.resolve(expression,null,null);
         }
 
