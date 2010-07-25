@@ -169,6 +169,10 @@ namespace O2.XRules.Database.Findings
             return findingsViewer;
         }
 
+		public static List<IO2Finding> loadO2Findings(this string fileToLoad)
+		{
+			return fileToLoad.loadFindingsFile();
+		}
         public static List<IO2Finding> loadFindingsFile(this string fileToLoad)
         {
             var o2Assessment = new O2Assessment(new O2AssessmentLoad_OunceV6(), fileToLoad);
