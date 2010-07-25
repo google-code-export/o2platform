@@ -37,12 +37,21 @@ using ICSharpCode.SharpDevelop.Dom;
 using ICSharpCode.SharpDevelop.Dom.CSharp;
 using System.CodeDom;
 using O2.Views.ASCX.O2Findings;
+using O2.Views.ASCX.DataViewers;
 using System.Security.Cryptography;
 
 //O2Ref:O2_API_AST.dll
 
 namespace O2.XRules.Database.Utils
 {
+	public static class ExtraMethodsToAddToO2CodeBase_String
+	{
+		public static bool isInt(this string value)
+		{
+			int a =0;
+			return Int32.TryParse(value, out a);
+		}
+	}
     public static class ExtraMethodsToAddToO2CodeBase
     {
     	public static string md5Hash(this Bitmap bitmap)
@@ -86,8 +95,7 @@ namespace O2.XRules.Database.Utils
 				"in Bitmap.isEqualTo at least one of the calculated MD5 Hashes was not valid".error();
 			return false;
 		}
-    }
-    
+    }   
     
     public static class ExtraMethodsToAddToO2CodeBase_Colections
     {
@@ -206,6 +214,24 @@ namespace O2.XRules.Database.Utils
     }
     
     
+
+	public static class ExtraMethodsToAddToO2CodeBase_ascx_TableList
+	{
+		public static ascx_TableList afterSelect(this ascx_TableList tableList, Action<List<ListViewItem>> callback)
+		{	
+			tableList.getListViewControl().SelectedIndexChanged +=
+		 		(sender,e)=>{
+		 						if(callback.notNull())
+		 						{
+		 							var selectedItems = new List<ListViewItem>();		 						
+		 							foreach(ListViewItem item in tableList.getListViewControl().SelectedItems)
+		 								selectedItems.Add(item);
+		 							callback(selectedItems);
+		 						}
+		 			    	};
+			return tableList;
+		}
+	}
     
 }
     	

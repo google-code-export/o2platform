@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <H2>
   <SourceCode>//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+//Global Variables
+var previewSizeValue = 50;
 
 //panel.clear();
 //var topPanel = panel;
@@ -13,18 +15,36 @@ var imageProperties = rightPanel[0].insert_Below&lt;Panel&gt;(200).add_PropertyG
 var moviePlayer = rightPanel[1].add_MoviePlayer();
 var topControlBar = topPanel.insert_Above&lt;Panel&gt;(50);
 var wpfHost = mainGui[0].add_WpfHost();
- 
+var framesOptions = wpfHost.insert_Below&lt;Panel&gt;(100); 
 rightPanel[1].insert_Above&lt;Panel&gt;().add_GroupBox("Movie Properties").add_PropertyGrid().show(aforgeVideo);   
-var listView  = wpfHost.add_ListView_Wpf();    
+var framesList  = wpfHost.add_ListView_Wpf();  
 var statusLabel = topPanel.parentForm().add_StatusStrip(); 
 topPanel.insert_Below&lt;Panel&gt;(100).add_LogViewer();
+
+//FramesOptions
+var previewSize = framesOptions.add_Label("preview size:")
+							   .append_TextBox(previewSizeValue.str())
+							   .align_Right(framesOptions)
+							   .onTextChange(
+							   		(value)=&gt;{
+							   					if (value.isInt())
+							   					{
+							   						previewSizeValue = value.toInt();
+							   						foreach(var image in framesList.items())
+							   						{
+							   							(image as WPF.Image).width_Wpf(previewSizeValue);
+							   							(image as WPF.Image).height_Wpf(previewSizeValue);							   							
+							   						}
+							   					}
+							   				 });
+
 //topControlBar
 
 Action&lt;string&gt; addImageFromFile = 
 	(file)=&gt;{
 				var bitmap = file.bitmap();
 				if (bitmap.notNull())
-					listView.add_Video_Image_Wpf(bitmap,100,100);
+					framesList.add_Video_Image_Wpf(bitmap,100,100);
 			};
 
 topControlBar.add_Link("add image from clipboard",5,5,
@@ -32,24 +52,24 @@ topControlBar.add_Link("add image from clipboard",5,5,
 						var bitmap = topPanel.fromClipboardGetImage();
 						if (bitmap.isNull())
 							"is null".error();
-						listView.add_Video_Image_Wpf(bitmap,100,100);		  
+						framesList.add_Video_Image_Wpf(bitmap,previewSizeValue,previewSizeValue);		  
 					})
 			.append_Link("add screenshot from entire desktop",
 				()=&gt;{
 						var bitmap = topPanel.desktop(); 												
 						
-						listView.add_Video_Image_Wpf(bitmap,100,100);		  
-						//listView.add_Image_Wpf(bitmap.save(),100,100);		 
+						framesList.add_Video_Image_Wpf(bitmap,previewSizeValue,previewSizeValue);		  
+						//framesList.add_Image_Wpf(bitmap.save(),100,100);		 
 					})
 			.append_Link("capture Desktop Capture area",
 				()=&gt;{
 						var bitmap = aforgeVideo.capture(topPanel);
-						listView.add_Video_Image_Wpf(bitmap,100,100);		 
+						framesList.add_Video_Image_Wpf(bitmap,previewSizeValue,previewSizeValue);		 
 					})
 			.append_Link("create movie",
 				()=&gt; { 
 						statusLabel.set_Text("Converting current images into GIFs");
-						var videoImages = listView.items&lt;API_AForge_Video_WPF_Image&gt;();
+						var videoImages = framesList.items&lt;API_AForge_Video_WPF_Image&gt;();
 						"There are {0} Video Images".info(videoImages.size());
 						var bitmapsForVideoCreation = videoImages.getBitmapsForVideoCreation(); 
 						"The Video images where expanded into {0} Bitmat Images".info(bitmapsForVideoCreation.size()); 
@@ -78,8 +98,8 @@ topControlBar.add_Link("Start capture",30,5,
 							// only add if the bimap is different from the previous frame
 							if (bitmap.isNotEqualTo(lastBitMap))
 							{
-								listView.add_Video_Image_Wpf(bitmap,100,100); 								
-								"Total Frame count: {0}".info(listView.items().size());
+								framesList.add_Video_Image_Wpf(bitmap,100,100); 								
+								"Total Frame count: {0}".info(framesList.items().size());
 							}
 							lastBitMap = bitmap;
 							aforgeVideo.frameCaptureDelay();
@@ -91,8 +111,9 @@ topControlBar.add_Link("Start capture",30,5,
 					})
 			.append_Link("Delete all images",
 				()=&gt;{
-						listView.clear();
+						framesList.clear();
 					});
+					
 			/*.append_Link("Open image Editor", 
 				()=&gt;{
 						var diagramDesignerScript = "Util - DiagramDesigner Editor.h2".local();
@@ -101,28 +122,28 @@ topControlBar.add_Link("Start capture",30,5,
 					}); */
 				
 
-listView.enableDrag(); 
-listView.enableDrop();
-listView.onDeleteKey_Remove_SelectedItems();  
+framesList.enableDrag(); 
+framesList.enableDrop();
+framesList.onDeleteKey_Remove_SelectedItems();  
 //var images = @"C:\O2\_tempDir\6-18-2010\For Video".files("*.jpeg"); 
-//listView.add_Images_Wpf(images,100,100);  
+//framesList.add_Images_Wpf(images,100,100);  
 
-listView.afterSelect&lt;API_AForge_Video_WPF_Image&gt;(
+framesList.afterSelect&lt;API_AForge_Video_WPF_Image&gt;(
 	(videoImage)=&gt;{				
 				imageViewer.show(videoImage);
 				imageProperties.show(videoImage);				
 			 });
 
 wpfHost.add_ContextMenu()
-	   .add_MenuItem("Delete Selected Frames", true,()=&gt;listView.remove_SelectedItems())
+	   .add_MenuItem("Delete Selected Frames", true,()=&gt;framesList.remove_SelectedItems())
 	   .add_MenuItem("Copy To Clipboard", 
 	   		()=&gt;{ 
-	   				var currentItem = listView.selected&lt;API_AForge_Video_WPF_Image&gt;();
+	   				var currentItem = framesList.selected&lt;API_AForge_Video_WPF_Image&gt;();
 	   				if (currentItem.notNull())
 	   					wpfHost.putBitmapOnClipboard(currentItem._BitmapFile.bitmap());
 	   			});
 
-listView.selectFirst(); 
+framesList.selectFirst(); 
 
 mainGui[0].onDrop(
 	(fileOrFolder)=&gt;{
@@ -136,14 +157,14 @@ return "done";
 
 
 
-//propGrid.show(listView);
+//propGrid.show(framesList);
 
 //return images;   
 /*foreach(var file in @"C:\O2\_tempDir\6-18-2010\For Video".files("*.jpeg"))
 {
 	file.info();
-	listView.add_Item(file); 
-	listView.add_Images_Wpf(file,100,100); 
+	framesList.add_Item(file); 
+	framesList.add_Images_Wpf(file,100,100); 
 }*/
 /*wpfHost.invokeOnThread(
 	()=&gt;{
@@ -156,7 +177,7 @@ return "done";
 */
 return null; 
  
-//O2File:Ref:WPF_ExtensionMethods.cs
+//O2File:WPF_ExtensionMethods.cs
 //O2File:API_AForge_Video_WPF_Image.cs  
 //O2File:API_WPF_ToolKit.cs
 //O2File:API_Cropper.cs
@@ -180,10 +201,6 @@ return null;
 //O2Ref:O2_API_AST.dll
 
 //O2Ref:O2_API_Visualization.dll
-//O2Ref:PresentationCore.dll
-//O2Ref:PresentationFramework.dll
-//O2Ref:WindowsBase.dll   
-//O2Ref:System.Core.dll
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:GraphSharp.dll
 //O2Ref:QuickGraph.dll 

@@ -17,6 +17,7 @@ using O2.Views.ASCX.ExtensionMethods;
 using O2.API.Visualization.Xaml;
 using O2.API.Visualization.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
+using  O2.XRules.Database.Utils;
 using DiagramDesigner;
 
 //O2File:WPF_ExtensionMethods.cs

@@ -26,7 +26,7 @@ using AvalonDock;
 //O2File:OwaspWikiAPI.cs
 //O2File:O2PlatformWikiAPI.cs
 //O2File:ISecretData.cs
-
+//O2File:WPF_Gui.cs
 //O2File:API_AvalonDock.cs
 
 //O2File:ascx_MediaWiki_ConfigAndLogin.cs
@@ -73,6 +73,7 @@ namespace O2.XRules.Database.APIs
     	public ResizingPanel MainResizingPanel { get; set; }
     	public DockableContent LeftMenuDockableContent { get; set; }    	    	    	
 		public DocumentPane MainDocumentPane { get; set; }		
+		public WPF_GUI WpfGui { get; set; }
 		
     	public static MediaWikiEditor launch()
     	{    		
@@ -91,7 +92,7 @@ namespace O2.XRules.Database.APIs
     	{
     		FileWithSecretData = @"C:\O2\_USERDATA\O2TestUsers.xml";    		
     		WikiApi = new O2MediaWikiAPI();    		
-    		buildGui_Internal();
+    		//buildGui_Internal();
     		//setMediaWikiTo_O2Platform();
     		//setMediaWikiTo_OWASP();
     	}    	    	
@@ -108,50 +109,10 @@ namespace O2.XRules.Database.APIs
     		this.buildGui();
     	}
     	
-    	/*public void loginToWikiAndWordPress()
-    	{
-    		// MediaWiki Api Object    				
-			var secretData = FileWithSecretData.deserialize<SecretData>();
-			var username = secretData.username("O2Platform-Wiki");
-			var password = secretData.password("O2Platform-Wiki");
-			WikiApi.login(username,password); 			
-						
-			//WpApi.login(secretData.username("O2Platform-WordPress"), secretData.password("O2Platform-WordPress"));			
-    	}*/    					        
-
-		private void buildGui_Internal()
-		{
-		
-			/*Action<Control> buildGui =
-	(topPanel)=>{     
-			try
-			{
-				DockingManager MainDockingManager2;
-				ResizingPanel MainResizingPanel2;
-				DockableContent LeftMenuDockableContent2;
-				DocumentPane MainDocumentPane2;
-				     
-				        	MainDockingManager2 = topPanel.add_DockingManager();  
-							MainResizingPanel2 = MainDockingManager2.add_ResizingPanel(); 
-							
-							MainResizingPanel2.add_DockablePane();	// don't understand why I need to add this so that the SetResizeWidth works
-				 		
-							var dockablePane = MainResizingPanel2.add_DockablePane(); 		
-							dockablePane.resizeWidth(200); 
-							
-							LeftMenuDockableContent2 = dockablePane.add_DockableContent("Commands","Commands");
-							
-							MainDocumentPane2 = MainResizingPanel2.add_DocumentPane();			
-							MainDocumentPane2.add_DocumentContent("Login_Panel","asdaaa");						
-										
-				}
-				catch(Exception ex)
-				{
-					ex.log("here");
-				}		
-			};*/
+		private void buildGui_Internal(Control topPanel)
+		{		
 			//buildGui(this);			
-        	var topPanel = this;//this.add_Panel();
+        	//var topPanel = this;//this.add_Panel();
         	//topPanel.insert_Below<Panel>(100).add_LogViewer();
         	
         	MainDockingManager = topPanel.add_DockingManager();  
@@ -159,15 +120,42 @@ namespace O2.XRules.Database.APIs
 			
 			MainResizingPanel.add_DockablePane();	// don't understand why I need to add this so that the SetResizeWidth works
  		
-			var dockablePane = MainResizingPanel.add_DockablePane(); 		
-			dockablePane.resizeWidth(200); 
+			//var dockablePane = MainResizingPanel.add_DockablePane(); 		
+			//dockablePane.resizeWidth(200); 
 			
-			LeftMenuDockableContent = dockablePane.add_DockableContent("Commands","Commands");
+			//LeftMenuDockableContent = dockablePane.add_DockableContent("Commands","Commands");
 			
 			MainDocumentPane = MainResizingPanel.add_DocumentPane();						
 		}
 		
-        public MediaWikiEditor buildGui()
+		
+		public MediaWikiEditor buildGui()
+		{
+			WpfGui = this.add_Control<WPF_GUI>();
+			WpfGui.buildGui();			
+			buildGui_Internal(WpfGui.WinFormPanel);
+			
+			showLogViewer();
+			
+			WpfGui.add_Section("Media Wiki Editor", "Welcome to the O2 MediaWiki Editor")
+				  .add_Link("Login",showLoginPanel)
+				  .add_Link("Edit Page", showEditPage)
+				  .add_Link("Edit using Categories", showEditUsingCategories)
+				  .add_Link("Edit Uncategorized Pages", showEditUncategorizedPages)
+				  .add_Link("Edit Category Pages", showEditCategoryPages)
+				  .add_Link("Edit Template Pages", showEditTemplatePages)
+				  .add_Link("Edit ALL Pages", showEditAllPages)
+				  .add_Link("Edit Users", showEditUsers)
+				  .add_Link("Util: Raw WikiText", showRawWikiText)
+				  .add_Link("Util: Backup",showBackup)
+				  .add_Link("Util: Show O2 Log Viewer",showLogViewer);
+									
+			
+			showLoginPanel();	// default page					
+			return this;
+		}
+		
+        public MediaWikiEditor buildGui_Old()
         {
         	return (MediaWikiEditor)this.invokeOnThread(
         		()=>{        					        	
