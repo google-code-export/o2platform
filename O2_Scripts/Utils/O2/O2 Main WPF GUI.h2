@@ -94,9 +94,15 @@ wpfGui.add_Section("Source-Code Reviews", "If you are performing securiiy review
 	  .add_Link_O2Script("Decompile .NET Assemblies","ascx_MonoDecompiler.cs.o2")	  
 	  .add_Link_O2Script("Decompile ASP.NET Dlls","Util - Decompile ASP.NET ASPX pages compiled code.h2")
 	  	  
-	  .add_Label("java:")
-	  .add_Label("Struts Viewer (soon)",false)
-	  .add_Label("Spring MVC Viewer (soon)",false);
+	  .add_Label("Java")
+	  .add_Label("     Struts &amp; Spring MVC Viewer",false);
+	  //.add_Label("Spring MVC Viewer (soon)",false);
+
+wpfGui.add_Section("O2Findings", "Tools to create and manipulate O2 Findings")
+	  .add_Link_O2Script("Simple Findings Viewer","Util - Simple Findings Viewer.h2")
+	  .add_Link_O2Script("Findings Viewer w/ SourceCode","Util - Simple Findings Viewer (with code viewer).h2")
+	  .add_Link_O2Script("Findings filtered by SourceCode","Util - Findings Viewer (filtered by SourceCode).h2")
+	  .add_Link_O2Script("Findings Viewer (tool)","Findings Viewer.h2");
 	  
 wpfGui.add_Section("Productivity Tools", "Here are a number of links to multiple O2 tools designed to solve a number of small but time consuming tasks" ) 
 	  .add_Label("web tools:")	  
@@ -112,8 +118,8 @@ wpfGui.add_Section("Productivity Tools", "Here are a number of links to multiple
 	  .add_Link_O2Script("Movie Creator","Util - Movie Creator.h2")	  	  	  
 	  
 	  .add_Label("websites:")
-	  .add_Link_Web("google.com","http://www.google.com")
-	  .add_Link_Web("stackoverflow.com","http://www.stackoverflow.com");
+		  .add_Link_Web("google","http://www.google.com")
+		  .add_Link_Web("stackoverflow","http://www.stackoverflow.com");
 	  
 wpfGui.add_Section("Windows Tools", "Here are a number of windows utilities and quick-launch of commonly used tools")	  
 	  .add_Label("files utils:")
@@ -130,10 +136,11 @@ wpfGui.add_Section("Windows Tools", "Here are a number of windows utilities and 
 	  .add_Link_O2Script("Reset Network Interfaces","Wizard - Enable or Disable Network Interfaces.cs.o2")	  	  	  
 	  .add_Link_O2Script("CmdExe API/Wrapper","CmdExeAPI.cs")	  
 	
-	  .add_Label("windows executables:")
+	  .add_Label("windows executables:")	 
+	  .add_WrapPanel()
 	  .add_Link_Process("notepad","notepad")
-	  .add_Link_Process("cmd.exe","cmd.exe")
-	  .add_Link_Process("calc.exe","calc.exe");
+	  .add_Link_Process("cmd","cmd.exe")
+	  .add_Link_Process("calc","calc.exe");
 	  
 wpfGui.add_Section("OWASP Projects", "Here are several examples of OWASP Projects that O2 already provides an API for (or are currently on the roadmap for being supported)")	  
 	  .add_Label("WebGoat  (see Demos)",true)
@@ -161,6 +168,9 @@ wpfGui.add_Section("API / Script Development", "There are a number of developmen
 	.add_Link_O2Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")			
 	.add_Link_O2Script("'Graph' development gui","ascx_GraphWithInspector.cs")		
 	.add_Link("O2 Development Environment",() =&gt; open.scriptEditor())
+	.add_Label("Unit Tests:")
+	.add_Link_O2Script("Execute Unit Tests","Execute Unit Tests.h2")			
+	.add_Link_O2Script("Write and Execute Unit Tests","Write and Execute Unit Tests.h2")				
 	.add_Label("Utils:")
 	.add_Link("O2 Object Model", () =&gt; open.o2ObjectModel())
 	.add_Link("O2 Executable Directory", () =&gt; open.directory(PublicDI.config.CurrentExecutableDirectory, true))

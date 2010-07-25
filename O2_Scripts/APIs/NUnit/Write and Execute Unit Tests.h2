@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>
+//panel.clear(); 
+//var topPanel = panel.add_Panel();
+var topPanel = O2Gui.open&lt;Panel&gt;("Write and Execute Unit Tests", 1000,600);
+var codeEditor = topPanel.add_SourceCodeEditor();
+var unitTest = codeEditor.insert_Right&lt;ascx_XRules_UnitTests&gt;(300);  
+
+Action&lt;string&gt; loadFile = 
+	(file)=&gt;{
+				codeEditor.open(file);
+				codeEditor.compileSourceCode();
+			};
+
+
+var textBox = topPanel.insert_Above&lt;Panel&gt;(25)
+					  .add_LabelAndTextAndButton("Unit Test file","","load", loadFile)
+					  .controls&lt;TextBox&gt;();
+textBox.onDrop(
+	(text)=&gt;{
+				textBox.set_Text(text); 
+				loadFile(text);				
+			});
+
+			
+			//unitTest.loadFile(text));	
+//
+
+//Default data
+
+textBox.set_Text("DefaultUnitTest.cs".local());  
+textBox.sendEnter();
+
+//return unitTest.type().methods(); 
+//using O2.Core.XRules.Ascx
+//O2Ref:O2_Core_XRules.dll
+//O2Ref:O2_External_O2Mono.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>

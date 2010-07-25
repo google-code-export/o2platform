@@ -73,7 +73,12 @@ namespace O2.XRules.Database.APIs
 				  .add_Link_Web("BBC news","http://news.bbc.co.uk")
 				  .add_Upgrade_Link("aaa", "http://code.google.com/p/o2platform/downloads/list");
 				  
-			wpfGui.add_Section("Section 1", "Text that describes Section 1");
+			wpfGui.add_Section("Section 1", "Text that describes Section 1")
+				  .add_Label("this is a label 1")	
+				  .add_WrapPanel()
+				  	.add_Link("label 2",()=>{})	
+				  	.add_Link("label 3",()=>{})	
+				  	.add_Link("label 4",()=>{});
 			wpfGui.add_Section("Section 2");
 			wpfGui.add_Section("Section 3");
 			wpfGui.add_Section("Section 4");
@@ -248,18 +253,7 @@ namespace O2.XRules.Database.APIs
     						wpf_Gui.showMessage("Executing script: {0}".format(scriptName), "Compiled OK, executing first method",wpf_Gui.scriptHelpPage(scriptName));    						
     					};
     		}
-    		return wpf_Gui;
-    		//ExecuteScripts.
-    		
-    	/*							show.info(section.Wpf_Gui.ExecuteScripts);
-						var compilationErrors = section.Wpf_Gui.ExecuteScripts.csharpCompiler.CompilationErrors;
-						
-						if (compilationErrors.valid())
-						{
-							
-							section.Wpf_Gui.showMessage("Compilation errors on Script: {0}".format(o2ScriptToExecute),compilationErrors); 
-						}*/
-    	
+    		return wpf_Gui;    	
     	}
     }
 
@@ -383,7 +377,7 @@ namespace O2.XRules.Database.APIs
     	public string Name { get; set;}
     	public string IntroText { get; set;}
     	//public WrapPanel ContentPanel { get; set;}
-    	public StackPanel ContentPanel { get; set;}
+    	public Panel ContentPanel { get; set;}
     	public OutlookSection SectionInGui { get; set;}
     	    	
     	public WPF_GUI_Section (string name, string introText) : this (name,introText,null)
@@ -415,6 +409,12 @@ namespace O2.XRules.Database.APIs
 			return newSection;
     	}
 
+		public static WPF_GUI_Section add_WrapPanel	(this WPF_GUI_Section section)
+    	{
+			section.ContentPanel = section.ContentPanel.add_WrapPanel();
+			return section;
+    	}
+
 		public static WPF_GUI_Section add_Upgrade_Link(this WPF_GUI_Section section, string latestVersion, string upgradeLink)
 		{							
 			if (PublicDI.config.CurrentExecutableDirectory.contains("OWASP O2 Platform") &&
@@ -441,7 +441,7 @@ namespace O2.XRules.Database.APIs
 		{			
 			return (WPF_GUI_Section)section.SectionInGui.wpfInvoke(
 				()=>{
-						section.ContentPanel.add_Xaml_Link(linkText,"20 0 5 10", onCLick);						
+						section.ContentPanel.add_Xaml_Link(linkText,"20 0 0 10", onCLick);						
 						return section;
 					});								
 		}
