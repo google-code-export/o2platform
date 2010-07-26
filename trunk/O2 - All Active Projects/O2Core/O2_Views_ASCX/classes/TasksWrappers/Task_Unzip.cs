@@ -34,7 +34,7 @@ namespace O2.Views.ASCX.classes.TasksWrappers
             if (!File.Exists(fileToUnzip))
                 return false;
             folderToUnzipFiles = folderToUnzipFiles ?? DI.config.TempFolderInTempDirectory;
-            List<string> unzipedFiles = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(fileToUnzip, folderToUnzipFiles);
+            List<string> unzipedFiles = new zipUtils().unzipFileAndReturnListOfUnzipedFiles(fileToUnzip, folderToUnzipFiles);
             if (unzipedFiles.Count == 0)
                 return false;
             resultsObject = unzipedFiles;

@@ -287,7 +287,7 @@ namespace O2.DotNetWrappers.Network
                                                     Path.GetFileNameWithoutExtension(urlOfFileToFetch));
                 byte[] pageData = webClient.DownloadData(urlOfFileToFetch);
                 Files.WriteFileContent(tempFileName, pageData);
-                List<string> extractedFiles = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(tempFileName);
+                List<string> extractedFiles = new zipUtils().unzipFileAndReturnListOfUnzipedFiles(tempFileName);
                 File.Delete(tempFileName);
                 return extractedFiles;
             }
@@ -319,7 +319,7 @@ namespace O2.DotNetWrappers.Network
                 if (Path.GetExtension(localTempFile) != ".zip" && urlToDownloadFile.fileName().extension(".zip").isFalse())
                     return localTempFile;
 
-                List<string> extractedFiles = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(localTempFile, PublicDI.config.O2TempDir);
+                List<string> extractedFiles = new zipUtils().unzipFileAndReturnListOfUnzipedFiles(localTempFile, PublicDI.config.O2TempDir);
         		if (extractedFiles != null)
         			foreach(var extractedFile in  extractedFiles)
         				if (Path.GetFileName(extractedFile) == file)

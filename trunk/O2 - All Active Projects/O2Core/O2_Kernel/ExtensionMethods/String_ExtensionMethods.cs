@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using System.IO;
+using O2.Kernel.CodeUtils;
 
 namespace O2.Kernel.ExtensionMethods
 {
@@ -427,6 +429,39 @@ namespace O2.Kernel.ExtensionMethods
         {
             return PublicDI.config.getTempFileInTempDirectory(postfixString);
         }
-        
+
+
+        public static string o2Temp2Dir(this string tempFolderName)
+        {
+            return tempFolderName.o2Temp2Dir(true);
+        }
+        public static string o2Temp2Dir(this string tempFolderName, bool appendRandomStringToFolderName)
+        {
+            if (tempFolderName.valid())
+                if (appendRandomStringToFolderName)
+                    return PublicDI.config.getTempFolderInTempDirectory(tempFolderName);
+                else
+                {
+                    var tempFolder = Path.Combine(PublicDI.config.O2TempDir, tempFolderName);
+                    O2Kernel_Files.checkIfDirectoryExistsAndCreateIfNot(tempFolder);
+                    return tempFolder;
+                }
+            return PublicDI.config.O2TempDir;
+        }
+
+        public static string tempO2Dir(this string tempFolderName)
+        {
+            return o2Temp2Dir(tempFolderName);
+        }
+
+        public static string tempDir(this string tempFolderName, bool appendRandomStringToFolderName)
+        {
+            return o2Temp2Dir(tempFolderName, appendRandomStringToFolderName);
+        }
+
+        public static string tempDir(this string tempFolderName)
+        {
+            return o2Temp2Dir(tempFolderName);
+        }
     }
 }

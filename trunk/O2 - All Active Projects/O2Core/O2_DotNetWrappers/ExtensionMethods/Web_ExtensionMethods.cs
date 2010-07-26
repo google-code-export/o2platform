@@ -39,7 +39,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         public static string getHtmlAndSave(this Uri uri)
         {
-            return uri.getHtmlAndSaveOnFolder(uri.o2Temp2Dir());
+            return uri.getHtmlAndSaveOnFolder("".o2Temp2Dir());
         }
 
         public static string getHtmlAndSaveOnFolder(this Uri uri, string targetFolder)
