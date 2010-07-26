@@ -52,6 +52,7 @@ namespace O2.XRules.Database.Utils
 			return Int32.TryParse(value, out a);
 		}
 	}
+	
     public static class ExtraMethodsToAddToO2CodeBase
     {
     	public static string md5Hash(this Bitmap bitmap)
@@ -116,8 +117,7 @@ namespace O2.XRules.Database.Utils
     		return Serialize.createSerializedXmlStringFromObject(_object);
     	}
     }
-    
-    
+        
     public static class ExtraMethodsToAddToO2CodeBase_TreeView
     {
     	public static TreeNode select(this TreeView treeView, string text)
@@ -212,9 +212,7 @@ namespace O2.XRules.Database.Utils
     	}
     	
     }
-    
-    
-
+        
 	public static class ExtraMethodsToAddToO2CodeBase_ascx_TableList
 	{
 		public static ascx_TableList afterSelect(this ascx_TableList tableList, Action<List<ListViewItem>> callback)
@@ -233,6 +231,34 @@ namespace O2.XRules.Database.Utils
 		}
 	}
     
+
+	public static class ExtraMethodsToAddToO2CodeBase_Button
+	{
+		public static List<Button> buttons(this Control control)
+		{
+			return control.controls<Button>(true);
+		}
+		public static Button button(this Control control, string text)
+		{
+			foreach(var button in control.buttons())
+				if (button.get_Text() == text)
+					return button;
+			return null;
+		}
+	}
+	public static class ExtraMethodsToAddToO2CodeBase_WinformControls
+	{
+		public static Control control<T>(this T hostControl, string controlName, bool recursive)
+			where T : Control
+		{
+			var controls = hostControl.controls(recursive);
+			foreach(var control in controls)				
+   				if (control.typeName() == controlName)
+					return control;
+    		return null;			
+		}
+		
+	}
 }
     	
 		

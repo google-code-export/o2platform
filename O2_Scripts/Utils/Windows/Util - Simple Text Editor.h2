@@ -13,6 +13,7 @@ richTextBox.add_ContextMenu()
 					var fileToSave = O2Forms.askUserForFileToSave(Environment.CurrentDirectory,"*.rtf");
 					richTextBox.SaveFile(fileToSave); 
 				 });
-</SourceCode>
+
+return richTextBox;</SourceCode>
   <ReferencedAssemblies />
 </H2>

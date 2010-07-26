@@ -1081,7 +1081,23 @@ textBox1.prop("",true);
                     return button;
                 });
         }
-
+        
+        public static Button name(this List<Button> buttons, string text)
+        {            
+        	foreach(var button in buttons)
+        		if (button.get_Text_Wpf() == text)
+        			return button;
+        	return null;
+        }
+	
+		public static Button click (this Button button)
+		{		
+			return (Button)button.wpfInvoke(
+				()=>{
+						button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+						return button;
+					});
+		}
         #endregion
 
  	}

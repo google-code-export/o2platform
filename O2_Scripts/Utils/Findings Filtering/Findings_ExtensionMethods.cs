@@ -173,6 +173,7 @@ namespace O2.XRules.Database.Findings
 		{
 			return fileToLoad.loadFindingsFile();
 		}
+		
         public static List<IO2Finding> loadFindingsFile(this string fileToLoad)
         {
             var o2Assessment = new O2Assessment(new O2AssessmentLoad_OunceV6(), fileToLoad);
@@ -686,6 +687,31 @@ namespace O2.XRules.Database.Findings
 			return null;
 		}
 		
+	}
+	
+	
+	
+	public static class Findings_ExtensionMethods_FindingsBatchReplace
+	{
+		public static List<IO2Finding> replaceFilePathsInFile(this string findingsFile, string pathToFind, string pathToReplace)
+		{
+			var o2Findings = findingsFile.loadO2Findings();
+			o2Findings.replaceFilePathsInFile(pathToFind, pathToReplace);
+			o2Findings.saveFindings(findingsFile);			
+			return o2Findings;
+		}
+		
+		public static List<IO2Finding> replaceFilePathsInFile(this List<IO2Finding> o2Findings, string pathToFind, string pathToReplace)
+		{
+			foreach(var o2Finding in o2Findings)
+			{
+				o2Finding.file = o2Finding.file.replace(pathToFind,pathToReplace);			
+				var allTraces = o2Finding.allTraces();
+				foreach(var o2Trace in allTraces)
+					o2Trace.file = o2Trace.file.replace(pathToFind,pathToReplace);			
+			}
+			return o2Findings;
+		}
 	}
 	
 	public static class Findings_ExtensionMethods_FindingsTrasformation

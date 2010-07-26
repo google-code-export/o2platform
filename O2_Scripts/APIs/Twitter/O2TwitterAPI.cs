@@ -19,6 +19,8 @@ using O2.XRules.Database.Utils;
 //O2Ref:System.Xml.Linq.dll 
 //O2Ref:System.Xml.dll
 
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+
 namespace O2.XRules.Database.APIs
 {
     public class O2TwitterAPI
@@ -155,12 +157,14 @@ namespace O2.XRules.Database.APIs
     	
     	public static List<TwitterStatus> home_Timeline(this O2TwitterAPI twitterAPI, int itemsToFetch)
     	{
+    		"HEEERRRRE".error();
     		return twitterAPI.Statuses
-    						 .OnHomeTimeline()
+    						 .OnHomeTimeline()    						 
     						 .Take(itemsToFetch)
+    						 //.Since(10)
     						 .AsJson()
-    						 .Request()
-    						 .AsStatuses()
+    						 .Request()    						 
+    						 .AsStatuses()    						
     						 .ToList();
     	}
     	
@@ -243,16 +247,34 @@ namespace O2.XRules.Database.APIs
 	public static class Twitter_ExtensionClasses_WinForms
 	{
         
-        public static T add_TableList_With_Tweets<T>(this T control, List<TwitterStatus> twitterStatuses)
+        public static T add_TableList_With_Tweets<T>(this T control, string description, Func<List<TwitterStatus>> twitterStatusesCallback)
         	where T : Control
-        {
-	        control.clear();
-			var tableList = control.add_TableList();																			
-			tableList.add_Columns(new List<string> {"#","Date","User","Tweet Text"});
-			var item = 1;
-			foreach(var twitterStatus in twitterStatuses)   
-				tableList.add_Row(new List<string> {item++.str(), twitterStatus.CreatedDate.str() ,  twitterStatus.User.Name, twitterStatus.Text });
-            tableList.makeColumnWidthMatchCellWidth();
+        {	
+        	Action loadData = null;
+        	loadData = 
+        		()=>{
+        			    "[O2TwitterAPI]: In add_TableList_With_Tweets: {0}".info(description);
+        				var twitterStatuses = twitterStatusesCallback();
+				        control.clear();	        
+						var tableList = control.add_TableList();																			
+						tableList.add_Columns(new List<string> {"#","Date","User","Tweet Text"});
+						var item = 1;
+						foreach(var twitterStatus in twitterStatuses)   
+						{
+							var row = tableList.add_Row(new List<string> {item++.str(), twitterStatus.CreatedDate.str() ,  twitterStatus.User.Name, twitterStatus.Text });
+							//row.infoTypeName();
+						}
+			            tableList.makeColumnWidthMatchCellWidth();            
+			            tableList.add_ContextMenu()
+            		 			 .add_MenuItem("Refresh",()=> loadData());
+            		 			 
+						tableList.afterSelect(
+							(selectedItems)=>{ 
+												"AFTER SELECT 2".info();
+											//	show.info(selectedItems);
+											 });
+			        };            
+           	loadData(); 		 
         	return control;
         }
         

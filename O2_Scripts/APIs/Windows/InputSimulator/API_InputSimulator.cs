@@ -15,6 +15,7 @@ using O2.Views.ASCX;
 using WindowsInput.Native;
 using WindowsInput;
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
+//O2Ref:O2_API_Visualization.dll
 
 namespace O2.XRules.Database.APIs
 {
@@ -70,12 +71,12 @@ namespace O2.XRules.Database.APIs
     		return Cursor.Position;
     	}    	
     
-    	public static API_InputSimulator mouse_setPosition(this API_InputSimulator inputSimulator, double x, double y)
+    	public static API_InputSimulator mouse_SetPosition(this API_InputSimulator inputSimulator, double x, double y)
     	{
-			return inputSimulator.mouse_setPosition(x,y, true);
+			return inputSimulator.mouse_SetPosition(x,y, true);
     	}
     	
-    	public static API_InputSimulator mouse_setPosition(this API_InputSimulator inputSimulator, double x, double y, bool sleepAfterSetPosition)
+    	public static API_InputSimulator mouse_SetPosition(this API_InputSimulator inputSimulator, double x, double y, bool sleepAfterSetPosition)
     	{
     		var xPos = x * inputSimulator.XDelta; 
 			var yPos = y * inputSimulator.YDelta;
@@ -88,12 +89,12 @@ namespace O2.XRules.Database.APIs
 			return inputSimulator;
     	}
     	
-    	public static API_InputSimulator mouse_moveBy(this API_InputSimulator inputSimulator, double x, double y)
+    	public static API_InputSimulator mouse_MoveBy(this API_InputSimulator inputSimulator, double x, double y)
     	{
-    		return inputSimulator.mouse_moveBy(x,y,true);
+    		return inputSimulator.mouse_MoveBy(x,y,true);
     	}
     	
-    	public static API_InputSimulator mouse_moveBy(this API_InputSimulator inputSimulator, double x, double y, bool animate)
+    	public static API_InputSimulator mouse_MoveBy(this API_InputSimulator inputSimulator, double x, double y, bool animate)
     	{
     		if (x != 0 || y != 0)
     		{
@@ -107,19 +108,19 @@ namespace O2.XRules.Database.APIs
     			{
     				currentX += xStep; //(x >0) ? -xStep : -xStep;
     				currentY += yStep; //(y >0) ? -yStep : -yStep;
-    				inputSimulator.mouse_setPosition(currentX, currentY,animate);
+    				inputSimulator.mouse_SetPosition(currentX, currentY,animate);
     			}
     		}
     		return inputSimulator;    		
     	}
     	
-    	public static API_InputSimulator mouse_moveTo<T>(this API_InputSimulator inputSimulator, T control)
+    	public static API_InputSimulator mouse_MoveTo<T>(this API_InputSimulator inputSimulator, T control)
     		where T : Control
     	{
-    		return inputSimulator.mouse_moveTo(control, true);
+    		return inputSimulator.mouse_MoveTo(control, true);
     	}
     	
-    	public static API_InputSimulator mouse_moveTo<T>(this API_InputSimulator inputSimulator, T control, bool animate)
+    	public static API_InputSimulator mouse_MoveTo<T>(this API_InputSimulator inputSimulator, T control, bool animate)
     		where T : Control
     	{
     		return (API_InputSimulator)control.invokeOnThread(
@@ -128,33 +129,54 @@ namespace O2.XRules.Database.APIs
 						var xPos = (double)location1.X + control.width()/2;
 						var yPos = (double)location1.Y  + control.height()/2;
 						//return inputSimulator;
-						return inputSimulator.mouse_moveTo(xPos, yPos, animate);
+						return inputSimulator.mouse_MoveTo(xPos, yPos, animate);
     				});    		
     	
     	}
     	
-    	public static API_InputSimulator mouse_moveTo(this API_InputSimulator inputSimulator, Point point)
+    	public static API_InputSimulator mouse_MoveTo_Wpf<T>(this API_InputSimulator inputSimulator, T uiElement)
+    		where T : System.Windows.UIElement
     	{
-    		return inputSimulator.mouse_moveTo(point, true);
+    		return (API_InputSimulator)O2.API.Visualization.ExtensionMethods.WPF_Threading_ExtensionMethods.wpfInvoke(
+    			uiElement, 
+    				()=>{
+    						var point = uiElement.PointToScreen(new System.Windows.Point(0, 0)); 
+    						return inputSimulator.mouse_MoveTo_Wpf(point);
+    					});
     	}
     	
-    	public static API_InputSimulator mouse_moveTo(this API_InputSimulator inputSimulator, Point point, bool animate)
+    	public static API_InputSimulator mouse_MoveTo_Wpf(this API_InputSimulator inputSimulator, System.Windows.Point point)
     	{
-    		return inputSimulator.mouse_moveTo(point.X, point.Y, animate);
+    		return inputSimulator.mouse_MoveTo(point.X+10, point.Y+2);    		
+    	}			
+			
+			
+    	public static API_InputSimulator mouse_MoveTo(this API_InputSimulator inputSimulator, Point point)
+    	{
+    		return inputSimulator.mouse_MoveTo(point, true);
     	}
     	
-    	public static API_InputSimulator mouse_moveTo(this API_InputSimulator inputSimulator, double x, double y)
+    	public static API_InputSimulator mouse_MoveTo(this API_InputSimulator inputSimulator, Point point, bool animate)
     	{
-    		return inputSimulator.mouse_moveTo(x,y, true);
+    		return inputSimulator.mouse_MoveTo(point.X, point.Y, animate);
     	}
     	
-    	public static API_InputSimulator mouse_moveTo(this API_InputSimulator inputSimulator, double x, double y, bool animate)
+    	public static API_InputSimulator mouse_MoveTo(this API_InputSimulator inputSimulator, double x, double y)
+    	{
+    		return inputSimulator.mouse_MoveTo(x,y, true);
+    	}
+    	
+    	public static API_InputSimulator mouse_MoveTo(this API_InputSimulator inputSimulator, double x, double y, bool animate)
     	{
     		var currentPosition = inputSimulator.mouse_CurrentPosition();
-    		inputSimulator.mouse_moveBy(x - currentPosition.X, y - currentPosition.Y, animate);    		
+    		inputSimulator.mouse_MoveBy(x - currentPosition.X, y - currentPosition.Y, animate);    		
 			return inputSimulator;
     	}
     	
+    	public static API_InputSimulator click(this API_InputSimulator inputSimulator)
+    	{
+    		return inputSimulator.mouse_Click();
+    	}
     	public static API_InputSimulator mouse_Click(this API_InputSimulator inputSimulator)
     	{    		
     		inputSimulator.Input_Simulator.Mouse.LeftButtonDown();			

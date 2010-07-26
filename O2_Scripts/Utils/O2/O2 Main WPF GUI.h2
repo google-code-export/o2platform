@@ -176,7 +176,23 @@ wpfGui.add_Section("API / Script Development", "There are a number of developmen
 	.add_Link("O2 Executable Directory", () =&gt; open.directory(PublicDI.config.CurrentExecutableDirectory, true))
 	.add_Link("View Loaded Script Source",wpfGui.ExecuteScripts.showLoadedScriptSourceCode);	
 
-wpfGui.add_Section("Videos", "Mostly created using O2's Movie Editor tool, here are a number of videos that show multiple O2 modules in action")	
+wpfGui.add_Section("O2 Stand-Alone tools", "Here are a number of stand-alone O2 tools that use the previous MDI environment")
+	  .add_Link_O2Script("Search Engine","Search Engine Tool.h2")
+	  .add_Link_O2Script("Findings Viewer","Findings Viewer.h2")
+	  .add_Link_O2Script("CIR Viewer","CIR Viewer.h2");
+	  
+	  
+	  
+	  
+	  
+	  
+wpfGui.add_Section("Demos and Videos", "Demos: If you are unsure on where to start, check out these demos")
+	  .add_Link_O2Script("WebGoat - BlackBox Exploits","WebGoat_BlackBox_Exploits.cs")
+	  .add_Link_O2Script("HacmeBank - Start WebServer","Wizard - Start HacmeBank.cs.o2")
+	  .add_Link_O2Script("HacmeBank - BlackBox Exploits","HacmeBank_BlackBox_Exploits.cs")
+	  .add_Link_O2Script("HacmeBank - Custom Scanner","HacmeBank - Custom O2 AST Security Scanner.h2")
+	  .add_Link_O2Script("HacmeBank - Map EntryPoints","Map HacmeBank Ascx EntryPoints.h2")	  
+	  .add_TextBlock("Vidos: Mostly created using O2's Movie Editor tool, here are multiple O2 modules in action")
 	  .add_Link_YouTube("WebGoat: Exploits","1bbKNvyvLO0")
 	  .add_Link_YouTube("HacmeBank: start server","vucYncGiClE")
 	  .add_Link_YouTube("HacmeBank: Exploits","T2XVufhJLig")
@@ -184,18 +200,7 @@ wpfGui.add_Section("Videos", "Mostly created using O2's Movie Editor tool, here 
 	  .add_Link_YouTube("Javascript: AST Viewer","_pqY_6-P-xU")	  
 	  .add_Link_YouTube("DotNet: O2 .NET Ast Engine","j0d3F3wqfRU")
 	  .add_Link_YouTube("DotNet: Convert C#-&gt;VBNet","3eVeG2Pwa4U")
-	  .add_Link_YouTube("IE: Create a GMail account","rTD31e7HY4E")
-	  .add_Link_YouTube("API: Amazon S3 Browser","bFOWs42cF3Q");
-	  
-	  
-	  
-wpfGui.add_Section("Demos", "If you are unsure on where to start, check out these demos")
-	  .add_Link_O2Script("WebGoat - BlackBox Exploits","WebGoat_BlackBox_Exploits.cs")
-	  .add_Link_O2Script("HacmeBank - Start WebServer","Wizard - Start HacmeBank.cs.o2")
-	  .add_Link_O2Script("HacmeBank - BlackBox Exploits","HacmeBank_BlackBox_Exploits.cs")
-	  .add_Link_O2Script("HacmeBank - Custom Scanner","HacmeBank - Custom O2 AST Security Scanner.h2")
-	  .add_Link_O2Script("HacmeBank - Map EntryPoints","Map HacmeBank Ascx EntryPoints.h2");
-	  
+	  .add_Link_YouTube("IE: Create a GMail account","rTD31e7HY4E");	  
 
 	  
 wpfGui.add_Section("Help", "If you are looking for help, here are the best places to start")	  
