@@ -33,14 +33,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return new zipUtils().unzipFile(fileToUnzip,targetFolder);
         }
 
-        public static List<string> unzip_FileAndReturtListOfUnzipedFiles(this string fileToUnzip)
+        public static List<string> unzip_FileAndReturnListOfUnzipedFiles(this string fileToUnzip)
         {
-            return new zipUtils().unzipFileAndReturtListOfUnzipedFiles(fileToUnzip);
+            return new zipUtils().unzipFileAndReturnListOfUnzipedFiles(fileToUnzip);
         }
 
-        public static List<string> unzip_FileAndReturtListOfUnzipedFiles(this string fileToUnzip, string targetFolder)
+        public static List<string> unzip_FileAndReturnListOfUnzipedFiles(this string fileToUnzip, string targetFolder)
         {
-            return new zipUtils().unzipFileAndReturtListOfUnzipedFiles(fileToUnzip, targetFolder);
+            return new zipUtils().unzipFileAndReturnListOfUnzipedFiles(fileToUnzip, targetFolder);
         }
     }
 }

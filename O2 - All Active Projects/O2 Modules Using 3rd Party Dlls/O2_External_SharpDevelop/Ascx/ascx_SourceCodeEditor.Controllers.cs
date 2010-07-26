@@ -55,6 +55,7 @@ namespace O2.External.SharpDevelop.Ascx
         public O2CodeCompletion o2CodeCompletion;
         public string AutoBackupSaveDir = PublicDI.config.O2TempDir.pathCombine("_AutoSavedScripts");
         public bool AutoBackUpOnCompileSucess = false;
+        public bool checkForDebugger = false;
 
         public void onLoad()
         {
@@ -1301,8 +1302,8 @@ namespace O2.External.SharpDevelop.Ascx
         {
             this.invokeOnThread(
             () =>
-            {
-                if (O2Messages.isDebuggerAvailable())
+            {                
+                if (checkForDebugger && O2Messages.isDebuggerAvailable())
                 {
                     btDebugMethod.Visible = true;
                     if (cboxCompliledSourceCodeMethods.SelectedItem != null && cboxCompliledSourceCodeMethods.SelectedItem is Reflection_MethodInfo)

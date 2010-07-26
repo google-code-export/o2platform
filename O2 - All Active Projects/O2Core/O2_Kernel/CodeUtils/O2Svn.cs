@@ -25,6 +25,8 @@ namespace O2.Kernel.CodeUtils
         public void tryToFetchAssemblyFromO2SVN(string assemblyToLoad, bool useCacheInfo)
         {            
             string localFilePath = "";
+            if (assemblyToLoad.contains("".tempDir()))       // don't try to fetch temp assemblies
+                return ;
             var thread = O2Kernel_O2Thread.mtaThread(
                 () =>
                 {

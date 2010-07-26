@@ -113,12 +113,12 @@ namespace O2.DotNetWrappers.Zip
             }
         }
 
-        public List<string> unzipFileAndReturtListOfUnzipedFiles(string fileToUnzip)
+        public List<string> unzipFileAndReturnListOfUnzipedFiles(string fileToUnzip)
         {
             return Files.getFilesFromDir_returnFullPath(unzipFile(fileToUnzip));
         }
 
-        public List<string> unzipFileAndReturtListOfUnzipedFiles(string fileToUnzip, string targetFolder)
+        public List<string> unzipFileAndReturnListOfUnzipedFiles(string fileToUnzip, string targetFolder)
         {
             if ("" != Files.checkIfDirectoryExistsAndCreateIfNot(targetFolder))
                 return Files.getFilesFromDir_returnFullPath(unzipFile(fileToUnzip, targetFolder),"*.*",true);
