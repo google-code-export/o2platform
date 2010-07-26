@@ -174,7 +174,9 @@ wpfGui.add_Section("API / Script Development", "There are a number of developmen
 	.add_Label("Utils:")
 	.add_Link("O2 Object Model", () =&gt; open.o2ObjectModel())
 	.add_Link("O2 Executable Directory", () =&gt; open.directory(PublicDI.config.CurrentExecutableDirectory, true))
-	.add_Link("View Loaded Script Source",wpfGui.ExecuteScripts.showLoadedScriptSourceCode);	
+	.add_Link("View Loaded Script Source",wpfGui.ExecuteScripts.showLoadedScriptSourceCode)
+	.add_Link_O2Script("SVN Download (via HTTP)","Wizard - SVN Download (via HTTP).cs.o2");
+	
 
 wpfGui.add_Section("O2 Stand-Alone tools", "Here are a number of stand-alone O2 tools that use the previous MDI environment")
 	  .add_Link_O2Script("Search Engine","Search Engine Tool.h2")
