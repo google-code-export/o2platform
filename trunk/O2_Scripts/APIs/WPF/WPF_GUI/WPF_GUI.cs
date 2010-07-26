@@ -31,10 +31,6 @@ using O2.XRules.Database.Utils;
 //O2Ref:Odyssey.dll
 //O2Ref:O2_API_AST.dll
 //O2Ref:O2_API_Visualization.dll
-//O2Ref:PresentationCore.dll
-//O2Ref:PresentationFramework.dll
-//O2Ref:WindowsBase.dll   
-//O2Ref:System.Core.dll
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:GraphSharp.dll
 //O2Ref:QuickGraph.dll 
@@ -71,7 +67,12 @@ namespace O2.XRules.Database.APIs
 				  			"after".debug();
 				  		})
 				  .add_Link_Web("BBC news","http://news.bbc.co.uk")
-				  .add_Upgrade_Link("aaa", "http://code.google.com/p/o2platform/downloads/list");
+				  .add_Upgrade_Link("aaa", "http://code.google.com/p/o2platform/downloads/list")
+				  .add_Link("Source Code Viewer", (panel)=>{ panel.add_Control<O2.External.SharpDevelop.Ascx.ascx_SourceCodeViewer>();
+				  										 })
+				  .add_Link("Source Code Editor", (panel)=>{ panel.add_Control<O2.External.SharpDevelop.Ascx.ascx_SourceCodeEditor>();
+				  										 });				  										 
+				  										 
 				  
 			wpfGui.add_Section("Section 1", "Text that describes Section 1")
 				  .add_Label("this is a label 1")	
@@ -222,6 +223,17 @@ namespace O2.XRules.Database.APIs
 		{
 			return "http://o2platform.com/wiki/O2_Script/{0}".format(scriptName);
 		}
+		
+		public List<Button> Links 
+		{
+			get{				
+					var links = new List<Button>();
+					foreach(var section in GuiSections)
+						links.AddRange(section.links());
+					return links;
+				}
+		}		
+		
     }     
     
     public static class WPF_GUI_ExtensionMethods_Config
@@ -369,6 +381,12 @@ namespace O2.XRules.Database.APIs
     	}
     }
     
+    
+    /*public static class WPF_GUI_ExtensionMethods_Items
+    {
+    	
+    }*/
+    
     public class WPF_GUI_Section
     {
     	public WPF_GUI Wpf_Gui { get; set;}
@@ -378,8 +396,8 @@ namespace O2.XRules.Database.APIs
     	public string IntroText { get; set;}
     	//public WrapPanel ContentPanel { get; set;}
     	public Panel ContentPanel { get; set;}
-    	public OutlookSection SectionInGui { get; set;}
-    	    	
+    	public OutlookSection SectionInGui { get; set;}    	
+    	
     	public WPF_GUI_Section (string name, string introText) : this (name,introText,null)
     	{    		
     	}
@@ -392,6 +410,12 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	  
+    	public List<Button> Links 
+		{
+			get{				
+					return this.links();
+				}
+		}		  
     }
     
     
@@ -409,11 +433,18 @@ namespace O2.XRules.Database.APIs
 			return newSection;
     	}
 
-		public static WPF_GUI_Section add_WrapPanel	(this WPF_GUI_Section section)
+		public static WPF_GUI_Section add_WrapPanel(this WPF_GUI_Section section)
     	{
 			section.ContentPanel = section.ContentPanel.add_WrapPanel();
 			return section;
     	}
+    	
+    	public static WPF_GUI_Section add_TextBlock(this WPF_GUI_Section section, string text)
+    	{
+			var textBlock = section.ContentPanel.add_TextBlock();
+			textBlock.set_Text_Wpf(text);
+			return section;
+    	}    	    						
 
 		public static WPF_GUI_Section add_Upgrade_Link(this WPF_GUI_Section section, string latestVersion, string upgradeLink)
 		{							
@@ -437,11 +468,32 @@ namespace O2.XRules.Database.APIs
 			return section;
 		}
 		
-		public static WPF_GUI_Section add_Link(this WPF_GUI_Section section, string linkText, Action onCLick)
+		public static WPF_GUI_Section add_Link(this WPF_GUI_Section section, string linkText, Action<WinForms.Panel> onClickCtor)
+		{			
+			Action<WinForms.Panel> pinnedCtor = onClickCtor;
+			WinForms.Panel pinnedPanel = null;
+			return (WPF_GUI_Section)section.SectionInGui.wpfInvoke(
+				()=>{
+						section.ContentPanel
+							   .add_Xaml_Link(linkText,"20 0 0 10",
+									()=>{
+											if (pinnedPanel ==null)
+											{
+												pinnedPanel  = section.Wpf_Gui.WinFormPanel.add_Panel();
+												pinnedCtor(pinnedPanel);
+											}
+											section.Wpf_Gui.WinFormPanel.clear();
+											section.Wpf_Gui.WinFormPanel.add_Control(pinnedPanel);	
+										});
+						return section;
+					});								
+		}
+		
+		public static WPF_GUI_Section add_Link(this WPF_GUI_Section section, string linkText, Action onClick)
 		{			
 			return (WPF_GUI_Section)section.SectionInGui.wpfInvoke(
 				()=>{
-						section.ContentPanel.add_Xaml_Link(linkText,"20 0 0 10", onCLick);						
+						section.ContentPanel.add_Xaml_Link(linkText,"20 0 0 10", onClick);						
 						return section;
 					});								
 		}
@@ -490,5 +542,10 @@ namespace O2.XRules.Database.APIs
 					 });
 		}
 				
+				
+		public static List<Button> links(this WPF_GUI_Section section)
+		{
+			return section.ContentPanel.controls_Wpf<Button>();
+		}
     }
 }

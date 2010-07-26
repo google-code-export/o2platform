@@ -2,10 +2,12 @@
 <H2>
   <SourceCode>
 //panel.clear(); 
-//var topPanel = panel.add_Panel();
+//var topPanel = panel.add_Panel();	
 var topPanel = O2Gui.open&lt;Panel&gt;("Write and Execute Unit Tests", 1000,600);
 var codeEditor = topPanel.add_SourceCodeEditor();
 var unitTest = codeEditor.insert_Right&lt;ascx_XRules_UnitTests&gt;(300);  
+unitTest.insert_Below&lt;Panel&gt;(130)
+		  .add_LogViewer();
 
 Action&lt;string&gt; loadFile = 
 	(file)=&gt;{
@@ -28,8 +30,7 @@ textBox.onDrop(
 //
 
 //Default data
-
-textBox.set_Text("DefaultUnitTest.cs".local());  
+textBox.set_Text("DefaultUnitTest.cs".local().fileContents().saveWithExtension(".cs"));  
 textBox.sendEnter();
 
 //return unitTest.type().methods(); 

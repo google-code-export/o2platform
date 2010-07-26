@@ -4,10 +4,9 @@ using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using O2.Interfaces.O2Core;
 using O2.Kernel;
-using O2.Kernel.Interfaces.XRules;
-using O2.DotNetWrappers.Windows;
+using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.ExtensionMethods;
 
 //O2Ref:nunit.framework.dll
 using NUnit.Framework;
@@ -20,7 +19,7 @@ namespace O2.XRules.Database.UnitTests
     	[Test]
     	public string Test1()
     	{
-    		Assert.That(1 == 1,"If this fails you have bigger problems :)");
+    		Assert.That(1 == 1,"If this fails you have bigger problems :)");    	
     		return "ok";
     	}
     	
