@@ -121,7 +121,7 @@ Action createMethodStreamForSelectedAllFileterdFiles =
 		};
 // events
 
-sourceFileFilter.onKeyPress((key)=&gt;refreshSourceFiles());
+sourceFileFilter.onEnter((text)=&gt;refreshSourceFiles());
 
 sourceFiles.afterSelect&lt;string&gt;(
 	(file)=&gt;{
