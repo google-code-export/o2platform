@@ -1224,8 +1224,15 @@ namespace O2.External.SharpDevelop.Ascx
             this.invokeOnThread(
                 () =>
                     {
-                        tecSourceCode.Document.RequestUpdate(new TextAreaUpdate(TextAreaUpdateType.WholeTextArea));
-                        tecSourceCode.Document.CommitUpdate();
+                        try
+                        {
+                            tecSourceCode.Document.RequestUpdate(new TextAreaUpdate(TextAreaUpdateType.WholeTextArea));
+                            tecSourceCode.Document.CommitUpdate();
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.log("in ascx_SourceCodeEditor.refresh");
+                        }
                     });
         }
 

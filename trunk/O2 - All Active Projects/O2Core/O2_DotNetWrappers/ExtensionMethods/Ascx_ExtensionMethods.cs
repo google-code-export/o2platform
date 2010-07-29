@@ -1095,14 +1095,23 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 () =>
                 {
                     progressBar.maximum(items.size());
+                    //for performance reasons create the treeNode here (good for the cases where we need to add 10,000+ nodes
+                    var nodesToAdd = new List<TreeNode>();
                     foreach (var item in items)
                     {
                         var nodeText = (maxNodeTextSize > 1 && item.Key.size() > maxNodeTextSize)
                                             ? item.Key.Substring(0, maxNodeTextSize).add("...")
                                             : item.Key;
-                        treeNode.add_Node(nodeText, item.Value, item.Value.size() > 1);
+                        TreeNode newNode = new TreeNode { Text = nodeText, Name = nodeText };
+                        newNode.ImageIndex = newNode.SelectedImageIndex = 0;
+                        newNode.Tag = item.Value;                        
+                        if (item.Value.size() > 1)
+                            newNode.Nodes.Add("DummyNode_1");
+                        nodesToAdd.Add(newNode);                        
                         progressBar.increment(1);
+                        Application.DoEvents();
                     }
+                    treeNode.Nodes.AddRange(nodesToAdd.ToArray());
                 });
             return treeNode;
 
@@ -2321,24 +2330,29 @@ namespace O2.DotNetWrappers.ExtensionMethods
         // order of params is: int top, int left, int width, int height)
         public static ProgressBar add_ProgressBar(this Control control, params int[] position)
         {
-            return control.add_Control<ProgressBar>(position);
+            if (control.notNull())
+                return control.add_Control<ProgressBar>(position);
+            return null;
         }
 
         public static ProgressBar maximum(this ProgressBar progressBar, int value)
         {
-            progressBar.invokeOnThread(() => progressBar.Maximum = value);
+            if (progressBar.notNull())
+                progressBar.invokeOnThread(() => progressBar.Maximum = value);
             return progressBar;
         }
 
         public static ProgressBar value(this ProgressBar progressBar, int value)
         {
-            progressBar.invokeOnThread(() => progressBar.Value = value);
+            if (progressBar.notNull())
+                progressBar.invokeOnThread(() => progressBar.Value = value);
             return progressBar;
         }
 
         public static ProgressBar increment(this ProgressBar progressBar, int value)
         {
-            progressBar.invokeOnThread(() => progressBar.Increment(value));
+            if (progressBar.notNull())
+                progressBar.invokeOnThread(() => progressBar.Increment(value));
             return progressBar;
         }
 

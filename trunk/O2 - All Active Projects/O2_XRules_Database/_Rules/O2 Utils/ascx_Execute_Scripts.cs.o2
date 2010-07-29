@@ -122,7 +122,7 @@ namespace O2.XRules.Database
                     //we need to make this or the 2nd time around the dynamic compiled references will not be found
                     foreach (var referencedAssembly in assembly.GetReferencedAssemblies().toList())
                     {
-                        var localPath = "{0}\\{1}.dll".format(PublicDI.config.o2Temp2Dir(), referencedAssembly.Name);
+                        var localPath = "{0}\\{1}.dll".format("".o2Temp2Dir(), referencedAssembly.Name);
                         if (localPath.fileExists())
                      //   if (referencedAssembly.E.Location.starts())
                             Files.Copy(localPath, PublicDI.config.CurrentExecutableDirectory);
@@ -168,12 +168,13 @@ namespace O2.XRules.Database
     	public ascx_Execute_Scripts()
     	{
             handleSpecialControlKeys();
-    		var logoFile = "..\\O2_Logo.gif";
-    		var tempPath = this.tempDir().pathCombine(logoFile);
-    		if (! tempPath.fileExists())
-		    	pathToPictureBox = new Web().checkIfFileExistsAndDownloadIfNot(logoFile, @"http://deploy.o2-ounceopen.com/_O2_Development/O2%20Images%20%28misc%20bunch%29/JustLogo.gif");
-		    else
-		    	pathToPictureBox = tempPath;		    
+    		//var logoFile = "..\\O2_Logo.gif";
+            //var tempPath = "".tempDir(false).pathCombine(logoFile);
+            pathToPictureBox = "O2_Logo.gif".local();
+            if (!pathToPictureBox.fileExists())
+                pathToPictureBox = new Web().checkIfFileExistsAndDownloadIfNot(pathToPictureBox, @"http://o2platform.googlecode.com/svn/trunk/O2_Scripts/_DataFiles/_Images/O2_Logo.gif");
+		    //else
+		    //	pathToPictureBox = tempPath;		    
         }
 
         public void checkForMSI_andOnFirstRunAndUnzipDefaultScripts()

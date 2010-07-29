@@ -34,13 +34,13 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://o2platform.googlecode.com/svn/O2_ClickOnce_Installers/O2_XRules_Database/</InstallUrl>
-    <ProductName>O2 XRules Database</ProductName>
+    <ProductName>OWASP O2 Platform %28ClickOnce version%29</ProductName>
     <PublisherName>OWASP O2 Platform</PublisherName>
     <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>115</ApplicationRevision>
+    <ApplicationRevision>117</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
