@@ -37,7 +37,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
                 if (iNode is T)
                     return iNode as T;
             }
-            "Could node find {0} for provided iNode: {1}".format(typeof(T).Name, iNode != null ? iNode.str() : "[null value]").error();
+            //"Could node find {0} for provided iNode: {1}".format(typeof(T).Name, iNode != null ? iNode.str() : "[null value]").error();
             return null;
         }
 

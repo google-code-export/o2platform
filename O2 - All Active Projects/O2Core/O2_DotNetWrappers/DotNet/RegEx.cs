@@ -25,7 +25,8 @@ namespace O2.DotNetWrappers.DotNet
             if (sSource == "")
                 return false;
             //DI.dRegExes.add(sRegExToFind, createRegEx(sRegExToFind));
-            O2.DotNetWrappers.ExtensionMethods.Collections_ExtensionMethods.add(DI.dRegExes,sRegExToFind, createRegEx(sRegExToFind));
+            if (DI.dRegExes.ContainsKey(sRegExToFind) == false)      
+                O2.DotNetWrappers.ExtensionMethods.Collections_ExtensionMethods.add(DI.dRegExes,sRegExToFind, createRegEx(sRegExToFind));
 
             return execRegExOnText_hasMatches(DI.dRegExes[sRegExToFind], sSource);
         }

@@ -37,7 +37,12 @@ namespace O2.API.AST.ExtensionMethods
             var methodDeclaration = expression.parent<MethodDeclaration>();
             if (methodDeclaration != null)
                 o2AstResolver.resolver.RunLookupTableVisitor(methodDeclaration);
-
+            else
+            {
+                var constructorDeclaration = expression.parent<ConstructorDeclaration>();
+                if (constructorDeclaration != null)
+                    o2AstResolver.resolver.RunLookupTableVisitor(constructorDeclaration);
+            }
             //resolver.Initialize(parseInformation, memberReferenceExpression.StartLocation.Line, memberReferenceExpression.StartLocation.Column);
             //resolver.RunLookupTableVisitor(memberReferenceExpression);
 

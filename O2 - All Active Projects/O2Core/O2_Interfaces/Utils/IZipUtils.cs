@@ -11,7 +11,7 @@ namespace O2.Interfaces.Utils
         List<String> getListOfFilesInZip(String sZipFileToLoad);
         string unzipFile(string fileToUnzip);
         string unzipFile(string fileToUnzip, string targetFolder);
-        List<string> unzipFileAndReturtListOfUnzipedFiles(string fileToUnzip);
-        List<string> unzipFileAndReturtListOfUnzipedFiles(string fileToUnzip, string targetFolder);
+        List<string> unzipFileAndReturnListOfUnzipedFiles(string fileToUnzip);
+        List<string> unzipFileAndReturnListOfUnzipedFiles(string fileToUnzip, string targetFolder);
     }
 }
