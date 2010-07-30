@@ -234,7 +234,7 @@ namespace O2.Cmd.SpringMvc.PythonScripts
                         if (extension == ".jar" && false == processJarFiles)     // handle the case where we don't want to process the Jar files
                             return;
                         targetFolder = Path.Combine(targetFolder, Path.GetFileName(fileToProcess).Replace(".", "_"));
-                        var unzipedFiles = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(fileToProcess, targetFolder);
+                        var unzipedFiles = new zipUtils().unzipFileAndReturnListOfUnzipedFiles(fileToProcess, targetFolder);
                         foreach (var unzipedFile in unzipedFiles)
                             getPythonStringTargetFile(unzipedFile, targetFolder, processJarFiles);
                         break;

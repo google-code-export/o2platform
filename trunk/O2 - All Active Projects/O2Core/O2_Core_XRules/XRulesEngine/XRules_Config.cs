@@ -15,7 +15,7 @@ namespace O2.Core.XRules.XRulesEngine
         {
             PathTo_XRulesDatabase_fromO2 = PublicDI.config.LocalScriptsFolder; // @"C:\O2\O2Scripts_Database\_Scripts";
             PathTo_XRulesDatabase_fromLocalDisk = PublicDI.config.LocallyDevelopedScriptsFolder; //@"C:\O2\_XRules_Local";
-            PathTo_XRulesTemplates = PublicDI.config.LocallyDevelopedTemplatesFolder; //  PathTo_XRulesDatabase_fromO2 + @"\_Templates";
+            PathTo_XRulesTemplates = PublicDI.config.ScriptsTemplatesFolder; //  PathTo_XRulesDatabase_fromO2 + @"\_Templates";
             PathTo_XRulesCompiledDlls = PathTo_XRulesDatabase_fromO2 + @"\..\_CompiledDlls";
             Files.checkIfDirectoryExistsAndCreateIfNot(PathTo_XRulesDatabase_fromO2);
             Files.checkIfDirectoryExistsAndCreateIfNot(PathTo_XRulesDatabase_fromLocalDisk);            

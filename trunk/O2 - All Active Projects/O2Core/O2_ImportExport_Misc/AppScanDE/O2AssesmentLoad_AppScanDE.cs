@@ -44,7 +44,7 @@ namespace O2.ImportExport.Misc.AppScanDE
                     //fileToLoad = Files.MoveFile(fileToLoad, (fileToLoad + ".zip"));
 
                     // Path.GetFileNameWithoutExtension(fileToLoad));
-                    filesToSearch = new zipUtils().unzipFileAndReturtListOfUnzipedFiles(fileOrFolderToLoad,
+                    filesToSearch = new zipUtils().unzipFileAndReturnListOfUnzipedFiles(fileOrFolderToLoad,
                                                                                         tempUnzipFolder);
                 }
 
