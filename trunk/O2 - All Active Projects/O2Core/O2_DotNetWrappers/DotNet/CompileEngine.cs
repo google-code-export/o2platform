@@ -223,7 +223,22 @@ namespace O2.DotNetWrappers.DotNet
         public Assembly compileSourceFiles(List<String> sourceCodeFiles, string mainClass,
                                                  string outputAssemblyName)
         {
+            return compileSourceFiles(sourceCodeFiles, mainClass, outputAssemblyName, false);
+        }
+
+        public Assembly compileSourceFiles(List<String> sourceCodeFiles, string mainClass,
+                                                 string outputAssemblyName, bool workOffline)
+        {            
             sourceCodeFiles = checkForNoCompileFiles(sourceCodeFiles);
+
+            // see if we already have a cache of all these files
+            var filesMd5 = sourceCodeFiles.filesContents().md5Hash();
+            var cachedCompilation = getCachedCompiledAssembly_MD5(filesMd5);
+            if (cachedCompilation.notNull())
+            {
+                compiledAssembly = cachedCompilation;
+                return cachedCompilation;
+            }
             if (sourceCodeFiles.Count == 0)
                 return null;
             string errorMessages = "";
@@ -234,17 +249,58 @@ namespace O2.DotNetWrappers.DotNet
             mapReferencesIncludedInSourceCode(sourceCodeFiles, referencedAssemblies);
             sourceCodeFiles = sourceCodeFiles.onlyValidFiles();
             if (sourceCodeFiles.size() == 0)  // means there are no files to compile
-                return null;
-            tryToResolveReferencesForCompilation(referencedAssemblies);                 // try to make sure all assemblies are available for compilation
+                return null;            
+
+            tryToResolveReferencesForCompilation(referencedAssemblies, workOffline);                 // try to make sure all assemblies are available for compilation
             if (compileSourceFiles(sourceCodeFiles, referencedAssemblies.ToArray(), ref compiledAssembly, ref errorMessages, false
                 /*verbose*/, mainClass, outputAssemblyName))
             {
                 PublicDI.log.debug("Compilated OK to: {0}", compiledAssembly.Location);
+                setCachedCompiledAssembly(filesMd5, compiledAssembly);                  // store the assembly under the original files MD5 hash (so that next time we don't have to calculate each file script dependency)
                 return compiledAssembly;
             }
             //foreach (var assembly in referencedAssemblies)
             //    "R: {0}".info(assembly);
             PublicDI.log.error("Compilation failed: {0}", errorMessages);
+            return null;
+        }
+
+        private void setCachedCompiledAssembly(List<string> sourceCodeFiles, Assembly compiledAssembly)
+        {
+            if (sourceCodeFiles.notNull())
+            {
+                var filesMd5 = sourceCodeFiles.filesContents().md5Hash();
+                setCachedCompiledAssembly(filesMd5, compiledAssembly);
+            }            
+        }
+
+        public void setCachedCompiledAssembly(string key, Assembly compiledAssembly)
+        {
+            if (key.valid() && 
+                compiledAssembly.notNull() && 
+                compiledAssembly.Location.valid() &&
+                compiledAssembly.Location.fileExists())
+            {                            
+                    CachedCompiledAssemblies.add(key, compiledAssembly.Location);
+            }
+        }
+        public Assembly getCachedCompiledAssembly_MD5(List<string> sourceCodeFiles)
+        {
+            var filesMd5 =  sourceCodeFiles.filesContents().md5Hash();
+            return getCachedCompiledAssembly_MD5(filesMd5);
+        }
+
+        public Assembly getCachedCompiledAssembly_MD5(string key)
+        {
+            if (CachedCompiledAssemblies.hasKey(key))
+            {
+                var cachedAssembly = CachedCompiledAssemblies[key];
+                if (cachedAssembly.fileExists())
+                {
+                    "found cached compiled assembly: {0}".info(cachedAssembly);
+                    return cachedAssembly.assembly();
+                }
+            }
             return null;
         }
 
@@ -654,6 +710,7 @@ namespace O2.DotNetWrappers.DotNet
                 LocalScriptFileMappings.add(file, mappedFilePath);
             return mappedFilePath;
         }
+
         public static string getCachedCompiledAssembly(string scriptFile)
         {
             if (CachedCompiledAssemblies.hasKey(scriptFile))
@@ -677,7 +734,7 @@ namespace O2.DotNetWrappers.DotNet
             return "";
         }
 
-        public static void tryToResolveReferencesForCompilation(List<string> referencedAssemblies)
+        public static void tryToResolveReferencesForCompilation(List<string> referencedAssemblies, bool workOffline)
         {
             var currentExecutablePath = PublicDI.config.CurrentExecutableDirectory;
             foreach (var reference in referencedAssemblies)
@@ -691,8 +748,9 @@ namespace O2.DotNetWrappers.DotNet
                 }
                 else
                 {
-                    populateCachedListOfGacAssemblies();                                                     
-                    new O2Svn().tryToFetchAssemblyFromO2SVN(reference);
+                    populateCachedListOfGacAssemblies();     
+                    if (workOffline.isFalse())                            
+                        new O2Svn().tryToFetchAssemblyFromO2SVN(reference);
                 }
             }
         }

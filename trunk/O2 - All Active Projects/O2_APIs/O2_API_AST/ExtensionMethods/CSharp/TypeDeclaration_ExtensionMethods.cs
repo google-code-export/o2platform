@@ -18,7 +18,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             // move to method IClass.typeDeclaration();
             var typeName = iClass.Name;
 
-            var newType = namespaceDeclaration.types(typeName);		// check if already exists and if it does return it
+            var newType = namespaceDeclaration.type(typeName);		// check if already exists and if it does return it
             if (newType != null)
                 return newType;
 
@@ -59,7 +59,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
                 // move to method IClass.typeDeclaration();
                 var typeName = iClass.Name;
 
-                var newType = compilationUnit.types(typeName);		// check if already exists and if it does return it
+                var newType = compilationUnit.type(typeName);		// check if already exists and if it does return it
                 if (newType != null)
                     return newType;
 
@@ -99,7 +99,7 @@ namespace O2.API.AST.ExtensionMethods.CSharp
         // should be merged with the one using CompilationUnit
         public static TypeDeclaration add_Type(this NamespaceDeclaration namespaceDeclaration, string typeName)
         {
-            var newType = namespaceDeclaration.types(typeName);		// check if already exists and if it does return it
+            var newType = namespaceDeclaration.type(typeName);		// check if already exists and if it does return it
             if (newType != null)
                 return newType;            
 
@@ -173,6 +173,13 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return typeDeclarations.types(false);
         }
 
+        public static List<TypeDeclaration> types(this List<TypeDeclaration> typeDeclarations, string typeToFind)
+        { 
+            return (from typeDeclaration in typeDeclarations
+                    where typeDeclaration.Name == typeToFind
+                    select typeDeclaration).ToList();
+        }
+
         public static List<TypeDeclaration> types(this List<TypeDeclaration> typeDeclarations, bool recursive)
         {
             var types = new List<TypeDeclaration>();
@@ -203,15 +210,15 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return types;
         }
 
-        public static TypeDeclaration types(this CompilationUnit compilationUnit, string typeToFind)
+        /*public static TypeDeclaration type(this CompilationUnit compilationUnit, string typeToFind)
         {
             foreach (var type in compilationUnit.types())
                 if (type.Name == typeToFind)
                     return type;
             return null;
-        }
+        }*/
 
-        public static TypeDeclaration types(this NamespaceDeclaration namespaceDeclaration, string typeToFind)
+        public static TypeDeclaration type(this NamespaceDeclaration namespaceDeclaration, string typeToFind)
         {
             foreach (var type in namespaceDeclaration.types())
                 if (type.Name == typeToFind)
@@ -225,6 +232,16 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             foreach (var typeDeclaration in typeDeclarations)
                 values.Add(typeDeclaration.Name);
             return values;
+        }
+
+        public static List<TypeDeclaration> types(this IParser parser, string name)
+        {
+            return parser.CompilationUnit.types(name);
+        }
+
+        public static List<TypeDeclaration> types(this CompilationUnit compilationUnit, string name)
+        {
+            return compilationUnit.types(true).types(name);
         }
 
         public static TypeDeclaration type(this IParser parser, string name)
@@ -250,6 +267,13 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return typeDeclaration.Name;
         }
 
+        public static List<INode> iNodes(this List<TypeDeclaration> typeDeclarations)
+        {
+            var iNodes = new List<INode>();
+            foreach (var typeDeclaration in typeDeclarations)
+                iNodes.AddRange(typeDeclaration.iNodes());
+            return iNodes;
+        }
         #endregion
         
     }

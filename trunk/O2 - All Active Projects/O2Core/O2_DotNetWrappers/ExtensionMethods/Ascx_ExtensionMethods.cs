@@ -100,6 +100,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         }
 
+        public static List<Button> buttons(this Control control)
+        {
+            return control.controls<Button>(true);
+        }
+
+        public static Button button(this Control control, string text)
+        {
+            foreach (var button in control.buttons())
+                if (button.get_Text() == text)
+                    return button;
+            return null;
+        }
+
         #endregion
 
         #region Label
@@ -811,6 +824,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return textBox;
         }
 
+        public static TreeNode select(this TreeView treeView, string text)
+        {
+            foreach (var treeNode in treeView.nodes())
+                if (treeNode.get_Text() == text)
+                    return treeNode.selected();
+            return null;
+        }
+
         public static TextBox select(this TextBox textBox, int start, int length)
         {
             textBox.invokeOnThread(() => textBox.Select(start, length));
@@ -845,6 +866,18 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 {
                     textBox.SelectionLength = 0;
                     textBox.SelectedText = textToInsert;
+                    return textBox;
+                });
+        }
+
+        public static TextBox replaceText(this TextBox textBox, string textToFind, string textToInsert)
+        {
+            return (TextBox)textBox.invokeOnThread(
+                () =>
+                {
+                    var selectionStart = textBox.SelectionStart;
+                    textBox.Text = textBox.Text.Replace(textToFind, textToInsert);
+                    textBox.SelectionStart = selectionStart;
                     return textBox;
                 });
         }
@@ -946,6 +979,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                           control.Controls.Add(treeView);
                                           //change the default dehaviour of treeviews of not selecting on mouse click (big problem when using right click) 
                                           treeView.NodeMouseClick += (sender, e) => { treeView.SelectedNode = e.Node; };
+                                          treeView.HideSelection = false;
                                           return treeView;
                                       });
         }
@@ -982,7 +1016,9 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                                                                       Text = nodeText,
                                                                                       Tag = nodeTag
                                                                                   };
+                                                               //treeNode.ForeColor = Color.Green;  // to handle the weird 'treeView with 1 Node makes the TreeNode Text  white' bug
                                                                treeView.Nodes.Add(treeNode);
+                                                               treeView.Refresh();
                                                                return treeNode;
                                                            }));
         }
@@ -1103,6 +1139,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                             ? item.Key.Substring(0, maxNodeTextSize).add("...")
                                             : item.Key;
                         TreeNode newNode = new TreeNode { Text = nodeText, Name = nodeText };
+                        newNode.ForeColor = Color.Black;  // to handle the weird 'treeView with 1 Node makes the TreeNode Text  white' bug
                         newNode.ImageIndex = newNode.SelectedImageIndex = 0;
                         newNode.Tag = item.Value;                        
                         if (item.Value.size() > 1)
@@ -2047,6 +2084,19 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 {
                     richTextBox.SelectionLength = 0;
                     richTextBox.SelectedText = textToInsert;
+                    return richTextBox;
+                });
+        }
+
+        public static RichTextBox replaceText(this RichTextBox richTextBox, string textToFind, string textToInsert)
+        {
+
+            return (RichTextBox)richTextBox.invokeOnThread(
+                () =>
+                {
+                    var selectionStart = richTextBox.SelectionStart;
+                    richTextBox.Rtf = richTextBox.Rtf.Replace(textToFind, textToInsert);
+                    richTextBox.SelectionStart = selectionStart;            // put the cursor roughly about where it was
                     return richTextBox;
                 });
         }

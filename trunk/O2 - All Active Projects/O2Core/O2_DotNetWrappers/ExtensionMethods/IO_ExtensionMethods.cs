@@ -211,6 +211,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 Files.WriteFileContent(file, fileContents);            
         }
 
+        public static string filesContents(this List<string> files)
+        {
+            var filesContents = "";
+            foreach (var file in files)
+                filesContents += file.fileContents().line();
+            return filesContents;
+        }
+
         public static string fileContents(this string file)
         {
             return file.contents();

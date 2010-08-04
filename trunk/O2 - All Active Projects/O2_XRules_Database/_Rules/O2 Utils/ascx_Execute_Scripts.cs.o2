@@ -510,13 +510,20 @@ namespace O2.XRules.Database
         {
             O2Thread.mtaThread(() =>
                 {
-                    showInfo("Updating XRules using via SVN ...");
-                    SvnApi.SyncLocalFolderWithO2XRulesDatabase();
-                    showInfo("SVN XRules updated Update completed");
-                    //1000.sleep();
-                    checkForClickOnceUpdates();
-                    //1000.sleep();
-                    showInfo(welcomeMessage);
+                    try
+                    {
+                        showInfo("Updating XRules using via SVN ...");
+                        SvnApi.SyncLocalFolderWithO2XRulesDatabase();
+                        showInfo("SVN XRules updated Update completed");
+                        //1000.sleep();
+                        checkForClickOnceUpdates();
+                        //1000.sleep();
+                        showInfo(welcomeMessage);
+                    }
+                    catch (Exception ex)
+                    {
+                        ex.log("in syncO2ViaSvn");
+                    }
                     svnSyncComplete.Set();
                 });
             //new Wizard_SyncXRulesViaSvn().runWizard();

@@ -231,6 +231,12 @@ namespace O2.Kernel.ExtensionMethods
             return Environment.NewLine + targetString + Environment.NewLine;
         }
 
+        public static bool isInt(this string value)
+        {
+            int a = 0;
+            return Int32.TryParse(value, out a);
+        }
+
         public static int toInt(this string _string)
         {
             Int32 value;

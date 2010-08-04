@@ -80,5 +80,14 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return results.ToList();
         }
 
+        public static List<T> iNodes<T>(this List<INode> iNodes)
+                 where T : INode
+        {
+            var iNodesInT = new List<T>();
+            foreach (var iNode in iNodes)
+                iNodesInT.AddRange(iNode.iNodes<T>());
+            return iNodesInT;
+        }
+    
     }
 }

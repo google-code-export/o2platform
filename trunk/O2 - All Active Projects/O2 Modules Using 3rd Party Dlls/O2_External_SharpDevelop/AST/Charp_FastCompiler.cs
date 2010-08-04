@@ -36,6 +36,7 @@ namespace O2.External.SharpDevelop.AST
         public CompilerResults CompilerResults { get; set; }
         public bool ExecuteInStaThread { get; set; }
         public bool ExecuteInMtaThread { get; set; }
+        public bool WorkOffline { get; set; }
         
         //public O2Timer executionTime { get; set; }
         
@@ -62,6 +63,7 @@ namespace O2.External.SharpDevelop.AST
         public CSharp_FastCompiler()
         {        
         	DebugMode = false;				// set to true to see details about each AstCreation and Compilation stage
+            DebugMode = true;	
         	InvocationParameters = new Dictionary<string, object>();
             ExtraSourceCodeFilesToCompile = new List<String>();
         	ReferencedAssemblies = getDefaultReferencedAssemblies();
@@ -445,15 +447,16 @@ namespace O2.External.SharpDevelop.AST
                                         "generateDebugSymbols", 
                                         "debugSymbols"}, true, (value) => generateDebugSymbols = true);
                 comment.Text.eq("StaThread", () => { ExecuteInStaThread = true; });
-                comment.Text.eq("MtaThread", () => { ExecuteInMtaThread = true; });  
+                comment.Text.eq("MtaThread", () => { ExecuteInMtaThread = true; });
+                comment.Text.eq("WorkOffline", () => { WorkOffline = true; });  
             }
 
             //resolve location of ExtraSourceCodeFilesToCompile
 
             resolveFileLocationsOfExtraSourceCodeFilesToCompile();                        
-
+    
             //make sure the referenced assemblies are in the current execution directory
-            CompileEngine.tryToResolveReferencesForCompilation(ReferencedAssemblies);            
+            CompileEngine.tryToResolveReferencesForCompilation(ReferencedAssemblies, WorkOffline);            
 
             if (onlyAddReferencedAssemblies.isFalse())
             {

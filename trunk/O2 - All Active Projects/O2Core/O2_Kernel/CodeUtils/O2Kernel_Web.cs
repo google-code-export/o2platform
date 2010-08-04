@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 using O2.Kernel.ExtensionMethods;
+using System.Net.NetworkInformation;
 
 namespace O2.Kernel.CodeUtils
 {
@@ -79,5 +80,26 @@ namespace O2.Kernel.CodeUtils
             return null;
         }
 
+        #region Ping
+        public bool online()
+        {
+            return ping("www.google.com");
+        }
+
+        public bool ping(string address)
+        {         
+            try
+            {
+                var pPing = new System.Net.NetworkInformation.Ping();
+                PingReply prPingReply = pPing.Send(address);
+                return (prPingReply != null && prPingReply.Status == IPStatus.Success) ? true : false;
+            }
+            catch (Exception ex)
+            {
+                DI.log.error("in Ping: {0}", ex.Message);
+                return false;
+            }
+        }
+        #endregion
     }
 }

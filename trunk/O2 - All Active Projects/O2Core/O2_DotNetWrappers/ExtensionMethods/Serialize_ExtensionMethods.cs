@@ -19,6 +19,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return Serialize.createSerializedXmlFileFromObject(_object, file);
         }
 
+        public static string serialize(this object _object, bool serializeToFile)
+        {
+            if (serializeToFile)
+                return _object.serialize();
+            return Serialize.createSerializedXmlStringFromObject(_object);
+        }
+
         public static T deserialize<T>(this string file)
         {
             return (T)Serialize.getDeSerializedObjectFromXmlFile(file, typeof(T));

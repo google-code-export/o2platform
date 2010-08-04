@@ -688,7 +688,9 @@ namespace O2.Kernel.InterfacesBaseImpl
             // try with load method #1
             try
             {
-                new O2Svn().tryToFetchAssemblyFromO2SVN(assemblyToLoad);
+                if (System.IO.File.Exists(assemblyToLoad) == false &&
+                    System.IO.File.Exists(System.IO.Path.Combine( PublicDI.config.CurrentExecutableDirectory,assemblyToLoad)))         // if this assembly is not on the current executable folder                                 
+                    new O2Svn().tryToFetchAssemblyFromO2SVN(assemblyToLoad);
 
                 return Assembly.LoadFrom(assemblyToLoad);
             }

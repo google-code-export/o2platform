@@ -248,6 +248,22 @@ namespace O2.Views.ASCX.ExtensionMethods
 
         #endregion
 
-
+        #region events
+        public static ascx_TableList afterSelect(this ascx_TableList tableList, Action<List<ListViewItem>> callback)
+        {
+            tableList.getListViewControl().SelectedIndexChanged +=
+                (sender, e) =>
+                {
+                    if (callback.notNull())
+                    {
+                        var selectedItems = new List<ListViewItem>();
+                        foreach (ListViewItem item in tableList.getListViewControl().SelectedItems)
+                            selectedItems.Add(item);
+                        callback(selectedItems);
+                    }
+                };
+            return tableList;
+        }
+        #endregion
     }
 }

@@ -451,6 +451,16 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return control.control<T>(true);
         }
 
+        public static Control control<T>(this T hostControl, string controlName, bool recursive)
+            where T : Control
+        {
+            var controls = hostControl.controls(recursive);
+            foreach (var control in controls)
+                if (control.typeName() == controlName)
+                    return control;
+            return null;
+        }
+
         public static T control<T>(this Control control, bool searchRecursively)
             where T : Control
         {

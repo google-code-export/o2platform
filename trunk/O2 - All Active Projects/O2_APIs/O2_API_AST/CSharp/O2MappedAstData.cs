@@ -17,7 +17,7 @@ using ICSharpCode.NRefactory;
 namespace O2.API.AST.CSharp
 {
     public class O2MappedAstData : IDisposable
-    {    	
+    {            	
         public O2AstResolver O2AstResolver { get; set; }
         public MapAstToDom MapAstToDom { get; set; }
         public MapAstToNRefactory MapAstToNRefactory { get; set; }
@@ -55,6 +55,11 @@ namespace O2.API.AST.CSharp
 			FileToINodes = new Dictionary<string, GetAllINodes>();            
 			FileToCompilationUnit = new Dictionary<string,CompilationUnit>();
             FileToSpecials = new Dictionary<string, List<ISpecial>>(); 
+        }
+
+        public O2MappedAstData(string fileToLoad) : this()
+        {            
+            loadFile(fileToLoad);
         }
 
         public void loadFile(string fileOrCode)

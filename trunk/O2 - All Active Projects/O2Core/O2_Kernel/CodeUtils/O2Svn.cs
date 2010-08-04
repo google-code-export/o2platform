@@ -33,10 +33,14 @@ namespace O2.Kernel.CodeUtils
                     try
                     {
                         if (AssembliesCheckedIfExists.Contains(assemblyToLoad) || AssembliesCheckedIfExists.Contains(Path.GetFileNameWithoutExtension(assemblyToLoad)))     // for performace reasons only check this once
-                            return;
-
+                            return;                        
                         "Trying to fetch assembly from O2's SVN repository: {0}".info(assemblyToLoad);
                         AssembliesCheckedIfExists.Add(assemblyToLoad);
+                        if (new O2Kernel_Web().online() == false)
+                        {
+                            "We are currently offline, skipping the check".debug();
+                            return;
+                        }
                         if (Path.GetExtension(assemblyToLoad) == ".dll" ||
                             Path.GetExtension(assemblyToLoad) == ".exe")  // if there is no valid extension is it most likely a GAC reference
                         {
