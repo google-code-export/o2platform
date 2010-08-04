@@ -130,6 +130,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                             break;
                         case "IndexerExpression":                            
                             var indexerExpression = (IndexerExpression)iNode;
+                            parentStreamNode = o2CodeStream.add_INode(iNode, parentStreamNode);
                             o2CodeStream.createStream(indexerExpression.TargetObject,identifier,  parentStreamNode);
 							break;
                         default:

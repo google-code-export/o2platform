@@ -37,6 +37,7 @@ namespace O2.XRules.Database.APIs
 		public AutoResetEvent WaitForIELaunch {get;set;}
 		public AutoResetEvent WaitForIEClose {get;set;}
  		public static bool FlashingEnabled { get; set; }
+ 		public static bool WaitingEnabled { get; set; }
  		public static bool ScrollOnFlash { get; set; } 		
  		public static int FlashingCount { get; set; }
  		
@@ -48,6 +49,7 @@ namespace O2.XRules.Database.APIs
 		{
 			WaitForIEClose = new AutoResetEvent(false);
 			WaitForIELaunch = new AutoResetEvent(false);			
+			WaitingEnabled = true;
 			FlashingEnabled = true;
 			ScrollOnFlash = false;
 			FlashingCount = 3;
@@ -159,7 +161,8 @@ namespace O2.XRules.Database.APIs
 			"closing WatiN_IE".info();
 			try
 			{
-				IE.Close();
+                //if (IE.Disposed.isFalse())
+				    IE.Close();
 			}
 			catch(Exception ex)
 			{

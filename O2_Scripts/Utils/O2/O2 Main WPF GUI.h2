@@ -150,7 +150,10 @@ wpfGui.add_Section("OWASP Projects", "Here are several examples of OWASP Project
 	  .add_Label("Testing Guide  (soon)",true)
 	  .add_Label("Code Review  (soon)",true)
 	  .add_Label("Tools:")
-	  .add_Link_O2Script("Edit the OWASP Website","MediaWikiEditor.cs.o2");
+	  .add_Link_O2Script("Edit the OWASP Website","MediaWikiEditor.cs.o2")
+	  .add_Link_O2Script("OWASP Wiki Page Edit","Tool - OWASP Wiki Page Edit.h2")
+	  .add_Link_O2Script("OWASP Wiki Latest Changes","Tool - OWASP WIKI Diff of Latests Changes.h2");
+	  
 
 wpfGui.add_Section("3rd Party Tools")	  
 	  .add_Label("FindBugs (soon)")
@@ -221,7 +224,10 @@ wpfGui.add_Section("Help", "If you are looking for help, here are the best place
 	  .add_Link("Rebuild Main Control", 
 	  		()=&gt;{
 		  			wpfGui.GuiSections[0].WinFormsControl = buildMainControl();
-		  		});
+		  		})
+	  .add_Link_O2Script("Edit O2Platform.com Wiki Page","ascx_MediaWiki_PageEditor_Simple.cs")
+	  .add_Link_O2Script("O2Platform.com Latest Changes","Tool - O2Platform.com WIKI Diff of Latests Changes.h2");
+		  		
 	  
 	  
 	  

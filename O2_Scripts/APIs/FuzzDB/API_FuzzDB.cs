@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using System.Reflection;
 using System.Text;
 using O2.Interfaces.O2Core;
@@ -10,9 +11,30 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.Zip;
+using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX.ExtensionMethods;
 
 namespace O2.XRules.Database.APIs
 {
+    public class API_FuzzDB_View
+    {
+    	public static void show()
+    	{
+    		var panel = O2Gui.open<Panel>("FuzzDb",400,500);
+    		var fuzzDb = new API_FuzzDB();
+    		var treeView = panel.add_TreeView();
+    		if (fuzzDb.isInstalled().isFalse())    		
+    			treeView.add_Node("Error:FuzzDB Not installed");
+    		else
+    		{
+    			treeView.add_Node("XSS Payloads")
+    					.add_Nodes(fuzzDb.payloads_Xss());
+    		}
+    	}
+    }
+    
+    
+    
     public class API_FuzzDB
     {    
     	public string _currentVersion = "fuzzdb-1.08";

@@ -151,12 +151,56 @@ namespace O2.XRules.Database.APIs
  	
  	public static class WatiN_IE_ExtensionMethods_Misc
     {
+    	public static WatiN_IE showMessage(this WatiN_IE ie, string message, int sleepValue)
+    	{
+    		ie.showMessage(message);
+    		ie.wait(sleepValue);
+    		return ie;
+    	}
+    	public static WatiN_IE showMessage(this WatiN_IE ie, string message)
+    	{    		
+    		message = message.Replace("".line(), "<br/>");
+    		var messageTemplate = "<html><body><div style = \"position:absolute; top:50%; width:100%; text-align: center;font-size:20pt; font-family:Arial\">{0}</div></body></html>";
+    		return ie.set_Html(messageTemplate.format(message));    		
+    	}
     	// uri & url
  
+  		public static string html (this HTMLHtmlElementClass htmlElementClass)
+  		{
+  			if (htmlElementClass.notNull())
+  				return htmlElementClass.outerHTML;
+  			return "";
+  		}
+  		
+ 		public static HTMLHtmlElementClass documentElement (this WatiN_IE ie)
+ 		{
+ 			try
+    		{
+	    		if (ie.IE.InternetExplorer.notNull() && ie.IE.InternetExplorer is IWebBrowser2)
+	    		{
+	    			var webBrowser = (IWebBrowser2)ie.IE.InternetExplorer;
+	    			if (webBrowser.Document.notNull() && webBrowser.Document is HTMLDocumentClass)
+	    			{
+	    				var htmlDocument = (HTMLDocumentClass)webBrowser.Document;
+	    				if (htmlDocument.documentElement.notNull() && htmlDocument.documentElement is HTMLHtmlElementClass)
+	    					return (HTMLHtmlElementClass)htmlDocument.documentElement;
+	    			}    			
+	    		}    		
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in WatiN_IE documentElement()");
+    		}
+    		return null;
+ 		}
+ 		
  		public static string html(this WatiN_IE ie)
     	{
-    		try
-    		{
+    		
+    		return ie.documentElement().html();
+    		/*
+			try
+    		{    			
 	    		if (ie.IE.InternetExplorer.notNull() && ie.IE.InternetExplorer is IWebBrowser2)
 	    		{
 	    			var webBrowser = (IWebBrowser2)ie.IE.InternetExplorer;
@@ -172,7 +216,18 @@ namespace O2.XRules.Database.APIs
     		{
     			ex.log("in WatiN_IE html()");
     		}
-    		return "";
+    		return "";*/
+    	}
+    	
+    	public static WatiN_IE html(this WatiN_IE ie, string newHtml)
+    	{
+    		return ie.set_Html(newHtml);
+    	}
+    	
+    	public static WatiN_IE set_Html(this WatiN_IE ie, string newHtml)
+    	{
+    		ie.open(newHtml.saveWithExtension(".html"));
+    		return ie;
     	}
     	
     	public static Uri uri(this WatiN_IE watinIe)
@@ -332,7 +387,7 @@ namespace O2.XRules.Database.APIs
  
     	public static WatiN_IE wait(this WatiN_IE watinIe, int miliseconds)
     	{
-    		if (miliseconds > 0)
+    		if (WatiN_IE.WaitingEnabled && miliseconds > 0)
     			watinIe.sleep(miliseconds);
     		return watinIe;
     	}
@@ -449,7 +504,13 @@ namespace O2.XRules.Database.APIs
  		
  		public static string lastAlert(this AlertAndConfirmDialogHandler alertHandler)
  		{
- 			return alertHandler.alerts().Last();
+ 			if (alertHandler.notNull() && 
+ 				alertHandler.alerts().notNull() && 
+ 				alertHandler.alerts().size()>0) 				
+ 			{
+	 			return alertHandler.alerts().Last();
+	 		}
+ 			return "";
  		}
  		
  	}
@@ -1307,10 +1368,10 @@ namespace O2.XRules.Database.APIs
     	}
     	public static ICredential askUserForUsernameAndPassword(this WatiN_IE watinIe, string loginType)
     	{
-	   	var credential = ascx_AskUserForLoginDetails.ask();
-	   	if (loginType.valid())
-		   	credential.CredentialType = loginType;
-	   	return credential;
+		   	var credential = ascx_AskUserForLoginDetails.ask();
+		   	if (loginType.valid())
+			   	credential.CredentialType = loginType;
+		   	return credential;
 	    }
     
     }

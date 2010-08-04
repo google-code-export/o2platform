@@ -33,6 +33,9 @@ using GraphSharp.Controls;
 using O2.XRules.Database.Utils.ExtensionMethods;
 using O2.XRules.Database.Utils;
 using O2.XRules.Database.Findings;
+using O2.XRules.Database.APIs;
+
+//O2File:WPF_GUI.cs
 
 //O2File:Ast_Engine_ExtensionMethods.cs
 //O2File:Findings_ExtensionMethods.cs
@@ -42,6 +45,8 @@ using O2.XRules.Database.Findings;
 //O2File:ascx_GraphAst_MethodCalls.cs
 //O2File:ascx_WriteRule.cs
 //O2File:ascx_ManualMethodStreams.cs
+//O2File:ascx_SearchAST.cs
+//O2File:ascx_ViewAST.cs
 
 //O2File:HtmlAgilityPack_ExtensionMethods.cs 
 //O2File:Scripts_ExtensionMethods.cs   
@@ -80,7 +85,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		public ascx_WriteRule WriteRule_Step { get; set; }
 		
 		public ascx_ManualMethodStreams ManualMethodStreams_Step  { get; set; }
-	
+		public ascx_SearchAST SearchAST_Step  { get; set; }
+		public ascx_ViewAST ViewAST_Step { get; set; }
 		//public Dictionary<IMethod, string> MethodStreams { get; set; }
 
 		public void start()
@@ -108,14 +114,33 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 	 	
 		public void buildGui() 
 		{		 
-			var statusStrip = this.parentForm().controls(true).control<StatusStrip>();
+								
+			/*var statusStrip = this.parentForm().controls(true).control<StatusStrip>();
 			
 			if (statusStrip != null)
 				StatusLabel = (ToolStripStatusLabel)statusStrip.Items[0];
 			else
 				StatusLabel = this.add_StatusStrip();
-			
+			*/
+			var wpfGui = this.add_Control<WPF_GUI>();
+			wpfGui.insert_Below<ascx_LogViewer>(100);
+			TopProgressBar = wpfGui.insert_Below<ProgressBar>(10);
+			wpfGui.buildGui();
+			StatusLabel = wpfGui.StatusLabel;
 			statusMessage("building Gui");
+			wpfGui.add_Section("O2 AST Engine", "This is the development enviroment for performing advanced analysis on top of O2's .NET AST Engine")
+				  .add_Link("Load Artifacts",()=> step_LoadArtifacts())
+				  .add_Link("view AST",()=> step_ViewAST())
+				  .add_Link("search AST",()=> step_SearchAST())
+				  .add_Link("search Comments",()=> step_SearchComments())
+				  .add_Link("who calls who?",()=> step_WhoCallsWho())
+				  .add_Link("method streams",()=> step_MethodStreams())
+				  .add_Link("manual method streams",()=> step_ManualMethodStream())
+				  .add_Link("write rule",()=> step_WriteRule())
+				  .add_Link("view findings",()=> step_ViewFindings());
+						
+			HostPanel = wpfGui.WinFormPanel;
+			return;
 			//add_StatusStrip();
 			//statusStrip.set_Text("test");
 			var controls = this.add_1x1("actions", "", false, 40);		
@@ -127,7 +152,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 								         .append_Link("method streams", ()=> step_MethodStreams())
 								         .append_Link("manual method stream", ()=> step_ManualMethodStream())
 								         .append_Link("write rule", ()=> step_WriteRule())								         
-								         .append_Link("view findings",()=> step_ViewFindings())
+								         .append_Link("view findings",()=> step_WriteRule())
 								         .append_Control<ProgressBar>();
 			TopProgressBar.align_Right(controls[0]);        
 			TopProgressBar.top(TopProgressBar.Top -4);
@@ -147,14 +172,16 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			return new Step_LoadArtifacts(this);
 		}
 		
-		public Step_ViewAST step_ViewAST()
+		public ascx_ViewAST step_ViewAST()
 		{
-			return new Step_ViewAST(this);
+			ViewAST_Step = show_Step<ascx_ViewAST>(ViewAST_Step);
+			return ViewAST_Step;
 		}
 		
-		public Step_SearchAST step_SearchAST()
+		public ascx_WriteRule step_SearchAST()
 		{
-			return new Step_SearchAST(this);
+			WriteRule_Step = show_Step<ascx_WriteRule>(WriteRule_Step);
+			return WriteRule_Step;
 		}			
 		
 		public Step_SearchComments step_SearchComments()
@@ -175,7 +202,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		
 		public ascx_ManualMethodStreams step_ManualMethodStream()
 		{
-			this.HostPanel.clear();
+			ManualMethodStreams_Step = show_Step<ascx_ManualMethodStreams>(ManualMethodStreams_Step);
+			return ManualMethodStreams_Step;
+			
+			/*this.HostPanel.clear();
 			if (ManualMethodStreams_Step.isNull())
 			{
 				ManualMethodStreams_Step = this.HostPanel.add_Control<ascx_ManualMethodStreams>();
@@ -184,14 +214,17 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			else
 				this.HostPanel.add_Control(ManualMethodStreams_Step);
 			//WriteRule_Step
-			return ManualMethodStreams_Step;
+			return ManualMethodStreams_Step;*/
 		}
 		
 		
 		public ascx_WriteRule step_WriteRule()
 		{
+			WriteRule_Step = show_Step<ascx_WriteRule>(WriteRule_Step);
+			return WriteRule_Step;
+			
 			//WriteRule_Step = this.newInThread< new ascx_WriteRule();
-			this.HostPanel.clear();
+			/*this.HostPanel.clear();
 			if (WriteRule_Step.isNull())
 			{
 				WriteRule_Step = this.HostPanel.add_Control<ascx_WriteRule>();
@@ -200,12 +233,29 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			else
 				this.HostPanel.add_Control(WriteRule_Step);
 			//WriteRule_Step
-			return WriteRule_Step;
-		}
+			return WriteRule_Step;*/
+		}				
+		
 		
 		public Step_ViewFindings step_ViewFindings()
 		{
 			return  new Step_ViewFindings(this);			
+		}
+		
+		public T show_Step<T>(T step)
+			where T : Control
+			
+		{
+			this.HostPanel.clear();
+			if (step.isNull())
+			{
+				step = this.HostPanel.add_Control<T>();
+				step.invoke("buildGui");
+			}
+			else
+				this.HostPanel.add_Control(step);
+			//WriteRule_Step
+			return step;
 		}
 				
 		 
@@ -388,204 +438,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
 		}
 		
-		public class Step_ViewAST
-		{
-			public O2_DotNet_Ast_Engine AstEngine;
-			
-			public ascx_SourceCodeViewer CodeViewer { get; set; }
-			public TreeView DataTreeView { get; set; }
-			public Panel Options { get; set; }
-						
-			public bool Show_Ast { get; set; }
-			public bool Show_CodeDom { get; set; }
-			public bool Show_NRefactory { get; set; }			
-			
-			public Step_ViewAST(O2_DotNet_Ast_Engine astEngine)
-			{
-				AstEngine = astEngine;
-				buildGui();
-				loadDataInGui();
-			}
-			
-			public void buildGui()
-			{
-				AstEngine.HostPanel.clear();
-				
-				CodeViewer = AstEngine.HostPanel.add_SourceCodeViewer();   
-				DataTreeView = CodeViewer.insert_Left<TreeView>(200);     
-				Options = DataTreeView.insert_Below<Panel>(40); 
-				Options.add_CheckBox("View AST",0,0,(value)=> { this.Show_Ast = value;}).check();
-				Options.add_CheckBox("View CodeDom",0,95,(value)=> {this.Show_CodeDom = value; }).front();
-				Options.add_CheckBox("View NRefactory",20,0,(value)=> {this.Show_NRefactory = value;}).front().autoSize();
-
-				DataTreeView.showSelection();	
-				DataTreeView.configureTreeViewForCodeDomViewAndNRefactoryDom();
-				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor(DataTreeView, CodeViewer.editor());  
-	
-				DataTreeView.afterSelect<string>(
-					(file)=>{
-							if (file.fileExists())
-								CodeViewer.open(file);
-							});
-				
-				
-				DataTreeView.beforeExpand<CompilationUnit>(
-					(compilationUnit)=>{																	
-											var treeNode = DataTreeView.selected();																									
-											treeNode.clear();	           
-																				
-											if (Show_Ast)
-											{										
-												if (compilationUnit!=null) 
-													treeNode.add_Node("AST",null)
-			            									.show_Ast(compilationUnit)
-			            									.show_Asts(compilationUnit.types(true))
-			            									.show_Asts(compilationUnit.methods());
-								                		//treeNode.show_Ast(compilationUnit);
-								             }
-								        
-								            if (Show_CodeDom)
-								            {
-									            var codeNamespace = AstEngine.AstData.MapAstToDom.CompilationUnitToNameSpaces[compilationUnit];
-								            	var domNode = treeNode.add_Node("CodeDom");
-		            							domNode.add_Node("CodeNamespaces").show_CodeDom(codeNamespace);
-												domNode.add_Node("CodeTypeDeclarations").show_CodeDom(AstEngine.AstData.codeTypeDeclarations());
-		            							domNode.add_Node("CodeMemberMethods").show_CodeDom(AstEngine.AstData.codeMemberMethods());
-		            							//domNode.add_Node("CodeMemberMethods").show_CodeDom(o2MappedAstData.codeMemberMethods());
-								            }
-								            if (Show_NRefactory)
-								            {
-								            	var iCompilationUnit = AstEngine.AstData.MapAstToNRefactory.CompilationUnitToICompilationUnit[compilationUnit];
-								            	treeNode.add_Node("NRefactory")
-								            		    .add_Nodes_WithPropertiesAsChildNodes<ICompilationUnit>(iCompilationUnit);
-		                                           //.show_NRefactoryDom(o2MappedAstData.iClasses())
-		                                           //.show_NRefactoryDom(o2MappedAstData.iMethods());
-		
-								            }
-								
-						    });				
-
-			}
-			
-			public void loadDataInGui()
-			{
-				DataTreeView.clear();
-				foreach(var file in AstEngine.AstData.files())
-					DataTreeView.add_Node(file.fileName(), AstEngine.AstData.compilationUnit(file),true);
-				if (DataTreeView.nodes().size()>0)
-					DataTreeView.nodes()[0].expand();
-			}
-			
-		}
-		
-		
-		public class Step_SearchAST
-		{
-			public O2_DotNet_Ast_Engine AstEngine { get; set; }
-			
-			public TreeView AstValueTreeView { get; set; }
-			public TreeView AstTypeTreeView { get; set; }
-			public ascx_SourceCodeViewer CodeViewer { get; set; }
-			
-			public String INodeTypeFilter { get; set; }
-			public String INodeValueFilter { get; set; }
-				
-			public Step_SearchAST(O2_DotNet_Ast_Engine astEngine)
-			{
-				AstEngine = astEngine;
-				INodeTypeFilter = "";
-				INodeValueFilter = "";
-				buildGui();
-				loadDataInGui();
-			}
-			
-			public void buildGui()
-			{
-				
-				AstEngine.HostPanel.clear();
-				var topPanel = AstEngine.HostPanel.add_1x1("AST INode Value", "Source Code", true, 400);								
-				
-				CodeViewer = topPanel[1].add_SourceCodeViewer(); 
-				
-				AstValueTreeView = topPanel[0].add_TreeView()
-											  .sort() 
-											  .showSelection()
-											  .beforeExpand<List<INode>>(
-												  	(selectedNode, nodes)=>{
-												  				 selectedNode.add_Nodes(nodes);
-												  			 });
-				
-				 
-				AstEngine.AstData.afterSelect_ShowInSourceCodeEditor(AstValueTreeView, CodeViewer.editor());  		   
-				AstTypeTreeView  = topPanel[0].insert_Left<GroupBox>(200)
-										.set_Text("AST INode Type") 
-										.add_TreeView()
-										.sort()
-										.showSelection()
-										.afterSelect<List<INode>>(
-											(iNodes)=>{ 	 															
-												 		  showINodes(iNodes);
-													  });
-				
-													 		 
-				AstTypeTreeView.insert_Above<TextBox>(20)
-							   .onTextChange_AlertOnRegExFail()
-							   .onEnter((value)=>{
-													INodeTypeFilter= value;
-													loadDataInGui();
-												 });
-
-				//nodeFilterTextBox.onTextChange_AlertOnRegExFail();
-				//nodeTypeTextBox.onTextChange_AlertOnRegExFail();
-							 
-				AstValueTreeView.insert_Above<TextBox>(20)
-								.onTextChange_AlertOnRegExFail()
-								.onEnter(
-								(value)=>{
-											INodeValueFilter= value;
-											showINodes(null);
-										 });
-														   							
-			}
-			
-			public void showINodes(List<INode> iNodes)
-			{
-				if (iNodes == null)
-					if (AstTypeTreeView.selected() ==null)
-						return;
-					else
-						iNodes = (List<INode>)AstTypeTreeView.selected().tag<List<INode>>(); 
-						
-				O2Thread.mtaThread(
-					()=>{  
-							var indexedData = iNodes.indexOnToString(INodeValueFilter);   
-							var typeName = iNodes[0].typeName();			 																					
-							AstValueTreeView.visible(false);  
-						 	AstValueTreeView.clear();
-							var rootNode = AstValueTreeView.add_Node(typeName, null);
-							rootNode.add_Nodes(indexedData, 100, AstEngine.TopProgressBar); 
-							AstValueTreeView.visible(true);
-							if (AstValueTreeView.nodes().size() > 0 && AstValueTreeView.nodes()[0].nodes().size() >0 )
-								AstValueTreeView.nodes()[0].nodes()[0].selected(); 		  																		
-							rootNode.expand();
-						});
-			}
-			
-			public void loadDataInGui()
-			{
-				AstTypeTreeView.clear();
-				AstValueTreeView.clear();
-				var iNodesByType = AstEngine.AstData.iNodes_By_Type(INodeTypeFilter); 			
-								
-				foreach(var item in iNodesByType)
-				{					
-					var nodeText = "{0}   ({1})".format(item.Key, item.Value.size()); 	
-					AstTypeTreeView.add_Node(nodeText, item.Value);						
-				}
-				
-				AstTypeTreeView.selectFirst();
-			}			
-		}
+					
 		
 		public class Step_SearchComments
 		{

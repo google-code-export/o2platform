@@ -8,8 +8,10 @@ using ICSharpCode.SharpDevelop.Dom;
 using O2.API.AST.CSharp;
 using ICSharpCode.NRefactory.Ast;
 using O2.API.AST.ExtensionMethods.CSharp;
+using O2.XRules.Database.Utils;
 
 //O2File:Ast_Engine_ExtensionMethods.cs
+//O2File:FileCache.cs
 
 namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
@@ -59,6 +61,28 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             
             return o2MethodStream;
         }
+        
+        public static List<string> createO2MethodStreams_UseCache_ReturnFile(this O2MappedAstData o2MappedAstData, List<IMethod> iMethods, FileCache fileCache, string cacheExtension)
+        {
+        	var methodStreams = new List<string>();
+        	foreach(var iMethod in iMethods)
+        		methodStreams.Add(o2MappedAstData.createO2MethodStream_UseCache_ReturnFile(iMethod, fileCache, cacheExtension));
+        	return methodStreams;
+        }
+        
+		public static string createO2MethodStream_UseCache_ReturnFile(this O2MappedAstData o2MappedAstData, IMethod iMethod, FileCache fileCache, string cacheExtension)
+		{
+			var csharpCodeFile = fileCache.cacheGet_File(iMethod.fullName(),cacheExtension);
+			if (csharpCodeFile.valid().isFalse())																		
+			{			 
+				"Creating MethodStream for iMethod: {0}".debug(iMethod.DotNetName); 
+				var methodStream = o2MappedAstData.createO2MethodStream(iMethod);						
+				var cSharpCode = methodStream.csharpCode();
+				csharpCodeFile = cSharpCode.saveWithExtension(cacheExtension);
+				fileCache.cachePut(iMethod.fullName(),".cs",cSharpCode);
+			}
+			return csharpCodeFile;	
+		}	
 
         /*
         public static List<string> createO2MethodStreamFiles(this O2MappedAstData o2MappedAstData, List<string> sourceFiles, string targetFolder)
@@ -185,25 +209,42 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         		return o2MethodStream;
         	}
             // map the methods called
-            var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
+            INode methodOrCtorINode = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
+            if (methodOrCtorINode.isNull())
+               methodOrCtorINode = o2MethodStream.O2MappedAstData.constructorDeclaration(iMethod);
+
+			if (methodOrCtorINode.notNull())
+			{
+				o2MethodStream.map_MemberReferenceExpressions(methodOrCtorINode)
+                              .map_ObjectCreateExpressions(methodOrCtorINode)
+                              .map_InvocationExpressions(methodOrCtorINode)
+                              .map_Expressions(methodOrCtorINode.iNodes<INode, IdentifierExpression>());
+
+                // this is not working (the idea is to map the chained ctors
+                /*
+                 
+                if (methodOrCtorINode is ConstructorDeclaration)
+                {
+                    var constructorDeclaration = (ConstructorDeclaration)methodOrCtorINode;
+                    if (constructorDeclaration.ConstructorInitializer.notNull())
+                    {
+                        //var iMethodOfConstructorInitializer = o2MethodStream.fromExpressionGetIMethod(constructorDeclaration.ConstructorInitializer);
+                        //if (iMethodOfConstructorInitializer.notNull())
+                        //    o2MethodStream.add_IMethod(iMethodOfConstructorInitializer);
+                    }
+                }
+                 */ 
+
+			}                             
+/*            var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
             if (methodDeclaration != null)
-            {
-                /*o2MethodStream.map_Expressions(methodDeclaration.iNodes<INode, IdentifierExpression>())
-                              .map_MemberReferenceExpressions(methodDeclaration)
-                              .map_ObjectCreateExpressions(methodDeclaration)
-                              .map_InvocationExpressions(methodDeclaration);*/
+            {            
 				o2MethodStream
                               .map_MemberReferenceExpressions(methodDeclaration)
                               .map_ObjectCreateExpressions(methodDeclaration)
                               .map_InvocationExpressions(methodDeclaration)
-                              .map_Expressions(methodDeclaration.iNodes<INode, IdentifierExpression>());
-
-                // map IdentifierExpression global and external static variables                
-                    //var iMethodOrProperty = o2MethodStream.O2MappedAstData.fromExpressionGetIMethodOrProperty(identifierExpression as Expression);                
-                
-                
-                
-            }
+                              .map_Expressions(methodDeclaration.iNodes<INode, IdentifierExpression>());                                               
+            }*/
             // map the external classes
             o2MethodStream.map_ExternalClasses(iMethod);
             return o2MethodStream;
@@ -287,7 +328,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             return o2MethodStream;
         }
 
-        public static O2MethodStream map_MemberReferenceExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
+        //public static O2MethodStream map_MemberReferenceExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
+        public static O2MethodStream map_MemberReferenceExpressions(this O2MethodStream o2MethodStream, INode methodDeclaration)
         {            
             var memberReferenceExpressions = methodDeclaration.iNodes<INode, MemberReferenceExpression>();
             foreach (var memberReferenceExpression in memberReferenceExpressions)
@@ -308,7 +350,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             return o2MethodStream;
         }
 
-        public static O2MethodStream map_ObjectCreateExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
+        //public static O2MethodStream map_ObjectCreateExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
+        public static O2MethodStream map_ObjectCreateExpressions(this O2MethodStream o2MethodStream, INode methodDeclaration)
         {
             // map ObjectCreateExpression (just about the same process as for memberReferenceExpressions
             var objectCreateExpressions = methodDeclaration.iNodes<INode, ObjectCreateExpression>();
@@ -326,8 +369,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
             return o2MethodStream;
         }
-
-        public static O2MethodStream map_InvocationExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
+        
+		public static O2MethodStream map_InvocationExpressions(this O2MethodStream o2MethodStream, INode methodDeclaration)
+        //public static O2MethodStream map_InvocationExpressions(this O2MethodStream o2MethodStream, MethodDeclaration methodDeclaration)
         {            
             var invocationExpressions = methodDeclaration.iNodes<INode, InvocationExpression>();
             foreach (var invocationExpression in invocationExpressions)
@@ -371,9 +415,16 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             {
                 //var @namespace = iMethod.DeclaringType.Namespace;
                 //var typeName = iMethod.DeclaringType.Name;
-                var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
-
-                compilationUnit.add_Method(iMethod.DeclaringType, methodDeclaration);
+                if (iMethod.IsConstructor)
+                {
+                    var constructorDeclaration = o2MethodStream.O2MappedAstData.constructorDeclaration(iMethod);
+                    compilationUnit.add_Ctor(iMethod.DeclaringType, constructorDeclaration);
+                }
+                else
+                {
+                    var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
+                    compilationUnit.add_Method(iMethod.DeclaringType, methodDeclaration);
+                }
             }
 
             // add external methods

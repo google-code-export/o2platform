@@ -41,7 +41,8 @@ namespace O2.XRules.Database.APIs
 		{
 			try
 			{
-				var page = @"http://www.owasp.org/index.php?title=Special:UserLogin";  
+				//var page = @"http://www.owasp.org/index.php?title=Special:UserLogin";  
+				var page = "http://www.owasp.org/index.php?title=Test&diff=cur";
 				var codeToParse = page.uri().getHtml(); 
 				
 				var htmlDocument = new HtmlAgilityPack.HtmlDocument();
@@ -61,6 +62,8 @@ namespace O2.XRules.Database.APIs
 					if (html.contains("ga.js").isFalse() && html.contains("_gat").isFalse())
 						headerText += html;
 				}
+				//headerText += "AAAAAAAAAAAAAA".line();
+				//headerText += "<link rel=\"stylesheet\" href=\"/skins/common/diff.css?207\" type="text/css" />"
 				if (scripts.Count > 4)
 				{
 					headerText += scripts[0].OuterHtml.line();

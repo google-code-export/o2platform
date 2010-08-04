@@ -70,18 +70,8 @@ Action refreshSourceFiles = ()=&gt; showSourceFiles(astData_LoadedFiles.files(),
 Action clearO2MethodStreamCache = ()=&gt; O2MethodStream_ExtensionMethods.O2MethodStreamCache.Clear();
 
 Func&lt;IMethod,string&gt; createMethodStream =
-	(iMethod)=&gt; {					
-					var csharpCodeFile = fileCache.cacheGet_File(iMethod.fullName(),".cs");
-					if (csharpCodeFile.valid().isFalse())																		
-					{			 
-						"Creating all method streams for method: {0}".debug(iMethod.DotNetName); 
-						var methodStream = astData_LoadedFiles.createO2MethodStream(iMethod);
-						//methodStreamDetails.show(O2MethodStream_ExtensionMethods.O2MethodStreamCache);
-						var cSharpCode = methodStream.csharpCode();
-						csharpCodeFile = cSharpCode.saveWithExtension(".cs");
-						fileCache.cachePut(iMethod.fullName(),".cs",cSharpCode);
-					}
-					return csharpCodeFile;
+	(iMethod)=&gt; {							
+					return astData_LoadedFiles.createO2MethodStream_UseCache_ReturnFile(iMethod, fileCache, ".cs");										
 				};
 
 Action&lt;string&gt; createMethodStreamForFile = 
