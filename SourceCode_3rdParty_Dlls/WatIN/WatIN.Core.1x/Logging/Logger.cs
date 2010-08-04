@@ -54,7 +54,11 @@ namespace WatiN.Core.Logging
 		/// </example>
 		public static void LogAction(string message, params object[] args)
 		{
-			LogWriter.LogAction(string.Format(message, args));
+            try
+            {
+                LogWriter.LogAction(string.Format(message, args));
+            }
+            catch { }
 		}
 
 		/// <summary>
