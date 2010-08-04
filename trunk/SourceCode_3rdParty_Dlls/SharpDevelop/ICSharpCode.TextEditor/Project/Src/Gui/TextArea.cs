@@ -34,6 +34,7 @@ namespace ICSharpCode.TextEditor
         public bool UseAlternativeCodeCompleteText { get; set; }
         public Location CodeCompleteCaretLocationOffset { get; set; } // used to support code complete on the simple script editor environments
         public string CodeCompleteTargetText { get; set; }
+        public bool HandleToolTipRequests {get;set;}
         // DC
 
 		bool hiddenMouseCursor = false;
@@ -448,6 +449,8 @@ namespace ICSharpCode.TextEditor
 		
 		protected void RequestToolTip(Point mousePos)
 		{
+            if (HandleToolTipRequests == false)
+                return;
 			if (toolTipRectangle.Contains(mousePos)) {
 				if (!toolTipActive)
 					ResetMouseEventArgs();

@@ -9,6 +9,7 @@ using System;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Forms;
+using O2.Kernel.ExtensionMethods;
 using ICSharpCode.TextEditor.Document;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
@@ -30,6 +31,7 @@ namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 		public int startOffset;         //DC: Made these public
 		public int endOffset;           //DC: Made these public
         public bool guiLoaded;           //DC
+        public static bool busy;        //DC
 
 		DeclarationViewWindow declarationViewWindow = null;
 		Rectangle workingScreen;
@@ -41,30 +43,54 @@ namespace ICSharpCode.TextEditor.Gui.CompletionWindow
 		
 		public static CodeCompletionWindow ShowCompletionWindow(Form parent, TextEditorControl control, string fileName, ICompletionDataProvider completionDataProvider, char firstChar, bool showDeclarationWindow, bool fixedListViewWidth)
 		{
-			
-            return (CodeCompletionWindow) parent.invokeOnThread(
-                () =>
-                {
-                    var tempCompletionData = new ICompletionData[] { };
-                    CodeCompletionWindow codeCompletionWindow = new CodeCompletionWindow(completionDataProvider, tempCompletionData, parent, control, showDeclarationWindow, fixedListViewWidth);
-                    codeCompletionWindow.CloseWhenCaretAtBeginning = firstChar == '\0';
-                    codeCompletionWindow.ShowCompletionWindow();
+            if (busy)  // DC to prevent multiple calls
+            {
+                "CodeCompletionWindow.ShowCompletionWindow was busy, skipping ShowCompletionWindow calculation".info();
+                return null;
+            }
 
-                    O2Thread.mtaThread(
-                        () =>
+                busy = true;
+                return (CodeCompletionWindow)parent.invokeOnThread(
+                    () =>
+                    {
+                        try
                         {
-                            ICompletionData[] completionData = completionDataProvider.GenerateCompletionData(fileName, control.ActiveTextAreaControl.TextArea, firstChar);
-                            if (completionData == null || completionData.Length == 0)
-                            {
-                                //return null;
-                            }
-                            else
-                                codeCompletionWindow.setCodeCompletionData(completionData);
-                        });
-                    
-                    return codeCompletionWindow;
-                });			
-		}        
+
+                            var tempCompletionData = new ICompletionData[] { };
+                            CodeCompletionWindow codeCompletionWindow = new CodeCompletionWindow(completionDataProvider, tempCompletionData, parent, control, showDeclarationWindow, fixedListViewWidth);
+                            codeCompletionWindow.CloseWhenCaretAtBeginning = firstChar == '\0';
+                            codeCompletionWindow.ShowCompletionWindow();
+
+                            O2Thread.mtaThread(         // run in on a separate thread for performance reasons
+                                () =>
+                                {
+                                    try
+                                    {
+                                        ICompletionData[] completionData = completionDataProvider.GenerateCompletionData(fileName, control.ActiveTextAreaControl.TextArea, firstChar);
+                                        if (completionData == null || completionData.Length == 0)
+                                        {
+                                            //return null;
+                                        }
+                                        else
+                                            codeCompletionWindow.setCodeCompletionData(completionData);
+                                        busy = false;
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        ex.log("in CodeCompletionWindow.ShowCompletionWindow ");
+                                    }
+                                });
+
+                            return codeCompletionWindow;
+                        }
+                        catch (Exception ex)
+                        {
+                            busy = false;
+                            return null;
+                        }
+                    });
+            
+		}     
 
 		CodeCompletionWindow(ICompletionDataProvider completionDataProvider, ICompletionData[] completionData, Form parentForm, TextEditorControl control, bool showDeclarationWindow, bool fixedListViewWidth) : base(parentForm, control)
 		{
