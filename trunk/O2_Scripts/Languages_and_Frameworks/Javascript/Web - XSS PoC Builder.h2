@@ -2,6 +2,8 @@
 <H2>
   <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("XSS PoC Builder",1100,550);   
 
+var processOnNavigateEvents= false;
+
 var designerCanvas = topPanel.add_DesignerCanvas();      
 
 
@@ -187,11 +189,12 @@ step7_Button.onClick_Wpf(()=&gt;publishExploit());
 
 step2_IE.onNavigate(
 	(url)=&gt; {
-				if (url.neq("about:blank"))
-				{
-					step1_TextBox.set_Text_Wpf(url);
-					image.rotate();		
-				}
+				if (processOnNavigateEvents)
+					if (url.neq("about:blank"))
+					{
+						step1_TextBox.set_Text_Wpf(url);
+						image.rotate();		
+					}
 			});
 			
 			

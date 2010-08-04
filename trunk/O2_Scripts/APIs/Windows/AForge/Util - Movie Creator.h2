@@ -3,6 +3,7 @@
   <SourceCode>//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 //Global Variables
 var previewSizeValue = 50;
+var addDuplicateFrames = false;
 
 //panel.clear();
 //var topPanel = panel;
@@ -23,6 +24,7 @@ topPanel.insert_Below&lt;Panel&gt;(100).add_LogViewer();
 
 //FramesOptions
 var previewSize = framesOptions.add_Label("preview size:")
+							   .top(3)
 							   .append_TextBox(previewSizeValue.str())
 							   .align_Right(framesOptions)
 							   .onTextChange(
@@ -38,6 +40,11 @@ var previewSize = framesOptions.add_Label("preview size:")
 							   					}
 							   				 });
 
+framesOptions.add_CheckBox("Add Duplicate Frames:",20,0, (value) =&gt; addDuplicateFrames  = value)
+             .autoSize();
+							   //.top(3)
+							   //.append_TextBox(previewSizeValue.str())
+//
 //topControlBar
 
 Action&lt;string&gt; addImageFromFile = 
@@ -96,7 +103,7 @@ topControlBar.add_Link("Start capture",30,5,
 						{
 							var bitmap = aforgeVideo.capture(topPanel);
 							// only add if the bimap is different from the previous frame
-							if (bitmap.isNotEqualTo(lastBitMap))
+							if (addDuplicateFrames || bitmap.isNotEqualTo(lastBitMap))
 							{
 								framesList.add_Video_Image_Wpf(bitmap,100,100); 								
 								"Total Frame count: {0}".info(framesList.items().size());

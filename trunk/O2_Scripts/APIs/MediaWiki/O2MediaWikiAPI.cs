@@ -668,7 +668,12 @@ namespace O2.XRules.Database.APIs
             //response.size().str().info();
             //return response.attibute("title");
         }
-    	
+        
+        public static List<string> pages(this O2MediaWikiAPI wikiApi, string withTitle)
+        { 
+        	var result =  wikiApi.getApiPhp("action=query&list=search&srwhat=text&srsearch={0}&format=xml&srlimit=200".format(withTitle));
+        	return result.xRoot().elementsAll("p").attributes("title").values().sort();
+    	}
     	public static List<string> revisions(this O2MediaWikiAPI wikiApi, string page)
     	{
 			var revisions = from revision in wikiApi.revisionsRaw(page)
@@ -701,6 +706,13 @@ namespace O2.XRules.Database.APIs
 			var rvlimit = 100;
 			
     		return wikiApi.getQueryContinueResults(page, rvlimit, propertyName, continueVarName, "", dataElement);  
+    	}
+    	
+    	public static string diff_Current(this O2MediaWikiAPI wikiApi, string page)
+    	{
+    		var requestData = "title={0}&diff=cur&action=render".format(page);
+    		var diffContent = wikiApi.getIndexPhp(requestData);
+			return wikiApi.wrapOnHtmlPage(diffContent);
     	}
     	
     	public static List<String> links(this O2MediaWikiAPI wikiApi, string pages)
@@ -838,6 +850,24 @@ namespace O2.XRules.Database.APIs
     	public static string allusers(this O2MediaWikiAPI wikiApi)
     	{
     		return wikiApi.action_query_list("allusers");
+    	}
+    	public static List<string> recentPages(this O2MediaWikiAPI wikiApi)
+    	{
+    		return wikiApi.recentPages(100);
+    	}
+    	public static List<string> recentPages(this O2MediaWikiAPI wikiApi, int itemsToFetch)
+    	{    		
+    		var pages = new List<String>();
+    		foreach(var change in wikiApi.recentChangesRaw(itemsToFetch))
+    		{
+    			if (change.attribute("type").value() != "log")
+    			{
+    				var title = change.attribute("title").value() ;
+    				if (pages.Contains(title).isFalse())
+    					pages.Add(title);
+    			}    			
+    		}
+    		return pages;
     	}
     	
     	public static List<string> recentChanges(this O2MediaWikiAPI wikiApi)
@@ -1093,6 +1123,37 @@ namespace O2.XRules.Database.APIs
                     browser.set_Text(htmlText);
                 });
             return browser;
+        }
+        
+        public static T show_Diff_LatestChanges<T>(this T control, O2MediaWikiAPI wikiApi)
+        	where T : Control
+        {
+        	return 	control.show_Diff_LatestChanges(wikiApi,100);
+        }
+        public static T show_Diff_LatestChanges<T>(this T control, O2MediaWikiAPI wikiApi, int itemsToShow)
+        	where T : Control
+        {        	
+        	var cancelLoad = false;
+			var browser = control.add_Browser();
+			var treeView = browser.insert_Left<TreeView>(200)
+								  .showSelection()	
+								  .afterSelect<string>((html)=>browser.set_Text(html));
+			treeView.backColor(Color.LightPink);		  
+			var recentPages = wikiApi.recentPages(itemsToShow);
+			treeView.backColor(Color.Azure); 
+			treeView.add_ContextMenu().add_MenuItem("Cancel Load", ()=>cancelLoad = true);
+			foreach(var recentPage in recentPages)
+			{
+				var diffHtml = wikiApi.diff_Current(recentPage); 	
+				treeView.add_Node(recentPage, diffHtml);
+				if (treeView.nodes().size()==1)
+					treeView.selectFirst();		
+				if (cancelLoad)
+					break;
+			}
+			treeView.backColor(Color.White);
+			return control;
+
         }
 
         #endregion

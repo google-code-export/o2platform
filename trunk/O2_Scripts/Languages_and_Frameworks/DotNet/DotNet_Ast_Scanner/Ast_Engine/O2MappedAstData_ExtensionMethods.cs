@@ -448,7 +448,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             // try to find by IMethod reference
             if (iMethod != null)
             {
-                var directMapping = o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration.hasKey(iMethod);
+                var directMapping = o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration.hasKey(iMethod) ||
+                                    o2MappedAstData.MapAstToNRefactory.IMethodToConstructorDeclaration.hasKey(iMethod);
                 if (directMapping)
                     return true;
                 // try to find by signature (this shouldn't be needed but there must be a bug which is making the resolved calledIMethod (current for InvocationExpression) to not be mapped)				

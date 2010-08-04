@@ -16,9 +16,11 @@ using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.CoreControls;
 using O2.External.IE.ExtensionMethods;
 using O2.External.IE.Wrapper;
-
+using O2.XRules.Database.Utils;
 //O2File:O2PlatformWikiAPI.cs
 //O2File:O2MediaWikiApi.cs
+//O2File:ascx_AskUserForLoginDetails.cs
+
 //O2Ref:O2_External_IE.dll
 
 namespace O2.XRules.Database.APIs
@@ -35,6 +37,7 @@ namespace O2.XRules.Database.APIs
 		public ComboBox CurrentPageUrl { get; set; }
 		public Button SaveButton { get; set; }
 		public Label StatusLabel { get; set; }
+		public ComboBox RecentChangesComboBox { get; set; }
 		
 		public static void lauchGui()
 		{
@@ -72,6 +75,35 @@ namespace O2.XRules.Database.APIs
 			WikiPage_TextBox = 	WikiTextEditor.insert_Above<TextBox>(50);	
 			var bottomPanel = WikiPage_TextBox.insert_Below<Panel>(30);  			
 			
+			RecentChangesComboBox = WikiPage_TextBox.insert_Right<Panel>(290)
+												    .add_Label("Recent Changes / Search")
+												    .top(3)
+												    .append_Control<ComboBox>()
+												    //.dropDownList()						    
+												    .width(150)
+												    .top(0);
+			Action<string> populateRecentChangesComboBox = 
+				(filter) => {
+								RecentChangesComboBox.backColor(Color.LightPink);								
+								O2Thread.mtaThread(
+									()=>{
+											RecentChangesComboBox.clear();
+											if (filter.valid().isFalse())
+												RecentChangesComboBox.add_Items(WikiApi.recentPages());			  				
+											else
+												RecentChangesComboBox.add_Items(WikiApi.pages(filter));			  				
+											RecentChangesComboBox.backColor(Color.White);												
+										});
+						  	};													    
+			RecentChangesComboBox.onSelection(
+	    		()=>{
+	    				WikiPage_TextBox.set_Text(RecentChangesComboBox.get_Text());
+	    				loadCurrentPage();
+	    			});
+	    	RecentChangesComboBox.onEnter(
+	    		(text)=>{
+	    					populateRecentChangesComboBox(text);	    					
+	    				});
 			//WikiTextEditor.insert_Below<ascx_LogViewer>(130);
 																
 						
@@ -119,13 +151,28 @@ namespace O2.XRules.Database.APIs
 						});*/
 		
 			WikiTextEditor.onKeyPress((key)=> 			// add suport to paste images form Clipboard
-				{
+				{ 
 					if (key == (Keys.Control | Keys.V))		
 						return pasteImageFromClipboard();
 					return false;
 				}); 
 				
 			WikiPage_TextBox.onEnter((text)=>loadPage(text));			
+			
+			
+			WikiTextEditor.add_ContextMenu()
+						  .add_MenuItem("Wrap with source tag (defaults to lang=csharp)",
+						  		()=>{
+						  				WikiTextEditor.invokeOnThread(
+						  					()=>{
+						  						
+						  							WikiTextEditor.SelectedText = "<source lang=csharp>".line() + 
+						  															WikiTextEditor.SelectedText.line() +
+						  															"</source>".line();
+						  						});
+						  			});
+						  			
+			populateRecentChangesComboBox("");
 			
 			return this;					
 		}
@@ -167,6 +214,15 @@ namespace O2.XRules.Database.APIs
 			if (WikiApi.loggedIn().isFalse())
 			{
 				StatusLabel.set_Text("You need to be logged in to save pages").textColor(Color.Red);				
+				var credential = ascx_AskUserForLoginDetails.ask();
+		   		if (credential.notNull())
+		   		{
+		   			WikiApi.login(credential.UserName, credential.Password);
+		   			if (WikiApi.loggedIn())
+		   				StatusLabel.set_Text("You are now logged in as user: {0}".format(credential.UserName)).textColor(Color.DarkGreen);				
+		   			else
+		   				StatusLabel.set_Text("Login failed for user: {0}".format(credential.UserName)).textColor(Color.Red);				
+		   		}
 			}
 			else
 			{
@@ -200,14 +256,17 @@ namespace O2.XRules.Database.APIs
 				"Image in Clipboard".debug();
 				O2Thread.mtaThread( 
 					()=>{
+							var tempImageTag = "[[Uploading_Image_tmp{0}]]".format(5.randomNumbers());
+							WikiTextEditor.insertText(tempImageTag); 
 							var imageUrl = WikiApi.uploadImage_FromClipboard();
-							var wikiTextForImage = WikiApi.getWikiTextForImage(imageUrl);					
-							WikiTextEditor.insertText(wikiTextForImage); 
+							var wikiTextForImage = WikiApi.getWikiTextForImage(imageUrl);												
+							WikiTextEditor.replaceText(tempImageTag,wikiTextForImage); 
+							
 						});
 				return true;
 			}		 			 
 			return false;
-		}
+		} 
 		
 		public void buildSidePanel_Old(Control sidePanel)
 		{

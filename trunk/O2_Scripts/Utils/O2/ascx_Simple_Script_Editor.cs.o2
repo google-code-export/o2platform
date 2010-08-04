@@ -61,6 +61,7 @@ namespace O2.XRules.Database.Utils
         public bool ExecuteOnEnter { get; set; }
         public object ReturnData { get; set; }
 		public MethodInvoker onCompilationOk {get ;set;}
+        public string previousCompiledCodeText { get; set; }
 
         public string defaultCode = "PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
                                .line("return \"Dynamic Data = \" + testString + \" :: \" + testNumber;");
@@ -94,7 +95,8 @@ namespace O2.XRules.Database.Utils
         public ascx_Simple_Script_Editor(bool codeCompleteSupport)        
     	{
             this.Width = width;
-            this.Height = height;                        
+            this.Height = height;
+            previousCompiledCodeText = "";
     		InvocationParameters = new Dictionary<string, object>();
             InvocationParameters.Add("returnData", ReturnData); // add the (previous script) execute return data 
             AutoCompileOnCodeChange = true;
@@ -305,8 +307,13 @@ namespace O2.XRules.Database.Utils
                             var targetFile = AutoSaveDir.pathCombine(Files.getFileSaveDateTime_Now().trim() + ".cs");
                             targetFile.fileWrite(Code);
                         }
+                                                                        
                         if (onCompilationOk != null)
                         	onCompilationOk();
+                        // once all is done update the codeComplete information
+                        if (commandsToExecute.editor().o2CodeCompletion.notNull())
+                            commandsToExecute.editor().o2CodeCompletion.addReferences(csharpCompiler.ReferencedAssemblies);
+
 					};
      		 		 
 	    }	         	
@@ -315,7 +322,16 @@ namespace O2.XRules.Database.Utils
         {
             if (AutoCompileOnCodeChange)
             {
+                // handle the case where the only changes made where a space or an enter (which shouldn't trigger a compilation)
+               /* var codeWithOutSpacesOrEnter = newText.remove(" ", "".line());
+                if (codeWithOutSpacesOrEnter == previousCompiledCodeText)
+                {
+                    "Skipping compilation since new text is equal to the previous one".info();
+                    return;
+                }*/
+                //previousCompiledCodeText = codeWithOutSpacesOrEnter;
                 compileCodeSnippet(newText);
+
             }
         }
 
@@ -327,7 +343,7 @@ namespace O2.XRules.Database.Utils
 		public void compileCodeSnippet(string codeSnippet)
      	{     		 
      		try
-     		{
+     		{                
 	     		result_RichTextBox.visible(true);
 	     		result_Panel.visible(false);
 	     		if (codeSnippet.size() > 200)
@@ -339,9 +355,7 @@ namespace O2.XRules.Database.Utils
 	     		var currentFile = commandsToExecute.editor().getFullPathTOCurrentSourceCodeFile();
 	     		if (currentFile.fileExists())
 	     			csharpCompiler.SourceCodeFile = currentFile;
-	     		csharpCompiler.compileSnippet(codeSnippet);
-				if (commandsToExecute.editor().o2CodeCompletion.notNull())
-	            	commandsToExecute.editor().o2CodeCompletion.addReferences(csharpCompiler.ReferencedAssemblies);            
+	     		csharpCompiler.compileSnippet(codeSnippet);                
 			}
 			catch(Exception ex)
 			{

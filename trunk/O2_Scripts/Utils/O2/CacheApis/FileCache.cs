@@ -18,7 +18,8 @@ namespace O2.XRules.Database.Utils
     {    
     	public string PathLocalCache {get;set;}
     	public bool UseBase64EncodedStringInFileName {get;set;}
-    	public string defaultCacheExtension = "o2Cache";
+    	public string defaultCacheExtension = ".o2Cache";
+    	public bool DisableCache { get; set; }
     	
     	public FileCache(string pathLocalCache)
     	{
@@ -53,6 +54,9 @@ namespace O2.XRules.Database.Utils
 		 		 
 		public string cacheGet(string itemPath, string cacheSaveExtension, Func<string> getFunction)
 		{
+			if (DisableCache)
+				return getFunction();
+				
 			var cacheAddress = getCacheAddress(itemPath,cacheSaveExtension);
 			
 			if (cacheAddress.fileExists())
@@ -81,6 +85,8 @@ namespace O2.XRules.Database.Utils
 		
 		public string cacheGet_File(string itemPath, string cacheSaveExtension)
 		{
+			if (DisableCache)
+				return "";
 			var cacheAddress = getCacheAddress(itemPath, cacheSaveExtension);
 			
 			if (cacheAddress.fileExists())
@@ -98,6 +104,8 @@ namespace O2.XRules.Database.Utils
 		
 		public string cachePut(string itemPath, string cacheSaveExtension, string cacheValue)
 		{
+			if (DisableCache)
+				return "";
 			cacheValue = cacheValue ?? "";
 			var cacheAddress = PathLocalCache.pathCombine(itemPath.safeFileName(UseBase64EncodedStringInFileName) + cacheSaveExtension);
 			cacheValue.saveAs(cacheAddress);

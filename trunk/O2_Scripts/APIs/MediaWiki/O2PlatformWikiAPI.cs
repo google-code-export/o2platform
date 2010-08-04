@@ -25,7 +25,8 @@ namespace O2.XRules.Database.APIs
 		// dynamically (one per session) grab the current header scripts used in OWASP
 		public string styles()
 		{
-			var wikiStyles = "<link rel=\"stylesheet\" href=\"http://www.o2platform.com/skins/common/shared.css?207\" type=\"text/css\" media=\"screen\" />".line() +
+			var wikiStyles = "<link rel=\"stylesheet\" href=\"http://www.o2platform.com/skins/common/diff.css?207\" type=\"text/css\" />".line() + 
+							 "<link rel=\"stylesheet\" href=\"http://www.o2platform.com/skins/common/shared.css?207\" type=\"text/css\" media=\"screen\" />".line() +
 			     		     "<link rel=\"stylesheet\" href=\"http://www.o2platform.com/skins/common/commonPrint.css?207\" type=\"text/css\" media=\"print\" /> ".line() +
 				 		     "<link rel=\"stylesheet\" href=\"http://www.o2platform.com/skins/gumax/gumax_main.css?207\" type=\"text/css\" media=\"screen\" /> ".line();
 			return wikiStyles;
