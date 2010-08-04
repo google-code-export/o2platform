@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.API.AST.ExtensionMethods.CSharp
 {
@@ -67,5 +69,68 @@ namespace O2.API.AST.ExtensionMethods.CSharp
         {
             return null;
         }*/
+
+
+        public static List<FieldDeclaration> fields(this List<INode> iNodes)
+        {
+            return iNodes.iNodes<FieldDeclaration>();
+        }
+
+        public static List<FieldDeclaration> fields(this List<INode> iNodes, string nameToFind)
+        {
+            return (from fieldDeclaration in iNodes.fields()
+                    from name in fieldDeclaration.names()
+                    where name == nameToFind
+                    select fieldDeclaration).toList();
+        }
+
+        public static List<TypeReference> types(this List<FieldDeclaration> fieldDeclarations)
+        {
+            return (from fieldDeclaration in fieldDeclarations
+                    select fieldDeclaration.TypeReference).toList();
+        }
+
+        public static List<string> names(this List<FieldDeclaration> fieldDeclarations)
+        {
+            return (from fieldDeclaration in fieldDeclarations
+                    from field in fieldDeclaration.Fields
+                    select field.Name).toList();
+        }
+
+        public static List<string> names(this FieldDeclaration fieldDeclaration)
+        {
+            return (from field in fieldDeclaration.Fields
+                    select field.Name).toList();
+        }
+
+        public static List<VariableDeclaration> variables(this List<FieldDeclaration> fieldDeclarations)
+        {
+            return (from fieldDeclaration in fieldDeclarations
+                    from field in fieldDeclaration.Fields
+                    select field).toList();
+        }
+
+        public static Dictionary<string, string> values(this List<FieldDeclaration> fieldDeclarations)
+        {
+            var values = new Dictionary<string, string>();
+            foreach (var variable in fieldDeclarations.variables())
+            {
+                if (variable.Initializer is PrimitiveExpression)
+                    values.add(variable.Name, (variable.Initializer as PrimitiveExpression).StringValue);
+                else
+                    values.add(variable.Name, variable.Initializer.str());
+            }
+            return values;
+        }
+
+
+        public static Dictionary<string, VariableDeclaration> filtered_ByName(this List<FieldDeclaration> fieldDeclarations)
+        {
+            var filtered_ByName = new Dictionary<string, VariableDeclaration>();
+            foreach (var fieldDeclaration in fieldDeclarations)
+                foreach (var variable in fieldDeclaration.Fields)
+                    filtered_ByName.add(variable.Name, variable);
+            return filtered_ByName;
+        }
     }
 }

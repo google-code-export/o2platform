@@ -35,6 +35,7 @@ namespace O2.Views.ASCX.classes.MainGUI
         public static bool bShowInfo = true;
         public static bool bShowMessages = true;
         public static bool bShowTimeStamp = true;
+        public static bool bUseShortTimeFormat = false;
         public static bool criticalErrorHasBeenHandled;
 
         public static StringBuilder sbLogCache = new StringBuilder();
@@ -142,7 +143,10 @@ namespace O2.Views.ASCX.classes.MainGUI
                     }
                     string sText1 = sText;
                     if (bShowTimeStamp)
-                        sText = "[" + DateTime.Now.ToShortTimeString() + "] " + sText;
+                        if (bUseShortTimeFormat)
+                            sText = "[" + DateTime.Now.ToShortTimeString() + "] " + sText;
+                        else
+                            sText = "[" + DateTime.Now.ToLongTimeString() + "] " + sText;
                     //if (targetRichTextBoxes[0].okThread(delegate { insertText(sText1, cColour); }))
                     //{
                         foreach (RichTextBox richTextBoxToUpdate in targetRichTextBoxes)

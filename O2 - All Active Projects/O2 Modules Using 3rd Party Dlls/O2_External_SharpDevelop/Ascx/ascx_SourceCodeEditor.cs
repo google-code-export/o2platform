@@ -6,7 +6,7 @@ using ICSharpCode.TextEditor.Document;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
-using O2.Kernel.CodeUtils;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -487,6 +487,27 @@ namespace O2.External.SharpDevelop.Ascx
         private void enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AutoBackUpOnCompileSucess = !AutoBackUpOnCompileSucess;
+        }
+
+        private void tecSourceCode_MouseMove(object sender, MouseEventArgs e)
+        {
+            "tecSourceCode_MouseMove".info();
+        }
+
+        private void tecSourceCode_MouseClick(object sender, MouseEventArgs e)
+        {
+            "tecSourceCode_MouseClick".info();
+        }
+
+        private void tstbTextSearch_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+                searchForTextInTextEditor_findNext(tstbTextSearch.Text);
+        }
+
+        private void tbExecutionHistoryOrLog_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            tbExecutionHistoryOrLog.Visible = false; 
         }
         
 

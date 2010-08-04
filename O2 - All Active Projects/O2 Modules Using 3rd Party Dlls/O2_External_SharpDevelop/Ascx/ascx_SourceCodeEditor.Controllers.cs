@@ -15,6 +15,7 @@ using O2.DotNetWrappers.O2Misc;
 using O2.DotNetWrappers.Windows;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ScriptSamples;
+using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Interfaces.Views;
 using O2.Kernel.ExtensionMethods;
 using O2.Kernel.CodeUtils;
@@ -24,6 +25,12 @@ using System.Threading;
 using O2.DotNetWrappers.ViewObjects;
 using O2.DotNetWrappers.H2Scripts;
 using O2.Views.ASCX.Ascx.MainGUI;
+using O2.API.AST.ExtensionMethods.CSharp;
+using ICSharpCode.NRefactory;
+using O2.API.AST.CSharp;
+using O2.API.AST.ExtensionMethods;
+using O2.API.AST.ExtensionMethods.CSharp;
+using ICSharpCode.NRefactory.Ast;
 
 namespace O2.External.SharpDevelop.Ascx
 {
@@ -40,7 +47,7 @@ namespace O2.External.SharpDevelop.Ascx
 
         private Ast_CSharp_ShowDetailsInViewer showAstDetails;
         private int iLastFoundPosition;
-        public long iMaxFileSize = 200; //  200k
+        public long iMaxFileSize = 500; //  200k
         public String sDirectoryOfFileLoaded = "";
         public String sFileToOpen = "";
         public String sPathToFileLoaded = "";
@@ -56,6 +63,8 @@ namespace O2.External.SharpDevelop.Ascx
         public string AutoBackupSaveDir = PublicDI.config.O2TempDir.pathCombine("_AutoSavedScripts");
         public bool AutoBackUpOnCompileSucess = false;
         public bool checkForDebugger = false;
+        public O2MappedAstData compiledFileAstData = null;
+        public INode CurrentINode = null;
 
         public void onLoad()
         {
@@ -88,7 +97,40 @@ namespace O2.External.SharpDevelop.Ascx
                 tecSourceCode.TextEditorProperties.Font = new Font("Courier New", 9, FontStyle.Regular);
 
                 mapExternalExecutionEngines();
+                this.onCaretMove(caretMoved);
                 runOnLoad = false;
+            }
+        }
+        
+
+
+        void caretMoved(Caret caret)
+        {
+            // same code as the one in "public static INode iNode(this O2MappedAstData o2MappedAstData, string file, Caret caret)" in O2MappedAstData_ExtensionMethods.cs (O2 Script)
+            var o2MappedAstData = compiledFileAstData;
+            var file = sPathToFileLoaded;
+
+            if (o2MappedAstData != null && file != null && caret != null)
+            {
+                if (o2MappedAstData.FileToINodes.hasKey(file))
+                {
+                    var allINodes = o2MappedAstData.FileToINodes[file];
+                    var adjustedLine = caret.Line + 1;
+                    var adjustedColumn = caret.Column + 1;
+                    CurrentINode = allINodes.getINodeAt(adjustedLine, adjustedColumn);
+                    if (CurrentINode != null)                    
+                        lbCurrentAstNode.set_Text("Current Ast Node: {0}".format(CurrentINode.typeName()));                                                                    
+                }
+                
+            }
+            if (compiledFileAstData.notNull())
+            {
+                //var iNode = compiledFileAstData.iNode(sPathToFileLoaded, caret);
+				//if (iNode != null)	
+				//{					
+					//CurrentINode = iNode;
+					//lbCurrentAstNode.set_Text("Current Ast Node: {0}".format(iNode.typeName()))
+                //}
             }
         }
 
@@ -113,6 +155,11 @@ namespace O2.External.SharpDevelop.Ascx
             {
                 executeMethod();
             }            
+            /*if (e.KeyValue == 17)
+            {
+                "KEY VALUe 17".debug();
+            }*/
+
         }
 
         void TextArea_KeyDown(object sender, KeyEventArgs e)
@@ -656,7 +703,7 @@ namespace O2.External.SharpDevelop.Ascx
             int iFoundPos = tecSourceCode.Text.IndexOf(sTextToSearch, iLastFoundPosition);
             if (iFoundPos == -1) // try from the begginig
                 iFoundPos = tecSourceCode.Text.IndexOf(sTextToSearch, 0);
-            if (iFoundPos > -1 & iLastFoundPosition != iFoundPos)
+            if (iFoundPos > -1)// & iLastFoundPosition != iFoundPos)
             {
                 lbSearch_textNotFound.Visible = false;
                 tecSourceCode.ActiveTextAreaControl.TextArea.SelectionManager.ClearSelection();
@@ -834,7 +881,9 @@ namespace O2.External.SharpDevelop.Ascx
                 // always save before compiling                                                
                 compileEngine.compileSourceFile(sPathToFileLoaded);
                 compiledAssembly = compileEngine.compiledAssembly ?? null;
-                if (compiledAssembly.notNull() & o2CodeCompletion.notNull())
+                if (compiledAssembly.notNull() &&
+                    o2CodeCompletion.notNull() &&
+                    compileEngine.cpCompilerParameters.notNull())
                     o2CodeCompletion.addReferences(compileEngine.cpCompilerParameters.ReferencedAssemblies.toList());  
             }
 
@@ -848,10 +897,16 @@ namespace O2.External.SharpDevelop.Ascx
 
             clearBookmarksAndMarkers();
             // if there isn't a compiledAssembly, show errors
-            if (compiledAssembly== null)
+            if (compiledAssembly == null)
             {
                 compileEngine.addErrorsListToTreeView(tvCompilationErrors);
-                showErrorsInSourceCodeEditor(compileEngine.sbErrorMessage.ToString());
+                showErrorsInSourceCodeEditor(compileEngine.sbErrorMessage.str());
+            }
+            else
+            {
+                if (compiledFileAstData.notNull())
+                    compiledFileAstData.Dispose();
+                compiledFileAstData = new O2MappedAstData(sPathToFileLoaded);
             }
             
             return compiledAssembly;
@@ -1015,9 +1070,12 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void showLogViewerControl()
         {
-            int splitterLocation = (int)(this.Width * .20);
-            var logViewer = this.add_Control<ascx_LogViewer>();
-            this.insert_Right(logViewer, splitterLocation);
+            if (this.controls<ascx_LogViewer>(true) == null)
+            {
+                int splitterLocation = (int)(this.Width * .20);
+                var logViewer = this.add_Control<ascx_LogViewer>();
+                this.insert_Right(logViewer, splitterLocation);
+            }
             //O2Messages.setAscxDockStateAndOpenIfNotAvailable("ascx_LogViewer", O2DockState.DockBottom, "O2 Logs");
         }
 
@@ -1258,7 +1316,7 @@ namespace O2.External.SharpDevelop.Ascx
         public void openO2ObjectModel()
         {
             //O2Messages.openControlInGUI(typeof(ascx_O2ObjectModel), O2DockState.Float, "O2 Object Model");
-            O2.Kernel.open.o2ObjectModel();
+            O2Thread.mtaThread(()=>O2.Kernel.open.o2ObjectModel());
         }
 
         public void setAutoCompileStatus(bool state)

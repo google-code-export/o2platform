@@ -623,6 +623,7 @@ namespace O2.DotNetWrappers.Windows
             var tnNewNode = new TreeNode {Text = text, Name = name};
             tnNewNode.ImageIndex = tnNewNode.SelectedImageIndex = imageIndex;
             tnNewNode.Tag = tag;
+            tnNewNode.ForeColor = Color.Black;  // to handle the weird 'treeView with 1 Node makes the TreeNode Text  white' bug
             return tnNewNode;
         }
 

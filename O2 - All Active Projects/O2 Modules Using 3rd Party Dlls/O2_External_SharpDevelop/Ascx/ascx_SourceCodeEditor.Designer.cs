@@ -111,6 +111,12 @@ namespace O2.External.SharpDevelop.Ascx
             this.tcSourceInfo = new System.Windows.Forms.TabControl();
             this.scCodeAndAst = new System.Windows.Forms.SplitContainer();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.lbCurrentAstNode = new System.Windows.Forms.Label();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.tstbTextSearch = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStripForSourceEdition.SuspendLayout();
             this.toolStripWithSourceCodeActions.SuspendLayout();
             this.groupBoxWithFileAndSaveSettings.SuspendLayout();
@@ -378,8 +384,8 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbSourceCode_FileLoaded.TabIndex = 37;
             this.tbSourceCode_FileLoaded.TextChanged += new System.EventHandler(this.tbSourceCode_FileLoaded_TextChanged);
             this.tbSourceCode_FileLoaded.DragDrop += new System.Windows.Forms.DragEventHandler(this.tbSourceCode_FileLoaded_DragDrop);
-            this.tbSourceCode_FileLoaded.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSourceCode_FileLoaded_KeyPress);
             this.tbSourceCode_FileLoaded.DragEnter += new System.Windows.Forms.DragEventHandler(this.tbSourceCode_FileLoaded_DragEnter);
+            this.tbSourceCode_FileLoaded.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbSourceCode_FileLoaded_KeyPress);
             // 
             // tbTextSearch
             // 
@@ -446,8 +452,10 @@ namespace O2.External.SharpDevelop.Ascx
             // toolStripWithSourceCodeActions
             // 
             this.toolStripWithSourceCodeActions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tbShowO2ObjectModel,
+            this.toolStripLabel1,
+            this.tstbTextSearch,
             this.toolStripSeparator7,
+            this.tbShowO2ObjectModel,
             this.toolStripLabel3,
             this.btSettings,
             this.toolStripSeparator1,
@@ -476,7 +484,10 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbSampleScripts,
             this.cBoxSampleScripts,
             this.toolStripSeparator5,
-            this.btOpenFile});
+            this.btOpenFile,
+            this.toolStripSeparator8,
+            this.toolStripSeparator9,
+            this.toolStripSeparator10});
             this.toolStripWithSourceCodeActions.Location = new System.Drawing.Point(0, 0);
             this.toolStripWithSourceCodeActions.Name = "toolStripWithSourceCodeActions";
             this.toolStripWithSourceCodeActions.Size = new System.Drawing.Size(963, 25);
@@ -539,7 +550,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             this.lbExecuteOnEngine.Name = "lbExecuteOnEngine";
             this.lbExecuteOnEngine.Size = new System.Drawing.Size(100, 22);
-            this.lbExecuteOnEngine.Text = "Execute on engine:";
+            this.lbExecuteOnEngine.Text = "execute on engine:";
             this.lbExecuteOnEngine.Visible = false;
             // 
             // cbExternalEngineToUse
@@ -609,8 +620,8 @@ namespace O2.External.SharpDevelop.Ascx
             this.cboxCompliledSourceCodeMethods.Size = new System.Drawing.Size(150, 25);
             this.cboxCompliledSourceCodeMethods.Visible = false;
             this.cboxCompliledSourceCodeMethods.SelectedIndexChanged += new System.EventHandler(this.cboxCompliledSourceCodeMethods_SelectedIndexChanged);
-            this.cboxCompliledSourceCodeMethods.TextChanged += new System.EventHandler(this.cboxCompliledSourceCodeMethods_TextChanged);
             this.cboxCompliledSourceCodeMethods.Click += new System.EventHandler(this.cboxCompliledSourceCodeMethods_Click);
+            this.cboxCompliledSourceCodeMethods.TextChanged += new System.EventHandler(this.cboxCompliledSourceCodeMethods_TextChanged);
             // 
             // btExecuteSelectedMethod
             // 
@@ -639,7 +650,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbCompilationErrors.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbCompilationErrors.ForeColor = System.Drawing.Color.Red;
             this.lbCompilationErrors.Name = "lbCompilationErrors";
-            this.lbCompilationErrors.Size = new System.Drawing.Size(111, 22);
+            this.lbCompilationErrors.Size = new System.Drawing.Size(111, 13);
             this.lbCompilationErrors.Text = "Compilation Errors";
             this.lbCompilationErrors.Visible = false;
             // 
@@ -649,7 +660,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btShowHideCompilationErrors.Image = ((System.Drawing.Image)(resources.GetObject("btShowHideCompilationErrors.Image")));
             this.btShowHideCompilationErrors.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btShowHideCompilationErrors.Name = "btShowHideCompilationErrors";
-            this.btShowHideCompilationErrors.Size = new System.Drawing.Size(23, 22);
+            this.btShowHideCompilationErrors.Size = new System.Drawing.Size(23, 20);
             this.btShowHideCompilationErrors.Text = "Show / Hide compilation errors";
             this.btShowHideCompilationErrors.Visible = false;
             this.btShowHideCompilationErrors.Click += new System.EventHandler(this.btShowHideCompilationErrors_Click);
@@ -666,7 +677,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btDragAssemblyCreated.Image = ((System.Drawing.Image)(resources.GetObject("btDragAssemblyCreated.Image")));
             this.btDragAssemblyCreated.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btDragAssemblyCreated.Name = "btDragAssemblyCreated";
-            this.btDragAssemblyCreated.Size = new System.Drawing.Size(23, 22);
+            this.btDragAssemblyCreated.Size = new System.Drawing.Size(23, 20);
             this.btDragAssemblyCreated.Text = "Drag Assembly Created";
             this.btDragAssemblyCreated.Visible = false;
             this.btDragAssemblyCreated.MouseDown += new System.Windows.Forms.MouseEventHandler(this.btDragAssemblyCreated_MouseDown);
@@ -682,7 +693,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.btSeachAndViewAst.Image = ((System.Drawing.Image)(resources.GetObject("btSeachAndViewAst.Image")));
             this.btSeachAndViewAst.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btSeachAndViewAst.Name = "btSeachAndViewAst";
-            this.btSeachAndViewAst.Size = new System.Drawing.Size(23, 22);
+            this.btSeachAndViewAst.Size = new System.Drawing.Size(23, 20);
             this.btSeachAndViewAst.Text = "Search and AST details view";
             this.btSeachAndViewAst.Click += new System.EventHandler(this.btSeachAndViewAst_Click);
             // 
@@ -855,7 +866,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.lbPartialFileView.FormattingEnabled = true;
             this.lbPartialFileView.Location = new System.Drawing.Point(0, -2);
             this.lbPartialFileView.Name = "lbPartialFileView";
-            this.lbPartialFileView.Size = new System.Drawing.Size(957, 394);
+            this.lbPartialFileView.Size = new System.Drawing.Size(957, 381);
             this.lbPartialFileView.TabIndex = 47;
             this.lbPartialFileView.Visible = false;
             // 
@@ -870,6 +881,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tbExecutionHistoryOrLog.Size = new System.Drawing.Size(364, 378);
             this.tbExecutionHistoryOrLog.TabIndex = 48;
             this.tbExecutionHistoryOrLog.Visible = false;
+            this.tbExecutionHistoryOrLog.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tbExecutionHistoryOrLog_MouseDoubleClick);
             // 
             // tvCompilationErrors
             // 
@@ -896,13 +908,15 @@ namespace O2.External.SharpDevelop.Ascx
             this.tecSourceCode.ShowEOLMarkers = true;
             this.tecSourceCode.ShowSpaces = true;
             this.tecSourceCode.ShowTabs = true;
-            this.tecSourceCode.Size = new System.Drawing.Size(956, 403);
+            this.tecSourceCode.Size = new System.Drawing.Size(956, 387);
             this.tecSourceCode.TabIndex = 17;
             this.toolTip1.SetToolTip(this.tecSourceCode, "Source Code Editor");
             this.tecSourceCode.Load += new System.EventHandler(this.tecSourceCode_Load);
             this.tecSourceCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragDrop);
-            this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
             this.tecSourceCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.tecSourceCode_DragEnter);
+            this.tecSourceCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tecSourceCode_KeyPress);
+            this.tecSourceCode.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tecSourceCode_MouseClick);
+            this.tecSourceCode.MouseMove += new System.Windows.Forms.MouseEventHandler(this.tecSourceCode_MouseMove);
             // 
             // tabPage1
             // 
@@ -912,7 +926,7 @@ namespace O2.External.SharpDevelop.Ascx
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(952, 85);
+            this.tabPage1.Size = new System.Drawing.Size(142, 20);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Text Search";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -939,6 +953,7 @@ namespace O2.External.SharpDevelop.Ascx
             // 
             // scCodeAndAst.Panel1
             // 
+            this.scCodeAndAst.Panel1.Controls.Add(this.lbCurrentAstNode);
             this.scCodeAndAst.Panel1.Controls.Add(this.groupBoxWithFileAndSaveSettings);
             this.scCodeAndAst.Panel1.Controls.Add(this.tvCompilationErrors);
             this.scCodeAndAst.Panel1.Controls.Add(this.tbExecutionHistoryOrLog);
@@ -952,6 +967,43 @@ namespace O2.External.SharpDevelop.Ascx
             this.scCodeAndAst.Size = new System.Drawing.Size(960, 406);
             this.scCodeAndAst.SplitterDistance = 291;
             this.scCodeAndAst.TabIndex = 53;
+            // 
+            // lbCurrentAstNode
+            // 
+            this.lbCurrentAstNode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lbCurrentAstNode.AutoSize = true;
+            this.lbCurrentAstNode.Location = new System.Drawing.Point(1, 390);
+            this.lbCurrentAstNode.Name = "lbCurrentAstNode";
+            this.lbCurrentAstNode.Size = new System.Drawing.Size(91, 13);
+            this.lbCurrentAstNode.TabIndex = 51;
+            this.lbCurrentAstNode.Text = "Current Ast Node:";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(39, 22);
+            this.toolStripLabel1.Text = "search";
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tstbTextSearch
+            // 
+            this.tstbTextSearch.Name = "tstbTextSearch";
+            this.tstbTextSearch.Size = new System.Drawing.Size(100, 25);
+            this.tstbTextSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tstbTextSearch_KeyUp);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 25);
             // 
             // ascx_SourceCodeEditor
             // 
@@ -1068,5 +1120,11 @@ namespace O2.External.SharpDevelop.Ascx
         private System.Windows.Forms.ToolStripMenuItem enableCodeCompleteToolStripMenuItem;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem enableOrDisableAutoBackupOnCompileSucessforCSharpToolStripMenuItem;
+        private System.Windows.Forms.Label lbCurrentAstNode;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripTextBox tstbTextSearch;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
     }
 }

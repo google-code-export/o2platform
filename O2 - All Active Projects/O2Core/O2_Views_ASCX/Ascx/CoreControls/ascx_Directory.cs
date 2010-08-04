@@ -421,17 +421,7 @@ namespace O2.Views.ASCX.CoreControls
 
         public String getCurrentDirectory()
         {
-            var gotData = new AutoResetEvent(false);
-            var currentDirectory = "";
-            if (tbCurrentDirectoryName.okThread(delegate
-                                                    {
-                                                        currentDirectory = tbCurrentDirectoryName.Text;
-                                                        gotData.Set();
-                                                    }))
-                return tbCurrentDirectoryName.Text;
-
-            gotData.WaitOne();
-            return currentDirectory;
+            return tbCurrentDirectoryName.get_Text();            
         }
 
         public String getSelectedItem()
@@ -448,6 +438,11 @@ namespace O2.Views.ASCX.CoreControls
 
         private void ascx_Directory_Load(object sender, EventArgs e)
         {
+            this.onClosed(
+                ()=>{
+                        if (folderWatcher != null)
+                            folderWatcher.disable();
+                    });
         }
 
         /*   private void llMode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -458,7 +453,13 @@ namespace O2.Views.ASCX.CoreControls
         public void setupFolderWatched()
         {
             if (folderWatcher != null)
-                folderWatcher.enabled = false;
+            {
+                if (folderWatcher.folderWatched == getCurrentDirectory())
+                    return;
+                else
+                    folderWatcher.disable();
+            }
+                                            
             if (cbWatchFolder.Checked)
                 folderWatcher = new FolderWatcher(getCurrentDirectory(), folderChangesCallback);
         }

@@ -198,16 +198,21 @@ namespace O2.External.SharpDevelop.Ascx
 
         public void addReferences(List<string> referencesToAdd)
         {
-            try
-            {
-                foreach (var referencedAssembly in referencesToAdd)
-                    addReference(referencedAssembly);
-            }
-            catch (Exception ex)
-            {
-                ex.log("in O2Completion addRefrences");
-            }
-        }
+            O2Thread.mtaThread(
+                () =>{
+                        try
+                        {
+                            var referencesTimer = new O2Timer("Added {0} references".format(referencesToAdd.size())).start(); ;
+                            foreach (var referencedAssembly in referencesToAdd)
+                                addReference(referencedAssembly);
+                            referencesTimer.stop();
+                        }
+                        catch (Exception ex)
+                        {
+                            ex.log("in O2Completion addRefrences");
+                        }
+                    });
+        }    
     
     	// this will regularly parse the current source code so that we have code completion for its methods 
 		public void startParseCodeThread()
@@ -298,8 +303,7 @@ namespace O2.External.SharpDevelop.Ascx
 		/// Return true to handle the keypress, return false to let the text area handle the keypress
 		/// </summary>
         public bool TextAreaKeyEventHandler(char key)
-        {
-
+        {            
             if (codeCompletionWindow != null)
             {
                 // If completion window is open and wants to handle the key, don't let the text area
@@ -378,9 +382,10 @@ namespace O2.External.SharpDevelop.Ascx
                         if (toolTipText != null)
                         {
                             e.ShowToolTip(toolTipText);
+                            //}
+                            //if (toolTipText.valid())
+                            "ToolTipText: {0}".format(toolTipText).info();
                         }
-                        // if (toolTipText.valid())
-                        //     "ToolTipText: {0}".format(toolTipText).info();
 
                     }
                 }

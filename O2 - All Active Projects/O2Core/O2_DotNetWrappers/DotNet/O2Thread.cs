@@ -123,7 +123,8 @@ namespace O2.DotNetWrappers.DotNet
 
         public static string getCurrentStackTrace()
         {
-            return new System.Diagnostics.StackTrace().ToString();
+            return "";      // enable the line below when needed
+            //return new System.Diagnostics.StackTrace().ToString();
         }
 
         public static void setPriority_Lowest()

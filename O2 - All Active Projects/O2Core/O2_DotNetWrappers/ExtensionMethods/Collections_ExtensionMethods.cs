@@ -207,6 +207,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
 
         #region Dictionary
 
+        public static List<T> keys<T, T1>(this Dictionary<T, T1> dictionary)
+        {
+            if (dictionary.notNull())
+                return dictionary.Keys.toList();
+            return new List<T>();
+        }
+
         public static List<object> values(this Dictionary<string, object> dictionary)
         {
             var results = new List<object>();

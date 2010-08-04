@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace O2.DotNetWrappers.Windows
 {
@@ -293,6 +294,7 @@ namespace O2.DotNetWrappers.Windows
                 var tnNewNode = new TreeNode {Text = sText, Name = sName};
                 tnNewNode.ImageIndex = tnNewNode.SelectedImageIndex = iImageIndex;
                 tnNewNode.Tag = oObject;
+                tnNewNode.ForeColor = Color.Black;  // to handle the weird 'treeView with 1 Node makes the TreeNode Text  white' bug
                 return tnNewNode;
             }
         }

@@ -23,10 +23,23 @@ namespace O2.DotNetWrappers.Windows
         public string fileDeleted = "";
         public string folderWatched = "";
 
+        public FileSystemWatcher fileSystemWatcher = null;
+
         public FolderWatcher(string folderToWatch)
         {
             folderWatched = folderToWatch;
             startFolderWatcher();
+        }
+
+        public void disable()
+        {
+            enabled = false;
+            fileSystemWatcher.Changed -= fileSystemWatcher_onChange;
+            fileSystemWatcher.Created -= fileSystemWatcher_onCreate;
+            fileSystemWatcher.Deleted -= fileSystemWatcher_onDelete;
+            fileSystemWatcher.EnableRaisingEvents = false;
+            fileSystemWatcher.Dispose();
+            fileSystemWatcher = null;            
         }
 
         public FolderWatcher(string folderToWatch, CallbackOnFolderWatchEvent callback) : this(folderToWatch)
@@ -38,14 +51,14 @@ namespace O2.DotNetWrappers.Windows
         {
             return folderWatched  ?? "";  // to deal with '...Attempted to read or write protected memory..' issue ;
         }
-
+        
         private void startFolderWatcher()
         {
             try
             {
                 if (Directory.Exists(folderWatched))
                 {
-                    var fileSystemWatcher = new FileSystemWatcher(folderWatched);
+                    fileSystemWatcher = new FileSystemWatcher(folderWatched);
                     fileSystemWatcher.Changed += fileSystemWatcher_onChange;
                     fileSystemWatcher.Created += fileSystemWatcher_onCreate;
                     fileSystemWatcher.Deleted += fileSystemWatcher_onDelete;
