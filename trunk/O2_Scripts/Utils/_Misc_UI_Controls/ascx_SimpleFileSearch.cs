@@ -22,7 +22,7 @@ namespace O2.XRules.Database.Utils
 		{
 			var simpleSearch = O2Gui.open<ascx_SimpleFileSearch>("Util - Simple File Search", 500,400);			
 			var localScriptsFolder = PublicDI.config.LocalScriptsFolder;
-			var filesToShow = localScriptsFolder.files("*.cs",true);
+			var filesToShow = localScriptsFolder.files(true,"*.cs","*.h2","*.o2");
 			simpleSearch.loadFiles(localScriptsFolder, filesToShow); 
 		}
 	}

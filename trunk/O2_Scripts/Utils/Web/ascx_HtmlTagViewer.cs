@@ -78,7 +78,14 @@ namespace O2.XRules.Database.Utils
 					(value)=>{
 								ViewAsXml = value;
 								reloadPage();
-							 });
+							 })
+							 .append_Label("Search html code:")
+							 .top(5)
+							 .append_TextBox("")
+							 .onTextChange((text)=> HtmlCodeViewer.editor().invoke("searchForTextInTextEditor_findNext",text))
+							 .onEnter((text)=> HtmlCodeViewer.editor().invoke("searchForTextInTextEditor_findNext",text))
+							 .align_Right(optionsPanel);
+							 
 			}
 			
 			if (addLoadUrlTextBox)	

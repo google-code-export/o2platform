@@ -92,12 +92,13 @@ wpfGui.add_Section("Source-Code Reviews", "If you are performing securiiy review
 	  .add_Label(".Net Utils:")
 	  .add_Link_O2Script("Viewstate Decoder","Util - ViewState_Decoder_ASP.NET 3.0.h2")	  
 	  .add_Link_O2Script("Copy GAC Dlls","Wizard - CopyGacDlls.cs.o2")	  
-	  .add_Link_O2Script("Convert VB.NET into C#","Util - Convert VB.Net to CSharp.h2")
+	  .add_Link_O2Script("Precompile Asp.Net websites","DotNet_AspNet_Compiler.cs")	  	  
 	  .add_Link_O2Script("Decompile .NET Assemblies","ascx_MonoDecompiler.cs.o2")	  
 	  .add_Link_O2Script("Decompile ASP.NET Dlls","Util - Decompile ASP.NET ASPX pages compiled code.h2")
+	  .add_Link_O2Script("Convert VB.NET into C#","Util - Convert VB.Net to CSharp.h2");
 	  	  
-	  .add_Label("Java")
-	  .add_Label("     Struts &amp; Spring MVC Viewer",false);
+	  //.add_Label("Java")
+	  //.add_Label("     Struts &amp; Spring MVC Viewer",false);
 	  //.add_Label("Spring MVC Viewer (soon)",false);
 
 wpfGui.add_Section("O2Findings", "Tools to create and manipulate O2 Findings")
