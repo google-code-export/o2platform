@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var xmlFile = "SAMM-1.0-XML-0.3-en_US.xml".local();
+var xsdFile = xmlFile.replace(".xml",".xsd");
+var csharpFile = xmlFile.replace(".xml",".cs");
+panel.clear();
+panel.add_SourceCodeViewer().open(xmlFile);
+
+xmlFile.xmlCreateXSD().saveAs(xsdFile);
+if (xsdFile.fileExists())
+{
+	"Created XSD for Xml File: {0}".info(xmlFile);	 
+	xsdFile.xsdCreateCSharpFile()
+		   .fileContents()
+		   .insertBefore("//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll".line())
+		   .saveAs(csharpFile);
+	if (csharpFile.fileExists())
+		"Created CSharpFile for Xml File: {0}".info(csharpFile);	
+}
+return "done";</SourceCode>
+  <ReferencedAssemblies />
+</H2>

@@ -49,7 +49,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			var manualMethodStreams = control.add_Control<ascx_ManualMethodStreams>();
 			
 			manualMethodStreams.buildGui(); 			
-			var testFile = @"C:\O2\O2 Demos\HacmeBank_WebSite_FLAT_VIEW\2nd Batch\HacmeBank_v2_Website.Main.Page_Load.cs";
+			var testFile = @"C:\O2\DemoData\HacmeBank_WebSite_FLAT_VIEW\2nd Batch\HacmeBank_v2_Website.Main.Page_Load.cs";
 			manualMethodStreams.loadFile(testFile);
 			
 		}
@@ -121,6 +121,13 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			SaveCodeLink = commandsPanel.add_Link("save code", 0,0, ()=> saveEditorContents());										
 			showINodeLink = commandsPanel.add_Link("show INode CodeStream", 0,60, ()=> showCurrentINodeCodeStream());
 			CurrentINodeLabel = commandsPanel.add_Label("current INode: ", 0,200); 
+			commandsPanel.add_Label("Search:", 0,350)
+						 .top(2)
+						 .append_TextBox("")
+						 .top(0)
+						 .onTextChange((text)=> CodeViewer.editor().invoke("searchForTextInTextEditor_findNext",text))
+						 .onEnter((text)=> CodeViewer.editor().invoke("searchForTextInTextEditor_findNext",text))
+						 .align_Right(commandsPanel);
 			 
 			// context menu
 			 
@@ -163,9 +170,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		public void saveEditorContents()
 		{
 			
-			if (MethodStreamFile.fileExists())
+			if (MethodStreamFile.fileExists() && MethodStreamFile.contains("".tempDir()))
+			{
+				"deleting previous temp temp file: {0}".info(MethodStreamFile);
 				Files.deleteFile(MethodStreamFile);			// delete previous file since we don't need it anymore
-			
+			}
 			"saving editor contents: {0}".info(MethodStreamFile);	
 			var code = CodeViewer.get_Text();	
 			MethodStreamFile = code.saveWithExtension(".cs");
