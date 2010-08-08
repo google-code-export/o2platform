@@ -29,8 +29,18 @@ namespace O2.DotNetWrappers.Network
 			return uploadFile(fileToUpload ,fileName ,fileFormat ,fileContentType , postURL, userAgent, cookies);
 		}*/
 		//
-		
-		public HttpWebResponse uploadFile(string fileToUpload, string fileName, string fileFormat, string fileContentType , 
+        public Dictionary<string, string> Headers_Request { get; set; }
+        public Dictionary<string, string> Headers_Response { get; set; }
+
+        public HttpMultiPartForm()
+        {
+            Headers_Request = new Dictionary<string, string>();
+            Headers_Response = new Dictionary<string, string>();
+        }        
+
+        #region uploadFile
+
+        public HttpWebResponse uploadFile(string fileToUpload, string fileName, string fileFormat, string fileContentType , 
 							   string postURL, string userAgent, string cookies)
 		{		
 			// Read file data
@@ -84,9 +94,11 @@ namespace O2.DotNetWrappers.Network
             this.gcCollect();
             return response;
 		}
-		
-		private HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData, string cookies)
-		{
+        #endregion 
+
+        #region PostForm
+        private HttpWebResponse PostForm(string postUrl, string userAgent, string contentType, byte[] formData, string cookies)
+		{            
             try
             {
 
@@ -105,6 +117,8 @@ namespace O2.DotNetWrappers.Network
                 webRequest.UserAgent = userAgent;
                 //request.CookieContainer = new CookieContainer();            
                 webRequest.Headers.Add("Cookie", cookies);
+                foreach (var extraHeader in Headers_Request)
+                    webRequest.Headers.Add(extraHeader.Key,extraHeader.Value);
                 webRequest.ContentLength = formData.Length;  // We need to count how many bytes we're sending. 
 
                 this.gcCollect();                            // Hack: need this or after a couple requests the webRequest.GetRequestStream() will hang
@@ -118,13 +132,18 @@ namespace O2.DotNetWrappers.Network
                 }
 
                 var response = webRequest.GetResponse() as HttpWebResponse;
-                
+                updateHeadersResponse(response.Headers);               // store response headers
                 return response;                       
             }
             catch (Exception ex)
             {
                 ex.log("in HttpFormUpload.PostForm");
                 this.gcCollect();                       //Hack: need this or after a couple requests the webRequest.GetRequestStream() will hang
+                if (ex is WebException)
+                {
+                    var webResponse = (ex as WebException).Response as HttpWebResponse;
+                    return webResponse;
+                }
                 return null;
             }
 		}
@@ -173,8 +192,38 @@ namespace O2.DotNetWrappers.Network
 	 
 			return formData;
 		}
-	 
-		public class FileParameter
+
+        #endregion
+
+        #region support for custom headers (needs to be merged with the code in Web.cs
+        public Dictionary<string, string> add_Header(string name, string value)
+        {
+            Headers_Request.add(name, value);
+            return Headers_Request;
+        }
+        public string get_Header(string name)
+        {
+            return Headers_Request.value(name);
+        }
+
+        public Dictionary<string, string> delete_Header(string name)
+        {
+            Headers_Request.delete(name);
+            return Headers_Request;
+        }
+
+        public void updateHeadersResponse(WebHeaderCollection webHeaders)
+        {
+            Headers_Response = new Dictionary<string, string>();
+            if (webHeaders.notNull())
+                foreach (string key in webHeaders.Keys)
+                    Headers_Response.Add(key, webHeaders[key]);
+
+        }
+        #endregion
+
+        #region class FileParameter
+        public class FileParameter
 		{
 			public byte[] File { get; set; }
 			public string FileName { get; set; }
@@ -187,7 +236,9 @@ namespace O2.DotNetWrappers.Network
 				FileName = filename;
 				ContentType = contenttype;
 			}
-		}
-	}
+        }
+        #endregion
+
+    }
     
 }
