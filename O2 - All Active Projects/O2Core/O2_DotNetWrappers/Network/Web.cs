@@ -120,6 +120,7 @@ namespace O2.DotNetWrappers.Network
                 if (verbose)
                     PublicDI.log.info("Fetching url: {0}", urlToFetch);
                 HttpWebRequest webRequest = WebRequest.Create(urlToFetch) as HttpWebRequest;
+                
                 webRequest.Timeout = Web.DefaultHttpWebRequestTimeout;
                 webRequest.ReadWriteTimeout = Web.DefaultHttpWebRequestTimeout;
 
