@@ -11,8 +11,10 @@ namespace O2.API.Visualization.ExtensionMethods
     	public static object wpfInvoke<T,TRet>(this T source, Func<TRet> func) where T:DispatcherObject
     	{
     		try
-			{            
-        		return (TRet)source.Dispatcher.Invoke(func);
+			{
+                if (source.Dispatcher.CheckAccess())
+                    return func();
+                return (TRet)source.Dispatcher.Invoke(func, DispatcherPriority.Normal);
         	}			
             catch (Exception ex)
             {
@@ -25,8 +27,10 @@ namespace O2.API.Visualization.ExtensionMethods
     	public static void wpfInvoke<T>(this T source, Action act) where T:DispatcherObject 
     	{
     		try
-			{            
-        		source.Dispatcher.Invoke(act);
+			{
+                if (source.Dispatcher.CheckAccess())
+                    act();
+                source.Dispatcher.Invoke(act, DispatcherPriority.Normal);
         	}			
             catch (Exception ex)
             {

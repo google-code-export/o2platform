@@ -11,6 +11,12 @@ namespace O2.API.AST.ExtensionMethods.CSharp
 {
     public static class FieldDeclaration_ExtensionMethods
     {
+        public static FieldDeclaration add_Field(this CompilationUnit compilationUnit, IField iField, FieldDeclaration fieldDeclaration)
+        {
+            var fieldType = compilationUnit.add_Type(iField.DeclaringType);
+            return fieldType.add_Field(fieldDeclaration);
+        }
+
         public static FieldDeclaration add_Field(this CompilationUnit compilationUnit, IField iField)
         {
             
@@ -18,13 +24,17 @@ namespace O2.API.AST.ExtensionMethods.CSharp
             return fieldtype.add_Field(iField);            
         }
 
-            /*   // move to method add_Field
-                var @namespace = iField.DeclaringType.Namespace;
-                var typeName = iField.DeclaringType.Name;
-                //var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
-                var type = compilationUnit.add_Type(
-                //compilationUnit.add_Method(@namespace, typeName, methodDeclaration);
-             */
+        public static FieldDeclaration add_Field(this TypeDeclaration typeDeclaration, FieldDeclaration fieldDeclaration)
+        {
+            if (typeDeclaration.notNull() && fieldDeclaration.notNull() && typeDeclaration.Children.notNull())
+            {
+                //var insertPosition = typeDeclaration.Children.Count;
+                var insertPosition = 0;  // fields are OK to go at the top
+                typeDeclaration.Children.Insert(insertPosition, fieldDeclaration);
+            }
+            return fieldDeclaration;
+        }
+            
  
         public static FieldDeclaration add_Field(this TypeDeclaration typeDeclaration, IField iField)
         {            
@@ -42,8 +52,8 @@ namespace O2.API.AST.ExtensionMethods.CSharp
 
             var classFinder = new ClassFinder(iField.DeclaringType, 0,0);
             field = ICSharpCode.SharpDevelop.Dom.Refactoring.CodeGenerator.ConvertMember(iField, classFinder);
-            if (field != null)
-                typeDeclaration.Children.Insert(0,field);
+            
+            typeDeclaration.add_Field(field);                
             //var varia = new
             //var field = new FieldDeclaration(
             /*var fields = (from child in typeDeclaration.Children
