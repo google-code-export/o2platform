@@ -104,6 +104,6 @@ namespace O2.XRules.Database.APIs
     		
 											   
 			return xssPayloads;
-    	}
+    	}    	    	
     }
 }

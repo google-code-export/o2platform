@@ -59,6 +59,7 @@ wpfGui.add_Section("Main", "Welcome to the OWASP O2 Platform!".line().line() +
 						   
 	  .add_Link("Available Scripts",wpfGui.ExecuteScripts.showAvailableScripts) 		
 	  .add_Link("O2 Log Viewer",wpfGui.ExecuteScripts.openO2LogViewer) 
+	  .add_Link_O2Script("Execute O2 Scripts","Util - Execute O2 Scripts") 	  
 	  .add_Link("O2 Command Prompt",wpfGui.ExecuteScripts.openO2CommandPromt)
 	  .add_Link_Web("O2Platform.com ({0})".format(currentVersion),defaultWebsiteOnMainTab)	  
 	  .add_Upgrade_Link(currentVersion, "http://code.google.com/p/o2platform/downloads/list");

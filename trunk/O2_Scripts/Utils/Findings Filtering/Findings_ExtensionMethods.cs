@@ -133,6 +133,8 @@ namespace O2.XRules.Database.Findings
 				var codeViewer = findingsViewer.insert_Right<Panel>(control.width()/2).add_SourceCodeViewer();
 				findingsViewer._onTraceSelected += 
 					(trace)=> codeViewer.show(trace);
+				findingsViewer._onFindingSelected +=
+					(finding)=> codeViewer.open(finding.file);
 			}
             return findingsViewer;
         }

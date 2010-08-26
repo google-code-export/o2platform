@@ -11,6 +11,7 @@ using TweetSharp.Fluent;
 using TweetSharp.Model;
 using TweetSharp.Extensions;
 using O2.XRules.Database.Utils;
+using O2.Views.ASCX.DataViewers;
 
 //O2File:ISecretData.cs
 
@@ -110,16 +111,39 @@ namespace O2.XRules.Database.APIs
     	
     	public static List<TwitterStatus> user_Timeline(this O2TwitterAPI twitterAPI, int itemsToFetch)
     	{
+			return twitterAPI.user_Timeline(itemsToFetch,-1);
+    	}
+    	public static List<TwitterStatus> user_Timeline(this O2TwitterAPI twitterAPI, int itemsToFetch, long beforeId)
+    	{
     		try
-    		{
-    			//twitterAPI.Statuses = twitterAPI.Twitter.Statuses();
-    			return twitterAPI.Statuses
-	    						 .OnUserTimeline()
-	    						 .Take(itemsToFetch)
-	    						 .AsJson()
-	    						 .Request()
-	    						 .AsStatuses()			
-					 			 .ToList();
+    		{    			    			
+    			var tweetsFetched = new List<TwitterStatus>();
+    			try
+    			{
+	    			while(tweetsFetched.size() < itemsToFetch)
+	    			{
+	    				"Fetching tweets before id: {0}".info(beforeId);	    			
+		    			var homeTimeline = twitterAPI.Statuses.OnUserTimeline();
+						if (beforeId >0)
+			    				homeTimeline = homeTimeline.Before(beforeId);
+						var tweets = homeTimeline.Take(itemsToFetch)
+						    					 .AsJson()
+						    					 .Request()
+						    					 .AsStatuses()			
+										 		 .ToList();
+						"Received {0} tweets before id: {1}".info(tweets.size(),beforeId);								 		 
+						if (tweets.size() ==0)
+							break;
+						tweetsFetched.AddRange(tweets);
+						beforeId = tweets.lastTweet().Id -1;
+					}
+				}
+				catch(Exception ex)
+				{
+					ex.log("in TwitterAPi.user_Timeline");
+				}
+				"TOTAL ReceiveD tweets {0}".debug(tweetsFetched.size());								 		 
+				return tweetsFetched;
 			}
 			catch(Exception ex)
 			{
@@ -156,12 +180,11 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	public static List<TwitterStatus> home_Timeline(this O2TwitterAPI twitterAPI, int itemsToFetch)
-    	{
-    		"HEEERRRRE".error();
+    	{    		
     		return twitterAPI.Statuses
     						 .OnHomeTimeline()    						 
-    						 .Take(itemsToFetch)
-    						 //.Since(10)
+    						 //.OnFriendsTimeline()
+    						 .Take(itemsToFetch)    						 
     						 .AsJson()
     						 .Request()    						 
     						 .AsStatuses()    						
@@ -189,6 +212,8 @@ namespace O2.XRules.Database.APIs
     						  .AsUsers()
     						  .ToList();
     	}
+    	
+    	
     	    	
     	
     	/*public static List<TwitterStatus> timeline(this O2TwitterAPI twitterAPI)
@@ -215,16 +240,42 @@ namespace O2.XRules.Database.APIs
     	public static bool ok(this TwitterResult result)
         {
             return result.ResponseHttpStatusDescription == "OK";
-        }        
+        }
+        
+        
 	}
-
-	public static class Twitter_ExtensionClasses_Search
-	{    	
-		public static List<string> search(this O2TwitterAPI twitterAPI, string searchText)
+	
+	public static class Twitter_ExtensionClasses_TwitterStatus
+	{
+		public static TwitterStatus lastTweet(this List<TwitterStatus> twitterStatuses)
 		{
-			//twitterAPI.Twitter.
+			if (twitterStatuses.size() > 0)
+				return twitterStatuses.Last();
 			return null;
 		}
+		
+	}
+	public static class Twitter_ExtensionClasses_Search
+	{    
+		public static List<TwitterSearchStatus> search(this O2TwitterAPI twitterAPI, string text)
+		{
+			return twitterAPI.Twitter.Search().Query()
+					                 .Containing(text)  
+					                 .Request()
+					                 .AsSearchResult()
+					                 .Statuses
+					                 .ToList(); 
+		}
+		
+		public static List<TwitterUser> search_forUser(this O2TwitterAPI twitterAPI, string text)
+		{
+			return twitterAPI.Twitter.Users() 
+			                          .SearchFor(text) 
+			                          .AsJson()
+			                          .Request()
+			                          .AsUsers()
+			                          .ToList();
+		}		
 	}
 	
 	public static class Twitter_ExtensionClasses_NewTweets
@@ -253,29 +304,56 @@ namespace O2.XRules.Database.APIs
         	Action loadData = null;
         	loadData = 
         		()=>{
-        			    "[O2TwitterAPI]: In add_TableList_With_Tweets: {0}".info(description);
         				var twitterStatuses = twitterStatusesCallback();
-				        control.clear();	        
-						var tableList = control.add_TableList();																			
-						tableList.add_Columns(new List<string> {"#","Date","User","Tweet Text"});
-						var item = 1;
-						foreach(var twitterStatus in twitterStatuses)   
-						{
-							var row = tableList.add_Row(new List<string> {item++.str(), twitterStatus.CreatedDate.str() ,  twitterStatus.User.Name, twitterStatus.Text });
-							//row.infoTypeName();
-						}
-			            tableList.makeColumnWidthMatchCellWidth();            
+        			    var tableList = control.add_TableList_With_Tweets(description,twitterStatuses);
 			            tableList.add_ContextMenu()
             		 			 .add_MenuItem("Refresh",()=> loadData());
             		 			 
-						tableList.afterSelect(
+						/*tableList.afterSelect(
 							(selectedItems)=>{ 
 												"AFTER SELECT 2".info();
 											//	show.info(selectedItems);
-											 });
+											 });*/
 			        };            
            	loadData(); 		 
         	return control;
+        }
+        
+        public static ascx_TableList add_TableList_With_Tweets<T>(this T control, string description, List<TwitterStatus> twitterStatuses)
+        	where T : Control
+        {
+        	"[O2TwitterAPI]: In add_TableList_With_Tweets: {0}".info(description);			
+	        control.clear();	        
+			var tableList = control.add_TableList();																			
+			tableList.add_Columns(new List<string> {"#","Date","User","Tweet Text"});
+			var item = 1;
+			foreach(var twitterStatus in twitterStatuses)   
+			{
+				var row = tableList.add_Row(new List<string> {item++.str(), twitterStatus.CreatedDate.str() ,  twitterStatus.User.Name, twitterStatus.Text });
+				//row.infoTypeName();
+			}
+            tableList.makeColumnWidthMatchCellWidth();            
+            return tableList;
+        }
+        
+        public static ascx_TableList add_TableList_With_TwitterSearchStatus<T>(this T control, string description, List<TwitterSearchStatus> twitterSearchStatuses)
+        	where T : Control
+        {
+        	"[O2TwitterAPI]: In add_TableList_With_TwitterSearchStatus: {0}".info(description);			
+	        control.clear();	        
+			var tableList = control.add_TableList();																			
+			tableList.add_Columns(new List<string> {"#","Date","FromUserScreenName","ToUserScreenName","Tweet Text"});
+			var item = 1;
+			foreach(var twitterSearchStatus in twitterSearchStatuses)   
+			{
+				var row = tableList.add_Row(new List<string> {item++.str(), twitterSearchStatus.CreatedDate.str() ,  																		
+																			twitterSearchStatus.FromUserScreenName.str(), 
+																			twitterSearchStatus.ToUserScreenName ?? "", 																			
+																			twitterSearchStatus.Text.str() });
+				//row.infoTypeName();
+			}
+            tableList.makeColumnWidthMatchCellWidth();            
+            return tableList;
         }
         
         public static T add_TableList_With_Users<T>(this T control, List<TwitterUser> twitterUsers)

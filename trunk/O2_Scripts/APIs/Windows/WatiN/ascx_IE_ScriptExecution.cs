@@ -21,8 +21,10 @@ using O2.XRules.Database.Utils;
 namespace O2.XRules.Database.Utils
 {
     public class ascx_IE_ScriptExecution : Control
-    {    
-		
+    {   
+        
+        public ascx_Simple_Script_Editor script {get; set;}        
+		public bool EnableCodeComplete { get; set;}
 		
 		public static ascx_IE_ScriptExecution launchGui()
 		{
@@ -30,10 +32,31 @@ namespace O2.XRules.Database.Utils
 						.buildGui();
 		}
 		
-    	public ascx_IE_ScriptExecution()
-    	{
-    		
+		public static ascx_IE_ScriptExecution launchGui_NoCodeComplete()
+		{
+			var host = O2Gui.open<Panel>("IE Script Execution (no code complete)", 600,400);
+			return (ascx_IE_ScriptExecution)host.invokeOnThread(
+				()=>{
+						var ieExecution = new ascx_IE_ScriptExecution(false).fill();						
+						ieExecution.buildGui("");
+						host.add_Control(ieExecution);
+						return ieExecution;
+					});
+			
+						
+		}
+		
+    	public ascx_IE_ScriptExecution() : this (true)
+    	{    		
     	}
+    	
+    	public ascx_IE_ScriptExecution(bool enableCodeComplete)
+    	{
+    		this.Width = 600;
+    		this.Height = 400;
+    		EnableCodeComplete = enableCodeComplete;
+    	}
+    	
     	public ascx_IE_ScriptExecution buildGui()
     	{
     		return buildGui("ie.open(\"http://www.google.com\");");
@@ -42,7 +65,7 @@ namespace O2.XRules.Database.Utils
 		{
 			var topPanel = this.add_Panel();			
 
-			var script = topPanel.insert_Below<Panel>().add_Script(true);
+			script = topPanel.insert_Below<Panel>().add_Script(EnableCodeComplete);
 			script.InvocationParameters.Add("panel",topPanel); 
 			script.onCompileExecuteOnce();
 			script.set_Command(getScript(customScript));

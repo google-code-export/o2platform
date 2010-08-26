@@ -44,57 +44,47 @@ using System.Security.Cryptography;
 
 namespace O2.XRules.Database.Utils
 {
-	public static class ExtraMethodsToAddToO2CodeBase_String
+	public static class ExtraMethodsToAddToO2CodeBase_IO
 	{
+		public static string safeFileName(this string _stringToConvert, int maxLength)
+		{			
+			var safeName = _stringToConvert.safeFileName();
+			if (maxLength > 10 && safeName.size() > maxLength)
+				return "{0} ({1}){2}".format(
+							safeName.Substring(0, maxLength - 10),
+							3.randomNumbers(),
+							_stringToConvert.Substring(_stringToConvert.size()-9).extension());
+			return safeName;
+		}
 		
-	}
-	
-    public static class ExtraMethodsToAddToO2CodeBase
-    {
-    	
-    }   
-    
-    public static class ExtraMethodsToAddToO2CodeBase_Colections
-    {
-    	
-    }
-    
-    public static class ExtraMethodsToAddToO2CodeBase_Serialize_ExtensionMethods
-    {
-    	
-    }
-        
-    public static class ExtraMethodsToAddToO2CodeBase_TreeView
-    {
-    	
-    	
-    }
-    
-    public static class ExtraMethodsToAddToO2CodeBase_O2_API_AST
-    {
-    	
-    	
-    	
-    	
-    	
-    	
-    }
-        
-	public static class ExtraMethodsToAddToO2CodeBase_ascx_TableList
-	{
+		public static float availableMemory(this object _object)
+		{
+			return new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes").NextValue();
+		}
 		
-	}
-    
+		public static string infoAvailableMemory(this object _object)
+		{
+			var availableMemory = new System.Diagnostics.PerformanceCounter("Memory", "Available MBytes")
+														.NextValue()
+														.str();
+			"AvailableMemory: {0}Mb".info(availableMemory);
+			return availableMemory;
+		}
 
-	public static class ExtraMethodsToAddToO2CodeBase_Button
-	{
+		public static string askUser(this string question)
+		{
+			return question.askUser("Question", "");
+		}
 		
-	}
-	public static class ExtraMethodsToAddToO2CodeBase_WinformControls
-	{
-		
-		
-	}
+		public static string askUser(this string question, string title, string defaultValue)
+    	{
+    		var assembly =  "Microsoft.VisualBasic".assembly();
+			var intercation = assembly.type("Interaction");
+ 
+			var parameters = new object[] {question,title,defaultValue,-1,-1}; 
+			return intercation.invokeStatic("InputBox",parameters).str(); 
+    	}
+	}	   
 }
     	
 		

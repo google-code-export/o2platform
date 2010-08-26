@@ -171,26 +171,26 @@ namespace O2.XRules.Database.APIs
 						  															"</source>".line();
 						  						});
 						  			});
-						  			
+					 	  			
 			populateRecentChangesComboBox("");
-			
+			  
 			return this;					
 		}
-
+   
 		public void loadCurrentPage()
 		{
 			var pageToEdit =  WikiPage_TextBox.get_Text();	
 			loadPage(pageToEdit);													
-		}
+		} 
 		
 		public void openPage(string pageToLoad)
 		{				
 			loadPage(pageToLoad);
 		}
-		
+		 
 		public void loadPage(string pageToLoad)
-		{
-			WikiPage_TextBox.set_Text(pageToLoad);
+		{  
+			WikiPage_TextBox.set_Text(pageToLoad); 
 			WikiTextEditor.backColor(Color.LightPink);
 			StatusLabel.set_Text("Opening page: {0}".format(pageToLoad)).textColor(Color.Black);
 			CurrentPageUrl.insert_Item("{0}/{1}".format(WikiApi.IndexPhp,pageToLoad));
@@ -210,7 +210,7 @@ namespace O2.XRules.Database.APIs
 		
 		public void saveCurrentPage()
 		{
-			var currentPage =  WikiPage_TextBox.get_Text();
+			var currentPage =  WikiPage_TextBox.get_Text();			
 			if (WikiApi.loggedIn().isFalse())
 			{
 				StatusLabel.set_Text("You need to be logged in to save pages").textColor(Color.Red);				

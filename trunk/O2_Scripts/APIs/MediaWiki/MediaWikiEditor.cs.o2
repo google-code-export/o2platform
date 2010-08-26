@@ -75,6 +75,8 @@ namespace O2.XRules.Database.APIs
 		public DocumentPane MainDocumentPane { get; set; }		
 		public WPF_GUI WpfGui { get; set; }
 		
+		public string helpPageInO2PlatformWiki = "O2 Script/Tool - MediaWiki Editor";
+		
     	public static MediaWikiEditor launch()
     	{    		
     		var wikiEditor = O2Gui.open<MediaWikiEditor>("O2 MediaWiki Editor",750,600)
@@ -138,6 +140,7 @@ namespace O2.XRules.Database.APIs
 			showLogViewer();
 			
 			WpfGui.add_Section("Media Wiki Editor", "Welcome to the O2 MediaWiki Editor")
+				  .add_Link("Help",showHelp)
 				  .add_Link("Login",showLoginPanel)
 				  .add_Link("Edit Page", showEditPage)
 				  .add_Link("Edit using Categories", showEditUsingCategories)
@@ -150,8 +153,10 @@ namespace O2.XRules.Database.APIs
 				  .add_Link("Util: Backup",showBackup)
 				  .add_Link("Util: Show O2 Log Viewer",showLogViewer);
 									
-			
-			showLoginPanel();	// default page					
+			WpfGui.GuiSections[0].links().name("Help").click();
+			//showLoginPanel();	// default page		
+			//WpfGui.show_O2Browser();
+			//WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);
 			return this;
 		}
 		
@@ -191,6 +196,15 @@ namespace O2.XRules.Database.APIs
         	this.insert_Below<Panel>(100).add_LogViewer();
         }
         
+        public void showHelp()
+        {
+        	 MainDocumentPane.add_DocumentContent("Help")
+        	 				 .setAsActive()
+        	 				 .add_WinForms_Control<Panel>()
+        	 				 .add_Control(WpfGui.O2Browser);
+        	 WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);				 
+        			         
+        }
         public void showLoginPanel()
         {        	        	
         	 MainDocumentPane.add_DocumentContent("Login Panel")

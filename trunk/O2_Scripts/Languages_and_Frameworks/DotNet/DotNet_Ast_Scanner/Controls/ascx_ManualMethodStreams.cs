@@ -1,6 +1,8 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -49,7 +51,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			var manualMethodStreams = control.add_Control<ascx_ManualMethodStreams>();
 			
 			manualMethodStreams.buildGui(); 			
-			var testFile = @"C:\O2\DemoData\HacmeBank_WebSite_FLAT_VIEW\2nd Batch\HacmeBank_v2_Website.Main.Page_Load.cs";
+			var testFile = @"HacmeBank_v2_Website.ascx.PostMessageForm.btnPostMessage_Click".local();
 			manualMethodStreams.loadFile(testFile);
 			
 		}
@@ -93,7 +95,12 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			TaintRules = new O2CodeStreamTaintRules(); 									
 		}	
 		
-		public void buildGui()
+		public ascx_ManualMethodStreams buildGui()
+		{
+			return buildGui(true);
+		}
+		
+		public ascx_ManualMethodStreams buildGui(bool addLogViewer)
 		{
 			//AstEngine.HostPanel.clear();												
 			var topPanel = this.add_1x1("Methods & Parameters", "Source Code", true);
@@ -130,7 +137,15 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 						 .align_Right(commandsPanel);
 			 
 			// context menu
-			 
+			
+			CodeStreamTreeView.add_ContextMenu()
+							  .add_MenuItem("Expand Selectd Node", 
+							  		()=>{
+							  				var selectedNode = CodeStreamTreeView.selected();
+							  				if (selectedNode.notNull())
+							  					selectedNode.ExpandAll();
+							  				selectedNode.selected();	
+							  			});
 			/*MethodsCalledTreeView.add_ContextMenu()
 					  		     .add_MenuItem("Show Method Stream Details", ()=> showMethodStreamDetails(CodeViewer.get_Text()));
 			*/	
@@ -144,7 +159,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			
 			CodeViewer.onCaretMove((caret)=> findINodeAtCaretLocation(caret));
 			//CodeViewer.editor().eDocumentDataChanged += (text)=> saveEditorContents();
-			this.insert_Below<Panel>(100).add_LogViewer();				
+			if (addLogViewer)
+				this.insert_Below<Panel>(100).add_LogViewer();				
 			
 			commandsPanel.onDrop(
 				(file)=>{
@@ -153,23 +169,41 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 						});									
 						
 			loadDefaultTaintRules();			
+			return this;
 		}
+				
 		
-		public void loadDataInGui()
+		public void set_Text(string codeToLoad)
 		{
-		
+			set_Text(codeToLoad,".cs");
 		}
 		
-		public void loadFile(string fileToLoad)
+		public void set_Text(string codeToLoad, string extension)
+		{
+			loadFile(codeToLoad.saveWithExtension(extension));
+		}
+		
+		public void set_Text(string codeToLoad, string extension, bool createMethodStream)
+		{
+			if (createMethodStream)
+				loadFile(codeToLoad.saveWithExtension(extension));
+			else
+				CodeViewer.set_Text(codeToLoad, extension);
+		}
+		
+		public Thread loadFile(string fileToLoad)
+		{
+			return loadFile(fileToLoad,true);
+		}
+		public Thread loadFile(string fileToLoad, bool useAstCachedData)
 		{
 			CodeViewer.load(fileToLoad);
 			MethodStreamFile = fileToLoad;
-			processCodeViewerContents();
+			return processCodeViewerContents(useAstCachedData);
 		}
 		
-		public void saveEditorContents()
-		{
-			
+		public Thread saveEditorContents()
+		{			
 			if (MethodStreamFile.fileExists() && MethodStreamFile.contains("".tempDir()))
 			{
 				"deleting previous temp temp file: {0}".info(MethodStreamFile);
@@ -178,22 +212,43 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			"saving editor contents: {0}".info(MethodStreamFile);	
 			var code = CodeViewer.get_Text();	
 			MethodStreamFile = code.saveWithExtension(".cs");
-			processCodeViewerContents();				
+			return processCodeViewerContents();				
 		}
 		
-		public void processCodeViewerContents()
+		public Thread processCodeViewerContents()
+		{
+			return processCodeViewerContents(true);
+		}
+		
+		public Thread processCodeViewerContents(bool useAstCachedData)
 		{
 			"Processing source code: {0}".info(MethodStreamFile);									
 			
 			//O2AstResolver cachedO2AstResolver = null;
 			//if (AstData_MethodStream != null)
 			//	cachedO2AstResolver = AstData_MethodStream.O2AstResolver;
+			ParametersTreeView.backColor(Color.LightPink);
+			MethodsCalledTreeView.backColor(Color.LightPink);
+			return O2Thread.mtaThread(
+				()=>{			
+						
+						mapTaintRules();
+						//AstData_MethodStream = new O2MappedAstData(); 																										
+						//AstData_MethodStream.loadFile(MethodStreamFile);	
+						if (AstData_MethodStream.notNull() && useAstCachedData.isFalse())
+						{
+							"Disposing previously used AstData_MethodStream".debug();
+							AstData_MethodStream.dispose();
+							PublicDI.config.gcCollect();
+						}
+												
+						AstData_MethodStream = MethodStreamFile.getAstData(useAstCachedData);//new List<string>(),false); 
+						
+						AstData_MethodStream.showMethodStreamDetailsInTreeViews(ParametersTreeView, MethodsCalledTreeView);
+						ParametersTreeView.backColor(Color.White);
+						MethodsCalledTreeView.backColor(Color.White);												
+					});
 			
-			mapTaintRules();
-			AstData_MethodStream = new O2MappedAstData(); 														
-										
-			AstData_MethodStream.loadFile(MethodStreamFile);	
-			AstData_MethodStream.showMethodStreamDetailsInTreeViews(ParametersTreeView, MethodsCalledTreeView);
 		}
 		
 		public void findINodeAtCaretLocation(ICSharpCode.TextEditor.Caret caret)
@@ -235,14 +290,21 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		
 		public void createAndShowCodeStream(INode iNode)
 		{
-			if (iNode != null)
+			try
 			{
-				CodeViewer.editor().selectTextWithColor(iNode);	
-				
-				var codeStream = AstData_MethodStream.createO2CodeStream(TaintRules, MethodStreamFile,iNode);
-				//var codeStream = AstData_MethodStream.createO2CodeStream(MethodStreamFile,iNode);
-				if (codeStream.hasPaths())
-					showCodeStream(codeStream);
+				if (iNode != null)
+				{				
+					CodeViewer.editor().caret(iNode.StartLocation.Line, iNode.StartLocation.Column);
+					CodeViewer.editor().selectTextWithColor(iNode);
+					var codeStream = AstData_MethodStream.createO2CodeStream(TaintRules, MethodStreamFile,iNode);
+					//var codeStream = AstData_MethodStream.createO2CodeStream(MethodStreamFile,iNode);
+					if (codeStream.hasPaths())
+						showCodeStream(codeStream);
+				}
+			}
+			catch(Exception ex)
+			{
+				ex.log("in createAndShowCodeStream");
 			}
 		}
 		
