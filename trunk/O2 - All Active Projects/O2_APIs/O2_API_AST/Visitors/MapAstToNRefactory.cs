@@ -40,7 +40,9 @@ namespace O2.API.AST.Visitors
         public Dictionary<NRefactoryAST.MethodDeclaration, IMethod> MethodDeclarationToIMethod { get; set; }
         public Dictionary<IMethod, NRefactoryAST.MethodDeclaration> IMethodToMethodDeclaration { get; set; }
         public Dictionary<NRefactoryAST.ConstructorDeclaration, IMethod> ConstructorDeclarationToIMethod { get; set; } 
-        public Dictionary<IMethod, NRefactoryAST.ConstructorDeclaration> IMethodToConstructorDeclaration  { get; set; } 
+        public Dictionary<IMethod, NRefactoryAST.ConstructorDeclaration> IMethodToConstructorDeclaration  { get; set; }
+        public Dictionary<IProperty, NRefactoryAST.PropertyDeclaration> IPropertyToPropertyDeclaration { get; set; }
+        public Dictionary<IField, NRefactoryAST.FieldDeclaration> IFieldToFieldDeclaration { get; set; } 
 
         //internal variables
         IProjectContent defaultProjectContent;
@@ -64,6 +66,8 @@ namespace O2.API.AST.Visitors
             IMethodToMethodDeclaration = new Dictionary<IMethod, NRefactoryAST.MethodDeclaration>();
             ConstructorDeclarationToIMethod = new Dictionary<NRefactoryAST.ConstructorDeclaration, IMethod>();
             IMethodToConstructorDeclaration = new Dictionary<IMethod, NRefactoryAST.ConstructorDeclaration>();
+            IPropertyToPropertyDeclaration = new Dictionary<IProperty, NRefactoryAST.PropertyDeclaration>();
+            IFieldToFieldDeclaration = new Dictionary<IField, NRefactoryAST.FieldDeclaration>();
             
         }
         
@@ -114,7 +118,15 @@ namespace O2.API.AST.Visitors
             IClassToTypeDeclaration.Add(iClass, typeDeclaration);
         }                
 
+        public void mapProperty(NRefactoryAST.PropertyDeclaration propertyDeclaration, IProperty iProperty)
+        {
+            IPropertyToPropertyDeclaration.add(iProperty, propertyDeclaration);            
+        }
 
+        public void mapField(NRefactoryAST.FieldDeclaration fieldDeclaration, IField iField)
+        {
+            IFieldToFieldDeclaration.add(iField, fieldDeclaration);
+        }
 
 		DefaultClass GetCurrentClass()
 		{
@@ -766,8 +778,10 @@ namespace O2.API.AST.Visitors
 					}
 					
 					c.Fields.Add(f);
+                    mapField(fieldDeclaration, f);
 				}
 			}
+            
 			return null;
 		}
 		
@@ -793,6 +807,7 @@ namespace O2.API.AST.Visitors
 			property.Documentation = GetDocumentation(region.BeginLine, propertyDeclaration.Attributes);
 			ConvertAttributes(propertyDeclaration, property);
 			c.Properties.Add(property);
+            mapProperty(propertyDeclaration, property);
 			return null;
 		}
 		

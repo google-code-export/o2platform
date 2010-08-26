@@ -26,6 +26,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
     <PublishUrl>C:\_O2_SVN\O2_ClickOnce_Installers\O2_XRules_Database\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -43,7 +44,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>122</ApplicationRevision>
+    <ApplicationRevision>126</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -123,6 +124,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\WatiN.Core.1x.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="WPFExtensions, Version=1.0.3437.34043, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\WPFExtensions.dll</HintPath>
@@ -167,6 +169,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="O2_XRules_Database_TemporaryKey.pfx" />
     <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
       <SubType>UserControl</SubType>

@@ -146,8 +146,8 @@ namespace O2.XRules.Database
                 var currentWinForms = executeScripts.applicationWinForms();
                 if (currentWinForms.size() == 1)
                 {
-                    if ("The new GUI could not be launched, do you want download the latest version?".askUserQuestion())
-                        openBrowserWithDownloadLink();
+                 //   if ("The new GUI could not be launched, do you want download the latest version?".askUserQuestion())
+                 //       openBrowserWithDownloadLink();
                 }
                 else
                     executeScripts.close();

@@ -1015,10 +1015,9 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                                                                       Name = nodeText,
                                                                                       Text = nodeText,
                                                                                       Tag = nodeTag
-                                                                                  };
-                                                               //treeNode.ForeColor = Color.Green;  // to handle the weird 'treeView with 1 Node makes the TreeNode Text  white' bug
+                                                                                  };                                                               
                                                                treeView.Nodes.Add(treeNode);
-                                                               treeView.Refresh();
+                                                               //treeView.Refresh();
                                                                return treeNode;
                                                            }));
         }
@@ -1138,15 +1137,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         var nodeText = (maxNodeTextSize > 1 && item.Key.size() > maxNodeTextSize)
                                             ? item.Key.Substring(0, maxNodeTextSize).add("...")
                                             : item.Key;
-                        TreeNode newNode = new TreeNode { Text = nodeText, Name = nodeText };
-                        newNode.ForeColor = Color.Black;  // to handle the weird 'treeView with 1 Node makes the TreeNode Text  white' bug
+                        TreeNode newNode = new TreeNode { Text = nodeText, Name = nodeText };                        
                         newNode.ImageIndex = newNode.SelectedImageIndex = 0;
                         newNode.Tag = item.Value;                        
                         if (item.Value.size() > 1)
                             newNode.Nodes.Add("DummyNode_1");
                         nodesToAdd.Add(newNode);                        
-                        progressBar.increment(1);
-                        Application.DoEvents();
+                        progressBar.increment(1);                        
                     }
                     treeNode.Nodes.AddRange(nodesToAdd.ToArray());
                 });
