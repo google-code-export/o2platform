@@ -8,8 +8,13 @@ var findingsViewer = topGui.insert_Right&lt;ascx_FindingsViewer&gt;(300);
 var sourceCodeViewer = findingsViewer.insert_Below&lt;Panel&gt;(400).add_SourceCodeViewer();
 var loopPoc = true;
 findingsViewer.add_ContextMenu().add_MenuItem("Cancel Execution",()=&gt;loopPoc = false);
+var url = "http://localhost:57592/HacmeBank_v2_Website";
+if(url.uri().online().isFalse())
+{
+	url = "What is Hacmebank's URL:".askUser("HacmeBank Url", "http://localhost:57592/HacmeBank_v2_Website"); 	 
+}
 
-ie.open("http://localhost:56253/HacmeBank_v2_Website/");
+ie.open(url);
 WatiN_IE.FlashingCount = 3;
 WatiN_IE.ScrollOnFlash = false;
 
@@ -53,6 +58,8 @@ return null;
 //using O2.XRules.Database.Findings;
 //using O2.DotNetWrappers.O2Findings
 //O2File:Findings_ExtensionMethods.cs
-//O2Ref:O2_ImportExport_OunceLabs.dll</SourceCode>
+//O2Ref:O2_ImportExport_OunceLabs.dll
+
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs</SourceCode>
   <ReferencedAssemblies />
 </H2>

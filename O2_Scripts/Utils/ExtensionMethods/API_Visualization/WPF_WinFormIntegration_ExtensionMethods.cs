@@ -22,7 +22,6 @@ using O2.External.IE.Wrapper;
 using O2.API.Visualization.ExtensionMethods;
 
 //O2File:WPF_Controls_ExtensionMethods.cs
-
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:O2SharpDevelop.dll
 //O2Ref:WPFExtensions.dll

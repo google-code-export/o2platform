@@ -4,7 +4,7 @@
 var topPanel = O2Gui.open&lt;Panel&gt;("Map HacmeBank Ascx entry points",600,400);
 topPanel.insert_Below&lt;Panel&gt;(100).add_LogViewer();
 //var pathToRemove = "http://localhost:{0}/Hacmebank_v2/main.aspx?TargetPage={1}";
-var originalPath = @"C:\O2\DemoData\HacmeBank_v2.0 (Dinis version - 7 Dec 08)\HacmeBank_v2_Website\ascx\";
+var originalPath = @"C:\O2\DemoData\HacmeBank_v2.0 (7 Dec 08)\HacmeBank_v2_Website\ascx";
 
 O2.ImportExport.OunceLabs.OunceAvailableEngines.addAvailableEnginesToControl(typeof(ascx_FindingsViewer));
 

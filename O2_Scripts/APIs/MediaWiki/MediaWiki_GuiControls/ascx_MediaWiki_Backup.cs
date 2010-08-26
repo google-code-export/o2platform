@@ -183,7 +183,10 @@ namespace O2.XRules.Database.APIs
 					"In backup_Files, CancelBackup was set, so aborting backup".error();
 					break;
 				}
-				new Web().downloadBinaryFile(file, files_BackupFolder); 
+				var web = new Web();
+				if (WikiApi.BasicAuth.valid())
+ 					web.Headers_Request.add("Authorization","Basic " + WikiApi.BasicAuth);
+				web.downloadBinaryFile(file, files_BackupFolder);
 				Status_ProgressBar.increment(1);
 			}			
 

@@ -177,6 +177,19 @@ namespace O2.XRules.Database.APIs
     	{
     		return inputSimulator.mouse_Click();
     	}
+    	
+    	public static API_InputSimulator mouse_LeftDown(this API_InputSimulator inputSimulator)
+    	{
+    		inputSimulator.Input_Simulator.Mouse.LeftButtonDown();			
+    		return inputSimulator;
+    	}
+    	
+    	public static API_InputSimulator mouse_LeftUp(this API_InputSimulator inputSimulator)
+    	{
+    		inputSimulator.Input_Simulator.Mouse.LeftButtonUp();			
+    		return inputSimulator;
+    	}
+    	
     	public static API_InputSimulator mouse_Click(this API_InputSimulator inputSimulator)
     	{    		
     		inputSimulator.Input_Simulator.Mouse.LeftButtonDown();			

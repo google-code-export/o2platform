@@ -67,7 +67,7 @@ namespace O2.XRules.Database.Utils
                                .line("return \"Dynamic Data = \" + testString + \" :: \" + testNumber;");
     		
 
-        public static void startControl()
+        public static ascx_Simple_Script_Editor startControl()
     	{
             //width = 700;    // make it bigger
             //height = 300;
@@ -85,8 +85,21 @@ namespace O2.XRules.Database.Utils
     			control.InvocationParameters.Add("testNumber", 42);
                 control.commandsToExecute.set_Text(control.defaultCode);
     		});
+    		return control;
     	}
 
+		public static ascx_Simple_Script_Editor startControl_NoCodeComplete()
+		{
+			var host = O2Gui.load<Panel>("O2 Simple Script Editor", 700, 300);
+			return (ascx_Simple_Script_Editor)host.invokeOnThread(
+				()=>{
+						var scriptEditor = new ascx_Simple_Script_Editor(false);						
+						scriptEditor.fill();
+						host.add_Control(scriptEditor);
+						return scriptEditor;
+					});
+		}
+		
         public ascx_Simple_Script_Editor() : this (true)
         {
 

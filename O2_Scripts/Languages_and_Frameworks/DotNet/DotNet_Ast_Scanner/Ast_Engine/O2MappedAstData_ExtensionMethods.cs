@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using System.Windows.Forms;
 using ICSharpCode.TextEditor;
 using O2.API.AST.CSharp;
 using ICSharpCode.NRefactory.Ast;
+using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 using ICSharpCode.SharpDevelop.Dom;
 using O2.API.AST.Visitors;
 using O2.API.AST.ExtensionMethods;
@@ -15,62 +18,63 @@ using O2.API.AST.ExtensionMethods.CSharp;
 using O2.Interfaces.O2Findings;
 using ICSharpCode.NRefactory;
 using O2.DotNetWrappers.O2Findings;
-
 //O2File:Ast_Engine_ExtensionMethods.cs
 //O2Ref:QuickGraph.dll
 
 namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
-    public static class O2MappedAstData_ExtensionMethods
+	public class O2MappedAstData_Cache
+	{
+		public static Dictionary<Expression,ResolveResult> AstResolve_Cache_ResolveExpression = new Dictionary<Expression,ResolveResult>();
+		public static Dictionary<Expression, IMethodOrProperty> AstResolve_Cache_FromExpressionGetIMethodOrProperty = new Dictionary<Expression, IMethodOrProperty>();
+	}
+	
+    public static class O2MappedAstData_ExtensionMethods_INodes_IClass_IMethods
     {
-		
+		 
 		public static O2MappedAstData dispose(this O2MappedAstData o2MappedAstData)
-        {
+        {        	
         	if (o2MappedAstData.notNull())
-        		o2MappedAstData.dispose();        		
+        		o2MappedAstData.Dispose();        		
             return o2MappedAstData;
         }
         
-        #region load
-
-        public static O2MappedAstData loadFiles(this O2MappedAstData o2MappedAstData, List<string> filesToLoad)
-        {
-            return o2MappedAstData.loadFiles(filesToLoad, false);
+        //this removes the references resolution database which usually takes about 40Mb and is not needed in
+        //most method and code stream calculations
+        public static O2MappedAstData dispose_unloadProjectContent(this O2MappedAstData astData)
+        {        	
+        	if (astData.notNull())
+        	{
+        		//o2MappedAstData.O2AstResolver.pcRegistry.Dispose();
+        		astData.O2AstResolver.pcRegistry.UnloadProjectContent(astData.O2AstResolver.myProjectContent);
+        		PublicDI.config.gcCollect();
+        	}
+            return astData;
         }
-        
-        public static O2MappedAstData loadFiles(this O2MappedAstData o2MappedAstData, List<string> filesToLoad, bool verbose)
-        {
-            //"Loading {0} files".format().debug();
-            var totalFilesCount = filesToLoad.size();
-            var filesLoaded = 0;
-            foreach (var fileToLoad in filesToLoad)
-            {
-                if (verbose)
-                    "loading file in O2MappedAstData object:{0}".format(fileToLoad).info();
-                o2MappedAstData.loadFile(fileToLoad);
-                if ((filesLoaded++) % 20 == 0)
-                    " [{0}/{1}] Loading files into O2MappedAstData".format(filesLoaded, totalFilesCount).debug();
-            }
-            return o2MappedAstData;
-        }
-        
-        #endregion
-
-        #region iNode(s)
+                        
+        #region iNode(s) 
 
         public static INode iNode(this O2MappedAstData o2MappedAstData, string file, Caret caret)
         {
-            if (o2MappedAstData != null && file != null && caret != null)
+        	if (caret != null)
+        	{
+    		    var adjustedLine = caret.Line + 1;
+                var adjustedColumn = caret.Column + 1;
+                return o2MappedAstData.iNode(file, adjustedLine,adjustedColumn);
+        	}
+        	return null;
+        }
+        public static INode iNode(this O2MappedAstData o2MappedAstData, string file, int line, int column)
+        {
+            if (o2MappedAstData != null && file != null)
             {
                 if (o2MappedAstData.FileToINodes.hasKey(file))
                 {
-                    var allINodes = o2MappedAstData.FileToINodes[file];
-                    var adjustedLine = caret.Line + 1;
-                    var adjustedColumn = caret.Column + 1;
-                    var iNode = allINodes.getINodeAt(adjustedLine, adjustedColumn);
+                    var allINodes = o2MappedAstData.FileToINodes[file];                
+                    var iNode = allINodes.getINodeAt(line, column);
                     if (iNode != null)
                         return iNode;
-                    "Could not find iNOde for position {0}:{1} in file:{2}".format(adjustedLine, adjustedColumn, file).error();
+                    "Could not find iNode for position {0}:{1} in file:{2}".format(line, column, file).error();
                 }
                 "o2MappedAstData did not have INodes for file:{0}".format(file).error();
             }
@@ -173,6 +177,22 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
         #endregion
 
+		#region iClass(es)
+		
+		//returns a list since there could be more that one class with the same name (case of partial classes)
+		public static List<IClass> iClass(this O2MappedAstData o2MappedAstData,string classToFind)
+		{
+			return (from iClass in o2MappedAstData.iClasses()
+				    where iClass.FullyQualifiedName ==classToFind
+				    select iClass).toList();
+			//foreach(var iClass in o2MappedAstData.iClasses())
+				//if (iClass.FullyQualifiedName ==classToFind)
+//					return iClass;
+//			return null;
+		}
+		
+		#endregion
+
         #region iMethod(s)
 
         public static IMethod iMethod(this O2MappedAstData o2MappedAstData, ConstructorDeclaration constructorDeclaration)
@@ -202,7 +222,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
         public static IMethod iMethod(this O2MappedAstData o2MappedAstData, MemberReferenceExpression memberReferenceExpression)
         {
-            return o2MappedAstData.fromMemberReferenceExpressionGetIMethod(memberReferenceExpression);
+            return o2MappedAstData.fromMemberReferenceExpressionGetIMethod(memberReferenceExpression);            
         }
 
         public static IMethod iMethod(this O2MappedAstData o2MappedAstData, ObjectCreateExpression objectCreateExpression)
@@ -214,6 +234,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         {
             return o2MappedAstData.fromExpressionGetIMethod(invocationExpression as Expression);
         }
+		public static List<IMethod> iMethods(this IClass iClass)
+		{
+			return iClass.Methods.toList();
+		}
 		
         public static List<IMethod> iMethods(this O2MappedAstData o2MappedAstData, string file)
         {
@@ -238,101 +262,127 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         
         public static IMethod iMethod_withSignature(this O2MappedAstData astData, string iMethodSignature)
         {
-            foreach (var iMethod in astData.iMethods())
-                if (iMethod.fullName() == iMethodSignature)
-                    return iMethod;
+        	if (astData.notNull())
+        	{
+            	foreach (var iMethod in astData.iMethods())
+            	    if (iMethod.fullName() == iMethodSignature)
+            	        return iMethod;
+			}
             return null;
         }
-
+		
+		#endregion
         //merge this one with fromMemberReferenceExpressionGetIMethod (and add support for use of Fields and Properties)
 
+	}
+	
+	public static class O2MappedAstData_ExtensionMethods_Resolve
+	{			
         public static ResolveResult resolveExpression(this O2MappedAstData o2MappedAstData, Expression expression)
         {
-            //resolve type  (move this into a method called typeResolve
-            var compilationUnit = expression.compilationUnit();
-            if (compilationUnit != null)
-            {                
-                o2MappedAstData.O2AstResolver.setCurrentCompilationUnit(compilationUnit);
-                var resolved = o2MappedAstData.O2AstResolver.resolve(expression);
-                if (resolved is UnknownIdentifierResolveResult)
-                {
-                    // this is a hack to deal with partial classes (which are located in different files (this could be heavily optimized
-                    var callingClassName = resolved.CallingClass.FullyQualifiedName;
-                    foreach (var item in o2MappedAstData.MapAstToNRefactory.IClassToTypeDeclaration)
-                    {
-                        var iClass = item.Key;
-                        var typeDeclaration = item.Value;
-                        if (iClass.FullyQualifiedName == callingClassName)
-                        {
-                            var otherCompilationUnit = typeDeclaration.compilationUnit();
-                            if (otherCompilationUnit != compilationUnit)
-                            {
-                                o2MappedAstData.O2AstResolver.setCurrentCompilationUnit(otherCompilationUnit);
-                                var resolved2 = o2MappedAstData.O2AstResolver.resolve(expression, iClass, null);
-                                if ((resolved2 is UnknownIdentifierResolveResult).isFalse())
-                                    return resolved2;
-                            }
-                        }
-                        //var types = cu.types(true);
-                        //                        foreach(var type in types)
-                        //                            if (type.Name
-
-                    }
-
-                    //var methodDeclaration = expression.parent<MethodDeclaration>();
-                    //var iMethod = o2MappedAstData.iMethod(methodDeclaration);
-
-                    // if we got here it means that we were not able to resolve this field (even after looking in partial files)
-                    if (expression is IdentifierExpression)
-                        "in resolved Expression, it was not possible to resolve: {0}".error((expression as IdentifierExpression).Identifier);
-                    else
-                        "in resolved Expression, it was not possible to resolve: {0}".error(expression.str());
-                    return resolved;
-                }
-                return resolved;
-            }
-            return null;
+        	if (expression.isNull())
+        		return null;
+        		
+        	if (O2MappedAstData_Cache.AstResolve_Cache_ResolveExpression.ContainsKey(expression))        	        		
+        		return O2MappedAstData_Cache.AstResolve_Cache_ResolveExpression[expression];
+        	
+        	Func<ResolveResult> resolveExpression = 	
+        	()=> {		        	
+		            //resolve type  (move this into a method called typeResolve
+		            var compilationUnit = expression.compilationUnit();
+		            if (compilationUnit != null)
+		            {                
+		                o2MappedAstData.O2AstResolver.setCurrentCompilationUnit(compilationUnit);
+		                var resolved = o2MappedAstData.O2AstResolver.resolve(expression);
+		                if (resolved is UnknownIdentifierResolveResult)
+		                {
+		                    // this is a hack to deal with partial classes (which are located in different files (this could be heavily optimized
+		                    var callingClassName = resolved.CallingClass.FullyQualifiedName;
+		                    foreach (var item in o2MappedAstData.MapAstToNRefactory.IClassToTypeDeclaration)
+		                    {
+		                        var iClass = item.Key;
+		                        var typeDeclaration = item.Value;
+		                        if (iClass.FullyQualifiedName == callingClassName)
+		                        {
+		                            var otherCompilationUnit = typeDeclaration.compilationUnit();
+		                            if (otherCompilationUnit != compilationUnit)
+		                            {
+		                                o2MappedAstData.O2AstResolver.setCurrentCompilationUnit(otherCompilationUnit);
+		                                var resolved2 = o2MappedAstData.O2AstResolver.resolve(expression, iClass, null);
+		                                if ((resolved2 is UnknownIdentifierResolveResult).isFalse())
+		                                    return resolved2;
+		                            }
+		                        }
+		                    }
+		
+		                    // if we got here it means that we were not able to resolve this field (even after looking in partial files)
+		                    if (expression is IdentifierExpression)	                    
+								"in resolved Expression, it was not possible to resolve: {0}".error((expression as IdentifierExpression).Identifier);							
+		                    else		                    
+		                        "in resolved Expression, it was not possible to resolve: {0}".error(expression.str());
+		                    return resolved;
+		                }
+		                return resolved;
+		            }
+		            return null;
+		        };
+	        var result = resolveExpression();	        
+	        O2MappedAstData_Cache.AstResolve_Cache_ResolveExpression.Add(expression, result);
+	        return result;
         }
 
         public static IMethod fromExpressionGetIMethod(this O2MappedAstData o2MappedAstData, Expression expression)
-        {
+        {        	
             var result = o2MappedAstData.fromExpressionGetIMethodOrProperty(expression);
             if (result is IMethod)
                 return (IMethod)result;
             return null;
         }
+                
+        
         public static IMethodOrProperty fromExpressionGetIMethodOrProperty(this O2MappedAstData o2MappedAstData, Expression expression)
-        {
+        {        	
+        	//"In fromExpressionGetIMethodOrProperty for:{0}".error(expression.str());
             if (expression == null)
                 return null;
-            var compilationUnit = expression.compilationUnit();
-            if (compilationUnit == null)
-                return null;
-            o2MappedAstData.O2AstResolver.setCurrentCompilationUnit(compilationUnit);
-            var resolved = o2MappedAstData.O2AstResolver.resolve(expression);
-            if (resolved is MethodGroupResolveResult)
-            {
-                var resolvedIMethods = new List<IMethod>();
-                foreach (var groupResult in (resolved as MethodGroupResolveResult).Methods)
-                    foreach (var method in groupResult)
-                    {
-                        resolvedIMethods.Add(method);
-                    }
-                if (resolvedIMethods.Count == 1)
-                    return resolvedIMethods[0];
-            }
-            if (resolved != null)
-                if (resolved is MemberResolveResult)
-                {
-                    var memberResolveResult = (MemberResolveResult)resolved;
-                    if (memberResolveResult.ResolvedMember is IMethodOrProperty)
-                        return memberResolveResult.ResolvedMember as IMethodOrProperty;
-                    //else
-                    //    "in fromExpressionGetIMethod, could not resolve Expression".error();
-                }
-
-            //return null;
-            return o2MappedAstData.loseFindIMethodFrom_MethodDeclaration(expression);
+                
+            if (O2MappedAstData_Cache.AstResolve_Cache_FromExpressionGetIMethodOrProperty.ContainsKey(expression))                        	
+            	return O2MappedAstData_Cache.AstResolve_Cache_FromExpressionGetIMethodOrProperty[expression];            	
+            	
+            Func<IMethodOrProperty> fromExpressionGetIMethodOrProperty = 
+            	()=>{            	
+			            var compilationUnit = expression.compilationUnit();
+			            if (compilationUnit == null)
+			                return null;
+			            o2MappedAstData.O2AstResolver.setCurrentCompilationUnit(compilationUnit);
+			            var resolved = o2MappedAstData.O2AstResolver.resolve(expression);
+			            if (resolved is MethodGroupResolveResult)
+			            {
+			                var resolvedIMethods = new List<IMethod>();
+			                foreach (var groupResult in (resolved as MethodGroupResolveResult).Methods)
+			                    foreach (var method in groupResult)
+			                    {
+			                        resolvedIMethods.Add(method);
+			                    }
+			                if (resolvedIMethods.Count == 1)
+			                    return resolvedIMethods[0];
+			            }
+			            if (resolved != null)
+			                if (resolved is MemberResolveResult)
+			                {
+			                    var memberResolveResult = (MemberResolveResult)resolved;
+			                    if (memberResolveResult.ResolvedMember is IMethodOrProperty)
+			                        return memberResolveResult.ResolvedMember as IMethodOrProperty;
+			                    //else
+			                    //    "in fromExpressionGetIMethod, could not resolve Expression".error();
+			                }
+			
+			            //return null;
+			            return o2MappedAstData.loseFindIMethodFrom_MethodDeclaration(expression);
+					};
+			var result = fromExpressionGetIMethodOrProperty();
+			O2MappedAstData_Cache.AstResolve_Cache_FromExpressionGetIMethodOrProperty.Add(expression,result);
+			return result;
         }
 
         // this handle some special cases where we have the code of this type but the code complete resolver couldn't find it
@@ -364,7 +414,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                    return o2MappedAstData.loseFindIMethod(className, methodName, parameterCount);
               }
                 //var parametersCount = memberReferenceExpression
-            }
+            }                       
             return null;
         }
 
@@ -462,63 +512,31 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                     }
             }
             return false;
-        }
-
-        // REWRITE (lots of redundant code
-        public static List<IMethod> calledIMethods(this O2MappedAstData o2MappedAstData, IMethod iMethod)
-        {
-            //"in Called IMETHODS".debug();
-            var calledIMethods = new List<IMethod>();
-            if (iMethod != null)
-            {
-              //  "-------------------".info();
-                var methodDeclaration = o2MappedAstData.methodDeclaration(iMethod);
-                if (methodDeclaration == null)
-                    return calledIMethods;
-
-                // handle invocations via MemberReferenceExpression
-                var memberReferenceExpressions = methodDeclaration.iNodes<INode, MemberReferenceExpression>();
-                foreach (var memberReferenceExpression in memberReferenceExpressions)
-                    calledIMethods.add(o2MappedAstData.iMethod(memberReferenceExpression));
-
-                // handle invocations via InvocationExpression
-                var invocationExpressions = methodDeclaration.iNodes<INode, InvocationExpression>();
-                foreach (var invocationExpression in invocationExpressions)
-                    calledIMethods.add(o2MappedAstData.iMethod(invocationExpression));
-
-                // handle contructors
-                var objectCreateExpressions = methodDeclaration.iNodes<INode, ObjectCreateExpression>();
-                //"objectCreateExpressions: {0}".format(objectCreateExpressions.Count).info();
-                foreach (var objectCreateExpression in objectCreateExpressions)
-                    calledIMethods.add(o2MappedAstData.iMethod(objectCreateExpression));
-
-            }
-            return calledIMethods;
-        }
-
-        public static List<ICSharpCode.NRefactory.Ast.Attribute> attributes(this O2MappedAstData o2MappedAstData)
-        {
-            return o2MappedAstData.iNodes<ICSharpCode.NRefactory.Ast.Attribute>();
-        }
+        }                                		
 
         public static List<INode> calledINodesReferences(this O2MappedAstData o2MappedAstData, IMethod iMethod)
         {
             var calledIMethodsRefs = new List<INode>();
             if (iMethod != null)
-            {
-                "-------------------".info();
+            {                
                 var methodDeclaration = o2MappedAstData.methodDeclaration(iMethod);
-
-                // handle invocations via MemberReferenceExpression
-                calledIMethodsRefs.add(methodDeclaration.iNodes<INode, MemberReferenceExpression>());
-                calledIMethodsRefs.add(methodDeclaration.iNodes<INode, InvocationExpression>());
-                calledIMethodsRefs.add(methodDeclaration.iNodes<INode, ObjectCreateExpression>());
+				if (methodDeclaration.notNull())
+				{
+                	// handle invocations via MemberReferenceExpression
+                	calledIMethodsRefs.add(methodDeclaration.iNodes<INode, MemberReferenceExpression>());
+                	calledIMethodsRefs.add(methodDeclaration.iNodes<INode, InvocationExpression>());
+                	calledIMethodsRefs.add(methodDeclaration.iNodes<INode, ObjectCreateExpression>());
+                }
             }
             return calledIMethodsRefs;
         }
 
-        #endregion
-
+        //#endregion
+	}
+	
+	        					
+	public static class O2MappedAstData_ExtensionMethods_MethodStreams
+	{
         #region methodStreams
 
         public static Dictionary<IMethod, string> methodStreams(this O2MappedAstData astData, Action<string> statusMessage)
@@ -547,7 +565,32 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         }
 
         #endregion
-
+        
+        public static INode fromFirstMethod_getINodeAtPosition(this O2MappedAstData astData, int iNodePosition)
+        {
+        	if (astData.isNull())
+        		return null;
+        	try
+        	{
+        		var methodDeclarations =  astData.methodDeclarations();
+	        	if (methodDeclarations.notNull() && methodDeclarations.size() > 0)
+	        	{
+	        		var firstMethod =methodDeclarations[0];  
+					var iNodesInFirstMethod = firstMethod.iNodes();
+					if (iNodesInFirstMethod.notNull() && iNodesInFirstMethod.size()>iNodePosition)
+						return iNodesInFirstMethod[iNodePosition];
+				}
+			}
+			catch(Exception ex)
+			{
+				ex.log("in fromFirstMethod_getINodeAtPosition");
+			}
+			return null;
+        }
+	}
+	
+	public static class O2MappedAstData_ExtensionMethods_CodeStreams
+	{
         #region codeStreams
         
         public static TreeView add_CodeStreams(this O2MappedAstData astData, TreeView treeView, List<IMethod> iMethods)
@@ -695,7 +738,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
     	}
 
         #endregion
-
+	}
+	
+	public static class O2MappedAstData_ExtensionMethods_O2Findings
+	{
         #region codeStreams & O2Findings
         public static List<IO2Finding> o2Findings(this O2CodeStream codeStream)
 		{
@@ -802,9 +848,17 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         }
 
         #endregion
-
+	}
+	
+	public static class O2MappedAstData_ExtensionMethods_Mics
+	{
         #region mist info
 
+		public static List<ICSharpCode.NRefactory.Ast.Attribute> attributes(this O2MappedAstData o2MappedAstData)
+        {
+            return o2MappedAstData.iNodes<ICSharpCode.NRefactory.Ast.Attribute>();
+        }
+        
         public static string fromINodeGetFile(this O2MappedAstData o2MappedAstData, INode iNode)
         {
             if (iNode != null)
@@ -840,15 +894,38 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             return iMethod.fullName();
         }
         
+        
+
+		public static List<IClass> inheritedIClasses(this O2MappedAstData o2MappedAstData, IClass iClassToFind)
+		{
+			var mappedByInheritClass = new Dictionary<IClass, List<IClass>>();
+			foreach(var iClass in o2MappedAstData.iClasses())
+				foreach(var inheritClass in iClass.ClassInheritanceTree)	
+					if (iClass != inheritClass)			
+						mappedByInheritClass.add(inheritClass,iClass); 
+			if (mappedByInheritClass.hasKey(iClassToFind))
+				return mappedByInheritClass[iClassToFind];
+			return null;
+		}
+        
         public static CompilationUnit compilationUnit(this O2MappedAstData o2MappedAstData, string file)
         {
             if (o2MappedAstData.FileToCompilationUnit.hasKey(file))
                 return o2MappedAstData.FileToCompilationUnit[file];
             return null;
         }
-
+        
+        public static TypeDeclaration typeDeclaration(this O2MappedAstData o2MappedAstData, IClass iClass)	
+		{
+			if (o2MappedAstData.MapAstToNRefactory.IClassToTypeDeclaration.hasKey(iClass))
+				return o2MappedAstData.MapAstToNRefactory.IClassToTypeDeclaration[iClass];
+			return null;
+		}
+		
         public static MethodDeclaration methodDeclaration(this O2MappedAstData o2MappedAstData, IMethod iMethod)
         {
+        	if (o2MappedAstData.isNull())
+        		return null;
             //try to find by Key
             if (iMethod != null)
                 if (o2MappedAstData.MapAstToNRefactory.IMethodToMethodDeclaration.hasKey(iMethod))
@@ -962,7 +1039,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         
 
         #endregion
-
+	}
+	
+	public static class O2MappedAstData_ExtensionMethods_GUI_WinForms
+	{
         #region show in WindowsForms
 
         public static O2MappedAstData showMethodStreamDetailsInTreeViews(this O2MappedAstData astData, TreeView ParametersTreeView, TreeView MethodsCalledTreeView)
@@ -1031,87 +1111,6 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             }
             return astData;
         } 
-        #endregion
-
-        #region Methods called and MethodIsCalledBy
-
-        public static List<IMethod> iMethodsThatCallThisIMethod(this O2MappedAstData astData, IMethod targetIMethod)
-        {
-            var results = new List<IMethod>();
-            if (astData != null && targetIMethod != null)
-            {
-                var targetIMethodName = targetIMethod.fullName();
-                foreach (var iMethod in astData.iMethods())
-                    if (iMethod != null && iMethod.DotNetName.valid())
-                    {
-                        try
-                        {
-                            foreach (var iMethodCalled in astData.calledIMethods(iMethod))
-                            {
-                                if (iMethodCalled != null && iMethodCalled.fullName() == targetIMethodName)
-                                    if (results.Contains(iMethod).isFalse())
-                                        results.add(iMethod);
-                                //"{0} -> {1}".debug(iMethod.DotNetName,  iMethodCalled.DotNetName);
-                                //results.add(iMethod);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            ex.log("iMethodsThatCallThisIMethod");
-                        }
-                    }
-            }
-            return results;
-        }
-
-        public static Dictionary<string, List<string>> calculateMappingsFor_MethodsCalled(this O2MappedAstData astData)
-        {
-            "stating: calculateMappingsFor_MethodsCalled".info();
-            var mappings = new Dictionary<string, List<string>>();
-            foreach (var iMethod in astData.iMethods())
-                if (iMethod != null && iMethod.DotNetName.valid())
-                {
-                    var calledMethodsList = mappings.add_Key(iMethod.fullName());
-                    try
-                    {
-                        foreach (var iMethodCalled in astData.calledIMethods(iMethod))
-                            if (iMethodCalled != null)
-                            {
-                                var methodCalledName = iMethodCalled.fullName();
-                                if (calledMethodsList.Contains(methodCalledName).isFalse())
-                                    calledMethodsList.add(methodCalledName);
-                            }
-                    }
-                    catch (Exception ex)
-                    {
-                        ex.log("iMethodsThatCallThisIMethod");
-                    }
-                    //if (mappings.Keys.size() == 25)
-                    //	return mappings;
-                }
-            "completed: calculateMappingsFor_MethodsCalled".info();
-            return mappings;
-        }
-
-        public static Dictionary<string, List<string>> calculateMappingsFor_MethodIsCalledBy(this O2MappedAstData astData, Dictionary<string, List<string>> methodsCalledMappings)
-        {
-            "stating: calculateMappingsFor_MethodIsCalledBy".info();
-            var mappings = new Dictionary<string, List<string>>();
-            foreach (var item in methodsCalledMappings)
-            {
-                var methodName = item.Key;
-                var methodsCalled = item.Value;
-                foreach (var methodCalled in methodsCalled)
-                {
-                    var isCalledBy = mappings.add_Key(methodCalled);
-                    if (isCalledBy.Contains(methodName).isFalse())
-                        isCalledBy.Add(methodName);
-                }
-            }
-            "completed: calculateMappingsFor_MethodIsCalledBy".debug(); ;
-            return mappings;
-        }
-
         #endregion
     }
 
@@ -1206,6 +1205,66 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			if (propertyDeclaration.notNull() && propertyDeclaration.TypeReference.notNull())
 				return propertyDeclaration.TypeReference.Type;
 			return null;
+		}
+	}
+
+	public static class O2MappedAstData_ExtensionMethods_Load
+	{
+		#region load
+
+        public static O2MappedAstData loadFiles(this O2MappedAstData o2MappedAstData, List<string> filesToLoad)
+        {
+            return o2MappedAstData.loadFiles(filesToLoad, false);
+        }
+        
+        public static O2MappedAstData loadFiles(this O2MappedAstData o2MappedAstData, List<string> filesToLoad, bool verbose)
+        {
+            //"Loading {0} files".format().debug();
+            var totalFilesCount = filesToLoad.size();
+            var filesLoaded = 0;
+            foreach (var fileToLoad in filesToLoad)
+            {
+                if (verbose)
+                    "loading file in O2MappedAstData object:{0}".format(fileToLoad).info();
+                o2MappedAstData.loadFile(fileToLoad);
+                if ((filesLoaded++) % 20 == 0)
+                    " [{0}/{1}] Loading files into O2MappedAstData".format(filesLoaded, totalFilesCount).debug();
+            }
+            return o2MappedAstData;
+        }
+        
+        #endregion 
+	
+		public static O2MappedAstData getAstData(this string fileOrFolder)
+		{
+			return fileOrFolder.getAstData(true);
+		}
+		
+		public static O2MappedAstData getAstData(this string fileOrFolder, bool useCachedData)		
+		{
+			return fileOrFolder.getAstData(new List<string>(), useCachedData);
+		}
+		
+		public static O2MappedAstData getAstData(this string fileOrFolder, List<string> referencesToLoad,  bool useCachedData)
+		{
+			var astDataCacheKey = "astData_" + fileOrFolder; 
+			O2MappedAstData astData = null;
+			if (useCachedData)
+				astData = (O2MappedAstData)O2LiveObjects.get(astDataCacheKey);			
+			if (astData == null)
+			{
+				"Loading AstData".info();
+				astData = new O2MappedAstData();
+				foreach(var referenceToLoad in referencesToLoad)
+					astData.O2AstResolver.addReference(referenceToLoad); 
+				if (fileOrFolder.fileExists())
+					astData.loadFile(fileOrFolder);	
+				else	
+					astData.loadFiles(fileOrFolder.files("*.cs",true));	
+				if (useCachedData)
+					O2LiveObjects.set(astDataCacheKey,astData); 
+			}
+			return astData;
 		}
 	}
 }

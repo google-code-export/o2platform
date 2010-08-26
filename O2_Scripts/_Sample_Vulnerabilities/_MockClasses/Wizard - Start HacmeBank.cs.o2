@@ -40,7 +40,7 @@ namespace O2.Script
     public class Wizard_Start_HacmeBank
     {    
     	private static IO2Log log = PublicDI.log;
-		private static string hacmeBankRootFolder = @"C:\O2\O2 Demos\HacmeBank_v2.0 (Dinis version - 7 Dec 08)";
+		private static string hacmeBankRootFolder = @"C:\O2\DemoData\HacmeBank_v2.0 (Dinis version - 7 Dec 08)";
 		private static string hacmeBankUrl; // = @"http://127.0.0.1/HacmeBank_v2_Website";
 		ascx_HostLocalWebsite webServicesHost;
     	ascx_HostLocalWebsite webSiteHost;

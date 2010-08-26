@@ -45,9 +45,12 @@ namespace O2.XRules.Database.APIs
 		public string Login_Token { get; set; }    	
 		public string Login_CookiePrefix { get; set; }    	
 		public string Login_SessionId { get; set; }    	
-		public string Login_Cookie { get; set; }		
+		public string Login_Cookie { get; set; }	
+		public string BasicAuth { get; set; }
 		
 		public Web LastWebRequest { get; set; }		
+		
+		public string SEPARATOR_CHAR = "?";
 		
 		public O2MediaWikiAPI()
 		{
@@ -62,6 +65,8 @@ namespace O2.XRules.Database.APIs
  		public Web web()
  		{
  			LastWebRequest = new Web();
+ 			if (BasicAuth.valid())
+ 				LastWebRequest.Headers_Request.add("Authorization","Basic " + BasicAuth);
  			return LastWebRequest;
  		}
     	public void init(string apiPhp)
@@ -168,8 +173,9 @@ namespace O2.XRules.Database.APIs
 		}
 		
 		public string raw(string page)
-		{			
+		{					 	
 			var getData = "action=raw&title={0}".format(page.urlEncode());
+			"getData: {0}".debug(getData);
 			return getIndexPhp(getData).fixCRLF();
 			//var getData = "action=raw&title={0}&format=xml".format(page);			
 			//var data = get(getData);
@@ -180,7 +186,7 @@ namespace O2.XRules.Database.APIs
 		{			
 			try
 			{				
-				var uri = new Uri("{0}?{1}".format(IndexPhp,getData));		
+				var uri = new Uri("{0}{1}{2}".format(IndexPhp,SEPARATOR_CHAR,getData));		
 				return getRequest(uri);
 			}			
 			catch(Exception ex)
@@ -195,7 +201,7 @@ namespace O2.XRules.Database.APIs
 		{	
 			try
 			{
-				var uri = new Uri("{0}?{1}".format(ApiPhp,getData));		
+				var uri = new Uri("{0}{1}{2}".format(ApiPhp,SEPARATOR_CHAR,getData));		
 				return getRequest(uri);
 			}			
 			catch(Exception ex)
@@ -307,8 +313,20 @@ namespace O2.XRules.Database.APIs
 				wikiApi.Login_CookiePrefix = "";
 				wikiApi.Login_SessionId = "";
 				return false;
-			}
+			}						
 		} 
+		
+		public static bool login_BasicAuth(this O2MediaWikiAPI wikiApi, string userName, string password)
+		{
+			wikiApi.Login_UserId = userName;
+			wikiApi.Login_Username = userName;
+			wikiApi.BasicAuth = "{0}:{1}".format(userName, password).base64Encode();
+			var page = wikiApi.raw("Main_Page");			
+			var result = page.valid();			
+			if (result)
+				wikiApi.Login_Result = "Success";
+			return result;
+		}
     	
     	#endregion
     	
@@ -896,7 +914,15 @@ namespace O2.XRules.Database.APIs
     	
     	public static List<XElement> recentChangesRaw(this O2MediaWikiAPI wikiApi, int itemsToFetch)
 		{
-			return wikiApi.action_query_list("recentchanges&rcprop=user|title|ids|type|timestamp&rclimit=" + itemsToFetch.str()).xRoot().elementsAll("rc");
+			try
+			{
+				return wikiApi.action_query_list("recentchanges&rcprop=user|title|ids|type|timestamp&rclimit=" + itemsToFetch.str()).xRoot().elementsAll("rc");
+			}
+			catch(Exception ex)
+			{
+				ex.log("in O2MediaWikiAPI.recentChangesRaw");
+				return new List<XElement>();
+			}
 	
 		}				
 		
@@ -1050,7 +1076,11 @@ namespace O2.XRules.Database.APIs
                 postParameters.Add("wpUpload", "Upload File");
                 postParameters.Add("wpIgnoreWarning", "True");
                 postParameters.Add("wpUploadDescription", uploadDescription);				
-                var httpWebResponse = new HttpMultiPartForm().uploadFile(fileContents, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
+                var httpMultiPartForm = new HttpMultiPartForm();
+                if (wikiApi.BasicAuth.valid())
+ 					httpMultiPartForm.add_Header("Authorization","Basic " + wikiApi.BasicAuth);
+ 					
+                var httpWebResponse = httpMultiPartForm.uploadFile(fileContents, postParameters, fileName, fileContentType, postURL, userAgent, postedFileHttpFieldName, cookies);
                 if (httpWebResponse != null)
                     if (httpWebResponse.ResponseUri.AbsoluteUri.extension() == fileName.extension())
                         return httpWebResponse.ResponseUri.AbsoluteUri.str();
@@ -1192,7 +1222,7 @@ namespace O2.XRules.Database.APIs
 										foreach(var link in htmlDocument.select("//td[@id='mw-prefixindex-nav-form']//a"))
 											if (link.value().starts("Next page ("))  
 											{ 
-												nextLink = link.attribute("href").value().remove("/index.php?");
+												nextLink = link.attribute("href").value().remove("/index.php" + wikiApi.SEPARATOR_CHAR);
 												nextLink = System.Web.HttpUtility.HtmlDecode(nextLink);
 											break;
 											}

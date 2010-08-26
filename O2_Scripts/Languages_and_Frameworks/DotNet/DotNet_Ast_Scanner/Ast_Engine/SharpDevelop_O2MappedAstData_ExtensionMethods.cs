@@ -347,4 +347,74 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         #endregion
 
     }
+    
+    public static class O2MappedAstData_ExtensionMethods_ExternalMethodsAndProperties_GUIS
+	{
+		public static TreeView getTreeViewToShowMethodsMappings(this O2MappedAstData astData, Control control, ascx_SourceCodeViewer sourceCodeViewer)
+		{
+	 		// create GUI
+			control.clear();
+			var treeView = control.add_TreeView()
+			 					  .showSelection() 
+			 					  .sort();
+			astData.afterSelect_ShowInSourceCodeEditor(treeView, sourceCodeViewer.editor());
+			treeView.afterSelect<IMethod>( 
+		   		(iMethod)=> 
+		   			{ 	   				
+		   				var methodDeclaration  = astData.MapAstToNRefactory.IMethodToMethodDeclaration[iMethod]; 
+		   				sourceCodeViewer.set_Text(methodDeclaration.csharpCode()); 	  			   				
+		   				
+			   		});
+			return treeView;
+		}
+		public static TreeView showInControl_AsTreeView(this O2MappedAstData astData, Dictionary<IMethod,Dictionary<string,List<KeyValuePair<INode,IMethodOrProperty>>>> iMethodMappings,  Control control, ascx_SourceCodeViewer sourceCodeViewer)
+		{		 
+			var treeView  = astData.getTreeViewToShowMethodsMappings(control, sourceCodeViewer);
+			
+			// load data
+			
+			foreach(var iMethodMapping in iMethodMappings) 
+			{ 
+				var iMethod = iMethodMapping.Key;
+				var externalItems = iMethodMapping.Value;
+				if (externalItems.size()>0)
+				{
+					var node = treeView.add_Node(iMethod.Name,iMethod);
+					foreach(var externalItem in externalItems)
+					{ 						
+						if (externalItem.Value.isNull())
+							node.add_Node(externalItem.Key);
+						else
+						{
+							var childNode = node.add_Node(externalItem.Key, externalItem.Value[0].Key);   
+							foreach(var item in externalItem.Value)
+								childNode.add_Node(item.Key);  
+						}
+					}
+				}
+			}
+				
+			return treeView;
+		}
+		
+		public static TreeView showInControl_AsTreeView(this O2MappedAstData astData,  Dictionary<string,List<KeyValuePair<INode,IMethodOrProperty>>>  iMethodMappings,  Control control, ascx_SourceCodeViewer sourceCodeViewer)
+		{
+			var treeView  = astData.getTreeViewToShowMethodsMappings(control, sourceCodeViewer);
+			treeView.visible(false);
+			var externalItems = iMethodMappings;
+			foreach(var externalItem in externalItems)
+			{ 						
+				if (externalItem.Value.isNull())
+					treeView.add_Node(externalItem.Key);
+				else
+				{
+					var childNode = treeView.add_Node(externalItem.Key, externalItem.Value[0].Key);   
+					foreach(var item in externalItem.Value)
+						childNode.add_Node(item.Key);  
+				}
+			}
+			treeView.visible(true);
+			return treeView;
+		}
+	}
 }

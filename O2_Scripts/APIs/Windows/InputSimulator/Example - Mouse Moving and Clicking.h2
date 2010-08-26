@@ -10,13 +10,13 @@ button1.onClick(()=&gt;{"I was clicked".info();});
 var inputSimulator = new API_InputSimulator();	
 inputSimulator.Move_SkipValue= 3;			// makes it faster
 var startPosition = inputSimulator.mouse_CurrentPosition();
-inputSimulator.mouse_moveTo(button1,false).mouse_Click()
-			  .mouse_moveTo(textBox).mouse_Click()
+inputSimulator.mouse_MoveTo(button1,false).mouse_Click()
+			  .mouse_MoveTo(textBox).mouse_Click()
 			  .text_Send("this is a test")
-			  .mouse_moveBy(100,20)
-			  .mouse_moveTo(button1).mouse_Click()
-			  .mouse_moveBy(-100,-20)
-			  .mouse_moveTo(startPosition);
+			  .mouse_MoveBy(100,20)
+			  .mouse_MoveTo(button1).mouse_Click()
+			  .mouse_MoveBy(-100,-20)
+			  .mouse_MoveTo(startPosition);
 		      
 return inputSimulator.mouse_CurrentPosition();
 

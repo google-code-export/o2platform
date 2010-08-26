@@ -34,7 +34,14 @@ namespace O2.XRules.Database.Utils
 		
     	public string getCacheAddress(string itemPath, string cacheSaveExtension)
 		{
-			return PathLocalCache.pathCombine(itemPath.safeFileName(UseBase64EncodedStringInFileName) + cacheSaveExtension);
+			var fileName = itemPath.safeFileName(UseBase64EncodedStringInFileName);
+			if (PathLocalCache.size() + fileName.size() > 250)
+			{
+				"in getCacheAddress, the combined filename was too big: {0} + {1}".error(PathLocalCache, fileName);
+				fileName = fileName.Substring(0, PathLocalCache.size() + fileName.size()  - 250);
+				"in getCacheAddress, new fileCacheName (with size {0}): {1}".error(fileName.size(), fileName);
+			}
+			return PathLocalCache.pathCombine(fileName + cacheSaveExtension);
 		}
 		
 		public string cacheGet(string uri)
@@ -107,9 +114,9 @@ namespace O2.XRules.Database.Utils
 			if (DisableCache)
 				return "";
 			cacheValue = cacheValue ?? "";
-			var cacheAddress = PathLocalCache.pathCombine(itemPath.safeFileName(UseBase64EncodedStringInFileName) + cacheSaveExtension);
+			var cacheAddress = getCacheAddress(itemPath,cacheSaveExtension);//  PathLocalCache.pathCombine(itemPath.safeFileName(UseBase64EncodedStringInFileName) + cacheSaveExtension);
 			cacheValue.saveAs(cacheAddress);
-			return cacheValue;
+			return cacheAddress;
 		}  	    	    	    
     }
 }

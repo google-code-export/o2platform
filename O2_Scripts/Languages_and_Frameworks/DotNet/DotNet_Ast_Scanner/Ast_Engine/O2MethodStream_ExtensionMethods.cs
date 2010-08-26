@@ -19,6 +19,12 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
     {
     	public static Dictionary<IMethod, O2MethodStream> O2MethodStreamCache = new Dictionary<IMethod, O2MethodStream>();
     
+		public static O2MappedAstData clearO2MethodStreamCache(this O2MappedAstData o2MappedAstData)
+		{
+			O2MethodStreamCache.Clear();
+			return o2MappedAstData;
+		}
+    
         public static List<string> createO2MethodStreamFiles(this O2MappedAstData o2MappedAstData, List<string> sourceFiles, string targetFolder)
         {
             var createdFiles = new List<String>();
@@ -51,11 +57,16 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             return targetFile;
         }
 
-        public static O2MethodStream createO2MethodStream(this O2MappedAstData o2MappedAstData, IMethod iMethod)
+		public static O2MethodStream createO2MethodStream(this O2MappedAstData o2MappedAstData, IMethod iMethod)
+		{
+			return o2MappedAstData.createO2MethodStream(iMethod,true);
+		}
+        public static O2MethodStream createO2MethodStream(this O2MappedAstData o2MappedAstData, IMethod iMethod, bool mapInterfacesCalls)
         {
             var o2MethodStream = new O2MethodStream(o2MappedAstData);
             o2MethodStream.add_IMethod(iMethod);
-            
+            if (mapInterfacesCalls)
+	            o2MethodStream.resolveInterfaceCalls();  
             //add to O2MethodStreamCache
             O2MethodStreamCache.add(iMethod, o2MethodStream);
             
@@ -70,16 +81,42 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         	return methodStreams;
         }
         
+        public static string methodStream_UseCache(this O2MappedAstData o2MappedAstData, IMethod iMethod)
+        {
+        	return o2MappedAstData.createO2MethodStream_UseCache_ReturnFile(iMethod);
+        }
+        
+        public static string methodStream_UseCache(this O2MappedAstData o2MappedAstData, IMethod iMethod, string fileCacheLocation)
+        {
+        	return o2MappedAstData.createO2MethodStream_UseCache_ReturnFile(iMethod, fileCacheLocation);
+        }
+        
+        public static string createO2MethodStream_UseCache_ReturnFile(this O2MappedAstData o2MappedAstData, IMethod iMethod)
+        {
+        	var fileCacheLocation = "".tempDir().pathCombine("_fileCache_MethodStreams");
+        	
+        	return o2MappedAstData.createO2MethodStream_UseCache_ReturnFile(iMethod, fileCacheLocation);
+        }
+        
+        public static string createO2MethodStream_UseCache_ReturnFile(this O2MappedAstData o2MappedAstData, IMethod iMethod, string fileCacheLocation)
+        {
+        	var cacheExtension = ".cs";
+        	var fileCache = new FileCache(fileCacheLocation);        	
+        	return o2MappedAstData.createO2MethodStream_UseCache_ReturnFile(iMethod, fileCache, cacheExtension);
+        }
+        
 		public static string createO2MethodStream_UseCache_ReturnFile(this O2MappedAstData o2MappedAstData, IMethod iMethod, FileCache fileCache, string cacheExtension)
 		{
+			if (iMethod.isNull())
+				return null;
 			var csharpCodeFile = fileCache.cacheGet_File(iMethod.fullName(),cacheExtension);
 			if (csharpCodeFile.valid().isFalse())																		
 			{			 
 				"Creating MethodStream for iMethod: {0}".debug(iMethod.DotNetName); 
 				var methodStream = o2MappedAstData.createO2MethodStream(iMethod);						
 				var cSharpCode = methodStream.csharpCode();
-				csharpCodeFile = cSharpCode.saveWithExtension(cacheExtension);
-				fileCache.cachePut(iMethod.fullName(),".cs",cSharpCode);
+				csharpCodeFile = cSharpCode.saveWithExtension(cacheExtension);				
+				return fileCache.cachePut(iMethod.fullName(),".cs",cSharpCode);
 			}
 			return csharpCodeFile;	
 		}	
@@ -207,7 +244,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         		"Found IMethod in O2MethodStreamCache(merging its data with the current o2MethodStream): {0}".debug(iMethod.DotNetName);
         		o2MethodStream.add_O2MethodStreamMappings(O2MethodStream_ExtensionMethods.O2MethodStreamCache[iMethod]);
         		return o2MethodStream;
-        	}
+        	}        	
             // map the methods called
             INode methodOrCtorINode = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
             if (methodOrCtorINode.isNull())
@@ -283,9 +320,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             foreach (var identifierExpression in expressions)
             {
                 var resolved = o2MethodStream.O2MappedAstData.resolveExpression(identifierExpression);
-
                 switch (resolved.typeName())
                 { 
+                	
                     case "MemberResolveResult":
                         var resolvedMember = (resolved as MemberResolveResult).ResolvedMember;
                         if (resolvedMember is IField)
@@ -319,7 +356,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                     default:                        
                         if (o2MethodStream.O2MappedAstData.debugMode)
                         {
-                            var unsupportedType = resolved.typeName();
+                            var unsupportedType = resolved.typeName();                            
                             "in map_IdentifierExpressions, unsupported ResolvedResult: {0}".error(unsupportedType);
                         }
                         break;
@@ -425,6 +462,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                     var methodDeclaration = o2MethodStream.O2MappedAstData.methodDeclaration(iMethod);
                     compilationUnit.add_Method(iMethod.DeclaringType, methodDeclaration);
                 }
+                compilationUnit.add_Using(iMethod.DeclaringType.Namespace);
             }
 
             // add external methods
@@ -470,7 +508,23 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             // add fields
             foreach (var iField in o2MethodStream.Fields.Values)
             {
-                compilationUnit.add_Field(iField);
+                if (o2MethodStream.O2MappedAstData.MapAstToNRefactory.IFieldToFieldDeclaration.ContainsKey(iField))
+                    compilationUnit.add_Field(iField, o2MethodStream.O2MappedAstData.MapAstToNRefactory.IFieldToFieldDeclaration[iField]);
+                else
+                // try to find by name
+                {
+                    var foundMatch = false;
+                    foreach (var item in o2MethodStream.O2MappedAstData.MapAstToNRefactory.IFieldToFieldDeclaration)
+                        if (item.Key.FullyQualifiedName == iField.FullyQualifiedName)
+                        {
+                            compilationUnit.add_Field(iField, item.Value);
+                            foundMatch = true;
+                            break;
+                        }
+                    if (foundMatch.isFalse())
+                        compilationUnit.add_Field(iField);
+                }
+
                 if (iField.ReturnType is DefaultReturnType)
                 {
                 	var iClass = (iField.ReturnType as DefaultReturnType).field("c");
@@ -489,7 +543,23 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
             foreach (var iProperty in o2MethodStream.Properties.Values)
             {
-                compilationUnit.add_Property(iProperty);
+                //try to find directly
+                if (o2MethodStream.O2MappedAstData.MapAstToNRefactory.IPropertyToPropertyDeclaration.ContainsKey(iProperty))
+                    compilationUnit.add_Property(iProperty, o2MethodStream.O2MappedAstData.MapAstToNRefactory.IPropertyToPropertyDeclaration[iProperty]);
+                else
+                // try to find by name
+                {
+                    var foundMatch = false;
+                    foreach (var item in o2MethodStream.O2MappedAstData.MapAstToNRefactory.IPropertyToPropertyDeclaration)
+                        if (item.Key.FullyQualifiedName == iProperty.FullyQualifiedName)
+                        {
+                            compilationUnit.add_Property(iProperty,item.Value);
+                            foundMatch = true;
+                            break;
+                        }                    
+                    if (foundMatch.isFalse())
+                        compilationUnit.add_Property(iProperty);
+                }
             }
 
             return compilationUnit;
@@ -498,7 +568,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         public static string csharpCode(this O2MethodStream o2MethodStream)
         {
             var compilationUnit = o2MethodStream.compilationUnit();
-            return compilationUnit.csharpCode();
+            var csharpCode = compilationUnit.csharpCode();            
+            //fix this which will prevent further AST mappings
+            csharpCode = csharpCode.replace("using ?;".line(),"using NOT.RESOLVED.NAMESPACE;".line());
+            return csharpCode;
         }
 
         public static O2MethodStream csharpFile(this O2MethodStream o2MethodStream)
@@ -513,5 +586,85 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             o2MethodStream.csharpCode().save(targetFile);
             return o2MethodStream;
         }	
+        
+        public static string postCSharpCreationCodeFixes(this string csharpCode)
+        {
+        	// handle properties
+        	var fixedCode = csharpCode.replace("get {".line() +
+											   "				throw new NotImplementedException();".line() + 
+											   "			}", "get;")
+									  .replace("set {".line() +
+											   "				throw new NotImplementedException();".line() + 
+											   "			}", "set;");
+			//handle autocreated exceptions
+			fixedCode = fixedCode.replace("{".line() + 
+										  "			throw new System.Exception(\"O2 Auto Generated Method\");".line() +
+										  "		}", " { /*....*/ }");
+			
+			//"throw new NotImplementedException();", "XXXXXXXXXXX");
+        	return fixedCode;        	
+        }
     }
+
+	public static class O2MethodStream_ExtensionMethods_Interfaces_Support
+	{
+	
+		public static O2MethodStream resolveInterfaceCalls(this O2MethodStream methodStream)
+		{
+			var methodsToMap = methodStream.MappedIMethods.Values.ToArray();
+			foreach(var interfaceMethod in methodsToMap) 
+				methodStream.resolveInterfaceCalls(interfaceMethod);   
+			return methodStream;
+		}				
+
+		public static O2MethodStream resolveInterfaceCalls(this O2MethodStream methodStream,IMethod iMethodToResolve)
+		{
+			var astData = methodStream.O2MappedAstData;
+		//Action<O2MethodStream , IMethod> resolveInterfaceCalls = 
+ 
+			"Resolving Interface calls for: {0}".info(iMethodToResolve);
+			var declaringType = iMethodToResolve.DeclaringType; 
+			if (declaringType.ClassType.str() == "Interface") 
+			{
+				"Is interface".debug();
+				
+				foreach(var inheritedClass in astData.inheritedIClasses(declaringType))
+				{
+					var iMethods = inheritedClass.iMethods();
+					var signatureToFind = iMethodToResolve.fullName().remove(iMethodToResolve.Namespace);
+					var methodDeclaration = astData.methodDeclaration(iMethodToResolve);
+					
+					foreach(var iMethod in iMethods)
+					{
+						var filteredSignature =  iMethod.fullName().remove(iMethod.Namespace);										
+						if (filteredSignature == signatureToFind) 
+						{ 
+							"Adding Interface Mapping: {0} -> {1}".debug(iMethodToResolve.fullName(), iMethod.fullName());     
+							if (methodStream.MappedIMethods.ContainsKey(iMethod.fullName()).isFalse())												
+								methodStream.add_IMethod(iMethod);
+										
+							// add call to this IMethod on its interface
+							"Body: {0}".info(methodDeclaration.Body.typeName());
+							"{0} = : {1}".debug(methodDeclaration.Body.str(), (methodDeclaration.Body.str() != "[NullBlockStatement]"));
+							var body = (methodDeclaration.Body.str() != "[NullBlockStatement]") 
+										? methodDeclaration.Body 
+										: methodDeclaration.add_Body();																						
+							var parameters = new List<IdentifierExpression>();			
+							foreach(var parameter in iMethod.Parameters)	
+								parameters.Add(new IdentifierExpression(parameter.Name)); 
+							var tempBlockStatement = new BlockStatement();
+							var tempInvocation = tempBlockStatement.add_Invocation(iMethod.Namespace,iMethod.name(), parameters.ToArray());			
+							//make sure we don't add this more than once 
+							if (body.csharpCode().contains(tempBlockStatement.csharpCode()).isFalse()) 
+							{											
+								"   Adding Interface Method call: {0}".info(tempBlockStatement.csharpCode().trim());     
+								body.add_Invocation(iMethod.Namespace,iMethod.name(), parameters.ToArray());												
+							}									 											 
+						}
+					}
+				}
+			}
+			return methodStream;
+	   }	
+	}
 }
