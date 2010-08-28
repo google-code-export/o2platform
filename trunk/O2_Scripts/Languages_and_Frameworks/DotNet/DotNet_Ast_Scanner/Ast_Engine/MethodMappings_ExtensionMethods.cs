@@ -29,7 +29,7 @@ using O2.External.SharpDevelop.ExtensionMethods;
 
 namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {	
-	
+	[Serializable]
 	public class MethodMappings
 	{	
 		public string SourceCodeFolder {get;set;}
@@ -48,6 +48,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			//MappedMethods = new List<string>();
 		}				
 	}
+	[Serializable]
 	public class MethodMappingItem 
 	{
 		[XmlAttribute]
@@ -60,6 +61,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			MethodMappings = new List<MethodMapping>();
 		}				
 	}
+	
+	[Serializable]
 	public class MethodMapping
 	{	
 		[XmlAttribute]
@@ -107,8 +110,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		{
 			return Key; //"{0} : {1}".format(INodeType, Signature);
 		}
-	}
-	
+	}			
     
 	public static class MethodMappings_ExtensionMethods_LoadAndMerge
 	{
@@ -199,25 +201,31 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 						
 		public static MethodMappings createSavedMethodMappings(this O2MappedAstData astData, Dictionary<string,List<KeyValuePair<INode,IMethodOrProperty>>> mappings)
 		{
-			//"creating SavedMethodMappings object from {0} mappings".info(mappings.size());
+			//"creating SavedMethodMappings object from {0} mappings".info(mappings.size());			
 			var savedMethodMappings = new MethodMappings();
 			foreach(var mapping in mappings)			
 			{
-				string key = mapping.Key;
-				var methodMappingItem = new MethodMappingItem() { Key =  key};
-				List<KeyValuePair<INode,IMethodOrProperty>> items = mapping.Value; 
-				foreach(var keyValuePair in items)
+				try
+				{										
+					string key = mapping.Key;					
+					var methodMappingItem = new MethodMappingItem() { Key =  key};
+					List<KeyValuePair<INode,IMethodOrProperty>> items = mapping.Value; 
+					foreach(var keyValuePair in items)
+					{							
+						var iNode = keyValuePair.Key;				
+						var iMethodOrProperty = keyValuePair.Value;
+						methodMappingItem.MethodMappings.Add(astData.methodMapping(iMethodOrProperty,iNode,key));
+					}						
+					savedMethodMappings.MethodMappingItems.Add(methodMappingItem);				
+				}
+				catch(Exception ex)
 				{
-					var iNode = keyValuePair.Key;				
-					var iMethodOrProperty = keyValuePair.Value;
-					methodMappingItem.MethodMappings.Add(astData.methodMapping(iMethodOrProperty,iNode,key));
-				}						
-				savedMethodMappings.MethodMappingItems.Add(methodMappingItem);				
-			}
-			//show.info(savedMethodMappings);
-			return savedMethodMappings;
-			//return savedMethodMappings.save();
+					ex.log("in createSavedMethodMappings");
+				}
+			}			
+			return savedMethodMappings;			
 		}			
+		
 		public static string saveMappings(this O2MappedAstData astData, Dictionary<string,List<KeyValuePair<INode,IMethodOrProperty>>> mappings)
 		{
 			return astData.createSavedMethodMappings(mappings).saveMappings();
@@ -236,8 +244,14 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			
 		}
 		public static string saveMappings(this MethodMappings savedMethodMappings)
-		{
-			return savedMethodMappings.save();
+		{	
+			if (savedMethodMappings.isNull())
+				"in saveMappings savedMethodMappings was Null".error();
+			//"__*****>>> in saveMappings: {0}".info(savedMethodMappings.MethodMappingItems.size());
+			//show.info(savedMethodMappings);
+			var savedMappingsFile = savedMethodMappings.save();
+			//"*****>>> Saved Mappings File: {0}".info(savedMappingsFile);
+			return savedMappingsFile;
 		}
 	}
 	
@@ -256,19 +270,19 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         
         public static Dictionary<IMethod, Dictionary<string,List<KeyValuePair<INode,IMethodOrProperty>>>> externalMethodsAndProperties(this O2MappedAstData astData, string filter, string targetFolder, int numberOfItemsToProcess)
         {
-        	var MimimumAvailableMemoryRequired = 50;
+        	var MimimumAvailableMemoryRequired = "".availableMemory()/4; //50;
+        	"Starting externalMethodsAndProperties calculations (with min memory required set to: {0}".info(MimimumAvailableMemoryRequired);
         	if (targetFolder.valid().isFalse())
         		targetFolder = PublicDI.config.getTempFolderInTempDirectory("_AstEngine_ExternalMappings"); 
         	
         	var methodMappingHashesFile = targetFolder.pathCombine("_methodMappingHashes.txt");
-        	
-        	"Saving MethodMappings to: {0}".info(targetFolder);
+        	        
         	var o2Timer = new O2Timer("Calculated externalMethodsAndProperties").start();
         	var iMethodMappings = new Dictionary<IMethod, Dictionary<string,List<KeyValuePair<INode,IMethodOrProperty>>>>(); 					
         	var iMethods = astData.iMethods();
         	var itemsToMap = iMethods.size();// - targetFolder.files().size();
 			var itemsMapped = 0;
-			
+								
 			foreach(var iMethod in iMethods)
 			{
 				// check avaialble memory
@@ -283,8 +297,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 				
 				//convert method
 				var fullName = iMethod.fullName();
-				var md5Hash = fullName.safeFileName().md5Hash();
-				var savedMethodMappingsFile = targetFolder.pathCombine(md5Hash)+ ".xml";
+                var md5Hash = fullName.safeFileName().md5Hash();
+                var savedMethodMappingsFile = targetFolder.pathCombine(md5Hash) + ".xml";
 				//var savedMethodMappingsFile = targetFolder.pathCombine(iMethod.fullName().safeFileName(100))+ ".xml";
 				itemsMapped++;
 				if (savedMethodMappingsFile.fileExists().isFalse()) // Skip if method mappings have already been calculated
@@ -390,6 +404,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         {
         	return new KeyValuePair<IMethod, INode>(iMethod, iNode);
         }
+        
         public static List<KeyValuePair<IMethod, INode>> calledIMethods_getMappings(this O2MappedAstData o2MappedAstData, IMethod iMethod)
         {
             //"in Called IMETHODS".debug();\
@@ -435,6 +450,50 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             }
             //return calledIMethods;
             return calledIMethodsMapping;
+        }
+        
+        public static string add_Properties(this O2MappedAstData astData, string targetFolder)
+        {
+        	//return methodMappingsIndexedBySignature;
+        	//handle Properties
+			var propertyMappings = new Dictionary<string,List<KeyValuePair<INode,IMethodOrProperty>>>();
+//			show.info(methodMappingsIndexedBySignature);
+
+            var fileName = "_MethodMapings_For_Properties";
+            //var md5Hash = fullName.safeFileName().md5Hash();
+            var savedPropertiesMappingsFile = targetFolder.pathCombine(fileName) + ".xml";
+            if (savedPropertiesMappingsFile.fileExists())
+                return savedPropertiesMappingsFile;
+
+			var propertyRefs = new List<INode>();
+			foreach(var propertyDeclaration in astData.MapAstToNRefactory.IPropertyToPropertyDeclaration.Values)
+			{
+				"Mapping property: {0}".info(propertyDeclaration.Name);
+				
+				propertyRefs.add(propertyDeclaration.iNodes<INode, MemberReferenceExpression>());
+                propertyRefs.add(propertyDeclaration.iNodes<INode, InvocationExpression>());
+                propertyRefs.add(propertyDeclaration.iNodes<INode, ObjectCreateExpression>());
+                
+			}
+//			show.info(propertyRefs);
+			try
+			{
+				foreach(Expression propertyRef in propertyRefs)
+				{
+					var methodOrProperty = astData.fromExpressionGetIMethodOrProperty(propertyRef);				
+					var nodeText =	astData.getTextForINode(propertyRef);// propertyRef.str();
+					propertyMappings.add(nodeText, new KeyValuePair<INode,IMethodOrProperty>(propertyRef,methodOrProperty)); 
+				}			
+			}
+			catch(Exception ex)
+			{
+				ex.log("in add_Property");
+			}
+            var tempFile = astData.saveMappings(propertyMappings);
+            if (tempFile.fileExists())
+				Files.MoveFile(tempFile, savedPropertiesMappingsFile);            
+            return savedPropertiesMappingsFile;
+			/// PROPERTIES
         }
 	}				
 	
@@ -571,6 +630,19 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			return result;
 		}
 	}
+	public static class MethodMappings_ExtensionMethods_MethodMapping
+	{
+		public static string sourceCodeLine(this MethodMapping methodMapping)
+		{
+			if (methodMapping.File.fileExists())
+			{
+				 var sourceCodeLine = Files.getLineFromSourceCode(methodMapping.File, methodMapping.Start_Line.uInt());
+				 if (methodMapping.SourceCode.contains(sourceCodeLine) || sourceCodeLine.contains(methodMapping.SourceCode))
+					 return sourceCodeLine.trim();;				 
+			}
+			return methodMapping.SourceCode;
+		}
+	}
 	
 	public static class MethodMappings_ExtensionMethods_GUI
 	{
@@ -579,8 +651,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			targetControl.clear();
 			var treeView = targetControl.add_TreeView()
 						 				.sort();
-						 						 
-			treeView.afterSelect<MethodMapping>(
+
+			Action<MethodMapping> showMethodMapping = 
 				(methodMapping)=>{
 									if (methodMapping.File.valid()) 
 									{
@@ -592,25 +664,71 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 																					  methodMapping.End_Line, 
 																					  methodMapping.End_Column);
 									}
-								 });
+								};
+								
+			treeView.afterSelect<MethodMapping>(showMethodMapping);
+			treeView.afterSelect<List<MethodMapping>>(
+				(methodMappings)=>showMethodMapping(methodMappings[0]));
+				
 			return treeView;										 
 		}
+		
+		
 		public static void showInTreeView(this MethodMappings methodMappings, TreeView treeView, string filter)		
 		{
+			methodMappings.showInTreeView(treeView, filter,false, false);
+		}
+		
+		public static void showInTreeView(this MethodMappings methodMappings, TreeView treeView, string filter, bool showSourceCodeSnippets, bool onlyShowSourceCodeLine)		
+		{
+			treeView.parent().backColor("LightPink");
 			treeView.visible(false);
 			treeView.clear();
 			var indexedMappings = methodMappings.indexedByKey(filter);
-			foreach(var item in indexedMappings)
-			{
-				var keyNodeText = "{0}                       ({1})".format(item.Key, item.Value.size());
-				var keyNode= treeView.add_Node(keyNodeText, item.Value[0]); 
-				foreach(var methodMapping in item.Value)
-				{					
-					var nodeText = "{0} - {1}".format(methodMapping.INodeType,methodMapping.SourceCode);
-					keyNode.add_Node(nodeText, methodMapping);
+			if (onlyShowSourceCodeLine)
+			{			
+				//do this so that we don't add more than one item per line
+				var indexedByFileAndLine = new Dictionary<string, MethodMapping>();
+				
+				foreach(var item in indexedMappings)
+					foreach(var methodMapping in item.Value)
+						if (methodMapping.File.valid())
+						{
+							var key = "{0}_{1}".format(methodMapping.File, methodMapping.Start_Line);
+							indexedByFileAndLine.add(key, methodMapping);														
+						}
+				// now group then by the same text in the SourceCodeLine		
+				var indexedBySourceCodeLine =  new Dictionary<string, List<MethodMapping>>();				
+				foreach(var methodMapping in indexedByFileAndLine.Values)								
+					indexedBySourceCodeLine.add(methodMapping.sourceCodeLine(), methodMapping);				
+				
+				//Finally show then
+				foreach(var item  in indexedBySourceCodeLine)
+				{
+					var uniqueTextNode = treeView.add_Node(item.Key, item.Value,true);
 				}
-								
 			}
+			else
+			{
+				foreach(var item in indexedMappings)
+				{
+					var keyNodeText = "{0}                       ({1})".format(item.Key, item.Value.size());
+					var keyNode= treeView.add_Node(keyNodeText, item.Value,true); 																
+				}
+				treeView.afterSelect<List<MethodMapping>>(
+					(mappings)=>{
+									var keyNode = treeView.selected();
+									keyNode.clear();
+									foreach(var methodMapping in mappings)
+									{					
+										var nodeText = (showSourceCodeSnippets) 
+															? methodMapping.sourceCodeLine()								
+															: "{0} - {1}".format(methodMapping.INodeType,methodMapping.SourceCode);
+										keyNode.add_Node(nodeText, methodMapping);
+									}
+								  });									
+			}
+			treeView.parent().backColor("Control");
 			treeView.visible(true);
 		}
 

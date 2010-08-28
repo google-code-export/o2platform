@@ -169,8 +169,10 @@ loadMethodMappings=
 							var source_MethodMappings = new List&lt;MethodMapping&gt;();
 							
 							MethodInvoker calculateTargets =
-								()=&gt;{
+								()=&gt;{										
+										"In calculate Targets".info();
 										sources_Matches.clear();
+										source_MethodMappings = new List&lt;MethodMapping&gt;();
 										var sourceRegExes = sources_RegEx.get_Text().lines();
 										
 										foreach(var sourceRegEx in sourceRegExes)
@@ -180,6 +182,7 @@ loadMethodMappings=
 												source_MethodMappings.AddRange(item.Value);
 											//show.info(matches);
 										}										
+										"There are {0} targets".info(source_MethodMappings.size());
 										sources_Matches.add_Nodes(source_MethodMappings); 
 									};
 							
@@ -202,14 +205,14 @@ loadMethodMappings=
 														"Creating findings for {0} methodmapings in method: {1}".info(methodMappingsInFile.size(),parentMethod);  
 														var iMethod = astData.iMethod_withSignature(parentMethod);														
 														var methodStreamFile = astData.methodStream_UseCache(iMethod, methodStreamsFileCache.get_Text());
-														"Method Stream Created: {0}".debug(methodStreamFile);
+														//"Method Stream Created: {0}".debug(methodStreamFile);
 														var astData_MethodStream = methodStreamFile.getAstData(false);
 														foreach(var methodMapping in methodMappings)
 														{
 															var targetINodes = new List&lt;INode&gt;();
 															if (methodMapping.INodeType == "MethodDeclaration")
 															{
-																"METHOdDeclaration".error();
+															
 																if (astData_MethodStream.methodDeclarations().size() &gt;0)
 																{
 																	targetINodes.AddRange(astData_MethodStream.methodDeclarations()[0].parameters().ToArray());
@@ -218,20 +221,20 @@ loadMethodMappings=
 															} 
 															else
 															{
-																"Creating findings for: {0}".info(methodMapping.str());
+																//"Creating findings for: {0}".info(methodMapping.str());
 																var iNodePosition = astData.getINodePosition(methodMapping);
-																"Finding adjustedINode".debug();
+																//"Finding adjustedINode".debug();
 																var adjustedINode = astData_MethodStream.fromFirstMethod_getINodeAtPosition(iNodePosition);
 																targetINodes.Add(adjustedINode);
 															}
 															foreach(var targetINode in targetINodes)
 															{
-																"Creating  O2CodeStream".debug();
+																//"Creating  O2CodeStream".debug();
 																var codeStream  = astData_MethodStream.createO2CodeStream(methodStreamFile, targetINode);  
 																var codeStreamO2Findings = codeStream.o2Findings();
-																"**** Created {0} O2Findings".info(codeStreamO2Findings.size());
+																//"**** Created {0} O2Findings".info(codeStreamO2Findings.size());
 																o2Findings.AddRange(codeStreamO2Findings);		
-																"**** Total Findings: {0}".info(o2Findings.size());	
+																"**** Total Findings so far: {0}".info(o2Findings.size());	
 															}
 														}
 														"disposing astData".debug();

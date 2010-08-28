@@ -316,10 +316,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		                    }
 		
 		                    // if we got here it means that we were not able to resolve this field (even after looking in partial files)
-		                    if (expression is IdentifierExpression)	                    
-								"in resolved Expression, it was not possible to resolve: {0}".error((expression as IdentifierExpression).Identifier);							
-		                    else		                    
-		                        "in resolved Expression, it was not possible to resolve: {0}".error(expression.str());
+		                    if (o2MappedAstData.debugMode)
+			                    if (expression is IdentifierExpression)	                    
+									"in resolved Expression, it was not possible to resolve: {0}".error((expression as IdentifierExpression).Identifier);							
+			                    else		                    
+			                        "in resolved Expression, it was not possible to resolve: {0}".error(expression.str());
 		                    return resolved;
 		                }
 		                return resolved;

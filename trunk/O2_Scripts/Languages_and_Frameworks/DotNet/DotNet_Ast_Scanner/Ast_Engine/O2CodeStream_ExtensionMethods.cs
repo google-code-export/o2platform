@@ -814,7 +814,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                         text = "field -> {0} : {1}".format(variableName.trim(), fieldDeclaration.TypeReference.Type);
                         break;
                     default:
-                        "in O2CodeStream.getTextForNode: not supported INode type: {0}".error(text);
+                    	if (o2MappedAstData.debugMode)
+	                        "in O2CodeStream.getTextForNode: not supported INode type: {0}".error(text);
                         break;
 
                 }

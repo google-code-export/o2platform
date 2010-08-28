@@ -26,7 +26,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
     	
     	public static bool isTaintPropagator(this O2CodeStreamTaintRules taintRules, InvocationExpression invocationExpression)
     	{    		
-    		"in isTaintPropagator for {0}".info(invocationExpression.str());
+    		//"in isTaintPropagator for {0}".info(invocationExpression.str());
     		//return (taintRules.TaintPropagators.Contains(taintPropagator));
     		return true;
     	}
