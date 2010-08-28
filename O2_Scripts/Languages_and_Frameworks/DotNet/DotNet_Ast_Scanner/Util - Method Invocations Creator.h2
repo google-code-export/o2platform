@@ -8,11 +8,12 @@ var baseFolder = "";
 O2MappedAstData astData = null;
 var useCachedData = true; //false;//true ;
 var showLogViewer = true;   
+var runOnSeparateAppDomain = true;
 var sourceCodeViewer = topPanel.add_SourceCodeViewer();
 var treeViewPanel = sourceCodeViewer.insert_Left&lt;Panel&gt;();		  	 				     
 treeViewPanel.parent&lt;SplitContainer&gt;().splitterDistance(400);							     
 var referencesToLoad = treeViewPanel.insert_Below&lt;GroupBox&gt;(100).set_Text("References").add_TextArea();
-var optionsPanel = referencesToLoad.insert_Below&lt;Panel&gt;(20);
+var optionsPanel = referencesToLoad.insert_Below&lt;Panel&gt;(40);
 var methodMappingsFilter = treeViewPanel.insert_Above&lt;Panel&gt;(20).add_TextBox().fill();
 TreeView methodsMappings_TreeView = null;
 MethodMappings loadedMethodMappings = null;  
@@ -31,6 +32,16 @@ Action showMethodMappings =
 			}
 		};
 
+optionsPanel.add_Link("Clear loaded Data", 20,0, 
+	()=&gt;{
+			loadedMethodMappings = new MethodMappings();
+			showMethodMappings();
+		});
+		
+optionsPanel.add_CheckBox("Run on separate AppDomain", 20,100, (value)=&gt; runOnSeparateAppDomain= value)
+			.check()
+			.autoSize(); 
+	
 methodMappingsFilter.onEnter((text)=&gt; showMethodMappings()); 
 
 Action&lt;string&gt; loadFilesFromFolder = null; 
@@ -43,8 +54,7 @@ loadFilesFromFolder=
 						return;
 					"loading files from: {0}".info(sourceFolder); 	 									
 					var methodFilder = @"";
-					var references = referencesToLoad.get_Text().lines();
-					var runOnSeparateAppDomain = true; 
+					var references = referencesToLoad.get_Text().lines();					
 					var results = MethodMappings_Engine.calculateMethodMappings(sourceFolder, resultsFolder,references,runOnSeparateAppDomain);     
 					
 					loadedMethodMappings = resultsFolder.files("*.xml").loadAndMergeMethodMappings();					

@@ -77,14 +77,18 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         {
         	if (ShowLogViewer)
 	        	showLogViewer();
-        	"Loading Ast source files form folder: {0}".info(SourceFolder);
+        	"Loading Ast source files from folder: {0}".info(SourceFolder);
         	O2MappedAstData astData = SourceFolder.getAstData(References, UseCachedData);					       	
         	        	
-        	"There are {0} AST files loaded".format(astData.files().size());
+        	"There are {0} AST files loaded".debug(astData.files().size());
         	"Calculating MethodsMappings".info();
-        	var iMethodMappings = astData.externalMethodsAndProperties(MethodFilter, ResultsFolder, NumberOfItemsToProcess)
-        								 .indexedBy_ResolvedSignature();
-        	var savedFile = astData.saveMappings(iMethodMappings); 
+        	var methodMapingsIndexedBySignature = astData.externalMethodsAndProperties(MethodFilter, ResultsFolder, NumberOfItemsToProcess)
+        								 			     .indexedBy_ResolvedSignature();
+        	//var methodMapingsIndexedBySignature = new Dictionary<string,List<KeyValuePair<INode,IMethodOrProperty>>>();			
+        	
+//			if (addProperties)       								 			     
+        		astData.add_Properties(ResultsFolder);							         	
+        	var savedFile = astData.saveMappings(methodMapingsIndexedBySignature); 
 			
 			"MethodMappings saved to: {0} : {1}".info(savedFile , ((Int32)savedFile.fileInfo().size()).kBytesStr());
 			
@@ -105,9 +109,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         {
 			LogViewer = O2Gui.open<Panel>("MethodMappings Engine Logs", 400,200).add_LogViewer();
         }
-        
-        
-        public static string executeEngineOnSeparateAppDomain(string sourceFolder,string resultsFolder, string methodFilter, bool useCachedData, List<string> references, int numberOfItemsToProcess)
+
+
+        public static string executeEngineOnSeparateAppDomain(string sourceFolder, string resultsFolder, string methodFilter, bool useCachedData, List<string> references, int numberOfItemsToProcess)
         {
         	//var script = @"C:\O2\_XRules_Local\Ast_Test.cs";
         	var script = "MethodMappings_Engine.cs".local();
@@ -125,9 +129,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 						methodFilter,
 						useCachedData,
 						references,
-						numberOfItemsToProcess
+						numberOfItemsToProcess                        
 					};					
-    	    var result = (string)o2Proxy.staticInvocation("O2_External_SharpDevelop","FastCompiler_ExtensionMethods","executeFirstMethod",new object[]{script, parameters});	
+
+    	    var result =(string)o2Proxy.staticInvocation("O2_External_SharpDevelop","FastCompiler_ExtensionMethods","executeFirstMethod",new object[]{script, parameters});	
     	    o2AppDomain.unLoadAppDomain(); 
     	    "AppDomain execution completed, Runing GCCollect".info();
     	    PublicDI.config.gcCollect();
@@ -177,7 +182,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         	resultsFolder.createDir();	 
         	var rawResultsFolder = 	 resultsFolder.pathCombine("_PartialMethodMappings");
         	rawResultsFolder.createDir();
-	        var continueScan = true;			
+	        var continueScan = true;				        
 			while(continueScan) 
 			{
 				"Executing MethodMappings_Engine for {0} methods".debug(numberOfMethodsToProcess);				
@@ -185,13 +190,16 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 									? MethodMappings_Engine.executeEngineOnSeparateAppDomain(sourceFolder, rawResultsFolder, methodFilter ,useCachedData, references, numberOfMethodsToProcess)
 									: new MethodMappings_Engine().createMethodMappings(sourceFolder, rawResultsFolder, methodFilter ,useCachedData, references, numberOfMethodsToProcess); 
 				if (resultsFile.isNull())
+                {
+                    "in calculateMethodMappings Results file was null".error();
 					break;
+                }
 				else								
 					if (resultsFile.xRoot().elementsAll().size() < 6)
 						break;	
-				"NUMBER OF ELEMENTS:{0}".error(resultsFile.xRoot().elementsAll().size());										
+				//"NUMBER OF ELEMENTS:{0}".error(resultsFile.xRoot().elementsAll().size());														
 			}
-			var consolidatedFile = resultsFolder.pathCombine("ConsolidatedMethodMappings.xml");
+			var consolidatedFile = resultsFolder.pathCombine("ConsolidatedMethodMappings_{0}.xml".format(sourceFolder.fileName()));
 			if (consolidatedFile.fileExists().isFalse())
 			{
 				var consolidatedMethodMappings = rawResultsFolder.files("*.xml").loadAndMergeMethodMappings();
@@ -207,4 +215,14 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         }
     }
 
+	public static class MethodMappings_Engine_ExtensionMethods
+	{
+		public static MethodMappings createMethodMappings(this string sourceFolder,List<string> references,  string resultsFolder, bool runOnSeparateAppDomain)
+		{
+			"Creating Method Mappings from folder : {0}".info(sourceFolder); 	 									
+			var methodFilter = @"";		
+			var results = MethodMappings_Engine.calculateMethodMappings(sourceFolder, resultsFolder,references,runOnSeparateAppDomain);     		
+			return resultsFolder.files("*.xml").loadAndMergeMethodMappings();
+		}
+	}
 }
