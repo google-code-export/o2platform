@@ -36,11 +36,15 @@ using O2.XRules.Database.Findings;
 using O2.XRules.Database.APIs;
 
 //O2File:WPF_GUI.cs
+//O2File:GraphLayout_O2CodeStream_ExtensionMethods.cs
+//O2File:VerticesAndEdges_ExtensionMethods.cs
+//O2File:Wpf_TextEditor_ExtensionMethods.cs
 
 //O2File:Ast_Engine_ExtensionMethods.cs
 //O2File:Findings_ExtensionMethods.cs
 //O2File:SharpDevelop_O2MappedAstData_ExtensionMethods.cs
 //O2File:TextEditor_O2CodeStream_ExtensionMethods.cs
+//O2File:MethodMappings_ExtensionMethods.cs
 
 //O2File:ascx_GraphAst_MethodCalls.cs
 //O2File:ascx_WriteRule.cs
@@ -143,6 +147,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			return;
 			//add_StatusStrip();
 			//statusStrip.set_Text("test");
+			/*
 			var controls = this.add_1x1("actions", "", false, 40);		
 			TopProgressBar =  controls[0].add_Link("Step 1: load artifacts (C# source code)", 15, 2, () => step_LoadArtifacts())
 								         .append_Link("view AST", ()=> step_ViewAST())
@@ -165,6 +170,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             HostPanel.insert_Below<ascx_LogViewer>(100);
 			
 			statusMessage("all ready...");
+			*/
 		}
 		
 		public Step_LoadArtifacts step_LoadArtifacts()

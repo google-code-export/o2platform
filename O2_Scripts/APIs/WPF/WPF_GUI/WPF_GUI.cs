@@ -19,6 +19,7 @@ using System.Windows;
 using System.Windows.Controls;
 using O2.API.Visualization.ExtensionMethods;
 using O2.XRules.Database;
+using O2.Views.ASCX.classes.MainGUI;
 using Odyssey.Controls;
 using O2.XRules.Database.Utils;
 

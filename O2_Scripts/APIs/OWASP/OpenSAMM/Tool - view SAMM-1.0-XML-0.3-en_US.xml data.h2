@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>panel.clear();
-var topPanel = panel.add_Panel();
+  <SourceCode>//panel.clear();
+//var topPanel = panel.add_Panel();
+var topPanel = O2Gui.open&lt;Panel&gt;("SAMM Xml",400,400);
 var xmlFile = "SAMM-1.0-XML-0.3-en_US.xml".local();
 //return xmlFile;
 

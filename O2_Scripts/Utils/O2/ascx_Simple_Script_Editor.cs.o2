@@ -218,7 +218,9 @@ namespace O2.XRules.Database.Utils
                        .add_MenuItem("add additional source code (when compile)", (menuitem) => insertCodeSnipptet(menuitem.Text))
                        .add_MenuItem("add external reference (dll or exe or GAC assembly)", (menuitem) => insertCodeSnipptet(menuitem.Text))
                        .add_MenuItem("run in STA thread (when invoke)", (menuitem) => insertCodeSnipptet(menuitem.Text))
-                       .add_MenuItem("run in MTA thread (when invoke)", (menuitem) => insertCodeSnipptet(menuitem.Text));
+                       .add_MenuItem("run in MTA thread (when invoke)", (menuitem) => insertCodeSnipptet(menuitem.Text))
+                       .add_MenuItem("clear 'AssembliesCheckedIfExists' cache", (menuitem) => insertCodeSnipptet(menuitem.Text));
+
             contextMenu.add_MenuItem("show Log Viewer", (menuitem) => showLogViewer());
             
 
@@ -249,7 +251,11 @@ namespace O2.XRules.Database.Utils
                 case "run in MTA thread (when invoke)":
                     commandsToExecute.insert_Text("".line() + "//MtaThread:".line());
                     break;
+                case "clear 'AssembliesCheckedIfExists' cache":
+                    commandsToExecute.insert_Text("".line() + "//ClearAssembliesCheckedIfExists".line());
+                    break;
                 default:
+                    
 //                    commandsToExecute.insert_Text(".........");                    
                     break;
             }

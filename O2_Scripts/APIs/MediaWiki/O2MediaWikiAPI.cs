@@ -33,6 +33,7 @@ namespace O2.XRules.Database.APIs
 {
     public class O2MediaWikiAPI
     {   
+    	public string ApiName { get; set; }
     	public string HostUrl { get; set; }		
     	public string ApiPhp { get; set; }
     	public string IndexPhp { get; set; }
@@ -54,14 +55,19 @@ namespace O2.XRules.Database.APIs
 		
 		public O2MediaWikiAPI()
 		{
-			
+			ApiName = "MediaWiki";
 		}
 		
-    	public O2MediaWikiAPI(string apiPhp)     		
+    	public O2MediaWikiAPI(string apiPhp)   : this()  		
     	{
     	  	init(apiPhp);
     	}
  
+ 		public override string ToString()
+ 		{
+ 			return ApiName;
+ 		}
+ 		
  		public Web web()
  		{
  			LastWebRequest = new Web();

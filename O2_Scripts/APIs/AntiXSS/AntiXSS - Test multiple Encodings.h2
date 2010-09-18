@@ -10,6 +10,8 @@ Action&lt;string&gt; showEncodings =
 						result.append_Line("------------------------");
 						result.append_Line("AntiXss.UrlEncode -&gt; {0}".format(AntiXss.UrlEncode(textToEncode)));
 						result.append_Line("------------------------"); 
+						result.append_Line("AntiXss.JavascriptEncode -&gt; {0}".format(AntiXss.JavaScriptEncode(textToEncode)));
+						result.append_Line("------------------------"); 
 						result.append_Line("System.Web.HttpUtility.HtmlEncode -&gt; {0}".format(System.Web.HttpUtility.HtmlEncode(textToEncode)));
 						result.append_Line("------------------------"); 
 						result.append_Line("System.Web.HttpUtility.UrlEncode -&gt; {0}".format(System.Web.HttpUtility.UrlEncode(textToEncode)));
@@ -27,6 +29,6 @@ showEncodings(testPayload);
 //return AntiXss.HtmlEncode(payload); 
 //return "AntiXSSLibrary.dll".assembly().methods();
 //using Microsoft.Security.Application
-</SourceCode>
+//O2Ref:AntiXSSLibrary.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

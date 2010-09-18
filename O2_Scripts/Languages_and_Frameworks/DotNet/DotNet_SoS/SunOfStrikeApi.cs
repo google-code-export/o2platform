@@ -15,6 +15,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX;
+using O2.Views.ASCX.classes.MainGUI;
 //O2File:CmdExeAPI.cs
 
 namespace O2.XRules.Database.APIs
@@ -38,21 +39,27 @@ namespace O2.XRules.Database.APIs
     	
     	public static void launchO2UnderDebugger()
     	{
-    	 	var pathToO2Exe =  PublicDI.config.CurrentExecutableDirectory.pathCombine(PublicDI.config.CurrentExecutableFileName);
+    	 	//var pathToO2Exe =  PublicDI.config.CurrentExecutableDirectory.pathCombine(PublicDI.config.CurrentExecutableFileName);
+    	 	var pathToO2Exe =  PublicDI.config.CurrentExecutableDirectory.pathCombine("DiagramDesigner.exe");
+    	 	
     	 	"launching O2 under debugger: {0}".info(pathToO2Exe);
-    		new SonOfStrikeGui().launch(pathToO2Exe);
+    	 	O2Gui.open<SonOfStrikeGui>("SunOfStrike API",600,400)
+    	 		 .launch(pathToO2Exe);;
+    		//new SonOfStrikeGui().launch(pathToO2Exe);
     	}
     	
     	public SonOfStrikeGui()
     	{
     		try
     		{
+    			
     			ExecutingRequest = new AutoResetEvent(true);
     			ExecutionQueue =new Queue<string>();
     			LastCommandResult = new StringBuilder();
     			sosApi = new SunOfStrikeApi(executeCmd);
+    			buildGui(); 
     			//StartArguments = cmdDefaultDebuggedProcess;
-    			buildGui();    			    			
+    			   			    			
     		}
     		catch(Exception ex)
     		{
@@ -76,7 +83,7 @@ namespace O2.XRules.Database.APIs
     	
     	public void buildGui()
     	{
-    		this.Width = 400;
+    		this.Width = 600;
     		this.Height = 300;
     		// add controls
     		var groupBoxes = this.add_1x1("Debug Commands","'Cdb & SoS' GUI",false, 100);

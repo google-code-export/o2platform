@@ -29,11 +29,17 @@ namespace O2.XRules.Database.APIs
 		}
 		
 		public OwaspWikiAPI(bool loadStylesFromWebsite)
-		{
+		{	
+			this.ApiName = "OwaspWiki";
 			init("http://www.owasp.org/api.php");
 			this.Styles = (loadStylesFromWebsite) ? owaspStyles() : "";
 		}
 		
+		public override string ToString()
+ 		{
+ 			return ApiName;
+ 		}
+ 		
 		//TODO: add detection to see if we are a)online and b) able to access the www.owasp.org website
 		
 		// dynamically (one per session) grab the current header scripts used in OWASP
@@ -87,4 +93,17 @@ namespace O2.XRules.Database.APIs
 			
 		}
     }
+    
+    public static class OwaspWikiAPI_ExtensionMethods
+    {
+    	public static List<string> OWASP_Projects(this OwaspWikiAPI wikiApi)
+    	{
+    		var categoryTag = "Category:OWASP Project";
+    		var projects = new List<string>();	
+    		projects.Add("Asd"); 
+    		return projects;
+    	}
+    }
+    
+    
 }

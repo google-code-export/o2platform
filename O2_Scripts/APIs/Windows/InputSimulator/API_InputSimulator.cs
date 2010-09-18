@@ -140,8 +140,16 @@ namespace O2.XRules.Database.APIs
     		return (API_InputSimulator)O2.API.Visualization.ExtensionMethods.WPF_Threading_ExtensionMethods.wpfInvoke(
     			uiElement, 
     				()=>{
-    						var point = uiElement.PointToScreen(new System.Windows.Point(0, 0)); 
-    						return inputSimulator.mouse_MoveTo_Wpf(point);
+    						try
+    						{
+    							var point = uiElement.PointToScreen(new System.Windows.Point(0, 0)); 
+    							return inputSimulator.mouse_MoveTo_Wpf(point);
+    						}
+    						catch(Exception ex)
+    						{
+    							ex.log("in mouse_MoveTo_Wpf");
+    							return null;
+    						}
     					});
     	}
     	
