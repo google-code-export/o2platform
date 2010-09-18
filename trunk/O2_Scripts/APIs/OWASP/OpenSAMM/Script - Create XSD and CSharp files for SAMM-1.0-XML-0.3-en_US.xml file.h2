@@ -1,10 +1,14 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var xmlFile = "SAMM-1.0-XML-0.3-en_US.xml".local();
+  <SourceCode>//panel.clear();
+//var topPanel = panel;
+var topPanel = O2Gui.open&lt;Panel&gt;("SAMM Xml",400,400);
+
+var xmlFile = "SAMM-1.0-XML-0.3-en_US.xml".local();
 var xsdFile = xmlFile.replace(".xml",".xsd");
 var csharpFile = xmlFile.replace(".xml",".cs");
-panel.clear();
-panel.add_SourceCodeViewer().open(xmlFile);
+
+topPanel.add_SourceCodeViewer().open(xmlFile);
 
 xmlFile.xmlCreateXSD().saveAs(xsdFile);
 if (xsdFile.fileExists())

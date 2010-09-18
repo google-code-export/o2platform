@@ -22,11 +22,20 @@ namespace O2.XRules.Database.Utils
     	{
     		return uiElement.xaml_CreateUIElement<Button>(XamlCode.new_Button(buttonText));	   
     	}
+    	public static Button add_Xaml_Button(this UIElement uiElement, string buttonText,  Action onClickCallback)
+    	{
+    		return uiElement.add_Xaml_Button( buttonText, -1,-1 ,onClickCallback);
+    	}
     	
-    	public static Button add_Xaml_Button(this UIElement uiElement, string buttonText, Action onClickCallback)
+    	public static Button add_Xaml_Button(this UIElement uiElement, string buttonText, int left, int top,  Action onClickCallback)
     	{
     		var button = uiElement.add_Xaml_Button(buttonText);
     		button.onClick_Wpf(onClickCallback);
+    		if (left > -1)
+    			button.left_Wpf(left);
+    		if (top > -1)
+    			button.top_Wpf(top);
+			  
     		return button;
     	}
     	    	    	

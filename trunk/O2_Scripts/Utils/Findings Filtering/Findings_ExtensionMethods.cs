@@ -48,6 +48,13 @@ namespace O2.XRules.Database.Findings
 					select o2Finding.Source).toList();
 		}
 		
+		public static List<IO2Finding> Cookies(this List<IO2Finding> iO2Findings)
+		{
+			return (from O2Finding o2Finding in iO2Findings
+		      where ((O2Finding)o2Finding).Source.contains("Cookie") 
+		      select (IO2Finding)o2Finding).toList(); 
+		}
+		
 		public static List<string> sinks(this List<IO2Finding> iO2Findings)
 		{
 			return (from O2Finding o2Finding in iO2Findings

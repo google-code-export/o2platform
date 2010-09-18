@@ -72,8 +72,8 @@ Action&lt;string&gt; loadAstData =
 												
 						foreach(var iClass in astData.iClasses())
 							foreach(var inheritClass in iClass.ClassInheritanceTree)	
-								if (iClass != inheritClass)
-								{		
+								if (iClass != inheritClass &amp;&amp; inheritClass.Name.neq("Object"))
+								{											
 									mappedByRootClass.add(iClass, inheritClass); 
 									mappedByInheritClass.add(inheritClass,iClass); 
 								}
@@ -93,8 +93,11 @@ setupTreeView(treeView_byInheritedClass);
 
 
 
-var sourceFolder = @"C:\DotNet\AspNet-MVC\NerdDinner_2.0\NerdDinner";
-loadAstData(sourceFolder); 	
+//var sourceFolder = @"C:\DotNet\AspNet-MVC\NerdDinner_2.0\NerdDinner";
+referencesToLoad.Add("System.Data");
+referencesToLoad.Add("System.Web");
+referencesToLoad.Add("System.Web.Services");
+//loadAstData(sourceFolder); 	
 return null;
 
 //using O2.API.AST.CSharp

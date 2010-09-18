@@ -35,7 +35,7 @@ return null;
 //using Svg
 //using System.IO
 //using System.Drawing.Imaging
-//O2Ref:svg.dll
+//O2Ref:Svg.dll
 </SourceCode>
   <ReferencedAssemblies />
 </H2>

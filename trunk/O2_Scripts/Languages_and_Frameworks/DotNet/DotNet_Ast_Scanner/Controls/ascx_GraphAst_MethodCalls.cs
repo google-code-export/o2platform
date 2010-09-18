@@ -22,6 +22,9 @@ using GraphSharp.Controls;
 using O2.XRules.Database.Utils;
 
 //O2File:WPF_ExtensionMethods.cs
+//O2File:GraphLayout_O2CodeStream_ExtensionMethods.cs
+//O2File:VerticesAndEdges_ExtensionMethods.cs
+//O2File:Wpf_TextEditor_ExtensionMethods.cs
 //O2File:Ast_Engine_ExtensionMethods.cs
 //O2File:ascx_Simple_Script_Editor.cs.o2
 //O2File:Scripts_ExtensionMethods.cs

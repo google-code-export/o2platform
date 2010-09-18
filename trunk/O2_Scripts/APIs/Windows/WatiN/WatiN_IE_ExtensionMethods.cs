@@ -157,11 +157,22 @@ namespace O2.XRules.Database.APIs
     		ie.wait(sleepValue);
     		return ie;
     	}
+    	
     	public static WatiN_IE showMessage(this WatiN_IE ie, string message)
+    	{
+    		return ie.showMessage(message,false);
+    	}
+    	
+    	public static WatiN_IE showMessage(this WatiN_IE ie, string message, bool runOnSeparateThread)
     	{    		
     		message = message.Replace("".line(), "<br/>");
-    		var messageTemplate = "<html><body><div style = \"position:absolute; top:50%; width:100%; text-align: center;font-size:20pt; font-family:Arial\">{0}</div></body></html>";
-    		return ie.set_Html(messageTemplate.format(message));    		
+			var messageTemplate = "<html><body><div style = \"position:absolute; top:50%; width:100%; text-align: center;font-size:20pt; font-family:Arial\">{0}</div></body></html>";
+			
+    		if (runOnSeparateThread)    			
+	    		O2Thread.mtaThread(()=>{ie.set_Html(messageTemplate.format(message));});
+	    	else
+	    		ie.set_Html(messageTemplate.format(message));
+    		return ie;
     	}
     	// uri & url
  
@@ -987,6 +998,19 @@ namespace O2.XRules.Database.APIs
 				"in WatiN_IE value, could not find textField with id: {0}".error(text);
 			return watinIe;
  
+		}
+		public static bool enabled(this TextField field)
+		{
+			return !(bool)field.htmlElement().prop("disabled");
+		}
+		public static TextField enabled(this TextField field, bool value)
+		{			
+			
+			O2.Kernel.ExtensionMethods.Reflection_ExtensionMethods
+					 .prop(field.htmlElement(),
+						   "disabled",
+						   ! value);
+			return field;			
 		}
 
     }
