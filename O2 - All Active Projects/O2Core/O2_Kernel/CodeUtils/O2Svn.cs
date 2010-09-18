@@ -41,28 +41,31 @@ namespace O2.Kernel.CodeUtils
                             "We are currently offline, skipping the check".debug();
                             return;
                         }
-                        if (Path.GetExtension(assemblyToLoad) == ".dll" ||
-                            Path.GetExtension(assemblyToLoad) == ".exe")  // if there is no valid extension is it most likely a GAC reference
-                        {
+//                        if (Path.GetExtension(assemblyToLoad) == ".dll" ||
+//                            Path.GetExtension(assemblyToLoad) == ".exe")  // if there is no valid extension is it most likely a GAC reference
+//                        {
                             var currentApplicationPath = PublicDI.config.CurrentExecutableDirectory;
-                            localFilePath = Path.Combine(currentApplicationPath, assemblyToLoad);
+                            localFilePath=  (assemblyToLoad.contains("/","\\"))
+                                                ? Path.Combine(currentApplicationPath, Path.GetFileName(assemblyToLoad))
+                                                : Path.Combine(currentApplicationPath, assemblyToLoad);
+                            
                             if (File.Exists(localFilePath))
                                 return;
-                            var webLocation1 = "{0}{1}".format(PublicDI.config.O2SVN_ExternalDlls, assemblyToLoad);
+                            var webLocation1 = "{0}{1}".format(PublicDI.config.O2SVN_ExternalDlls, assemblyToLoad).trim();
                             if (new O2Kernel_Web().httpFileExists(webLocation1))
                             {
                                 new O2Kernel_Web().downloadBinaryFile(webLocation1, localFilePath);
                             }
                             else
                             {
-                                var webLocation2 = "{0}{1}".format(PublicDI.config.O2SVN_Binaries, assemblyToLoad);
+                                var webLocation2 = "{0}{1}".format(PublicDI.config.O2SVN_Binaries, assemblyToLoad).trim();
                                 if (new O2Kernel_Web().httpFileExists(webLocation2))
                                 {
                                     new O2Kernel_Web().downloadBinaryFile(webLocation2, localFilePath);
                                 }
                                 else
                                 {
-                                    var webLocation3 = "{0}{1}".format(PublicDI.config.O2SVN_FilesWithNoCode, assemblyToLoad);
+                                    var webLocation3 = "{0}{1}".format(PublicDI.config.O2SVN_FilesWithNoCode, assemblyToLoad).trim();
                                     if (new O2Kernel_Web().httpFileExists(webLocation3))
                                     {
                                         new O2Kernel_Web().downloadBinaryFile(webLocation3, localFilePath);
@@ -74,7 +77,7 @@ namespace O2.Kernel.CodeUtils
                                 "Assembly sucessfully fetched from O2SVN: {0}".info(localFilePath);
                                 return;
                             }
-                        }
+//                        }
                     }
                     catch (Exception ex)
                     {

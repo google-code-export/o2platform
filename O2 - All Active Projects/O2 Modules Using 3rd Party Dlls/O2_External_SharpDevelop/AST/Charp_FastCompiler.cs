@@ -429,6 +429,7 @@ namespace O2.External.SharpDevelop.AST
             ExtraSourceCodeFilesToCompile = new List<string>();        	
         	var compilationUnit = astCSharp.CompilationUnit;
             ReferencedAssemblies = new List<string>();
+            var FilesToDownload = new List<string>();
 
         	var currentUsingDeclarations = new List<string>();
         	foreach(var usingDeclaration in astCSharp.AstDetails.UsingDeclarations)
@@ -440,6 +441,7 @@ namespace O2.External.SharpDevelop.AST
                 comment.Text.eq("O2Tag_OnlyAddReferencedAssemblies", () => onlyAddReferencedAssemblies = true);                
                 comment.Text.starts("using ", false, value => astCSharp.CompilationUnit.add_Using(value));
                 comment.Text.starts(new [] {"ref ", "O2Ref:"}, false,  value => ReferencedAssemblies.Add(value));
+                comment.Text.starts(new[] { "Download:","download:", "O2Download:" }, false, value => FilesToDownload.Add(value));
                 comment.Text.starts(new[] { "include", "file ", "O2File:" }, false, value => ExtraSourceCodeFilesToCompile.Add(value));
                 comment.Text.starts(new[] { "dir ", "O2Dir:" }, false, value => ExtraSourceCodeFilesToCompile.AddRange(value.files("*.cs",true))); 
                
@@ -448,7 +450,8 @@ namespace O2.External.SharpDevelop.AST
                                         "debugSymbols"}, true, (value) => generateDebugSymbols = true);
                 comment.Text.eq("StaThread", () => { ExecuteInStaThread = true; });
                 comment.Text.eq("MtaThread", () => { ExecuteInMtaThread = true; });
-                comment.Text.eq("WorkOffline", () => { WorkOffline = true; });  
+                comment.Text.eq("WorkOffline", () => { WorkOffline = true; });
+                comment.Text.eq("ClearAssembliesCheckedIfExists", () => { O2.Kernel.CodeUtils.O2Svn.clear_AssembliesCheckedIfExists(); });  
             }
 
             //resolve location of ExtraSourceCodeFilesToCompile
@@ -457,6 +460,8 @@ namespace O2.External.SharpDevelop.AST
     
             //make sure the referenced assemblies are in the current execution directory
             CompileEngine.tryToResolveReferencesForCompilation(ReferencedAssemblies, WorkOffline);            
+            //use the same technique to download files that are needed for this script (for example *.zip files or other unmanaged/support files)
+            CompileEngine.tryToResolveReferencesForCompilation(FilesToDownload, WorkOffline);            
 
             if (onlyAddReferencedAssemblies.isFalse())
             {
