@@ -23,6 +23,7 @@ namespace O2.DotNetWrappers.DotNet
     {                
         static string onlyAddReferencedAssemblies = "O2Tag_OnlyAddReferencedAssemblies";
         static List<string> specialO2Tag_ExtraReferences = new List<string>() {"//O2Tag_AddReferenceFile:", "//O2Ref:"};
+        static List<string> specialO2Tag_Download = new List<string>() { "//Download:", "//O2Download:" };
         static List<string> specialO2Tag_ExtraSourceFile = new List<string>() { "//O2Tag_AddSourceFile:", "//O2File:" };
         static List<string> specialO2Tag_ExtraFolder = new List<string>() { "//O2Tag_AddSourceFolder:", "//O2Folder:", "//O2Dir:" };
         static List<string> specialO2Tag_DontCompile= new List<string>() { "//O2NoCompile"};
