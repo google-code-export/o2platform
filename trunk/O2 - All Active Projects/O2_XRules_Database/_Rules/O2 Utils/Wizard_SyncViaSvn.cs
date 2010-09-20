@@ -31,11 +31,11 @@ namespace O2.Core.XRules._Wizards
 	{
 		private static IO2Log log = PublicDI.log;
 		
-        public static string testTargetFolder = PublicDI.config.getTempFolderInTempDirectory("Svn To Sync");
+        //public static string testTargetFolder = PublicDI.config.getTempFolderInTempDirectory("Svn To Sync");
 
         public Thread runWizard()
         {
-            return runWizard(PublicDI.config.SvnO2DatabaseRulesFolder, testTargetFolder);        	
+            return runWizard(PublicDI.config.SvnO2DatabaseRulesFolder, PublicDI.config.LocalScriptsFolder);        	
         }
         [StartWizard]
         public Thread runWizard(string svnUrl, string targetFolder)
