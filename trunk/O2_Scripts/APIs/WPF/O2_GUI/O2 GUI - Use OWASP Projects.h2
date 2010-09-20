@@ -25,7 +25,7 @@ owaspWiki.add_RibbonGroup("Tools")
 				 .add_RibbonButton_H2Script(topPanel,"OWASP Wiki Latest Changes","Tool - OWASP WIKI Diff of Latests Changes.h2");  
 
 owaspWiki.add_RibbonGroup("History of OWASP Website")
-				 .add_RibbonButton_H2Script(topPanel,"Shiw Image Animation of OWASP content","Script - show Image animation of OWASP Content.h2");  
+				 .add_RibbonButton_H2Script(topPanel,"Show Image Animation of OWASP content","Script - show Image animation of OWASP Content.h2");  
 
 				 
 var openSamm = ribbon.Ribbon.add_RibbonTab("OWASP Wiki");   

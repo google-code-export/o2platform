@@ -194,6 +194,18 @@ namespace O2.XRules.Database.Utils
 						winFormsControl.add_SourceCodeViewer().open(pathToFile);
 					});
 		}
+		
+		public static RibbonGroup add_RibbonButton_Web(this RibbonGroup ribbonGroup, WinForms.Control winFormsControl, string label, string url)
+		{
+			return ribbonGroup.add_RibbonButton(label,  
+				()=>{						
+						winFormsControl.clear();
+						"Opening url: {0}".info(url);
+						winFormsControl.add_Control<WinForms.WebBrowser>().open(url);;						
+					});
+		}
+		
+		
 
 		
 //var button1 = ribbonGroup2.add_Control_Wpf<RibbonButton>();
