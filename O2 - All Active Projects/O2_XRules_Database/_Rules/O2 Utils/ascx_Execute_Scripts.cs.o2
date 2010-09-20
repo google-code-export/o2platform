@@ -41,6 +41,7 @@ using O2.Views.ASCX.ExtensionMethods;
 //using O2.XRules.Database.O2Utils;
 using O2.Core.XRules.Classes;
 using O2.External.IE.ExtensionMethods;
+using O2.Core.XRules._Wizards;
 
 namespace O2.XRules.Database
 { 
@@ -63,47 +64,78 @@ namespace O2.XRules.Database
 		public SplitContainer mainSplitContainer;
         public ToolStripStatusLabel statusLabel;
 
-        public static string NEW_GUI_SCRIPT = "O2 Main WPF GUI.h2";
+        //public static string NEW_GUI_SCRIPT = "O2 Main WPF GUI.h2";
+        public static string NEW_GUI_SCRIPT = "O2 GUI.h2";
 
-        public static void startControl()
-    	{   
+        public static void startControl(string scriptToExecute)
+        {
+            // load Execute_Scripts GUI
             var formTitle = "O2 XRules Database ({0})".format("O2_XRules_Database.exe".assembly().version());
-            var executeScripts = (ascx_Execute_Scripts)typeof(ascx_Execute_Scripts).showAsForm(formTitle, 240, 200);            
-    		//executeScripts.invokeOnThread(
-    		//	()=>{
+            var executeScripts = (ascx_Execute_Scripts)typeof(ascx_Execute_Scripts).showAsForm(formTitle, 240, 200);
+            //executeScripts.invokeOnThread(
+            //	()=>{
             executeScripts.checkForMSI_andOnFirstRunAndUnzipDefaultScripts();
-			executeScripts.buildGui();
-            if (msiExecution.isFalse())                
-            {
-                if (executeScripts.is32Bit())
-                    executeScripts.syncO2ViaSvn();
-            }
-            else
-                svnSyncComplete.Set();            
+            executeScripts.buildGui();
 
-			//var scriptToExecute = ClickOnceDeployment.getClickOnceScriptPath();
-            //if (scriptToExecute.fileExists())
-            //  executeScripts.loadFile(scriptToExecute);
-            //else
-            //{
-                svnSyncComplete.WaitOne();
-                var newGuiScript = NEW_GUI_SCRIPT.local();
-                if (newGuiScript.fileExists())
+            // see if there there is a script to execute 
+            //(first via normal process arguments 
+            if (scriptToExecute.valid() && scriptToExecute.fileExists())
+                executeScripts.runScriptAndCloseGui(scriptToExecute);
+            else
+            {
+                //.. then via Clickonce invoke
+                scriptToExecute = ClickOnceDeployment.getClickOnceScriptPath();
+                if (scriptToExecute.fileExists())
+                    executeScripts.runScriptAndCloseGui(scriptToExecute);
+                else
+                // ... if there is no script to execute: check for SVN updates and Start the new GUI
                 {                    
-                    executeScripts.welcomeMessage = "New O2 GUI detected, launching it now...";
-                    executeScripts.status(executeScripts.welcomeMessage);
+                    if (msiExecution.isFalse())
                     {
-                        O2Thread.mtaThread(() =>
-                            {
-                                loadNewGui(executeScripts);                                            
-                            });
+                        if (executeScripts.is32Bit())
+                            executeScripts.syncO2ViaSvn();
+                    }
+                    else
+                        svnSyncComplete.Set();
+
+                    svnSyncComplete.WaitOne();
+
+
+                    // load new gui       
+                    var newGuiScript = NEW_GUI_SCRIPT.local();
+                    if (newGuiScript.fileExists())
+                    {
+                        executeScripts.welcomeMessage = "New O2 GUI detected, launching it now...";
+                        executeScripts.status(executeScripts.welcomeMessage);
+                        {
+                            O2Thread.mtaThread(() =>
+                                {
+                                    loadNewGui(executeScripts);
+                                });
+                        }
                     }
                 }
-            //}
-    		//		});                        
+            }
+        }
 
-    	}
+        public static void startControl(string[] args)
+        {
+            if (args.notNull() && args.size() > 0)
+            {
+                var fileToExecute = args[0];
+                if (fileToExecute.fileExists().isFalse())
+                    fileToExecute = fileToExecute.local();
+                startControl(fileToExecute);
+            }
+            else
+                startControl("");
+        }
 
+        public void runScriptAndCloseGui(string scriptToExecute)
+        {
+            this.loadFile(scriptToExecute);
+            this.csharpCompiler_onCompileOK = () => { this.close(); };            
+        }
         private static void loadNewGui(ascx_Execute_Scripts executeScripts)
         {
             try
@@ -115,7 +147,7 @@ namespace O2.XRules.Database
                 {
                     Files.deleteFile(cached_O2Main_WPF_GUI);
                     Files.deleteFile(cached_O2Main_WPF_GUI_Dll);
-                    Files.Copy("O2 Main WPF GUI.h2".local(), cached_O2Main_WPF_GUI);
+                    Files.Copy(NEW_GUI_SCRIPT.local(), cached_O2Main_WPF_GUI);
                     var assembly = cached_O2Main_WPF_GUI.compile_H2Script();
                     var dllLocation = assembly.Location;                    
                     Files.Copy(dllLocation, cached_O2Main_WPF_GUI_Dll);
@@ -513,17 +545,22 @@ namespace O2.XRules.Database
                     try
                     {
                         showInfo("Updating XRules using via SVN ...");
-                        SvnApi.SyncLocalFolderWithO2XRulesDatabase();
-                        showInfo("SVN XRules updated Update completed");
-                        //1000.sleep();
+                                                
                         checkForClickOnceUpdates();
-                        //1000.sleep();
-                        showInfo(welcomeMessage);
+                        if (is32Bit())
+                            SvnApi.SyncLocalFolderWithO2XRulesDatabase();
+                        else
+                            if("You are not running on a 64 bit box, do you want to update the SVN rules via HTTP".askUserQuestion())
+                                new Wizard_SyncViaSvn().runWizard().Join();
+                        showInfo("SVN XRules updated Update completed");                        
+                        1000.sleep();                        
                     }
                     catch (Exception ex)
                     {
                         ex.log("in syncO2ViaSvn");
                     }
+
+                    showInfo(welcomeMessage);
                     svnSyncComplete.Set();
                 });
             //new Wizard_SyncXRulesViaSvn().runWizard();

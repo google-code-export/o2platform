@@ -10,10 +10,10 @@ namespace O2.XRules.Database
         /// </summary>
 
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
 
-            ascx_Execute_Scripts.startControl();
+            ascx_Execute_Scripts.startControl(args);
             //typeof(ascx_Execute_Scripts).showAsForm("Execute *.cs *.o2 and *.cs scripts", 400,400);
             //new Wizard_XRule_Exec_Simple().startWizard();
         }                
