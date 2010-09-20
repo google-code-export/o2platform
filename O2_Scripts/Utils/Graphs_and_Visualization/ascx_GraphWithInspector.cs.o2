@@ -84,7 +84,9 @@ namespace O2.XRules.Database.Utils.O2
 						  "//using System.Linq".line()+
 						  "//using WPF=System.Windows.Controls".line() + 
 						  "//using O2.API.Visualization.ExtensionMethods".line().line()+
-						  "//O2File:Ref:WPF_ExtensionMethods.cs".line()+
+						  "//O2File:GraphSharp_ExtensionMethods.cs".line()+
+						  "//O2File:VerticesAndEdges_ExtensionMethods.cs".line()+
+						  "//O2File:WPF_ExtensionMethods.cs".line()+						  
 						  "//O2Ref:System.Xml.dll".line()+
 						  "//O2Ref:System.Xml.Linq.dll".line()+
 						  "//O2Ref:O2_API_Visualization.dll".line()+
