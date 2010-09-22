@@ -20,8 +20,9 @@ if ((bool)updateCheckInfo.prop("UpdateAvailable"))
         	"all done, ready for restart".info();
         	if (DialogResult.OK == MessageBox.Show("This O2 module was successfull upgraded, please click OK to restart (note that you will lose any unsaved changes)"))
         	{
-        		"retarting".info();
+        		"retarting".info();        		
         		Application.Restart();
+        		PublicDI.config.closeO2Process();
         	}
         }
         else

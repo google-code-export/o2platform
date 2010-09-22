@@ -119,6 +119,20 @@ namespace O2.XRules.Database.Utils
 					return frameworkElement;
 				});						
     	}
+    	
+		public static RibbonGroup add_RibbonButton_H2Script(this RibbonGroup ribbonGroup, string label, string h2Script)
+		{
+			if (h2Script.fileExists().isFalse())
+				h2Script = h2Script.local();
+			return ribbonGroup.add_RibbonButton(label, ()=>h2Script.executeH2Script());
+		}
+		
+		public static RibbonGroup add_RibbonButton_Script(this RibbonGroup ribbonGroup, string label, string script)
+		{
+			if (script.fileExists().isFalse())
+				script = script.local();
+			return ribbonGroup.add_RibbonButton(label, ()=> script.executeFirstMethod());				
+		}
 		
 		public static RibbonGroup add_RibbonButton_H2Script(this RibbonGroup ribbonGroup, WinForms.Control winFormsControl, string label, string h2Script)
 		{
@@ -135,24 +149,9 @@ namespace O2.XRules.Database.Utils
 		
 		public static RibbonGroup add_RibbonButton_Script(this RibbonGroup ribbonGroup, WinForms.Control winFormsControl, string label, string script)
 		{
-
 			if (script.fileExists().isFalse())
 				script = script.local();
 			return ribbonGroup.add_RibbonButton_Script_GUI(winFormsControl, label, script.fileContents());
-/*							
-			return ribbonGroup.add_RibbonButton(label,  
-				()=>{						
-						
-						"Executing script: {0}".info(script);
-						O2Thread.mtaThread(
-							()=> {
-									if (script.extension(".h2"))
-										script.executeH2Script();
-									else
-										script.executeFirstMethod();
-								});
-						
-					});*/
 		}
 		
 		public static RibbonGroup add_RibbonButton_Script_GUI(this RibbonGroup ribbonGroup, WinForms.Control winFormsControl, string label, string sourceCode)
@@ -178,7 +177,10 @@ namespace O2.XRules.Database.Utils
 						
 					});
 		}
-		
+		public static RibbonGroup add_RibbonButton_StartProcess(this RibbonGroup ribbonGroup , string label, string process)
+		{
+			return ribbonGroup.add_RibbonButton_StartProcess(label,process, "");
+		}
 		public static RibbonGroup add_RibbonButton_StartProcess(this RibbonGroup ribbonGroup , string label, string process, string arguments)
 		{
 			return ribbonGroup.add_RibbonButton(label, ()=> Processes.startProcess(process, arguments));
