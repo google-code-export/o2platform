@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Threading;
 using O2.Kernel;
+using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
 using System.Windows;
@@ -1077,7 +1078,7 @@ textBox1.prop("",true);
             return (Button)button.wpfInvoke(
                 () =>
                 {
-                    button.Click += (sender, e) => callback();
+                    button.Click += (sender, e) => O2Thread.mtaThread(()=> callback());
                     return button;
                 });
         }

@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>/*panel.clear(); 
+var topPanel = panel.add_Panel(); 
+topPanel.fill(false)
+		.width(800)
+		.height(153); */
+ 
+ 
+var title = "Dinis Cruz - O2 version (Security Consultant)";
+var topPanel = O2Gui.open&lt;Panel&gt;(title, 800,283);        
+topPanel.insert_Below&lt;Panel&gt;(110).add_LogViewer(); 
+var leftPanel = topPanel.insert_Right&lt;Panel&gt;(200).fill(false).width(200).height(153);
+
+topPanel.parentForm().top(60).left(60); 
+
+leftPanel.add_PictureBox().show("__O2_Version_For_DinisCruz.jpg".local()).fill(false).width(190).height(140);;
+topPanel.backColor("Control"); 
+topPanel.parent&lt;SplitContainer&gt;().backColor(Color.White);//.splitterDistance(200); 
+ 
+var logoNoShadow = "O2_Logo_no_Shadow.jpg".local();  
+var smallLogo = "O2Logo_Small.gif".local();
+
+var ribbon = topPanel.add_Control&lt;WPF_Ribbon&gt;();
+
+var apiScriptDevelopment = ribbon.Ribbon.add_RibbonTab("API / Script Development");   // "There are a number of development environments in O2, each is designed for a particular talk/workflow")
+ 
+apiScriptDevelopment.add_RibbonGroup("Development GUIs") 		
+					.add_RibbonButton_Script("Simple Script Editor","ascx_Simple_Script_Editor.cs.o2")
+					.add_RibbonButton_Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")			
+					.add_RibbonButton_H2Script("O2 Development Environment","Util - O2 Development Environment.h2")
+					.add_RibbonButton_Script("'Graph' development gui","ascx_GraphWithInspector.cs")			
+					.add_RibbonButton_H2Script("Source Code Viewer","Util - SourceCodeViewer.h2")
+					.add_RibbonButton_H2Script("Source Code Editor","Util - SourceCodeEditor.h2");
+					
+apiScriptDevelopment.add_RibbonGroup("Unit Tests")	
+					.add_RibbonButton_H2Script("Execute Unit Tests","Execute Unit Tests.h2")			
+					.add_RibbonButton_H2Script("Write Unit Tests","Write and Execute Unit Tests.h2");
+	
+apiScriptDevelopment.add_RibbonGroup("Development Utils")			
+					.add_RibbonButton("O2 Object Model", () =&gt; open.o2ObjectModel())
+					.add_RibbonButton_H2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")	  
+	  				.add_RibbonButton_Script("Edit O2Platform.com Page","ascx_MediaWiki_PageEditor_Simple.cs");
+
+var miscTools = ribbon.Ribbon.add_RibbonTab("Misc Tools");
+miscTools.add_RibbonGroup("PoCs") 		
+		 .add_RibbonButton_H2Script("Aspx PoC Builder","Util - Aspx PoC Builder.h2");
+		 
+miscTools.add_RibbonGroup("Other Guis") 		
+		 .add_RibbonButton_H2Script("O2 GUI (v1.4)","O2 GUI.h2")
+		 .add_RibbonButton_Script("Big O2 WPF GUI (from v1.3)","O2 Main WPF GUI.h2")
+		 .add_RibbonButton_H2Script("Execute Scripts","Util - Execute O2 Scripts.h2")	   
+	     .add_RibbonButton_Script("O2 Command Prompt","ascx_O2_Command_Prompt.cs.o2")
+	     .add_RibbonButton_Script("Stop O2 Instances","Uitl - Stop all (but current) O2_XRules_Database processes.h2");
+	     
+miscTools.add_RibbonGroup("Media Tools")
+	  .add_RibbonButton_H2Script(topPanel,"screenshot tool","Util - Show ScreenShot Tool.h2")
+	  .add_RibbonButton_H2Script(topPanel,"Image Editor", "Util - DiagramDesigner Editor.h2")	  	  
+	  .add_RibbonButton_H2Script(topPanel,"Movie Creator","Util - Movie Creator.h2");
+	     
+	     
+miscTools.add_RibbonGroup("Wireless Networks") 		 
+		 .add_RibbonButton_Script("Login into BTOpenZone (UK)","API_BTOpenZone.cs");      
+
+var specialFolders = ribbon.Ribbon.add_RibbonTab("Special Folders");
+specialFolders.add_RibbonGroup("O2 Scripting")
+			  .add_RibbonButton_StartProcess("Local Scripts Folder",PublicDI.config.LocalScriptsFolder)
+		 	  .add_RibbonButton_StartProcess("_Custom_O2s",PublicDI.config.LocalScriptsFolder.pathCombine("_Custom_O2s"));
+specialFolders.add_RibbonGroup("O2 Source Code (Folders)")
+			  .add_RibbonButton_StartProcess("O2 - All Active Projects",@"C:\_O2_SVN\O2 - All Active Projects")
+			  .add_RibbonButton_StartProcess("O2_XRules_Database",@"C:\_O2_SVN\O2 - All Active Projects\O2_XRules_Database") 
+			  .add_RibbonButton_StartProcess("3rd Party Dlls",@"C:\_O2_SVN\O2 - All Active Projects\_3rdPartyDlls");			  
+specialFolders.add_RibbonGroup("O2 Source Code (Solutions)")
+			  .add_RibbonButton_StartProcess("O2_XRules_Database.sln",@"C:\_O2_SVN\O2 - All Active Projects\O2_XRules_Database\O2_XRules_Database.sln"); 
+
+
+return "";	     
+
+//using Microsoft.Windows.Controls.Ribbon;
+//using WPF= System.Windows.Controls
+//using DiagramDesigner
+//O2File:WPF_Ribbon.cs 
+//O2File:WPF_Ribbon_ExtensionMethods.cs
+//O2File:DiagramDesigner_ExtensionMethods.cs
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:O2_API_Visualization.dll
+//O2Ref:DiagramDesigner.exe
+//O2Ref:RibbonControlsLibrary.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>

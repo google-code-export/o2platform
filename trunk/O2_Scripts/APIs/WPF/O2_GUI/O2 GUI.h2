@@ -8,7 +8,7 @@ topPanel.fill(false)
 		.width(800)
 		.height(170);  
 */
-var topPanel = O2Gui.open&lt;Panel&gt;("OWASP O2 Platform - v1.4", 800,163);     
+var topPanel = O2Gui.open&lt;Panel&gt;("OWASP O2 Platform - v1.4 beta (Sep 2010)", 800,163);     
 topPanel.parentForm().top(30).left(30);  
 
 var logoNoShadow = "O2_Logo_no_Shadow.jpg".local(); 
@@ -21,7 +21,7 @@ Action&lt;string, int,int, string&gt; add_Button =
 			designerCanvas.add_Xaml_Button(title, top,left, ()=&gt;script.local().executeH2Script() );
 		};
 
-designerCanvas.add_Item&lt;WPF.Image&gt;(0,0,90,90).open(logoNoShadow);    
+designerCanvas.add_Item&lt;WPF.Image&gt;(0,0,90,90).open(logoNoShadow);
 			
 
 var label1 = designerCanvas.add_Label("Welcome to the OWASP O2 Platform",5,100).fontSize(30).designMode(false);    
