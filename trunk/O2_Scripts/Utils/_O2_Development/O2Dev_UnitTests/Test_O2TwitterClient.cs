@@ -18,7 +18,6 @@ using O2.XRules.Database.Utils;
 //O2File:API_InputSimulator
 //O2File:WPF_Controls_ExtensionMethods.cs
 
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.UnitTests
 {		

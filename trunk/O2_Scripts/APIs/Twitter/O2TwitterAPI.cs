@@ -7,20 +7,23 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
-using TweetSharp.Fluent;
-using TweetSharp.Model;
+using TweetSharp.Twitter.Fluent;
+using TweetSharp.Twitter.Model;
 using TweetSharp.Extensions;
+using TweetSharp.Twitter.Extensions;
 using O2.XRules.Database.Utils;
 using O2.Views.ASCX.DataViewers;
 
 //O2File:ISecretData.cs
 
-//O2Ref:Dimebrain.TweetSharp.dll
+//O2Ref:Hammock.dll
+//O2Ref:Newtonsoft.Json.dll
+//O2Ref:TweetSharp.dll
+//O2Ref:TweetSharp.Twitter.dll
 //O2Ref:System.Data.dll
 //O2Ref:System.Xml.Linq.dll 
 //O2Ref:System.Xml.dll
 
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.APIs
 {
