@@ -10,10 +10,12 @@ namespace O2.Kernel.CodeUtils
 {
     public class O2Svn
     {
+        public const string NO_GAC_TAG = "NoGAC->";
         public static List<string> AssembliesCheckedIfExists = new List<string>() {"System.Deployment"};        
 
         public static void clear_AssembliesCheckedIfExists()
         {
+            "in clear_AssembliesCheckedIfExists".info();
             AssembliesCheckedIfExists = new List<string>();
         }
 
@@ -32,8 +34,9 @@ namespace O2.Kernel.CodeUtils
                 {
                     try
                     {
-                        if (AssembliesCheckedIfExists.Contains(assemblyToLoad) || AssembliesCheckedIfExists.Contains(Path.GetFileNameWithoutExtension(assemblyToLoad)))     // for performace reasons only check this once
-                            return;                        
+                        if (AssembliesCheckedIfExists.Contains(assemblyToLoad) || AssembliesCheckedIfExists.Contains(Path.GetFileNameWithoutExtension(assemblyToLoad)))     // for performace reasons only check this once                           
+                            return;
+                        assemblyToLoad = assemblyToLoad.remove(NO_GAC_TAG); // special tag to allow force downloads
                         "Trying to fetch assembly from O2's SVN repository: {0}".info(assemblyToLoad);
                         AssembliesCheckedIfExists.Add(assemblyToLoad);
                         if (new O2Kernel_Web().online() == false)

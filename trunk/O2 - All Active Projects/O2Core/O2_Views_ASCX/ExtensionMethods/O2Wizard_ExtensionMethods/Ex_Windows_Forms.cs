@@ -91,11 +91,13 @@ namespace O2.Views.ASCX.MerlinWizard.O2Wizard_ExtensionMethods
                     if (step.UI.Controls[0] is TextBox)
                     {
                         var targetTextBox = (TextBox)step.UI.Controls[0];
-                        targetTextBox.invokeOnThread(
+                        targetTextBox.append_Text(message);
+                        
+                        /*targetTextBox.invokeOnThread(
                             () =>
-                                {
+                                {                                    
                                     targetTextBox.Text += message;                                    
-                                });                        
+                                });                        */
                     }                        
         }        
 

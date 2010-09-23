@@ -48,7 +48,7 @@ namespace O2.XRules.Database
     public class ascx_Execute_Scripts: UserControl
     {
         public static AutoResetEvent svnSyncComplete = new AutoResetEvent(false);
-        public static bool msiExecution = false;
+        //public static bool msiExecution = false;
 
         public string welcomeMessage = "Hello! To start right-click on the logo";
         public string pathToPictureBox = "";    
@@ -71,10 +71,11 @@ namespace O2.XRules.Database
         {
             // load Execute_Scripts GUI
             var formTitle = "O2 XRules Database ({0})".format("O2_XRules_Database.exe".assembly().version());
+            "{0}".info(formTitle);
             var executeScripts = (ascx_Execute_Scripts)typeof(ascx_Execute_Scripts).showAsForm(formTitle, 240, 200);
-            //executeScripts.invokeOnThread(
-            //	()=>{
+            
             executeScripts.checkForMSI_andOnFirstRunAndUnzipDefaultScripts();
+            "LocalScriptsFolder: {0}".debug(PublicDI.config.LocalScriptsFolder);
             executeScripts.buildGui();
 
             // see if there there is a script to execute 
@@ -90,10 +91,10 @@ namespace O2.XRules.Database
                 else
                 // ... if there is no script to execute: check for SVN updates and Start the new GUI
                 {                    
-                    if (msiExecution.isFalse())
+                    if (ClickOnceDeployment.isClickOnceDeployment())
                     {
-                        if (executeScripts.is32Bit())
-                            executeScripts.syncO2ViaSvn();
+                        executeScripts.checkForClickOnceUpdates();
+                        executeScripts.syncO2ViaSvn();
                     }
                     else
                         svnSyncComplete.Set();
@@ -133,6 +134,7 @@ namespace O2.XRules.Database
 
         public void runScriptAndCloseGui(string scriptToExecute)
         {
+            "Found startup script (for execution): ".info(scriptToExecute);
             this.loadFile(scriptToExecute);
             this.csharpCompiler_onCompileOK = () => { this.close(); };            
         }
@@ -207,10 +209,14 @@ namespace O2.XRules.Database
                 pathToPictureBox = new Web().checkIfFileExistsAndDownloadIfNot(pathToPictureBox, @"http://o2platform.googlecode.com/svn/trunk/O2_Scripts/_DataFiles/_Images/O2_Logo.gif");
 		    //else
 		    //	pathToPictureBox = tempPath;		    
+            "pathToPictureBox: {0}".debug(pathToPictureBox);
         }
 
         public void checkForMSI_andOnFirstRunAndUnzipDefaultScripts()
         {
+            if (ClickOnceDeployment.isClickOnceDeployment())
+                return;
+            "in checkForMSI_andOnFirstRunAndUnzipDefaultScripts()".info();
             //this will only happen on the MSI since the ZipppedScriptsFile is not included in the ClickOnce install
             var pathToLocalZippedFile = PublicDI.config.CurrentExecutableDirectory.pathCombine(PublicDI.config.ZipppedScriptsFile);
             var msiScriptsFolder = PublicDI.config.CurrentExecutableDirectory.pathCombine(PublicDI.config.ZipppedScriptsFile.remove(".zip"));
@@ -239,10 +245,10 @@ namespace O2.XRules.Database
                 "msiScriptsFolder existed: {0}".info(msiScriptsFolder);
 
                 PublicDI.config.setLocalScriptsFolder(msiScriptsFolder);
-                msiExecution = true;
+                //msiExecution = true;
             }
             else
-                "msiScriptsFolder did not exist: {0}".info(msiScriptsFolder);             
+                "msiScriptsFolder did not exist: {0}".info(msiScriptsFolder);            
         }
 
         public bool is32Bit()
@@ -267,7 +273,7 @@ namespace O2.XRules.Database
             this.invokeOnThread(
                 () =>
                 {
-
+                    "Buliding Gui for ascx_ExecuteScripts.cs.o2".info();
                     // add controls    
                     statusLabel = this.parentForm().add_StatusStrip(Color.White);
                     this.BackColor = Color.White;
@@ -300,6 +306,8 @@ namespace O2.XRules.Database
                     // load data map actions
                     if (pathToPictureBox.fileExists())
                         pictureBox.load(pathToPictureBox);
+                    else
+                        "in ascx_Execute_Scripts.buildGui, could not find pathToPictureBox:{0}".error(pathToPictureBox);
 
 
                     this.onDrop((file) => loadFile(file));
@@ -309,7 +317,7 @@ namespace O2.XRules.Database
 
                     // put this on menu item
                     //this.add_Link("reload",10,2,()=>loadH2Script());                    
-
+                    "Buliding Gui complete".info();
                     return;         // to make this run in sync mode
                 });
      	}
@@ -544,14 +552,20 @@ namespace O2.XRules.Database
                 {
                     try
                     {
-                        showInfo("Updating XRules using via SVN ...");
-                                                
-                        checkForClickOnceUpdates();
+                        showInfo("Updating Scripts via SVN");
                         if (is32Bit())
+                        {
+                            "32bit mode, sync using SvnClient".info();
                             SvnApi.SyncLocalFolderWithO2XRulesDatabase();
+                        }
                         else
-                            if("You are not running on a 64 bit box, do you want to update the SVN rules via HTTP".askUserQuestion())
-                                new Wizard_SyncViaSvn().runWizard().Join();
+                        {
+                            "64bit mode, sync using http svn access".info();
+                            if (("Do you want to update the SVN rules via HTTP? ".line() + "(You are not running on a 32 bit box, so the built-in 32bit SvnClient can not be used)").askUserQuestion())
+                                O2Thread.staThread(
+                                            () => new Wizard_SyncViaSvn().runWizard().Join())
+                                        .Join();
+                        }
                         showInfo("SVN XRules updated Update completed");                        
                         1000.sleep();                        
                     }
@@ -572,16 +586,22 @@ namespace O2.XRules.Database
             {
                 if (ClickOnceDeployment.isClickOnceDeployment())
                 {
+                    var h2Script = "AutoUpdate - Using Reflection.h2";
                     showInfo("Checking for ClickOnce updates");
-                    "AutoUpdate - Using Reflection.h2".executeFirstMethod();
-                   /* var XRulesWithUpdateCheckScript = XRules_Config.PathTo_XRulesDatabase_fromO2.pathCombine(@"\O2 Utils\AutoUpdate - Using Reflection.h2");
-                    if (XRulesWithUpdateCheckScript.fileExists().isFalse())
-                        "[in checkForClickOnceUpdates]: could not find H2 script to execute: {0}".error(XRulesWithUpdateCheckScript);
-                    else
+                    if (h2Script.local().fileExists())
                     {
-                        XRulesWithUpdateCheckScript.executeH2Script();
-                    }*/
-                    showInfo("Check for ClickOnce updates completed");
+                        h2Script.executeFirstMethod();
+                        /* var XRulesWithUpdateCheckScript = XRules_Config.PathTo_XRulesDatabase_fromO2.pathCombine(@"\O2 Utils\AutoUpdate - Using Reflection.h2");
+                         if (XRulesWithUpdateCheckScript.fileExists().isFalse())
+                             "[in checkForClickOnceUpdates]: could not find H2 script to execute: {0}".error(XRulesWithUpdateCheckScript);
+                         else
+                         {
+                             XRulesWithUpdateCheckScript.executeH2Script();
+                         }*/
+                        showInfo("Check for ClickOnce updates completed");
+                    }
+                    else
+                        "Could not check for ClickOnce updates because the H2Script did not exist: {0}".error(h2Script);
                 }
             }
             catch (Exception ex)

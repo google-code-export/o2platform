@@ -36,6 +36,11 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return _object.serialize();
         }
 
+        public static bool saveAs(this object _object, string pathToSave)
+        {
+            return _object.serialize(pathToSave);
+        }
+
         
         public static T load<T>(this string pathToSerializedObject)
         {

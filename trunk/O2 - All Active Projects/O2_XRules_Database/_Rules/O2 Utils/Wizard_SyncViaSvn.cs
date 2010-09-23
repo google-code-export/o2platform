@@ -48,7 +48,7 @@ namespace O2.Core.XRules._Wizards
         								"{0}{0}Note that the local O2 Rule Database will be deleted!", Environment.NewLine, svnUrl.Replace("%20"," ") , targetFolder);
             o2Wizard.Steps.add_Message("Confirm", message);
             o2Wizard.Steps.add_Action("Download Files", (step) => downloadFiles(step, svnUrl, targetFolder));
-            o2Wizard.Steps.add_Directory("Downloaded Files", targetFolder);
+            //o2Wizard.Steps.add_Directory("Downloaded Files", targetFolder);
             return o2Wizard.start();
             //return o2Wizard.start();
 

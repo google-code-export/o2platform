@@ -120,6 +120,7 @@ namespace O2.DotNetWrappers.DotNet
 
             var value = (bool)systemDeploymentDll.type("ApplicationDeployment").prop("IsNetworkDeployed");
             //return ApplicationDeployment.IsNetworkDeployed;
+            "isClickOnceDeployment: {0}".info(value);
             return value;
         }
     }
