@@ -308,6 +308,8 @@ namespace O2.DotNetWrappers.Network
         {
         	if (File.Exists(file))
         		return file;
+            if (file.valid().isFalse())
+                file = urlToDownloadFile.fileName();
             var localTempFile = urlToDownloadFile.extension(".zip") 
                 ? PublicDI.config.getTempFileInTempDirectory(".zip")
                 : Path.Combine(PublicDI.config.O2TempDir, file);

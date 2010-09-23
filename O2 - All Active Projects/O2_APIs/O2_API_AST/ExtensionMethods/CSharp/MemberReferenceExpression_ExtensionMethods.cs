@@ -11,10 +11,10 @@ namespace O2.API.AST.ExtensionMethods.CSharp
 {
     public static class MemberReferenceExpression_ExtensionMethods
     {
-        public static MemberReferenceExpression add_MemberReference(this BlockStatement blockStatement, string memberName) //, AstExpression expression)
+        public static MemberReferenceExpression add_MemberReference(this BlockStatement blockStatement, string memberName, string className) //, AstExpression expression)
         {
             var identifier = new IdentifierExpression(memberName);
-            var memberReference = new MemberReferenceExpression(identifier, "data");
+            var memberReference = new MemberReferenceExpression(identifier, className);
             blockStatement.append(memberReference.expressionStatement());
             return memberReference;
         }

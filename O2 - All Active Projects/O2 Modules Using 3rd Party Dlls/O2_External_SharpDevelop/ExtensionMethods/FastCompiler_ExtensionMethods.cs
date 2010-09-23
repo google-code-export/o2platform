@@ -100,7 +100,15 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static object executeFirstMethod(this string pathToFileToCompileAndExecute)
         {
-            return pathToFileToCompileAndExecute.executeFirstMethod(new object[] { });
+            try
+            {
+                return pathToFileToCompileAndExecute.executeFirstMethod(new object[] { });
+            }
+            catch (Exception ex)
+            {
+                ex.log("in executeFirstMethod");
+                return null;
+            }
         }
 
         public static object executeFirstMethod(this string pathToFileToCompileAndExecute, object[] parameters)

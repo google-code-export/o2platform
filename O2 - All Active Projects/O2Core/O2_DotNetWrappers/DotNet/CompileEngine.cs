@@ -16,6 +16,7 @@ using O2.DotNetWrappers.Windows;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.Kernel.CodeUtils;
+using O2.Kernel.Objects;
 
 namespace O2.DotNetWrappers.DotNet
 {
@@ -37,7 +38,8 @@ namespace O2.DotNetWrappers.DotNet
 
         public static Dictionary<string, string> LocalScriptFileMappings = new Dictionary<string, string>();
         public static Dictionary<string, string> CachedCompiledAssemblies = new Dictionary<string, string>();
-
+        public static string CachedCompiledAssembliesMappingsFile = PublicDI.config.O2TempDir.pathCombine("..\\CachedCompiledAssembliesMappings.xml");
+        
         public static List<String> lsGACExtraReferencesToAdd = new List<string>(new []
                                                                                  {
                                                                                      "System.Windows.Forms.dll",
@@ -62,11 +64,50 @@ namespace O2.DotNetWrappers.DotNet
                                                                                     "PresentationFramework.dll",
                                                                                     "WindowsBase.dll",
                                                                                     "System.Core.dll"
-                                                                                 });     
-                                     
-                                     
-                                                                          
+                                                                                 });
 
+
+        // the first time were here, load up the mappings from the CachedCompiledAssembliesMappingsFile
+        static CompileEngine() 
+        {
+            loadCachedCompiledAssembliesMappings();
+        }
+
+        public static void loadCachedCompiledAssembliesMappings()
+        {
+            try
+            {
+                if (CachedCompiledAssembliesMappingsFile.fileExists())
+                {
+                    "in loadCachedCompiledAssembliesMappings: {0}".debug(CachedCompiledAssembliesMappingsFile);
+                    CachedCompiledAssemblies = new Dictionary<string, string>();
+                    var keyValueStrings = CachedCompiledAssembliesMappingsFile.load<KeyValueStrings>();
+                    foreach (var item in keyValueStrings.Items)
+                        CachedCompiledAssemblies.add(item.Key, item.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.log("in loadCachedCompiledAssembliesMappings");
+            }
+        }
+
+        public static void saveCachedCompiledAssembliesMappings()
+        {
+            try
+            {
+                "in saveCachedCompiledAssembliesMappings: {0}".debug(CachedCompiledAssembliesMappingsFile);
+                var keyValueStrings = new KeyValueStrings();
+                foreach (var item in CompileEngine.CachedCompiledAssemblies)
+                    keyValueStrings.add(item.Key, item.Value);
+                keyValueStrings.saveAs(CachedCompiledAssembliesMappingsFile);
+
+            }
+            catch (Exception ex)
+            {
+                ex.log("in loadCachedCompiledAssembliesMappings");
+            }
+        }
         public void addErrorsListToListBox(ListBox lbSourceCode_CompilationResult)
         {
             lbSourceCode_CompilationResult.invokeOnThread(
@@ -282,9 +323,11 @@ namespace O2.DotNetWrappers.DotNet
                 compiledAssembly.Location.valid() &&
                 compiledAssembly.Location.fileExists())
             {                            
-                    CachedCompiledAssemblies.add(key, compiledAssembly.Location);
+                CachedCompiledAssemblies.add(key, compiledAssembly.Location);
+                saveCachedCompiledAssembliesMappings();                
             }
         }
+
         public Assembly getCachedCompiledAssembly_MD5(List<string> sourceCodeFiles)
         {
             var filesMd5 =  sourceCodeFiles.filesContents().md5Hash();

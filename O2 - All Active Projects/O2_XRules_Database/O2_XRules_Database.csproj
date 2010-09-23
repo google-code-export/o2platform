@@ -44,7 +44,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>128</ApplicationRevision>
+    <ApplicationRevision>135</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -94,6 +94,10 @@
       <HintPath>..\_3rdPartyDlls\FilesWithNoCode\Microsoft.mshtml.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Windows.Shell, Version=3.5.40729.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\FilesWithNoCode\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
@@ -105,6 +109,10 @@
     <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\_3rdPartyDlls\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="RibbonControlsLibrary, Version=3.5.40729.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\FilesWithNoCode\RibbonControlsLibrary.dll</HintPath>
     </Reference>
     <Reference Include="SharpSvn, Version=1.6006.1373.40218, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
