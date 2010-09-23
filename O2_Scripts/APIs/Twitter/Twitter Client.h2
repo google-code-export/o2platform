@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var fileWithCredentials = @"C:\O2\_USERDATA\TwitterAccounts_.xml";
+  <SourceCode>var fileWithCredentials = @"C:\O2\_USERDATA\TwitterAccounts.xml";
 var mainPanel = O2Gui.open&lt;Panel&gt;("O2 Twitter Client", 900,400);
 
 var wpfGui = mainPanel.add_Control&lt;WPF_GUI&gt;();
@@ -232,15 +232,14 @@ return "done";
 //O2File:ascx_AskUserForLoginDetails.cs
 //O2File:O2TwitterAPI.cs
 //O2File:WPF_GUI.cs
-//O2Ref:Dimebrain.TweetSharp.dll
-//O2Ref:Newtonsoft.Json.dll
+
+
 //O2Ref:O2_API_Visualization.dll
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:GraphSharp.dll
 //O2Ref:QuickGraph.dll
 //O2Ref:GraphSharp.Controls.dll
 //O2Ref:ICSharpCode.AvalonEdit.dll
-
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs</SourceCode>
+</SourceCode>
   <ReferencedAssemblies />
 </H2>
