@@ -62,200 +62,208 @@ namespace Org.Mentalis.Network.PacketMonitor {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(PacketMonitorForm));
-			this.ToolBar = new System.Windows.Forms.ToolBar();
-			this.StartButton = new System.Windows.Forms.ToolBarButton();
-			this.HostsMenu = new System.Windows.Forms.ContextMenu();
-			this.StopButton = new System.Windows.Forms.ToolBarButton();
-			this.ClearButton = new System.Windows.Forms.ToolBarButton();
-			this.AboutButton = new System.Windows.Forms.ToolBarButton();
-			this.ToobarImages = new System.Windows.Forms.ImageList(this.components);
-			this.MainMenu = new System.Windows.Forms.MainMenu();
-			this.FileMenu = new System.Windows.Forms.MenuItem();
-			this.MonitorMenuItem = new System.Windows.Forms.MenuItem();
-			this.StopMenuItem = new System.Windows.Forms.MenuItem();
-			this.ClearMenuItem = new System.Windows.Forms.MenuItem();
-			this.Splitter1MenuItem = new System.Windows.Forms.MenuItem();
-			this.ExitMenuItem = new System.Windows.Forms.MenuItem();
-			this.HelpMenu = new System.Windows.Forms.MenuItem();
-			this.AboutMenuItem = new System.Windows.Forms.MenuItem();
-			this.StatusBar = new System.Windows.Forms.StatusBar();
-			this.PacketList = new System.Windows.Forms.ListView();
-			this.TimeHeader = new System.Windows.Forms.ColumnHeader();
-			this.ProtocolHeader = new System.Windows.Forms.ColumnHeader();
-			this.SourceHeader = new System.Windows.Forms.ColumnHeader();
-			this.DestinationHeader = new System.Windows.Forms.ColumnHeader();
-			this.LengthHeader = new System.Windows.Forms.ColumnHeader();
-			this.SuspendLayout();
-			// 
-			// ToolBar
-			// 
-			this.ToolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
-			this.ToolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
-																					   this.StartButton,
-																					   this.StopButton,
-																					   this.ClearButton,
-																					   this.AboutButton});
-			this.ToolBar.Cursor = System.Windows.Forms.Cursors.Default;
-			this.ToolBar.DropDownArrows = true;
-			this.ToolBar.ImageList = this.ToobarImages;
-			this.ToolBar.Name = "ToolBar";
-			this.ToolBar.ShowToolTips = true;
-			this.ToolBar.Size = new System.Drawing.Size(522, 25);
-			this.ToolBar.TabIndex = 1;
-			this.ToolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.OnToolBarClick);
-			// 
-			// StartButton
-			// 
-			this.StartButton.DropDownMenu = this.HostsMenu;
-			this.StartButton.ImageIndex = 0;
-			this.StartButton.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton;
-			this.StartButton.ToolTipText = "Start monitoring";
-			// 
-			// StopButton
-			// 
-			this.StopButton.ImageIndex = 1;
-			this.StopButton.ToolTipText = "Stop monitoring";
-			// 
-			// ClearButton
-			// 
-			this.ClearButton.ImageIndex = 3;
-			this.ClearButton.ToolTipText = "Clear packet list";
-			// 
-			// AboutButton
-			// 
-			this.AboutButton.ImageIndex = 2;
-			this.AboutButton.ToolTipText = "About...";
-			// 
-			// ToobarImages
-			// 
-			this.ToobarImages.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-			this.ToobarImages.ImageSize = new System.Drawing.Size(16, 16);
-			this.ToobarImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ToobarImages.ImageStream")));
-			this.ToobarImages.TransparentColor = System.Drawing.Color.Magenta;
-			// 
-			// MainMenu
-			// 
-			this.MainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.FileMenu,
-																					 this.HelpMenu});
-			// 
-			// FileMenu
-			// 
-			this.FileMenu.Index = 0;
-			this.FileMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.MonitorMenuItem,
-																					 this.StopMenuItem,
-																					 this.ClearMenuItem,
-																					 this.Splitter1MenuItem,
-																					 this.ExitMenuItem});
-			this.FileMenu.Text = "&File";
-			// 
-			// MonitorMenuItem
-			// 
-			this.MonitorMenuItem.Index = 0;
-			this.MonitorMenuItem.Text = "Monitor";
-			// 
-			// StopMenuItem
-			// 
-			this.StopMenuItem.Index = 1;
-			this.StopMenuItem.Text = "&Stop monitoring";
-			this.StopMenuItem.Click += new System.EventHandler(this.StopMenuItem_Click);
-			// 
-			// ClearMenuItem
-			// 
-			this.ClearMenuItem.Index = 2;
-			this.ClearMenuItem.Text = "&Clear packet list";
-			this.ClearMenuItem.Click += new System.EventHandler(this.ClearMenuItem_Click);
-			// 
-			// Splitter1MenuItem
-			// 
-			this.Splitter1MenuItem.Index = 3;
-			this.Splitter1MenuItem.Text = "-";
-			// 
-			// ExitMenuItem
-			// 
-			this.ExitMenuItem.Index = 4;
-			this.ExitMenuItem.Text = "E&xit";
-			this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
-			// 
-			// HelpMenu
-			// 
-			this.HelpMenu.Index = 1;
-			this.HelpMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					 this.AboutMenuItem});
-			this.HelpMenu.Text = "&Help";
-			// 
-			// AboutMenuItem
-			// 
-			this.AboutMenuItem.Index = 0;
-			this.AboutMenuItem.Text = "&About";
-			this.AboutMenuItem.Click += new System.EventHandler(this.AboutMenuItem_Click);
-			// 
-			// StatusBar
-			// 
-			this.StatusBar.Location = new System.Drawing.Point(0, 321);
-			this.StatusBar.Name = "StatusBar";
-			this.StatusBar.Size = new System.Drawing.Size(522, 16);
-			this.StatusBar.TabIndex = 3;
-			// 
-			// PacketList
-			// 
-			this.PacketList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-																						 this.TimeHeader,
-																						 this.ProtocolHeader,
-																						 this.SourceHeader,
-																						 this.DestinationHeader,
-																						 this.LengthHeader});
-			this.PacketList.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.PacketList.FullRowSelect = true;
-			this.PacketList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-			this.PacketList.Location = new System.Drawing.Point(0, 25);
-			this.PacketList.MultiSelect = false;
-			this.PacketList.Name = "PacketList";
-			this.PacketList.Size = new System.Drawing.Size(522, 296);
-			this.PacketList.TabIndex = 4;
-			this.PacketList.View = System.Windows.Forms.View.Details;
-			this.PacketList.DoubleClick += new System.EventHandler(this.OnPacketDoubleClick);
-			// 
-			// TimeHeader
-			// 
-			this.TimeHeader.Text = "Time";
-			this.TimeHeader.Width = 120;
-			// 
-			// ProtocolHeader
-			// 
-			this.ProtocolHeader.Text = "Protocol";
-			// 
-			// SourceHeader
-			// 
-			this.SourceHeader.Text = "Source";
-			this.SourceHeader.Width = 130;
-			// 
-			// DestinationHeader
-			// 
-			this.DestinationHeader.Text = "Destination";
-			this.DestinationHeader.Width = 130;
-			// 
-			// LengthHeader
-			// 
-			this.LengthHeader.Text = "Length";
-			// 
-			// PacketMonitormForm
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(522, 337);
-			this.Controls.AddRange(new System.Windows.Forms.Control[] {
-																		  this.PacketList,
-																		  this.StatusBar,
-																		  this.ToolBar});
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Menu = this.MainMenu;
-			this.Name = "PacketMonitormForm";
-			this.Text = "Mentalis.org Packet Monitor";
-			this.Closing += new System.ComponentModel.CancelEventHandler(this.PacketMonitormForm_Closing);
-			this.ResumeLayout(false);
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PacketMonitorForm));
+            this.ToolBar = new System.Windows.Forms.ToolBar();
+            this.StartButton = new System.Windows.Forms.ToolBarButton();
+            this.HostsMenu = new System.Windows.Forms.ContextMenu();
+            this.StopButton = new System.Windows.Forms.ToolBarButton();
+            this.ClearButton = new System.Windows.Forms.ToolBarButton();
+            this.AboutButton = new System.Windows.Forms.ToolBarButton();
+            this.ToobarImages = new System.Windows.Forms.ImageList(this.components);
+            this.MainMenu = new System.Windows.Forms.MainMenu(this.components);
+            this.FileMenu = new System.Windows.Forms.MenuItem();
+            this.MonitorMenuItem = new System.Windows.Forms.MenuItem();
+            this.StopMenuItem = new System.Windows.Forms.MenuItem();
+            this.ClearMenuItem = new System.Windows.Forms.MenuItem();
+            this.Splitter1MenuItem = new System.Windows.Forms.MenuItem();
+            this.ExitMenuItem = new System.Windows.Forms.MenuItem();
+            this.HelpMenu = new System.Windows.Forms.MenuItem();
+            this.AboutMenuItem = new System.Windows.Forms.MenuItem();
+            this.StatusBar = new System.Windows.Forms.StatusBar();
+            this.PacketList = new System.Windows.Forms.ListView();
+            this.TimeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ProtocolHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.SourceHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.DestinationHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.LengthHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.SuspendLayout();
+            // 
+            // ToolBar
+            // 
+            this.ToolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat;
+            this.ToolBar.Buttons.AddRange(new System.Windows.Forms.ToolBarButton[] {
+            this.StartButton,
+            this.StopButton,
+            this.ClearButton,
+            this.AboutButton});
+            this.ToolBar.Cursor = System.Windows.Forms.Cursors.Default;
+            this.ToolBar.DropDownArrows = true;
+            this.ToolBar.ImageList = this.ToobarImages;
+            this.ToolBar.Location = new System.Drawing.Point(0, 0);
+            this.ToolBar.Name = "ToolBar";
+            this.ToolBar.ShowToolTips = true;
+            this.ToolBar.Size = new System.Drawing.Size(522, 28);
+            this.ToolBar.TabIndex = 1;
+            this.ToolBar.ButtonClick += new System.Windows.Forms.ToolBarButtonClickEventHandler(this.OnToolBarClick);
+            // 
+            // StartButton
+            // 
+            this.StartButton.DropDownMenu = this.HostsMenu;
+            this.StartButton.ImageIndex = 0;
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Style = System.Windows.Forms.ToolBarButtonStyle.DropDownButton;
+            this.StartButton.ToolTipText = "Start monitoring";
+            // 
+            // StopButton
+            // 
+            this.StopButton.ImageIndex = 1;
+            this.StopButton.Name = "StopButton";
+            this.StopButton.ToolTipText = "Stop monitoring";
+            // 
+            // ClearButton
+            // 
+            this.ClearButton.ImageIndex = 3;
+            this.ClearButton.Name = "ClearButton";
+            this.ClearButton.ToolTipText = "Clear packet list";
+            // 
+            // AboutButton
+            // 
+            this.AboutButton.ImageIndex = 2;
+            this.AboutButton.Name = "AboutButton";
+            this.AboutButton.ToolTipText = "About...";
+            // 
+            // ToobarImages
+            // 
+            this.ToobarImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ToobarImages.ImageStream")));
+            this.ToobarImages.TransparentColor = System.Drawing.Color.Magenta;
+            this.ToobarImages.Images.SetKeyName(0, "");
+            this.ToobarImages.Images.SetKeyName(1, "");
+            this.ToobarImages.Images.SetKeyName(2, "");
+            this.ToobarImages.Images.SetKeyName(3, "");
+            // 
+            // MainMenu
+            // 
+            this.MainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.FileMenu,
+            this.HelpMenu});
+            // 
+            // FileMenu
+            // 
+            this.FileMenu.Index = 0;
+            this.FileMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.MonitorMenuItem,
+            this.StopMenuItem,
+            this.ClearMenuItem,
+            this.Splitter1MenuItem,
+            this.ExitMenuItem});
+            this.FileMenu.Text = "&File";
+            // 
+            // MonitorMenuItem
+            // 
+            this.MonitorMenuItem.Index = 0;
+            this.MonitorMenuItem.Text = "Monitor";
+            // 
+            // StopMenuItem
+            // 
+            this.StopMenuItem.Index = 1;
+            this.StopMenuItem.Text = "&Stop monitoring";
+            this.StopMenuItem.Click += new System.EventHandler(this.StopMenuItem_Click);
+            // 
+            // ClearMenuItem
+            // 
+            this.ClearMenuItem.Index = 2;
+            this.ClearMenuItem.Text = "&Clear packet list";
+            this.ClearMenuItem.Click += new System.EventHandler(this.ClearMenuItem_Click);
+            // 
+            // Splitter1MenuItem
+            // 
+            this.Splitter1MenuItem.Index = 3;
+            this.Splitter1MenuItem.Text = "-";
+            // 
+            // ExitMenuItem
+            // 
+            this.ExitMenuItem.Index = 4;
+            this.ExitMenuItem.Text = "E&xit";
+            this.ExitMenuItem.Click += new System.EventHandler(this.ExitMenuItem_Click);
+            // 
+            // HelpMenu
+            // 
+            this.HelpMenu.Index = 1;
+            this.HelpMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.AboutMenuItem});
+            this.HelpMenu.Text = "&Help";
+            // 
+            // AboutMenuItem
+            // 
+            this.AboutMenuItem.Index = 0;
+            this.AboutMenuItem.Text = "&About";
+            this.AboutMenuItem.Click += new System.EventHandler(this.AboutMenuItem_Click);
+            // 
+            // StatusBar
+            // 
+            this.StatusBar.Location = new System.Drawing.Point(0, 321);
+            this.StatusBar.Name = "StatusBar";
+            this.StatusBar.Size = new System.Drawing.Size(522, 16);
+            this.StatusBar.TabIndex = 3;
+            // 
+            // PacketList
+            // 
+            this.PacketList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.TimeHeader,
+            this.ProtocolHeader,
+            this.SourceHeader,
+            this.DestinationHeader,
+            this.LengthHeader});
+            this.PacketList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PacketList.FullRowSelect = true;
+            this.PacketList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.PacketList.Location = new System.Drawing.Point(0, 28);
+            this.PacketList.MultiSelect = false;
+            this.PacketList.Name = "PacketList";
+            this.PacketList.Size = new System.Drawing.Size(522, 293);
+            this.PacketList.TabIndex = 4;
+            this.PacketList.UseCompatibleStateImageBehavior = false;
+            this.PacketList.View = System.Windows.Forms.View.Details;
+            this.PacketList.DoubleClick += new System.EventHandler(this.OnPacketDoubleClick);
+            // 
+            // TimeHeader
+            // 
+            this.TimeHeader.Text = "Time";
+            this.TimeHeader.Width = 120;
+            // 
+            // ProtocolHeader
+            // 
+            this.ProtocolHeader.Text = "Protocol";
+            // 
+            // SourceHeader
+            // 
+            this.SourceHeader.Text = "Source";
+            this.SourceHeader.Width = 130;
+            // 
+            // DestinationHeader
+            // 
+            this.DestinationHeader.Text = "Destination";
+            this.DestinationHeader.Width = 130;
+            // 
+            // LengthHeader
+            // 
+            this.LengthHeader.Text = "Length";
+            // 
+            // PacketMonitorForm
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(522, 337);
+            this.Controls.Add(this.PacketList);
+            this.Controls.Add(this.StatusBar);
+            this.Controls.Add(this.ToolBar);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Menu = this.MainMenu;
+            this.Name = "PacketMonitorForm";
+            this.Text = "Mentalis.org Packet Monitor";
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.PacketMonitormForm_Closing);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
