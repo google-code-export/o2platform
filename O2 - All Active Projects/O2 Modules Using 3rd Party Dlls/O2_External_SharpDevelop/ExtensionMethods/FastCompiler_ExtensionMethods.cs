@@ -19,6 +19,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static Assembly compile(this string pathToFileToCompile, bool generateDebugSymbols)
         {
+            PublicDI.CurrentScript = pathToFileToCompile;
             var csharpCompiler = new CSharp_FastCompiler();
             csharpCompiler.generateDebugSymbols= generateDebugSymbols;
             var compileProcess = new System.Threading.AutoResetEvent(false);
@@ -53,6 +54,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 var sourceCode = "";
                 if (h2Script.extension(".h2"))
                 {
+                    PublicDI.CurrentScript = h2Script;
                     if (h2Script.fileExists().isFalse())
                         h2Script = h2Script.local();
                     sourceCode = H2.load(h2Script).SourceCode;
@@ -113,6 +115,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
 
         public static object executeFirstMethod(this string pathToFileToCompileAndExecute, object[] parameters)
         {
+            PublicDI.CurrentScript = pathToFileToCompileAndExecute;
             if (pathToFileToCompileAndExecute.fileExists().isFalse())
             { 
                 // if we were not provided a complete path, try to find it on the local o2 script folder                
@@ -197,6 +200,7 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                     "[in executeH2Script]: file to execute must be a *.h2 file, it was:{0}".error(h2ScriptFile);
                 else
                 {
+                    PublicDI.CurrentScript = h2ScriptFile;
                     var h2Script = H2.load(h2ScriptFile);
                     return h2Script.execute();                    
                 }

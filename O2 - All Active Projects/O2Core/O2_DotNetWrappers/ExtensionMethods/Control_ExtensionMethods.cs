@@ -73,24 +73,32 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (T)hostControl.invokeOnThread(
                 () =>
                 {
-                    var newControl = (Control)typeof(T).ctor();
-                    if (newControl != null)
+                    try
                     {
-                        if (top == -1 && left == -1 && width == -1 && height == -1)
-                            newControl.fill();
-                        else
+                        var newControl = (Control)typeof(T).ctor();
+                        if (newControl != null)
                         {
-                            if (top > -1)
-                                newControl.Top = top;
-                            if (left > -1)
-                                newControl.Left = left;
-                            if (width > -1)
-                                newControl.Width = width;
-                            if (height > -1)
-                                newControl.Height = height;
+                            if (top == -1 && left == -1 && width == -1 && height == -1)
+                                newControl.fill();
+                            else
+                            {
+                                if (top > -1)
+                                    newControl.Top = top;
+                                if (left > -1)
+                                    newControl.Left = left;
+                                if (width > -1)
+                                    newControl.Width = width;
+                                if (height > -1)
+                                    newControl.Height = height;
+                            }
+                            hostControl.Controls.Add(newControl);
+                            return newControl;
                         }
-                        hostControl.Controls.Add(newControl);
-                        return newControl;
+                    }
+                    catch (Exception ex)
+                    {
+                       // ex.log("in add_Control<T>");  // can't realy log this since it will introduce an race-condition
+                        System.Diagnostics.Debug.WriteLine("in add_Control<T>: " + ex.Message);
                     }
                     return null;
                 });
@@ -340,6 +348,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
                         if (userControl.ParentForm != null)
                             userControl.ParentForm.Close();
                     }
+                });
+        }
+
+        public static T foreColor<T>(this T control, Color color)
+            where T : Control
+        {
+            return (T)control.invokeOnThread(
+                () =>
+                {
+                    control.ForeColor = color;
+                    return control;
                 });
         }
 
@@ -1311,7 +1330,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion 
-
+        
+        #region askUserFor...
         public static string askUserForFileToOpen(this Control control)
         {
             return (string)control.invokeOnThread(
@@ -1342,5 +1362,6 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return (string)control.invokeOnThread(
                 () => O2Forms.askUserForDirectory(baseDirectory));
         }
+        #endregion
     }
 }

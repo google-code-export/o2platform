@@ -13,6 +13,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
     public static class Processes_ExtensionMethods
     {
 
+        public static Process getProcessWithWindowTitle(this string processName, string windowTitle)
+        {
+            foreach (var process in Processes.getProcessesCalled(processName))
+                if (process.MainWindowTitle == windowTitle)
+                    return process;
+            return null;
+        }
+
         // TODO: Double check if the name still matches the behaviour (and if there are no duplicate methods)
 
         public static Process exeConsoleOut(this TextBox textBox, string processToStart)

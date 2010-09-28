@@ -63,12 +63,14 @@
     <Compile Include="DotNet\DnD.cs" />
     <Compile Include="ExtensionMethods\Clipboard_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\CompileEngine_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\ConfigFiles_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Crypto_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Data_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Form_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\NamedPipes_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\O2Controls_ExtensioMethods.cs" />
     <Compile Include="ExtensionMethods\O2Utils_ExtensionMethods.cs" />
+    <Compile Include="ExtensionMethods\PerformanceCounters_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Sleep_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\Processes_ExtensionMethods.cs" />
     <Compile Include="ExtensionMethods\RegEx_ExtensionMethods.cs" />

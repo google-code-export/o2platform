@@ -62,5 +62,24 @@ namespace O2.Kernel
         public static string sO2Website { get; set; }
 
         public static string LogViewerControlName { get; set; }                        
+
+        // Scripts
+        private static string _currentScript = "";
+        public static string CurrentScript
+        {
+            get
+            {
+                return _currentScript;
+            }
+            set
+            {
+                if (String.IsNullOrEmpty(value) == false)
+                {
+                    PublicDI.log.info("Setting CurrentScript to: {0}", value);
+                    _currentScript = value;
+                }
+            }
+        }
+
     }
 }

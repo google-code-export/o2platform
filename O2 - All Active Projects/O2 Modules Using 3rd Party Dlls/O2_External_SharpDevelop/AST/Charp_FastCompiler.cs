@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using ICSharpCode.NRefactory.Ast;
 using O2.DotNetWrappers.DotNet;
-//O2Ref:O2SharpDevelop.dll
 using ICSharpCode.NRefactory;
-//O2File:C:\O2\_XRules_Local\MiscTestss\extra.cs
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
@@ -36,10 +34,8 @@ namespace O2.External.SharpDevelop.AST
         public CompilerResults CompilerResults { get; set; }
         public bool ExecuteInStaThread { get; set; }
         public bool ExecuteInMtaThread { get; set; }
-        public bool WorkOffline { get; set; }
-        
-        //public O2Timer executionTime { get; set; }
-        
+        public bool WorkOffline { get; set; }                
+
         public MethodInvoker onAstFail { get; set; }
         public MethodInvoker onAstOK { get; set; }
         public MethodInvoker onCompileFail { get; set; }
@@ -57,6 +53,8 @@ namespace O2.External.SharpDevelop.AST
 		
 		bool creatingAst;
 		bool compiling;
+        
+        public const string EXTRA_EXTENSION_METHODS_FILE = "_Extra_methods_To_Add_to_Main_CodeBase.cs";
 
         public System.Threading.ManualResetEvent FinishedCompilingCode { get;set;} 
 		
@@ -426,7 +424,8 @@ namespace O2.External.SharpDevelop.AST
         {            
             bool onlyAddReferencedAssemblies = false;
 //            generateDebugSymbols = false; // default to not generating debug symbols and creating the assembly only in memory
-            ExtraSourceCodeFilesToCompile = new List<string>();        	
+            ExtraSourceCodeFilesToCompile = new List<string>();                    
+            ExtraSourceCodeFilesToCompile.Add(EXTRA_EXTENSION_METHODS_FILE); // add this one by default to make it easy to add new extension methods to the O2 Scripts
         	var compilationUnit = astCSharp.CompilationUnit;
             ReferencedAssemblies = new List<string>();
             var FilesToDownload = new List<string>();
@@ -482,7 +481,10 @@ namespace O2.External.SharpDevelop.AST
                 //List<string> o2LocalScriptFiles = null;
                 // try to resolve local file references
                 try
-                {
+                {                    
+                    //var currentScriptFolder = PublicDI.CurrentScript.directoryName();
+                    if (this.SourceCodeFile.isNull())           // in case this is not set
+                        SourceCodeFile = PublicDI.CurrentScript;
                     for (int i = 0; i < ExtraSourceCodeFilesToCompile.size(); i++)
                     {
                         var fileToResolve = ExtraSourceCodeFilesToCompile[i].trim();
@@ -492,16 +494,20 @@ namespace O2.External.SharpDevelop.AST
                             ExtraSourceCodeFilesToCompile[i] = "";
                         else
                         {
-
-
+                            var resolved = false;
+                            // try using SourceCodeFile.directoryName()
                             if (fileToResolve.fileExists().isFalse())
                                 if (SourceCodeFile.valid())
                                 {
                                     var resolvedFile = SourceCodeFile.directoryName().pathCombine(fileToResolve);
                                     if (resolvedFile.fileExists())
+                                    {
                                         ExtraSourceCodeFilesToCompile[i] = resolvedFile;
-                                }
-                            if (fileToResolve.fileExists().isFalse())
+                                        resolved = true;
+                                    }
+                                }    
+                            // try using the localscripts folders                    
+                            if (resolved.isFalse() && fileToResolve.fileExists().isFalse())
                             {
                                 var mappedFile = CompileEngine.findScriptOnLocalScriptFolder(fileToResolve);
                                 if (mappedFile.valid())

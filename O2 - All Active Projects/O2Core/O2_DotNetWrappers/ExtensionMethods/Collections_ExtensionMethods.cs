@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using O2.DotNetWrappers.DotNet;
 using O2.Kernel.ExtensionMethods;
 using System.Collections.Specialized;
+using O2.Kernel.Objects;
 
 namespace O2.DotNetWrappers.ExtensionMethods
 {
@@ -161,6 +162,14 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return list;
         }
 
+        public static List<String> lower(this List<String> list)
+        {
+            return (from item in list
+                    select item.ToLower())
+                    .toList();            
+        }
+        
+
         public static bool contains<T>(this List<T> list, T itemToFind)
         {
             return list.Contains(itemToFind);
@@ -179,6 +188,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 list.Remove(itemToRemove);
             return list;
         }
+
         #endregion
 
         #region ICollection
@@ -334,6 +344,13 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 dictionary.Remove(key);
             return dictionary;
         }
+
+        public static Dictionary<string, string> clear(this Dictionary<string, string> dictionary)
+        {
+            if (dictionary.notNull())
+                dictionary.Clear();
+            return dictionary;
+        }
         #endregion 
 
         #region KeyValuePair
@@ -379,6 +396,50 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         #endregion 
+
+        #region KeyValueStrings
+
+        public static Dictionary<string, string> toDictionary(this KeyValueStrings keyValueStrings)
+        {
+            if (keyValueStrings.isNull())
+                return null;    
+            var dictionary = new Dictionary<string, string>();            
+            foreach (var item in keyValueStrings.Items)                
+                dictionary.add(item.Key, item.Value);
+            return dictionary;
+        }
+
+        public static KeyValueStrings toKeyValueStrings(this Dictionary<string,string> dictionary)
+        {
+            if (dictionary.isNull())
+                return null;
+            var keyValueStrings = new KeyValueStrings();
+            foreach (var item in dictionary)
+                keyValueStrings.add(item.Key, item.Value);
+            return keyValueStrings;
+        }
+
+        public static KeyValueStrings toKeyValueStrings(this string file)
+        {
+            return file.load<KeyValueStrings>();
+        }
+
+        public static Dictionary<string, string> configLoad(this string file)
+        {
+            return file.toKeyValueStrings().toDictionary();
+        }
+
+        public static string configSave(this Dictionary<string, string> dictionary)
+        {
+            return dictionary.toKeyValueStrings().save();
+        }
+        public static Dictionary<string, string> configSave(this Dictionary<string, string> dictionary, string file)
+        {
+            dictionary.toKeyValueStrings().saveAs(file);
+            return dictionary;
+        }
+
+        #endregion
 
     }
 }

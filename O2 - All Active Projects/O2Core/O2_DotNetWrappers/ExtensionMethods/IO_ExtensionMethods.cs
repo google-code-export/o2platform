@@ -24,10 +24,22 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return Files.getSafeFileNameString(_string,prependBase64EncodedString);
         }
 
+        public static string safeFileName(this string _stringToConvert, int maxLength)
+        {
+            var safeName = _stringToConvert.safeFileName();
+            if (maxLength > 10 && safeName.size() > maxLength)
+                return "{0} ({1}){2}".format(
+                            safeName.Substring(0, maxLength - 10),
+                            3.randomNumbers(),
+                            _stringToConvert.Substring(_stringToConvert.size() - 9).extension());
+            return safeName;
+        }
+
         public static string save(this string contents)
         {
             return contents.saveAs(PublicDI.config.TempFileNameInTempDirectory);
         }
+
 
         public static string save(this string fileContents, string targeFileName)
         {
@@ -376,11 +388,28 @@ namespace O2.DotNetWrappers.ExtensionMethods
         }
 
         public static bool askUserQuestion(this string question)
+        {
+            return question.askUserQuestion("O2 Question");
+        }
+        public static bool askUserQuestion(this string question, string title)
         { 
-            return System.Windows.Forms.MessageBox.Show(question, "O2 Question", System.Windows.Forms.MessageBoxButtons.YesNo)
+            return System.Windows.Forms.MessageBox.Show(question, title, System.Windows.Forms.MessageBoxButtons.YesNo)
                 == System.Windows.Forms.DialogResult.Yes;
         }
 
+        public static string askUser(this string question)
+        {
+            return question.askUser("O2 Question", "");
+        }
+
+        public static string askUser(this string question, string title, string defaultValue)
+        {
+            var assembly = "Microsoft.VisualBasic".assembly();
+            var intercation = assembly.type("Interaction");
+
+            var parameters = new object[] { question, title, defaultValue, -1, -1 };
+            return intercation.invokeStatic("InputBox", parameters).str();
+        }
 
         public static List<string> onlyValidFiles(this List<string> files)
         {
