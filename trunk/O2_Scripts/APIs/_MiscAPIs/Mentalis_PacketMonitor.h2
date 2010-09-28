@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>O2Thread.staThread(
+	()=&gt;{
+			var packetMonitorForm = new PacketMonitorForm(); // panel.add_Control&lt;PacketMonitorForm&gt;();
+			packetMonitorForm.ShowDialog();
+		}); 
+
+return "ok";
+
+//using Org.Mentalis.Network.PacketMonitor
+//O2Ref:Mentalis_Tools.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
