@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>//panel.clear();
+ 
+var webScarab = new API_WebScarab();   
+ 
+//webScarab.InputSimulator.Move_SleepValue = 10;
+var topPanel = O2Gui.open&lt;Panel&gt;("WebScarab - Custom O2", 800,570);    
+ 
+topPanel.parentForm().top(60).left(60);  
+topPanel.parentForm().Closed += 			//O2 ext method onClosed is not working
+	(sender,e)=&gt;{
+					"Parent Form close".debug();
+					webScarab.stop();
+				};
+//var logoNoShadow = "O2_Logo_no_Shadow.jpg".local();  
+//var smallLogo = "O2Logo_Small.gif".local(); 
+
+var ribbon = topPanel.insert_Above&lt;WPF_Ribbon&gt;(135);   
+  
+var webScarabTab = ribbon.Ribbon.add_RibbonTab("WebScarab");     
+webScarabTab.add_RibbonGroup("Commands") 				  
+		    .add_RibbonButton("Start WebScarab", 
+		    	()=&gt;{
+		    			webScarab.startAndSync(topPanel);		    			
+		    		})
+		    .add_RibbonButton("Restart WebScarab", ()=&gt; webScarab.restart())
+		    .add_RibbonButton("Close WebScarab Gui", 
+		    	()=&gt; { 
+		    			webScarab.stop();
+		    			topPanel.parentForm().close();
+		    		});
+
+webScarabTab.add_RibbonGroup("Gui Automation")
+		    .add_RibbonButton("Set Interface - Lite", 
+		    	()=&gt;{
+		    			webScarab.setInterface_Lite();
+		    			webScarab.restart();
+		    		})
+		    .add_RibbonButton("Set Interface - Fully Featured", 
+		    	()=&gt;{
+		    			webScarab.setInterface_FullFeatured();
+		    			webScarab.restart();
+		    		});
+
+
+webScarab.startAndSync(topPanel);	 
+				 
+return webScarab; 
+
+//O2File:API_WebScarab.cs 
+//O2File:WPF_Ribbon.cs
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:RibbonControlsLibrary.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
