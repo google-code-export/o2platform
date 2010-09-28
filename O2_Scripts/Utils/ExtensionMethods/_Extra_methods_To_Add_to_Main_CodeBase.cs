@@ -4,6 +4,7 @@ using System.IO;
 using System.Xml;
 using System.Drawing;
 using System.Threading;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Collections;
@@ -46,9 +47,46 @@ namespace O2.XRules.Database.Utils
 {
 	public static class ExtraMethodsToAddToO2CodeBase_IO
 	{
+		// Config
+		public static string localScriptFile(this string file)
+		{
+			if (PublicDI.CurrentScript.valid())			
+				return PublicDI.CurrentScript.directoryName().pathCombine(file);
+			return null;
+		}
+		public static Dictionary<string,string> localConfig_Load(this string file)
+		{
+			var configFile = file.localScriptFile();
+			if (configFile.fileExists())
+				return configFile.configLoad();				
+			return null;
+		}	
 		
+		public static Dictionary<string,string> localConfig_Save(this Dictionary<string,string> dictionary, string file)
+		{			
+			var configFile = file.localScriptFile();				
+			"Saving {0} items to file: {1}".info(dictionary.Count,configFile);
+			return dictionary.configSave(configFile);				
+		}	
 		
+		// Collections Dictionary<string,string>
+		public static Dictionary<string,string> clear(this Dictionary<string,string> dictionary)
+		{
+			if (dictionary.notNull())
+				dictionary.Clear();
+			return dictionary;
+		}
 		
+		//Processes ExtensionMethods API				
+		
+		public static Process getProcessWithWindowTitle(this string processName, string windowTitle)
+		{
+			foreach(var process in Processes.getProcessesCalled(processName))
+				if (process.MainWindowTitle == windowTitle)
+					return process;
+				return null;
+		}
+	
 
 		
 	}	   

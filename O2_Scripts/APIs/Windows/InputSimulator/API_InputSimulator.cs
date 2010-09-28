@@ -1,12 +1,14 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
-using System.Windows.Forms;
-using System.Drawing;
-using System.Threading;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
+using System.Drawing;
+using System.Reflection;
+using System.Threading;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
@@ -29,6 +31,8 @@ namespace O2.XRules.Database.APIs
     	public bool DebugMode { get; set; }
     	public int Move_SleepValue { get; set; }    
     	public int Move_SkipValue { get; set; }    
+    	public int Mouse_MoveTo_X_Offset { get; set; }
+    	public int Mouse_MoveTo_Y_Offset { get; set; }
     	
     	public API_InputSimulator()
     	{
@@ -41,18 +45,125 @@ namespace O2.XRules.Database.APIs
 			Move_SleepValue = 1;
 			Move_SkipValue = 3;
 			DebugMode = false;
-    	}
-    		 	
-    	    	    	    	    
+    	}    		    	    	    	    	    
+    }
+    
+	public class API_InputSimulator_NativeMethods
+	{		
+		[DllImport("User32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+		public static extern bool MoveWindow(IntPtr hWnd, int x, int y, int cx, int cy, bool repaint);
+		
+		[DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)]
+		public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter, int x, int y, int cx, int cy, int flags);
+		
+		[DllImport("user32.dll", SetLastError=true)]		
+		public static extern bool GetWindowRect(HandleRef hWnd, out Rect rc);
+ 
+		[StructLayout(LayoutKind.Sequential)]
+		public struct Rect
+		{
+		    public int left;
+		    public int top;
+		    public int right;
+		    public int bottom;		    
+		}
+
+ 
+
     }
     
 	public static class API_InputSimulator_ExtensionMethods
 	{
+		public static API_InputSimulator window_Normal(this API_InputSimulator inputSimulator, Process process)
+		{	
+			var windowHandle = process.MainWindowHandle;
+			WindowsInput.Native.NativeMethods.ShowWindow((int)windowHandle, (int)WindowsInput.Native.NativeMethods.SW.SHOWNORMAL);
+			return inputSimulator;
+		}
+		public static API_InputSimulator window_Maximized(this API_InputSimulator inputSimulator, Process process)
+		{
+			var windowHandle = process.MainWindowHandle; 
+			WindowsInput.Native.NativeMethods.ShowWindow((int)windowHandle,(int)WindowsInput.Native.NativeMethods.SW.SHOWMAXIMIZED);
+			return inputSimulator;
+		}
+		public static API_InputSimulator window_Minimized(this API_InputSimulator inputSimulator, Process process)
+		{
+			var windowHandle = process.MainWindowHandle; 
+			WindowsInput.Native.NativeMethods.ShowWindow((int)windowHandle, (int)WindowsInput.Native.NativeMethods.SW.SHOWMINIMIZED);
+			return inputSimulator;
+		}
+		public static API_InputSimulator alwaysOnTop(this API_InputSimulator inputSimulator, Process process)
+		{				
+			return inputSimulator.alwaysOnTop(process,true);
+		}
+		
+		public static API_InputSimulator alwaysOnTop(this API_InputSimulator inputSimulator, Process process, bool value)
+		{
+			inputSimulator.window_Normal(process);		// make sure the window is not minimized
+		
+			var HWND_TOPMOST = new HandleRef(null, new IntPtr(-1));
+			var HWND_NOTOPMOST = new HandleRef(null, new IntPtr(-2));
+			
+			var windowHandle =  new HandleRef(null, process.MainWindowHandle); 
+			HandleRef hWndInsertAfter = value ? HWND_TOPMOST : HWND_NOTOPMOST;
+            API_InputSimulator_NativeMethods.SetWindowPos(windowHandle, hWndInsertAfter, 0, 0, 0, 0, 3);
+           	return inputSimulator;
+		}
+
+		public static API_InputSimulator bringToFront(this API_InputSimulator inputSimulator, Process process)
+		{
+			var windowHandle = process.MainWindowHandle; 
+    		WindowsInput.Native.NativeMethods.SetForegroundWindow(windowHandle);  
+    		return inputSimulator;    		
+		}
+		
+		public static API_InputSimulator moveWindow(this API_InputSimulator inputSimulator, Process process, int left, int top, int width, int height)
+		{
+			var windowHandle = process.MainWindowHandle; 
+    		API_InputSimulator_NativeMethods.MoveWindow(windowHandle, left, top, width, height, true); 
+    		return inputSimulator;    		
+		}
+		public static API_InputSimulator_NativeMethods.Rect windowRectangle(this API_InputSimulator inputSimulator, Process process)
+		{
+			var rect = new API_InputSimulator_NativeMethods.Rect();
+			var windowHandle = new HandleRef(null, process.MainWindowHandle); 
+			API_InputSimulator_NativeMethods.GetWindowRect(windowHandle, out rect);
+			return rect;
+		}
+		
+		public static  API_InputSimulator set_XY_OffsetToWindow(this API_InputSimulator inputSimulator, Process process)
+		{					
+			var windowRectangle = inputSimulator.windowRectangle( process);
+			inputSimulator.Mouse_MoveTo_X_Offset = windowRectangle.left-10;
+			inputSimulator.Mouse_MoveTo_Y_Offset = windowRectangle.top-10;
+			return inputSimulator;
+		}
+		
 		public static API_InputSimulator wait(this API_InputSimulator inputSimulator, int sleepValue)
   		{
   			inputSimulator.sleep(sleepValue);
   			return inputSimulator;
   		}
+  		
+  		/*public static double xPos<T>(this API_InputSimulator inputSimulator, T control)
+    		where T : Control
+    	{
+    		return (double)control.invokeOnThread(
+    			()=>{
+	    				var location1 = control.PointToScreen(Point.Empty); 
+						return (double)location1.X + control.width()/2;
+					});
+		}
+		
+		public static double yPos<T>(this API_InputSimulator inputSimulator, T control)
+    		where T : Control
+    	{
+    		return (double)control.invokeOnThread(
+    			()=>{
+	    				var location1 = control.PointToScreen(Point.Empty); 
+						return (double)location1.Y  + control.height()/2;
+					});
+		}*/						
 	}
 	
   	public static class API_InputSimulator_ExtensionMethods_Keyboard
@@ -176,6 +287,8 @@ namespace O2.XRules.Database.APIs
     	
     	public static API_InputSimulator mouse_MoveTo(this API_InputSimulator inputSimulator, double x, double y, bool animate)
     	{
+    		x += inputSimulator.Mouse_MoveTo_X_Offset;
+    		y += inputSimulator.Mouse_MoveTo_Y_Offset;
     		var currentPosition = inputSimulator.mouse_CurrentPosition();
     		inputSimulator.mouse_MoveBy(x - currentPosition.X, y - currentPosition.Y, animate);    		
 			return inputSimulator;

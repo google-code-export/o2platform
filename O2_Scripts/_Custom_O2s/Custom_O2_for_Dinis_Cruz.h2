@@ -8,7 +8,9 @@ topPanel.fill(false)
  
  
 var title = "Dinis Cruz - O2 version (Security Consultant)";
-var topPanel = O2Gui.open&lt;Panel&gt;(title, 800,283);        
+var currentScript = "Custom_O2_for_Dinis_Cruz.h2".local();
+
+var topPanel = O2Gui.open&lt;Panel&gt;(title, 1150,283);        
 topPanel.insert_Below&lt;Panel&gt;(110).add_LogViewer(); 
 var leftPanel = topPanel.insert_Right&lt;Panel&gt;(200).fill(false).width(200).height(153);
 
@@ -28,8 +30,7 @@ var apiScriptDevelopment = ribbon.Ribbon.add_RibbonTab("API / Script Development
 apiScriptDevelopment.add_RibbonGroup("Development GUIs") 		
 					.add_RibbonButton_Script("Simple Script Editor","ascx_Simple_Script_Editor.cs.o2")
 					.add_RibbonButton_Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")			
-					.add_RibbonButton_H2Script("O2 Development Environment","Util - O2 Development Environment.h2")
-					.add_RibbonButton_Script("'Graph' development gui","ascx_GraphWithInspector.cs")			
+					.add_RibbonButton_H2Script("O2 Development Environment","Util - O2 Development Environment.h2")					
 					.add_RibbonButton_H2Script("Source Code Viewer","Util - SourceCodeViewer.h2")
 					.add_RibbonButton_H2Script("Source Code Editor","Util - SourceCodeEditor.h2");
 					
@@ -42,9 +43,19 @@ apiScriptDevelopment.add_RibbonGroup("Development Utils")
 					.add_RibbonButton_H2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")	  
 	  				.add_RibbonButton_Script("Edit O2Platform.com Page","ascx_MediaWiki_PageEditor_Simple.cs");
 
-var miscTools = ribbon.Ribbon.add_RibbonTab("Misc Tools");
-miscTools.add_RibbonGroup("PoCs") 		
-		 .add_RibbonButton_H2Script("Aspx PoC Builder","Util - Aspx PoC Builder.h2");
+apiScriptDevelopment.add_RibbonGroup("Custom O2")			
+					.add_RibbonButton("Edit this version", 
+						() =&gt; O2Gui.open&lt;Panel&gt;("Custom O2",800,400)
+								   .add_SourceCodeEditor()
+								   .open(currentScript))
+				    .add_RibbonButton("Relaunch", 
+				    	()=&gt;{	
+								topPanel.parentForm().close();
+								currentScript.executeH2Script();
+							})
+					.add_RibbonButton_H2Script("Check for ClickOnce Updates","AutoUpdate - Using Reflection.h2")	  					
+					.add_RibbonButton("Exit O2 (and close all windows)", () =&gt; PublicDI.config.closeO2Process());
+var miscTools = ribbon.Ribbon.add_RibbonTab("Misc Tools");		 
 		 
 miscTools.add_RibbonGroup("Other Guis") 		
 		 .add_RibbonButton_H2Script("O2 GUI (v1.4)","O2 GUI.h2")
@@ -54,13 +65,20 @@ miscTools.add_RibbonGroup("Other Guis")
 	     .add_RibbonButton_Script("Stop O2 Instances","Uitl - Stop all (but current) O2_XRules_Database processes.h2");
 	     
 miscTools.add_RibbonGroup("Media Tools")
-	  .add_RibbonButton_H2Script("screenshot tool","Util - Show ScreenShot Tool.h2")
-	  .add_RibbonButton_H2Script("Image Editor", "Util - DiagramDesigner Editor.h2")	  	  
-	  .add_RibbonButton_H2Script("Movie Creator","Util - Movie Creator.h2");
+		 .add_RibbonButton_H2Script("screenshot tool","Util - Show ScreenShot Tool.h2")
+		 .add_RibbonButton_H2Script("Image Editor", "Util - DiagramDesigner Editor.h2")	  	  
+		 .add_RibbonButton_H2Script("Movie Creator","Util - Movie Creator.h2");
+
+miscTools.add_RibbonGroup("Other Tools")
+	     .add_RibbonButton_H2Script("Amazon S3 Browser","Amazon S3 Browser.h2")
+	     .add_RibbonButton_Script("Login into BTOpenZone (UK)","API_BTOpenZone.cs");      
+
 	     
-	     
-miscTools.add_RibbonGroup("Wireless Networks") 		 
-		 .add_RibbonButton_Script("Login into BTOpenZone (UK)","API_BTOpenZone.cs");      
+miscTools.add_RibbonGroup("Files Utils") 		 		
+		 .add_RibbonButton_H2Script("Map Files by Extension","Util - File Mapping (by extension).h2")	  
+		 .add_RibbonButton_H2Script("Quick File Search","Util - Quick File Search.h2")	  
+		 .add_RibbonButton_H2Script("Simple Text Editor","Util - Simple Text Editor.h2")
+		 .add_RibbonButton_H2Script("Search Engine","Search Engine Tool.h2");
 
 var specialFolders = ribbon.Ribbon.add_RibbonTab("Special Folders");
 specialFolders.add_RibbonGroup("O2 Scripting")
@@ -72,6 +90,28 @@ specialFolders.add_RibbonGroup("O2 Source Code (Folders)")
 			  .add_RibbonButton_StartProcess("3rd Party Dlls",@"C:\_O2_SVN\O2 - All Active Projects\_3rdPartyDlls");			  
 specialFolders.add_RibbonGroup("O2 Source Code (Solutions)")
 			  .add_RibbonButton_StartProcess("O2_XRules_Database.sln",@"C:\_O2_SVN\O2 - All Active Projects\O2_XRules_Database\O2_XRules_Database.sln"); 
+
+var securityAnalysis = ribbon.Ribbon.add_RibbonTab("Security Analysis");
+securityAnalysis.add_RibbonGroup(".Net")
+			    .add_RibbonButton_H2Script("Aspx PoC Builder","Util - Aspx PoC Builder.h2")
+			    .add_RibbonButton_H2Script("Method Invocations Creator","Util - Method Invocations Creator.h2")
+			    .add_RibbonButton_Script("Search AST","ascx_SearchAST.cs");
+
+securityAnalysis.add_RibbonGroup("Network Tools")
+			    .add_RibbonButton_H2Script("Packet Monitor (Sniffer)","Mentalis_PacketMonitor.h2");
+			    
+securityAnalysis.add_RibbonGroup("IE Script development environments") 				 
+				 .add_RibbonButton_Script("IE Automation","ascx_IE_ScriptExecution.cs")
+				 .add_RibbonButton_H2Script("IE Automation Development","IE Automation using WatiN.h2");
+				 
+securityAnalysis.add_RibbonGroup("Html") 
+				 .add_RibbonButton_H2Script("Html Tag Viewer","ascx_HtmlTagViewer.cs")
+				 .add_RibbonButton_H2Script("View WebPage details","ascx_View_WebPage_Details.cs.o2")
+				 .add_RibbonButton_H2Script("Quick HtmlCode Viewer","Quick HtmlCode Viewer.h2")
+				 .add_RibbonButton_H2Script("Simple Html Viewer","Util - Simple Html Viewer.h2")
+				 .add_RibbonButton_H2Script("Html Editor","ascx_Html_Editor.cs.o2");      
+
+
 
 
 return "";	     

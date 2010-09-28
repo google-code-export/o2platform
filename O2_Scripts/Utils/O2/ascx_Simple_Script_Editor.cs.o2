@@ -463,6 +463,9 @@ namespace O2.XRules.Database.Utils
      	{     		
      		if (executeButton.Enabled)
      		{
+     			var currentScript = currentSourceCodeFilePath();
+     			if (currentScript.fileExists())
+     				PublicDI.CurrentScript = currentScript;
                 result_RichTextBox.textColor(Color.Black).set_Text("Executing code");	  
      			O2Thread.mtaThread(()=> showResult(csharpCompiler.executeFirstMethod()));
      		}
