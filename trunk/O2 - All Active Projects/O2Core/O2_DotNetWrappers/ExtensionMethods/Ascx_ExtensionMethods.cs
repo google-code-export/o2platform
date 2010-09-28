@@ -2690,6 +2690,50 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 });
         }
 
+        public static DataGridView allowNewRows(this DataGridView dataGridView)
+        {
+            return dataGridView.allowNewRows(true);
+        }
+
+        public static DataGridView allowNewRows(this DataGridView dataGridView, bool value)
+        {
+            dataGridView.invokeOnThread(() => dataGridView.AllowUserToAddRows = value);
+            return dataGridView;
+        }
+
+        public static DataGridView allowRowsDeletion(this DataGridView dataGridView)
+        {
+            return dataGridView.allowRowsDeletion(true);
+        }
+
+        public static DataGridView allowRowsDeletion(this DataGridView dataGridView, bool value)
+        {
+            dataGridView.invokeOnThread(() => dataGridView.AllowUserToDeleteRows = value);
+            return dataGridView;
+        }
+
+        public static DataGridView allowColumnResize(this DataGridView dataGridView)
+        {
+            return dataGridView.allowColumnResize(true);
+        }
+
+        public static DataGridView allowColumnResize(this DataGridView dataGridView, bool value)
+        {
+            dataGridView.invokeOnThread(() => dataGridView.AllowUserToResizeColumns = value);
+            return dataGridView;
+        }
+
+        public static DataGridView allowColumnOrder(this DataGridView dataGridView)
+        {
+            return dataGridView.allowColumnOrder(true);
+        }
+
+        public static DataGridView allowColumnOrder(this DataGridView dataGridView, bool value)
+        {
+            dataGridView.invokeOnThread(() => dataGridView.AllowUserToOrderColumns = value);
+            return dataGridView;
+        }	
+
         #endregion		
 
         #region PropertyGrid
@@ -2711,6 +2755,8 @@ namespace O2.DotNetWrappers.ExtensionMethods
             propertyGrid.show(objectToLoad);
             return propertyGrid;
         }
+
+
         #endregion
 
         #region Panel
@@ -3083,6 +3129,12 @@ namespace O2.DotNetWrappers.ExtensionMethods
         #endregion
 
         #region WebBrowser
+
+        public static WebBrowser add_WebBrowser_Control<T>(this T control)
+            where T : Control
+        {
+            return control.add_Control<WebBrowser>();
+        }
 
         public static WebBrowser open(this WebBrowser webBrowser, string url)
         {

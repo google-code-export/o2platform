@@ -25,6 +25,7 @@ namespace O2.DotNetWrappers.DotNet
         static string onlyAddReferencedAssemblies = "O2Tag_OnlyAddReferencedAssemblies";
         static List<string> specialO2Tag_ExtraReferences = new List<string>() {"//O2Tag_AddReferenceFile:", "//O2Ref:"};
         static List<string> specialO2Tag_Download = new List<string>() { "//Download:", "//O2Download:" };
+        static List<string> specialO2Tag_PathMapping = new List<string>() { "//PathMapping:", "//O2PathMapping:" };
         static List<string> specialO2Tag_ExtraSourceFile = new List<string>() { "//O2Tag_AddSourceFile:", "//O2File:" };
         static List<string> specialO2Tag_ExtraFolder = new List<string>() { "//O2Tag_AddSourceFolder:", "//O2Folder:", "//O2Dir:" };
         static List<string> specialO2Tag_DontCompile= new List<string>() { "//O2NoCompile"};
@@ -39,7 +40,8 @@ namespace O2.DotNetWrappers.DotNet
         public static Dictionary<string, string> LocalScriptFileMappings = new Dictionary<string, string>();
         public static Dictionary<string, string> CachedCompiledAssemblies = new Dictionary<string, string>();
         public static string CachedCompiledAssembliesMappingsFile = PublicDI.config.O2TempDir.pathCombine("..\\CachedCompiledAssembliesMappings.xml");
-        
+        public static Dictionary<string,string> CompilationPathMappings = new Dictionary<string, string>();
+
         public static List<String> lsGACExtraReferencesToAdd = new List<string>(new []
                                                                                  {
                                                                                      "System.Windows.Forms.dll",
@@ -80,10 +82,7 @@ namespace O2.DotNetWrappers.DotNet
                 if (CachedCompiledAssembliesMappingsFile.fileExists())
                 {
                     "in loadCachedCompiledAssembliesMappings: {0}".debug(CachedCompiledAssembliesMappingsFile);
-                    CachedCompiledAssemblies = new Dictionary<string, string>();
-                    var keyValueStrings = CachedCompiledAssembliesMappingsFile.load<KeyValueStrings>();
-                    foreach (var item in keyValueStrings.Items)
-                        CachedCompiledAssemblies.add(item.Key, item.Value);
+                    CachedCompiledAssemblies = CachedCompiledAssembliesMappingsFile.load<KeyValueStrings>().toDictionary();                        
                 }
             }
             catch (Exception ex)
@@ -97,11 +96,8 @@ namespace O2.DotNetWrappers.DotNet
             try
             {
                 "in saveCachedCompiledAssembliesMappings: {0}".debug(CachedCompiledAssembliesMappingsFile);
-                var keyValueStrings = new KeyValueStrings();
-                foreach (var item in CompileEngine.CachedCompiledAssemblies)
-                    keyValueStrings.add(item.Key, item.Value);
+                var keyValueStrings = CompileEngine.CachedCompiledAssemblies.toKeyValueStrings();                
                 keyValueStrings.saveAs(CachedCompiledAssembliesMappingsFile);
-
             }
             catch (Exception ex)
             {
@@ -368,13 +364,61 @@ namespace O2.DotNetWrappers.DotNet
                     PublicDI.log.debug("   {0}", file);
             }
             if (referencedAssemblies.Count > 1)
-            {                
+            {
+                applyCompilationPathMappings(referencedAssemblies);
                 PublicDI.log.debug("There are {0} referencedAssemblies used", referencedAssemblies.Count);
                 if (DebugMode)
                     foreach (var referencedAssembly in referencedAssemblies)
                         PublicDI.log.debug("   {0}", referencedAssembly);
             }
+            
         }
+
+        public static Dictionary<string,string> clearCompilationPathMappings()
+        {
+            "in clearCompilationPathMappings".info();
+            CompilationPathMappings.Clear();
+            return CompilationPathMappings;
+        }
+
+        public static Dictionary<string, string> showInLog_CompilationPathMappings()
+        {
+            "Current CompilationPathMappings".debug();
+            foreach (var pathMapping in CompilationPathMappings)
+                "    {0}  =  {1}".info(pathMapping.Key, pathMapping.Value);
+            return CompilationPathMappings;
+        }
+        
+        public static List<string> applyCompilationPathMappings(List<string> itemsToMap)
+        {
+            foreach(var compilationMapping in CompilationPathMappings)
+                for(int i=0; i < itemsToMap.Count; i++)
+                    itemsToMap[i] = itemsToMap[i].replace(compilationMapping.Key, compilationMapping.Value);
+            return itemsToMap;
+        }
+
+        public static Dictionary<string,string> addCompilationPathMappings(string mappingToAdd)
+        {
+            if (mappingToAdd.valid())
+            {
+                var splittedMapping = mappingToAdd.split("=");
+                if (splittedMapping.Count == 2)
+                    addCompilationPathMappings(splittedMapping[0], splittedMapping[1]);
+            }
+            return CompilationPathMappings; 
+        }
+
+        public static Dictionary<string, string> addCompilationPathMappings(string key, string value)
+        {
+            if (key.valid() && value.valid())
+            {
+                "Adding CompilationPathMappings: {0} = {1}".info(key, value);
+                CompilationPathMappings.add(key, value);
+            }
+            return CompilationPathMappings;
+        }
+        
+
 
         public static List<string> checkForNoCompileFiles(List<string> sourceCodeFiles)
         {
@@ -444,10 +488,19 @@ namespace O2.DotNetWrappers.DotNet
                                     if (false == sourceCodeFiles.Contains(file) && false == filesToAdd.Contains(file))
                                         filesToAdd.Add(file);
                             }
+
+                            else
+                            {
+                                match = StringsAndLists.TextStartsWithStringListItem(fileLine, specialO2Tag_PathMapping);
+                                if (match != "")
+                                    addCompilationPathMappings(fileLine.remove(match));
+                            }
                         }
                     }
                 }
             }
+
+            applyCompilationPathMappings(filesToAdd);
 
             // add them to the list (checking if the file exist)
             if (filesToAdd.Count > 0)
@@ -468,8 +521,8 @@ namespace O2.DotNetWrappers.DotNet
                                 filePath = Path.Combine(directory, file);
                                 break;
                             }
-
-                        filePath = findScriptOnLocalScriptFolder(file);
+                        if (filePath.fileExists().isFalse())
+                            filePath = findScriptOnLocalScriptFolder(file);
                         
                         if (filePath == "")
                             PublicDI.log.error("in addSourceFileOrFolderIncludedInSourceCode, could not file file to add: {0}", file);
@@ -477,7 +530,7 @@ namespace O2.DotNetWrappers.DotNet
                     if (filePath != "" )
                     {
                         filePath = Path.GetFullPath(filePath);
-                        if (false == sourceCodeFiles.Contains(filePath))
+                        if (false == sourceCodeFiles.lower().Contains(filePath.lower()))
                         {
                             sourceCodeFiles.Add(filePath);
                             addSourceFileOrFolderIncludedInSourceCode(sourceCodeFiles, referencedAssemblies); // we need to recursively add new new dependencies 
@@ -514,6 +567,7 @@ namespace O2.DotNetWrappers.DotNet
                     break;              // once one the files has the onlyAddReferencedAssemblies ref, we can clear the referencedAssemblies and break the loop
                 }
             }
+
             foreach (var sourceCodeFile in sourceCodeFiles)
             {
                 // extract the names from referencedAssemblies

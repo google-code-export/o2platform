@@ -5,8 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 
 namespace O2.Kernel.Objects
-{
-    // this currently doesn't suport unique Keys    
+{        
     public class KeyValueStrings
     {
         public List<KeyValueString> Items { get; set; }
@@ -18,16 +17,44 @@ namespace O2.Kernel.Objects
 
         public KeyValueStrings add(string key, string value)
         {
-            Items.Add(new KeyValueString(key, value));
+            this[key] = value;                        
             return this;
         }
-        public int Count
+
+        public int size
         {
             get { return Items.Count; }
         }
 
+        public bool hasKey(string key)
+        {
+            return this[key] != null;
+        }
 
+        public string this[string key]
+        {
+            get
+            {
+                foreach(var item in Items)
+                    if(item.Key == key)
+                        return item.Value;
+                return null;
+            }
+            set
+            { 
+                if (value != null)
+                    foreach (var item in Items)
+                        if (item.Key == key)
+                        {
+                         item.Value = value;
+                             return;
+                        }
+                Items.Add(new KeyValueString(key, value));               
+            }
+        }                
     }
+
+
 
     public class KeyValueString
     {

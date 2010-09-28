@@ -456,6 +456,7 @@ namespace O2.XRules.Database
                     };
 
                 var sourceCode = "";
+                PublicDI.CurrentScript = scriptToLoad;
                 csharpCompiler.SourceCodeFile = scriptToLoad;
                 if (scriptToLoad.extension(".h2"))
                     sourceCode = H2.load(scriptToLoad).SourceCode;

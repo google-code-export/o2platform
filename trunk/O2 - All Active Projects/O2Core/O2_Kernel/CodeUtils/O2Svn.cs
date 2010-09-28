@@ -10,7 +10,7 @@ namespace O2.Kernel.CodeUtils
 {
     public class O2Svn
     {
-        public const string NO_GAC_TAG = "NoGAC->";
+        public const string NO_GAC_TAG = "__NoGAC__";
         public static List<string> AssembliesCheckedIfExists = new List<string>() {"System.Deployment"};        
 
         public static void clear_AssembliesCheckedIfExists()

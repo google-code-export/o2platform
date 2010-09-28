@@ -29,7 +29,6 @@ using O2.API.AST.ExtensionMethods.CSharp;
 using ICSharpCode.NRefactory;
 using O2.API.AST.CSharp;
 using O2.API.AST.ExtensionMethods;
-using O2.API.AST.ExtensionMethods.CSharp;
 using ICSharpCode.NRefactory.Ast;
 
 namespace O2.External.SharpDevelop.Ascx
@@ -580,6 +579,7 @@ namespace O2.External.SharpDevelop.Ascx
         public void saveSourceCode()
         {
             String sFilePath = getFullPathTOCurrentSourceCodeFile();
+            PublicDI.CurrentScript = sFilePath;
             if (partialFileViewMode == false && sFilePath.extension(".h2").isFalse())
             {
                 // if (lbSourceCode_UnsavedChanges.Visible)

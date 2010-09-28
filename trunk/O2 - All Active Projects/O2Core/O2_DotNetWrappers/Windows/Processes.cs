@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using O2.Kernel.CodeUtils;
+using O2.DotNetWrappers.ExtensionMethods;
 
 namespace O2.DotNetWrappers.Windows
 {
@@ -107,10 +108,24 @@ namespace O2.DotNetWrappers.Windows
             }
         }
 
-        public static String startProcessAsConsoleApplicationAndReturnConsoleOutput(String processToStart,
-                                                                                    String arguments)
+        public static String startAsCmdExe(String processToStart, String arguments)
+        {
+            return startProcessAsConsoleApplicationAndReturnConsoleOutput(processToStart, arguments, Path.GetDirectoryName(processToStart), true);
+        }
+
+        public static String startAsCmdExe(String processToStart, String arguments, string workingDirectory)
+        {
+            return startProcessAsConsoleApplicationAndReturnConsoleOutput(processToStart, arguments, workingDirectory, true);
+        }
+
+        public static String startProcessAsConsoleApplicationAndReturnConsoleOutput(String processToStart, String arguments)
         {
             return startProcessAsConsoleApplicationAndReturnConsoleOutput(processToStart, arguments,Path.GetDirectoryName(processToStart),  true);
+        }
+
+        public static String startProcessAsConsoleApplicationAndReturnConsoleOutput(String processToStart, String arguments, string workingDirectory)
+        {
+            return startProcessAsConsoleApplicationAndReturnConsoleOutput(processToStart, arguments, workingDirectory, true);
         }
 
         public static String startProcessAsConsoleApplicationAndReturnConsoleOutput(String processToStart,
@@ -192,6 +207,44 @@ namespace O2.DotNetWrappers.Windows
             pProcess.BeginOutputReadLine();
 
             return pProcess;
+        }
+
+        public static Process startProcessAndRedirectIO(string processToStart , Action<string> onDataReceived)
+        {
+            return startProcessAndRedirectIO(processToStart, "", onDataReceived);
+        }
+
+        public static Process startProcessAndRedirectIO(string processToStart, string arguments, Action<string> onDataReceived)
+        {
+            return startProcessAndRedirectIO(processToStart, arguments, processToStart.directoryName(), onDataReceived, onDataReceived);
+        }
+
+        public static Process startProcessAndRedirectIO(string processToStart, string arguments, string workingDirectory,Action<string> onDataReceived)
+        {
+            return startProcessAndRedirectIO(processToStart, arguments, workingDirectory, onDataReceived, onDataReceived);
+        }
+
+        public static Process startProcessAndRedirectIO(string processToStart, string arguments, string workingDirectory,
+                                                        Action<string> onOutputDataReceived,
+                                                        Action<string> onErrorDataReceived)
+        { 
+            //var memoryStream = new MemoryStream();
+            //var stringWriter = new StringWriter();
+            var streamWriter = new StreamWriter(new MemoryStream());
+            return startProcessAndRedirectIO(processToStart, 
+                                             arguments, 
+                                             workingDirectory,
+                                             ref streamWriter, 
+                                               (sender,e)=>{
+                                                            if (e.Data != "")
+                                                                onOutputDataReceived(e.Data);
+                                                           },
+                                               (sender,e)=>{
+                                                            if (e.Data != "")
+                                                                onOutputDataReceived(e.Data);
+                                                           });
+    
+
         }
 
         public static Process startProcessAndRedirectIO(
