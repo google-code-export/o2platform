@@ -245,6 +245,7 @@ namespace O2.DotNetWrappers.DotNet
 
         public Assembly compileSourceFile(String sourceCodeFile)
         {
+            PublicDI.CurrentScript = sourceCodeFile;
             return compileSourceFiles(new List<string> { sourceCodeFile });
         }
 
