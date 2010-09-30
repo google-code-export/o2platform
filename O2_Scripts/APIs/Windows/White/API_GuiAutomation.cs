@@ -1,8 +1,9 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.InteropServices;
 using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
@@ -16,7 +17,7 @@ using White.Core.UIItems.Finders;
 using White.Core.UIItems.TabItems;
 using White.Core.UIItems.TreeItems;
 using White.Core.UIItems.WindowItems;
-
+using White.Core.UIItems.ListBoxItems;
 using White.Core.AutomationElementSearch;
 using System.Windows.Automation;
 
@@ -138,10 +139,14 @@ namespace O2.XRules.Database.APIs
     	public static T get<T>(this IUIItemContainer container, string text)
     		where T : UIItem
     	{
-    		var match = container.Get<T>(text);
-    		if (match.notNull())
-    			return match;
-    		return container.Get<T>(SearchCriteria.ByText(text));
+    		if (container.notNull())
+    		{
+	    		var match = container.Get<T>(text);
+	    		if (match.notNull())
+	    			return match;
+	    		return container.Get<T>(SearchCriteria.ByText(text));
+	    	}
+	    	return null;
     	}    	    	
     }	
     
@@ -157,6 +162,14 @@ namespace O2.XRules.Database.APIs
     	{
     		return uiItem.Name;
     	}
+    	
+    	public static int handle(this IUIItem uiItem)
+    	{
+    		if (uiItem.notNull())
+    			return uiItem.AutomationElement.Current.NativeWindowHandle;
+    		return -1;
+    	}
+    	
     	
     	public static T setFocus<T>(this T uiItem)
     		where T : IUIItem
@@ -193,6 +206,8 @@ namespace O2.XRules.Database.APIs
     	
     	public static List<ITabPage> tabPages(this UIItemContainer container)    		
     	{
+    		if (container.isNull())
+    			return null;    		
     		return (from tab in container.Tabs
 		    		from tabPage in tab.Pages
 		    		select tabPage).toList();
@@ -202,6 +217,13 @@ namespace O2.XRules.Database.APIs
     		foreach(var tabPage in container.tabPages())
     			if (tabPage.Name == name)
     				return tabPage;
+    		return null;
+    	}
+    	
+    	public static Tree treeView(this UIItemContainer container)    		
+    	{
+    		if (container.notNull())
+    			return container.Get<Tree>();
     		return null;
     	}
     	
@@ -222,7 +244,8 @@ namespace O2.XRules.Database.APIs
     	public static T click<T>(this T uiItem)
     		where T : IUIItem
     	{
-    		uiItem.Click();
+    		if (uiItem.notNull())
+    			uiItem.Click();
     		return uiItem;    		
     	}
     	
@@ -275,7 +298,7 @@ namespace O2.XRules.Database.APIs
     	public static Mouse mouse_MoveTo(this Mouse mouse, double x, double y, bool animate)
     	{
     		System.Windows.Forms.Application.DoEvents();
-    		"__moving mouse to:{0} {1}".debug(x,y);
+    		//"__moving mouse to:{0} {1}".debug(x,y);
     		return 	mouse.mouse_MoveBy(x - mouse.Location.X , y - mouse.Location.Y, animate);
     	}
     	
@@ -283,7 +306,7 @@ namespace O2.XRules.Database.APIs
     	{
     		var originalX = mouse.Location.X;
     		var originalY = mouse.Location.Y;
-    		"__moving mouse by:{0} {1}".debug(x,y);
+    		"moving mouse by:{0} {1}".debug(x,y);
     		if (animate)
     		{    			    		
 	    		if (x != 0 || y != 0)
@@ -314,13 +337,78 @@ namespace O2.XRules.Database.APIs
     	
     }
     
+    public static class API_GuiAutomation_ExtensionMethods_Desktop
+    {
+    	public static List<ListItem> desktopIcons(this API_GuiAutomation guiAutomation)
+    	{
+    		return Desktop.Instance.Icons;    		    	
+    	}
+    	
+		public static ListItem desktopIcon(this API_GuiAutomation guiAutomation, string name)
+    	{
+    		foreach(var icon in guiAutomation.desktopIcons())
+    			if (icon.Name == name)
+    				return icon;
+    		return null;
+    	}
+    	
+    	public static List<Window> desktopWindows(this API_GuiAutomation guiAutomation)
+    	{
+    		for(int i=0; i < 5 ; i++)
+    		{
+    			try
+    			{
+    				return WindowFactory.Desktop.DesktopWindows();
+    			}
+    			catch(Exception ex)
+    			{
+    				ex.log("in API_GuiAutomation in desktopWindows");
+    			}
+    		}
+    		return null;
+    	}
+    	
+    	public static Window desktopWindow(this API_GuiAutomation guiAutomation, string name)
+    	{
+    		foreach(var window in guiAutomation.desktopWindows())
+    			if(window.Name == name)
+    				return window;
+    		return null;
+    	}
+    	
+    	public static Window desktopWindow(this API_GuiAutomation guiAutomation, string name, int numberOfTries)
+    	{
+			for(int i=0; i < numberOfTries ; i++)
+			{				
+				var window = guiAutomation.desktopWindow(name);
+				if (window.notNull())
+				{
+					"after {0} tries, found window with title: {1}".info(i, name);
+					return window;
+				}
+				guiAutomation.sleep(1000,false);
+			}
+			"after {0} tries, cound not find window with title: {1}".info(numberOfTries, name);
+			return null;
+		}
+    	
+    	public static List<Window> showDesktop(this API_GuiAutomation guiAutomation)
+    	{
+    		var desktopWindows = guiAutomation.desktopWindows();
+    		foreach(var window in desktopWindows)
+    			window.minimized();
+			return desktopWindows;
+		}
+    }    
+    
+    
     public static class API_GuiAutomation_ExtensionMethods_Window
     {	
     	public static List<Window> windows(this API_GuiAutomation guiAutomation)
     	{
     		return guiAutomation.Application.GetWindows();
     	}
-    	
+    	    	    	
     	public static List<string> names(this List<Window> windows)
     	{
     		return (from window in windows
@@ -337,10 +425,119 @@ namespace O2.XRules.Database.APIs
     	
     	public static Window bringToFront(this Window window)
     	{
-    		var windowHandle = window.AutomationElement.Current.NativeWindowHandle;
-    		WindowsInput.Native.NativeMethods.SetForegroundWindow(new IntPtr(windowHandle));  
+    		if (window.notNull())
+    		{
+    			var windowHandle = window.AutomationElement.Current.NativeWindowHandle;
+    			WindowsInput.Native.NativeMethods.SetForegroundWindow(new IntPtr(windowHandle));  
+    		}
     		return window;    			
     	}
+    	
+    	public static Window minimized(this Window window)
+    	{
+    		try
+    		{
+    			window.DisplayState = DisplayState.Minimized;
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in Window minimized");
+    		}
+    		return window;
+    	}
+    	
+    	public static Window maximized(this Window window)
+    	{
+    		try
+    		{
+    			window.DisplayState = DisplayState.Maximized;
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in Window maximized");
+    		}	
+    		return window;
+    	}
+    	
+    	public static Window restored(this Window window)
+    	{
+    		try
+    		{
+    			window.DisplayState = DisplayState.Restored;
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in Window restored");
+    		}	
+    		return window;
+    	}
+    	
+    	
+    	public static Window move(this Window window,int left, int top)
+    	{
+    		var handle = window.handle();
+    		var rect = API_GuiAutomation_ExtensionMethods_Window_using_WindowHandle.windowRectangle(null, handle);
+    		var right = (rect.right - rect.left); //+ left;
+    		var bottom = (rect.bottom - rect.top); //+ top;
+    		window.move(left,top, right, bottom);
+    		return window;
+    	}
+    	public static Window move(this Window window,int left, int top, int width, int height)
+    	{
+    		API_GuiAutomation_ExtensionMethods_Window_using_WindowHandle.moveWindow(null, window.handle(), left, top, width,height);
+    		return window;
+    	}
+    }
+    
+    public static class API_GuiAutomation_ExtensionMethods_Window_using_WindowHandle
+    {
+    	public static API_GuiAutomation window_Normal(this API_GuiAutomation guiAutomation, int windowHandle)
+		{				
+			WindowsInput.Native.NativeMethods.ShowWindow((int)windowHandle, (int)WindowsInput.Native.NativeMethods.SW.SHOWNORMAL);
+			return guiAutomation;
+		}
+		public static API_GuiAutomation window_Maximized(this API_GuiAutomation guiAutomation, int windowHandle)
+		{			
+			WindowsInput.Native.NativeMethods.ShowWindow((int)windowHandle,(int)WindowsInput.Native.NativeMethods.SW.SHOWMAXIMIZED);
+			return guiAutomation;
+		}
+		public static API_GuiAutomation window_Minimized(this API_GuiAutomation guiAutomation, int windowHandle)
+		{			
+			WindowsInput.Native.NativeMethods.ShowWindow((int)windowHandle, (int)WindowsInput.Native.NativeMethods.SW.SHOWMINIMIZED);
+			return guiAutomation;
+		}
+    	
+    	public static API_GuiAutomation alwaysOnTop(this API_GuiAutomation guiAutomation, int windowHandle, bool value)
+		{
+			guiAutomation.window_Normal(windowHandle);		// make sure the window is not minimized
+		
+			var HWND_TOPMOST = new HandleRef(null, new IntPtr(-1));
+			var HWND_NOTOPMOST = new HandleRef(null, new IntPtr(-2));
+			
+			
+			HandleRef hWndInsertAfter = value ? HWND_TOPMOST : HWND_NOTOPMOST;
+            API_GuiAutomation_NativeMethods.SetWindowPos(windowHandle, hWndInsertAfter, 0, 0, 0, 0, 3);
+           	return guiAutomation;
+		}
+
+		public static API_GuiAutomation bringToFront(this API_GuiAutomation guiAutomation, int windowHandle)
+		{			
+    		WindowsInput.Native.NativeMethods.SetForegroundWindow(new IntPtr(windowHandle));  
+    		return guiAutomation;    		
+		}
+		
+		public static API_GuiAutomation moveWindow(this API_GuiAutomation guiAutomation, int windowHandle, int left, int top, int width, int height)
+		{			
+    		API_GuiAutomation_NativeMethods.MoveWindow(windowHandle, left, top, width, height, true); 
+    		return guiAutomation;    		
+		}
+		
+		public static API_GuiAutomation_NativeMethods.Rect windowRectangle(this API_GuiAutomation guiAutomation, int windowHandle)
+		{
+			var rect = new API_GuiAutomation_NativeMethods.Rect();			
+			API_GuiAutomation_NativeMethods.GetWindowRect(windowHandle, out rect);
+			return rect;
+		}
     }
     
     public static class API_GuiAutomation_ExtensionMethods_Find
@@ -357,7 +554,27 @@ namespace O2.XRules.Database.APIs
     	{
     		return guiAutomation.Application.GetWindow(SearchCriteria.ByControlType(ControlType.Image),InitializeOption.NoCache);
     	}
-    	
-    	
+    }
+    
+    //Similar to the ones in API_InputSimulator
+    public class API_GuiAutomation_NativeMethods
+	{		
+		[DllImport("User32.dll", ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+		public static extern bool MoveWindow(int hWnd, int x, int y, int cx, int cy, bool repaint);
+		
+		[DllImport("user32.dll", CharSet=CharSet.Auto, ExactSpelling=true)]
+		public static extern bool SetWindowPos(int hWnd, HandleRef hWndInsertAfter, int x, int y, int cx, int cy, int flags);
+		
+		[DllImport("user32.dll", SetLastError=true)]		
+		public static extern bool GetWindowRect(int hWnd, out Rect rc);
+ 
+		[StructLayout(LayoutKind.Sequential)]
+		public struct Rect
+		{
+		    public int left;
+		    public int top;
+		    public int right;
+		    public int bottom;		    
+		}    	
 	}
 }
