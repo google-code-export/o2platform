@@ -30,6 +30,10 @@ browserAutomation.add_RibbonGroup("Html")
 				 .add_RibbonButton_H2Script(topPanel,"Html Editor","ascx_Html_Editor.cs.o2");      
 
 var demoVulnerableApplications = ribbon.Ribbon.add_RibbonTab("Demo Vulnerable Applications");   
+demoVulnerableApplications.add_RibbonGroup("Browser Automation") 				  
+	.add_RibbonButton_H2Script(topPanel,"Browser Automation - IE Demos","Browser Automation_IE Demos.h2");
+
+
 demoVulnerableApplications.add_RibbonGroup("HacmeBank") 				  
 				 		  .add_RibbonButton_Script(topPanel,"HacmeBank BlackBox Exploits / Unit tests","HacmeBank_BlackBox_Exploits.cs") 
 				 		  .add_RibbonButton_H2Script(topPanel,"Full PoC (Black Box to WhiteBox)", "HacmeBank_FullPoc.h2")

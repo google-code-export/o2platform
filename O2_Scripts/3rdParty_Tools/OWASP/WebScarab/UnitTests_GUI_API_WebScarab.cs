@@ -16,14 +16,7 @@ using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.Windows;
 using NUnit.Framework;
 //O2File:API_WebScarab.cs
-//O2File:API_White_GuiAutomation.cs
 //O2Ref:NUnit.Framework.dll
-
-
-using White.Core.UIItems.WindowStripControls;
-using System.Windows.Automation;
-//O2Ref:UIAutomationClient.dll
-//O2Ref:UIAutomationTypes.dll
 
 namespace O2.XRules.Database.APIs
 {

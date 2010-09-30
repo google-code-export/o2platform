@@ -23,11 +23,10 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX;
+using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
-//using O2.External.IE.ExtensionMethods;
-//using O2.External.IE.Wrapper;
 using O2.API.AST.CSharp;
 using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
@@ -47,48 +46,31 @@ namespace O2.XRules.Database.Utils
 {
 	public static class ExtraMethodsToAddToO2CodeBase_IO
 	{
-		// Config
-		public static string localScriptFile(this string file)
-		{
-			if (PublicDI.CurrentScript.valid())			
-				return PublicDI.CurrentScript.directoryName().pathCombine(file);
-			return null;
-		}
-		public static Dictionary<string,string> localConfig_Load(this string file)
-		{
-			var configFile = file.localScriptFile();
-			if (configFile.fileExists())
-				return configFile.configLoad();				
-			return null;
-		}	
+		// Config files
+        public static Panel editLocalConfigFile(this string file)
+        {
+            var panel = O2Gui.open<Panel>("Editing local config file: {0}".format(file), 700, 300);
+            return file.editLocalConfigFile(panel);
+        }
+
+		//DateTime extensionMethods
 		
-		public static Dictionary<string,string> localConfig_Save(this Dictionary<string,string> dictionary, string file)
-		{			
-			var configFile = file.localScriptFile();				
-			"Saving {0} items to file: {1}".info(dictionary.Count,configFile);
-			return dictionary.configSave(configFile);				
-		}	
+		public static string safeFileName(this DateTime dateTime)
+		{
+			return Files.getSafeFileNameString(dateTime.str()); 
+		}
 		
 		// Collections Dictionary<string,string>
-		public static Dictionary<string,string> clear(this Dictionary<string,string> dictionary)
-		{
-			if (dictionary.notNull())
-				dictionary.Clear();
-			return dictionary;
-		}
+		
 		
 		//Processes ExtensionMethods API				
 		
-		public static Process getProcessWithWindowTitle(this string processName, string windowTitle)
-		{
-			foreach(var process in Processes.getProcessesCalled(processName))
-				if (process.MainWindowTitle == windowTitle)
-					return process;
-				return null;
-		}
-	
-
 		
+	
+		// Controls ExtensionMethods
+		
+		// Controls DataGridView ExtensionMethods
+			
 	}	   
 }
     	
