@@ -13,7 +13,7 @@ using White.Core.UIItems;
 using System.Windows.Automation;
 using White.Core.AutomationElementSearch;
 
-//O2File:API_White_GuiAutomation.cs
+//O2File:API_GuiAutomation.cs
 //O2File:Tool_API.cs
 
 //O2Ref:White.Core.dll
@@ -36,7 +36,7 @@ namespace O2.XRules.Database.APIs
 	{				
 		public string Eclipse_Exe { get; set; }		
 		public Process Eclipse_Process { get; set; }		
-		public API_White_GuiAutomation GuiAutomation { get; set;}
+		public API_GuiAutomation GuiAutomation { get; set;}
 		public API_Eclipse()
 		{
 			config("Eclipse", "Eclipse Helios SR1" , "eclipse-java-helios-SR1-win32.zip");
@@ -69,7 +69,7 @@ namespace O2.XRules.Database.APIs
 			if (eclipse.Eclipse_Exe.fileExists())
 			{
 				eclipse.Eclipse_Process = Processes.startProcess(eclipse.Eclipse_Exe);
-				eclipse.GuiAutomation = new API_White_GuiAutomation(eclipse.Eclipse_Process);  
+				eclipse.GuiAutomation = new API_GuiAutomation(eclipse.Eclipse_Process);  
 				eclipse.GuiAutomation.waitWhileBusy();
 			}
 			return eclipse;

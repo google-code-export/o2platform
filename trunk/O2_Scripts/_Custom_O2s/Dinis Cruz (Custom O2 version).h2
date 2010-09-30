@@ -8,7 +8,7 @@ topPanel.fill(false)
  
  
 var title = "Dinis Cruz - O2 version (Security Consultant)";
-var currentScript = "Custom_O2_for_Dinis_Cruz.h2".local();
+var currentScript = "Dinis Cruz (Custom O2 version).h2".local();
 
 var topPanel = O2Gui.open&lt;Panel&gt;(title, 1150,283);        
 topPanel.insert_Below&lt;Panel&gt;(110).add_LogViewer(); 
@@ -79,6 +79,9 @@ miscTools.add_RibbonGroup("Files Utils")
 		 .add_RibbonButton_H2Script("Quick File Search","Util - Quick File Search.h2")	  
 		 .add_RibbonButton_H2Script("Simple Text Editor","Util - Simple Text Editor.h2")
 		 .add_RibbonButton_H2Script("Search Engine","Search Engine Tool.h2");
+
+miscTools.add_RibbonGroup("Gui Automation") 		 		
+		 .add_RibbonButton_H2Script("Visual UIA Verify","Launch VisualUIAVerify.h2");
 
 var specialFolders = ribbon.Ribbon.add_RibbonTab("Special Folders");
 specialFolders.add_RibbonGroup("O2 Scripting")
