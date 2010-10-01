@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>//panel.clear(); 
+//panel.backColor(Color.White); 
+
+//var topPanel = panel.add_Panel();//
+var topPanel = O2Gui.open&lt;Panel&gt;("OWASP O2 Platform v1.5 Beta", 800,600);
+topPanel.parent().backColor(Color.White);
+var menuPanel = topPanel.insert_Above&lt;Panel&gt;(61);
+var imagePanel = menuPanel.insert_Left&lt;Panel&gt;();
+menuPanel.parent&lt;SplitContainer&gt;().distance(351);  
+imagePanel.add_PictureBox().open("OWASP_O2_Platform.png".local()).fill(false).width(351).height(41).top(10); 
+
+var browser = topPanel.add_WebBrowser_Control(); 
+
+menuPanel.add_Link("Welcome GUI",15,30,()=&gt; browser.open("wiki_Welcome.html".local())).click();; 
+menuPanel.add_Link("Demos, Animations and Videos",15,140,()=&gt; browser.open("wiki_Demos.html".local()));   
+menuPanel.add_Link("Buy O2",15,350,()=&gt; browser.open("wiki_BuyO2.html".local())); 
+menuPanel.add_Link("Open Custom O2s",35,30,()=&gt;browser.open("wiki_CustomO2s.html".local())); 
+menuPanel.add_Link("Advanced Users and O2 Developers",35,140,()=&gt;browser.open("wiki_Developer.html".local())); 
+menuPanel.add_Link("HELP!",35,350,()=&gt; browser.open("wiki_Help.html".local()));  
+
+//var wiki_HomePage = wikisFolder.pathCombine("TiddlyWiki.html");
+
+
+
+
+return "ok"; </SourceCode>
+  <ReferencedAssemblies />
+</H2>
