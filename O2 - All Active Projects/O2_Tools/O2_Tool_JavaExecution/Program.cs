@@ -6,6 +6,8 @@ using O2.External.SharpDevelop;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.WinFormsUI.Forms;
 using O2.Interfaces.Views;
+using O2.Kernel;
+using O2.Kernel.ExtensionMethods;
 
 namespace O2.Tool.JavaExecution
 {
@@ -29,7 +31,7 @@ namespace O2.Tool.JavaExecution
                 //O2AscxGUI.openAscx(DI.reflection.getType("O2_External_SharpDevelop.dll", "ascx_Scripts"));
 
                 var scriptsFolder = (ascx_ScriptsFolder)O2AscxGUI.openAscx(typeof(ascx_ScriptsFolder), O2DockState.DockLeft, "scripts folder"); 
-                scriptsFolder.loadSampleScripts(new JavaSamples(),true);
+                scriptsFolder.loadSampleScripts(typeof(JavaSamples).ctor(),true);
 
                 O2AscxGUI.openAscx(typeof (ascx_JavaExecution));
             }
