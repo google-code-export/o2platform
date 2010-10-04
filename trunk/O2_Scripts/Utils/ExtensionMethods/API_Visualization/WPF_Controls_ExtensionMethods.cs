@@ -1078,7 +1078,8 @@ textBox1.prop("",true);
             return (Button)button.wpfInvoke(
                 () =>
                 {
-                    button.Click += (sender, e) => O2Thread.mtaThread(()=> callback());
+                	if (button.notNull())
+                    	button.Click += (sender, e) => O2Thread.mtaThread(()=> callback());
                     return button;
                 });
         }

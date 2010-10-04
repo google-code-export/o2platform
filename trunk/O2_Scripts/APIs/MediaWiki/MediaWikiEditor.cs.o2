@@ -198,11 +198,15 @@ namespace O2.XRules.Database.APIs
         
         public void showHelp()
         {
-        	 MainDocumentPane.add_DocumentContent("Help")
-        	 				 .setAsActive()
-        	 				 .add_WinForms_Control<Panel>()
-        	 				 .add_Control(WpfGui.O2Browser);
-        	 WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);				 
+        	 var webBrowser = MainDocumentPane.add_DocumentContent("Help")
+			        	 				 	   .setAsActive()
+			        	 				 	   .add_WinForms_Control<Panel>()
+			        	 				 	   .add_WebBrowser_Control();			        	 				         	 				 
+			 //webBrowser.parent().parent().backColor(Color.White);  // because of a current bug prevents the webbrowser control from resizing to fill (on first view)
+			 webBrowser.open(WpfGui.Wiki_O2.html(helpPageInO2PlatformWiki).saveWithExtension(".html"));			 
+			 //WpfGui.show_O2Browser();
+			//WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);        	 				 
+        	 //WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);				 
         			         
         }
         public void showLoginPanel()
