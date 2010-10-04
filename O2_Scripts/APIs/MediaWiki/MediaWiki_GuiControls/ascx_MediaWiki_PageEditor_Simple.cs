@@ -59,121 +59,127 @@ namespace O2.XRules.Database.APIs
 		
 		public ascx_MediaWiki_PageEditor_Simple buildGui(O2MediaWikiAPI wikiApi)
 		{			
-			WikiApi = wikiApi;	
-			
-			
-			var topPanel = this.add_Panel();						
-		  	
-		  	
-		  	var horizontalSplitterPosition = topPanel.height()/2;
-		  	var verticalSplitterPosition = topPanel.width()/2;
-			var controls = topPanel.add_1x2("WikiText","Preview","Live (Current page)",false,horizontalSplitterPosition,verticalSplitterPosition); 
-			WikiTextEditor = controls[0].add_RichTextBox();
-			BrowserPreview = controls[1].add_Browser();
-			BrowserCurrent = controls[2].add_Browser(); 
-						
-			WikiPage_TextBox = 	WikiTextEditor.insert_Above<TextBox>(50);	
-			var bottomPanel = WikiPage_TextBox.insert_Below<Panel>(30);  			
-			
-			RecentChangesComboBox = WikiPage_TextBox.insert_Right<Panel>(290)
-												    .add_Label("Recent Changes / Search")
-												    .top(3)
-												    .append_Control<ComboBox>()
-												    //.dropDownList()						    
-												    .width(150)
-												    .top(0);
-			Action<string> populateRecentChangesComboBox = 
-				(filter) => {
-								RecentChangesComboBox.backColor(Color.LightPink);								
-								O2Thread.mtaThread(
-									()=>{
-											RecentChangesComboBox.clear();
-											if (filter.valid().isFalse())
-												RecentChangesComboBox.add_Items(WikiApi.recentPages());			  				
-											else
-												RecentChangesComboBox.add_Items(WikiApi.pages(filter));			  				
-											RecentChangesComboBox.backColor(Color.White);												
-										});
-						  	};													    
-			RecentChangesComboBox.onSelection(
-	    		()=>{
-	    				WikiPage_TextBox.set_Text(RecentChangesComboBox.get_Text());
-	    				loadCurrentPage();
-	    			});
-	    	RecentChangesComboBox.onEnter(
-	    		(text)=>{
-	    					populateRecentChangesComboBox(text);	    					
-	    				});
-			//WikiTextEditor.insert_Below<ascx_LogViewer>(130);
-																
-						
-			//default values
-			BrowserPreview.silent(true);
-			BrowserCurrent.silent(true);
-			//WikiPage_TextBox.set_Text("Test");			 			
-			
-			// add controls with events	 												
-			
-			CurrentPageUrl = BrowserCurrent.insert_Above<Panel>(20)
-						 			        .add_LabelAndComboBoxAndButton("Current page","","open",showInCurrentBrowser)
-						  					.controls<ComboBox>();
-			
-			
-			CurrentPageUrl.insert_Item("www.google.com");			
-			
-			bottomPanel.add_Button("Load",0).onClick(
-				()=>{		
-						loadCurrentPage();						
-					});
-			
-			
-			bottomPanel.add_Button("Preview",0,100).onClick(
-				()=>{						
-						O2Thread.mtaThread( 
-								()=>{
-										BrowserPreview.set_Text(WikiApi.parseText(WikiTextEditor.get_Text(),true));
-									});
-					});
-					
-			SaveButton = bottomPanel.add_Button("Save",0,200).onClick(
-							()=>{
-									saveCurrentPage();		
-								}); 
-								
-			StatusLabel = SaveButton.append_Label("").topAdd(3).autoSize();
-			
-			/*WikiTextEditor.onKeyPress(Keys.Enter, 
-				(code)=>{
-							O2Thread.mtaThread(()=>
-							{			
-								BrowserPreview.set_Text(WikiApi.parseText(code,true));
-							});
-						});*/
-		
-			WikiTextEditor.onKeyPress((key)=> 			// add suport to paste images form Clipboard
-				{ 
-					if (key == (Keys.Control | Keys.V))		
-						return pasteImageFromClipboard();
-					return false;
-				}); 
+			try
+			{
+				WikiApi = wikiApi;	
 				
-			WikiPage_TextBox.onEnter((text)=>loadPage(text));			
+				
+				var topPanel = this.add_Panel();						
+			  	
+			  	
+			  	var horizontalSplitterPosition = topPanel.height()/2;
+			  	var verticalSplitterPosition = topPanel.width()/2;
+				var controls = topPanel.add_1x2("WikiText","Preview","Live (Current page)",false,horizontalSplitterPosition,verticalSplitterPosition); 
+				WikiTextEditor = controls[0].add_RichTextBox();
+				BrowserPreview = controls[1].add_Browser();
+				BrowserCurrent = controls[2].add_Browser(); 
+							
+				WikiPage_TextBox = 	WikiTextEditor.insert_Above<TextBox>(50);	
+				var bottomPanel = WikiPage_TextBox.insert_Below<Panel>(30);  			
+				
+				RecentChangesComboBox = WikiPage_TextBox.insert_Right<Panel>(290)
+													    .add_Label("Recent Changes / Search")
+													    .top(3)
+													    .append_Control<ComboBox>()
+													    //.dropDownList()						    
+													    .width(150)
+													    .top(0);
+				Action<string> populateRecentChangesComboBox = 
+					(filter) => {
+									RecentChangesComboBox.backColor(Color.LightPink);								
+									O2Thread.mtaThread(
+										()=>{
+												RecentChangesComboBox.clear();
+												if (filter.valid().isFalse())
+													RecentChangesComboBox.add_Items(WikiApi.recentPages());			  				
+												else
+													RecentChangesComboBox.add_Items(WikiApi.pages(filter));			  				
+												RecentChangesComboBox.backColor(Color.White);												
+											});
+							  	};													    
+				RecentChangesComboBox.onSelection(
+		    		()=>{
+		    				WikiPage_TextBox.set_Text(RecentChangesComboBox.get_Text());
+		    				loadCurrentPage();
+		    			});
+		    	RecentChangesComboBox.onEnter(
+		    		(text)=>{
+		    					populateRecentChangesComboBox(text);	    					
+		    				});
+				//WikiTextEditor.insert_Below<ascx_LogViewer>(130);
+																	
+							
+				//default values
+				BrowserPreview.silent(true);
+				BrowserCurrent.silent(true);
+				//WikiPage_TextBox.set_Text("Test");			 			
+				
+				// add controls with events	 												
+				
+				CurrentPageUrl = BrowserCurrent.insert_Above<Panel>(20)
+							 			        .add_LabelAndComboBoxAndButton("Current page","","open",showInCurrentBrowser)
+							  					.controls<ComboBox>();
+				
+				
+				CurrentPageUrl.insert_Item("www.google.com");			
+				
+				bottomPanel.add_Button("Load",0).onClick(
+					()=>{		
+							loadCurrentPage();						
+						});
+				
+				
+				bottomPanel.add_Button("Preview",0,100).onClick(
+					()=>{						
+							O2Thread.mtaThread( 
+									()=>{
+											BrowserPreview.set_Text(WikiApi.parseText(WikiTextEditor.get_Text(),true));
+										});
+						});
+						
+				SaveButton = bottomPanel.add_Button("Save",0,200).onClick(
+								()=>{
+										saveCurrentPage();		
+									}); 
+									
+				StatusLabel = SaveButton.append_Label("").topAdd(3).autoSize();
+				
+				/*WikiTextEditor.onKeyPress(Keys.Enter, 
+					(code)=>{
+								O2Thread.mtaThread(()=>
+								{			
+									BrowserPreview.set_Text(WikiApi.parseText(code,true));
+								});
+							});*/
 			
-			
-			WikiTextEditor.add_ContextMenu()
-						  .add_MenuItem("Wrap with source tag (defaults to lang=csharp)",
-						  		()=>{
-						  				WikiTextEditor.invokeOnThread(
-						  					()=>{
-						  						
-						  							WikiTextEditor.SelectedText = "<source lang=csharp>".line() + 
-						  															WikiTextEditor.SelectedText.line() +
-						  															"</source>".line();
-						  						});
-						  			});
-					 	  			
-			populateRecentChangesComboBox("");
-			  
+				WikiTextEditor.onKeyPress((key)=> 			// add suport to paste images form Clipboard
+					{ 
+						if (key == (Keys.Control | Keys.V))		
+							return pasteImageFromClipboard();
+						return false;
+					}); 
+					
+				WikiPage_TextBox.onEnter((text)=>loadPage(text));			
+				
+				
+				WikiTextEditor.add_ContextMenu()
+							  .add_MenuItem("Wrap with source tag (defaults to lang=csharp)",
+							  		()=>{
+							  				WikiTextEditor.invokeOnThread(
+							  					()=>{
+							  						
+							  							WikiTextEditor.SelectedText = "<source lang=csharp>".line() + 
+							  															WikiTextEditor.SelectedText.line() +
+							  															"</source>".line();
+							  						});
+							  			});
+						 	  			
+				populateRecentChangesComboBox("");
+			}
+			catch(Exception ex)
+			{
+				ex.log("in ascx_MediaWiki_PageEditor_Simple buildGui");
+			}
 			return this;					
 		}
    
