@@ -46,10 +46,13 @@ namespace O2.XRules.Database.Utils
     	
     	public static Button add_Xaml_Link(this UIElement uiElement, string linkText, string margin, Action onClickCallback)
     	{
-    		var link = uiElement.xaml_CreateUIElement<Button>(XamlCode.link(linkText,margin));	 
-    		link.Focusable = false;
-    		link.onClick_Wpf(onClickCallback);
-    		return link;
+    		return (Button)uiElement.wpfInvoke(
+    			()=>{
+    					var link = uiElement.xaml_CreateUIElement<Button>(XamlCode.link(linkText,margin));	 
+    					link.Focusable = false;
+    					link.onClick_Wpf(onClickCallback);
+    					return link;
+    				});
     	}    	    	    	
     }
     
