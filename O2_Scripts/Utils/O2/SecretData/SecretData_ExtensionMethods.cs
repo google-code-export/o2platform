@@ -31,23 +31,30 @@ namespace O2.XRules.Database.Utils
             return credentials;
         }
                 
-            public static ICredential credential(this string fileWithSecretData, string credentialType)
+            public static ICredential credential(this string fileWithSecretData, string credentialTypeOrName)
         {
             if (fileWithSecretData.fileExists())
             {
                 var secretData = fileWithSecretData.deserialize<SecretData>();
-                return secretData.credential(credentialType);
+                return secretData.credential(credentialTypeOrName);
             }
             return null;
         }
 
-        public static ICredential credential(this SecretData secretData, string credentialType)
+        public static ICredential credential(this SecretData secretData, string credentialTypeOrName)
         {
             if (secretData != null)
             {
-                var credentials = secretData.credentialTypes(credentialType);
+                var credentials = secretData.credentialTypes(credentialTypeOrName);
                 if (credentials != null && credentials.size() > 0)
                     return credentials[0];
+                "Finding by Username".debug();
+                foreach(var credential in secretData.Credentials)
+                	if (credential.UserName == credentialTypeOrName)
+                	{                		
+                		"credential.UserName: {0}".info(credential.UserName);
+                		return credential;
+                	}
             }
             return null;
         }
@@ -116,6 +123,16 @@ namespace O2.XRules.Database.Utils
         	if (credential.notNull())
             	return credential.UserName;
             return "";
+        }
+        
+        public static List<string> names(this List<Credential> credentials)
+        {
+        	return credentials.usernames();
+        }
+        public static List<string> usernames(this List<Credential> credentials)
+        {
+        	return (from credential in credentials
+        		    select credential.UserName).toList();
         }
 
         #endregion
