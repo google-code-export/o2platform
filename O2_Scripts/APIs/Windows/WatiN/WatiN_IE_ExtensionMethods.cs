@@ -1320,10 +1320,11 @@ namespace O2.XRules.Database.APIs
     public static class WatiN_IE_ExtensionMethods_Divs
     { 
  
-    	public static Div div(this WatiN_IE watinIe, string id)
+    	public static Div div(this WatiN_IE watinIe, string idOrTitle)
     	{
     		foreach(var div in watinIe.divs())
-    			if (div.Id != null && div.Id == id)
+    			if ((div.Id != null && div.Id == idOrTitle) || 
+    				(div.Title != null && div.Title ==idOrTitle))
     				return div;
     		return null;
     	}

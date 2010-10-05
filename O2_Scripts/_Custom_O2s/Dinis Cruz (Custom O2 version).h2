@@ -40,8 +40,10 @@ apiScriptDevelopment.add_RibbonGroup("Unit Tests")
 	
 apiScriptDevelopment.add_RibbonGroup("Development Utils")			
 					.add_RibbonButton("O2 Object Model", () =&gt; open.o2ObjectModel())
-					.add_RibbonButton_H2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")	  
+					.add_RibbonButton_H2Script("TiddlyWiki Editor","TiddlyWiki_Editor.h2")	  
 	  				.add_RibbonButton_Script("Edit O2Platform.com Page","ascx_MediaWiki_PageEditor_Simple.cs");
+	  				
+	  				
 
 apiScriptDevelopment.add_RibbonGroup("Custom O2")			
 					.add_RibbonButton("Edit this version", 
@@ -54,6 +56,7 @@ apiScriptDevelopment.add_RibbonGroup("Custom O2")
 								currentScript.executeH2Script();
 							})
 					.add_RibbonButton_H2Script("Check for ClickOnce Updates","AutoUpdate - Using Reflection.h2")	  					
+					.add_RibbonButton_H2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")
 					.add_RibbonButton("Exit O2 (and close all windows)", () =&gt; PublicDI.config.closeO2Process());
 var miscTools = ribbon.Ribbon.add_RibbonTab("Misc Tools");		 
 		 
