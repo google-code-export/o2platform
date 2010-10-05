@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//panel.clear(); 
+  <SourceCode>panel.clear(); 
 //panel.backColor(Color.White); 
-
-//var topPanel = panel.add_Panel();//
-var topPanel = O2Gui.open&lt;Panel&gt;("OWASP O2 Platform v1.5 Beta", 800,600);
+var topPanel = panel.add_Panel();//
+//var topPanel = O2Gui.open&lt;Panel&gt;("OWASP O2 Platform v1.5 Beta", 800,600);
 topPanel.parent().backColor(Color.White);
 var menuPanel = topPanel.insert_Above&lt;Panel&gt;(61);
 var imagePanel = menuPanel.insert_Left&lt;Panel&gt;();
@@ -22,7 +21,10 @@ menuPanel.add_Link("HELP!",35,350,()=&gt; browser.open("wiki_Help.html".local())
 
 //var wiki_HomePage = wikisFolder.pathCombine("TiddlyWiki.html");
 
-
+browser.Navigated+= 
+	(sender,e)=&gt; {
+					"navigated to: {0}".info(e);
+				 });
 
 
 return "ok"; </SourceCode>
