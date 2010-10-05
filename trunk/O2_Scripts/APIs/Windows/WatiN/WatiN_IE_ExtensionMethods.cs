@@ -1621,7 +1621,7 @@ namespace O2.XRules.Database.APIs
  				//(object pDisp, ref object url)
  				(object pDisp,  ref object URL, ref object Flags,  ref object TargetFrameName, ref object PostData, ref object Headers, ref bool Cancel)=>
  					{ 						
- 						"in beforeNavigate of url:{0} -> h: {1}".info(URL, Headers);
+ 						//"in beforeNavigate of url:{0} -> h: {1}".info(URL, Headers);
  						Cancel = callback(URL.str()); 						
  					};
  			return ie;
