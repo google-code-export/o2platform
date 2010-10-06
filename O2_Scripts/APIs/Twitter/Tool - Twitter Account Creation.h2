@@ -56,7 +56,7 @@ step2_TextBox.onKeyPress_Wpf((key)=&gt;updateDataGridValues());
 step4_Button.onClick_Wpf(
 	()=&gt;{					
 			var ie = step5_IE;
-			// ensire that there isn't an logged in session
+			// ensure that there isn't an logged in session
 			ie.open("http://www.twitter.com");
 			if (ie.hasLink("Sign out"))
 				ie.link("Sign out").click();

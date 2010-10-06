@@ -81,6 +81,7 @@ miscTools.add_RibbonGroup("Files Utils")
 		 .add_RibbonButton_H2Script("Map Files by Extension","Util - File Mapping (by extension).h2")	  
 		 .add_RibbonButton_H2Script("Quick File Search","Util - Quick File Search.h2")	  
 		 .add_RibbonButton_H2Script("Simple Text Editor","Util - Simple Text Editor.h2")
+		 .add_RibbonButton_H2Script("CSharp String Encoder","CSharp_String_Encoder.h2")		 
 		 .add_RibbonButton_H2Script("Search Engine","Search Engine Tool.h2");
 
 miscTools.add_RibbonGroup("Gui Automation") 		 		

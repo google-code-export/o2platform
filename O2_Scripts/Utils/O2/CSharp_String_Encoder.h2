@@ -3,8 +3,9 @@
   <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("CSharp Script Encoder",750,400);
 //topPanel.clear();
 var workArea = topPanel.add_1x1("Original text (encoded text is automatically copied to the Clipboard&gt;","Script text");
-var original_TextBox = workArea[0].add_TextArea();
-var encoded_TextBox = workArea[1].add_TextArea();
+var original_TextBox = workArea[0].add_TextArea().allowTabs();
+var encoded_TextBox = workArea[1].add_TextArea().allowTabs();
+
 original_TextBox.onTextChange(
 	(text) =&gt; 
 		{ 	

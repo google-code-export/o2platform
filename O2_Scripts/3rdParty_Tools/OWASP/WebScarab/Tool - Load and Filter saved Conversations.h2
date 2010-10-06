@@ -15,7 +15,7 @@ script.InvocationParameters.add("tableList",tableList);
 script.set_Command( "if ((returnData.isNull() || returnData is string)&amp;&amp; file.valid().isFalse())".line()+
 					"	return \"drop a WebScarab conversationLog in the table list below\".line();".line()+
 					"List&lt;IWebscarabConversation&gt; conversations = null;".line()+
-					"if (returnData.isNull())".line()+
+					"if (returnData.isNull() || (returnData is List&lt;IWebscarabConversation&gt;).isFalse())".line()+
 					"	conversations = new API_WebScarab().loadConversationsFile(file); 				".line()+
 					"else".line()+ 
 					" 	conversations = (List&lt;IWebscarabConversation&gt;)returnData; ".line()+
