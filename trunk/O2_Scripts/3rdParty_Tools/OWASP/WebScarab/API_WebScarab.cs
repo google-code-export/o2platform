@@ -210,8 +210,7 @@ namespace O2.XRules.Database.APIs
     			"in API_WebScarab setInterface_Lite, we are already using the 'Lite' Interface, aborting request".error();
     			return webScarab;
     		}
-    		
-    	    
+    		    	    
 			
 			//API_InputSimulator_NativeMethods.MoveWindow(windowHandle,0,0,600,400,true); 
 			webScarab.bringToFront();    	    
@@ -224,8 +223,10 @@ namespace O2.XRules.Database.APIs
 			webScarab.InputSimulator.mouse_MoveTo(90,30);  
 			webScarab.InputSimulator.mouse_MoveTo(90,220).click(); 
 			
-			// Click Ok
-			webScarab.InputSimulator.mouse_MoveTo(390,215).click(); 			
+			// Press Ok			
+			webScarab.InputSimulator.send_Tab();
+			webScarab.InputSimulator.send_Enter();
+//			webScarab.InputSimulator.mouse_MoveTo(390,215).click(); 			
 			// click 'exit' menu item
 			webScarab.InputSimulator.mouse_MoveTo(20,30).click(); 
 			webScarab.InputSimulator.mouse_MoveTo(20,120).click();	
@@ -256,13 +257,54 @@ namespace O2.XRules.Database.APIs
 			webScarab.InputSimulator.mouse_MoveTo(90,30);  
 			webScarab.InputSimulator.mouse_MoveTo(90,150).click(); 
 			
-			// Click Ok
-			webScarab.InputSimulator.mouse_MoveTo(390,215).click(); 			
+			// Press Ok			
+			webScarab.InputSimulator.send_Tab();
+			webScarab.InputSimulator.send_Enter();
+//			webScarab.InputSimulator.mouse_MoveTo(390,215).click(); 			
 			// click 'exit' menu item
 			webScarab.InputSimulator.mouse_MoveTo(20,30).click(); 
 			webScarab.InputSimulator.mouse_MoveTo(20,120).click();		
 			
 			webScarab.waitForExit();
+			return webScarab;
+		}
+		
+		public static API_WebScarab saveConversations(this API_WebScarab webScarab, Control hostControl, string conversationsSavePath)
+		{
+		
+			"Saving Current webscarab conversations to: {0}".info(conversationsSavePath); 				
+			webScarab.bringToFront();    	    
+			webScarab.InputSimulator.set_XY_OffsetToWindow(webScarab.WebScarab_Process); // this will make the mouse_MoveTo below to be relative to the current webscarab window
+			
+			// open menu			
+			webScarab.InputSimulator.mouse_MoveTo(20, 30).click(); 
+			// save button
+			webScarab.InputSimulator.mouse_MoveTo(20, 100).click();  					
+			hostControl.sendKeys(conversationsSavePath).sleep(1000);  // this API is more robust for WebScarab
+			Application.DoEvents();			
+			webScarab.InputSimulator.send_Tab().sleep(500);
+			webScarab.InputSimulator.send_Tab().sleep(500);
+			webScarab.InputSimulator.send_Enter().sleep(500); 
+			"API_WebScarab conversation save complete".info();
+			return webScarab;
+		}
+		
+		public static API_WebScarab loadConversations(this API_WebScarab webScarab, Control hostControl, string conversationsSavePath)
+		{		
+			// open menu			
+			webScarab.bringToFront();    	    
+			webScarab.InputSimulator.set_XY_OffsetToWindow(webScarab.WebScarab_Process); // this will make the mouse_MoveTo below to be relative to the current webscarab window   				
+			webScarab.InputSimulator.mouse_MoveTo(20, 30).click(); 
+			// save button 
+			webScarab.InputSimulator.mouse_MoveTo(20, 80).click();  		
+			hostControl.sendKeys("").sleep(1000);
+			hostControl.sendKeys(conversationsSavePath).sleep(1000);  // this API is more robust for WebScarab			
+			Application.DoEvents();
+			hostControl.sendKeys("").sleep(1000);
+			webScarab.InputSimulator.send_Tab().sleep(500);
+			webScarab.InputSimulator.send_Tab().sleep(500);
+			webScarab.InputSimulator.send_Enter().sleep(500); 
+			"API_WebScarab conversation load complete".info();
 			return webScarab;
 		}
     }

@@ -207,7 +207,37 @@ namespace O2.XRules.Database.Utils
 					});
 		}
 		
-		
+		// TextBox
+		public static RibbonTextBox add_RibbonTextBox<T>(this T frameworkElement, string label,  string text, int width)
+			where T : FrameworkElement
+    	{
+			var textBox = frameworkElement.add_Control_Wpf<RibbonTextBox>(); 
+			textBox.prop("Label", label);
+			textBox.prop("TextBoxWidth", (double)width);			
+			textBox.set_Text_Wpf(text);
+			//textBox.wpfInvoke(()=> textBox.Text = text);
+			return textBox;
+    	}
+    	
+    	public static string get_Text_Wpf(this RibbonTextBox textBox)
+        {
+            return (string)textBox.wpfInvoke(
+                () =>
+                {
+                    return textBox.Text;
+                });
+        }
+        
+        public static RibbonTextBox set_Text_Wpf(this RibbonTextBox textBox, string text)
+        {
+            return (RibbonTextBox)textBox.wpfInvoke(
+                () =>
+                {
+                    textBox.Text = text;
+                    return textBox;
+                });
+        }
+
 
 		
 //var button1 = ribbonGroup2.add_Control_Wpf<RibbonButton>();

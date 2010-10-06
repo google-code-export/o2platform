@@ -60,6 +60,21 @@ namespace O2.XRules.Database.Utils
 			return Files.getSafeFileNameString(dateTime.str()); 
 		}
 		
+		// ASCX TextBox
+		
+		public static TextBox allowTabs(this TextBox textBox)
+		{
+			return textBox.acceptsTab();
+		}
+		public static TextBox acceptsTab(this TextBox textBox)
+		{
+			return textBox.acceptsTab(true);
+		}
+		public static TextBox acceptsTab(this TextBox textBox, bool value)
+		{
+			textBox.invokeOnThread(()=> textBox.AcceptsTab = value);
+			return textBox;
+		}
 		// Collections Dictionary<string,string>
 		
 		

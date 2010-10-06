@@ -173,6 +173,25 @@ namespace O2.XRules.Database.APIs
   			inputSimulator.Input_Simulator.Keyboard.TextEntry(text);
   			return inputSimulator;
   		}
+  		
+  		public static API_InputSimulator key_Send(this API_InputSimulator inputSimulator, VirtualKeyCode keyCode)
+  		{
+  			inputSimulator.Input_Simulator.Keyboard.KeyPress(keyCode);
+  			return inputSimulator;
+  		}
+  		
+  		public static API_InputSimulator send_Tab(this API_InputSimulator inputSimulator)
+  		{
+  			"sending Tab".info();
+  			inputSimulator.key_Send(VirtualKeyCode.TAB);
+  			return inputSimulator;
+  		}
+  		public static API_InputSimulator send_Enter(this API_InputSimulator inputSimulator)
+  		{
+  			inputSimulator.key_Send(VirtualKeyCode.RETURN);
+  			"sending Tab".info();
+  			return inputSimulator;
+  		}
   	}
 
     public static class API_InputSimulator_ExtensionMethods_Mouse
