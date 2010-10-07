@@ -35,7 +35,9 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         }
 
         public static Assembly compile_CodeSnippet(this string codeSnipptet, bool generateDebugSymbols)
-        {
+        {   
+            //Note we can't use the precompiled engines here since there is an issue of the resolution of this code dependencies
+
             var csharpCompiler = new CSharp_FastCompiler();
             csharpCompiler.generateDebugSymbols= generateDebugSymbols;
             var compileProcess = new System.Threading.AutoResetEvent(false);
@@ -44,7 +46,8 @@ namespace O2.External.SharpDevelop.ExtensionMethods
             csharpCompiler.onCompileFail = () => compileProcess.Set();
             csharpCompiler.onCompileOK = () => compileProcess.Set();
             compileProcess.WaitOne();
-            return csharpCompiler.assembly();
+            var assembly = csharpCompiler.assembly();
+            return assembly;
         }
 
         public static Assembly compile_H2Script(this string h2Script)

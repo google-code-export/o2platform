@@ -313,13 +313,13 @@ namespace O2.DotNetWrappers.DotNet
             }            
         }
 
-        public void setCachedCompiledAssembly(string key, Assembly compiledAssembly)
+        public static void setCachedCompiledAssembly(string key, Assembly compiledAssembly)
         {
             if (key.valid() && 
                 compiledAssembly.notNull() && 
                 compiledAssembly.Location.valid() &&
                 compiledAssembly.Location.fileExists())
-            {                            
+            {                                            
                 CachedCompiledAssemblies.add(key, compiledAssembly.Location);
                 saveCachedCompiledAssembliesMappings();                
             }
@@ -380,6 +380,13 @@ namespace O2.DotNetWrappers.DotNet
             "in clearCompilationPathMappings".info();
             CompilationPathMappings.Clear();
             return CompilationPathMappings;
+        }
+
+        public static Dictionary<string, string> clearLocalScriptFileMappings()
+        {
+            "in clearLocalScriptFileMappings".info();
+            LocalScriptFileMappings.Clear();
+            return LocalScriptFileMappings;
         }
 
         public static Dictionary<string, string> showInLog_CompilationPathMappings()
@@ -760,26 +767,30 @@ namespace O2.DotNetWrappers.DotNet
                 treeNode.ExpandAll();
             }
         }
-
-        public static string findFileOnLocalScriptFolder(string file)
-        {           
-            if (CompileEngine.LocalScriptFileMappings.hasKey(file))
-                return CompileEngine.LocalScriptFileMappings[file];
-            var mappedFilePath = "";
-
+        public static Dictionary<string, string> resetLocalScriptsFileMappings()
+        {
+            clearLocalScriptFileMappings();
             var filesToSearch = PublicDI.config.LocalScriptsFolder.files(true);
             foreach (var localScriptFile in filesToSearch)
             {
-                if (localScriptFile.fileName().ToLower().StartsWith(file.ToLower()))
+                if (localScriptFile.contains(@"\.svn").isFalse())
                 {
-                    PublicDI.log.debug("in CompileEngin, file reference '{0}' was mapped to local O2 Script file '{1}'", file, localScriptFile);
-                    mappedFilePath = localScriptFile;
-                    break;
+                    var key = localScriptFile.fileName().ToLower();
+                    CompileEngine.LocalScriptFileMappings.add(key, localScriptFile);
                 }
-            }
-            if (mappedFilePath.valid())
-                CompileEngine.LocalScriptFileMappings.add(file, mappedFilePath);
-            return mappedFilePath;
+            }            
+            return CompileEngine.LocalScriptFileMappings;                
+        }
+        public static string findFileOnLocalScriptFolder(string file)
+        {
+            if (LocalScriptFileMappings.size() == 0)  // if there are no mappings create the cached list
+                resetLocalScriptsFileMappings();
+
+            var key = file.ToLower();
+            if (CompileEngine.LocalScriptFileMappings.hasKey(key))
+                return CompileEngine.LocalScriptFileMappings[key];
+            PublicDI.log.debug("in CompileEngine, could NOT map file reference '{0}'", file);
+            return "";                    
         }
 
         public static string findScriptOnLocalScriptFolder(string file)
@@ -800,7 +811,7 @@ namespace O2.DotNetWrappers.DotNet
                 if (localScriptFile.fileName().ToLower().StartsWith(file.ToLower()))
                 //if (fileToResolve.lower() == localScriptFile.fileName().lower())
                 {
-                    PublicDI.log.debug("in CompileEngin, file reference '{0}' was mapped to local O2 Script file '{1}'",file, localScriptFile);
+                    PublicDI.log.debug("in CompileEngine, file reference '{0}' was mapped to local O2 Script file '{1}'",file, localScriptFile);
                     mappedFilePath = localScriptFile;
                     break;
                 }
@@ -810,15 +821,25 @@ namespace O2.DotNetWrappers.DotNet
             return mappedFilePath;
         }
 
-        public static string getCachedCompiledAssembly(string scriptFile)
+        public static string getCachedCompiledAssembly(string scriptOrFile)
         {
-            if (CachedCompiledAssemblies.hasKey(scriptFile))
+            return getCachedCompiledAssembly(scriptOrFile, true);
+        }
+
+        public static string getCachedCompiledAssembly(string scriptOrFile, bool compileIfNotFound)
+        {
+            if (CachedCompiledAssemblies.hasKey(scriptOrFile))
             {
-                var pathToDll = CachedCompiledAssemblies[scriptFile];
-                "in getCachedCompiledAssembly, mapped file '{0}' to cached assembly '{1}'".debug(scriptFile, pathToDll);
+                var pathToDll = CachedCompiledAssemblies[scriptOrFile];
+                if (scriptOrFile.isFile())
+                    "in getCachedCompiledAssembly, mapped file '{0}' to cached assembly '{1}'".debug(scriptOrFile, pathToDll);
+                else
+                    "in getCachedCompiledAssembly, found cached assembly for script/md5hash with size '{0}' to cached assembly '{1}'".debug(scriptOrFile.size(), pathToDll);
                 return pathToDll;
             }
-            var mappedFile = CompileEngine.findScriptOnLocalScriptFolder(scriptFile);
+            if (compileIfNotFound.isFalse())
+                return null;            
+            var mappedFile = CompileEngine.findScriptOnLocalScriptFolder(scriptOrFile);
             //var sourceCode = mappedFile.fileContents();
             //if (sourceCode.contains("//generateDebugSymbols").isFalse())
                 //sourceCode += "//generateDebugSymbols".lineBefore();
@@ -826,8 +847,8 @@ namespace O2.DotNetWrappers.DotNet
             if (assembly != null && assembly.Location.fileExists())
             {
                 var pathToDll = assembly.Location;
-                CachedCompiledAssemblies.add(scriptFile, pathToDll);
-                "in getCachedCompiledAssembly, compiled file '{0}' to assembly '{1}' (and added it to CachedCompiledAssembly)".debug(scriptFile, pathToDll);
+                CachedCompiledAssemblies.add(scriptOrFile, pathToDll);
+                "in getCachedCompiledAssembly, compiled file '{0}' to assembly '{1}' (and added it to CachedCompiledAssembly)".debug(scriptOrFile, pathToDll);
                 return assembly.Location;
             }
             return "";

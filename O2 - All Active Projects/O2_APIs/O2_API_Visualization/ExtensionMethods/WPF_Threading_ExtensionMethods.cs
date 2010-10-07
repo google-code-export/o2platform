@@ -30,7 +30,8 @@ namespace O2.API.Visualization.ExtensionMethods
 			{
                 if (source.Dispatcher.CheckAccess())
                     act();
-                source.Dispatcher.Invoke(act, DispatcherPriority.Normal);
+                else
+                    source.Dispatcher.Invoke(act, DispatcherPriority.Normal);
         	}			
             catch (Exception ex)
             {

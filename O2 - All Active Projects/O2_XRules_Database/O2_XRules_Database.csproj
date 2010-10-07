@@ -44,7 +44,7 @@
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>index.htm</WebPage>
     <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
-    <ApplicationRevision>142</ApplicationRevision>
+    <ApplicationRevision>143</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -72,6 +72,9 @@
   <ItemGroup>
     <Reference Include="Cropper">
       <HintPath>..\_3rdPartyDlls\Cropper.exe</HintPath>
+    </Reference>
+    <Reference Include="DiagramDesigner">
+      <HintPath>..\_3rdPartyDlls\DiagramDesigner.exe</HintPath>
     </Reference>
     <Reference Include="GraphSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

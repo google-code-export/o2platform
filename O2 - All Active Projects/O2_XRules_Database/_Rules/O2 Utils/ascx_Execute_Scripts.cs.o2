@@ -142,7 +142,7 @@ namespace O2.XRules.Database
         {
             try
             {
-                var cached_O2Main_WPF_GUI = PublicDI.config.CurrentExecutableDirectory.pathCombine(NEW_GUI_SCRIPT + ".cached.h2");
+/*                var cached_O2Main_WPF_GUI = PublicDI.config.CurrentExecutableDirectory.pathCombine(NEW_GUI_SCRIPT + ".cached.h2");
                 var cached_O2Main_WPF_GUI_Dll = PublicDI.config.CurrentExecutableDirectory.pathCombine(NEW_GUI_SCRIPT + ".cached.Dll");
                 if (cached_O2Main_WPF_GUI.fileExists().isFalse() ||
                     cached_O2Main_WPF_GUI.fileContents() != NEW_GUI_SCRIPT.local().fileContents())
@@ -169,6 +169,7 @@ namespace O2.XRules.Database
                 }
                 else
                 {
+ */ 
                     var newGui = NEW_GUI_SCRIPT.compile_H2Script();
                     if (newGui.notNull())
                     {
@@ -176,7 +177,7 @@ namespace O2.XRules.Database
                     }
                     else
                         executeScripts.status("There was an error compiling the new GUI!");
-                }
+   //             }
                 var currentWinForms = executeScripts.applicationWinForms();
                 if (currentWinForms.size() == 1)
                 {
