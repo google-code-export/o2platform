@@ -84,6 +84,14 @@ namespace O2.XRules.Database.Utils
 	
 		// Controls ExtensionMethods
 		
+		public static Form opacity(this Form form, double value)			
+		{
+			form.invokeOnThread(
+				()=>{
+						form.Opacity = value;
+					});
+			return form;
+		}
 		// Controls DataGridView ExtensionMethods
 			
 	}	   

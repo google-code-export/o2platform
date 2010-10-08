@@ -177,6 +177,7 @@ namespace O2.XRules.Database.APIs
   		public static API_InputSimulator key_Send(this API_InputSimulator inputSimulator, VirtualKeyCode keyCode)
   		{
   			inputSimulator.Input_Simulator.Keyboard.KeyPress(keyCode);
+  			Application.DoEvents();
   			return inputSimulator;
   		}
   		

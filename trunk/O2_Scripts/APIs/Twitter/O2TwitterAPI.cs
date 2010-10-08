@@ -9,6 +9,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 using TweetSharp.Twitter.Fluent;
 using TweetSharp.Twitter.Model;
+using TweetSharp.Model;
 //using TweetSharp.Extensions;
 using TweetSharp.Twitter.Extensions;
 using O2.XRules.Database.Utils;
@@ -31,12 +32,17 @@ namespace O2.XRules.Database.APIs
     {
         public string Username { get; set; }
         internal string Password { get; set; }
+        
         public TwitterUser UserLoggedIn { get; set; }
         public ITwitterStatuses Statuses { get; set; }
         public IFluentTwitter Twitter { get; set;}
         public bool IsLoggedIn { get;set; }
         //public TwitterResult LastResult { get; set;} 
 		
+		//Twitter O2Platform app details
+		string OAUTH_CONSUMER_KEY = "64ODjhZI0cSDb32lLIACFA";  
+		string OAUTH_CONSUMER_SECRET = "3SuM5vKvfiN2DJjJdSEUMSnDCpFYx39wDEQM11iQtg"; 
+
 		public O2TwitterAPI()
 		{
 		}		        
@@ -59,6 +65,45 @@ namespace O2.XRules.Database.APIs
         	{
         		"login to Twitter under user:{0}".info(Username);
             	this.Twitter = FluentTwitter.CreateRequest().AuthenticateAs(Username, Password); //.Statuses.OnUserTimeline().AsJson();            	            	
+            	var response = this.Twitter.Account().VerifyCredentials().AsJson().Request();            	            	
+            	IsLoggedIn = response.ok();
+            	if (IsLoggedIn)
+            	{            		
+            		this.Statuses = this.Twitter.Statuses();
+            		this.UserLoggedIn = response.AsUser();
+            		"Sucessfully connected to twitter user: '{0}' (id:{1})".info(this.UserLoggedIn.Name, this.UserLoggedIn.Id);
+            	}
+            	else
+            		"Failed to connect to twitter user {0}".error(Username);
+            		
+            	return IsLoggedIn;
+            }
+            catch(Exception ex)
+            {
+            	ex.log("[in O2TwitterAPI.login");
+            }
+            return false;
+        }
+        
+        public bool login(string oAuthFile)
+        {
+        	var oAuthToken = oAuthFile.load<OAuthToken>();
+        	return login(oAuthToken);
+        }
+        public bool login(OAuthToken oAuthToken)
+        {
+        	if (oAuthToken.isNull())
+        	{
+        		"[O2TwitterApi] in login, provided OAuthToken parameter was null".error();
+        		return false;
+        	}
+        	try
+        	{
+        		"login to Twitter via OAuth under user:{0}".info(oAuthToken.ScreenName);
+            	this.Twitter = FluentTwitter.CreateRequest()
+            							    .AuthenticateWith(OAUTH_CONSUMER_KEY,
+						                                      OAUTH_CONSUMER_SECRET,
+						                                      oAuthToken.Token,oAuthToken.TokenSecret);
             	var response = this.Twitter.Account().VerifyCredentials().AsJson().Request();            	            	
             	IsLoggedIn = response.ok();
             	if (IsLoggedIn)
