@@ -43,6 +43,8 @@ namespace O2.XRules.Database.APIs
     	public int Desktop_Capture_Width { get; set; }
     	public int Desktop_Capture_Height { get; set; }
     	public int FrameCaptureDelay { get; set; }
+    	public bool CapturingImages { get; set; }
+    	public bool AddDuplicateFrames { get; set; }
     	
         public API_AForge_Video()
     	{    	    	    		
@@ -55,9 +57,11 @@ namespace O2.XRules.Database.APIs
 			Cropper = new API_Cropper();
 			Desktop_Capture_Top = 0;
 			Desktop_Capture_Left = 0;
-			Desktop_Capture_Width = 640;
-			Desktop_Capture_Height = 480;
-			FrameCaptureDelay = 500;
+			Desktop_Capture_Width = 800;
+			Desktop_Capture_Height = 600;
+			FrameCaptureDelay = 25;
+			CapturingImages = false;
+			AddDuplicateFrames = false;			
 			//start();
 		}  							
 		
@@ -114,16 +118,23 @@ namespace O2.XRules.Database.APIs
 		
 		public static API_AForge_Video add_Image(this API_AForge_Video aforgeVideo, Bitmap image)
 		{	
-			if (image.isNull())
-				return aforgeVideo;				
-			if (aforgeVideo.PathToAviVideo.isNull())
-				aforgeVideo.newVideo();
-			if (image.isNull())
-				return aforgeVideo;
-			if (image.Width.neq(aforgeVideo.VideoWidth).or(
-				image.Height.neq(aforgeVideo.VideoHeight)))
-				image = image.resize(aforgeVideo.VideoWidth,aforgeVideo.VideoHeight);
-			aforgeVideo.VideoWriter.AddFrame(image);	
+			try
+			{
+				if (image.isNull())
+					return aforgeVideo;				
+				if (aforgeVideo.PathToAviVideo.isNull())
+					aforgeVideo.newVideo();
+				if (image.isNull())
+					return aforgeVideo;
+				if (image.Width.neq(aforgeVideo.VideoWidth).or(
+					image.Height.neq(aforgeVideo.VideoHeight)))
+					image = image.resize(aforgeVideo.VideoWidth,aforgeVideo.VideoHeight);
+				aforgeVideo.VideoWriter.AddFrame(image);	
+			}
+			catch(Exception ex)
+			{
+				ex.log("[API_AForge_Video] in add_Image");
+			}						
 			return aforgeVideo;
 		}
 		

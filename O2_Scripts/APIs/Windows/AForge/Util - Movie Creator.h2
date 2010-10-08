@@ -2,7 +2,7 @@
 <H2>
   <SourceCode>//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 //Global Variables
-var previewSizeValue = 50;
+var previewSizeValue = -1;//50;
 var addDuplicateFrames = false;
 
 //panel.clear();
@@ -27,7 +27,7 @@ var previewSize = framesOptions.add_Label("preview size:")
 							   .top(3)
 							   .append_TextBox(previewSizeValue.str())
 							   .align_Right(framesOptions)
-							   .onTextChange(
+							   .onEnter(
 							   		(value)=&gt;{
 							   					if (value.isInt())
 							   					{
@@ -49,9 +49,12 @@ framesOptions.add_CheckBox("Add Duplicate Frames:",20,0, (value) =&gt; addDuplic
 
 Action&lt;string&gt; addImageFromFile = 
 	(file)=&gt;{
+				"loading image from File: {0}".info(file);
 				var bitmap = file.bitmap();
 				if (bitmap.notNull())
 					framesList.add_Video_Image_Wpf(bitmap,100,100);
+				else 
+					"Bitmap for file was null: {0}".error(file);
 			};
 
 topControlBar.add_Link("add image from clipboard",5,5,
@@ -86,6 +89,10 @@ topControlBar.add_Link("add image from clipboard",5,5,
 						
 						//videoCreationLabel.set_Text("Showling AVI movie in player");
 						aforgeVideo.createVideo(bitmapsForVideoCreation);    
+						
+					})
+			.append_Link("play movie",		
+				()=&gt;{
 						moviePlayer.play(aforgeVideo.PathToAviVideo); 	 		 
 					})
 			.append_Link("play movie in new window",
@@ -154,11 +161,14 @@ framesList.selectFirst();
 
 mainGui[0].onDrop(
 	(fileOrFolder)=&gt;{
-				if (fileOrFolder.fileExists())
-					addImageFromFile(fileOrFolder);
-				if (fileOrFolder.dirExists())
-					foreach(var file in fileOrFolder.files())
-						addImageFromFile(file);					
+				O2Thread.mtaThread(
+					()=&gt;{
+							if (fileOrFolder.fileExists())
+								addImageFromFile(fileOrFolder);
+							if (fileOrFolder.dirExists())
+								foreach(var file in fileOrFolder.files())
+									addImageFromFile(file);					
+						});
 			});
 return "done"; 
 

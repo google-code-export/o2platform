@@ -224,7 +224,7 @@ namespace O2.XRules.Database.APIs
 			webScarab.InputSimulator.mouse_MoveTo(90,220).click(); 
 			
 			// Press Ok			
-			webScarab.InputSimulator.send_Tab();
+			webScarab.InputSimulator.send_Tab();			
 			webScarab.InputSimulator.send_Enter();
 //			webScarab.InputSimulator.mouse_MoveTo(390,215).click(); 			
 			// click 'exit' menu item

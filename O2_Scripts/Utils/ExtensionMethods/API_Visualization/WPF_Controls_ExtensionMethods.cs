@@ -628,6 +628,34 @@ textBox1.prop("",true);
 
  	}
 	
+	public static class WPF_Controls_ExtensionMethods_ItemsControl
+	{
+		public static List<object> items(this ItemsControl itemsControl)
+		{
+			return (List<object>)itemsControl.wpfInvoke(
+				()=>{
+						var items = new List<Object>();
+						foreach(var item in itemsControl.Items)
+							items.Add(item);
+						return items;
+							
+						//return itemsControl.Items;						
+					});
+		}
+		public static List<T> items<T>(this ItemsControl itemsControl)
+			where T : UIElement
+		{
+			return (List<T>)itemsControl.wpfInvoke(
+				()=>{
+						var items = new List<T>();
+						foreach(var item in itemsControl.Items)
+							if (item is T)
+								items.Add((T)item);
+						return items;						
+					});
+		}
+	}
+	
 	public static class WPF_Controls_ExtensionMethods_TreeView
 	{
         #region TreeView
@@ -1016,6 +1044,7 @@ textBox1.prop("",true);
 
  	}
 	
+	
 	public static class WPF_Controls_ExtensionMethods_ComboBox
 	{
 	
@@ -1202,7 +1231,14 @@ textBox1.prop("",true);
             return (object)listView.wpfInvoke(()=> listView.SelectedItems);					
         }*/
 
-
+		public static int selectedIndex(this ListView listView)
+		{
+            return (int)listView.wpfInvoke(
+                ()=>{
+                		return listView.SelectedIndex;
+                	});
+        }               
+        
         public static T selected<T>(this ListView listView)
         {
             return (T)listView.wpfInvoke(
@@ -1228,15 +1264,37 @@ textBox1.prop("",true);
         {
             return (ListView)listView.wpfInvoke(
                 () =>
+                {                	
+                    listView.SelectionChanged +=
+                        (sender, e) =>
+                        {                        	
+                            listView.wpfInvoke(
+                                () =>{                                	
+	                                    if (listView.SelectedValue is T && listView.SelectedItems.size() ==1)
+	                                        callback((T)listView.SelectedValue);
+    	                             });                            
+	                        };
+                    return listView;
+                });
+        }
+        
+        public static ListView afterSelects<T>(this ListView listView, Action<List<T>> callback)
+        {
+            return (ListView)listView.wpfInvoke(
+                () =>
                 {
                     listView.SelectionChanged +=
                         (sender, e) =>
                         {
                             listView.wpfInvoke(
                                 () =>
-                                {
-                                    if (listView.SelectedValue is T)
-                                        callback((T)listView.SelectedValue);
+                                {                                	
+                                	var selectedItems = new List<T>();
+                                	foreach(var selectedItem in listView.SelectedItems)  		                                	                                		
+                                    	if (selectedItem is T)
+                                    		selectedItems.Add((T)selectedItem);                                    
+                                    if (selectedItems.size()>0)
+                                        callback(selectedItems);
                                 });
                         };
                     return listView;
@@ -1280,7 +1338,10 @@ textBox1.prop("",true);
         
         public static ListView remove_SelectedItems(this ListView listView)
         {
-            listView.remove_Items(listView.selectedValues());
+        	var originalSelectedIndex = listView.selectedIndex();	
+        	var selectedValues = listView.selectedValues();        	        
+            listView.remove_Items(selectedValues);
+            listView.selectIndex(originalSelectedIndex);
             return listView;
         }
         
@@ -1328,7 +1389,10 @@ textBox1.prop("",true);
                 {
                     var items = listView.items();
                     if (index > -1 && index < items.size())
+                    {
                         listView.SelectedIndex = index;
+                        listView.SelectedItem = items[index];
+                    }                    
                     return listView;
                 });
         }
@@ -1342,6 +1406,18 @@ textBox1.prop("",true);
 		public static ListView onDeleteKey_Remove_SelectedItems(this ListView listView)
 		{
 			listView.onKeyPress_Wpf(Key.Delete, ()=> listView.remove_SelectedItems());
+			return listView;
+		}
+		
+		public static ListView useWrapPanel(this ListView listView)
+		{
+			listView.wpfInvoke(
+				()=>{
+						var frameworkElementFactory = new System.Windows.FrameworkElementFactory(typeof(WrapPanel));
+						//frameworkElementFactory.SetValue(WrapPanel.OrientationProperty, Orientation.Vertical);  
+						var itemsPanelTemplate = new ItemsPanelTemplate(frameworkElementFactory);					
+						listView.ItemsPanel = itemsPanelTemplate;
+					});
 			return listView;
 		}
 		

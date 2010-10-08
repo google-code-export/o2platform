@@ -197,8 +197,12 @@ namespace O2.XRules.Database.Utils
                        .add_MenuItem("force compilation", (menuitem) => forceCompilation())
                        .add_MenuItem("replace with generated source code", (menuitem) => replaceMainCodeWithGeneratedSource())
                        .add_MenuItem("show/hide generated source code", (menuitem) => swapGeneratedCodeViewMode())
-                       .add_MenuItem("clear AssembliesCheckedIfExists list", (menuitem) => O2Svn.clear_AssembliesCheckedIfExists())
-                       .add_MenuItem("clear CachedCompiledAssemblies list", (menuitem) => CompileEngine.CachedCompiledAssemblies.Clear());
+                       .add_MenuItem("-------------------------------")
+                       .add_MenuItem("clear AssembliesCheckedIfExists list", (menuitem) => O2Svn.clear_AssembliesCheckedIfExists())                       
+                       .add_MenuItem("clear CachedCompiledAssemblies list", (menuitem) => CompileEngine.CachedCompiledAssemblies.Clear())                       
+                       .add_MenuItem("clear LocalScriptFileMappings list", (menuitem) => CompileEngine.clearLocalScriptFileMappings())
+                       .add_MenuItem("clear CompilationPathMappings list", (menuitem) => CompileEngine.clearCompilationPathMappings());
+                       //.add_MenuItem("clear CachedCompiledAssemblies list", (menuitem) => CompileEngine.clear.Clear());
                        //.add_MenuItem("[Internal Debugging]",false, (menuitem) => swapGeneratedCodeViewMode())
                        //.add_MenuItem("reset assembly  download list", () => {  new O2.Kernel.CodeUtils.O2Svn.clear_AssembliesCheckedIfExists();  }); 
             contextMenu.add_MenuItem("execution options")

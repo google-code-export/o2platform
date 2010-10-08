@@ -31,11 +31,186 @@ using O2.External.SharpDevelop.ExtensionMethods;
 
 namespace O2.XRules.Database.Utils
 {	
-	
-    public static class WPF_Ribbon_ExtensionMethods
+	public static class WPF_Ribbon_ExtensionMethods
+    {
+    	public static List<RibbonTab> tabs(this WPF_Ribbon wpfRibbon)
+    	{
+    		return wpfRibbon.Ribbon.items<RibbonTab>();    		
+    	}
+    	
+    	public static RibbonTab tab(this WPF_Ribbon wpfRibbon, string header)
+    	{
+    		foreach(var tab in wpfRibbon.tabs())
+    			if (tab.header()== header)
+    				return tab;
+    		return null;
+    	}
+		
+		public static List<string> headers(this List<RibbonTab> tabs)
+		{
+			return (from tab in tabs
+				    select tab.header()).toList();
+		}
+		
+    	public static string header(this RibbonTab ribbonTab)
+    	{
+    		return (string)ribbonTab.wpfInvoke(
+    			()=> { return ribbonTab.Header; });    		
+    	}
+    	    	
+    	public static List<RibbonGroup> groups(this RibbonTab ribbonTab)
+    	{
+    		return ribbonTab.items<RibbonGroup>();    		
+    	}
+    	
+    	public static RibbonGroup group(this RibbonTab ribbonTab, string header)
+    	{
+    		foreach(var group in ribbonTab.groups())
+    			if (group.header()== header)
+    				return group;
+    		return null;
+    	}    	
+    	
+    	public static string header(this RibbonGroup ribonGroup)
+    	{
+    		return (string)ribonGroup.wpfInvoke(
+    			()=> { return ribonGroup.Header; });    		
+    	}
+    	
+    	
+    	public static List<RibbonButton> buttons(this RibbonGroup ribonGroup)
+    	{
+    		return ribonGroup.items<RibbonButton>();    		
+    	}
+    	
+    	public static RibbonButton button(this RibbonGroup ribonGroup, string label)
+    	{
+    		foreach(var button in ribonGroup.buttons())
+    			if (button.label()== label)
+    				return button;
+    		return null;
+    	}    	
+    	
+    	public static string label(this RibbonButton ribbonButton)
+    	{
+    		return (string)ribbonButton.wpfInvoke(
+    			()=> { return ribbonButton.Label; });    		
+    	}
+    }
+    
+    public static class WPF_Ribbon_ExtensionMethods_Add
+    {
+    	public static WPF_Ribbon add_Ribbon(this WinForms.Control control)
+    	{
+    		return control.add_Ribbon(false);
+    	}
+    	public static WPF_Ribbon add_Ribbon(this WinForms.Control control, bool addAbove)
+    	{
+    		if (addAbove)
+    			return control.add_Ribbon_Above();    		
+    		return control.add_Control<WPF_Ribbon>();     		    		
+    	}
+    	
+    	public static WPF_Ribbon add_Ribbon_Above(this WinForms.Control control)
+    	{
+    		var wpfRibbon = control.insert_Above<WinForms.Panel>(133).add_Control<WPF_Ribbon>(); 
+    		return wpfRibbon;
+    	}
+    	
+    	// helper methods (to make the api easy to use)
+    	public static RibbonTab add_Tab(this WPF_Ribbon wpfRibbon, string title)
+    	{
+    		return wpfRibbon.Ribbon.add_RibbonTab(title);
+    	}
+    	
+    	public static WPF_Ribbon add_Tabs(this WPF_Ribbon wpfRibbon, params string[] titles)
+    	{	    		
+    		foreach(var title in titles)
+    			wpfRibbon.add_Tab(title);
+    		return wpfRibbon;
+    	}
+    	
+    	public static RibbonGroup add_Group(this RibbonTab ribbonTab, string title)
+    	{
+    		return ribbonTab.add_RibbonGroup(title);
+    	}
+    	
+    	public static RibbonGroup add_Button(this RibbonGroup ribbonGroup, string label)
+    	{
+    		return ribbonGroup.add_RibbonButton(label);
+    	}
+    	
+    	public static RibbonGroup add_Button(this RibbonGroup ribbonGroup, string label, Action onClick)
+    	{
+    		return ribbonGroup.add_RibbonButton(label,onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_New(this RibbonGroup ribbonGroup, Action onClick)
+    	{
+    		return ribbonGroup.add_Button_New("New",onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_New(this RibbonGroup ribbonGroup, string label, Action onClick)
+    	{
+    		return ribbonGroup.add_Button_WithSmallImage(label,"NewDocument_16x16.png", onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_Open(this RibbonGroup ribbonGroup, Action onClick)
+    	{
+    		return ribbonGroup.add_Button_Open("Open",onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_Open(this RibbonGroup ribbonGroup, string label, Action onClick)
+    	{
+    		return ribbonGroup.add_Button_WithSmallImage(label,"Open_16x16.png", onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_Save(this RibbonGroup ribbonGroup, Action onClick)
+    	{
+    		return ribbonGroup.add_Button_Save("Save",onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_Save(this RibbonGroup ribbonGroup, string label, Action onClick)
+    	{
+    		return ribbonGroup.add_Button_WithSmallImage(label,"Save_16x16.png", onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button(this RibbonGroup ribbonGroup, string label, string smallImage, Action onClick)
+    	{
+    		return ribbonGroup.add_Button_WithSmallImage(label,smallImage, onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_WithImage(this RibbonGroup ribbonGroup, string label, string smallImage, Action onClick)
+    	{
+    		return ribbonGroup.add_Button_WithSmallImage(label,smallImage, onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_WithSmallImage(this RibbonGroup ribbonGroup, string label, string smallImage, Action onClick)
+    	{
+    		if (smallImage.fileExists().isFalse())
+    			smallImage = smallImage.local();
+    		return ribbonGroup.add_RibbonButton(label,smallImage, true, onClick);
+    	}
+    	
+    	public static RibbonGroup add_Button_Open_Folder(this RibbonGroup ribbonGroup, string label, Action<string> onValidFolder)
+    	{
+    		return ribbonGroup.add_Button_WithSmallImage(label,"Open_16x16.png", 
+    								()=> O2Thread.staThread(
+							 				()=>{ 
+							 						var folder = O2Forms.askUserForDirectory("Choose Folder With Images To load");
+							 						if (folder.valid() && folder.dirExists())
+					    									onValidFolder(folder);
+					    						})
+					    			);
+				    						
+    	}    			 			
+    	
+    }
+    
+    public static class Ribbon_ExtensionMethods
     {
     	public static Ribbon add_Wpf_Ribbon<T>(this T control)
-    		where T : System.Windows.Forms.Control
+    		where T : WinForms.Control
     	{    	        		
     		return (Ribbon)control.invokeOnThread(
     			()=>{    		
@@ -53,12 +228,12 @@ namespace O2.XRules.Database.Utils
 					});
     	}
     	
-    	public static RibbonTab add_RibbonTab(this Ribbon ribbon, string title)
+    	public static RibbonTab add_RibbonTab(this Ribbon ribbon, string header)
     	{
     		var ribbonTab = ribbon.add_Control_Wpf<RibbonTab>(); 
-			ribbonTab.prop("Header", title);
+			ribbonTab.prop("Header", header);
 			return ribbonTab;
-    	}
+    	}    	    	
     	
     	public static RibbonGroup add_RibbonGroup(this RibbonTab ribbonTab, string title)
     	{
