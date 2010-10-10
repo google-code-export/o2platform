@@ -132,7 +132,7 @@ namespace O2.XRules.Database.Utils
     	public static RibbonButton button(this RibbonTab ribonTab, string label)
     	{
     		foreach(var button in ribonTab.buttons())
-    			if (button.label().trim() == label)
+    			if (button.label().trim() == label.trim())
     				return button;
     		return null;
     	}
@@ -146,7 +146,7 @@ namespace O2.XRules.Database.Utils
     	{
     		if (ribonGroup.notNull())
     			foreach(var button in ribonGroup.buttons())
-    				if (button.label().trim() == label)
+    				if (button.label().trim() == label.trim())
     					return button;
     		return null;
     	}    	

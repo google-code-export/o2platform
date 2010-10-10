@@ -326,10 +326,16 @@ namespace O2.XRules.Database.APIs
     				select menu.name()).toList();
     	}
     	
-    	public static Menu menu_Click(this Window window, string menuName, string menuItemName)
+    	//this was not working
+    	/*public static Menu menu_Click(this Window window, string menuName, string menuItemName)
+    	{	
+    		return window.menu_Click(menuName,menuItemName,true);
+    	}*/
+    	
+    	public static Menu menu_Click(this Window window, string menuName, string menuItemName) //,bool animateMouse)
     	{
-    		var menu = window.menu(menuName,menuItemName);
-    		menu.sleep(200);			 
+    		var menu = window.menu(menuName,menuItemName);    		    		
+    		menu.sleep(200);
 			return menu.click();
     	}
     	public static Menu menu(this Window window, string menuName, string menuItemName)

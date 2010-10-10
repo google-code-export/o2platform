@@ -77,9 +77,17 @@ namespace O2.XRules.Database.APIs
 			post.title = title;
 			post.description = body;
 			return wpApi.wordPressWrapper.NewPost(post, true);
-//			return wpApi;
+
 		}
 		
+		public static List<Page> pages(this WordPressAPI wpApi)
+		{
+			return wpApi.wordPressWrapper.GetPages().toList();
+		}
+		
+	}
+	public static class WordPressAPI_ExtensionMethods_MediaWiki_Integration
+    {
 		public static string post_from_MediaWiki(this WordPressAPI wpApi, O2MediaWikiAPI wikiApi, string mediaWikiPage)
 		{
 			return wpApi.post_from_MediaWiki(wikiApi, mediaWikiPage, mediaWikiPage);
