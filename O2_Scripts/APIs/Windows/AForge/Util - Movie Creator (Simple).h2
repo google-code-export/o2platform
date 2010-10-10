@@ -6,7 +6,7 @@
 var topPanel = O2Gui.open&lt;Panel&gt;("Util - Movie Creator (Simple)", 700,163);  
 
 topPanel.parentForm().height(163);
-
+ 
 var movieEditor = topPanel.add_Control&lt;ascx_MovieEditor&gt;()
 						  .buildGui();  
 
@@ -31,7 +31,7 @@ wpfRibbon.tab("Movie Creation")
 		 .add_Button(" Stop Recording", "player_stop.png", ()=&gt; movieEditor.stop_ImageCapture() )
 		 .add_Button(" 0 Frames Recorded"); 
 		 
-FramesRecordedInfo = wpfRibbon.tab("Movie Creation").group("Record").button(" 0 Frames Recorded");
+FramesRecordedInfo = wpfRibbon.tab("Movie Creation").group("Record").button("0 Frames Recorded");
 
 wpfRibbon.tab("Movie Creation")
 		 .add_Group("Create")
