@@ -33,16 +33,59 @@ namespace O2.XRules.Database.Utils
 {	
 	public static class WPF_Ribbon_ExtensionMethods
     {
+    	
+    	public static Ribbon ribbon(this WinForms.Control control)
+    	{
+    		var ribbon = control.control<System.Windows.Forms.Integration.ElementHost>(true)
+    						    .Child.control_Wpf<Ribbon>();
+			if (ribbon.notNull())
+				return ribbon;
+				
+			"Could not find Ribbon control in control: {0}".error(control.str());
+			return null;			
+    	}
+    	
+    	public static WPF_Ribbon wpfRibbon(this WinForms.Control control)
+    	{
+			var wpfRibbon = control.control<WPF_Ribbon>(true); 
+			if (wpfRibbon.isNull())
+				"Could not find WPF_Ribbon control in control: {0}".error(control.str());
+			return wpfRibbon;
+    	}
+    	
     	public static List<RibbonTab> tabs(this WPF_Ribbon wpfRibbon)
     	{
-    		return wpfRibbon.Ribbon.items<RibbonTab>();    		
+    		return wpfRibbon.Ribbon.tabs();
     	}
     	
     	public static RibbonTab tab(this WPF_Ribbon wpfRibbon, string header)
     	{
-    		foreach(var tab in wpfRibbon.tabs())
+    		return wpfRibbon.Ribbon.tab(header);
+    	}
+    	
+    	public static List<RibbonTab> tabs(this Ribbon ribbon)
+    	{
+    		return ribbon.items<RibbonTab>();    		
+    	}
+    	
+    	public static RibbonGroup group(this WPF_Ribbon wpfRibbon, string tabHeader, string groupHeader)
+    	{
+    		var tab =  wpfRibbon.Ribbon.tab(tabHeader);    		
+    		return tab.group(groupHeader);
+    	}
+    	
+    	public static RibbonButton button(this WPF_Ribbon wpfRibbon, string tabHeader, string groupHeader, string buttonLabel)
+    	{
+    		var tab =  wpfRibbon.Ribbon.tab(tabHeader);    		
+    		var group =  tab.group(groupHeader);
+    		return group.button(buttonLabel);
+    	}
+    	
+    	public static RibbonTab tab(this Ribbon ribbon, string header)
+    	{
+    		foreach(var tab in ribbon.tabs())
     			if (tab.header()== header)
-    				return tab;
+    				return tab;    		
     		return null;
     	}
 		
@@ -56,7 +99,7 @@ namespace O2.XRules.Database.Utils
     	{
     		return (string)ribbonTab.wpfInvoke(
     			()=> { return ribbonTab.Header; });    		
-    	}
+    	}    	    	
     	    	
     	public static List<RibbonGroup> groups(this RibbonTab ribbonTab)
     	{
@@ -78,6 +121,22 @@ namespace O2.XRules.Database.Utils
     	}
     	
     	
+    	public static List<RibbonButton> buttons(this RibbonTab ribonTab)
+    	{
+    		var buttons = new List<RibbonButton>();
+    		foreach(var group in ribonTab.groups())
+    			buttons.AddRange(group.buttons());
+    		return buttons;
+    	}
+    	
+    	public static RibbonButton button(this RibbonTab ribonTab, string label)
+    	{
+    		foreach(var button in ribonTab.buttons())
+    			if (button.label().trim() == label)
+    				return button;
+    		return null;
+    	}
+    	
     	public static List<RibbonButton> buttons(this RibbonGroup ribonGroup)
     	{
     		return ribonGroup.items<RibbonButton>();    		
@@ -85,9 +144,10 @@ namespace O2.XRules.Database.Utils
     	
     	public static RibbonButton button(this RibbonGroup ribonGroup, string label)
     	{
-    		foreach(var button in ribonGroup.buttons())
-    			if (button.label()== label)
-    				return button;
+    		if (ribonGroup.notNull())
+    			foreach(var button in ribonGroup.buttons())
+    				if (button.label().trim() == label)
+    					return button;
     		return null;
     	}    	
     	
@@ -96,8 +156,41 @@ namespace O2.XRules.Database.Utils
     		return (string)ribbonButton.wpfInvoke(
     			()=> { return ribbonButton.Label; });    		
     	}
+    	
+    	/*public static RibbonTab menu(this WPF_Ribbon wpfRibbon, string name)
+    	{
+    		return wpfRibbon.Ribbon.tab(header);
+    	}*/    	    	    	
+    	
     }
-    
+    public static class WPF_Ribbon_ExtensionMethods_Mouse
+    {
+		public static RibbonTab click(this RibbonTab ribbonTab)
+    	{
+    		return ribbonTab.selected();
+    	}
+    	
+    	public static RibbonTab selected(this RibbonTab ribbonTab)
+    	{
+    		return (RibbonTab)ribbonTab.wpfInvoke(
+    			()=>{    					
+    					ribbonTab.IsSelected=true;
+    					return ribbonTab;
+    				});    		
+    	}		    	    	
+    	
+    	public static RibbonButton button_Click(this WPF_Ribbon wpfRibbon, string tabHeader, string groupHeader, string buttonLabel)
+    	{
+    		return wpfRibbon.Ribbon.button_Click(tabHeader, groupHeader, buttonLabel);
+    	}
+    	
+    	public static RibbonButton button_Click(this Ribbon Ribbon, string tabHeader, string groupHeader, string buttonLabel)
+    	{
+    		var tab =  Ribbon.tab(tabHeader);    		
+    		var group =  tab.group(groupHeader);
+    		return (RibbonButton)group.button(buttonLabel).click();
+    	}
+    }
     public static class WPF_Ribbon_ExtensionMethods_Add
     {
     	public static WPF_Ribbon add_Ribbon(this WinForms.Control control)
@@ -287,13 +380,24 @@ namespace O2.XRules.Database.Utils
 						if (imageFile.fileExists().isFalse())
 							imageFile = imageFile.local();
 						if(smallImage)
+						{
 							ribbonButton.SmallImageSource =  imageFile.image_Wpf().Source;
+							ribbonButton.Label = " " + ribbonButton.Label; // adds an extra space to the right of the image (since the default is too close)
+						}
 						else
 							ribbonButton.LargeImageSource =  imageFile.image_Wpf().Source;
 					}					
 					return frameworkElement;
 				});						
     	}
+    	
+    	public static RibbonGroup add_Script(this RibbonGroup ribbonGroup, string label, string script)
+    	{
+    		if (script.extension(".h2"))
+    			return ribbonGroup.add_RibbonButton_H2Script(label,script);
+    		else
+    			return ribbonGroup.add_RibbonButton_Script(label,script);
+    	}    
     	
 		public static RibbonGroup add_RibbonButton_H2Script(this RibbonGroup ribbonGroup, string label, string h2Script)
 		{

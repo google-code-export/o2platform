@@ -7,17 +7,17 @@ using System.Text;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.Interfaces.O2Core;
+using O2.XRules.Database.Utils;
 using O2.DotNetWrappers.ExtensionMethods;
-
 using JoeBlogs;
 using JoeBlogs.Structs;
 
 //O2File:O2MediaWikiApi.cs
-
 //O2Ref:WordPress_XmlRpc_JoeBlogs.dll
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 //O2Ref:System.Xml.Linq.dll
 //O2Ref:System.Xml.dll
+//O2File:ISecretData.cs
 
 namespace O2.XRules.Database.APIs
 {
@@ -43,12 +43,18 @@ namespace O2.XRules.Database.APIs
     public static class WordPressAPI_ExtensionMethods
     {
     
+    	public static WordPressAPI login(this WordPressAPI wpApi, ICredential credential)
+    	{
+    		return wpApi.login(credential.UserName,credential.Password);
+    	}
+    
     	public static WordPressAPI login(this WordPressAPI wpApi, string username, string password)
     	{
-            wpApi.wordPressWrapper = new WordPressWrapper(wpApi.WordPressXmlRpc, username, password);    		
+            wpApi.wordPressWrapper = new WordPressWrapper(wpApi.WordPressXmlRpc, username, password);    
     		wpApi.LoggedIn = wpApi.loggedIn();
     		return wpApi;
     	}  
+    	
     	//DC: need to find a better way to do this
     	public static bool loggedIn(this WordPressAPI wpApi)
     	{

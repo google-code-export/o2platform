@@ -274,7 +274,15 @@ namespace O2.XRules.Database.Utils
         {
         	return uiElement.allUIElements();
         }
-
+		
+		public static T control_Wpf<T>(this UIElement uiElement)
+			where T : UIElement
+		{
+			foreach(var control in uiElement.allUIElements())
+				if (control is T)
+					return (T)control;
+			return null;
+		}
 
 
         #endregion       
