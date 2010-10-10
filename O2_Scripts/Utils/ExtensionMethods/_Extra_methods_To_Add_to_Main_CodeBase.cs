@@ -22,6 +22,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.H2Scripts;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.AST;
@@ -30,6 +31,7 @@ using O2.External.SharpDevelop.Ascx;
 using O2.API.AST.CSharp;
 using O2.API.AST.ExtensionMethods;
 using O2.API.AST.ExtensionMethods.CSharp;
+
 using ICSharpCode.TextEditor;
 using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast; 
@@ -92,8 +94,36 @@ namespace O2.XRules.Database.Utils
 					});
 			return form;
 		}
-		// Controls DataGridView ExtensionMethods
-			
+		
+		// ascx_SourceCodeEditor ExtensionMethods
+		public static ascx_SourceCodeEditor editScript(this string scriptOrFile)
+		{
+			if (scriptOrFile.fileExists().isFalse())
+			{
+				if (scriptOrFile.local().valid())				
+					scriptOrFile= scriptOrFile.local();				
+				else
+				{					
+					var h2Script = new H2(scriptOrFile);
+					scriptOrFile = PublicDI.config.getTempFileInTempDirectory(".h2");
+					h2Script.save(scriptOrFile);
+				}
+			}			
+			return O2Gui.open<Panel>(scriptOrFile.fileName(),800,400)
+			     		.add_SourceCodeEditor()
+			     		.open(scriptOrFile);
+		}
+						
+		// Objects
+		
+		public static Form lastFormLoaded(this string dummyString)
+		{
+			return dummyString.lastWindowShown();
+		}
+		public static Form lastWindowShown(this string dummyString)
+		{
+			return dummyString.applicationWinForms().Last();
+		}
 	}	   
 }
     	

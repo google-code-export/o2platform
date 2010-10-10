@@ -25,7 +25,8 @@ namespace O2.XRules.Database.APIs
     	public string VersionWebDownload {get;set;} 
     	public string Install_File {get;set;}
     	public Uri Install_Uri {get;set;}
-    	public string Install_Dir {get;set;}     	    	    	
+    	public string Install_Dir {get;set;}     	    
+    	public string DownloadedInstallerFile {get; set;}
     	
     	public string  toolsDir = PublicDI.config.O2TempDir.pathCombine("..\\_ToolsOrAPIs").createDir();
     	public string  localDownloadsDir = PublicDI.config.O2TempDir.pathCombine("..\\_O2Downloads").createDir();
@@ -61,7 +62,7 @@ namespace O2.XRules.Database.APIs
     		return false;
     	}
     	
-    	//http://strawberry-perl.googlecode.com/files/strawberry-perl-5.12.1.0.msi
+    	
     	    	
     	public virtual bool installFromMsi_Local(string pathToMsi)
     	{    		
@@ -70,10 +71,24 @@ namespace O2.XRules.Database.APIs
 			return isInstalled();
     	}
     	
+    	//this will just download the installer (with the file in 
+    	public virtual string installerFile()
+    	{    		
+    		DownloadedInstallerFile = download(Install_File);
+    		if (DownloadedInstallerFile.fileExists())
+    			return DownloadedInstallerFile;    		
+    		"[Tool_API] could not download Install_File: {0}".error(DownloadedInstallerFile);
+    		return null;    		
+    	}
     	
     	public virtual bool installFromMsi_Web(string url)
     	{
     		VersionWebDownload = url;
+    		return installFromMsi_Web();
+    	}
+    	
+    	public virtual bool installFromExe_Web()
+    	{
     		return installFromMsi_Web();
     	}
     	
@@ -127,9 +142,9 @@ namespace O2.XRules.Database.APIs
     		"Installing: {0}".debug(ToolName);
     		if (isInstalled())    		
     			return true;
-    		var localFilePath = download(Install_File);
-			if (localFilePath.fileExists())   
-                	onDownload(localFilePath);                	    		
+    		DownloadedInstallerFile = download(Install_File);
+			if (DownloadedInstallerFile.fileExists())   
+                	onDownload(DownloadedInstallerFile);                	    		
     		if (isInstalled())
             {
             	"{0} installed ok".info(Version);

@@ -16,8 +16,10 @@ using White.Core.InputDevices;
 using White.Core.UIItems.Finders;
 using White.Core.UIItems.TabItems;
 using White.Core.UIItems.TreeItems;
+using White.Core.UIItems.MenuItems;
 using White.Core.UIItems.WindowItems;
 using White.Core.UIItems.ListBoxItems;
+using White.Core.UIItems.WindowStripControls;
 using White.Core.AutomationElementSearch;
 using System.Windows.Automation;
 
@@ -148,6 +150,13 @@ namespace O2.XRules.Database.APIs
 	    	}
 	    	return null;
     	}    	    	
+    	
+    	public static MenuBar menu(this UIItemContainer container)
+    	{
+    		if (container.notNull())
+    			return container.MenuBar;
+    		return null;
+    	}
     }	
     
     public static class API_GuiAutomation_ExtensionMethods_IUIItem
@@ -194,6 +203,7 @@ namespace O2.XRules.Database.APIs
     
     public static class API_GuiAutomation_ExtensionMethods_UIItem_Helpers
     {    	
+    	//Button
     	public static Button button(this UIItemContainer container, string text)    		
     	{
     		return container.get<Button>(text);
@@ -204,6 +214,46 @@ namespace O2.XRules.Database.APIs
     		return container.items<Button>();
     	}
     	
+    	public static List<Button> buttons(this List<Window> windows)    		
+    	{
+    		var buttons = new List<Button>();
+    		foreach(var window in windows)
+    			buttons.AddRange(window.buttons());
+    		return buttons;
+    	}
+    	
+    	//TextBox
+    	public static TextBox textBox(this UIItemContainer container, string text)    		
+    	{
+    		return container.get<TextBox>(text);
+    	}
+    	 
+    	public static List<TextBox> textBoxes(this UIItemContainer container)    		
+    	{
+    		return container.items<TextBox>();
+    	}
+    	
+    	public static string text(this TextBox textBox)
+    	{
+    		return textBox.get_Text();
+    	}
+    	
+    	public static string get_Text(this TextBox textBox)    		
+    	{
+    		return textBox.Text;
+    	}
+    	
+    	public static TextBox text(this TextBox textBox, string text)
+    	{
+    		return textBox.set_Text(text);
+    	}
+    	
+    	public static TextBox set_Text(this TextBox textBox, string text)
+    	{
+    		textBox.Text = text;
+    		return textBox;
+    	}
+    	//TabPages
     	public static List<ITabPage> tabPages(this UIItemContainer container)    		
     	{
     		if (container.isNull())
@@ -220,6 +270,7 @@ namespace O2.XRules.Database.APIs
     		return null;
     	}
     	
+    	//TreeView
     	public static Tree treeView(this UIItemContainer container)    		
     	{
     		if (container.notNull())
@@ -236,9 +287,84 @@ namespace O2.XRules.Database.APIs
     	public static List<TreeNode> treeNodes(this Tree tree)    		
     	{
     		return tree.Nodes;
+    	}    	    	
+    	
+    	//Menu
+    	public static MenuBar menuBar(this Window window, string name)
+    	{
+    		foreach(var menu in window.menuBars())
+    			if (menu.Name ==name)
+    				return menu;
+    		return null;
     	}
     	
+    	public static List<MenuBar> menuBars(this Window window)
+    	{
+    		return window.items<MenuBar>();    		
+    	}
+    	
+    	public static List<Menu> menus(this Window window)
+    	{
+    		return window.menu().menus();
+    	}
+    	
+    	public static List<Menu> menus(this MenuBar menuBar)
+    	{
+    		if (menuBar.notNull())
+	    		return menuBar.TopLevelMenu;
+	    	return null;
+    	}
+    	
+    	public static List<Menu> menus(this Menu menu)
+    	{
+    		return menu.ChildMenus;
+    	}
+    	
+    	public static List<string> names(this List<Menu> menus)
+    	{
+    		return (from menu in menus
+    				select menu.name()).toList();
+    	}
+    	
+    	public static Menu menu_Click(this Window window, string menuName, string menuItemName)
+    	{
+    		var menu = window.menu(menuName,menuItemName);
+    		menu.sleep(200);			 
+			return menu.click();
+    	}
+    	public static Menu menu(this Window window, string menuName, string menuItemName)
+    	{
+    		return window.menu(menuName).click().menu(menuItemName);
+    	}
+    	
+    	public static Menu menu_Click(this Window window, string menuName)
+    	{
+    		return window.menu(menuName).click();
+    	}
+    	
+    	public static Menu menu(this Window window, string name)
+    	{
+    		foreach(var menu in window.menus())
+    			if (menu.name()== name)
+    				return menu;
+    		return null;
+    	}
+    	
+    	public static Menu menu(this Menu menu, string name)
+    	{
+    		foreach(var childMenu in menu.menus())
+    			if (childMenu.name()== name)
+    				return childMenu;
+    		return null;
+    	}
+    	
+    	public static string name(this Menu menu)
+    	{
+    		return menu.Name;
+    	}
     }
+    
+    
     public static class API_GuiAutomation_ExtensionMethods_Mouse
     {
     	public static T click<T>(this T uiItem)
@@ -482,13 +608,56 @@ namespace O2.XRules.Database.APIs
     		window.move(left,top, right, bottom);
     		return window;
     	}
+    	
     	public static Window move(this Window window,int left, int top, int width, int height)
     	{
     		API_GuiAutomation_ExtensionMethods_Window_using_WindowHandle.moveWindow(null, window.handle(), left, top, width,height);
     		return window;
     	}
+    	
+    	public static Window alwaysOnTop(this Window window, bool value)
+		{
+			var windowHandle = window.handle();
+			window.restored();		// make sure the window is not minimized
+			
+			var HWND_TOPMOST = new HandleRef(null, new IntPtr(-1));
+			var HWND_NOTOPMOST = new HandleRef(null, new IntPtr(-2));
+			
+			
+			HandleRef hWndInsertAfter = value ? HWND_TOPMOST : HWND_NOTOPMOST;
+            API_GuiAutomation_NativeMethods.SetWindowPos(windowHandle, hWndInsertAfter, 0, 0, 0, 0, 3);
+           	return window;
+		}
+		
+		public static Window syncWithControl(this Window window, System.Windows.Forms.Control control)
+		{
+			if (window.isNull())
+			{
+				"[API_GuiAutomation] in syncWithControl, provided window value was null".error();
+				return null;
+			}
+			Action moveToControl = 
+				()=>{
+						window.alwaysOnTop(true); 
+						var xPos =  control.PointToScreen(System.Drawing.Point.Empty).X;
+						var yPos =  control.PointToScreen(System.Drawing.Point.Empty).Y;
+						var width = control.width();
+						var height = control.height();
+						window.move(xPos, yPos, width, height);  
+					};	
+						
+			control.parentForm().Move += 
+				(sender,e)=> moveToControl();
+			 
+			control.Resize +=  
+				(sender,e)=> moveToControl();
+			moveToControl();	
+			return window;
+		}
     }
     
+    
+    // Legacy (refactor to use methods above
     public static class API_GuiAutomation_ExtensionMethods_Window_using_WindowHandle
     {
     	public static API_GuiAutomation window_Normal(this API_GuiAutomation guiAutomation, int windowHandle)
@@ -542,6 +711,14 @@ namespace O2.XRules.Database.APIs
     
     public static class API_GuiAutomation_ExtensionMethods_Find
     {
+/*    	public static AutomationElement.AutomationElementInformation findElement_Dialog(this API_GuiAutomation guiAutomation)
+    	{
+    		var processID = guiAutomation.TargetProcess.Id;
+    		var finder = new AutomationElementFinder(AutomationElement.RootElement);
+			var automationElementInformation =  finder.FindWindow(SearchCriteria.ByControlType(ControlType.Window),processID).Current;
+			return automationElementInformation;
+		}*/
+		
     	public static AutomationElement.AutomationElementInformation findElement_Image(this API_GuiAutomation guiAutomation)
     	{
     		var processID = guiAutomation.TargetProcess.Id;

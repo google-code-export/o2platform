@@ -55,6 +55,7 @@ apiScriptDevelopment.add_RibbonGroup("Custom O2")
 								topPanel.parentForm().close();
 								currentScript.executeH2Script();
 							})
+					.add_Script("SecretData Editor", "SecretDataEditor.cs.o2")
 					.add_RibbonButton_H2Script("Check for ClickOnce Updates","AutoUpdate - Using Reflection.h2")	  					
 					.add_RibbonButton_H2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")
 					.add_RibbonButton("Exit O2 (and close all windows)", () =&gt; PublicDI.config.closeO2Process());
@@ -70,7 +71,7 @@ miscTools.add_RibbonGroup("Other Guis")
 miscTools.add_RibbonGroup("Media Tools")
 		 .add_RibbonButton_H2Script("screenshot tool","Util - Show ScreenShot Tool.h2")
 		 .add_RibbonButton_H2Script("Image Editor", "Util - DiagramDesigner Editor.h2")	  	  
-		 .add_RibbonButton_H2Script("Movie Creator","Util - Movie Creator.h2");
+		 .add_RibbonButton_H2Script("Movie Creator","Util - Movie Creator (Simple).h2");
 
 miscTools.add_RibbonGroup("Other Tools")
 	     .add_RibbonButton_H2Script("Amazon S3 Browser","Amazon S3 Browser.h2")
