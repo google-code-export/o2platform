@@ -25,7 +25,9 @@ namespace O2.XRules.Database.APIs
     {    
     	public string WordPressServer {get; set;}
         public string WordPressXmlRpc { get; set; } 
-    	public WordPressWrapper wordPressWrapper { get; set; }
+    	public WordPressWrapper WordPress { get; set; }
+    	public MetaWeblogWrapper MetaWeblog { get; set; }
+    	
     	public bool LoggedIn { get; set; }    	    
 
     	public WordPressAPI(string wordPressServer)
@@ -50,7 +52,8 @@ namespace O2.XRules.Database.APIs
     
     	public static WordPressAPI login(this WordPressAPI wpApi, string username, string password)
     	{
-            wpApi.wordPressWrapper = new WordPressWrapper(wpApi.WordPressXmlRpc, username, password);    
+            wpApi.WordPress = new WordPressWrapper(wpApi.WordPressXmlRpc, username, password);    
+            wpApi.MetaWeblog = new MetaWeblogWrapper(wpApi.WordPressXmlRpc, username, password);    
     		wpApi.LoggedIn = wpApi.loggedIn();
     		return wpApi;
     	}  
@@ -60,7 +63,7 @@ namespace O2.XRules.Database.APIs
     	{
     		try
     		{
-    			wpApi.wordPressWrapper.GetUserInfo();
+    			wpApi.WordPress.GetUserInfo();
     			return true;
     		}
     		catch
@@ -76,13 +79,13 @@ namespace O2.XRules.Database.APIs
 			post.dateCreated = DateTime.Now;
 			post.title = title;
 			post.description = body;
-			return wpApi.wordPressWrapper.NewPost(post, true);
+			return wpApi.WordPress.NewPost(post, true);
 
 		}
 		
 		public static List<Page> pages(this WordPressAPI wpApi)
 		{
-			return wpApi.wordPressWrapper.GetPages().toList();
+			return wpApi.WordPress.GetPages().toList();
 		}
 		
 	}
