@@ -1,0 +1,134 @@
+﻿<!--
+<copyright file="TaskDialog.xaml" company="Cédric Belin">
+	Copyright (c) 2007-2009, Cédric Belin &lt;contact@cedric-belin.fr&gt;
+	GNU Lesser General Public License (LGPLv3) - http://www.gnu.org/licenses/lgpl-3.0.txt
+</copyright>
+<summary>
+	Code XAML de la classe <c>MiniFramework.Windows.TaskDialog</c>.
+</summary>
+<author>$Author: cedx $</author>
+<date>$Date: 2009-10-07 14:07:17 +0200 (mer. 07 oct. 2009) $</date>
+<version>$Revision: 2044 $</version>
+-->
+
+<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:ctrls="clr-namespace:MiniFramework.Windows.Controls"
+	xmlns:data="clr-namespace:MiniFramework.Windows.Data"
+	xmlns:props="clr-namespace:MiniFramework.Windows.Properties"
+		  
+	x:Class="MiniFramework.Windows.TaskDialog"
+	Name="Dialog"
+	Loaded="OnWindowLoaded"
+	MaxWidth="500" MinWidth="200"
+	ResizeMode="NoResize"
+	SizeToContent="WidthAndHeight"
+	ShowInTaskbar="False"
+	SnapsToDevicePixels="True"
+	WindowStartupLocation="CenterScreen">
+	
+	<Window.CommandBindings>
+		<CommandBinding Command="Close" Executed="OnCloseExecuted" />
+	</Window.CommandBindings>
+	
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Resources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+			<data:ObjectToVisibilityConverter x:Key="ObjectToVisibilityConverter" />
+
+			<Style BasedOn="{StaticResource DialogFooterBorderStyle}" TargetType="Border">
+				<Setter Property="Padding" Value="0" />
+			</Style>
+
+			<Style TargetType="{x:Type ctrls:PushButton}">
+				<Setter Property="Margin" Value="8,0,0,0" />
+			</Style>
+
+			<Style TargetType="Expander">
+				<Setter Property="Header" Value="{x:Static props:Resources.ShowDetails}" />
+				<Style.Triggers>
+					<Trigger Property="IsExpanded" Value="True">
+						<Setter Property="Header" Value="{x:Static props:Resources.HideDetails}" />
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+	
+	<DockPanel>
+		<Border DockPanel.Dock="Bottom"
+			Visibility="{Binding FooterText, Converter={StaticResource ObjectToVisibilityConverter}, ElementName=Dialog}">
+			
+			<Border
+				BorderBrush="{DynamicResource {x:Static SystemColors.ControlLightLightBrushKey}}"
+				Padding="12,10">
+				
+				<StackPanel Orientation="Horizontal">
+					<Image
+						Margin="0,0,6,0"
+						Source="{Binding FooterImage, ElementName=Dialog}"
+						Style="{StaticResource SmallIconStyle}"
+						Visibility="{Binding FooterImage, Converter={StaticResource ObjectToVisibilityConverter}, ElementName=Dialog}" />
+					
+					<TextBlock Text="{Binding FooterText, ElementName=Dialog}" />
+				</StackPanel>
+			</Border>
+		</Border>
+
+		<Border DockPanel.Dock="Bottom"
+			Padding="10,10,12,10"
+			Style="{StaticResource DialogFooterBorderStyle}">
+			
+			<DockPanel Name="ButtonsPanel">
+				<Expander DockPanel.Dock="Left"
+					Name="Expander"
+					Margin="0,0,8,0"
+					Visibility="{Binding DetailsText, Converter={StaticResource ObjectToVisibilityConverter}, ElementName=Dialog}" />
+			</DockPanel>
+		</Border>
+		
+		<Grid Margin="10,12,12,16">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+				<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+			
+			<Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
+				Margin="0,0,8,0"
+				Source="{Binding Image, ElementName=Dialog}"
+				Style="{StaticResource LargeIconStyle}"
+				VerticalAlignment="Top"
+				Visibility="{Binding Image, Converter={StaticResource ObjectToVisibilityConverter}, ElementName=Dialog}" />
+			
+			<TextBlock Grid.Column="1" Grid.Row="0"
+				Name="InstructionTextBlock"
+				Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+				Margin="0,0,0,8"
+				Text="{Binding InstructionText, ElementName=Dialog}"
+				Visibility="{Binding InstructionText, Converter={StaticResource ObjectToVisibilityConverter}, ElementName=Dialog}" />
+
+			<TextBlock Grid.Column="1" Grid.Row="1"
+				Margin="1,0"
+				Text="{Binding Text, ElementName=Dialog}"
+				TextWrapping="Wrap"
+				VerticalAlignment="Center" />
+
+			<TextBlock Grid.Column="1" Grid.Row="2"
+				Margin="1,8,1,0"
+				Text="{Binding DetailsText, ElementName=Dialog}"
+				TextWrapping="Wrap"
+				Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=Expander}" />
+		</Grid>
+	</DockPanel>
+</Window>

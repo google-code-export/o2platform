@@ -1,0 +1,96 @@
+﻿<!--
+<copyright file="TipDialog.xaml" company="Cédric Belin">
+	Copyright (c) 2007-2009, Cédric Belin &lt;contact@cedric-belin.fr&gt;
+	GNU Lesser General Public License (LGPLv3) - http://www.gnu.org/licenses/lgpl-3.0.txt
+</copyright>
+<summary>
+	Code XAML de la classe <c>MiniFramework.Windows.TipDialog</c>.
+</summary>
+<author>$Author: cedx $</author>
+<date>$Date: 2009-10-07 14:07:17 +0200 (mer. 07 oct. 2009) $</date>
+<version>$Revision: 2044 $</version>
+-->
+
+<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:ctrls="clr-namespace:MiniFramework.Windows.Controls"
+	xmlns:props="clr-namespace:MiniFramework.Windows.Properties"
+	xmlns:res="clr-namespace:MiniFramework.Resources;assembly=MiniFramework.Resources"
+
+	x:Class="MiniFramework.Windows.TipDialog"
+	Name="Dialog"
+	Height="200" Width="420"
+	ResizeMode="NoResize"
+	ShowInTaskbar="False"
+	Title="{x:Static props:Resources.TipDialogTitle}"
+	WindowStartupLocation="CenterOwner">
+	
+	<Window.CommandBindings>
+		<CommandBinding Command="ApplicationCommands.Close" Executed="OnCloseExecuted" />
+		<CommandBinding Command="NavigationCommands.BrowseForward" CanExecute="OnNextTipCanExecute" Executed="OnNextTipExecuted" />
+	</Window.CommandBindings>
+	
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="Resources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			
+			<Style TargetType="{x:Type ctrls:PushButton}">
+				<Setter Property="Margin" Value="8,0,0,0" />
+			</Style>
+		</ResourceDictionary>
+	</Window.Resources>
+
+	<DockPanel>
+		<Border DockPanel.Dock="Bottom" Style="{StaticResource DialogFooterBorderStyle}">
+			<DockPanel>
+				<ctrls:PushButton DockPanel.Dock="Right"
+					Command="ApplicationCommands.Close"
+					Icon="{Binding SmallBitmapImage, Source={x:Static res:StockIcons.Close}}"
+					IsCancel="True" IsDefault="True"
+					Text="{Binding Text, Source={x:Static ApplicationCommands.Close}}" />
+
+				<ctrls:PushButton DockPanel.Dock="Right"
+					Command="NavigationCommands.BrowseForward"
+					Icon="{Binding SmallBitmapImage, Source={x:Static res:StockIcons.Next}}"
+					Text="{x:Static props:Resources.NextTipButton}" />
+				
+				<CheckBox
+					Content="{x:Static props:Resources.ShowTipsCheckBox}"
+					IsChecked="{Binding ShowOnStartup, ElementName=Dialog}"
+					VerticalAlignment="Center" />
+			</DockPanel>
+		</Border>
+		
+		<Grid Margin="12">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition />
+			</Grid.ColumnDefinitions>
+			
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition />
+			</Grid.RowDefinitions>
+			
+			<Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+				Margin="0,0,5,0"
+				Source="{Binding LargeBitmapImage, Source={x:Static res:StockIcons.Tip}}"
+				Style="{StaticResource LargeIconStyle}"
+				VerticalAlignment="Top" />
+
+			<TextBlock Grid.Column="1" Grid.Row="0"
+				Name="InstructionTextBlock"
+				Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"
+				Padding="3,0,5,10"
+				Text="{x:Static props:Resources.TipDialogHeader}" />
+			
+			<TextBox Grid.Column="1" Grid.Row="1"
+				Name="TipTextBox"
+				BorderThickness="0"
+				Style="{StaticResource ReadOnlyTextBoxStyle}" />
+		</Grid>
+	</DockPanel>
+</Window>

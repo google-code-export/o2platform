@@ -1,0 +1,66 @@
+﻿<!--
+<copyright file="NumericUpDown.xaml" company="Cédric Belin">
+	Copyright (c) 2007-2009, Cédric Belin &lt;contact@cedric-belin.fr&gt;
+	GNU Lesser General Public License (LGPLv3) - http://www.gnu.org/licenses/lgpl-3.0.txt
+</copyright>
+<summary>
+	Code XAML de la classe <c>MiniFramework.Windows.Controls.NumericUpDown</c>.
+</summary>
+<author>$Author: cedx $</author>
+<date>$Date: 2009-10-06 10:05:49 +0200 (mar. 06 oct. 2009) $</date>
+<version>$Revision: 2041 $</version>
+-->
+
+<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	
+	x:Class="MiniFramework.Windows.Controls.NumericUpDown"
+	Name="Control"
+	MinWidth="30">
+	
+	<UserControl.CommandBindings>
+		<CommandBinding Command="ComponentCommands.MoveDown" CanExecute="OnMoveDownCanExecute" Executed="OnMoveDownExecuted" />
+		<CommandBinding Command="ComponentCommands.MoveUp" CanExecute="OnMoveUpCanExecute" Executed="OnMoveUpExecuted" />
+	</UserControl.CommandBindings>
+	
+	<UserControl.InputBindings>
+		<KeyBinding Command="ComponentCommands.MoveDown" Gesture="Down" />
+		<KeyBinding Command="ComponentCommands.MoveUp" Gesture="Up" />
+	</UserControl.InputBindings>
+
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../Resources.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+
+			<Style BasedOn="{StaticResource SmallIconStyle}" TargetType="Image">
+				<Setter Property="Height" Value="3" />
+				<Setter Property="Width" Value="5" />
+			</Style>
+
+			<Style TargetType="RepeatButton">
+				<Setter Property="Width" Value="18" />
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<DockPanel>
+		<UniformGrid DockPanel.Dock="{Binding UpDownAlign, ElementName=Control}" Rows="2">
+			<RepeatButton Command="ComponentCommands.MoveUp">
+				<Image Source="{StaticResource UpIcon}" />
+			</RepeatButton>
+
+			<RepeatButton Command="ComponentCommands.MoveDown">
+				<Image Source="{StaticResource DownIcon}" />
+			</RepeatButton>
+		</UniformGrid>
+		
+		<TextBox
+			Name="ValueString"
+			HorizontalContentAlignment="{Binding TextAlign, ElementName=Control}"
+			MaxLines="1"
+			Text="{Binding Value, ElementName=Control}" />
+	</DockPanel>
+</UserControl>
