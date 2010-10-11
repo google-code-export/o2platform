@@ -61,6 +61,27 @@ namespace MiniFramework.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apache License
+        ///Version 2.0, January 2004
+        ///http://www.apache.org/licenses/
+        ///
+        ///TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+        ///
+        ///1. Definitions.
+        ///
+        ///&quot;License&quot; shall mean the terms and conditions for use, reproduction, and distribution as defined by Sections 1 through 9 of this document.
+        ///
+        ///&quot;Licensor&quot; shall mean the copyright owner or entity authorized by the copyright owner that is granting the License.
+        ///
+        ///&quot;Legal Entity&quot; shall mean the union of the acting entity and all other entities that contr [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Apache_2_0 {
+            get {
+                return ResourceManager.GetString("Apache_2_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Domain name can&apos;t be empty.
         /// </summary>
         public static string EmptyDomainName {
