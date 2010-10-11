@@ -1,0 +1,894 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4218AE93-0565-4193-AD90-4DFE883A1E04}</ProjectGuid>
+    <OutputType>library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MiniFramework.Resources</RootNamespace>
+    <AssemblyName>MiniFramework.Resources</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Binaries\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\Binaries\Debug\MiniFramework.Resources.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\Binaries\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CountryFlags.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StockIcons.cs" />
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MiniFramework.Core\MiniFramework.Core.csproj">
+      <Project>{E913462E-FC81-411B-A561-DF8510EE4F3F}</Project>
+      <Name>MiniFramework.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CountryFlags.resx">
+      <DependentUpon>CountryFlags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StockIcons.resx">
+      <DependentUpon>StockIcons.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Key.snk" />
+    <None Include="StockIcons\Accept.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\About.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Close.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Undo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Cancel.ico" />
+    <None Include="StockIcons\Delete.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Apply.ico" />
+    <None Include="StockIcons\Build.ico" />
+    <None Include="StockIcons\Clear.ico" />
+    <None Include="StockIcons\Copy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Cut.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Error.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Exit.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Find.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Help.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Information.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\New.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Open.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Paste.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Preview.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Print.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Properties.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Question.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Redo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Restart.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Save.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\SaveAll.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\SaveAs.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\SelectAll.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Settings.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Shield.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Stop.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Warning.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Bug.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Credits.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Database.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Flag.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Internet.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Support.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Tip.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Success.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Next.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Previous.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="StockIcons\Run.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ad.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ae.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\af.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ag.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ai.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\al.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\am.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\an.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ao.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\aq.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ar.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\as.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\at.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\au.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\aw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\az.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ba.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bb.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bd.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\be.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bf.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bi.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bj.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\br.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bs.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bt.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\by.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\bz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ca.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cd.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cf.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ch.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ci.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ck.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cl.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\co.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cu.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cv.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\cz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\de.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\dj.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\dk.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\dm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\do.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\dz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ec.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ee.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\eg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\eh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\er.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\es.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\et.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\eu.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\fi.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\fj.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\fm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\fo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\fr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ga.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gb.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gd.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ge.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gi.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gl.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gq.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gt.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gu.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\gy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\hk.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\hn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\hr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ht.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\hu.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\id.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ie.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\il.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\im.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\in.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\iq.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ir.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\is.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\it.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\je.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\jm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\jo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\jp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ke.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\kg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\kh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ki.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\km.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\kn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\kp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\kr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\kw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ky.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\kz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\la.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\lb.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\lc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\li.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\lk.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\lr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ls.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\lt.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\lu.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\lv.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ly.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ma.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\md.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\me.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mh.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mk.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ml.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mq.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ms.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mt.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mu.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mv.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mx.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\my.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\mz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\na.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\nc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ne.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ng.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ni.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\nl.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\no.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\np.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\nr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\nz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\om.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pa.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pe.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pf.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ph.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pk.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pl.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ps.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pt.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\pw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\py.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\qa.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\re.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ro.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\rs.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ru.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\rw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sa.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sb.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sd.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\se.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\si.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sk.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sl.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\so.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\st.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sv.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\sz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\td.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\th.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tj.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tl.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\to.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tr.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tt.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tv.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tw.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\tz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ua.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ug.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\us.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\uy.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\uz.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\va.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\vc.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ve.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\vg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\vi.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\vn.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\vu.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ws.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\ye.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\za.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\zm.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CountryFlags\zw.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
