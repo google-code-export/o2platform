@@ -404,9 +404,11 @@ namespace O2.XRules.Database.APIs
     	public static T mouse_MoveTo<T>(this T uiItem)
     		where T : IUIItem
     	{
-    		//Mouse.Instance.Location = uiItem.Bounds.Center();
-    		var location = uiItem.Bounds.Center();
-    		Mouse.Instance.mouse_MoveTo(location.X, location.Y,true);
+    		if (uiItem.notNull())
+    		{    			
+    			var location = uiItem.Bounds.Center();
+    			Mouse.Instance.mouse_MoveTo(location.X, location.Y,true);
+    		}
     		return uiItem;    		
     	}
 

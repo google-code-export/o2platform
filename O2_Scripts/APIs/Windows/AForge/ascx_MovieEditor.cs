@@ -13,6 +13,7 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Windows;
 using O2.XRules.Database.Utils;
 using O2.XRules.Database.APIs;
 using O2.Views.ASCX.classes.MainGUI;
@@ -30,22 +31,30 @@ namespace O2.XRules.Database.APIs
     {        	
 		public int IMAGE_WIDTH = 410; 
 		public int IMAGE_HEIGHT = 300;
+		public bool OnImageDeleteAlsoDeleteFromDisk {get;set;}
+		public bool ViewMultipleSelectedImages {get;set;}
 		public API_AForge_Video AForge_Video { get; set; }
+		public string TempVideoImages { get;set;}
 		
+		public string ListOfImagesToDelete {get;set;}		
 		public WPF.ListView FramesList { get; set;}				
 		public Control FrameViewer_Panel { get; set; }
 		public WPF.ListView MultiImageViewer { get; set; }
 		public Panel PreviewPanel { get; set; }
+		
         
         public ascx_MovieEditor()
     	{    	    		
 			FrameViewer_Panel = this;				
 			AForge_Video = new API_AForge_Video(); 
+			OnImageDeleteAlsoDeleteFromDisk = false;
+			ViewMultipleSelectedImages = true;
     	}
     	
     	public ascx_MovieEditor buildGui()
     	{
     		buildFrameViewer();
+    		this.newMovie();
     		return this;
     	}
     	
@@ -56,9 +65,31 @@ namespace O2.XRules.Database.APIs
 			PreviewPanel.backColor(Color.White);
 			
     		var wpfHost = FrameViewer_Panel.add_WpfHost(); 
-			FramesList  = wpfHost.add_ListView_Wpf();  
-				
-			FramesList.onDeleteKey_Remove_SelectedItems();  
+			FramesList  = wpfHost.add_ListView_Wpf();   
+			
+			FramesList.onKeyPress_Wpf(System.Windows.Input.Key.Delete, 
+				()=>{
+						if (OnImageDeleteAlsoDeleteFromDisk)
+						{					
+							/*var pictureBox = PreviewPanel.control<PictureBox>();
+							if (pictureBox.notNull())
+							{
+								pictureBox.Image=null;
+								pictureBox.clear();
+								Application.DoEvents();
+							}*/
+							GC.Collect();		// because the Framework doesn't always releases immediately the file's handles
+							foreach(var item in FramesList.selectedValues())
+							{
+								var fileToDelete = item.str();
+								Files.deleteFile(fileToDelete);
+								if (fileToDelete.fileExists())
+									addFileToListOfImagesToDelete(fileToDelete);
+							}										
+						}
+						FramesList.remove_SelectedItems();
+					});
+			
 			FramesList.enableDrag(); 
 			FramesList.enableDrop();	 
 							 
@@ -70,6 +101,7 @@ namespace O2.XRules.Database.APIs
 							 	 	var pictureBox = PreviewPanel.control<PictureBox>();
 									if (pictureBox.isNull())
 										pictureBox = PreviewPanel.clear().add_PictureBox(); 
+									pictureBox.Image=null;
 									pictureBox.show(imagePaths[0]);
 							 	 }
 							 	 else
@@ -81,9 +113,12 @@ namespace O2.XRules.Database.APIs
 										MultiImageViewer.useWrapPanel();
 									}
 									else
+									{										
 										MultiImageViewer.clear();
-									foreach(var imagePath in imagePaths)
-										MultiImageViewer.add_Image_Wpf(imagePath, IMAGE_WIDTH, IMAGE_HEIGHT);    									
+									}
+									if (ViewMultipleSelectedImages)
+										foreach(var imagePath in imagePaths)
+											MultiImageViewer.add_Image_Wpf(imagePath, IMAGE_WIDTH, IMAGE_HEIGHT);    									
 							 	 }
 							 	 
 							 	 
@@ -92,10 +127,31 @@ namespace O2.XRules.Database.APIs
     		return this;
     	}
     	
+    	
     	public ascx_MovieEditor newMovie()
-    	{	
+    	{	    		
+    		TempVideoImages = "_TempVideoImages".tempDir();
+    		"[ascx_MovieEditor] TempVideoImages set to: {0}".info(TempVideoImages);
+    		
     		FramesList.clear();
     		PreviewPanel.clear();
+    		return this;
+    	}
+    	
+    	public ascx_MovieEditor setListOfImagesToDelete()
+    	{
+    		ListOfImagesToDelete = TempVideoImages.pathCombine("ListOfImagesToDelete.xml");
+    		return this;
+    	}
+    	
+    	public ascx_MovieEditor setMoviePath(string path)
+    	{
+    		if (path.valid() && path.dirExists())
+    		{
+    			TempVideoImages = path;
+    			setListOfImagesToDelete();
+    			loadImages(path);
+    		}
     		return this;
     	}
     	
@@ -117,6 +173,35 @@ namespace O2.XRules.Database.APIs
 			FramesList.selectFirst();	
 			return this;
 		}
+		
+		public List<string> getListOfImagesToDelete()
+		{
+			return ListOfImagesToDelete.fileExists()
+							? ListOfImagesToDelete.load<List<string>>()
+							: new List<string>();		
+		}
+		
+		public List<string> addFileToListOfImagesToDelete(string file)
+		{
+			var list = getListOfImagesToDelete();
+			list.Add(file);
+			list.saveAs(ListOfImagesToDelete);
+			return list;
+		}
+		
+		public void deleteListOfImagesToDelete()
+		{
+			GC.Collect();
+			var stillThere = new List<string>();
+			foreach(var file in getListOfImagesToDelete())
+			{
+				"Deleting: {0}".info(file);
+				Files.deleteFile(file);
+				if (file.fileExists())
+					stillThere.add(file);
+			}
+			stillThere.saveAs(ListOfImagesToDelete);
+		}
     }
     
     public static class ascx_MovieEditor_ExtensionMethods
@@ -136,10 +221,11 @@ namespace O2.XRules.Database.APIs
     		return movieEditor;
     	}
     	public static string add_Bitmap(this ascx_MovieEditor movieEditor, Bitmap bitmap)
-    	{
+    	{    		
     		var tempFile = bitmap.save();
-    		movieEditor.FramesList.add_Item(tempFile);
-    		return tempFile;
+    		var savedBitmap = Files.MoveFile(tempFile, movieEditor.TempVideoImages);
+    		movieEditor.FramesList.add_Item(savedBitmap);
+    		return savedBitmap;
     	}
     }
     
@@ -194,6 +280,7 @@ namespace O2.XRules.Database.APIs
 				{					
 					capturedImages.Add(bitmap);					
 					capturedFramesCount(capturedImages.size());
+					aforgeVideo.sleep(10,false);     // small sleep to prevent a rare race-condition where a number of images are added in big numbers
 				}
 				else
 					aforgeVideo.frameCaptureDelay();  // only sleep if we didn't add 

@@ -183,12 +183,15 @@ namespace O2.XRules.Database.APIs
 	
 		public static string encryptFile(this API_OpenPgp openPgp, string fileToEncrypt)
 		{
+			var publicKey = openPgp.PublicKey;
+			if (publicKey.fileExists().isFalse())
+				publicKey = PublicDI.CurrentScript.directoryName().pathCombine(publicKey);
 			if (fileToEncrypt.fileExists().isFalse())
 			{
 				"in API_OpenPgp signFile, the provided file to encrypt doesn't exist: {0}".error(fileToEncrypt);
 				return "";
 			}
-			var keyIn = File.OpenRead(openPgp.PublicKey);
+			var keyIn = File.OpenRead(publicKey);
 			var pathToEncryptedFile = fileToEncrypt + ".asc";
             var fos = File.Create(pathToEncryptedFile);
 			EncryptFile(fos, fileToEncrypt, OpenPgp_HelperMethods.ReadPublicKey(keyIn), true, true);			
@@ -261,18 +264,25 @@ namespace O2.XRules.Database.APIs
 	
 		public static string decryptFile(this API_OpenPgp openPgp, string fileToDecrypt)
 		{
+			var privateKey = openPgp.PrivateKey;
+			if (privateKey.fileExists().isFalse())
+				privateKey = PublicDI.CurrentScript.directoryName().pathCombine(privateKey);
+			var passPhrase = openPgp.PassPhrase;
+			if (passPhrase.valid().isFalse())
+				passPhrase = "What is the passphase to unlock the Private Key?".askUser();
+				
 			if (fileToDecrypt.fileExists().isFalse())
 			{
 				"in API_OpenPgp signFile, the provided file to decrypt doesn't exist: {0}".error(fileToDecrypt);
 				return "";
 			}
-			var keyIn = File.OpenRead(openPgp.PrivateKey);			
+			var keyIn = File.OpenRead(privateKey);			
 			var fin = File.OpenRead(fileToDecrypt);		
 			var originalExtension = Path.GetFileNameWithoutExtension(fileToDecrypt).extension();
 			if (originalExtension.valid().isFalse())
 				originalExtension = ".out";
 			var pathToDecryptedFile = fileToDecrypt + originalExtension; // new FileInfo(args[1]).Name + ".out"
-			DecryptFile(fin, keyIn, openPgp.PassPhrase.ToCharArray(), pathToDecryptedFile);
+			DecryptFile(fin, keyIn, passPhrase.ToCharArray(), pathToDecryptedFile);
 			fin.Close();
 			keyIn.Close();
 			//var pathToEncryptedFile = fileToEncrypt + ".asc";
