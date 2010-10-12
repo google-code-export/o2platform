@@ -53,6 +53,19 @@ namespace O2.XRules.Database.Utils
 			return wpfRibbon;
     	}
     	
+    	public static WPF_Ribbon title(this WPF_Ribbon wpfRibbon, string title)
+    	{
+    		wpfRibbon.invokeOnThread(()=> 
+			{
+				var label = new System.Windows.Controls.Label();
+				label.Content =title;
+				label.FontSize = 10;  
+				label.Padding = new System.Windows.Thickness(0,0,0,0);
+				wpfRibbon.Ribbon.Title = label; 
+			});
+			return wpfRibbon;
+    	}
+    	
     	public static List<RibbonTab> tabs(this WPF_Ribbon wpfRibbon)
     	{
     		return wpfRibbon.Ribbon.tabs();
@@ -197,6 +210,7 @@ namespace O2.XRules.Database.Utils
     	{
     		return control.add_Ribbon(false);
     	}
+    	
     	public static WPF_Ribbon add_Ribbon(this WinForms.Control control, bool addAbove)
     	{
     		if (addAbove)
@@ -296,8 +310,8 @@ namespace O2.XRules.Database.Utils
 					    						})
 					    			);
 				    						
-    	}    			 			
-    	
+    	}   
+    	    	    
     }
     
     public static class Ribbon_ExtensionMethods
@@ -485,6 +499,24 @@ namespace O2.XRules.Database.Utils
 						winFormsControl.add_Control<WinForms.WebBrowser>().open(url);;						
 					});
 		}
+		
+		//Checkbox
+		public static T add_RibbonCheckBox<T>(this T frameworkElement, string label, Action<bool> onClick)
+			where T : FrameworkElement
+		{
+			return frameworkElement.add_RibbonCheckBox(label, false, onClick);
+		}
+		
+		public static T add_RibbonCheckBox<T>(this T frameworkElement, string label, bool value, Action<bool> onClick)		
+			where T : FrameworkElement
+    	{
+			var checkBox = frameworkElement.add_Control_Wpf<RibbonCheckBox>(); 
+			checkBox.prop("Label", label);	
+			checkBox.prop("IsChecked",value);
+			checkBox.Checked+=(sender,e)=>onClick(true);
+			checkBox.Unchecked+=(sender,e)=>onClick(false);
+			return frameworkElement;
+    	}
 		
 		// TextBox
 		public static RibbonTextBox add_RibbonTextBox<T>(this T frameworkElement, string label,  string text, int width)

@@ -1410,7 +1410,7 @@ textBox1.prop("",true);
             return listView.selectIndex(0);
 
         }
-
+		
 		public static ListView onDeleteKey_Remove_SelectedItems(this ListView listView)
 		{
 			listView.onKeyPress_Wpf(Key.Delete, ()=> listView.remove_SelectedItems());
