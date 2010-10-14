@@ -24,7 +24,9 @@ using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.H2Scripts;
 using O2.Views.ASCX;
+using O2.Views.ASCX.CoreControls;
 using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
@@ -95,6 +97,89 @@ namespace O2.XRules.Database.Utils
 			return form;
 		}
 		
+		public static TextBox add_TextBox(this Control control, string labelText, string defaultTextBoxText)
+		{
+			return control.add_Label(labelText).top(3)
+						  .append_TextBox(defaultTextBoxText)
+						  .align_Right(control);;
+		}
+		
+		public static TextBox add_TextBox(this Control control, int top, string labelText, string defaultTextBoxText)
+		{
+			return control.add_Label(labelText).top(top+3)
+						  .append_TextBox(defaultTextBoxText)
+						  .align_Right(control);;
+		}
+		
+		public static CheckBox add_CheckBox(this Control control, int top, string checkBoxText)
+		{
+			return control.add_CheckBox(top, 0, checkBoxText);
+		}
+		
+		public static CheckBox add_CheckBox(this Control control, int top,int left, string checkBoxText)
+		{			
+			return control.add_CheckBox(checkBoxText, top, left,(value)=> {})
+						  .autoSize();
+		}
+		
+		public static Button add_Button(this Control control, int top, string buttonText)
+		{
+			return control.add_Button(top, 0, buttonText);
+		}
+		
+		public static Button add_Button(this Control control, int top,int left, string buttonText)
+		{
+			return control.add_Button(buttonText, top, left);
+		}
+		
+		
+		//PropertyGrid
+		
+		public static PropertyGrid toolBarVisible(this PropertyGrid propertyGrid, bool value)
+		{
+			propertyGrid.invokeOnThread(()=>propertyGrid.ToolbarVisible = value);
+		
+			return propertyGrid;
+		}
+		
+		public static PropertyGrid helpVisible(this PropertyGrid propertyGrid, bool value)
+		{
+			propertyGrid.invokeOnThread(()=>propertyGrid.HelpVisible = value);		
+			return propertyGrid;
+		}
+		
+		public static PropertyGrid sort_Alphabetical(this PropertyGrid propertyGrid)
+		{
+			propertyGrid.invokeOnThread(()=>propertyGrid.PropertySort = PropertySort.Alphabetical);		
+			return propertyGrid;
+		}
+		
+		public static PropertyGrid sort_Categorized(this PropertyGrid propertyGrid)
+		{
+			propertyGrid.invokeOnThread(()=>propertyGrid.PropertySort = PropertySort.Categorized);		
+			return propertyGrid;
+		}
+		
+		public static PropertyGrid sort_CategorizedAlphabetical(this PropertyGrid propertyGrid)
+		{
+			propertyGrid.invokeOnThread(()=>propertyGrid.PropertySort = PropertySort.CategorizedAlphabetical);		
+			return propertyGrid;
+		}
+		
+		
+		// ascx_Directory
+		public static ascx_Directory processDroppedObjects(this ascx_Directory directory, bool value)
+		{
+			directory.invokeOnThread(()=>directory._ProcessDroppedObjects = value);
+			return directory;
+		}
+		
+		public static ascx_Directory handleDrop(this ascx_Directory directory, bool value)
+		{
+			directory.invokeOnThread(()=>directory._HandleDrop = value);
+			return directory;
+		}					
+		
 		// ascx_SourceCodeEditor ExtensionMethods
 		public static ascx_SourceCodeEditor editScript(this string scriptOrFile)
 		{
@@ -124,6 +209,35 @@ namespace O2.XRules.Database.Utils
 		{
 			return dummyString.applicationWinForms().Last();
 		}
+		
+		public static Exception log(this Exception ex)
+		{
+			ex.log("");
+			return ex;
+		}
+		
+		// ascx_TableList in O2.Views.ASCX.DataViewers
+		public static ascx_TableList title(this ascx_TableList tableList, string title)
+		{
+			tableList.invokeOnThread(()=> tableList._Title = title );
+			return tableList;
+			
+		}
+		
+		public static ascx_TableList show(this ascx_TableList tableList, object targetObject)	
+		{			
+			if (tableList.notNull() && targetObject.notNull())
+			{
+				tableList.clearTable();
+				tableList.title("{0}".format(targetObject.typeFullName()));  
+				tableList.add_Columns("name","value"); 
+				foreach(var property in PublicDI.reflection.getProperties(targetObject))
+					tableList.add_Row(property.Name, targetObject.prop(property.Name).str());
+				tableList.makeColumnWidthMatchCellWidth();					
+			}
+			return tableList;
+		}
+
 	}	   
 }
     	

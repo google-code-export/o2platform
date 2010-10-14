@@ -44,7 +44,12 @@ namespace O2.XRules.Database.APIs
     }
     
     public static class API_OpenPgp_ExtensionMethods
-    {
+    {    
+    	public static API_OpenPgp openPgp(this string pathToOpenPgpFile)
+    	{
+    		return pathToOpenPgpFile.load<API_OpenPgp>();
+    	}
+    	
     	public static string save(this API_OpenPgp openPgp)
     	{
     		return openPgp.save("_API_OpenPgp.xml".tempFile());
@@ -65,7 +70,25 @@ namespace O2.XRules.Database.APIs
     		return openPgp;
     	}
     	
-    	
+    	public static API_OpenPgp fixOpenPgpKeysPaths(this API_OpenPgp openPgp, string file)
+    	{    	
+			// see if we need to resolve the paths
+			if (openPgp.PrivateKey.fileExists().isFalse())
+			{
+				var localPrivateKey = file.directoryName().pathCombine(openPgp.PrivateKey);
+				if (localPrivateKey.fileExists())
+					openPgp.PrivateKey = localPrivateKey;
+			}
+			
+			if (openPgp.PublicKey.fileExists().isFalse())
+			{
+				var localPublicKey = file.directoryName().pathCombine(openPgp.PublicKey);
+				if (localPublicKey.fileExists())
+					openPgp.PublicKey = localPublicKey;
+			}					
+			return openPgp;
+		}
+
     }
     
     
@@ -74,30 +97,39 @@ namespace O2.XRules.Database.APIs
     	public static string defaultSufix_PrivateKey = "_privateKey.asc";
     	public static string defaultSufix_PublicKey = "_publicKey.asc";
     	
-    	public static API_OpenPgp createKey(this API_OpenPgp openPgp)
+    	public static string createKey(this API_OpenPgp openPgp)
     	{    	    
     		string random_Identity = 12.randomLetters();
     		string random_passPhrase = 64.randomLetters();    							
     		return openPgp.createKey(random_Identity, random_passPhrase);
     	}
     	
-    	public static API_OpenPgp createKey(this API_OpenPgp openPgp, string identity)
+    	public static string createKey(this API_OpenPgp openPgp, string identity)
     	{
     		string random_passPhrase = 64.randomLetters();
     		return openPgp.createKey(identity, random_passPhrase);
     	}
     	
-    	public static API_OpenPgp createKey(this API_OpenPgp openPgp, string identity, string passPhrase)
+    	public static string createKey(this API_OpenPgp openPgp, string identity, string passPhrase)
     	{
-    		string pathTo_PrivateKey = "".tempFile();
-    		string pathTo_PublicKey = "".tempFile();
-    		pathTo_PrivateKey = pathTo_PrivateKey.replace(pathTo_PrivateKey.fileName(),"{0}_{1}".format(identity, defaultSufix_PrivateKey));
-    		pathTo_PublicKey  = pathTo_PublicKey .replace(pathTo_PublicKey .fileName(),"{0}_{1}".format(identity, defaultSufix_PublicKey));
+    		return openPgp.createKey(identity, passPhrase, "".tempDir());
+    	}
+    	
+    	public static string createKey(this API_OpenPgp openPgp, string identity, string passPhrase, string targetFolder)
+    	{
+    		targetFolder.createDir(); 	// make sure it is created
+			string pathTo_PrivateKey = targetFolder.pathCombine("{0}_{1}".format(identity, defaultSufix_PrivateKey));
+    		string pathTo_PublicKey = targetFolder.pathCombine("{0}_{1}".format(identity, defaultSufix_PublicKey));
     		return openPgp.createKey(identity,passPhrase, pathTo_PrivateKey, pathTo_PublicKey);
     	}
     	
-    	public static API_OpenPgp createKey(this API_OpenPgp openPgp, string identity, string passPhrase, string pathTo_PrivateKey, string pathTo_PublicKey)
-    	{    	
+    	public static string createKey(this API_OpenPgp openPgp, string identity, string passPhrase, string pathTo_PrivateKey, string pathTo_PublicKey)
+    	{    		
+    		if (identity.valid().isFalse())
+    		{
+    			"[API_OpenPgp] there was no value provided for the mandatory field: PGP Identity".error();
+    			return null;
+    		}
     		IAsymmetricCipherKeyPairGenerator kpg = GeneratorUtilities.GetKeyPairGenerator("RSA");
 
             kpg.Init(new RsaKeyGenerationParameters(
@@ -119,8 +151,11 @@ namespace O2.XRules.Database.APIs
 			openPgp.PublicKey = pathTo_PublicKey;				
 			openPgp.Identity =  identity;
 			openPgp.PassPhrase = passPhrase;
-				
-			return openPgp;
+			
+			var openPgpFile = pathTo_PublicKey.directoryName().pathCombine("{0}_OpenPgp.xml".format(identity));
+			openPgp.save(openPgpFile);
+			"[API_OpenPgp] Pgp mappings for identity '{0}' saved to: {0}".debug(openPgpFile);
+			return openPgpFile;
     	}    	    	    
     
 	    public sealed class RsaKeyRingGenerator
@@ -176,27 +211,94 @@ namespace O2.XRules.Database.APIs
 	        }
 		}
 	}
+		
+	
+	public static class API_OpenPgp_ExtensionMethods_EncryptText
+	{
+	
+		public static string pgp_EncryptText(this string textToEncrypt, string pathToOpenPgpFile)
+		{
+			if (pathToOpenPgpFile.fileExists())
+			{
+				var openPgp = pathToOpenPgpFile.openPgp();					
+				openPgp.fixOpenPgpKeysPaths(pathToOpenPgpFile);
+				return openPgp.encryptText(textToEncrypt);
+			}
+			return null;
+		}
+		
+		public static string encryptText(this API_OpenPgp openPgp, string textToEncrypt)
+		{
+			try
+			{ 
+				if (openPgp.notNull())
+				{
+					var tempFile = textToEncrypt.save(); 
+					var resultTempFile = openPgp.encryptFile(tempFile); 
+					var result = resultTempFile.fileContents();											
+					Files.deleteFile(tempFile);	
+					Files.deleteFile(resultTempFile);
+					return result;
+				}
+			} 
+			catch(Exception ex)
+			{
+				ex.log("[API_OpenPgp] in EncryptText");				
+			}	
+			return null;
+		}
+		
+		public static string decryptText(this API_OpenPgp openPgp, string textToEncrypt)
+		{
+			try
+			{ 
+				if (openPgp.notNull()) 
+				{ 
+					var tempFile = textToEncrypt.saveWithExtension(".asc");
+					"tempFile: {0}".info(tempFile);
+					var resultTempFile = openPgp.decryptFile(tempFile); 
+					var result = resultTempFile.fileContents();											
+					Files.deleteFile(tempFile);	
+					Files.deleteFile(resultTempFile);
+					return result;
+				}																						
+			} 
+			catch(Exception ex)
+			{
+				ex.log("[API_OpenPgp] in DecryptText");				
+			}
+			return null;
 
+		}
+	}
 	
 	public static class API_OpenPgp_ExtensionMethods_EncryptFile
 	{
-	
 		public static string encryptFile(this API_OpenPgp openPgp, string fileToEncrypt)
 		{
-			var publicKey = openPgp.PublicKey;
-			if (publicKey.fileExists().isFalse())
-				publicKey = PublicDI.CurrentScript.directoryName().pathCombine(publicKey);
-			if (fileToEncrypt.fileExists().isFalse())
-			{
-				"in API_OpenPgp signFile, the provided file to encrypt doesn't exist: {0}".error(fileToEncrypt);
-				return "";
+			try
+			{				
+				var publicKey = openPgp.PublicKey;
+				if (publicKey.fileExists().isFalse())
+					publicKey = PublicDI.CurrentScript.directoryName().pathCombine(publicKey);
+				if (fileToEncrypt.fileExists().isFalse())
+				{
+					"[API_OpenPgp] in API_OpenPgp signFile, the provided file to encrypt doesn't exist: {0}".error(fileToEncrypt);
+					return "";
+				}
+				var keyIn = File.OpenRead(publicKey);
+				var pathToEncryptedFile = fileToEncrypt + ".asc";
+	            var fos = File.Create(pathToEncryptedFile);
+				EncryptFile(fos, fileToEncrypt, OpenPgp_HelperMethods.ReadPublicKey(keyIn), true, true);			
+				fos.Close();			
+				return pathToEncryptedFile;			
 			}
-			var keyIn = File.OpenRead(publicKey);
-			var pathToEncryptedFile = fileToEncrypt + ".asc";
-            var fos = File.Create(pathToEncryptedFile);
-			EncryptFile(fos, fileToEncrypt, OpenPgp_HelperMethods.ReadPublicKey(keyIn), true, true);			
-			fos.Close();			
-			return pathToEncryptedFile;			
+			catch(Exception ex)
+			{
+				ex.log("[API_OpenPgp]  in encryptFile");
+				return null;
+			}						
+			
 		}
 		
 		private static void EncryptFile(
@@ -264,6 +366,7 @@ namespace O2.XRules.Database.APIs
 	
 		public static string decryptFile(this API_OpenPgp openPgp, string fileToDecrypt)
 		{
+			"In Decrypt step".info();
 			var privateKey = openPgp.PrivateKey;
 			if (privateKey.fileExists().isFalse())
 				privateKey = PublicDI.CurrentScript.directoryName().pathCombine(privateKey);
@@ -284,7 +387,7 @@ namespace O2.XRules.Database.APIs
 			var pathToDecryptedFile = fileToDecrypt + originalExtension; // new FileInfo(args[1]).Name + ".out"
 			DecryptFile(fin, keyIn, passPhrase.ToCharArray(), pathToDecryptedFile);
 			fin.Close();
-			keyIn.Close();
+			keyIn.Close();	
 			//var pathToEncryptedFile = fileToEncrypt + ".asc";
             //var fos = File.Create(pathToEncryptedFile);
 			//EncryptFile(fos, fileToEncrypt, OpenPgp_HelperMethods.ReadPublicKey(keyIn), true, true);			
@@ -406,7 +509,7 @@ namespace O2.XRules.Database.APIs
 	            }
 	            catch (PgpException e)
 	            {
-	            	e.log("[API_OpenPgp] in EncryptFile");
+	            	e.log("[API_OpenPgp] in DecryptFile: " + e.StackTrace );
 	            	
 	                /*Console.Error.WriteLine(e);
 	
@@ -420,7 +523,7 @@ namespace O2.XRules.Database.APIs
 			}
 			catch (Exception ex)
 			{
-				ex.log("[API_OpenPgp] in EncryptFile");
+				ex.log("[API_OpenPgp] in DecryptFile  : " + ex.StackTrace );
 			}
         }
 
