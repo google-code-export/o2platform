@@ -19,7 +19,6 @@ using System.Windows;
 using System.Windows.Controls;
 using O2.API.Visualization.ExtensionMethods;
 using O2.XRules.Database;
-using O2.Views.ASCX.classes.MainGUI;
 using Odyssey.Controls;
 using O2.XRules.Database.Utils;
 
@@ -111,6 +110,7 @@ namespace O2.XRules.Database.APIs
     			()=>{
 			    		
 			    		this.backColor(Color.White);
+			    		
 			    		var wpfHost = this.add_WpfHost();
 			    		
 			    		var dockPanel = wpfHost.add_Control_Wpf<DockPanel>();
@@ -268,8 +268,26 @@ namespace O2.XRules.Database.APIs
     		}
     		return wpf_Gui;    	
     	}
+    	
+    	public static WPF_GUI add_OutlookBar(this WinForms.Control control)
+    	{
+    		return control.add_Control<WPF_GUI>().buildGui();
+    	}
+    	
+    	public static WPF_GUI add_OutlookBar_Left(this WinForms.Control control)
+    	{
+    		var panel = control.add_Panel();
+			var wpfGui = panel.insert_Left<WPF_GUI>().buildGui();
+    		panel.parent<WinForms.SplitContainer>().distance(245);
+    		//show.info(control.parent<WinForms.SplitContainer>());
+    		return wpfGui;
+    	}
     }
 
+    public static class WPF_GUI_ExtensionMethods_Add
+    {
+    	
+    }
     
     public static class WPF_GUI_ExtensionMethods_Show
     {
