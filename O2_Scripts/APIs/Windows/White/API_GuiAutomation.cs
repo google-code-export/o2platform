@@ -196,13 +196,28 @@ namespace O2.XRules.Database.APIs
     	public static T wait<T>(this T uiItem, int miliseconds, bool showInLog)
     		where T : IUIItem
     	{
-    		uiItem.sleep(miliseconds);
+    		Sleep_ExtensionMethods.sleep(uiItem,miliseconds,showInLog);
+    		return uiItem;    		
+    	}
+    	
+    	
+    	public static T sleep<T>(this T uiItem, int delay)  
+    		where T : IUIItem
+    	{
+    		return uiItem.wait(delay);
+    	}
+    	    	
+    	
+    	public static T waitNSeconds<T>(this T uiItem, int seconds)    		
+    		where T : IUIItem
+    	{
+    		uiItem.wait(seconds * 1000,true);
     		return uiItem;    		
     	}
     }
     
     public static class API_GuiAutomation_ExtensionMethods_UIItem_Helpers
-    {    	
+    {        	    	    
     	//Button
     	public static Button button(this UIItemContainer container, string text)    		
     	{
@@ -332,6 +347,7 @@ namespace O2.XRules.Database.APIs
     		return window.menu_Click(menuName,menuItemName,true);
     	}*/
     	
+    	
     	public static Menu menu_Click(this Window window, string menuName, string menuItemName) //,bool animateMouse)
     	{
     		var menu = window.menu(menuName,menuItemName);    		    		
@@ -346,6 +362,11 @@ namespace O2.XRules.Database.APIs
     	public static Menu menu_Click(this Window window, string menuName)
     	{
     		return window.menu(menuName).click();
+    	}
+    	
+    	public static Menu menu_Click(this Menu menu, string menuName)
+    	{
+    		return menu.menu(menuName).click();
     	}
     	
     	public static Menu menu(this Window window, string name)
@@ -434,6 +455,19 @@ namespace O2.XRules.Database.APIs
     		System.Windows.Forms.Application.DoEvents();
     		//"__moving mouse to:{0} {1}".debug(x,y);
     		return 	mouse.mouse_MoveBy(x - mouse.Location.X , y - mouse.Location.Y, animate);
+    	}
+    	
+    	public static API_GuiAutomation mouse_MoveBy(this API_GuiAutomation guiAutomation, double x, double y)
+    	{
+    		Mouse.Instance.mouse_MoveBy(x, y, true);
+    		return guiAutomation;
+    	}
+    	
+    	public static T mouse_MoveBy<T>(this T uiItem, double x, double y)
+    		where T : IUIItem
+    	{
+    		Mouse.Instance.mouse_MoveBy(x, y, true);
+    		return uiItem;
     	}
     	
     	public static Mouse mouse_MoveBy(this Mouse mouse, double x, double y, bool animate)
