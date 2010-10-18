@@ -238,6 +238,29 @@ namespace O2.XRules.Database.Utils
 			return tableList;
 		}
 
+
+		//screenshots
+		
+		public static string saveImageFromClipboard(this object _object)
+		{
+			var sync = new AutoResetEvent(false);
+			string savedImage = null;
+			O2Thread.staThread(
+				()=>{
+						var bitmap = new Control().fromClipboardGetImage();  
+						if (bitmap.notNull())
+						{
+							savedImage = bitmap.save();
+							savedImage.toClipboard(); 
+							"Image in clipboard was saved to: {0}".info(savedImage);
+						}
+						sync.Set();							
+					});
+					
+			sync.WaitOne(2000);
+			
+			return savedImage;
+		}
 	}	   
 }
     	

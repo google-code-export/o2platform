@@ -396,20 +396,18 @@ namespace O2.XRules.Database.Utils
         public static string get_Text_Wpf(this TextBox textBox)
         {
             return (string)textBox.wpfInvoke(
-                () =>
-                {
-                    return textBox.Text;
-                });
+                ()=>{
+	                    return textBox.Text;
+	                });
         }
 
         public static TextBox set_Text_Wpf(this TextBox textBox, string text)
         {
             return (TextBox)textBox.wpfInvoke(
-                () =>
-                {
-                    textBox.Text = text;
-                    return textBox;
-                });
+                ()=>{
+	                    textBox.Text = text;
+	                    return textBox;
+	                });
         }
 
         public static TextBox multiLine(this TextBox textBox)
@@ -423,6 +421,22 @@ namespace O2.XRules.Database.Utils
                     return textBox;
                 });
         }
+        
+        public static TextBox onTextChange(this TextBox textBox, Action<string> onTextChange)
+        {
+            return (TextBox)textBox.wpfInvoke(
+                ()=>{
+                		textBox.TextChanged += (sender,e)=> onTextChange(textBox.get_Text_Wpf());
+                		return textBox;
+                	});
+        }
+		
+		// not working since the Enter is not captured
+        /*public static TextBox onEnter_Wpf(this TextBox textBox, Action<string> callback)
+        {        
+			textBox.onKeyPress_Wpf(Key.Return, ()=> callback(textBox.get_Text_Wpf()));
+			return textBox;
+        }*/
     	#endregion
  	}
 	
@@ -1087,7 +1101,7 @@ textBox1.prop("",true);
                         comboBox.SelectedIndex = 0;
                     return comboBox;
                 });
-        }
+        }                
 
         public static string get_Text_Wpf(this ComboBox comboBox)
         {

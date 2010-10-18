@@ -100,7 +100,7 @@ namespace O2.XRules.Database.Utils
     			if (tab.header()== header)
     				return tab;    		
     		return null;
-    	}
+    	}    	    	
 		
 		public static List<string> headers(this List<RibbonTab> tabs)
 		{
@@ -131,6 +131,28 @@ namespace O2.XRules.Database.Utils
     	{
     		return (string)ribonGroup.wpfInvoke(
     			()=> { return ribonGroup.Header; });    		
+    	}
+    	
+    	public static Ribbon ribbon(this RibbonGroup ribonGroup)
+    	{
+    		return (Ribbon)ribonGroup.wpfInvoke(
+    			()=> { return ribonGroup.Ribbon; });    		
+    	}
+    	
+    	public static Ribbon ribbon(this RibbonTab ribbonTab)
+    	{
+    		return (Ribbon)ribbonTab.wpfInvoke(
+    			()=> { return ribbonTab.Ribbon; });    		
+    	}
+    	
+    	public static RibbonTab tab(this RibbonGroup ribonGroup, string header)
+    	{
+    		return ribonGroup.ribbon().tab(header);
+    	}
+    	
+    	public static RibbonTab tab(this RibbonTab ribbonTab, string header)
+    	{
+    		return ribbonTab.ribbon().tab(header);
     	}
     	
     	
@@ -470,6 +492,11 @@ namespace O2.XRules.Database.Utils
 						
 					});
 		}
+		
+		public static RibbonGroup add_StartProcess(this RibbonGroup ribbonGroup , string label, string process)
+		{
+			return ribbonGroup.add_RibbonButton_StartProcess(label, process);
+		}
 		public static RibbonGroup add_RibbonButton_StartProcess(this RibbonGroup ribbonGroup , string label, string process)
 		{
 			return ribbonGroup.add_RibbonButton_StartProcess(label,process, "");
@@ -519,12 +546,24 @@ namespace O2.XRules.Database.Utils
     	}
 		
 		// TextBox
-		public static RibbonTextBox add_RibbonTextBox<T>(this T frameworkElement, string label,  string text, int width)
-			where T : FrameworkElement
+		
+		public static RibbonTextBox add_TextBox(this FrameworkElement frameworkElement, string label,  string text)			
+		{
+			return frameworkElement.add_RibbonTextBox(label, text, -1);
+		}
+		
+		public static RibbonTextBox add_TextBox(this FrameworkElement frameworkElement, string label,  string text, int width)			
+		{
+			return frameworkElement.add_RibbonTextBox(label, text, width);
+		}
+		
+		public static RibbonTextBox add_RibbonTextBox(this FrameworkElement frameworkElement, string label,  string text, int width)			
     	{
 			var textBox = frameworkElement.add_Control_Wpf<RibbonTextBox>(); 
-			textBox.prop("Label", label);
-			textBox.prop("TextBoxWidth", (double)width);			
+			if (label.valid())
+				textBox.prop("Label", label);
+			if (width > -1)
+				textBox.prop("TextBoxWidth", (double)width);			
 			textBox.set_Text_Wpf(text);
 			//textBox.wpfInvoke(()=> textBox.Text = text);
 			return textBox;
@@ -549,7 +588,97 @@ namespace O2.XRules.Database.Utils
                 });
         }
 
+		// ComboBox
+		
+		public static ComboBox add_ComboBox(this FrameworkElement frameworkElement)
+		{
+			return frameworkElement.add_RibbonComboBox(null, -1);
+		}
+		
+		public static ComboBox add_ComboBox(this FrameworkElement frameworkElement, string text)			
+		{
+			return frameworkElement.add_RibbonComboBox(text, -1);
+		}
+				
+		public static ComboBox add_RibbonComboBox(this FrameworkElement frameworkElement, string text, int width)			
+    	{
+			var comboBox = frameworkElement.add_Control_Wpf<ComboBox>(); 			
+			if (width > -1)
+				//comboBox.prop("ComboBoxWidth", (double)width);			
+				width = 100;
+			
+			comboBox.width_Wpf(width);
+			if (text.notNull())
+			{
+				comboBox.add_Item(text);
+				comboBox.selectedIndex(0);
+			}
+			/*comboBox.wpfInvoke(
+				()=>{
+						comboBox.SelectionChanged += 
+							(sender,e)=>{
+											"Selection changed".info();
+											comboBox.Text = comboBox.SelectedItem.Content.ToString();
+										};
+					});
+			//textBox.wpfInvoke(()=> textBox.Text = text);*/
+			return comboBox;
+    	}
+    	
+    	public static string selectedItem(this ComboBox comboBox)
+        {
+            return (string)comboBox.wpfInvoke(
+                () =>
+                {
+                    return comboBox.SelectedItem.str();
+                });
+        }
 
+		public static ComboBox add_Item(this ComboBox comboBox, object itemToAdd)
+        {
+            return (ComboBox)comboBox.wpfInvoke(
+                () =>
+                {
+                	if (itemToAdd.notNull())                	
+                		comboBox.Items.Add(itemToAdd);
+                    return comboBox;
+                });
+        }
+        
+        public static ComboBox add_Items(this ComboBox comboBox, List<string> itemsToAdd)
+        {
+            return (ComboBox)comboBox.wpfInvoke(
+                () =>
+                {
+                	if (itemsToAdd.notNull()) 
+                		foreach(var item in itemsToAdd)
+                			comboBox.Items.Add(item);
+                    return comboBox;
+                });
+        }
+        
+        public static ComboBox clear(this ComboBox comboBox)
+        {
+            return (ComboBox)comboBox.wpfInvoke(
+                () =>
+                {
+                	comboBox.Items.Clear();
+                    return comboBox;
+                });
+        }
+        
+        public static ComboBox selectedIndex(this ComboBox comboBox, int index)
+        {
+            return (ComboBox)comboBox.wpfInvoke(
+                () =>
+                {
+                	comboBox.SelectedIndex = index;
+                	
+                	//comboBox.Text = comboBox.Items[index].str();
+                    return comboBox;
+                });
+        }
+        
 		
 //var button1 = ribbonGroup2.add_Control_Wpf<RibbonButton>();
 //	button1.Label = "Button1";
@@ -570,6 +699,53 @@ namespace O2.XRules.Database.Utils
 			return inputSimulator;
     	}
     }
+
+
+	public static class WPF_Ribbon_ExtensionMethods_API_CommonlyUsed_Groups
+    {
+    
+    	public static RibbonTab add_Group_FindAndExecuteScripts(this RibbonTab ribbonTab)	
+    	{
+    		Func<string,List<String>> getLocalFileMappings = 
+				(filter)=>{							 
+							 var currentFileMappings = CompileEngine.LocalScriptFileMappings;
+							 return (from item in currentFileMappings.Keys
+							 		 where item.regEx(filter)
+							 		 select item).toList().sort();
+						  };
+						  
+			var searchTextBox = ribbonTab.add_Group("Find and Execute O2 Scripts") 
+					 				   	 .add_TextBox("RegEx:","",200);
+
+			var comboBox = ribbonTab.group("Find and Execute O2 Scripts") 
+	  				 				.add_ComboBox( "(enter a search term above)");
+	  				 
+			searchTextBox.onTextChange(  
+				(text)=> {   														
+							var results = getLocalFileMappings(text);							
+							comboBox.clear(); 
+							comboBox.add_Item("[Found {0} Scripts]".format(results.size()));   
+							comboBox.add_Items(results); 
+							comboBox.selectedIndex(0);							
+						});
+			
+			ribbonTab.group("Find and Execute O2 Scripts")  
+					 .add_Button("Execute Selected Script", 
+					  	()=>{ 
+					  			var scriptToExecute = comboBox.selectedItem().local(); 
+					  			if (scriptToExecute.fileExists())
+					  			{
+						  			"Executing script:{0}".info(scriptToExecute);
+						  			if (scriptToExecute.extension(".h2"))
+						  				scriptToExecute.executeH2Script();
+						  			else
+						  				scriptToExecute.executeFirstMethod();
+						  		}
+					  		});
+			searchTextBox.set_Text(".*h2");
+			return ribbonTab;					  		
+		}
+	}
     
     
 }	

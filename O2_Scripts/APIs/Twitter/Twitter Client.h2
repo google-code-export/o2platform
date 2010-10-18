@@ -5,7 +5,7 @@ var mainPanel = O2Gui.open&lt;Panel&gt;("O2 Twitter Client", 900,400);
 
 var wpfGui = mainPanel.add_Control&lt;WPF_GUI&gt;();
 var tweetsToFetch = 40;
-wpfGui.buildGui();			
+wpfGui.buildGui();			 
 
 wpfGui.insert_Below&lt;Panel&gt;(130).add_LogViewer();
 //var credentials = fileWithCredentials.deserialize&lt;SecretData&gt;();
@@ -76,7 +76,7 @@ var mainSection = wpfGui.add_Section("Main", "Welcome to O2's twitter client")
 						{
 						  	usersComboBox.add_Item(userProvidedCredential);
 						  	usersComboBox.selectFirst();
-						}
+						} 
 					}			         							*/
 					
 				 })
@@ -233,13 +233,15 @@ return "done";
 //O2File:O2TwitterAPI.cs
 //O2File:WPF_GUI.cs
 
-
+//O2Ref:TweetSharp.dll
+//O2Ref:TweetSharp.Twitter.dll
 //O2Ref:O2_API_Visualization.dll
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:GraphSharp.dll
 //O2Ref:QuickGraph.dll
 //O2Ref:GraphSharp.Controls.dll
 //O2Ref:ICSharpCode.AvalonEdit.dll
+//O2Ref:WatiN.Core.1x.dll
 </SourceCode>
   <ReferencedAssemblies />
 </H2>

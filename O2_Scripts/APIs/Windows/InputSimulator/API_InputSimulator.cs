@@ -141,7 +141,7 @@ namespace O2.XRules.Database.APIs
 		
 		public static API_InputSimulator wait(this API_InputSimulator inputSimulator, int sleepValue)
   		{
-  			inputSimulator.sleep(sleepValue);
+  			Sleep_ExtensionMethods.sleep(null,sleepValue); 
   			return inputSimulator;
   		}
   		
@@ -334,7 +334,7 @@ namespace O2.XRules.Database.APIs
     	public static API_InputSimulator mouse_Click(this API_InputSimulator inputSimulator)
     	{    		
     		inputSimulator.Input_Simulator.Mouse.LeftButtonDown();			
-    		inputSimulator.sleep(300);
+    		inputSimulator.wait(300);
 			inputSimulator.Input_Simulator.Mouse.LeftButtonUp();
 //			inputSimulator.sleep(500);	
 			return inputSimulator;    	

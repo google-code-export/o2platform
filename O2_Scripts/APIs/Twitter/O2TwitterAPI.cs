@@ -2,20 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX.ExtensionMethods;
 using TweetSharp.Twitter.Fluent;
 using TweetSharp.Twitter.Model;
 using TweetSharp.Model;
-//using TweetSharp.Extensions;
 using TweetSharp.Twitter.Extensions;
 using O2.XRules.Database.Utils;
 using O2.Views.ASCX.DataViewers;
 
 //O2File:ISecretData.cs
+//O2File:Watin_IE.cs
+//O2File:Watin_IE_ExtensionMethods.cs
 
 //O2Ref:Hammock.dll
 //O2Ref:Newtonsoft.Json.dll
@@ -30,8 +33,9 @@ namespace O2.XRules.Database.APIs
 {
     public class O2TwitterAPI
     {
-        public string Username { get; set; }
+        public string Username { get; set; }        
         internal string Password { get; set; }
+        public OAuthToken OAuthToken { get; set; }
         
         public TwitterUser UserLoggedIn { get; set; }
         public ITwitterStatuses Statuses { get; set; }
@@ -40,12 +44,135 @@ namespace O2.XRules.Database.APIs
         //public TwitterResult LastResult { get; set;} 
 		
 		//Twitter O2Platform app details
-		string OAUTH_CONSUMER_KEY = "64ODjhZI0cSDb32lLIACFA";  
-		string OAUTH_CONSUMER_SECRET = "3SuM5vKvfiN2DJjJdSEUMSnDCpFYx39wDEQM11iQtg"; 
+		public string OAUTH_CONSUMER_KEY  {get;set;}
+		public string OAUTH_CONSUMER_SECRET  {get;set;}
+
+		public string TestAccount_UserName  {get;set;} 
+		public string TestAccount_Password  {get;set;}  
+		public string TwitterOAuthTokensFolder  {get;set;} 
 
 		public O2TwitterAPI()
 		{
-		}		        
+			setDefaultValues();
+		}	
+		
+		public void setDefaultValues()
+		{
+			OAUTH_CONSUMER_KEY  = "64ODjhZI0cSDb32lLIACFA";	
+			OAUTH_CONSUMER_SECRET = "3SuM5vKvfiN2DJjJdSEUMSnDCpFYx39wDEQM11iQtg";
+			
+			TestAccount_UserName = "Test_AlDsy";  // please don't abuse :)
+			TestAccount_Password = "Super!!Password";
+			TwitterOAuthTokensFolder = @"C:\O2\_USERDATA\Twitter".createDir();			
+		}
+        
+        public string getTokenFileForUser(string username)
+        {
+        	return TwitterOAuthTokensFolder.pathCombine("{0}_TwitterOAuth.xml".format(username));
+        }
+        
+        public string getAuthorizationUrl()
+		{
+			"[O2TwitterAPI] retriving Authorization Url".info();
+			
+			var twitter = FluentTwitter.CreateRequest()
+		   							   .Configuration.UseHttps()  
+		    						   .Authentication.GetRequestToken(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET);
+		
+			var response = twitter.Request();
+		
+			if (response.ResponseHttpStatusCode.neq(200))
+			{
+				"error in first twitter response".error();
+				return null;
+			} 
+		
+			var unauthorizedToken = response.AsToken(); 
+		
+			var url =  FluentTwitter.CreateRequest().Authentication.GetAuthorizationUrl(unauthorizedToken.Token);
+			"[O2TwitterAPI] Authorization Url retrived: {0}".info(url);
+			return url;
+		}
+
+
+		public OAuthToken getAuthToken(string autorizationUrl, string username, string password) 	
+		{
+			var sync = new AutoResetEvent(false);
+			OAuthToken oauthToken = null; 
+			var tokenFile = getTokenFileForUser(username);
+			if (tokenFile.valid() && tokenFile.fileExists())
+			{
+				"[O2TwitterAPI] found cached token for user: {0}".info(username);
+				return tokenFile.load<OAuthToken>(); 
+			}
+			
+			var ie = autorizationUrl.ie();			  // will open a new instance of IE 
+			//var ie = panel.add_IE();				  // will use an Embeded version of IE
+			// configure IE to handle twitter redirect
+			ie.beforeNavigate(
+				(url)=> {
+							"[O2TwitterAPI] in BeforeNavigate for: {0}".debug(url);
+							if (url.starts("http://o2platform.com/?oauth_token="))
+							{
+								O2Thread.mtaThread(
+									()=>{											
+											var splitted = url.uri().Query.split("=");
+											if(splitted.size()==2 && splitted[0] == "?oauth_token")
+											{
+												var token = splitted[1];
+												"[O2TwitterAPI] Found Token: {0}".info(token); 
+											
+												var twitter = FluentTwitter.CreateRequest()
+						    									   .Authentication.GetAccessToken(OAUTH_CONSUMER_KEY, OAUTH_CONSUMER_SECRET,token);
+												
+												oauthToken = twitter.Request().AsToken();												
+												
+												if (oauthToken.notNull())
+												{ 													
+													oauthToken.saveAs(tokenFile);
+													"[O2TwitterAPI] OAuthToken saved to: {0}".info(tokenFile); 													
+												}										        
+											}
+											sync.Set(); // continue 
+										});
+								"[O2TwitterAPI] Found O2Platform.com Twitter redirect, stoping IE request".debug();  
+								return true;
+							}
+							return false;
+						});
+
+			//perform login section
+			
+			ie.open(autorizationUrl);
+			
+			if (ie.hasLink("Sign out"))
+				ie.link("Sign out").click();
+				
+			if(ie.hasField("session[password]") && ie.hasField("session[username_or_email]"))
+			{				
+				ie.field("session[username_or_email]").value(username);
+				ie.field("session[password]").value(password);
+				ie.button("Allow").click();
+			}
+			
+			if (sync.WaitOne(10000).isFalse())			// wait until the redirect has been processed
+				"[O2TwitterAPI] OAuthToken request timeout".error();
+			ie.close();	
+			return oauthToken;
+		}
+					
+		public OAuthToken getAuthToken(string autorizationUrl, ICredential credential) 	
+		{					
+			if (credential.isNull())
+				credential = ascx_AskUserForLoginDetails.ask();
+			if (credential.isNull())
+			{
+				"[O2TwitterAPI] No credentials provided".error();
+				return null;
+			}			
+			return getAuthToken(autorizationUrl,credential.UserName, credential.Password);
+		}
+
         
         public bool login(ICredential credential)
 		{
@@ -64,7 +191,9 @@ namespace O2.XRules.Database.APIs
         	try
         	{
         		"login to Twitter under user:{0}".info(Username);
-            	this.Twitter = FluentTwitter.CreateRequest().AuthenticateAs(Username, Password); //.Statuses.OnUserTimeline().AsJson();            	            	
+        		var oauthToken = getAuthToken(getAuthorizationUrl(), Username, Password);
+        		login(oauthToken);
+            	/*this.Twitter = FluentTwitter.CreateRequest().AuthenticateAs(Username, Password); //.Statuses.OnUserTimeline().AsJson();            	            	
             	var response = this.Twitter.Account().VerifyCredentials().AsJson().Request();            	            	
             	IsLoggedIn = response.ok();
             	if (IsLoggedIn)
@@ -75,7 +204,7 @@ namespace O2.XRules.Database.APIs
             	}
             	else
             		"Failed to connect to twitter user {0}".error(Username);
-            		
+            	*/	
             	return IsLoggedIn;
             }
             catch(Exception ex)
@@ -87,9 +216,16 @@ namespace O2.XRules.Database.APIs
         
         public bool login(string oAuthFile)
         {
-        	var oAuthToken = oAuthFile.load<OAuthToken>();
-        	return login(oAuthToken);
+        	if (oAuthFile.fileExists().isFalse())
+        		oAuthFile = getTokenFileForUser(oAuthFile);
+        	if (oAuthFile.fileExists())
+        	{
+        		var oAuthToken = oAuthFile.load<OAuthToken>();
+        		return login(oAuthToken);
+        	}
+			return login(getAuthorizationUrl(), null);
         }
+        
         public bool login(OAuthToken oAuthToken)
         {
         	if (oAuthToken.isNull())
@@ -99,6 +235,7 @@ namespace O2.XRules.Database.APIs
         	}
         	try
         	{
+        		OAuthToken  = oAuthToken;
         		"login to Twitter via OAuth under user:{0}".info(oAuthToken.ScreenName);
             	this.Twitter = FluentTwitter.CreateRequest()
             							    .AuthenticateWith(OAUTH_CONSUMER_KEY,
@@ -123,6 +260,15 @@ namespace O2.XRules.Database.APIs
             }
             return false;
         }       
+        
+        public ITwitterStatuses authenticatedStatuses()
+        {
+        	this.Twitter = FluentTwitter.CreateRequest().AuthenticateWith(OAUTH_CONSUMER_KEY,
+						                                      OAUTH_CONSUMER_SECRET,
+						                                      OAuthToken.Token,OAuthToken.TokenSecret);
+			this.Statuses =	this.Twitter.Statuses();
+			return this.Statuses;
+        }
 
         
     }
@@ -161,6 +307,7 @@ namespace O2.XRules.Database.APIs
     	{
 			return twitterAPI.user_Timeline(itemsToFetch,-1);
     	}
+    	
     	public static List<TwitterStatus> user_Timeline(this O2TwitterAPI twitterAPI, int itemsToFetch, long beforeId)
     	{
     		try
@@ -336,8 +483,9 @@ namespace O2.XRules.Database.APIs
 		public static bool update(this O2TwitterAPI twitterAPI, string updateString)
         {	
         	// not sure why I can 't user the twitterAPI.Statuses for this (but I'm getting an error on the next request to user_timeline)
-        	var result = FluentTwitter.CreateRequest().AuthenticateAs(twitterAPI.Username, twitterAPI.Password).Statuses()
-            						  .Update(updateString).AsJson().Request();
+        	//var result = FluentTwitter.CreateRequest().AuthenticateAs(twitterAPI.Username, twitterAPI.Password).Statuses()
+            //						  .Update(updateString).AsJson().Request();
+			var result = twitterAPI.authenticatedStatuses().Update(updateString).AsJson().Request();            						  
             return result.ok();
         }
                                 
