@@ -54,14 +54,14 @@ namespace O2.XRules.Database.APIs
     	public static WatiN_IE ie(this string url)
     	{
     		int top = 0;
-    		int left = 900;    		
+    		int left = 0;    		
     		return url.ie(top, left);
     	}
  
     	public static WatiN_IE ie(this string url, int top, int left)
     	{
-    		int width = 385;
-    		int height = 500;
+    		int width = 800;
+    		int height = 600;
     		return url.ie(top, left, width, height);
     	}
  

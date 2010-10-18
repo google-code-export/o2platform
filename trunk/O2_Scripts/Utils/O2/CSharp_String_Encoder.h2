@@ -37,11 +37,18 @@ contextMenu.add_MenuItem("Replace all \\n with Environment.NewLine",
 			original_TextBox.set_Text(original_TextBox.get_Text().Replace("\n",Environment.NewLine));
 		} );
 
-encoded_TextBox.add_ContextMenu().add_MenuItem("append .line() on NewLine",
+encoded_TextBox.add_ContextMenu()
+			   .add_MenuItem("append .line() on NewLine",true,
 	()=&gt;{
 			var encodedText = encoded_TextBox.get_Text();
 			encodedText = encodedText.Replace("\"+","\".line()+");
 			encodedText = encodedText.Replace("\";","\".line();");
+			encoded_TextBox.set_Text(encodedText);	
+		})
+			  .add_MenuItem("replace tabs with spaces",
+	()=&gt;{
+			var encodedText = encoded_TextBox.get_Text();
+			encodedText = encodedText.Replace("\t", "    ");			
 			encoded_TextBox.set_Text(encodedText);	
 		});</SourceCode>
   <ReferencedAssemblies />
