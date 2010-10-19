@@ -24,8 +24,7 @@ wpfRibbon.add_Tab("Movie Creation")
 			 				  movieEditor.newMovie(); 
 			 				  movieEditor.loadImages(folder);
 			 				 }
-			 		});
-		 //.add_Button_WithSmallImage(" Load test images","Default_16x16.png",()=&gt; movieEditor.loadImages(PublicDI.config.LocalScriptsFolder.pathCombine(@"_DataFiles\_Images")));
+			 		});		 
 
 RibbonButton FramesRecordedInfo = null;		 
 wpfRibbon.tab("Movie Creation")
@@ -68,6 +67,7 @@ wpfRibbon.add_Tab("Options")
 	     .add_Group("Slide Editor")
 		 	.add_RibbonCheckBox("On image delete, also delete from disk", (value)=&gt;{ movieEditor.OnImageDeleteAlsoDeleteFromDisk = value;})
 		 	.add_RibbonCheckBox("View Multiple Selected Images", true, (value)=&gt;{ movieEditor.ViewMultipleSelectedImages = value;})		 	
+		 	.add_RibbonCheckBox("Add Duplicate Frames (while capture)", false, (value)=&gt;{ movieEditor.AForge_Video.AddDuplicateFrames = value;})		 	
 		 	.add_Button("Show TempVideoImages folder","Open_16x16.png", ()=&gt; Processes.startProcess(movieEditor.TempVideoImages));				 
 wpfRibbon.tab("Options")  
 		 .add_Group("Temp Images")  		 	
@@ -78,10 +78,6 @@ wpfRibbon.tab("Options")
 							  
 			
 		 	 
-
-//wpfRibbon.tab("Movie Creation").group("Load").button(" Load test images").click();  
-//this.sleep(1000);
-//wpfRibbon.tab("Movie Creation").group("Create").button(" Create Movie").click();
 return "done"; 	 
  
 //using Microsoft.Windows.Controls.Ribbon;

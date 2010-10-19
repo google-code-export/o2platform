@@ -42,6 +42,8 @@ ribbon.add_Tab("Help").add_Group("Websites")
 	  .add_StartProcess("Main O2 Website (http://o2platform)", "http://o2platform.com")	  
 	  .add_StartProcess("O2 @ OWASP.org website", "http://www.owasp.org/index.php/O2")
 	  .add_StartProcess("O2 @ CodePlex (for .NET Developers)", "http://o2platform.codeplex.com/")
+	  .add_StartProcess("O2 Source Code", "http://code.google.com/p/o2platform/source/browse/")
+	  
 	  
 	  .tab("Help").add_Group("Blogs")	  
 	  .add_StartProcess("Developer focused Blog on O2 (o2platform.wordpress.com)", "http://o2platform.wordpress.com/")

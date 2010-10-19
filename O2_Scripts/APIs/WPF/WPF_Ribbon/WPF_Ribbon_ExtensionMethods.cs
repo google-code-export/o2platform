@@ -198,6 +198,8 @@ namespace O2.XRules.Database.Utils
     	}*/    	    	    	
     	
     }
+    
+    
     public static class WPF_Ribbon_ExtensionMethods_Mouse
     {
 		public static RibbonTab click(this RibbonTab ribbonTab)
@@ -244,6 +246,20 @@ namespace O2.XRules.Database.Utils
     	{
     		var wpfRibbon = control.insert_Above<WinForms.Panel>(133).add_Control<WPF_Ribbon>(); 
     		return wpfRibbon;
+    	}
+    	
+    	    	
+    	public static T add_CustomO2_Image<T>(this T control, string pathToImage)
+    		where T : WinForms.Control
+    	{
+    		if (pathToImage.fileExists().isFalse())
+    			pathToImage = pathToImage.local();
+    			
+    		var leftPanel = control.insert_Right<WinForms.Panel>(200).fill(false).width(200).height(153);		
+			leftPanel.add_PictureBox().show(pathToImage).fill(false).width(190).height(140);;
+			//topPanel.backColor("Control"); 
+			control.parent<WinForms.SplitContainer>().backColor(System.Drawing.Color.White);//.splitterDistance(200); 
+			return control;
     	}
     	
     	// helper methods (to make the api easy to use)
@@ -506,10 +522,17 @@ namespace O2.XRules.Database.Utils
 			return ribbonGroup.add_RibbonButton(label, ()=> Processes.startProcess(process, arguments));
 		}
 		
+		public static RibbonGroup add_RibbonButton_ShowCodeFile(this RibbonGroup ribbonGroup, string label, string pathToFile)
+		{			
+			return ribbonGroup.add_RibbonButton_ShowCodeFile(null, label, pathToFile);
+		}
+		
 		public static RibbonGroup add_RibbonButton_ShowCodeFile(this RibbonGroup ribbonGroup, WinForms.Control winFormsControl, string label, string pathToFile)
 		{
 			return ribbonGroup.add_RibbonButton(label,  
 				()=>{
+						if (winFormsControl.isNull())
+							winFormsControl = O2Gui.open<WinForms.Panel>("Showing File:{0}".format(pathToFile),800,600);
 						if (pathToFile.fileExists().isFalse())
 							pathToFile = pathToFile.local();
 						winFormsControl.clear();
