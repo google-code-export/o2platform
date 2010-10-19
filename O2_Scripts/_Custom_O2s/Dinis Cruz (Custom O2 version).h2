@@ -29,6 +29,7 @@ ribbon.add_Tab("Custom O2s")
 	  .tab("Custom O2s").add_Group_FindAndExecuteScripts()
 	  
 	  .tab("Custom O2s").add_RibbonGroup("Web Proxy")
+	  .add_Script("OWASP Projects and Website (Custom O2)", "OWASP Projects and Website (Custom O2).h2")	  
 	  .add_Script("OWASP WebScarab (Custom O2 version)", "OWASP WebScarab (Custom O2 version).h2")
 	  .add_Script("Fiddler - HTTP Debugging Proxy (Custom O2)", "Fiddler - HTTP Debugging Proxy (Custom O2).h2")
 	  
