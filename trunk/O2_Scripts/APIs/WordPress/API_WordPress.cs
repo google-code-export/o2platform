@@ -9,6 +9,7 @@ using O2.Kernel.ExtensionMethods;
 using O2.Interfaces.O2Core;
 using O2.XRules.Database.Utils;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.Windows;
 using JoeBlogs;
 using JoeBlogs.Structs;
 
@@ -18,10 +19,11 @@ using JoeBlogs.Structs;
 //O2Ref:System.Xml.Linq.dll
 //O2Ref:System.Xml.dll
 //O2File:ISecretData.cs
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.APIs
 {
-    public class WordPressAPI
+    public class API_WordPress
     {    
     	public string WordPressServer {get; set;}
         public string WordPressXmlRpc { get; set; } 
@@ -30,7 +32,7 @@ namespace O2.XRules.Database.APIs
     	
     	public bool LoggedIn { get; set; }    	    
 
-    	public WordPressAPI(string wordPressServer)
+    	public API_WordPress(string wordPressServer)
     	{               
             WordPressXmlRpc = wordPressServer;
             if (WordPressXmlRpc.Contains("/xmlrpc.php").isFalse())
@@ -42,15 +44,15 @@ namespace O2.XRules.Database.APIs
     	    	
     }
     
-    public static class WordPressAPI_ExtensionMethods
+    public static class API_WordPress_ExtensionMethods
     {
     
-    	public static WordPressAPI login(this WordPressAPI wpApi, ICredential credential)
+    	public static API_WordPress login(this API_WordPress wpApi, ICredential credential)
     	{
     		return wpApi.login(credential.UserName,credential.Password);
     	}
     
-    	public static WordPressAPI login(this WordPressAPI wpApi, string username, string password)
+    	public static API_WordPress login(this API_WordPress wpApi, string username, string password)
     	{
             wpApi.WordPress = new WordPressWrapper(wpApi.WordPressXmlRpc, username, password);    
             wpApi.MetaWeblog = new MetaWeblogWrapper(wpApi.WordPressXmlRpc, username, password);    
@@ -59,7 +61,7 @@ namespace O2.XRules.Database.APIs
     	}  
     	
     	//DC: need to find a better way to do this
-    	public static bool loggedIn(this WordPressAPI wpApi)
+    	public static bool loggedIn(this API_WordPress wpApi)
     	{
     		try
     		{
@@ -72,7 +74,7 @@ namespace O2.XRules.Database.APIs
     		}
     	}
     	
-    	public static string post(this WordPressAPI wpApi, string title, string body)
+    	public static string post(this API_WordPress wpApi, string title, string body)
     	{
     	
     		var post = new Post();
@@ -83,7 +85,7 @@ namespace O2.XRules.Database.APIs
 
 		}
 		
-		public static List<Page> pages(this WordPressAPI wpApi)
+		public static List<Page> pages(this API_WordPress wpApi)
 		{
 			return wpApi.WordPress.GetPages().toList();
 		}
@@ -91,12 +93,12 @@ namespace O2.XRules.Database.APIs
 	}
 	public static class WordPressAPI_ExtensionMethods_MediaWiki_Integration
     {
-		public static string post_from_MediaWiki(this WordPressAPI wpApi, O2MediaWikiAPI wikiApi, string mediaWikiPage)
+		public static string post_from_MediaWiki(this API_WordPress wpApi, O2MediaWikiAPI wikiApi, string mediaWikiPage)
 		{
 			return wpApi.post_from_MediaWiki(wikiApi, mediaWikiPage, mediaWikiPage);
 		}
 		
-		public static string post_from_MediaWiki(this WordPressAPI wpApi, O2MediaWikiAPI wikiApi, string mediaWikiPage, string postTitle)
+		public static string post_from_MediaWiki(this API_WordPress wpApi, O2MediaWikiAPI wikiApi, string mediaWikiPage, string postTitle)
 		{
 			try
 			{
@@ -143,6 +145,21 @@ namespace O2.XRules.Database.APIs
 				return "";
 			}			
 		}
+    }
+    
+    public static class WordPressAPI_ExtensionMethods_SourceCode_Utils
+    {
+    	public static string wrapClipboardTextInSourceCodeTags(this API_WordPress wordPress)
+    	{
+    		var clipboardText = "".clipboardText_Get(); 
+    		"Current Clipboard Text:{0}".info(clipboardText);
+    		var wrapedText = "[sourcecode language=\"csharp\" wraplines=\"true\"]".line() + 
+							 clipboardText + "".line() + 
+ 							 "[/sourcecode]".line();
+
+    		wrapedText.clipboardText_Set();
+    		return clipboardText;
+    	}
     }
         
 }

@@ -1130,7 +1130,18 @@ textBox1.prop("",true);
                 () =>
                 {
                 	if (button.notNull())
-                    	button.Click += (sender, e) => O2Thread.mtaThread(()=> callback());
+                    	button.Click += (sender, e) => 
+                    		O2Thread.mtaThread(()=> 
+                    			{
+                    				try
+                    				{
+                    					callback();
+                    				}
+                    				catch(Exception ex)
+                    				{
+                    					ex.log("in WPF button onClick_Wpf");
+                    				}
+                    			});
                     return button;
                 });
         }

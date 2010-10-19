@@ -261,8 +261,32 @@ namespace O2.XRules.Database.Utils
 			
 			return savedImage;
 		}
+		
+		// we need to do this because the clipboard can only be accessed from an STA thread
+		public static string clipboardText_Get(this object _object)
+		{
+			var sync = new AutoResetEvent(false);
+			string clipboardText = null;
+			O2Thread.staThread(
+				()=>{
+						clipboardText = O2Forms.getClipboardText();						
+						sync.Set();							
+					});					
+			sync.WaitOne(2000);		
+			return clipboardText;
+		}
+		// poing existing toClipboard(this string _) to this
+		public static string clipboardText_Set(this string newClipboardText)
+		{
+			var sync = new AutoResetEvent(false);			
+			O2Thread.staThread(
+				()=>{
+						O2Forms.setClipboardText(newClipboardText);
+						sync.Set();							
+					});					
+			sync.WaitOne(2000);		
+			return newClipboardText;
+		}
 	}	   
 }
     	
-		
-		

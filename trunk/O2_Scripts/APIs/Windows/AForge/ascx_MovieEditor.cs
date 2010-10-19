@@ -47,6 +47,9 @@ namespace O2.XRules.Database.APIs
     	{    	    		
 			FrameViewer_Panel = this;				
 			AForge_Video = new API_AForge_Video(); 
+			AForge_Video.FrameRate = 3;
+			AForge_Video.FrameCaptureDelay = 10;
+			AForge_Video.AddDuplicateFrames = false;
 			OnImageDeleteAlsoDeleteFromDisk = false;
 			ViewMultipleSelectedImages = true;
     	}
@@ -331,6 +334,9 @@ namespace O2.XRules.Database.APIs
  
 
 	}
-	
+
+	//public static class ascx_MovieEditor_ExtensionMethods_YouTube
+    //{	
+    //	public static ascx_MovieEditor publishMovieToYouTube(this ascx_MovieEditor movieEditor)
 	
 }
