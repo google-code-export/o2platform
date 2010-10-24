@@ -50,15 +50,55 @@ namespace O2.XRules.Database.Utils
 {
 	public static class ExtraMethodsToAddToO2CodeBase_IO
 	{
-		// Config files
+		// Config files (can't easily put this on the main
         public static Panel editLocalConfigFile(this string file)
         {
             var panel = O2Gui.open<Panel>("Editing local config file: {0}".format(file), 700, 300);
             return file.editLocalConfigFile(panel);
         }
-
-		//DateTime extensionMethods
 		
+		// new one
+		public static T resizeFormToControlSize<T>(this T control, Control controlToSync)
+			where T : Control
+		{
+			if (controlToSync.notNull())
+			{
+				var parentForm = control.parentForm();
+				if (parentForm.notNull())
+				{
+					var top = controlToSync.PointToScreen(System.Drawing.Point.Empty).Y;
+					var left = controlToSync.PointToScreen(System.Drawing.Point.Empty).X;
+					var width = controlToSync.Width;
+					var height = controlToSync.Height;
+					"Setting parentForm location to {0}x{1} : {2}x{3}".info(top, left, width, height);
+					parentForm.Top = top;
+					parentForm.Left = left;
+					parentForm.Width = width;
+					parentForm.Height = height;
+				}
+			}
+			return control;
+		}
+		
+		public static string saveImageFromClipboardToFile(this object _object)
+		{
+			var clipboardImagePath = _object.saveImageFromClipboard();
+			if (clipboardImagePath.fileExists())
+			{
+				var fileToSave = O2Forms.askUserForFileToSave(PublicDI.config.O2TempDir,"*.jpg");
+				if (fileToSave.valid())
+				{
+					Files.MoveFile(clipboardImagePath, fileToSave);
+					"Clipboard Image saved to: {0}".info(fileToSave);
+				}
+			}
+			return clipboardImagePath;
+		}
+		
+		
+		// ALREADY ADDED****
+		//DateTime extensionMethods
+		/*
 		public static string safeFileName(this DateTime dateTime)
 		{
 			return Files.getSafeFileNameString(dateTime.str()); 
@@ -287,6 +327,7 @@ namespace O2.XRules.Database.Utils
 			sync.WaitOne(2000);		
 			return newClipboardText;
 		}
+		*/
 	}	   
 }
     	
