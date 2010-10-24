@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
@@ -190,16 +191,17 @@ namespace O2.Views.ASCX.CoreControls
         {
             try
             {
-                if (tbCurrentDirectoryName.okThread(delegate { openDirectory(sDirectoryToOpen); }))
-                {
-                    if (sDirectoryToOpen.dirExists())
+                if (sDirectoryToOpen.valid())
+                    if (tbCurrentDirectoryName.okThread(delegate { openDirectory(sDirectoryToOpen); }))
                     {
-                        //Files.checkIfDirectoryExistsAndCreateIfNot(sDirectoryToOpen);
-                        tbCurrentDirectoryName.Text = Path.GetFullPath(sDirectoryToOpen);
-                        setupFolderWatched();
-                        refreshDirectoryView();
+                        if (sDirectoryToOpen.dirExists())
+                        {
+                            //Files.checkIfDirectoryExistsAndCreateIfNot(sDirectoryToOpen);
+                            tbCurrentDirectoryName.Text = Path.GetFullPath(sDirectoryToOpen);
+                            setupFolderWatched();
+                            refreshDirectoryView();
+                        }
                     }
-                }
             }
             catch (Exception ex)
             {

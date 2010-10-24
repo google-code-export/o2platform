@@ -32,6 +32,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return dictionary.configSave(configFile);
         }        
 
+
         public static T editLocalConfigFile<T>(this string file, T control)
             where T : Control
         {

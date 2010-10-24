@@ -51,5 +51,24 @@ namespace O2.DotNetWrappers.ExtensionMethods
             //return (from form in 
             //		select form).toList();    		
         }
+
+        public static Form lastFormLoaded(this string dummyString)
+        {
+            return dummyString.lastWindowShown();
+        }
+        public static Form lastWindowShown(this string dummyString)
+        {
+            return dummyString.applicationWinForms().Last();
+        }
+
+        public static Form opacity(this Form form, double value)
+        {
+            form.invokeOnThread(
+                () =>
+                {
+                    form.Opacity = value;
+                });
+            return form;
+        }
     }
 }

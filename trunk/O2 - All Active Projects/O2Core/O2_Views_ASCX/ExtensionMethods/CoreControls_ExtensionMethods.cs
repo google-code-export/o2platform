@@ -59,6 +59,19 @@ namespace O2.Views.ASCX.ExtensionMethods
                     return directory;
                 });
         }*/
+
+        public static ascx_Directory processDroppedObjects(this ascx_Directory directory, bool value)
+        {
+            directory.invokeOnThread(() => directory._ProcessDroppedObjects = value);
+            return directory;
+        }
+
+        public static ascx_Directory handleDrop(this ascx_Directory directory, bool value)
+        {
+            directory.invokeOnThread(() => directory._HandleDrop = value);
+            return directory;
+        }	
+
         #endregion
 
         #region ascx_TableList

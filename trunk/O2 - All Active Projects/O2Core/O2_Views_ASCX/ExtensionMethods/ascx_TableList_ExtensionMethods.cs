@@ -7,6 +7,7 @@ using O2.Views.ASCX.DataViewers;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using System.Drawing;
+using O2.Kernel;
 
 namespace O2.Views.ASCX.ExtensionMethods
 {
@@ -45,7 +46,27 @@ namespace O2.Views.ASCX.ExtensionMethods
         #endregion
 
         #region misc
-        
+        public static ascx_TableList title(this ascx_TableList tableList, string title)
+        {
+            tableList.invokeOnThread(() => tableList._Title = title);
+            return tableList;
+
+        }
+
+        public static ascx_TableList show(this ascx_TableList tableList, object targetObject)
+        {
+            if (tableList.notNull() && targetObject.notNull())
+            {
+                tableList.clearTable();
+                tableList.title("{0}".format(targetObject.typeFullName()));
+                tableList.add_Columns("name", "value");
+                foreach (var property in PublicDI.reflection.getProperties(targetObject))
+                    tableList.add_Row(property.Name, targetObject.prop(property.Name).str());
+                tableList.makeColumnWidthMatchCellWidth();
+            }
+            return tableList;
+        }
+
         public static ascx_TableList show<T>(this ascx_TableList tableList, IEnumerable<T> collection, params string[] columnsToShow)
         {
             tableList.setDataTable(collection.dataTable(columnsToShow));

@@ -16,6 +16,7 @@ using System.Drawing;
 using O2.API.AST.CSharp;
 using System.CodeDom;
 using ICSharpCode.SharpDevelop.Dom;
+using O2.DotNetWrappers.H2Scripts;
 
 namespace O2.External.SharpDevelop.ExtensionMethods
 {
@@ -163,6 +164,8 @@ namespace O2.External.SharpDevelop.ExtensionMethods
         {
             return sourceCodeViewer.editor().getSourceCode();
         }
+
+
 
         #region events
 
@@ -406,6 +409,24 @@ namespace O2.External.SharpDevelop.ExtensionMethods
                 codeEditor.setDocumentContents(fileOrCode);
             }
             return codeEditor;
+        }
+
+        public static ascx_SourceCodeEditor editScript(this string scriptOrFile)
+        {
+            if (scriptOrFile.fileExists().isFalse())
+            {
+                if (scriptOrFile.local().valid())
+                    scriptOrFile = scriptOrFile.local();
+                else
+                {
+                    var h2Script = new H2(scriptOrFile);
+                    scriptOrFile = PublicDI.config.getTempFileInTempDirectory(".h2");
+                    h2Script.save(scriptOrFile);
+                }
+            }
+            return O2Gui.open<Panel>(scriptOrFile.fileName(), 800, 400)
+                        .add_SourceCodeEditor()
+                        .open(scriptOrFile);
         }
 
         public static Caret caret(this ascx_SourceCodeViewer codeViewer)
