@@ -124,6 +124,28 @@ namespace O2.XRules.Database.APIs
  			return new List<string>(); 			
  		}
  		
+ 		public static Dictionary<string,string> cookies_asDictionary(this WatiN_IE ie)
+ 		{ 			
+ 			var cookies_asDictionary = new Dictionary<string,string>();
+ 			foreach(var cookie in ie.cookies())
+ 			{
+ 				var splittedCookie = cookie.split("=");
+ 				if (splittedCookie.size().neq(2))
+ 					"[Watin_IE] in cookies_asDictionary, there was an error splitting cookie: {0}".error(cookie);
+ 				else
+ 					cookies_asDictionary.add(splittedCookie[0], splittedCookie[1]); 					
+ 			}
+ 			return cookies_asDictionary;
+ 		}
+ 		
+ 		public static string cookiesRaw(this Dictionary<string,string> cookies_asDictionary)
+ 		{
+ 			var cookieRaw = "";
+ 			foreach(var item in cookies_asDictionary)
+ 				cookieRaw+= "{0}={1}&".format(item.Key, item.Value);
+ 			return cookieRaw;
+ 		}
+ 		
  		//Need to find a better way to do this  (check what happens if the cookie name has a space between name & =
  		public static string cookie(this WatiN_IE ie, string cookieName)
  		{

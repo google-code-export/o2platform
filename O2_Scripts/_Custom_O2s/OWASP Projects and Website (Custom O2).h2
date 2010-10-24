@@ -13,8 +13,8 @@ topPanel.add_CustomO2_Image("owasp_logo.jpg");
 
 //topPanel.parentForm().top(60).left(60); 
 
-var logoNoShadow = "O2_Logo_no_Shadow.jpg".local(); 
-var smallLogo = "O2Logo_Small.gif".local();
+//var logoNoShadow = "O2_Logo_no_Shadow.jpg".local(); 
+//var smallLogo = "O2Logo_Small.gif".local();
 
 var ribbon = topPanel.add_Ribbon();
  
