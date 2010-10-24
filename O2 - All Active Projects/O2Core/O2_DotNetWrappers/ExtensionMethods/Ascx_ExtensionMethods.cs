@@ -71,7 +71,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
         {
             return control.add_Button(text, top, left, -1, -1, onClick);
         }
-        
+
+        public static Button add_Button(this Control control, int top, string buttonText)
+        {
+            return control.add_Button(top, 0, buttonText);
+        }
+
+        public static Button add_Button(this Control control, int top, int left, string buttonText)
+        {
+            return control.add_Button(buttonText, top, left);
+        }
+
         public static Button onClick(this Button button, MethodInvoker onClick)
         {
             if (onClick != null)
@@ -802,6 +812,20 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return textBox;
         }
 
+        public static TextBox add_TextBox(this Control control, string labelText, string defaultTextBoxText)
+        {
+            return control.add_Label(labelText).top(3)
+                          .append_TextBox(defaultTextBoxText)
+                          .align_Right(control); ;
+        }
+
+        public static TextBox add_TextBox(this Control control, int top, string labelText, string defaultTextBoxText)
+        {
+            return control.add_Label(labelText).top(top + 3)
+                          .append_TextBox(defaultTextBoxText)
+                          .align_Right(control); ;
+        }
+
         public static TextBox append_TextBox(this Control control, string text)
         {
             return control.append_TextBox(text, -1, -1);
@@ -965,7 +989,23 @@ namespace O2.DotNetWrappers.ExtensionMethods
                 return textBox;
             });
         }
-        
+
+        public static TextBox allowTabs(this TextBox textBox)
+        {
+            return textBox.acceptsTab();
+        }
+
+        public static TextBox acceptsTab(this TextBox textBox)
+        {
+            return textBox.acceptsTab(true);
+        }
+
+        public static TextBox acceptsTab(this TextBox textBox, bool value)
+        {
+            textBox.invokeOnThread(() => textBox.AcceptsTab = value);
+            return textBox;
+        }
+
         #endregion
 
         #region TreeView
@@ -2118,6 +2158,17 @@ namespace O2.DotNetWrappers.ExtensionMethods
                                       });
         }
 
+        public static CheckBox add_CheckBox(this Control control, int top, string checkBoxText)
+        {
+            return control.add_CheckBox(top, 0, checkBoxText);
+        }
+
+        public static CheckBox add_CheckBox(this Control control, int top, int left, string checkBoxText)
+        {
+            return control.add_CheckBox(checkBoxText, top, left, (value) => { })
+                          .autoSize();
+        }
+
         public static bool @checked(this CheckBox checkBox)
         {
             return checkBox.value();
@@ -2756,6 +2807,36 @@ namespace O2.DotNetWrappers.ExtensionMethods
             return propertyGrid;
         }
 
+        public static PropertyGrid toolBarVisible(this PropertyGrid propertyGrid, bool value)
+        {
+            propertyGrid.invokeOnThread(() => propertyGrid.ToolbarVisible = value);
+
+            return propertyGrid;
+        }
+
+        public static PropertyGrid helpVisible(this PropertyGrid propertyGrid, bool value)
+        {
+            propertyGrid.invokeOnThread(() => propertyGrid.HelpVisible = value);
+            return propertyGrid;
+        }
+
+        public static PropertyGrid sort_Alphabetical(this PropertyGrid propertyGrid)
+        {
+            propertyGrid.invokeOnThread(() => propertyGrid.PropertySort = PropertySort.Alphabetical);
+            return propertyGrid;
+        }
+
+        public static PropertyGrid sort_Categorized(this PropertyGrid propertyGrid)
+        {
+            propertyGrid.invokeOnThread(() => propertyGrid.PropertySort = PropertySort.Categorized);
+            return propertyGrid;
+        }
+
+        public static PropertyGrid sort_CategorizedAlphabetical(this PropertyGrid propertyGrid)
+        {
+            propertyGrid.invokeOnThread(() => propertyGrid.PropertySort = PropertySort.CategorizedAlphabetical);
+            return propertyGrid;
+        }
 
         #endregion
 

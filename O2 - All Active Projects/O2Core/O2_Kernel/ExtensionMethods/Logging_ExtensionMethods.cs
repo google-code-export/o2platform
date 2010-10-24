@@ -109,6 +109,12 @@ namespace O2.Kernel.ExtensionMethods
             PublicDI.log.error(_string);
         }*/
 
+        public static Exception log(this Exception ex)
+        {
+            ex.log("");
+            return ex;
+        }
+
         public static void log(this Exception ex, string textFormat, params object[] parameters)
         {
             ex.log(textFormat.format(parameters));

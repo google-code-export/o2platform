@@ -13,6 +13,10 @@ namespace O2.DotNetWrappers.ExtensionMethods
     {
         #region save
 
+        public static string safeFileName(this DateTime dateTime)
+        {
+            return Files.getSafeFileNameString(dateTime.str());
+        }
 
         public static string safeFileName(this string _string)
         {
