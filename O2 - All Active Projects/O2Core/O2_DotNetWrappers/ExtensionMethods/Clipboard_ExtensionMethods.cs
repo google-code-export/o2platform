@@ -15,7 +15,7 @@ namespace O2.DotNetWrappers.ExtensionMethods
     {
         public static void toClipboard(this string newClipboardText)
         {
-            newClipboardText.toClipboard();
+            newClipboardText.clipboardText_Set();
         }
 
         public static string clipboardText_Set(this string newClipboardText)
