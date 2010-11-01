@@ -51,6 +51,13 @@ namespace O2.Script
         	var columns = new List<string> { "ProcessName", "Id", "SessionId", "MainModule", "MainWindowTitle", "FileName", "WorkingDirectory", "Arguments"};
         	tableList = this.add_TableList("Processes");
         	tableList.setDataTable(GetRunningProcesses());        	
+        	tableList.afterSelect(
+        		(listViewItems)=>
+        			{
+        				"Selected row(s) values:".debug();
+        				foreach(var listViewItem in listViewItems)
+        					listViewItem.values().showInLog();
+        			});
 
      	}
     	    	    	    	    

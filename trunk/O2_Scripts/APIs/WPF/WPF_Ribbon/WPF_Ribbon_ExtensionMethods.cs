@@ -102,7 +102,7 @@ namespace O2.XRules.Database.Utils
     		foreach(var tab in ribbon.tabs())
     			if (tab.header()== header)
     				return tab;    		
-    		return null;
+    		return ribbon.add_RibbonTab(header);    		
     	}    	    	
 		
 		public static List<string> headers(this List<RibbonTab> tabs)
@@ -280,11 +280,15 @@ namespace O2.XRules.Database.Utils
     		where T : WinForms.Control
     	{
     		var pathToImage = "O2Logo_Small.gif".local();     		
-    		var leftPanel = control.insert_Right<WinForms.Panel>(200).fill(false).width(200).height(153);	  	    
+    		var leftPanel = control.insert_Right<WinForms.Panel>(200);//.fill(false).width(200).height(153);	  	    
     		control.splitContainer().backColor(System.Drawing.Color.White);//.splitterDistance(200); 
 			leftPanel.add_PictureBox().show(pathToImage).fill(false).width(71).height(61);  
 			leftPanel.add_Label("version for").left(70).top(15).size(16).font("Arial").font_bold();
-			leftPanel.add_Label(versionName).left(0).top(80).width(leftPanel.width()).size(16).font("Comic Sans MS").font_bold().text_Center(); 
+			leftPanel.add_Label("").left(0)
+					 .top(70).height(40).width(leftPanel.width())
+					 .size(16).font("Comic Sans MS")
+					 .font_bold().text_Center()
+					 .set_Text(versionName);
 			//topPanel.backColor("Control");   			
 			return control;
     	}
