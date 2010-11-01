@@ -121,32 +121,14 @@ apiScriptDevelopment.add_RibbonGroup("Custom O2")
 					.add_RibbonButton_H2Script("Check for ClickOnce Updates","AutoUpdate - Using Reflection.h2")	  					
 					.add_RibbonButton_H2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")
 					.add_RibbonButton("Exit O2 (and close all windows)", () =&gt; PublicDI.config.closeO2Process());
-					
-var miscTools = ribbon.Ribbon.add_RibbonTab("Misc Tools");		 
 
-miscTools.add_RibbonGroup("Media Tools")
-		 .add_RibbonButton_H2Script("open ScreenShot tool (Cropper)","Util - Show ScreenShot Tool.h2")
-		 .add_Button("save Image From Clipboard (to temp file)",()=&gt; 0.saveImageFromClipboard())
-		 .add_Button("save Image From Clipboard (to user's location)",()=&gt; 0.saveImageFromClipboardToFile());		 
-		 	     
-miscTools.add_RibbonGroup("Media Tools")
-		 .add_RibbonButton_H2Script("Image Editor", "Util - DiagramDesigner Editor.h2")	  	  
-		 .add_RibbonButton_H2Script("Movie Creator","Util - Movie Creator (Simple).h2");
+apiScriptDevelopment.add_RibbonGroup("Web Storage, Gui Automation")
+				    .add_RibbonButton_H2Script("Amazon S3 Browser","Amazon S3 Browser.h2")
+				    .add_StartProcess("DropBox","https://www.dropbox.com/home#/Public/;")
+					.add_RibbonButton_H2Script("Visual UIA Verify","Launch VisualUIAVerify.h2");
 
-miscTools.add_RibbonGroup("Web Storage")
-	     .add_RibbonButton_H2Script("Amazon S3 Browser","Amazon S3 Browser.h2")
-	     .add_StartProcess("DropBox","https://www.dropbox.com/home#/Public/;");
 
-	     
-miscTools.add_RibbonGroup("Files Utils") 		 		
-		 .add_RibbonButton_H2Script("Map Files by Extension","Util - File Mapping (by extension).h2")	  
-		 .add_RibbonButton_H2Script("Quick File Search","Util - Quick File Search.h2")	  
-		 .add_RibbonButton_H2Script("Simple Text Editor","Util - Simple Text Editor.h2")
-		 .add_RibbonButton_H2Script("CSharp String Encoder","CSharp_String_Encoder.h2")		 
-		 .add_RibbonButton_H2Script("Search Engine","Search Engine Tool.h2");
-
-miscTools.add_RibbonGroup("Gui Automation") 		 		
-		 .add_RibbonButton_H2Script("Visual UIA Verify","Launch VisualUIAVerify.h2");
+ribbon.add_Tab_MiscTools(); 
 
 var localFolders = ribbon.Ribbon.add_RibbonTab("UK Only and local folders");
 localFolders.add_Group("Wireless Providers")
@@ -168,6 +150,7 @@ return "ok";
 //using Microsoft.Windows.Controls.Ribbon;
 //using WPF= System.Windows.Controls
 //using DiagramDesigner
+//O2File:CustomO2.cs 
 //O2File:WPF_Ribbon.cs 
 //O2File:WPF_Ribbon_ExtensionMethods.cs
 //O2File:DiagramDesigner_ExtensionMethods.cs

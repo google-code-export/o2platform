@@ -38,7 +38,7 @@ namespace O2.XRules.Database.Utils
 		public static WPF_Ribbon create(string title, int width, int height)
 		{				
 			var formTitle = "{0} (Custom O2)".format(title);		
-			var panel = O2Gui.open<WinForms.Panel>(title, width, height);       
+			var panel = O2Gui.open<WinForms.Panel>(formTitle, width, height);       
 			return create(panel, title);
 		}
 		
@@ -73,6 +73,33 @@ namespace O2.XRules.Database.Utils
 							 .add_RibbonButton_H2Script("Html Editor","ascx_Html_Editor.cs.o2");      
 			return ribbon;		
 		}		
+		
+		public static  WPF_Ribbon add_Tab_MiscTools(this WPF_Ribbon ribbon)
+		{
+			var miscTools = ribbon.Ribbon.add_RibbonTab("Misc Tools");		 
+
+			miscTools.add_RibbonGroup("Media Tools")
+					 .add_RibbonButton_H2Script("open ScreenShot tool (Cropper)","Util - Show ScreenShot Tool.h2")
+					 .add_Button("save Image From Clipboard (to temp file)",()=> 0.saveImageFromClipboard())
+					 .add_Button("save Image From Clipboard (to user's location)",()=> 0.saveImageFromClipboardToFile());		 
+					 	     
+			miscTools.add_RibbonGroup("Media Tools")
+					 .add_RibbonButton_H2Script("Image Editor", "Util - DiagramDesigner Editor.h2")	  	  
+					 .add_RibbonButton_H2Script("Movie Creator","Util - Movie Creator (Simple).h2");
+				     
+			miscTools.add_RibbonGroup("Files Utils") 		 		
+					 .add_RibbonButton_H2Script("Map Files by Extension","Util - File Mapping (by extension).h2")	  
+					 .add_RibbonButton_H2Script("Quick File Search","Util - Quick File Search.h2")	  
+					 .add_RibbonButton_H2Script("Simple Text Editor","Util - Simple Text Editor.h2")
+					 .add_RibbonButton_H2Script("CSharp String Encoder","CSharp_String_Encoder.h2")		 
+					 .add_RibbonButton_H2Script("Search Engine","Search Engine Tool.h2");
+			miscTools.add_RibbonGroup("Windows Processes and Services")
+					 .add_Script("Stop Processes","ascx_Processes_Stop.cs.o2")
+					 .add_Script("View Running Process Details", "ascx_Running_Processes_Details.cs.o2")
+					 .add_Script("Stop Services","ascx_Services_Stop.cs.o2");
+				
+			return ribbon;
+		}
 	}
 	
 	public static class CustomO2_ExtensionMethods_Groups
