@@ -96,6 +96,177 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		
+		//Split Container
+		
+		public static SplitContainer splitContainer(this Control control)
+		{
+			return control.parent<SplitContainer>();
+		}
+		
+		public static SplitContainer splitterWidth(this SplitContainer splitContainer, int value)
+		{
+			splitContainer.invokeOnThread(()=> splitContainer.SplitterWidth = value);
+			return splitContainer;
+		}
+		
+		
+		//Label
+
+		public static Label autoSize(this Label label, bool value)
+		{
+			label.invokeOnThread(
+				()=>{						
+						label.AutoSize = value;
+					});
+			return label;
+		}
+		
+		public static Label text_Center(this Label label)			
+		{			
+			label.invokeOnThread(
+				()=>{						
+						label.autoSize(false);
+						label.TextAlign = ContentAlignment.MiddleCenter;
+					});
+			return label;
+		}				
+		//Control (Font)			
+		
+		
+		public static T size<T>(this T control, int value)
+			where T : Control
+		{
+			return control.textSize(value);
+		}
+		
+		public static T size<T>(this T control, string value)
+			where T : Control
+		{
+			return control.textSize(value.toInt());
+		}
+		
+		public static T font<T>(this T control, string fontFamily, string size)
+			where T : Control
+		{
+			return control.font(fontFamily, size.toInt());
+		}
+		
+		public static T font<T>(this T control, string fontFamily, int size)
+			where T : Control
+		{
+			return control.font(new FontFamily(fontFamily), size);
+		}
+		
+		public static T font<T>(this T control, FontFamily fontFamily, string size)
+			where T : Control
+		{
+			return control.font(fontFamily, size.toInt());
+		}
+		
+		public static T font<T>(this T control, FontFamily fontFamily, int size)
+			where T : Control
+		{
+			if (control.isNull())
+				return null;
+			control.invokeOnThread(
+				()=>{
+						if (fontFamily.isNull())
+							fontFamily = control.Font.FontFamily;
+						control.Font = new Font(fontFamily, size);
+					});
+			return control;
+		}
+		
+		public static T font<T>(this T control, string fontFamily)
+			where T : Control
+		{
+			return control.fontFamily(fontFamily);
+		}
+		
+		public static T fontFamily<T>(this T control, string fontFamily)
+			where T : Control
+		{
+			control.invokeOnThread(
+				()=> control.Font = new Font(new FontFamily(fontFamily), control.Font.Size));			
+			return control;
+		}
+		
+		public static T textSize<T>(this T control, int value)
+			where T : Control
+		{
+			control.invokeOnThread(
+				()=> control.Font = new Font(control.Font.FontFamily, value));			
+			return control;
+		}
+		
+		public static T font_bold<T>(this T control)		// just bold() conficts with WPF version
+			where T : Control
+		{
+			control.invokeOnThread(
+				()=> control.Font = new Font( control.Font, control.Font.Style | FontStyle.Bold ));
+			return control;
+		}
+		
+		public static T font_italic<T>(this T control)
+			where T : Control
+		{
+			control.invokeOnThread(
+				()=> control.Font = new Font( control.Font, control.Font.Style | FontStyle.Italic ));
+			return control;
+		}
+		
+		//ListBox
+		
+		public static ListBox add_ListBox(this Control control)
+		{
+			return control.add_Control<ListBox>();
+		}
+		
+		public static ListBox add_Item(this ListBox listBox, object item)
+		{
+			return listBox.add_Items(item);
+		}
+		
+		public static ListBox add_Items(this ListBox listBox, params object[] items)
+		{
+			return (ListBox)listBox.invokeOnThread(
+				()=>{
+						listBox.Items.AddRange(items);
+						return listBox;
+					});					
+		}
+		
+		public static object selectedItem(this ListBox listBox)
+		{
+			return (object)listBox.invokeOnThread(
+				()=>{	
+						return listBox.SelectedItem;	
+					});
+		}
+		
+		public static T selectedItem<T>(this ListBox listBox)
+		{			
+			var selectedItem = listBox.selectedItem();
+			if (selectedItem is T) 
+				return (T) selectedItem;
+			return default(T);					
+		}
+		
+		public static ListBox select(this ListBox listBox, int selectedIndex)
+		{
+			return (ListBox)listBox.invokeOnThread(
+				()=>{
+						if (listBox.Items.size() > selectedIndex)
+							listBox.SelectedIndex = selectedIndex;
+						return listBox;
+					});					
+		}
+		
+		public static ListBox selectFirst(this ListBox listBox)
+		{
+			return listBox.select(0);
+		}
+		
 		// ALREADY ADDED****
 		//DateTime extensionMethods
 		/*

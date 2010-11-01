@@ -20,6 +20,7 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
+using O2.Views.ASCX.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
 using O2.API.Visualization.ExtensionMethods;
 using Microsoft.Windows.Controls.Ribbon;
@@ -28,6 +29,8 @@ using O2.External.SharpDevelop.ExtensionMethods;
 
 //O2File:WPF_Ribbon.cs
 //O2File:Scripts_ExtensionMethods.cs
+
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.Utils
 {	
@@ -231,9 +234,18 @@ namespace O2.XRules.Database.Utils
     public static class WPF_Ribbon_ExtensionMethods_Add
     {
     	public static WPF_Ribbon add_Ribbon(this WinForms.Control control)
-    	{
+    	{    		
     		return control.add_Ribbon(false);
     	}
+    	
+    	public static WPF_Ribbon add_Ribbon(this WinForms.Control control, string versionName)
+    	{    		
+    		if (versionName.valid())
+    			control.add_CustomO2_Text(versionName);
+    		return control.add_Ribbon(false);
+    	}
+    	
+    	
     	
     	public static WPF_Ribbon add_Ribbon(this WinForms.Control control, bool addAbove)
     	{
@@ -243,12 +255,40 @@ namespace O2.XRules.Database.Utils
     	}
     	
     	public static WPF_Ribbon add_Ribbon_Above(this WinForms.Control control)
-    	{
-    		var wpfRibbon = control.insert_Above<WinForms.Panel>(133).add_Control<WPF_Ribbon>(); 
+    	{ 
+    		var wpfRibbon = control.insert_Above<WinForms.Panel>(136).add_Control<WPF_Ribbon>(); 
+    		control.splitContainer().splitterWidth(1); 
     		return wpfRibbon;
     	}
     	
-    	    	
+    	public static WPF_Ribbon add_Ribbon_WithLogViewer(this WinForms.Control control)
+    	{
+    		return control.add_Ribbon_WithLogViewer(null);
+    	}
+    	
+    	public static WPF_Ribbon add_Ribbon_WithLogViewer(this WinForms.Control control, string versionName)
+    	{
+    		var wpfRibbon = control.insert_Above<WinForms.Panel>(136).add_Ribbon(versionName);
+    		control.splitContainer().splitterWidth(1); 
+    		control.add_LogViewer();
+			//var leftPanel = topPanel.insert_Right<Panel>(200).fill(false).width(200).height(153);
+    		//var wpfRibbon = control.add_Ribbon();//insert_Above<WinForms.Panel>(153).add_Control<WPF_Ribbon>(); 
+    		return wpfRibbon;
+    	}    	    	
+    	
+    	public static T add_CustomO2_Text<T>(this T control, string versionName)    	
+    		where T : WinForms.Control
+    	{
+    		var pathToImage = "O2Logo_Small.gif".local();     		
+    		var leftPanel = control.insert_Right<WinForms.Panel>(200).fill(false).width(200).height(153);	  	    
+    		control.splitContainer().backColor(System.Drawing.Color.White);//.splitterDistance(200); 
+			leftPanel.add_PictureBox().show(pathToImage).fill(false).width(71).height(61);  
+			leftPanel.add_Label("version for").left(70).top(15).size(16).font("Arial").font_bold();
+			leftPanel.add_Label(versionName).left(0).top(80).width(leftPanel.width()).size(16).font("Comic Sans MS").font_bold().text_Center(); 
+			//topPanel.backColor("Control");   			
+			return control;
+    	}
+    	
     	public static T add_CustomO2_Image<T>(this T control, string pathToImage)
     		where T : WinForms.Control
     	{
@@ -368,7 +408,7 @@ namespace O2.XRules.Database.Utils
 						grid.RowDefinitions.Add(rowDefinition);
 									
 						var ribbon = grid.add_Control_Wpf<Ribbon>(); 
-						ribbon.ShowQuickAccessToolBarOnTop = false;  // this is not being used
+						ribbon.ShowQuickAccessToolBarOnTop = false;  // this is not being used						
 						return ribbon;
 					});
     	}

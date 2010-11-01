@@ -3,9 +3,9 @@
   <SourceCode>var title = "Dinis Cruz - O2 version (Security Consultant)";
 var currentScript = "Dinis Cruz (Custom O2 version).h2".local();
  
-var topPanel = O2Gui.open&lt;Panel&gt;(title, 1150,283);        
+var topPanel = O2Gui.open&lt;Panel&gt;(title, 1024,273);        
 topPanel.insert_Below&lt;Panel&gt;(110).add_LogViewer(); 
-var leftPanel = topPanel.insert_Right&lt;Panel&gt;(200).fill(false).width(200).height(153);
+var leftPanel = topPanel.insert_Right&lt;Panel&gt;(200).fill(false).width(200).height(148);
 
 topPanel.parentForm().top(60).left(60); 
 
@@ -23,7 +23,7 @@ ribbon.add_Tab("Custom O2s")
 
 	  .add_Group("Main GUIs")
 	  .add_Script("v1.5 GUI  (TiddlyWiki based)","v1.5_MainGui.h2") 
-	  .add_Script("v1.4 GUI  (shows running scripts)","O2 GUI.h2")
+	  .add_Script("v1.4 GUI  (shows scripts)","O2 GUI.h2")
 	  .add_Script("v1.3  (Big O2 WPF GUI)","O2 Main WPF GUI.h2")
 
 	  .tab("Custom O2s").add_Group_FindAndExecuteScripts()
