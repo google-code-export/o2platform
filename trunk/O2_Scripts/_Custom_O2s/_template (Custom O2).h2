@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var title = "Custom O2";  
+ 
+var ribbon = CustomO2.create(title); 		// stand alone version
+//var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
+  
+var hacmeBankDemos = ribbon.add_Tab("Custom O2");
+hacmeBankDemos.add_RibbonGroup("Group")
+	 		  .add_RibbonButton_Script("IE Automation","ascx_IE_ScriptExecution.cs");	 		 
+
+//ribbon.add_Tab_BrowserAutomation();
+
+//O2File:CustomO2.cs  
+
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:RibbonControlsLibrary.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
