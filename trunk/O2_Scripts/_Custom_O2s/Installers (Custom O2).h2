@@ -11,7 +11,9 @@ ribbon.add_Tab("Setup Apps")
 	  
 	  .tab("Setup Apps")
 	  .add_RibbonGroup("O2 internals")
-	  .add_StartProcess("O2 Spring MVC module", "http://deploy.o2-ounceopen.com/O2_Cmd_SpringMvc/setup.exe");
+	  .add_StartProcess("O2 Spring MVC module", "http://deploy.o2-ounceopen.com/O2_Cmd_SpringMvc/setup.exe")
+	  .add_StartProcess("_Jython (put in O2 tempdir)", "http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/_3rdPartyDlls/FilesWithNoCode/_Jython_RunTime.zip")
+	  
 	  
 	  
 
