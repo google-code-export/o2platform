@@ -71,6 +71,15 @@ namespace O2.XRules.Database.APIs
     
     public static class API_GuiAutomation_ExtensionMethods
     {
+    	public static API_GuiAutomation guiAutomation(this Process process)
+    	{
+    		return process.automation();
+    	}
+    	public static API_GuiAutomation automation(this Process process)
+    	{
+    		return new API_GuiAutomation(process);
+    	}
+    	
     	public static API_GuiAutomation attach(this API_GuiAutomation guiAutomation, Process process)
     	{
     		guiAutomation.Application = Application.Attach(process);
@@ -79,9 +88,17 @@ namespace O2.XRules.Database.APIs
     	
     	public static API_GuiAutomation attach(this API_GuiAutomation guiAutomation, string title)
     	{
-    		guiAutomation.Application = Application.Attach(title);
-    		guiAutomation.TargetProcess = guiAutomation.Application.Process;
-    		return guiAutomation;
+    		try
+    		{
+    			guiAutomation.Application = Application.Attach(title);
+    			guiAutomation.TargetProcess = guiAutomation.Application.Process;
+    			return guiAutomation;
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in attach");
+    			return null;
+    		}
     	}    	    	
     	
     	public static API_GuiAutomation attach(this API_GuiAutomation guiAutomation, int processId)
@@ -237,6 +254,39 @@ namespace O2.XRules.Database.APIs
     		return buttons;
     	}
     	
+    	//Label
+    	//TextBox
+    	public static Label label(this UIItemContainer container, string text)    		
+    	{
+    		return container.get<Label>(text);
+    	}
+    	 
+    	public static List<Label> labels(this UIItemContainer container)    		
+    	{
+    		return container.items<Label>();
+    	}
+    	
+    	public static string text(this Label label)
+    	{
+    		return label.get_Text();
+    	}
+    	
+    	public static string get_Text(this Label label)    		
+    	{
+    		return label.Text;
+    	}
+    	
+    	/*public static Label text(this Label label, string text)
+    	{
+    		return label.set_Text(text);
+    	}
+    	
+    	public static Label set_Text(this Label label, string text)
+    	{
+    		label.Text = text;
+    		return label;
+    	}*/
+    	
     	//TextBox
     	public static TextBox textBox(this UIItemContainer container, string text)    		
     	{
@@ -290,6 +340,14 @@ namespace O2.XRules.Database.APIs
     	{
     		if (container.notNull())
     			return container.Get<Tree>();
+    		return null;
+    	}
+    	
+    	public static Tree treeView(this UIItemContainer container, string name)    		
+    	{
+    		foreach(var treeView in container.treeViews())
+    			if (treeView.Name == name)
+    				return treeView;
     		return null;
     	}
     	
@@ -371,10 +429,13 @@ namespace O2.XRules.Database.APIs
     	
     	public static Menu menu(this Window window, string name)
     	{
+    		// first use the menus() list
     		foreach(var menu in window.menus())
     			if (menu.name()== name)
     				return menu;
-    		return null;
+    		// then do a search for it		
+    		return window.find<Menu>(name);
+    		//return null;
     	}
     	
     	public static Menu menu(this Menu menu, string name)
@@ -574,7 +635,9 @@ namespace O2.XRules.Database.APIs
     {	
     	public static List<Window> windows(this API_GuiAutomation guiAutomation)
     	{
-    		return guiAutomation.Application.GetWindows();
+    		if (guiAutomation.notNull() && guiAutomation.Application.notNull())
+    			return guiAutomation.Application.GetWindows();
+    		return new List<Window>();			// do a soft landing
     	}
     	    	    	
     	public static List<string> names(this List<Window> windows)
@@ -584,10 +647,11 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	public static Window window(this API_GuiAutomation guiAutomation, string windowName)
-    	{    		
-    		foreach(var window in guiAutomation.windows())
-    			if (window.Name == windowName) 
-    				return window;
+    	{    
+    		if (guiAutomation.notNull())
+    			foreach(var window in guiAutomation.windows())
+    				if (window.Name == windowName) 
+    					return window;
     		return null;
     	}
     	

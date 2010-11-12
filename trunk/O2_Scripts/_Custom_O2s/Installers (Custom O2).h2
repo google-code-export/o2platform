@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var title = "Custom O2";  
+  <SourceCode>var title = "Installers";  
  
 var ribbon = CustomO2.create(title); 		// stand alone version
 //var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
   
-var hacmeBankDemos = ribbon.add_Tab("Custom O2");
-hacmeBankDemos.add_RibbonGroup("Group")
-	 		  .add_RibbonButton_Script("IE Automation","ascx_IE_ScriptExecution.cs");	 		 
+ribbon.add_Tab("Setup Apps")
+      .add_RibbonGroup("Misc")
+	  .add_StartProcess("Firefox", "http://s3.amazonaws.com/O2_Downloads/Firefox Setup 3.6.10.exe");
 
 
 //ribbon.add_Tab_BrowserAutomation();
