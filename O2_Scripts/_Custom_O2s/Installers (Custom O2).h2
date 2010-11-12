@@ -7,7 +7,13 @@ var ribbon = CustomO2.create(title); 		// stand alone version
   
 ribbon.add_Tab("Setup Apps")
       .add_RibbonGroup("Misc")
-	  .add_StartProcess("Firefox", "http://s3.amazonaws.com/O2_Downloads/Firefox Setup 3.6.10.exe");
+	  .add_StartProcess("Firefox", "http://s3.amazonaws.com/O2_Downloads/Firefox Setup 3.6.10.exe")
+	  
+	  .tab("Setup Apps")
+	  .add_RibbonGroup("O2 internals")
+	  .add_StartProcess("O2 Spring MVC module", "http://deploy.o2-ounceopen.com/O2_Cmd_SpringMvc/setup.exe");
+	  
+	  
 
 
 //ribbon.add_Tab_BrowserAutomation();
