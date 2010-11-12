@@ -117,6 +117,7 @@ apiScriptDevelopment.add_RibbonGroup("Custom O2")
 								topPanel.parentForm().close();
 								currentScript.executeH2Script();
 							})
+					.add_Script("Open O2 Executable Directory", "Util - Open O2's Execution Directory.h2")
 					.add_Script("SecretData Editor", "SecretDataEditor.cs.o2")
 					.add_RibbonButton_H2Script("Check for ClickOnce Updates","AutoUpdate - Using Reflection.h2")	  					
 					.add_RibbonButton_H2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")
