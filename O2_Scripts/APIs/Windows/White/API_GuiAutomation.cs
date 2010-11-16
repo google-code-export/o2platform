@@ -19,6 +19,7 @@ using White.Core.UIItems.TreeItems;
 using White.Core.UIItems.MenuItems;
 using White.Core.UIItems.WindowItems;
 using White.Core.UIItems.ListBoxItems;
+using White.Core.UIItems.PropertyGridItems;
 using White.Core.UIItems.WindowStripControls;
 using White.Core.AutomationElementSearch;
 using System.Windows.Automation;
@@ -191,8 +192,15 @@ namespace O2.XRules.Database.APIs
     	
     	public static int handle(this IUIItem uiItem)
     	{
-    		if (uiItem.notNull())
-    			return uiItem.AutomationElement.Current.NativeWindowHandle;
+    		try
+    		{
+    			if (uiItem.notNull())
+    				return uiItem.AutomationElement.Current.NativeWindowHandle;
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in IUIItem handle(...)");
+    		}
     		return -1;
     	}
     	
@@ -218,11 +226,11 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	
-    	public static T sleep<T>(this T uiItem, int delay)  
+    	/*public static T sleep<T>(this T uiItem, int delay)  
     		where T : IUIItem
     	{
     		return uiItem.wait(delay);
-    	}
+    	}*/
     	    	
     	
     	public static T waitNSeconds<T>(this T uiItem, int seconds)    		
@@ -362,6 +370,53 @@ namespace O2.XRules.Database.APIs
     		return tree.Nodes;
     	}    	    	
     	
+    	//Panels
+    	
+    	public static Panel panel(this UIItemContainer container, string name)    		
+    	{
+    		foreach(var panel in container.panels())
+    			if (panel.Name == name)
+    				return panel;
+    		return null;
+    	}
+    	
+    	public static List<Panel> panels(this UIItemContainer container)    		
+    	{
+    		return container.items<Panel>();
+    	}
+    	
+    	//PropertyGrid
+    	public static PropertyGrid propertyGrid(this UIItemContainer container)    		
+    	{
+    		var propertyGrids = container.items<PropertyGrid>(); 
+    		if (propertyGrids.notNull() && propertyGrids.size() >0)
+    			return propertyGrids[0];
+    		return null;
+    	}
+    	
+    	public static Dictionary<string,string> properties(this PropertyGrid propertyGrid)
+    	{
+    		var properties = new Dictionary<string,string>();
+    		try
+    		{
+	    		// I have to do this because the code from 	PropertyGridCategoty and PropertyGridProperties has a couple bugs						
+				var finder = propertyGrid .field("finder");
+				var rows =  (List<AutomationElement>)finder.invoke("FindRows"); 
+				foreach(var element in rows)  
+				{	
+					AutomationPatterns automationPatterns = new AutomationPatterns(element);
+				 		var propertyGridProperty = (PropertyGridProperty)typeof(PropertyGridProperty).ctor(element, finder, propertyGrid.ActionListener);	
+					properties.add(propertyGridProperty.Text, propertyGridProperty.Value);
+				}
+			}
+			catch(Exception ex)
+			{
+				ex.log("in PropertyGrid properties");
+			}
+			"Found {0} propeties in PropertyGridView".info(properties.size());
+			return properties;
+    	}
+    	
     	//Menu
     	public static MenuBar menuBar(this Window window, string name)
     	{
@@ -390,7 +445,9 @@ namespace O2.XRules.Database.APIs
     	
     	public static List<Menu> menus(this Menu menu)
     	{
-    		return menu.ChildMenus;
+    		if (menu.notNull())
+    			return menu.ChildMenus;
+    		return new List<Menu>();
     	}
     	
     	public static List<string> names(this List<Menu> menus)
@@ -409,22 +466,22 @@ namespace O2.XRules.Database.APIs
     	public static Menu menu_Click(this Window window, string menuName, string menuItemName) //,bool animateMouse)
     	{
     		var menu = window.menu(menuName,menuItemName);    		    		
-    		menu.sleep(200);
-			return menu.click();
+    		//menu.sleep(200);
+			return menu.mouse().click();
     	}
     	public static Menu menu(this Window window, string menuName, string menuItemName)
     	{
-    		return window.menu(menuName).click().menu(menuItemName);
+    		return window.menu(menuName).mouse().click().menu(menuItemName);
     	}
     	
     	public static Menu menu_Click(this Window window, string menuName)
     	{
-    		return window.menu(menuName).click();
+    		return window.menu(menuName).mouse().click();
     	}
     	
     	public static Menu menu_Click(this Menu menu, string menuName)
     	{
-    		return menu.menu(menuName).click();
+    		return menu.menu(menuName).mouse().click();
     	}
     	
     	public static Menu menu(this Window window, string name)
@@ -449,6 +506,20 @@ namespace O2.XRules.Database.APIs
     	public static string name(this Menu menu)
     	{
     		return menu.Name;
+    	}
+    	
+    	
+    	//window
+    	public static API_GuiAutomation button_Click(this API_GuiAutomation guiAutomation, string windowName, string buttonName)
+    	{
+    		var window = guiAutomation.window(windowName);
+    		if (window.notNull())
+    		{
+    			var button = window.button(buttonName);
+    			if (button.notNull())
+    				button.mouse().click();    			
+    		}
+    		return guiAutomation;
     	}
     }
     
@@ -479,8 +550,10 @@ namespace O2.XRules.Database.APIs
     	
     	public static T mouse<T>(this T uiItem)
     		where T : IUIItem
-    	{
-    		return uiItem.mouse_MoveTo();
+    	{    		
+    		if (uiItem.notNull())	    			
+    			return uiItem.mouse_MoveTo();
+			return default(T);    		
     	}
     	
     	public static T mouse_MoveTo<T>(this T uiItem)
@@ -506,7 +579,7 @@ namespace O2.XRules.Database.APIs
 		}
     	
     	public static API_GuiAutomation mouse_MoveTo(this API_GuiAutomation guiAutomation, double x, double y)
-    	{
+    	{    		
     		Mouse.Instance.mouse_MoveTo(x, y, true);
     		return guiAutomation;
     	}    	
