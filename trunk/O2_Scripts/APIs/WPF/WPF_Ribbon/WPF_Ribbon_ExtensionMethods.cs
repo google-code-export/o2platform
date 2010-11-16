@@ -393,7 +393,11 @@ namespace O2.XRules.Database.Utils
 					    			);
 				    						
     	}   
-    	    	    
+    	
+    	public static RibbonGroup add_Button_Open_Folder(this RibbonGroup ribbonGroup, string label, string path) 
+    	{
+    		return ribbonGroup.add_RibbonButton_StartProcess(label,path);
+    	}
     }
     
     public static class Ribbon_ExtensionMethods
