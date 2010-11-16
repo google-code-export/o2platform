@@ -11,6 +11,12 @@ hacmeBankDemos.add_RibbonGroup("HacmeBank")
 	 		  .add_RibbonButton_H2Script("Full PoC (Black Box to WhiteBox)", "HacmeBank_FullPoc.h2")
 	 		  .add_RibbonButton_H2Script("Map HacmeBank Ascx EntryPoints", "Map HacmeBank Ascx EntryPoints.h2");
 
+hacmeBankDemos.add_RibbonGroup("Installion")
+			  .add_RibbonButton_StartProcess("HanmeBank at Google code", "http://code.google.com/p/owasp-hacmebank/")
+			  .add_RibbonButton_StartProcess("HanmeBank Installation", "http://owasp-hacmebank.googlecode.com/files/HacmeBank_v2.0%20%287%20Dec%2008%29.zip");
+			  
+		     
+
 ribbon.add_Tab_BrowserAutomation();
 return "ok";
 
