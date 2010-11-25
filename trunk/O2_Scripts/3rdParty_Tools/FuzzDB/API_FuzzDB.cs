@@ -105,5 +105,20 @@ namespace O2.XRules.Database.APIs
 											   
 			return xssPayloads;
     	}    	    	
+    	
+    	public static List<String> payloads_SQLi_Generic(this API_FuzzDB fuzzDB)
+    	{
+			var xssPayloads = fuzzDB.getPayloads(@"attack-payloads\sql-injection\detect\generic\sql-injection.txt",
+    											 @"attack-payloads\sql-injection\detect\generic\sql-injection-active.txt",
+    											 @"attack-payloads\sql-injection\detect\generic\sql-injection-passive.txt");
+			return xssPayloads;    											 
+    	}
+    	
+    	public static List<String> payloads_SQLi_SqlServer(this API_FuzzDB fuzzDB)
+    	{
+    		var xssPayloads = fuzzDB.getPayloads(@"attack-payloads\sql-injection\detect\ms-sql\sql-injection-ms-sql.txt",
+    											 @"attack-payloads\sql-injection\detect\ms-sql\sql-injection-ms-sql-blind-ninja.txt");
+			return xssPayloads;
+    	}    	    	
     }
 }
