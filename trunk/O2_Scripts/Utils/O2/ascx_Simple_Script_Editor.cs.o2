@@ -191,6 +191,7 @@ namespace O2.XRules.Database.Utils
             commandsToExecute.textArea().KeyEventHandler += handleKeyEventHandler;
             contextMenu.add_MenuItem("current source code")
                        .add_MenuItem("compile", (menuitem) => compile())
+                       .add_MenuItem("copy to clipboard", (menuitem) => commandsToExecute.get_Text().toClipboard())
                        .add_MenuItem("save", (menuitem) => saveScript())
                        .add_MenuItem("save As", (menuitem) => saveAsScript())
                        .add_MenuItem("what is the current loaded filename", (menuitem) => "The path of the currently loaded file is: {0}".info(currentSourceCodeFilePath()))
