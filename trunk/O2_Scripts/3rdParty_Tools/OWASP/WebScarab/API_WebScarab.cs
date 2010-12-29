@@ -42,6 +42,7 @@ namespace O2.XRules.Database.APIs
     		Install_Uri = "http://dawes.za.net/rogan/webscarab/webscarab-one-20100820-1632.jar".uri();    		    		
     		WebScarab_Jar = Install_Dir.pathCombine(Install_File);
     		InputSimulator = new API_InputSimulator();   
+    		install();
 		}
 		 
 		

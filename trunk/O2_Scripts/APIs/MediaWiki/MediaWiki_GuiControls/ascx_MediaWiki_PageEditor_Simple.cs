@@ -189,6 +189,14 @@ namespace O2.XRules.Database.APIs
 			loadPage(pageToEdit);													
 		} 
 		
+		//use this just to set the page name (and not load it)
+		public void setPage(string pageToLoad)
+		{
+			WikiPage_TextBox.set_Text(pageToLoad); 		//set the page name
+			WikiTextEditor.set_Text("");				//clear the current contents
+			
+		}
+		
 		public void openPage(string pageToLoad)
 		{				
 			loadPage(pageToLoad);
@@ -196,7 +204,13 @@ namespace O2.XRules.Database.APIs
 		 
 		public void loadPage(string pageToLoad)
 		{  
-			WikiPage_TextBox.set_Text(pageToLoad); 
+			WikiPage_TextBox.set_Text(pageToLoad);
+			loadPage();
+		}
+		
+		public void loadPage()
+		{
+			var pageToLoad = WikiPage_TextBox.get_Text();
 			WikiTextEditor.backColor(Color.LightPink);
 			StatusLabel.set_Text("Opening page: {0}".format(pageToLoad)).textColor(Color.Black);
 			CurrentPageUrl.insert_Item("{0}/{1}".format(WikiApi.IndexPhp,pageToLoad));
