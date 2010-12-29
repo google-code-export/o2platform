@@ -23,6 +23,8 @@ namespace O2.XRules.Database.Utils
     	
     	public FileCache(string pathLocalCache)
     	{
+    		if (pathLocalCache.contains("\\","/").isFalse())
+    			pathLocalCache = pathLocalCache.tempDir(false);
     		PathLocalCache = pathLocalCache;
     		Files.checkIfDirectoryExistsAndCreateIfNot(PathLocalCache);
     	}
@@ -46,12 +48,17 @@ namespace O2.XRules.Database.Utils
 		
 		public string cacheGet(string uri)
 		{
-			return cacheGet(uri,".html", null);
+			return cacheGet(uri,defaultCacheExtension, null);
 		}
 		
 		public string cacheGet(string itemPath, string cacheSaveExtension)
 		{
 			return cacheGet(itemPath,cacheSaveExtension, null);
+		}
+		
+		public string cacheGet(string itemPath,  Func<string,string> getFunction)
+		{
+			return cacheGet(itemPath , ()=> {return getFunction(itemPath);} );
 		}
 		
 		public string cacheGet(string itemPath,  Func<string> getFunction)
@@ -106,7 +113,7 @@ namespace O2.XRules.Database.Utils
 		
 		public string cachePut(string itemPath, string cacheValue)
 		{
-			return 	cachePut(itemPath, ".o2Cache",cacheValue);
+			return 	cachePut(itemPath, defaultCacheExtension,cacheValue);
 		}
 		
 		public string cachePut(string itemPath, string cacheSaveExtension, string cacheValue)
@@ -117,6 +124,26 @@ namespace O2.XRules.Database.Utils
 			var cacheAddress = getCacheAddress(itemPath,cacheSaveExtension);//  PathLocalCache.pathCombine(itemPath.safeFileName(UseBase64EncodedStringInFileName) + cacheSaveExtension);
 			cacheValue.saveAs(cacheAddress);
 			return cacheAddress;
-		}  	    	    	    
+		}
+		
+		public void cacheRemove(string itemPath)
+		{
+			var localFile = getCacheAddress(itemPath);
+			if (localFile.fileExists())
+			{
+				"deleting caceh file:{0}".info(itemPath);
+				Files.deleteFile(localFile);
+			}
+			
+		}
+		public void clearCache()
+		{
+			if (PathLocalCache.dirExists())
+				foreach(var file in PathLocalCache.files())
+				{
+					"deleting cache file:{0}".info(file);
+					Files.deleteFile(file);
+				}
+		}
     }
 }

@@ -20,9 +20,11 @@ using System.IO;
 using System.Drawing.Imaging;
 using O2.External.IE.Wrapper;
 using O2.External.IE.ExtensionMethods;
+using O2.XRules.Database.Utils;
 using O2.XRules.Database.Utils.ExtensionMethods;
 
 //O2File:HtmlAgilityPack_ExtensionMethods.cs
+//O2File:FileCache.cs
 
 //O2Ref:O2_External_IE.dll
 //O2Ref:System.Xml.Linq.dll
@@ -32,7 +34,7 @@ using O2.XRules.Database.Utils.ExtensionMethods;
 namespace O2.XRules.Database.APIs
 {
     public class O2MediaWikiAPI
-    {   
+    {            
     	public string ApiName { get; set; }
     	public string HostUrl { get; set; }		
     	public string ApiPhp { get; set; }
@@ -52,6 +54,10 @@ namespace O2.XRules.Database.APIs
 		public Web LastWebRequest { get; set; }		
 		
 		public string SEPARATOR_CHAR = "?";
+		
+		//fetched data cache (only setup when used
+		public FileCache WikiContentLocalCache {get;set;}			
+		
 		
 		public O2MediaWikiAPI()
 		{
@@ -176,6 +182,18 @@ namespace O2.XRules.Database.APIs
 				ex.log("in O2MediaWikiAPI.parseText");				
 			}
             return null;
+		}
+		
+		// version of raw(string page) with cache support
+		public string raw(string page, bool useCache)
+		{
+			if (useCache)
+			{
+				if (WikiContentLocalCache.isNull())
+					WikiContentLocalCache = new FileCache("MediaWiki_ContentLocalCache");
+				return WikiContentLocalCache.cacheGet(page,()=>{ return this.raw(page);});   
+			}
+			return this.raw(page);
 		}
 		
 		public string raw(string page)

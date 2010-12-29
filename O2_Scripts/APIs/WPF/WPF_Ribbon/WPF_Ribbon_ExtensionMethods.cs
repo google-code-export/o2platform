@@ -588,6 +588,16 @@ namespace O2.XRules.Database.Utils
 					});
 		}
 		
+		public static RibbonGroup add_RibbonButton_Web(this RibbonGroup ribbonGroup, string label, string url)
+		{			
+			return ribbonGroup.add_RibbonButton(label,  
+				()=>{						
+						var panel = O2Gui.open<WinForms.Panel>("Web Browser: " + label, 600,400);
+						"Opening url: {0}".info(url);
+						panel.add_Control<WinForms.WebBrowser>().open(url);;						
+					});
+		}
+		
 		public static RibbonGroup add_RibbonButton_Web(this RibbonGroup ribbonGroup, WinForms.Control winFormsControl, string label, string url)
 		{
 			return ribbonGroup.add_RibbonButton(label,  
