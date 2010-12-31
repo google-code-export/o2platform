@@ -48,6 +48,7 @@ return TextParsed ;
           
 //var text =  fileCache.cacheGet(pageName,()=&gt;{ return wikiApi.raw(pageName);});    
 var mappings = new WikiText_HeadersAndTemplates()
+				   .useCache(false)
 				   .parse(wikiApi,pageName1)
 				   .parse(wikiApi,pageName2)
 				   .Templates;

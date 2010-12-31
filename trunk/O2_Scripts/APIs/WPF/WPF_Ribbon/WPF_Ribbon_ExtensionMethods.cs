@@ -239,14 +239,17 @@ namespace O2.XRules.Database.Utils
     	}
     	
     	public static WPF_Ribbon add_Ribbon(this WinForms.Control control, string versionName)
+    	{
+    		return control.add_Ribbon(versionName, false);
+    	}
+    	
+    	public static WPF_Ribbon add_Ribbon(this WinForms.Control control, string versionName, bool addAbove)
     	{    		
     		if (versionName.valid())
     			control.add_CustomO2_Text(versionName);
-    		return control.add_Ribbon(false);
+    		return control.add_Ribbon(addAbove);
     	}
-    	
-    	
-    	
+    	  	
     	public static WPF_Ribbon add_Ribbon(this WinForms.Control control, bool addAbove)
     	{
     		if (addAbove)
@@ -285,7 +288,7 @@ namespace O2.XRules.Database.Utils
 			leftPanel.add_PictureBox().show(pathToImage).fill(false).width(71).height(61);  
 			leftPanel.add_Label("version for").left(70).top(15).size(16).font("Arial").font_bold();
 			leftPanel.add_Label("").left(0)
-					 .top(70).height(40).width(leftPanel.width())
+					 .top(50).height(80).width(leftPanel.width())
 					 .size(16).font("Comic Sans MS")
 					 .font_bold().text_Center()
 					 .set_Text(versionName);
