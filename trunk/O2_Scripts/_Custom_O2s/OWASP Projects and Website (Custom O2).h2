@@ -25,10 +25,11 @@ owaspWiki.add_RibbonGroup("Tools")
 				 .add_RibbonButton_H2Script("OWASP Wiki Page Edit","Tool - OWASP Wiki Page Edit.h2")
 				 .add_RibbonButton_H2Script("OWASP Wiki Latest Changes","Tool - OWASP WIKI Diff of Latests Changes.h2");  
 
-owaspWiki.add_RibbonGroup("History of OWASP Website")
-				 .add_RibbonButton_H2Script("Show Image Animation of OWASP content","Script - show Image animation of OWASP Content.h2");  
+//owaspWiki.add_RibbonGroup("History of OWASP Website")
+//				 .add_RibbonButton_H2Script("Show Image Animation of OWASP content","Script - show Image animation of OWASP Content.h2");  
 
-				 
+owaspWiki.add_RibbonGroup("OWASP Summit 2011")
+	     .add_Script("OWASP Summit 2011 (Control Center)","OWASP Summit 2011 (Custom O2).h2");				 
 var openSamm = ribbon.Ribbon.add_RibbonTab("Open SAMM");    
 openSamm.add_RibbonGroup("OpenSAMM") 				 	  
 				 .add_RibbonButton_StartProcess("Open SAMM folder","SAMM-1.0-roadmap-0.3.xsd".local().directoryName(),"") 
