@@ -13,6 +13,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Reflection;
 using System.Text;
+using Microsoft.Win32;
 using O2.Interfaces.O2Core;
 using O2.Interfaces.O2Findings;
 using O2.Kernel;
@@ -290,6 +291,45 @@ namespace O2.XRules.Database.Utils
 					});
 			return process;
 		}
-	}	   
+	}
+		
+	//REGISTRY
+	public static class RegistryKeyExtensionMethods
+    {
+        public static RegistryKey getOrCreateSubKey(this RegistryKey registryKey, string parentKeyLocation, string key, bool writable)
+        {
+            string keyLocation = string.Format(@"{0}\{1}", parentKeyLocation, key);
+
+            RegistryKey foundRegistryKey = registryKey.OpenSubKey(keyLocation, writable);
+
+            return foundRegistryKey ?? registryKey.createSubKey(parentKeyLocation, key);
+        }
+
+        public static RegistryKey createSubKey(this RegistryKey registryKey, string parentKeyLocation, string key)
+        {
+            RegistryKey parentKey = registryKey.OpenSubKey(parentKeyLocation, true); //must be writable == true
+            if (parentKey == null) { throw new NullReferenceException(string.Format("Missing parent key: {0}", parentKeyLocation)); }
+
+            RegistryKey createdKey = parentKey.CreateSubKey(key);
+            if (createdKey == null) { throw new Exception(string.Format("Key not created: {0}", key)); }
+
+            return createdKey;
+        }
+        
+        //IE Specific
+        public static void createSubDomainKeyAndValue(this RegistryKey currentUserKey, string domainsKeyLocation, string domain, 
+        											   string subDomainKey, string subDomainValue, int zone)
+        {
+            RegistryKey subdomainRegistryKey = currentUserKey.getOrCreateSubKey(string.Format(@"{0}\{1}", domainsKeyLocation, domain), subDomainKey, true);
+
+            object objSubDomainValue = subdomainRegistryKey.GetValue(subDomainValue);
+
+            if (objSubDomainValue == null || Convert.ToInt32(objSubDomainValue) != zone)
+            {
+                subdomainRegistryKey.SetValue(subDomainValue, zone, RegistryValueKind.DWord);
+            }
+        }
+
+	}   
 }
     	

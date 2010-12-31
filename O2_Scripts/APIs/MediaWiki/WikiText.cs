@@ -32,6 +32,12 @@ namespace O2.XRules.Database.APIs
     		UseContentLocalCache = true;
     	}
     	
+    	public WikiText_HeadersAndTemplates useCache(bool value)
+    	{
+    		UseContentLocalCache = value;
+    		return this;
+    	}
+    	
     	public WikiText_HeadersAndTemplates parse(O2MediaWikiAPI wikiApi, string page)
     	{
     		return parse(wikiApi.raw(page,UseContentLocalCache));	

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var title = "OWASP Summit 2011";  
+
+//var topPanel = panel.clear().add_Panel(); 
+var topPanel = O2Gui.open&lt;Panel&gt;("OWASP O2 Summit (custom O2)",1024,600);
+
+var ribbon = topPanel.add_Ribbon(title,true);
+topPanel.backColor("Control");
+ 
+ 
+//var ribbon = CustomO2.create(title); 		// stand alone version
+//var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
+  
+var webPages = ribbon.add_Tab("Summit Pages and Tools"); 
+webPages.add_RibbonGroup("Web Pages")
+	  	.add_RibbonButton_Web(topPanel,"Summit Home Page","http://www.owasp.org/index.php/Summit_2011");
+
+webPages.add_RibbonGroup("Utils ")  
+		.add_Script("Util - Attendees Mappings", "Util - Attendees Mappings (first GUI).h2".local()); 
+
+//ribbon.add_Tab_BrowserAutomation();
+ribbon.add_Tab_MiscTools();
+
+return webPages.group("Web Pages").buttons()[0].click(); 
+//O2File:CustomO2.cs  
+
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:RibbonControlsLibrary.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
