@@ -170,11 +170,12 @@ namespace O2.XRules.Database.APIs
 
 	public class WikiText_Template	: WikiText
 	{
-		//public Dictionary<string,List<string>> Templates { get; set; }    	
+		public string TemplateName { get; set; }
+		public Dictionary<string,string> Variables { get; set; }
 		
 		public WikiText_Template() : base()
     	{    		
-    		//Templates = new Dictionary<string,List<string>>();      		
+    		Variables = new Dictionary<string,string>();		
     	}    	    	    	    	    	    	
 		
 		//method called that will trigger the parsing
@@ -189,18 +190,22 @@ namespace O2.XRules.Database.APIs
 		{
 			if (this.ParseTree.isNull())
 				return;
-			//var currentTemplate = "";
+			var root =  ParseTree.Root; 
+			TemplateName = root.ChildNodes[1].ChildNodes[0].ChildNodes[0].Token.ValueString.trim();
 			
-			/*foreach(var child in ParseTree.Root.ChildNodes)
-			{
-				var nodeText = child.Token.ValueString.trim();
-				var nodeType = child.Term.Name; 
-				if (nodeType == "h2")
-					currentTemplate = nodeText;
-				if (currentTemplate.valid())
-					if (nodeType == "template")
-						Templates.add(currentTemplate, nodeText);
-			}*/					
+			var rows = root.ChildNodes[1].ChildNodes[1].ChildNodes;
+			foreach(var row in rows) 
+			{	
+				//var nodeValue = child.ValueString.isNull() ? "" : child.Token.ValueString.trim();  
+				var nodeType = row.Term.Name; 
+				if (nodeType =="dataRow")
+				{
+					var variableName = row.ChildNodes[0].Token.ValueString.trim();
+					var variableValue = row.ChildNodes[1].Token.ValueString.trim()  ;
+					Variables.add(variableName, variableValue);
+					//"{0} : {1} " .info(variableName, variableValue);	
+				} 
+			}
 		}				 
 	}
 

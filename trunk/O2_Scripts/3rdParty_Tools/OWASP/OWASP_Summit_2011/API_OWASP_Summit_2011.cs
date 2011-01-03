@@ -18,6 +18,38 @@ using O2.Views.ASCX.ExtensionMethods;
 
 namespace O2.XRules.Database.APIs
 {
+	public class SummitAttendee
+	{
+		public string Name { get; set; }
+		public string Email { get; set; }
+		public string Wiki_UserName { get; set; }
+		public string OWASP_Sponsor { get; set; }
+		public string TimePaidBy { get; set; }
+		public string ExpensesPaidBy { get; set; }
+		public string Status { get; set; }
+		
+		public Dictionary<string,string> variables;// { get; set; }
+		
+		public SummitAttendee(WikiText_Template templateData)
+		{
+			variables = templateData.Variables;	
+			setValue("Name", "summit_attendee_name1");
+			setValue("Email", "summit_attendee_email1");
+			setValue("Wiki_UserName", "summit_attendee_wiki_username1");
+			setValue("OWASP_Sponsor", "summit_attendee_owasp_sponsor");
+			setValue("TimePaidBy", "summit_attendee_summit_time_paid_by_name1");
+			setValue("ExpensesPaidBy", "summit_attendee_summit_expenses_paid_by_name1");
+			setValue("Status", "status");
+			//Name = Variables.get("summit_attendee_name1");
+			//Email = Variables.get("summit_attendee_email1");
+		}
+		
+		void setValue(string localVariableName, string variableName)
+		{
+			this.prop(localVariableName, this.variables.get(variableName));
+		}
+	}
+	
     public class API_OWASP_Summit_2011
     {    
     	public OwaspWikiAPI wikiApi;
@@ -25,6 +57,31 @@ namespace O2.XRules.Database.APIs
     	public API_OWASP_Summit_2011()
     	{
     		wikiApi = new OwaspWikiAPI(false);  
+    	}
+    	
+    	//Attendee details
+    	
+    	
+    	public List<SummitAttendee> getAttendees(List<string> pages)
+    	{
+    		var attendees = new List<SummitAttendee>();
+    		foreach(var page in pages)
+    		{
+    			var attendee = getAttendee(page);
+    			if (attendee.Name.valid())
+    				attendees.add(attendee);
+    		}
+    		return attendees;
+    	}
+    	public SummitAttendee getAttendee(string page)
+    	{
+    		var wikiApi = new OwaspWikiAPI(false);   
+					
+			var templateData = new WikiText_Template();  
+					  
+			templateData.parse(wikiApi,page); 
+			//return templateData.ParseTree.Root.ChildNodes;    
+			return new SummitAttendee(templateData);//.Variables; 
     	}
     	
     	//All Attendess funds

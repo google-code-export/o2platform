@@ -14,10 +14,16 @@ topPanel.backColor("Control");
   
 var webPages = ribbon.add_Tab("Summit Pages and Tools"); 
 webPages.add_RibbonGroup("Web Pages")
-	  	.add_RibbonButton_Web(topPanel,"Summit Home Page","http://www.owasp.org/index.php/Summit_2011");
+	  	.add_RibbonButton_Web(topPanel,"Summit Home Page","http://www.owasp.org/index.php/Summit_2011")
+	  	.add_RibbonButton_Web(topPanel,"Attendees list (who is going)","http://www.owasp.org/index.php/Summit_2011_Attendee")
+	  	.add_RibbonButton_Web(topPanel,"Summit Internals","http://www.owasp.org/index.php/Summit_2011_Internals");
 
+webPages.add_RibbonGroup("Attendees Funding")
+		.add_RibbonButton_Web(topPanel,"Compiled funding information from Summit sponsorship applicants ","https://spreadsheets.google.com/ccc?key=0ApZ9zE0hx0LNdERFaW9iWmVEeUY4QXd4ZnR6N0xCWGc&amp;hl=en&amp;authkey=CKPE8O0J");
+	  	
 webPages.add_RibbonGroup("Utils ")  
-		.add_Script("Util - Attendees Mappings", "Util - Attendees Mappings (first GUI).h2".local()); 
+		.add_Script("Util - Attendees Mappings", "Util - Attendees Mappings (first GUI).h2".local())
+		.add_Script("Util - Attendees Funding Mappings", "Util - Attendees Funding Mappings.h2".local()); 
 
 //ribbon.add_Tab_BrowserAutomation();
 ribbon.add_Tab_MiscTools();
