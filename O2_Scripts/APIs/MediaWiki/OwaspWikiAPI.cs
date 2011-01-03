@@ -96,13 +96,13 @@ namespace O2.XRules.Database.APIs
     
     public static class OwaspWikiAPI_ExtensionMethods
     {
-    	public static List<string> OWASP_Projects(this OwaspWikiAPI wikiApi)
+    	/*public static List<string> OWASP_Projects(this OwaspWikiAPI wikiApi)
     	{
-    		var categoryTag = "Category:OWASP Project";
+    		//var categoryTag = "Category:OWASP Project";
     		var projects = new List<string>();	
     		projects.Add("Asd"); 
     		return projects;
-    	}
+    	}*/
     }
     
     
