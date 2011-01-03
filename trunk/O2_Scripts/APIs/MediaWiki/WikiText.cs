@@ -17,42 +17,88 @@ using Irony.Parsing;
 //O2File:O2MediaWikiAPI.cs
 namespace O2.XRules.Database.APIs
 {
-	//These are massive hacks that should be rewritten once the MediaWiki Gramar is bettert
-    public class WikiText_HeadersAndTemplates
-    {    
+	/// Abstract WikiText CLASS
+	public abstract class WikiText	
+	{
 		public List<string> TextParsed { get; set; }
 		public ParserMessageList  ParserMessages { get; set; }
-    	public Dictionary<string,List<string>> Templates { get; set; }
-    	public bool UseContentLocalCache { get; set; }
+		public bool UseContentLocalCache { get; set; }
+		public ParseTree ParseTree { get; set; }
+		public ParseTreeStatus Status { get; set; }
 		
-		public WikiText_HeadersAndTemplates()
+		public WikiText()
+		{
+			TextParsed = new List<string>();
+			UseContentLocalCache = true;
+		}				
+    	
+    	public void parse(O2MediaWikiAPI wikiApi, Grammar grammar, string page)
+    		 //where T : WikiText	    		 
     	{
-    		TextParsed = new List<string>();
-    		Templates = new Dictionary<string,List<string>>();  
-    		UseContentLocalCache = true;
+    		parse(wikiApi.raw(page,UseContentLocalCache),grammar);	
     	}
     	
-    	public WikiText_HeadersAndTemplates useCache(bool value)
-    	{
-    		UseContentLocalCache = value;
-    		return this;
-    	}
-    	
-    	public WikiText_HeadersAndTemplates parse(O2MediaWikiAPI wikiApi, string page)
-    	{
-    		return parse(wikiApi.raw(page,UseContentLocalCache));	
-    	}
-    	
-    	public WikiText_HeadersAndTemplates parse(string wikiText)
+    	public void parse(string wikiText, Grammar grammar)
+    		//where T : WikiText	    		
     	{
     		TextParsed.Add(wikiText);
     		if (wikiText.valid().isFalse())
-    			return this;
+    			return;// (T)this;
     		
-    		var grammar = new MediaWiki_Grammar();   
+    		//var grammar = new T1();   
 			var Parser = new Parser(grammar);    
-			var ParseTree = Parser.Parse(wikiText);   
+			ParseTree = Parser.Parse(wikiText);  
+			Status = ParseTree.Status;
 			ParserMessages = ParseTree.ParserMessages;
+			processParseTree();
+			//return (T)this;
+		}
+		
+		//public abstract T parse<T>(O2MediaWikiAPI wikiApi, string page)
+		//	where T : WikiText; 
+    	public abstract void processParseTree();
+	}
+	
+	public static class WikiText_ExtensionMethods
+	{
+		public static T useCache<T>(this T wikiText, bool value) 
+			where T : WikiText
+    	{
+    		wikiText.UseContentLocalCache = value;
+    		return wikiText;
+    	}
+	}
+	
+	///WikiText_HeadersAndTemplates
+	
+    public class WikiText_HeadersAndTemplates : WikiText
+    {    				
+    	public Dictionary<string,List<string>> Templates { get; set; }  
+    	public List<string> OnlySelectTemplatesWith { get; set; } 
+		
+		public WikiText_HeadersAndTemplates() : base()
+    	{    		
+    		Templates = new Dictionary<string,List<string>>();   
+    		OnlySelectTemplatesWith = new List<string>();
+    	}    
+    	
+    	public WikiText_HeadersAndTemplates(string selectionCriteria) : this()
+    	{    		
+    		OnlySelectTemplatesWith.Add(selectionCriteria);
+    	}  
+		
+		//method called that will trigger the parsing
+		public WikiText_HeadersAndTemplates parse(O2MediaWikiAPI wikiApi, string page)			
+		{
+			base.parse(wikiApi, new WikiText_HeadersAndTemplates_Grammar(), page); 
+			return this;
+		}
+
+		//callback to be used to process the calltreeCreated
+		public override void processParseTree() 
+		{
+			if (this.ParseTree.isNull())
+				return;
 			var currentTemplate = "";
 			foreach(var child in ParseTree.Root.ChildNodes)
 			{
@@ -62,22 +108,25 @@ namespace O2.XRules.Database.APIs
 					currentTemplate = nodeText;
 				if (currentTemplate.valid())
 					if (nodeType == "template")
-						Templates.add(currentTemplate, nodeText);
-			}
-			return this;
-		}	
-			
-    	//   public 
+						if (OnlySelectTemplatesWith.size()==0 || nodeText.contains(OnlySelectTemplatesWith))
+						{
+							if (nodeText.contains("|"))
+								nodeText = nodeText.split("|")[0].trim();
+							Templates.add(currentTemplate, nodeText);
+						}
+			}			
+		}				
     }
     
    
    
+   ///WikiText_HeadersAndTemplates_Grammar
    
-    
+    //These are massive hacks that should be rewritten once the MediaWiki Gramar is better
     [Language("MediaWiki", "1.0", "MediaWiki markup grammar.")]
-    public class MediaWiki_Grammar : Grammar
+    public class WikiText_HeadersAndTemplates_Grammar : Grammar
     {
-    	public MediaWiki_Grammar()
+    	public WikiText_HeadersAndTemplates_Grammar()
     	{
 	     	// Terminals  	     	
 	     	var text = new WikiTextTerminal("text");  
@@ -100,10 +149,8 @@ namespace O2.XRules.Database.APIs
       		var wikiText = new NonTerminal("wikiText"); 
       		
       		
-	     	// BNF rules
-	     	
-	     	wikiElement.Rule = 	//template |
-	     						text	|
+	     	// BNF rules	     	
+	     	wikiElement.Rule = 	text |
 	     						h1 | h2 | h3 | h4 | h5 | h6 |
 	     						template |
 	     					   	NewLine
@@ -117,60 +164,149 @@ namespace O2.XRules.Database.APIs
 			NewLine.SetFlag(TermFlags.IsPunctuation, false); 
       		this.LanguageFlags |= LanguageFlags.DisableScannerParserLink | LanguageFlags.NewLineBeforeEOF | LanguageFlags.CanRunSample
       							| LanguageFlags.CreateAst ;
-;
-		}
-		
-		public TreeView showInTreeView(TreeView treeView, ParseTree ParseTree)
-                {
-                        if (ParseTree != null)
-                        {
-                                treeView.clear(); 
-                                if (ParseTree.HasErrors())
-                                {
-                                        var errorNode = treeView.add_Node("Parse errors!!").setTextColor(Color.Red);
-                                        foreach(var message in ParseTree.ParserMessages)
-                                        {
-                                                var noteText  = "{0} [{1} : {2}]".format(message, message.Location.Line, message.Location.Column);
-                                                errorNode.add_Node(noteText); 
-                                                
-                                        }
-                                        treeView.expand();
-                                }
-                                else                    
-                                {                                                        
-                                        treeView.removeEventHandlers_BeforeExpand();                             
-                                        treeView.beforeExpand<ParseTreeNode>( 
-                                                (parseTreeNode)=> 
-                                                        {
-                                                                "in before expand".debug();
-                                                                var currentNode = treeView.current();
-                                                                currentNode.clear();                    
-                                                                foreach(var child in parseTreeNode.ChildNodes)
-                                                                {
-                                                                        if (child.Token == null) 
-                                                                                currentNode.add_Node(child.Term.Name ,child,true);      
-                                                                        else
-                                                                                currentNode.add_Node(child.Term.Name + " : " + child.Token.ValueString,child);                    
-                                                                }                               
-                                                        });
-                                        if (ParseTree != null && ParseTree.Root != null)
-                                        {
-                                                treeView//.add_Node("Raw ParseTree Data")
-                                                        .add_Node(ParseTree.Root.Term.Name, ParseTree.Root, true);
-                                                //treeView.expandAll(); 
-                                                
-                                                //treeView.add_Node("DirResult Object", dirResultObject(), true);                                 
-                                                //treeView.autoExpandObjects<DirResult>();
-                                                //treeView.autoExpandObjects<DirResult.File>();
-                                                //treeView.autoExpandObjects<DirResult.Dir>();                                    
-                                                treeView.selectFirst();                                 
-                                                treeView.expand(); 
-                                        }                                                                                                                       
-                                }
-                        }
-                        return treeView;
-                }
+		}				
+    }
 
+
+	public class WikiText_Template	: WikiText
+	{
+		//public Dictionary<string,List<string>> Templates { get; set; }    	
+		
+		public WikiText_Template() : base()
+    	{    		
+    		//Templates = new Dictionary<string,List<string>>();      		
+    	}    	    	    	    	    	    	
+		
+		//method called that will trigger the parsing
+		public WikiText_Template parse(O2MediaWikiAPI wikiApi, string page)			
+		{
+			base.parse(wikiApi, new WikiText_Template_Grammar(), page); 
+			return this;
+		}
+
+		//callback to be used to process the calltreeCreated
+		public override void processParseTree() 
+		{
+			if (this.ParseTree.isNull())
+				return;
+			//var currentTemplate = "";
+			
+			/*foreach(var child in ParseTree.Root.ChildNodes)
+			{
+				var nodeText = child.Token.ValueString.trim();
+				var nodeType = child.Term.Name; 
+				if (nodeType == "h2")
+					currentTemplate = nodeText;
+				if (currentTemplate.valid())
+					if (nodeType == "template")
+						Templates.add(currentTemplate, nodeText);
+			}*/					
+		}				 
+	}
+
+    [Language("MediaWiki-Template", "1.0", "MediaWiki Templates markup grammar.")]
+    public class WikiText_Template_Grammar : Grammar
+    {
+    	public WikiText_Template_Grammar()
+    	{
+	     	// Terminals  	     	
+	     	//var text = new WikiTextTerminal("text");
+	     	var pipeChar = ToTerm("|");
+	     	var identifier = new IdentifierTerminal("identifier");//,"",""); 
+			var variableName = new DsvLiteral("variableName", TypeCode.String,"=");   
+	     	var variableValue = new DsvLiteral("variableValue", TypeCode.String,"\n");  
+	     	
+	     	// Non-terminals
+	     	var wikiTemplate = new NonTerminal("wikiElement");
+	     	var templateData = new NonTerminal("templateData");
+	     	var includeOnly = new WikiBlockTerminal("includeOnly", WikiBlockType.EscapedText, "<includeonly>", "</includeonly>", "includeOnly");
+	     	var noInclude = new WikiBlockTerminal("includeOnly", WikiBlockType.EscapedText, "<noinclude>", "</noinclude>", "includeOnly");
+	     	
+      		//var wikiText = new NonTerminal("wikiText"); 
+      		var templateDetails = new NonTerminal("templateDetails");
+      		var row = new NonTerminal("row");
+      		var emptyRow = new NonTerminal("emptyRow");
+      		var dataRow = new NonTerminal("dataRow");
+      		var rows = new NonTerminal("rows");
+      		//var drive = new NonTerminal("drive");    
+      		
+	     	// BNF rules
+	     	templateDetails.Rule = identifier + ":" + includeOnly + noInclude;
+	     	dataRow.Rule = pipeChar + variableName + variableValue;
+	     	row.Rule = emptyRow | dataRow;	     			   
+	     	emptyRow.Rule = ToTerm("|-") + NewLine;
+	     	rows.Rule = MakePlusRule(rows, row);
+	     	templateData.Rule = templateDetails + NewLine + rows ;
+	     	wikiTemplate.Rule = ToTerm("{{")+ templateData  + "}}";// + ToTerm("}}"); 
+	     	//wikiText.Rule = "{{ " + MakeStarRule(wikiText, wikiElement)  + "}}" ; 
+	     	//wikiText.Rule = MakeStarRule(wikiText, wikiElement) ; 
+	     	// config               
+			//this.Root =  wikiText; 
+			this.Root =  wikiTemplate;
+			
+     	 	//this.WhitespaceChars = string.Empty;
+      		MarkTransient(row);       		
+      		MarkPunctuation(pipeChar);
+			//NewLine.SetFlag(TermFlags.IsPunctuation, true); 
+			this.LanguageFlags  = LanguageFlags.NewLineBeforeEOF ;
+      		//this.LanguageFlags |= LanguageFlags.DisableScannerParserLink | LanguageFlags.NewLineBeforeEOF | LanguageFlags.CanRunSample
+      		//					| LanguageFlags.CreateAst ;
+	    }
+	}
+
+	//    Parse_ExtensionMethods
+    public static class Parse_ExtensionMethods
+    {
+    	public static TreeView showInTreeView(this TreeView treeView, ParseTree ParseTree)
+            {
+                    if (ParseTree != null)
+                    {
+                            treeView.clear(); 
+                            if (ParseTree.HasErrors())
+                            {
+                                    var errorNode = treeView.add_Node("Parse errors!!").setTextColor(Color.Red);
+                                    foreach(var message in ParseTree.ParserMessages)
+                                    {
+                                            var noteText  = "{0} [{1} : {2}]".format(message, message.Location.Line, message.Location.Column);
+                                            errorNode.add_Node(noteText); 
+                                            
+                                    }
+                                    treeView.expand();
+                            }
+                            else                    
+                            {                                                        
+                                    treeView.removeEventHandlers_BeforeExpand();                             
+                                    treeView.beforeExpand<ParseTreeNode>( 
+                                            (parseTreeNode)=> 
+                                                    {
+                                                            "in before expand".debug();
+                                                            var currentNode = treeView.current();
+                                                            currentNode.clear();                    
+                                                            foreach(var child in parseTreeNode.ChildNodes)
+                                                            {
+                                                                    if (child.Token == null) 
+                                                                            currentNode.add_Node(child.Term.Name ,child,true);      
+                                                                    else
+                                                                            currentNode.add_Node(child.Term.Name + " : " + child.Token.ValueString,child);                    
+                                                            }                               
+                                                    });
+                                    if (ParseTree != null && ParseTree.Root != null)
+                                    {
+                                            treeView//.add_Node("Raw ParseTree Data")
+                                                    .add_Node(ParseTree.Root.Term.Name, ParseTree.Root, true);
+                                            //treeView.expandAll(); 
+                                            
+                                            //treeView.add_Node("DirResult Object", dirResultObject(), true);                                 
+                                            //treeView.autoExpandObjects<DirResult>();
+                                            //treeView.autoExpandObjects<DirResult.File>();
+                                            //treeView.autoExpandObjects<DirResult.Dir>();                                    
+                                            treeView.selectFirst();                                 
+                                            treeView.expand(); 
+                                    }                                                                                                                       
+                            }
+                    }
+                    return treeView;
+            }
     }
 
 }

@@ -4,6 +4,8 @@
 var topPanel = O2Gui.open&lt;Panel&gt;("OWASP Summit 2011 - Attendees Mappings", 1000,400 );
 
 var wikiApi = new OwaspWikiAPI(false);  
+var useCacheForFirstPage = true;
+
 
 
 //var fileCache = new FileCache("OWASP MediaWiki");    
@@ -35,7 +37,6 @@ var pageName1 = "Template:Summit_2011_Attendee";
 var pageName2 = "Summit_2011_Confirmed_Attendees";  
 
 
-
 /*var TextParsed = wikiApi.raw(":Summit_2011_Attendee_Attendee098",true);
 var grammar = new MediaWiki_Grammar();   
 var Parser = new Parser(grammar);     
@@ -44,11 +45,10 @@ grammar.showInTreeView(treeView,ParseTree);
 return TextParsed ;
 */
  
-//var pageName = "Summit 2011";        
-          
+//var pageName = "Summit 2011"; 
 //var text =  fileCache.cacheGet(pageName,()=&gt;{ return wikiApi.raw(pageName);});    
 var mappings = new WikiText_HeadersAndTemplates()
-				   .useCache(false)
+				   .useCache(useCacheForFirstPage)
 				   .parse(wikiApi,pageName1)
 				   .parse(wikiApi,pageName2)
 				   .Templates;
@@ -94,7 +94,9 @@ treeView.afterSelect&lt;string&gt;(
 						pageEditor.setPage(page);					
 					//textArea.backColor(Color.White);
 				});
+				
 treeView.add_Nodes(mappings);
+
 treeView.nodes()[0].expand();//.nodes();//[0].selected();
 treeView.focus();
 return mappings; 
