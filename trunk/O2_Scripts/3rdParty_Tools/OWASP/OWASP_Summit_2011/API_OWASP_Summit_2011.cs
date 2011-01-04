@@ -28,6 +28,20 @@ namespace O2.XRules.Database.APIs
 		public string ExpensesPaidBy { get; set; }
 		public string Status { get; set; }
 		
+		public int RankingPoints { get; set; }
+		
+		public string ProjectLeadership_New { get; set; }
+		public string ProjectLeadership_Old { get; set; }		
+		public string ReleaseLeadership_New { get; set; }
+		public string ReleaseLeadership_Old { get; set; }
+		public string ProjectContribution_New { get; set; }
+		public string ProjectContribution_Old { get; set; }
+		public string ReleaseContribution_New { get; set; }
+		public string ReleaseContribution_Old { get; set; }
+		public string CommitteeMembership  { get; set; }
+		public string ChapterCoLeadership { get; set; }
+		public string ConferenceCoLeadership { get; set; }
+		
 		public Dictionary<string,string> variables;// { get; set; }
 		
 		public SummitAttendee(WikiText_Template templateData)
@@ -40,13 +54,41 @@ namespace O2.XRules.Database.APIs
 			setValue("TimePaidBy", "summit_attendee_summit_time_paid_by_name1");
 			setValue("ExpensesPaidBy", "summit_attendee_summit_expenses_paid_by_name1");
 			setValue("Status", "status");
+			setValue("ProjectLeadership_New", "Project Leadership (less than 6 months old)");
+			setValue("ProjectLeadership_Old", "Project Leadership (more than 6 months old)");
+			setValue("ReleaseLeadership_New", "Release Leadership (less than 6 months old)");
+			setValue("ReleaseLeadership_Old", "Release Leadership (more than 6 months old)");
+			setValue("ProjectContribution_New", "Project Contribution  (less than 6 months old)");
+			setValue("ProjectContribution_Old", "Project Contribution  (more than 6 months old)");
+			setValue("ReleaseContribution_New", "Release Contribution (less than 6 months old)");
+			setValue("ReleaseContribution_Old", "Release Contribution (more than 6 months old)");
+			setValue("CommitteeMembership", "Committee Membership");
+			setValue("ChapterCoLeadership", "Chapter Co-Leadership");
+			setValue("ConferenceCoLeadership", "Conference Co-Leadership");
+			
+			calculatePoints();
 			//Name = Variables.get("summit_attendee_name1");
 			//Email = Variables.get("summit_attendee_email1");
 		}
 		
 		void setValue(string localVariableName, string variableName)
 		{
-			this.prop(localVariableName, this.variables.get(variableName));
+			this.prop(localVariableName, this.variables.get(variableName) ?? "");
+		}
+		
+		void calculatePoints()
+		{
+			RankingPoints += ProjectLeadership_New.valid() ? ProjectLeadership_New.split(",").size() : 0;
+			RankingPoints += ProjectLeadership_Old.valid() ? ProjectLeadership_Old.split(",").size() : 0;
+			RankingPoints += ReleaseLeadership_New.valid() ? ReleaseLeadership_New.split(",").size() : 0;
+			RankingPoints += ReleaseLeadership_Old.valid() ? ReleaseLeadership_Old.split(",").size() : 0;
+			RankingPoints += ProjectContribution_New.valid() ? ProjectContribution_New.split(",").size() : 0;
+			RankingPoints += ProjectContribution_Old.valid() ? ProjectContribution_Old.split(",").size() : 0;				
+			RankingPoints += ReleaseContribution_New.valid() ? ReleaseContribution_New.split(",").size() : 0;	
+			RankingPoints += ReleaseContribution_Old.valid() ? ReleaseContribution_Old.split(",").size() : 0;	
+			RankingPoints += CommitteeMembership.valid() ? CommitteeMembership.split(",").size() : 0;	
+			RankingPoints += ChapterCoLeadership.valid() ? ChapterCoLeadership.split(",").size() : 0;	
+			RankingPoints += ConferenceCoLeadership.valid() ? ConferenceCoLeadership.split(",").size() : 0;	
 		}
 	}
 	
