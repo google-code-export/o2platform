@@ -5,7 +5,7 @@
 var topPanel = O2Gui.open&lt;Panel&gt;("Attendees Funding Mappings",1000,500);
 
 var summitApi = new API_OWASP_Summit_2011();
-var useCache = false;
+var useCache = true;
 
 var actionPanel = topPanel.insert_Above&lt;GroupBox&gt;(50)
 						  .set_Text("Actions (Select type of Attendee to see)")

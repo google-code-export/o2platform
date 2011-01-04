@@ -4,10 +4,10 @@
 
 //var topPanel = panel.clear().add_Panel(); 
 var topPanel = O2Gui.open&lt;Panel&gt;("OWASP O2 Summit (custom O2)",1024,600);
-
+topPanel.insert_Below&lt;Panel&gt;(120).add_LogViewer(); 
 var ribbon = topPanel.add_Ribbon(title,true);
 topPanel.backColor("Control");
- 
+
  
 //var ribbon = CustomO2.create(title); 		// stand alone version
 //var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
@@ -22,8 +22,10 @@ webPages.add_RibbonGroup("Attendees Funding")
 		.add_RibbonButton_Web(topPanel,"Compiled funding information from Summit sponsorship applicants ","https://spreadsheets.google.com/ccc?key=0ApZ9zE0hx0LNdERFaW9iWmVEeUY4QXd4ZnR6N0xCWGc&amp;hl=en&amp;authkey=CKPE8O0J");
 	  	
 webPages.add_RibbonGroup("Utils ")  
-		.add_Script("Util - Attendees Mappings", "Util - Attendees Mappings (first GUI).h2".local())
-		.add_Script("Util - Attendees Funding Mappings", "Util - Attendees Funding Mappings.h2".local()); 
+		.add_Script("View/Rdit Attendee's Data", "Util - Attendees Mappings (first GUI).h2".local())
+		.add_Script("Attendees Funding Mappings", "Util - Attendees Funding Mappings.h2".local())
+		.add_Script("Calculate Ranking (attendee Stats) page.h2", "Util - Calculate Ranking (attendee Stats) page.h2".local())
+		;
 
 //ribbon.add_Tab_BrowserAutomation();
 ribbon.add_Tab_MiscTools();

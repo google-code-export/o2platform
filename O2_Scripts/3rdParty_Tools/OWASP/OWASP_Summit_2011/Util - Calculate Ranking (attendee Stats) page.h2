@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>//var topPanel = panel.clear().add_Panel();
+var topPanel = O2Gui.open&lt;Panel&gt;("Calculate Ranking (attendee Stats) page", 1000,500);
+var wikiApi = new OwaspWikiAPI(false);
+var statsPageName = "Summit_2011_Attendee/Stats";	
+Action wikiLogin = 
+	()=&gt;{
+			wikiApi.login("Dinis.cruz","!!owasp");
+		};
+
+Action&lt;string&gt; saveStatsPage = 
+	(pageContents)=&gt;{					  
+						wikiLogin();											
+						wikiApi.save(statsPageName,pageContents); 
+					};
+
+
+
+var actionPanel = topPanel.insert_Above&lt;GroupBox&gt;(50).add_Panel();	
+var statsPage = topPanel.add_TextArea();
+
+actionPanel.add_Link("Save page", 0,0,
+				()=&gt;{
+						statsPage.backColor("LightPink");
+						saveStatsPage(statsPage.get_Text()); 
+						statsPage.backColor("White");
+					});
+
+ 
+var summitApi = new API_OWASP_Summit_2011(); 
+var useCache = true ;
+var statsText = "==Stats page (for OWASP Summit Attendees)==".line();
+
+Action addSeekFunds = 
+	()=&gt;{
+			statsText += "==Confirmed need funds==".line();
+			var seekFunds = new Dictionary&lt;string, SummitAttendee&gt;();
+			var attendees = summitApi.getAttendees(summitApi.attendees_SeekingFunds(useCache));
+			foreach(var attendee in attendees) 
+				seekFunds.add(attendee.Name, attendee);
+			var sortedNames = seekFunds.Keys.toList().sort();
+			foreach(var attendee in sortedNames)  
+				statsText += attendee + " , " ;
+			
+			statsText += "".line().line();  
+			
+			var rankingData = (from attendee in attendees
+							   orderby attendee.RankingPoints descending 
+							   select attendee.Name 
+							   ); 
+			statsText += "===Ranking===".line(); 
+			
+			foreach(var name in rankingData)  
+			{ 
+				var attendee = seekFunds[name];
+				statsText += ("# '''{0}''' : {1} points".line()
+							  ).format(name, attendee.RankingPoints) ;
+			}
+			
+			statsText += "===Ranking (details)===".line();  
+
+			foreach(var name in rankingData)  
+			{
+				var attendee = seekFunds[name];
+				
+				var projectData = attendee.ProjectLeadership_New + attendee.ProjectLeadership_Old + attendee.ProjectContribution_New  + attendee.ProjectContribution_Old;
+				var releasesData = attendee.ReleaseLeadership_New  + attendee.ReleaseLeadership_Old + attendee.ReleaseContribution_New  + attendee.ReleaseContribution_Old;
+				
+				statsText += ("# '''{0}: {1} points ''': ".line() +
+							  (projectData.valid() ? "## ''Projects'': " + projectData  +
+							  					"".line() : "") +
+							  (releasesData.valid() ? "## ''Releases'': " + releasesData   +	 
+							  					"".line() : "") +
+							  (attendee.CommitteeMembership.valid() ? "## ''Committee'': " + attendee.CommitteeMembership + 
+							  					"".line() : "") +
+							  (attendee.ChapterCoLeadership.valid() ? "## ''Chapters'': " + attendee.ChapterCoLeadership + 
+							  				   "".line() : "") +
+							  (attendee.ConferenceCoLeadership.valid()  ? "## ''Conference'': " + attendee.ConferenceCoLeadership + 
+							  				     "".line() : "")
+							 //(attendee.ProjectContribution_Old.valid() ? "Releases:" +  attendee.ProjectContribution_Old : "...") +   
+				             ).format(name, attendee.RankingPoints) ;
+			}
+				
+			//var sorted
+		};
+
+
+Action addConfirmed = 
+	()=&gt;{
+			statsText += "".line().line();
+			statsText += "==Confirmed==".line();
+			var confirmed = summitApi.getAttendees(summitApi.attendees_Confirmed(useCache)); 
+			foreach(var attendee in confirmed)
+				statsText += attendee.Name + " , " ;
+			statsText += "".line().line();
+			var sponsoredByOwasp = 0;
+			var owaspSponsoredText = "";
+			var sponsoredByOthers = 0; 
+			var othersSponsoredText = "";
+			foreach(var attendee in confirmed)
+				if (attendee.ExpensesPaidBy.contains("www.owasp.org"))
+				{
+					sponsoredByOwasp++;
+					owaspSponsoredText += attendee.ExpensesPaidBy + " , " ;
+				}
+				else
+				{
+					sponsoredByOthers++;
+					othersSponsoredText += attendee.ExpensesPaidBy + " , " ;
+				}
+			statsText += "===Sponsored by OWASP: {0}===".format(sponsoredByOwasp).line();
+			//statsText += owaspSponsoredText.line();
+			statsText += "===Sponsored by Others: {0}===".format(sponsoredByOthers).line();
+			statsText += othersSponsoredText.line() ;
+		};
+		
+ Action addUnconfirmed = 
+ 	()=&gt;{ 
+			statsText += "".line().line();	
+			statsText += "==UnConfirmed==".line();
+			var unconfirmed = summitApi.getAttendees(summitApi.attendees_UnConfirmed(useCache)); 
+			foreach(var attendee in unconfirmed)
+				statsText += attendee.Name + " , " ;
+				
+		}; 
+		
+addSeekFunds();
+
+addConfirmed();
+	
+addUnconfirmed();
+	
+statsPage.set_Text(statsText);
+//
+
+return wikiApi.raw(statsPageName);
+     
+//wikiApi.login("O2.user","!!o2");     
+
+return wikiApi;
+ 
+//O2File:API_OWASP_Summit_2011.cs  
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
