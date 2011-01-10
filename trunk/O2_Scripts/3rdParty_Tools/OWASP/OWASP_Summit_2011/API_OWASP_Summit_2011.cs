@@ -27,6 +27,7 @@ namespace O2.XRules.Database.APIs
 		public string TimePaidBy { get; set; }
 		public string ExpensesPaidBy { get; set; }
 		public string Status { get; set; }
+		public int ProjectedFundingCost { get; set; }
 		
 		public int RankingPoints { get; set; }
 		
@@ -53,7 +54,14 @@ namespace O2.XRules.Database.APIs
 			setValue("OWASP_Sponsor", "summit_attendee_owasp_sponsor");
 			setValue("TimePaidBy", "summit_attendee_summit_time_paid_by_name1");
 			setValue("ExpensesPaidBy", "summit_attendee_summit_expenses_paid_by_name1");
-			setValue("Status", "status");
+			setValue("Status", "status");			
+			setValue("ProjectedFundingCost", "Projected Funding Cost", 
+				(rawValue)=>{
+								var splittedData = rawValue.split(" ");
+								if (rawValue.starts("$") && splittedData.size() > 1 )
+									return splittedData[0].removeFirstChar().toInt();
+								return 0;
+							});
 			setValue("ProjectLeadership_New", "Project Leadership (less than 6 months old)");
 			setValue("ProjectLeadership_Old", "Project Leadership (more than 6 months old)");
 			setValue("ReleaseLeadership_New", "Release Leadership (less than 6 months old)");
@@ -69,6 +77,12 @@ namespace O2.XRules.Database.APIs
 			calculatePoints();
 			//Name = Variables.get("summit_attendee_name1");
 			//Email = Variables.get("summit_attendee_email1");
+		}
+		
+		void setValue(string localVariableName, string variableName, Func<string,object> dataFilter)
+		{
+			var rawValue = this.variables.get(variableName);
+			this.prop(localVariableName, rawValue.notNull() ? dataFilter(rawValue) :  "");
 		}
 		
 		void setValue(string localVariableName, string variableName)

@@ -1,18 +1,25 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//var topPanel = panel.clear().add_Panel();
-var topPanel = O2Gui.open&lt;Panel&gt;("Calculate Ranking (attendee Stats) page", 1000,500);
+  <SourceCode>var credential = @"C:\O2\_USERDATA\WikiAccounts.xml".credential("OwaspWiki");
+
+var topPanel = panel.clear().add_Panel();
+//var topPanel = O2Gui.open&lt;Panel&gt;("Calculate Ranking (attendee Stats) page", 1000,500);
 var wikiApi = new OwaspWikiAPI(false);
 var statsPageName = "Summit_2011_Attendee/Stats";	
-Action wikiLogin = 
+Func&lt;bool&gt; wikiLogin = 
 	()=&gt;{
-			wikiApi.login("Dinis.cruz","!!owasp");
+			return wikiApi.login(credential.username(),credential.password());  
 		};
 
 Action&lt;string&gt; saveStatsPage = 
 	(pageContents)=&gt;{					  
-						wikiLogin();											
-						wikiApi.save(statsPageName,pageContents); 
+						if (wikiLogin())
+						{
+							wikiApi.save(statsPageName,pageContents); 
+							"Save complete".info();
+						}
+						else
+							"Could not Login into WIKI".error();
 					};
 
 
@@ -51,13 +58,31 @@ Action addSeekFunds =
 							   ); 
 			statsText += "===Ranking===".line(); 
 			
-			foreach(var name in rankingData)  
-			{ 
-				var attendee = seekFunds[name];
-				statsText += ("# '''{0}''' : {1} points".line()
-							  ).format(name, attendee.RankingPoints) ;
-			}
+			statsText = "{| border=\"1\"".line() + 					    
+					    "! Position".line() + 
+					    "! Name".line() +
+					    "! # of Points".line() +
+					    "! Projected Cost".line() +
+					    "! Cost SubTotal".line() +
+					    "! Status".line() ;
 			
+			var costSubTotal = 0;
+			var position = 1;
+			foreach(var name in rankingData)  
+			{ 			
+				var attendee = seekFunds[name];
+				var status = "TBD";
+				costSubTotal += attendee.ProjectedFundingCost;
+				statsText += ("|-".line() + 
+							  "| {0}".line() + 
+							  "| {1}".line() + 
+							  "| {2}".line() + 
+							  "| {3}".line() + 
+							  "| {4} ".line() + 
+							  "| {5} ".line()
+							  ).format(position++, name, attendee.RankingPoints, attendee.ProjectedFundingCost, costSubTotal , status) ; 
+			}
+			statsText +="|}";
 			statsText += "===Ranking (details)===".line();  
 
 			foreach(var name in rankingData)  
@@ -124,23 +149,31 @@ Action addConfirmed =
 				statsText += attendee.Name + " , " ;
 				
 		}; 
-		
+
+
+/*var _attendees = summitApi.getAttendees(summitApi.attendees_SeekingFunds(useCache));
+var totalCost = 0;
+foreach(var _attendee in _attendees)
+	totalCost += _attendee.ProjectedFundingCost;
+return totalCost;
+*/	
 addSeekFunds();
 
-addConfirmed();
+//addConfirmed();
 	
-addUnconfirmed();
+//addUnconfirmed();
 	
 statsPage.set_Text(statsText);
 //
 
-return wikiApi.raw(statsPageName);
+return wikiApi.raw(statsPageName); 
      
 //wikiApi.login("O2.user","!!o2");     
 
 return wikiApi;
  
 //O2File:API_OWASP_Summit_2011.cs  
+//O2File:SecretData_ExtensionMethods.cs
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>
