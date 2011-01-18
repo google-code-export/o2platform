@@ -5,7 +5,7 @@
 var topPanel = panel.clear().add_Panel();
 //var topPanel = O2Gui.open&lt;Panel&gt;("Calculate Ranking (attendee Stats) page", 1000,500);
 var wikiApi = new OwaspWikiAPI(false);
-var statsPageName = "Summit_2011_Attendee/Stats";	
+var statsPageName = "Summit_2011_Attendee/Summit Attendees Funds - Ranking for 10th Jan 2010";	
 Func&lt;bool&gt; wikiLogin = 
 	()=&gt;{
 			return wikiApi.login(credential.username(),credential.password());  
@@ -37,53 +37,69 @@ actionPanel.add_Link("Save page", 0,0,
  
 var summitApi = new API_OWASP_Summit_2011(); 
 var useCache = true ;
-var statsText = "==Stats page (for OWASP Summit Attendees)==".line();
+var statsText = "==Summit Attendees Funds - Ranking for 10th Jan 2010)==".line();
 
 Action addSeekFunds = 
 	()=&gt;{
-			statsText += "==Confirmed need funds==".line();
+			var budgetAvailable = 20000;
+			//statsText += "==Confirmed need funds==".line();
 			var seekFunds = new Dictionary&lt;string, SummitAttendee&gt;();
 			var attendees = summitApi.getAttendees(summitApi.attendees_SeekingFunds(useCache));
 			foreach(var attendee in attendees) 
 				seekFunds.add(attendee.Name, attendee);
 			var sortedNames = seekFunds.Keys.toList().sort();
-			foreach(var attendee in sortedNames)  
-				statsText += attendee + " , " ;
+			//foreach(var attendee in sortedNames)  
+			//	statsText += attendee + " , " ;
 			
-			statsText += "".line().line();  
-			
-			var rankingData = (from attendee in attendees
+			//statsText += "".line().line();  
+			 
+			var rankingData = (from attendee in attendees 
 							   orderby attendee.RankingPoints descending 
 							   select attendee.Name 
-							   ); 
-			statsText += "===Ranking===".line(); 
+							   );  
+							    
+			statsText += "===Ranking and Funding status===".line().format(budgetAvailable); 
 			
-			statsText = "{| border=\"1\"".line() + 					    
+			statsText += "{| border=\"1\"".line() + 					    
 					    "! Position".line() + 
 					    "! Name".line() +
 					    "! # of Points".line() +
 					    "! Projected Cost".line() +
 					    "! Cost SubTotal".line() +
+					    "! Extra Funds needed".line() + 
 					    "! Status".line() ;
 			
 			var costSubTotal = 0;
+			var extraFundsNeeded =0;
 			var position = 1;
+			var status = "";
 			foreach(var name in rankingData)  
 			{ 			
 				var attendee = seekFunds[name];
-				var status = "TBD";
-				costSubTotal += attendee.ProjectedFundingCost;
-				statsText += ("|-".line() + 
-							  "| {0}".line() + 
-							  "| {1}".line() + 
-							  "| {2}".line() + 
+				costSubTotal += attendee.ProjectedFundingCost;				
+				if (costSubTotal &lt; budgetAvailable)
+					status = "Approved";
+				else
+				{
+					status = "To be funded next";
+					extraFundsNeeded += attendee.ProjectedFundingCost;
+				}
+				
+				var rowFormat = (status=="Approved")
+									?  "style=\"color:green;\""
+							  		:  "style=\"color:red;\""; 
+				statsText += ("|-" + rowFormat.line()	 + 						   
+							  "| {0}".line() +  
+							  "| [[{1}|{2}]]".line() + 
 							  "| {3}".line() + 
-							  "| {4} ".line() + 
-							  "| {5} ".line()
-							  ).format(position++, name, attendee.RankingPoints, attendee.ProjectedFundingCost, costSubTotal , status) ; 
+							  "| {4:c0}".line() +  
+							  "| {5:c0} ".line() +  
+							  "| {6:c0} ".line() + 
+							  "| {7} ".line()
+							  ).format(position++, attendee.AttendeeWikiPage,name, attendee.RankingPoints, attendee.ProjectedFundingCost, costSubTotal ,extraFundsNeeded, status) ; 
 			}
-			statsText +="|}";
-			statsText += "===Ranking (details)===".line();  
+			statsText +="|}".line();
+			statsText += "==Detailed information on leader's activities==".line();  
 
 			foreach(var name in rankingData)  
 			{

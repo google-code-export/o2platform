@@ -20,7 +20,7 @@ namespace O2.XRules.Database.APIs
 {
 	public class SummitAttendee
 	{
-		public string Name { get; set; }
+		public string Name { get; set; }		
 		public string Email { get; set; }
 		public string Wiki_UserName { get; set; }
 		public string OWASP_Sponsor { get; set; }
@@ -42,6 +42,8 @@ namespace O2.XRules.Database.APIs
 		public string CommitteeMembership  { get; set; }
 		public string ChapterCoLeadership { get; set; }
 		public string ConferenceCoLeadership { get; set; }
+		
+		public string AttendeeWikiPage { get; set;} 
 		
 		public Dictionary<string,string> variables;// { get; set; }
 		
@@ -74,6 +76,8 @@ namespace O2.XRules.Database.APIs
 			setValue("ChapterCoLeadership", "Chapter Co-Leadership");
 			setValue("ConferenceCoLeadership", "Conference Co-Leadership");
 			
+			setValue("AttendeeWikiPage", "attendee_home_page", (rawValue)=> rawValue.remove("<!--Please replace DO NOT EDIT this string --> ")); 
+			
 			calculatePoints();
 			//Name = Variables.get("summit_attendee_name1");
 			//Email = Variables.get("summit_attendee_email1");
@@ -100,9 +104,11 @@ namespace O2.XRules.Database.APIs
 			RankingPoints += ProjectContribution_Old.valid() ? ProjectContribution_Old.split(",").size() : 0;				
 			RankingPoints += ReleaseContribution_New.valid() ? ReleaseContribution_New.split(",").size() : 0;	
 			RankingPoints += ReleaseContribution_Old.valid() ? ReleaseContribution_Old.split(",").size() : 0;	
-			RankingPoints += CommitteeMembership.valid() ? CommitteeMembership.split(",").size() : 0;	
-			RankingPoints += ChapterCoLeadership.valid() ? ChapterCoLeadership.split(",").size() : 0;	
-			RankingPoints += ConferenceCoLeadership.valid() ? ConferenceCoLeadership.split(",").size() : 0;	
+			RankingPoints += CommitteeMembership.valid() ? CommitteeMembership.split(",").size()*2 : 0;	
+			RankingPoints += ChapterCoLeadership.valid() ? ChapterCoLeadership.split(",").size()*2 : 0;	
+			RankingPoints += ConferenceCoLeadership.valid() ? ConferenceCoLeadership.split(",").size()*3 : 0;	
+			RankingPoints += (TimePaidBy.valid() && TimePaidBy =="Self") ? 1 : 0;	
+			RankingPoints += (Status.valid() && Status.contains("partially funded")) ? 2 : 0;
 		}
 	}
 	
