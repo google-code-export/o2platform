@@ -108,7 +108,7 @@ namespace O2.XRules.Database.APIs
 			RankingPoints += ChapterCoLeadership.valid() ? ChapterCoLeadership.split(",").size()*2 : 0;	
 			RankingPoints += ConferenceCoLeadership.valid() ? ConferenceCoLeadership.split(",").size()*3 : 0;	
 			RankingPoints += (TimePaidBy.valid() && TimePaidBy =="Self") ? 1 : 0;	
-			RankingPoints += (Status.valid() && Status.contains("partially funded")) ? 2 : 0;
+			RankingPoints += (Status.valid() && Status.contains("partially funded")) ? 10 : 0;
 		}
 	}
 	

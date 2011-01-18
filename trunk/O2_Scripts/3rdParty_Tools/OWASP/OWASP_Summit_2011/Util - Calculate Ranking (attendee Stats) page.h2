@@ -2,8 +2,8 @@
 <H2>
   <SourceCode>var credential = @"C:\O2\_USERDATA\WikiAccounts.xml".credential("OwaspWiki");
 
-var topPanel = panel.clear().add_Panel();
-//var topPanel = O2Gui.open&lt;Panel&gt;("Calculate Ranking (attendee Stats) page", 1000,500);
+//var topPanel = panel.clear().add_Panel();
+var topPanel = O2Gui.open&lt;Panel&gt;("Calculate Ranking (attendee Stats) page", 1000,500);
 var wikiApi = new OwaspWikiAPI(false);
 var statsPageName = "Summit_2011_Attendee/Summit Attendees Funds - Ranking for 10th Jan 2010";	
 Func&lt;bool&gt; wikiLogin = 
@@ -35,13 +35,13 @@ actionPanel.add_Link("Save page", 0,0,
 					});
 
  
-var summitApi = new API_OWASP_Summit_2011(); 
+var summitApi = new API_OWASP_Summit_2011();  
 var useCache = true ;
-var statsText = "==Summit Attendees Funds - Ranking for 10th Jan 2010)==".line();
+var statsText = "==Summit Attendees Funds - Ranking for 18th Jan 2010)==".line();
 
 Action addSeekFunds = 
 	()=&gt;{
-			var budgetAvailable = 20000;
+			var budgetAvailable = 14000;
 			//statsText += "==Confirmed need funds==".line();
 			var seekFunds = new Dictionary&lt;string, SummitAttendee&gt;();
 			var attendees = summitApi.getAttendees(summitApi.attendees_SeekingFunds(useCache));

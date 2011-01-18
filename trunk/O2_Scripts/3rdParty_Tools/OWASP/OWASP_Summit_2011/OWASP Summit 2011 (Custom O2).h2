@@ -22,7 +22,7 @@ webPages.add_RibbonGroup("Attendees Funding")
 		.add_RibbonButton_Web(topPanel,"Compiled funding information from Summit sponsorship applicants ","https://spreadsheets.google.com/ccc?key=0ApZ9zE0hx0LNdERFaW9iWmVEeUY4QXd4ZnR6N0xCWGc&amp;hl=en&amp;authkey=CKPE8O0J");
 	  	
 webPages.add_RibbonGroup("Utils ")  
-		.add_Script("View/Rdit Attendee's Data", "Util - Attendees Mappings (first GUI).h2".local())
+		.add_Script("View/Edit Attendee's Data", "Util - Attendees Mappings (first GUI).h2".local())
 		.add_Script("Attendees Funding Mappings", "Util - Attendees Funding Mappings.h2".local())
 		.add_Script("Calculate Ranking (attendee Stats) page.h2", "Util - Calculate Ranking (attendee Stats) page.h2".local())
 		;
