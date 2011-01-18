@@ -32,31 +32,38 @@ namespace O2.XRules.Database.APIs
 			UseContentLocalCache = true;
 		}				
     	
-    	public void parse(O2MediaWikiAPI wikiApi, Grammar grammar, string page)
+    	public bool parse(O2MediaWikiAPI wikiApi, Grammar grammar, string page)
     		 //where T : WikiText	    		 
     	{
-    		parse(wikiApi.raw(page,UseContentLocalCache),grammar);	
+    		return parse(wikiApi.raw(page,UseContentLocalCache),grammar);	
     	}
     	
-    	public void parse(string wikiText, Grammar grammar)
+    	public bool parse(string wikiText, Grammar grammar)
     		//where T : WikiText	    		
     	{
     		TextParsed.Add(wikiText);
     		if (wikiText.valid().isFalse())
-    			return;// (T)this;
+    			return false;// (T)this;
     		
     		//var grammar = new T1();   
 			var Parser = new Parser(grammar);    
 			ParseTree = Parser.Parse(wikiText);  
 			Status = ParseTree.Status;
 			ParserMessages = ParseTree.ParserMessages;
-			processParseTree();
+			if (ParserMessages.size()>0)
+			{
+				"There were errors processing this WikiText".error();
+				foreach(var message in ParserMessages)
+					"  - {0}: {1} at location {2}".error(message.Level.str(),message.str(), message.Location.str());
+				return false;
+			}	
+			return processParseTree();
 			//return (T)this;
 		}
 		
 		//public abstract T parse<T>(O2MediaWikiAPI wikiApi, string page)
 		//	where T : WikiText; 
-    	public abstract void processParseTree();
+    	public abstract bool processParseTree();
 	}
 	
 	public static class WikiText_ExtensionMethods
@@ -95,26 +102,36 @@ namespace O2.XRules.Database.APIs
 		}
 
 		//callback to be used to process the calltreeCreated
-		public override void processParseTree() 
+		public override bool processParseTree() 
 		{
-			if (this.ParseTree.isNull())
-				return;
-			var currentTemplate = "";
-			foreach(var child in ParseTree.Root.ChildNodes)
+			if (this.ParseTree.notNull())
 			{
-				var nodeText = child.Token.ValueString.trim();
-				var nodeType = child.Term.Name; 
-				if (nodeType == "h2")
-					currentTemplate = nodeText;
-				if (currentTemplate.valid())
-					if (nodeType == "template")
-						if (OnlySelectTemplatesWith.size()==0 || nodeText.contains(OnlySelectTemplatesWith))
-						{
-							if (nodeText.contains("|"))
-								nodeText = nodeText.split("|")[0].trim();
-							Templates.add(currentTemplate, nodeText);
-						}
-			}			
+				try
+				{
+					var currentTemplate = "";
+					foreach(var child in ParseTree.Root.ChildNodes)
+					{
+						var nodeText = child.Token.ValueString.trim();
+						var nodeType = child.Term.Name; 
+						if (nodeType == "h2")
+							currentTemplate = nodeText;
+						if (currentTemplate.valid())
+							if (nodeType == "template")
+								if (OnlySelectTemplatesWith.size()==0 || nodeText.contains(OnlySelectTemplatesWith))
+								{
+									if (nodeText.contains("|"))
+										nodeText = nodeText.split("|")[0].trim();
+									Templates.add(currentTemplate, nodeText);
+								}
+					}			
+					return true;
+				}
+				catch(Exception ex)
+				{
+					ex.log("In WikiText_HeadersAndTemplates.processParseTree");
+				}
+			}
+			return false;
 		}				
     }
     
@@ -186,26 +203,35 @@ namespace O2.XRules.Database.APIs
 		}
 
 		//callback to be used to process the calltreeCreated
-		public override void processParseTree() 
+		public override bool processParseTree() 
 		{
-			if (this.ParseTree.isNull())
-				return;
-			var root =  ParseTree.Root; 
-			TemplateName = root.ChildNodes[1].ChildNodes[0].ChildNodes[0].Token.ValueString.trim();
-			
-			var rows = root.ChildNodes[1].ChildNodes[1].ChildNodes;
-			foreach(var row in rows) 
-			{	
-				//var nodeValue = child.ValueString.isNull() ? "" : child.Token.ValueString.trim();  
-				var nodeType = row.Term.Name; 
-				if (nodeType =="dataRow")
+			if (this.ParseTree.notNull())
+			{
+				try
 				{
-					var variableName = row.ChildNodes[0].Token.ValueString.trim();
-					var variableValue = row.ChildNodes[1].Token.ValueString.trim()  ;
-					Variables.add(variableName, variableValue);
-					//"{0} : {1} " .info(variableName, variableValue);	
-				} 
+					var root =  ParseTree.Root; 
+					TemplateName = root.ChildNodes[1].ChildNodes[0].ChildNodes[0].Token.ValueString.trim();
+					
+					var rows = root.ChildNodes[1].ChildNodes[1].ChildNodes;
+					foreach(var row in rows) 
+					{	
+						//var nodeValue = child.ValueString.isNull() ? "" : child.Token.ValueString.trim();  
+						var nodeType = row.Term.Name; 
+						if (nodeType =="dataRow")
+						{
+							var variableName = row.ChildNodes[0].Token.ValueString.trim();
+							var variableValue = row.ChildNodes[1].Token.ValueString.trim()  ;
+							Variables.add(variableName, variableValue);
+							//"{0} : {1} " .info(variableName, variableValue);	
+						} 
+					}
+				}
+				catch(Exception ex)
+				{
+					ex.log("In WikiText_Template.processParseTree");
+				}
 			}
+			return false;
 		}				 
 	}
 
