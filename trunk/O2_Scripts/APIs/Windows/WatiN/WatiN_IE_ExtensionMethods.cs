@@ -35,6 +35,7 @@ using mshtml;
 //O2File:ascx_AskUserForLoginDetails.cs
 //O2File:ISecretData.cs
 //O2File:DotNet_Viewstate.cs
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 //O2Ref:O2_External_IE.dll
 //O2Ref:WatiN.Core.1x.dll
@@ -642,7 +643,7 @@ namespace O2.XRules.Database.APIs
     		if (link != null)
     		{
     			link.Click();
-    			link.wait(miliseconds); 
+    			O2.XRules.Database.APIs.WatiN_IE_ExtensionMethods_Misc.wait(link,miliseconds); 
     		}
     		return link;
     	}
@@ -1450,7 +1451,8 @@ namespace O2.XRules.Database.APIs
     	public static WatiN_IE add_IE(this Control control)
     	{
     		var browser = control.add_Control<System.Windows.Forms.WebBrowser>();
-    		var ie = browser.ie();    		
+    		var ie = browser.ie();   
+    		ie.setWebBrowserObject(browser);    		
     		var parentForm = control.parentForm();
     		if (parentForm.notNull())
     		{
@@ -1648,6 +1650,100 @@ namespace O2.XRules.Database.APIs
  						Cancel = callback(URL.str()); 						
  					};
  			return ie;
+    	}
+    }
+    
+    
+    public static class WatiN_IE_ExtensionMethods_Javascript
+    {
+    	
+    	public static object invokeScript(this WatiN_IE ie, string functionName)
+    	{
+    		return ie.invokeScript(functionName, null);
+    	}
+    	
+    	public static object invokeScript(this WatiN_IE ie, string functionName, params object[] parameters)
+    	{
+    		return ie.invokeScript(true, functionName, parameters);
+    	}	
+    		
+    	public static object invokeScript(this WatiN_IE ie, bool waitForExecutionComplete, string functionName, params object[] parameters)
+    	{
+    		var sync = new AutoResetEvent(false);
+    		object responseValue = null;
+    		ie.WebBrowser.invokeOnThread(
+    								()=>{
+    										var document = ie.WebBrowser.Document;
+    										if (parameters.isNull())
+												responseValue = document.InvokeScript(functionName); 
+											else
+												responseValue = document.InvokeScript(functionName, parameters); 
+											sync.Set();	
+										});
+    		if (waitForExecutionComplete)
+    			sync.WaitOne();
+    		return responseValue;	
+    	}
+    	
+    	public static object invokeEval(this WatiN_IE ie, string evalScript)
+    	{
+    		return ie.invokeScript("eval", "(function() { " + evalScript + "})();");   
+    	}
+    	
+    	public static WatiN_IE injectJavascriptFunctions(this WatiN_IE ie)
+    	{
+    		if (ie.WebBrowser.isNull())
+    			"in InjectJavascriptFunctions, ie.WebBrowser was null".error();
+    		else
+    		{
+    			if (ie.WebBrowser.ObjectForScripting.isNull()) 
+    				ie.WebBrowser.ObjectForScripting = new WatiN_IE.ToCSharp();
+    				
+    			"Injecting Javascript Hooks * Functions for page: {0}".debug(ie.url());
+				ie.eval("var o2Log = function(message) { window.external.write(message) };");
+				ie.invokeScript("o2Log","Test from Javascript (via toCSharp(message) )");
+				"Injection complete".info();
+			}
+			return ie;
+    	}
+    	    	
+    	public static WatiN_IE injectJavascriptFunctions_onNavigate(this WatiN_IE ie)
+    	{
+    		
+			ie.onNavigate((url)=> ie.injectJavascriptFunctions());
+			return ie;
+		}
+
+		public static WatiN_IE setOnAjaxLog(this WatiN_IE ie, Action<string, string,string,string> onAjaxLog)
+		{
+			(ie.WebBrowser.ObjectForScripting as WatiN_IE.ToCSharp).OnAjaxLog = onAjaxLog;
+			return ie;
+		}
+    
+    	public static WatiN_IE eval(this WatiN_IE ie, string script)
+    	{
+    		return ie.eval(script, true);
+    	}
+    	
+    	public static WatiN_IE eval(this WatiN_IE ie, string script, bool waitForExecutionComplete)
+    	{
+    		var executionThread = O2Thread.staThread(()=> ie.IE.RunScript(script));			
+    		if (waitForExecutionComplete)
+    			executionThread.Join();
+    		return ie;	
+    	}
+    	
+    	public static WatiN_IE alert(this WatiN_IE ie, string alertScript)
+    	{
+    		return ie.eval("alert({0});".format(alertScript));
+    	}
+    	    	
+    }
+    public static class WatiN_IE_ExtensionMethods_JavaScript_Helpers
+    {
+    	public static List<string> javascript_ObjectItems(this WatiN_IE ie, string targetObject)
+    	{
+    		return ie.invokeEval("var result = []; for(var item in " + targetObject + ") result.push(item);return result.toString();").str().split(",");
     	}
     }
     

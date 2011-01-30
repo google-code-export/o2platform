@@ -51,6 +51,17 @@ namespace O2.XRules.Database.Utils
 {
 	public static class ExtraMethodsToAddToO2CodeBase_IO
 	{
+		//Reflection
+		
+		public static MethodInfo method(this Type type, string name)
+		{
+			foreach(var method in type.methods())
+			{				
+				if (method.Name == name)
+					return method;
+			}
+			return null;
+		}
 		// Config files (can't easily put this on the main
         public static Panel editLocalConfigFile(this string file)
         {

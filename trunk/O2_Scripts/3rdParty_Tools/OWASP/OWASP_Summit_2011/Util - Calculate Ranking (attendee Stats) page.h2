@@ -5,7 +5,7 @@
 //var topPanel = panel.clear().add_Panel();
 var topPanel = O2Gui.open&lt;Panel&gt;("Calculate Ranking (attendee Stats) page", 1000,500);
 var wikiApi = new OwaspWikiAPI(false);
-var statsPageName = "Summit_2011_Attendee/Summit Attendees Funds - Ranking for 10th Jan 2010";	
+var statsPageName = "Summit_2011_Attendee/Summit Attendees Funds - Ranking for 18th Jan 2010";	
 Func&lt;bool&gt; wikiLogin = 
 	()=&gt;{
 			return wikiApi.login(credential.username(),credential.password());  
@@ -38,10 +38,21 @@ actionPanel.add_Link("Save page", 0,0,
 var summitApi = new API_OWASP_Summit_2011();  
 var useCache = true ;
 var statsText = "==Summit Attendees Funds - Ranking for 18th Jan 2010)==".line();
-
+var rankingRulesText = "The ranking is calculated the following way.&lt;br/&gt; ".line() +
+					   "The OWASP leader in the list bellow gets a number of points based on his/hers past OWASP contributions:&lt;br&gt;".line() + 
+					   "* Committee Member: 2 Points".line() + 
+					   "* Project/Release leadership: 1 Point".line() +
+					   "* Project/Release contribution: 1 Point".line() +			   
+					   "* Chapter leadership: 2 Points".line() + 
+					   "* Conference Organizer: 3 Points".line() + 
+					   "* Leader funds its own time (or takes holidays) : 1 Point".line() + 
+					   "* Leader was able to secure partial funding: 10 Points".line() +
+					   "&lt;br/&gt;".line();
+statsText += rankingRulesText;
+						
 Action addSeekFunds = 
 	()=&gt;{
-			var budgetAvailable = 14000;
+			var budgetAvailable = 17100;
 			//statsText += "==Confirmed need funds==".line();
 			var seekFunds = new Dictionary&lt;string, SummitAttendee&gt;();
 			var attendees = summitApi.getAttendees(summitApi.attendees_SeekingFunds(useCache));
@@ -58,8 +69,9 @@ Action addSeekFunds =
 							   select attendee.Name 
 							   );  
 							    
-			statsText += "===Ranking and Funding status===".line().format(budgetAvailable); 
+			statsText += "===Ranking and Funding status ===".line().format(budgetAvailable); 
 			
+			statsText += "Funds Available: {0:c0}&lt;br/&gt;&lt;br&gt;".line().format(budgetAvailable);
 			statsText += "{| border=\"1\"".line() + 					    
 					    "! Position".line() + 
 					    "! Name".line() +

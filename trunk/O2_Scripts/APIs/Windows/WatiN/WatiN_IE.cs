@@ -32,6 +32,7 @@ namespace O2.XRules.Database.APIs
     public class WatiN_IE
 	{
 		public Thread IEThread { get; set; }
+		public System.Windows.Forms.WebBrowser WebBrowser { get; set; }
 		public IE IE { get; set; }
 		public SHDocVw.InternetExplorerClass InternetExplorer { get; set; }
 		public AutoResetEvent WaitForIELaunch {get;set;}
@@ -253,6 +254,70 @@ namespace O2.XRules.Database.APIs
 		{
 			Processes.getProcessesCalled("iexplore").stop();
 		}
+		
+		public WatiN_IE setWebBrowserObject(System.Windows.Forms.WebBrowser webBrowser)
+		{
+			this.WebBrowser = webBrowser;			 
+			return this;
+		}
+		
+		[System.Runtime.InteropServices.ComVisible(true)]
+	    public class ToCSharp
+	    {
+	    	
+	        public void write(string message)
+	        {
+	            "[IE to ToCSharp] : {0}".info(message);
+	        }
+	        
+	        public string ping(string message)
+	        {
+	            "[ping from IE] : {0}".info(message);
+	            return "pong: " + message;
+	        }
+	        public Func<string, string> OnFilter {get;set;}
+	        public Action<string, string, string, string> OnAjaxLog {get;set;}
+	        public Func<string, string, string, string> OnAjaxCall {get;set;}
+	        
+	        public string filter(string data)
+	        {
+	        	"Received Filter request".debug();
+	        	if (OnFilter.notNull())
+	        		return OnFilter(data);
+	        	return data;
+	        }
+	        
+	        public void ajaxLog(string id, string open, string body, string response)
+	        {
+	            "Received Ajax Log request".debug();
+	            if (OnAjaxLog.isNull())
+	            	("id: {0}".line() + 
+	            	 "open: {0}".line() +
+	            	 "body: {0}".line() +
+	            	 "response: {0}".line()).format(id,open,body,response);
+	            else
+	            	O2Thread.mtaThread(
+	            		()=>{
+	            				"invoking OnAjaxLog method".info();
+	            				OnAjaxLog(id,open,body,response);
+	            			});
+	        }
+	        
+	        public string ajaxCall(string id, string open, string body, string response)
+	        {
+	        	"Received Ajax Call request".debug();
+	        	 if (OnAjaxCall.isNull())
+	        	 {
+	        	 	"Error, OnAjaxCall is not set".info();
+	        	 	return null;
+	        	 }
+	        	 else
+	        	 {
+	        	 	"invoking OnAjaxCall method".info();
+	            	return OnAjaxCall(id,open,body);
+	        	 }
+			}
+	    }
 	}
  
  
@@ -280,7 +345,6 @@ namespace O2.XRules.Database.APIs
     	{
     		return (from instance in ieInstances
     				select instance.LocationURL).toList();    		
-    	}
-	}	
- 
+    	}		 	 	
+	 }
  }
