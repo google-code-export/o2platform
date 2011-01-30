@@ -76,7 +76,7 @@ securityAnalysis.add_RibbonGroup("IE Script development environments")
 				 
 securityAnalysis.add_RibbonGroup("Html") 
 				 .add_RibbonButton_H2Script("Html Tag Viewer","ascx_HtmlTagViewer.cs")
-				 .add_RibbonButton_H2Script("View WebPage details","ascx_View_WebPage_Details.cs.o2")
+				 .add_RibbonButton_Script("View WebPage details","ascx_View_WebPage_Details.cs.o2".local())
 				 .add_RibbonButton_H2Script("Quick HtmlCode Viewer","Quick HtmlCode Viewer.h2")
 				 .add_RibbonButton_H2Script("Simple Html Viewer","Util - Simple Html Viewer.h2")
 				 .add_RibbonButton_H2Script("Html Editor","ascx_Html_Editor.cs.o2");      
