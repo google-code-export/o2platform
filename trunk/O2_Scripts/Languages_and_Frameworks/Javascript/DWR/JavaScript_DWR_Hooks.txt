@@ -1,4 +1,5 @@
-/*Script to hook on DWR request and response and send it back to CSharp land
+/*Script to hook on DWR request and response
+ and send it back to CSharp land
 */
 
 function o2Hooks()
@@ -65,7 +66,7 @@ function waitForDwr()
 		if (maxCount-- > 0)
 		{
 			o2Log("#### Did not Found DWR");	
-			setTimeout(waitForDwr,500);
+			setTimeout(waitForDwr,1000);
 		}
 		else
 			o2Log("#### Stopped looking for DWR");
