@@ -147,13 +147,35 @@ namespace O2.XRules.Database.APIs
 		}
     }
     
+    
+    public static class WordPressAPI_ExtensionMethods_IE_Utils
+    {
+    	public static API_WordPress addRequiredSitesToIETrustedZone(this API_WordPress wordPress)
+    	{
+    		"o2platform".makeDomainTrusted("com");
+    		"stats.wordpress.com".makeDomainTrusted("s");
+    		"scorecardresearch.com".makeDomainTrusted("b");
+    		"wp.com".makeDomainTrusted("sp1");
+    		"wp.com".makeDomainTrusted("s2");
+    		"wp.com".makeDomainTrusted("s1");
+    		"wp.com".makeDomainTrusted("s0");
+    		"quantserve.com".makeDomainTrusted("edge");
+    		"gravatar.com".makeDomainTrusted("s");    		
+    		return wordPress;
+    	}
+    }
+    
+    
+    
+    
     public static class WordPressAPI_ExtensionMethods_SourceCode_Utils
     {
     	public static string wrapClipboardTextInSourceCodeTags(this API_WordPress wordPress)
     	{
-    		var clipboardText = "".clipboardText_Get(); 
+    		var clipboardText = "".clipboardText_Get();
     		"Current Clipboard Text:{0}".info(clipboardText);
-    		var wrapedText = "[sourcecode language=\"csharp\" wraplines=\"true\"]".line() + 
+    		clipboardText = clipboardText.Replace("\t","    ");  
+    		var wrapedText = "[sourcecode language=\"csharp\" wraplines=\"false\"]".line() + 
 							 clipboardText + "".line() + 
  							 "[/sourcecode]".line();
 
