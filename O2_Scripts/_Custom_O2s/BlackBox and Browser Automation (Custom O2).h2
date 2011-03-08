@@ -4,26 +4,60 @@
 //var topPanel = panel.add_Panel();
 
 var topPanel = O2Gui.open&lt;Panel&gt;("BlackBox and Browser Automation (Custom O2)", 800,163);      
-var ribbon = topPanel.add_Control&lt;WPF_Ribbon&gt;();//.buildGui();  
-//topPanel.parentForm().top(60).left(60); 
+var currentScript = "BlackBox and Browser Automation (Custom O2).h2".local();
+var ribbon = topPanel.add_Control&lt;WPF_Ribbon&gt;();
+ribbon.title("BlackBox (plus IE Automation, Javascript, Html)");
  
 var browserAutomation = ribbon.Ribbon.add_RibbonTab("Browser Automation");   
 browserAutomation.add_RibbonGroup("IE Script development environments") 				 
 				 .add_RibbonButton_Script("IE Automation","ascx_IE_ScriptExecution.cs")
 				 .add_RibbonButton_H2Script("IE Automation Development","IE Automation using WatiN.h2")
 				 .add_RibbonButton_H2Script("WatiN Recorder","WatiN - Open 'Test Recorder' in new process.h2");
-browserAutomation.add_RibbonGroup("Javascript")
-				 .add_RibbonButton_H2Script("XSS PoC Builder","Web - XSS PoC Builder.h2") 
-				 .add_RibbonButton_H2Script("Javascript AST Viewer","Web - Javascript AST Viewer.h2")	  
-				 .add_RibbonButton_H2Script("JavaScript Stats Viewer","Web - JavaScript Stats Viewer.h2");  
-	  
-browserAutomation.add_RibbonGroup("Html") 
-				 .add_RibbonButton_H2Script("Html Tag Viewer","ascx_HtmlTagViewer.cs")
-				 .add_RibbonButton_H2Script("View WebPage details","ascx_View_WebPage_Details.cs.o2")
-				 .add_RibbonButton_H2Script("Quick HtmlCode Viewer","Quick HtmlCode Viewer.h2")
-				 .add_RibbonButton_H2Script("Simple Html Viewer","Util - Simple Html Viewer.h2")
-				 .add_RibbonButton_H2Script("Html Editor","ascx_Html_Editor.cs.o2");      
+				 
+var html = ribbon.Ribbon.add_RibbonTab("Html");   	  
+html.add_RibbonGroup("Html") 
+	.add_RibbonButton_H2Script("Html Tag Viewer","ascx_HtmlTagViewer.cs")
+	.add_RibbonButton_Script("View WebPage details","ascx_View_WebPage_Details.cs.o2")
+	.add_RibbonButton_H2Script("Quick Html Viewer","Quick HtmlCode Viewer.h2")
+	.add_RibbonButton_H2Script("Simple Html Editor -&gt; Viewer","Util - Simple Html Viewer.h2")
+	.add_RibbonButton_Script("Html Editor","ascx_Html_Editor.cs.o2")    
+	.add_RibbonButton_H2Script("View and Search Web Page","Util - View and search WebPage code.h2");
+	
 
+var javascript = ribbon.Ribbon.add_RibbonTab("Javascript"); 
+javascript.add_RibbonGroup("Invocation and Debug")
+		  .add_RibbonButton_H2Script("Javascript Object Viewer","Util - Javascript Object viewer.h2")	 
+		  .add_RibbonButton_H2Script("Get Javascript Objects (using Firefox)" ,"Util - get Javascript Objects.h2");
+		  
+
+javascript.add_RibbonGroup("AST")
+		  .add_RibbonButton_H2Script("Javascript AST Viewer","Web - Javascript AST Viewer.h2")	  
+		  .add_RibbonButton_H2Script("JavaScript Stats Viewer","Web - JavaScript Stats Viewer.h2");  
+
+javascript.add_RibbonGroup("XSS")
+		  .add_RibbonButton_H2Script("XSS PoC Builder","Web - XSS PoC Builder.h2");		  
+		  
+
+var frameworks = ribbon.Ribbon.add_RibbonTab("Frameworks");
+frameworks.add_RibbonGroup("DWR")
+		  .add_RibbonButton_H2Script("DWR Calls Monitor","Util - DWR Calls Monitor.h2")
+		  .add_RibbonButton_H2Script("DWR Functions Viewer and Invoker","Util - DWR Functions Viewer and Invoker.h2");
+		  
+		  
+
+ribbon.Ribbon.add_RibbonTab("Misc")   
+		     .add_RibbonGroup("This Custom O2")			
+					.add_RibbonButton("Edit this Custom O2 Script", 
+						() =&gt; O2Gui.open&lt;Panel&gt;("Custom O2",800,400)
+								   .add_SourceCodeEditor()
+								   .open(currentScript))
+				    .add_RibbonButton("Relaunch", 
+				    	()=&gt;{	
+								topPanel.parentForm().close();
+								currentScript.executeH2Script();
+							})
+			.add_RibbonButton_H2Script("Open a Log Viewer window","Util - LogViewer.h2");
+						
 /*var demoVulnerableApplications = ribbon.Ribbon.add_RibbonTab("Demo Vulnerable Applications");   
 demoVulnerableApplications.add_RibbonGroup("Browser Automation") 				  
 	.add_RibbonButton_H2Script(topPanel,"Browser Automation - IE Demos","Browser Automation_IE Demos.h2");

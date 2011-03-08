@@ -12,6 +12,7 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
+using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX;
 using Fusion8.Cropper.Core;
 using Splicer.WindowsMedia;
@@ -65,6 +66,20 @@ namespace O2.XRules.Database.APIs
 			if (captureComplete.WaitOne(MaxImageCaptureWait).isFalse())
 				"in API_Cropper waitForCapture(), MaxImageCaptureWait reached".error();			
 			return this;
+		}
+		
+		//static for the cases where we have no live Control to get the STA thread from
+		public static Bitmap captureSta(int x, int y, int width, int height)
+		{
+    		Bitmap bitmap = null;
+			var sync = new AutoResetEvent(false);
+			O2Thread.staThread(
+				()=>{
+						bitmap = new API_Cropper().capture(x,y,width,height);
+						sync.Set();
+					});
+			sync.WaitOne();
+			return bitmap;	
 		}
     }
     
@@ -187,7 +202,7 @@ namespace O2.XRules.Database.APIs
     					var cropper = new API_Cropper();        					
     					return 	cropper.capture(x,  y,  width,  height);
     				});
-    	}
+    	}    	    	
     }
     
    

@@ -111,11 +111,13 @@ Action&lt;string&gt; openUrl =
 
 
 			
-var urlText = topPanel.insert_Above&lt;Panel&gt;(20).add_LabelAndTextAndButton("Url to Open:","","open",(url)=&gt; openUrl(url)).control&lt;TextBox&gt;(); 
+var urlText = topPanel.insert_Above&lt;Panel&gt;(20)
+					  .add_LabelAndTextAndButton("Url to Open:","","open",(url)=&gt; openUrl(url))
+					  .control&lt;TextBox&gt;();
 var openButton = urlText.parent().control&lt;Button&gt;(); 
 //demo data			
 scriptText.set_Text("o2Log(\"test\");");
-urlText.set_Text("http://local:8080/dwr/simpletext/index.html");
+urlText.set_Text("http://www.directwebremoting.org/dwr-demo/simple/text.html");
 openButton.click();
 return "ok";
 

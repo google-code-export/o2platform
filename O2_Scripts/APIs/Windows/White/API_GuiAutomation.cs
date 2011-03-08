@@ -1,5 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.Drawing;
+using System.Threading;
 using System.Linq;
 using System.Diagnostics;
 using System.Collections.Generic;
@@ -7,6 +9,7 @@ using System.Runtime.InteropServices;
 using O2.Interfaces.O2Core;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using White.Core;
 using White.Core.UIA;
@@ -32,6 +35,7 @@ using System.Windows.Automation;
 //O2Ref:UIAutomationTypes.dll
 //O2Ref:UIAutomationClient.dll
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
+//O2File:Api_Cropper.cs
 
 namespace O2.XRules.Database.APIs
 {
@@ -728,6 +732,22 @@ namespace O2.XRules.Database.APIs
     		return null;
     	}
     	
+    	public static Window window(this API_GuiAutomation guiAutomation, string windowName, int numberOfTries)
+    	{
+    		for(int i=0; i < numberOfTries ; i++)
+			{				
+				var window = guiAutomation.window(windowName);
+				if (window.notNull())
+				{
+					"after {0} tries, found window with title: {1}".info(i, windowName);
+					return window;
+				}
+				guiAutomation.sleep(1000,false);
+			}
+			"after {0} tries, cound not find window with title: {1}".info(numberOfTries, windowName);
+			return null;
+		}
+    	
     	public static Window bringToFront(this Window window)
     	{
     		if (window.notNull())
@@ -833,6 +853,13 @@ namespace O2.XRules.Database.APIs
 			moveToControl();	
 			return window;
 		}
+		
+		public static API_GuiAutomation_NativeMethods.Rect windowRectangle(this Window window)
+		{
+			var rect = new API_GuiAutomation_NativeMethods.Rect();			
+			API_GuiAutomation_NativeMethods.GetWindowRect(window.handle(), out rect);
+			return rect;
+		}
     }
     
     
@@ -909,6 +936,19 @@ namespace O2.XRules.Database.APIs
 		public static Window findWindow_viaImage(this API_GuiAutomation guiAutomation)
     	{
     		return guiAutomation.Application.GetWindow(SearchCriteria.ByControlType(ControlType.Image),InitializeOption.NoCache);
+    	}
+    }
+    
+    public static class API_GuiAutomation_Screenshots
+    {    
+    	public static Bitmap screenshot(this Window window)
+    	{
+    		var left = window.windowRectangle().left;
+			var top = window.windowRectangle().top;
+			var right = window.windowRectangle().right;
+			var bottom = window.windowRectangle().bottom;
+			
+			return API_Cropper.captureSta(left,top,right-left,bottom-top ); 			
     	}
     }
     
