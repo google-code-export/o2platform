@@ -146,14 +146,19 @@ namespace O2.XRules.Database.APIs
 			Dwr_Session.ScriptSessionId = scriptSessionId;
 		}
 		
-		public string invoke( string scriptName, string methodName, params string[] parameters)
-		{
-			return dwrRequest(scriptName, methodName, parameters);
+		public string invoke( DWR_Function dwrFunction)
+		{	
+			return invoke(dwrFunction.ClassName, dwrFunction.FunctionName, dwrFunction.emptyParameters());
 		}
 		
-		public string dwrRequest( string scriptName, string methodName, params string[] parameters)
+		public string invoke( string className, string methodName, params string[] parameters)
 		{
-			var dwr_Request = new DWR_Request(Dwr_Session, scriptName, methodName,parameters);
+			return dwrRequest(className, methodName, parameters);
+		}
+		
+		public string dwrRequest( string className, string methodName, params string[] parameters)
+		{
+			var dwr_Request = new DWR_Request(Dwr_Session, className, methodName,parameters);
 			return dwr_Request.makeRequest();
 		}				
     }
@@ -202,7 +207,7 @@ namespace O2.XRules.Database.APIs
 		
 		public static string makeCall_Plain(this DWR_Request dwr_Request)
 		{
-			dwr_Request.createGetRequestData().info();
+			//dwr_Request.createGetRequestData().info();
 			return dwr_Request.Dwr_Session.makeCall_Plain(dwr_Request.Dwr_Session.Cookie,dwr_Request.createPostRequestData());
 		}
 	}
@@ -262,7 +267,7 @@ namespace O2.XRules.Database.APIs
 					var dwrFunction = new DWR_Function(className, functionName, parameters);
 					dwrFunction.SourceCode = javascriptFunction.Source.Code; 
 					dwrClass.Functions.add(dwrFunction); 	
-					"Mapped function: {0}.{1}".debug(className, functionName);
+					//"Mapped function: {0}.{1}".debug(className, functionName);
 				}									
 			};
 			if (dwrClass.Functions.size()>0)
@@ -331,6 +336,15 @@ namespace O2.XRules.Database.APIs
 		*/
 	}    
 	
+	public static class DWR_Function_ExtensionMethods
+	{
+		public static string[] emptyParameters(this DWR_Function dwrFunction)
+		{		
+			if (dwrFunction.isNull() || dwrFunction.Parameters.size() < 2)
+				return new string[0] ;
+			return new string[dwrFunction.Parameters.size()-1] ;			
+		}
+	}
 	public static class DWR_GUIs
 	{
 	
@@ -357,9 +371,9 @@ namespace O2.XRules.Database.APIs
 			//var files = new string[] {"Demo.js", "Intro.js", "Corporations.js", "People.js", "CallCenter.js" ,"UploadDownload.js"} .toList();
 			//var file = rootUrl + files[5];
 			
-			//var sourceCodeViewer = topPanel.add_SourceCodeViewer(); 
-			var files_treeView = topPanel.insert_Left<Panel>(200).add_TreeView();
-			var functions_treeView = files_treeView.insert_Below<Panel>().add_TreeView();
+			//var sourceCodeViewer = topPanel.add_SourceCodeViewer(); 			
+			var files_treeView = topPanel.insert_Left<Panel>(200).add_TreeView().sort();
+			var functions_treeView = files_treeView.insert_Below<Panel>().add_TreeView().sort();
 			var ActionPanel = topPanel.insert_Above<GroupBox>(60).add_Panel();
 			var selectedFunction = ActionPanel.add_Label("Selected Function").append_Label("...").font_bold().autoSize() ;
 			var functionParametersRaw = ActionPanel.add_Label("Functions Parameters (Raw)",20).append_TextBox("").width(200);
