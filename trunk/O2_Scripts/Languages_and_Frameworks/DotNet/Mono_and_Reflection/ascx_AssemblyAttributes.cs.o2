@@ -28,10 +28,12 @@ namespace O2.Script
 
         public static void openAscxInNewWindow()
     	{    		
-    		var executeWizards = O2Gui.showAsForm<ascx_AssemblyAttributes>("Execute Wizards",400,400);    		
-    		var urlWithTargetFile = @"http://deploy.o2-ounceopen.com/DemoFiles/DotNet/HacmeBank_v2_WS.dll.zip";    		
-    		var targetFile = new Web().checkIfFileExistsAndDownloadIfNot("HacmeBank_v2_WS.dll", urlWithTargetFile);	    		
-    		if (File.Exists(targetFile))
+    		var executeWizards = O2Gui.showAsForm<ascx_AssemblyAttributes>("View Assembly Attributes",400,400);    		
+    		
+    		//var urlWithTargetFile = @"http://deploy.o2-ounceopen.com/DemoFiles/DotNet/HacmeBank_v2_WS.dll.zip";    		
+    		//var targetFile = new Web().checkIfFileExistsAndDownloadIfNot("HacmeBank_v2_WS.dll", urlWithTargetFile);	    		
+    		var targetFile = PublicDI.config.CurrentExecutableDirectory.pathCombine("O2_Kernel.dll");
+    		if (targetFile.fileExists())
     		{
     			log.debug("File exists: {0}", targetFile);
     			executeWizards.loadAssembly(targetFile);
@@ -54,7 +56,7 @@ namespace O2.Script
      	}   
      	
      	public void loadAssembly(string assemblyToLoad)
-     	{
+     	{     		
      		if (false == File.Exists(assemblyToLoad))
      		{
      			PublicDI.log.error("Could not load file: {0}", assemblyToLoad);

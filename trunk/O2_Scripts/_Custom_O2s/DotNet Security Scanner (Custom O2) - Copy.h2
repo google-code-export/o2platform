@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var title = ".Net Static Analysis";  
+ 
+var ribbon = CustomO2.create(title, 1000,300); 		// stand alone version 
+//var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
+  
+var staticAnalysis  = ribbon.add_Tab("Method Streams and Invocations");
+staticAnalysis.add_RibbonGroup("Method Streams")
+			  .add_Script("MethodStreams Creator","Util - MethodStreams Creator.h2")
+	 		  .add_Script("MethodStreams Viewer","Util - MethodStreams Viewer.h2");	 		 
+	 		  
+staticAnalysis.add_RibbonGroup("Method Invocations")
+			  .add_Script("Util - Method Invocations Creator","Util - Method Invocations Creator.h2")
+			  .add_Script("Util - Method Invocations Viewer (Simple)","Util - Method Invocations Viewer (Simple).h2")			  
+			  .add_Script("Util - Method Invocations Viewer (MethodStreams)","Util - Method Invocations Viewer (MethodStreams).h2")			  
+			  .add_Script("Util - Method Invocations (Findings Creator)","Util - Method Invocations (Findings Creator).h2")
+			  .add_Script("","");
+			  
+var ast  = ribbon.add_Tab("AST &amp; PoCs");
+ast.add_RibbonGroup("Ast Utils") 
+   .add_Script("ascx_ViewAST","ascx_ViewAST.cs")
+   .add_Script("ascx_SearchAST","ascx_SearchAST.cs")
+   .add_Script("View SourceCode AST","ascx_View_SourceCode_AST.cs.o2");
+			  
+ast.add_RibbonGroup("PoCs")
+   .add_Script("O2_DotNet_Ast_Engine","O2_DotNet_Ast_Engine.h2")   
+   .add_Script("O2_DotNet_Ast_Scanner","O2_DotNet_Ast_Scanner.h2")   
+   .add_Script("Util - Debug AST Rules","Util - Debug AST Rules.h2")
+   .add_Script("Util - Edit AST Rules","Util - Edit AST Rules.h2");
+
+var dotNetUtils  = ribbon.add_Tab(".NET Utils");
+
+dotNetUtils.add_RibbonGroup("Reflection")
+		   .add_Script("View Assembly Attributes","ascx_AssemblyAttributes.cs.o2")
+		   .add_Script("Mono Decompiler","ascx_MonoDecompiler.cs.o2")		   
+		   .add_Script("View .NET Assembly References Mappings","Tool - View .NET Assembly References Mappings.h2");
+
+dotNetUtils.add_RibbonGroup(".Net debug utils")
+           .add_Script("SunOfStrikeApi","SunOfStrikeApi.h2");
+
+
+
+//ribbon.add_Tab_BrowserAutomation();
+ribbon.add_Tab_MiscTools();
+
+//O2File:CustomO2.cs  
+
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:RibbonControlsLibrary.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
