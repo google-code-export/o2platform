@@ -29,8 +29,10 @@ ribbon.add_Tab("Custom O2s")
 	  .tab("Custom O2s").add_Group_FindAndExecuteScripts()
 	  
 	  .tab("Custom O2s").add_RibbonGroup("Custom O2s")
-	  .add_Script("OWASP Projects and Website (Custom O2)", "OWASP Projects and Website (Custom O2).h2")	  
-	  .add_Script("BlackBox (plus IE Automation, Javascript, Html)", "BlackBox and Browser Automation (Custom O2).h2")	  
+					    .add_Script("BlackBox (plus IE Automation, Javascript, Html)", "BlackBox and Browser Automation (Custom O2).h2")	  
+					    .add_Script("DotNet Static Analysis", "DotNet Static Analysis (Custom O2).h2")	  
+					    .add_Script("OWASP Projects and Website)", "OWASP Projects and Website (Custom O2).h2")
+					    
 	  
       .tab("Custom O2s").add_Group("Misc") 				
 	  .add_Script("Execute Scripts","Util - Execute O2 Scripts.h2")	   
