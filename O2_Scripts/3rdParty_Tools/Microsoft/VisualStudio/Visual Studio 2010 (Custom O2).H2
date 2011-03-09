@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>panel.clear(); 
+  <SourceCode>//panel.clear(); 
     
 /*var vStudio = new API_VisualStudio_2010().attach();     
 API_GuiAutomation.Mouse_Move_SleepValue = 1;  
@@ -65,6 +65,8 @@ vStudio.close_VisualStudio();
 //vsProcess.moveWindow(50,50,300,300);[DefaultSelection : StartPosition=(Line 44, Col 38), EndPosition=(Line 44, Col 40)]
 
 //return "ok";
+
+
 API_VisualStudio_2010 vStudio = null;
 
 Action&lt;bool&gt; startOrAttach = 
@@ -86,8 +88,8 @@ var websiteToOpen = baseFolder.pathCombine(projectFolder).createDir();
 var solutionPath = websiteToOpen.pathCombine(projectFolder + ".sln"); 
 
  
-//var ribbon = CustomO2.create(title); 		// stand alone version
-var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
+var ribbon = CustomO2.create(title); 		// stand alone version
+//var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
 
   
 ribbon.add_Tab("Visual Studio") 
