@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>panel.clear();
-var topPanel = panel.add_Panel();
+  <SourceCode>//panel.clear();
+//var topPanel = panel.add_Panel();
+var topPanel = O2Gui.open&lt;Panel&gt;("Tool - Map method streams interfaces.h2", 1000,600);   
 var astDataCacheKey = "astData ASP.NET MVC";  
 var baseFolder = ""; 
 var useCachedData = true; //false;//true ;
 var referencesToLoad = new List&lt;string&gt;();  
 var astData = (O2MappedAstData)O2LiveObjects.get(astDataCacheKey);
-var codeViewer = topPanel.add_SourceCodeEditor();   
+//var codeViewer = topPanel.add_SourceCodeEditor();   
  
 //var treeView = codeViewer.insert_Left&lt;TreeView&gt;(400) 
 //							     .showSelection();

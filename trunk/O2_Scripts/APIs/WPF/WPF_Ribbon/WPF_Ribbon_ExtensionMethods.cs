@@ -84,10 +84,26 @@ namespace O2.XRules.Database.Utils
     		return ribbon.items<RibbonTab>();    		
     	}
     	
+    	public static List<RibbonGroup> groups(this Ribbon ribbon)
+    	{
+    		var groups = new List<RibbonGroup>();
+    		foreach(var tab in ribbon.tabs())
+    			groups.add(tab.groups());
+    		return groups;    		
+    	}
+    	
     	public static RibbonGroup group(this WPF_Ribbon wpfRibbon, string tabHeader, string groupHeader)
     	{
     		var tab =  wpfRibbon.Ribbon.tab(tabHeader);    		
     		return tab.group(groupHeader);
+    	}
+    	
+    	public static List<RibbonButton> buttons(this Ribbon ribbon)
+    	{
+    		var buttons = new List<RibbonButton>();
+    		foreach(var group in ribbon.groups())
+    			buttons.add(group.buttons());
+    		return buttons;    		
     	}
     	
     	public static RibbonButton button(this WPF_Ribbon wpfRibbon, string tabHeader, string groupHeader, string buttonLabel)
@@ -194,6 +210,13 @@ namespace O2.XRules.Database.Utils
     		return (string)ribbonButton.wpfInvoke(
     			()=> { return ribbonButton.Label; });    		
     	}
+    	
+    	public static List<string> labels(this List<RibbonButton> ribbonButtons)
+    	{
+    		return (from ribbonButton in ribbonButtons
+    				select ribbonButton.label()).toList();
+    	}
+    	
     	
     	/*public static RibbonTab menu(this WPF_Ribbon wpfRibbon, string name)
     	{

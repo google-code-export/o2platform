@@ -14,8 +14,7 @@ staticAnalysis.add_RibbonGroup("Method Invocations")
 			  .add_Script("Util - Method Invocations Creator","Util - Method Invocations Creator.h2")
 			  .add_Script("Util - Method Invocations Viewer (Simple)","Util - Method Invocations Viewer (Simple).h2")			  
 			  .add_Script("Util - Method Invocations Viewer (MethodStreams)","Util - Method Invocations Viewer (MethodStreams).h2")			  
-			  .add_Script("Util - Method Invocations (Findings Creator)","Util - Method Invocations (Findings Creator).h2")
-			  .add_Script("","");
+			  .add_Script("Util - Method Invocations (Findings Creator)","Util - Method Invocations (Findings Creator).h2");			  
 			  
 var ast  = ribbon.add_Tab("AST &amp; PoCs");
 ast.add_RibbonGroup("Ast Utils") 
@@ -35,8 +34,8 @@ ast.add_RibbonGroup("PoCs")
 var mvcAntiXss  = ribbon.add_Tab("Asp.Net MVC , AntiXss");
 mvcAntiXss.add_RibbonGroup("Asp.Net MVC")		  
 		  .add_Script("Tool - View Asp.NET MCV controllers","Tool - View Asp.NET MCV controllers.h2")
-		  .add_Script("Tool - View Asp.NET MCV method streams and views","Tool - View Asp.NET MCV method streams and views.h2")
-		  .add_Script("Tool - Map method streams interfaces","Tool - Map method streams interfaces.h2");
+		  .add_Script("Tool - View Asp.NET MCV method streams and views","Tool - View Asp.NET MCV method streams and views.h2");
+		  
 		  
 mvcAntiXss.add_RibbonGroup("AntiXss Library")
 		  .add_Script("AntiXSS - Test multiple Encodings", "AntiXSS - Test multiple Encodings.h2");
@@ -69,6 +68,7 @@ dotNetUtils.add_RibbonGroup("Other")
 
 //ribbon.add_Tab_BrowserAutomation();
 ribbon.add_Tab_MiscTools();
+return ribbon;
 
 //O2File:CustomO2.cs  
 
