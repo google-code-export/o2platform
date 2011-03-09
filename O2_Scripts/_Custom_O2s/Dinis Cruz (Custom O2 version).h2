@@ -147,7 +147,7 @@ localFolders.add_RibbonGroup("O2 Source Code (Solutions)")
 			.add_RibbonButton_StartProcess("O2_XRules_Database.sln",@"C:\_O2_SVN\O2 - All Active Projects\O2_XRules_Database\O2_XRules_Database.sln"); 
 
 
-return "ok";	     
+return ribbon;	     
 
 //using Microsoft.Windows.Controls.Ribbon;
 //using WPF= System.Windows.Controls
