@@ -90,14 +90,24 @@ namespace O2.XRules.Database.Utils
 			miscTools.add_RibbonGroup("Files Utils") 		 		
 					 .add_RibbonButton_H2Script("Map Files by Extension","Util - File Mapping (by extension).h2")	  
 					 .add_RibbonButton_H2Script("Quick File Search","Util - Quick File Search.h2")	  
-					 .add_RibbonButton_H2Script("Simple Text Editor","Util - Simple Text Editor.h2")
-					 .add_RibbonButton_H2Script("CSharp String Encoder","CSharp_String_Encoder.h2")		 
+					 .add_RibbonButton_H2Script("Simple Text Editor","Util - Simple Text Editor.h2")					 
 					 .add_RibbonButton_H2Script("Search Engine","Search Engine Tool.h2");
+			miscTools.add_RibbonGroup("O2 Utils") 		 				 
+					 .add_Script("Execute Scripts","Util - Execute O2 Scripts.h2")
+					 .add_RibbonButton_Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")
+					 .add_RibbonButton_Script("IE Automation","ascx_IE_ScriptExecution.cs")
+					 .add_RibbonButton_H2Script("CSharp String Encoder","CSharp_String_Encoder.h2");		 
 			miscTools.add_RibbonGroup("Windows Processes and Services")
 					 .add_Script("Stop Processes","ascx_Processes_Stop.cs.o2")
 					 .add_Script("View Running Process Details", "ascx_Running_Processes_Details.cs.o2")
 					 .add_Script("Stop Services","ascx_Services_Stop.cs.o2");
-				
+			var currentScript = PublicDI.CurrentScript; 
+			miscTools.add_RibbonGroup("This Custom O2")		 	
+					.add_RibbonButton("Edit this Custom O2 Script", 
+						() => O2Gui.open<System.Windows.Forms.Panel>("Custom O2",800,400)
+								   .add_SourceCodeEditor()
+								   .open(currentScript))				    
+					.add_RibbonButton_H2Script("Open a Log Viewer window","Util - LogViewer.h2");
 			return ribbon;
 		}
 	}

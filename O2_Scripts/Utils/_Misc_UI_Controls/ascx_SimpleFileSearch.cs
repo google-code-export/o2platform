@@ -13,7 +13,8 @@ using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
- 
+//O2File:SearchEngine.cs
+//O2File:SearchUtils.cs
 namespace O2.XRules.Database.Utils
 {
     public class test_ascx_SimpleFileSearch : ContainerControl
@@ -29,15 +30,21 @@ namespace O2.XRules.Database.Utils
 
     public class ascx_SimpleFileSearch : ContainerControl
     {       		
-		public TextBox Path { get;set; }
-
-		public Panel leftPanel;
-		public ascx_SourceCodeEditor sourceCode;
+		public SearchEngine searchEngine;
 		
+		public TextBox Path { get;set; }		
+		public Panel leftPanel;
+		public ascx_SourceCodeViewer sourceCode;
+		public DataGridView dataGridView;
+		public TreeView treeView;
+		public TextBox textSearch_TextBox;
+		
+
         public ascx_SimpleFileSearch()
     	{
     		this.Width = 300;
     		this.Height = 300;
+    		searchEngine = new SearchEngine();
     		buildGui();
     	}
  
@@ -45,8 +52,8 @@ namespace O2.XRules.Database.Utils
     	{
     		var topPanel = this.add_Panel();
     		Path = topPanel.insert_Above<TextBox>(20);
-			sourceCode = topPanel.add_SourceCodeEditor();
-			
+			sourceCode = topPanel.add_SourceCodeViewer();
+			dataGridView = sourceCode.insert_Above<Panel>(100).add_DataGridView();
 			leftPanel = topPanel.insert_Left<Panel>(300);									
 			
 			Path.onEnter(loadFiles);
@@ -55,6 +62,21 @@ namespace O2.XRules.Database.Utils
 									Path.set_Text(fileOrFolder);
 									loadFiles(fileOrFolder);
 								}); 	   	   	   	   
+			dataGridView.SelectionChanged+= 
+				(sender,e) => {
+						if (dataGridView.SelectedRows.size() == 1)
+						{
+							var selectedRow = dataGridView.SelectedRows[0];
+							var filePath = selectedRow.Cells[0].Value.str();
+							var filename = selectedRow.Cells[1].Value.str();
+							var lineNumber = selectedRow.Cells[2].Value.str();
+							"opening up source code: {0}".info(filePath);
+							sourceCode.open(filePath.pathCombine(filename));  
+							sourceCode.editor().gotoLine(lineNumber.toInt() + 1);
+							dataGridView.focus();
+						}
+				  };
+								
 		}
 		
 		public void loadFiles(string filesPath)
@@ -64,19 +86,34 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		public void loadFiles(string filesPath, List<string> filesToLoad)
-		{
+		{			
+			sourceCode.set_Text("Loading files from: {0}".format(filesPath));
 			Path.set_Text(filesPath);
 			var filesContent = new Dictionary<string,string>();
+			var nonBinaryFiles = new List<string>();
 			foreach(var file in filesToLoad) 
 				if (file.isBinaryFormat().isFalse()) 
+					nonBinaryFiles.add(file);
+			
+			foreach(var file in nonBinaryFiles) 
 					filesContent.add(file.remove(filesPath),file.contents());
+			searchEngine.loadFiles(nonBinaryFiles); 			
 			leftPanel.clear();
-			var treeView = leftPanel.add_TreeViewWithFilter(filesContent); 
+			treeView = leftPanel.add_TreeViewWithFilter(filesContent); 
 			treeView.afterSelect<string>(
-				(fileContents)=>{
+				(fileContents)=>{					
 									sourceCode.open(filesPath + treeView.selected().get_Text());
 								});						
-			sourceCode.colorCodeForExtension(treeView.selected().str());
+			sourceCode.editor().colorCodeForExtension(treeView.selected().str());
+			sourceCode.set_Text("");
+			textSearch_TextBox = leftPanel.controls<TextBox>(true)[1];
+			textSearch_TextBox.onEnter(
+				(text)=>{
+					var searchResults = searchEngine.searchFor(text);
+					dataGridView.loadInDataGridView_textSearchResults(searchResults);  
+				});
+			
+			
 		}		
 	}
  
