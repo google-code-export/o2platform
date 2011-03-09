@@ -21,7 +21,8 @@ var ast  = ribbon.add_Tab("AST &amp; PoCs");
 ast.add_RibbonGroup("Ast Utils") 
    .add_Script("ascx_ViewAST","ascx_ViewAST.cs")
    .add_Script("ascx_SearchAST","ascx_SearchAST.cs")
-   .add_Script("View SourceCode AST","ascx_View_SourceCode_AST.cs.o2");
+   .add_Script("View SourceCode AST","ascx_View_SourceCode_AST.cs.o2")
+   .add_Script("Convert VB.Net to CSharp.h2", "Util - Convert VB.Net to CSharp.h2");
 			  
 ast.add_RibbonGroup("PoCs")
    .add_Script("O2_DotNet_Ast_Engine","O2_DotNet_Ast_Engine.h2")   
@@ -29,8 +30,19 @@ ast.add_RibbonGroup("PoCs")
    .add_Script("Util - Debug AST Rules","Util - Debug AST Rules.h2")
    .add_Script("Util - Edit AST Rules","Util - Edit AST Rules.h2");
 
-var dotNetUtils  = ribbon.add_Tab(".NET Utils");
 
+
+var mvcAntiXss  = ribbon.add_Tab("Asp.Net MVC , AntiXss");
+mvcAntiXss.add_RibbonGroup("Asp.Net MVC")		  
+		  .add_Script("Tool - View Asp.NET MCV controllers","Tool - View Asp.NET MCV controllers.h2")
+		  .add_Script("Tool - View Asp.NET MCV method streams and views","Tool - View Asp.NET MCV method streams and views.h2")
+		  .add_Script("Tool - Map method streams interfaces","Tool - Map method streams interfaces.h2");
+		  
+mvcAntiXss.add_RibbonGroup("AntiXss Library")
+		  .add_Script("AntiXSS - Test multiple Encodings", "AntiXSS - Test multiple Encodings.h2");
+
+
+var dotNetUtils  = ribbon.add_Tab(".NET Utils");
 dotNetUtils.add_RibbonGroup("Reflection")
 		   .add_Script("View Assembly Attributes","ascx_AssemblyAttributes.cs.o2")
 		   .add_Script("Mono Decompiler","ascx_MonoDecompiler.cs.o2")		   
@@ -38,6 +50,20 @@ dotNetUtils.add_RibbonGroup("Reflection")
 
 dotNetUtils.add_RibbonGroup(".Net debug utils")
            .add_Script("SunOfStrikeApi","SunOfStrikeApi.h2");
+           
+dotNetUtils.add_RibbonGroup("ASP.NET")
+   		   .add_Script("ViewState_Decoder (for ASP.NET 3.0)","Util - ViewState_Decoder_ASP.NET 3.0.h2")		
+		   .add_Script("Aspx PoC Builder","Util - Aspx PoC Builder.h2")
+           .add_Script(".Net AspNet Compiler","DotNet_AspNet_Compiler.cs")
+           .add_Script("Decompile ASPX pages compiled code","Util - Decompile ASP.NET ASPX pages compiled code.h2");
+
+dotNetUtils.add_RibbonGroup("Other")
+		   .add_Script("HacmeBank - Vulnerable Web Application (Custom O2)", "HacmeBank - Vulnerable Web Application (Custom O2).h2")
+		   .add_Script("Visual Studio 2010 (Custom O2)", "Visual Studio 2010 (Custom O2).h2")
+		   .add_Script("Copy Gac Dlls (Wizard)", "Wizard - CopyGacDlls.cs");
+           
+
+
 
 
 
