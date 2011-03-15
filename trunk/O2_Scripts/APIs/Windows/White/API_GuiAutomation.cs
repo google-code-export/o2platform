@@ -525,6 +525,25 @@ namespace O2.XRules.Database.APIs
     		}
     		return guiAutomation;
     	}
+    	
+    	//Button
+    	public static RadioButton radioButton(this UIItemContainer container, string text)    		
+    	{
+    		return container.get<RadioButton>(text);
+    	}
+    	 
+    	public static List<RadioButton> radioButtons(this UIItemContainer container)    		
+    	{
+    		return container.items<RadioButton>();
+    	}
+    	
+    	public static List<RadioButton> radioButtons(this List<Window> windows)    		
+    	{
+    		var radioButtons = new List<RadioButton>();
+    		foreach(var window in windows)
+    			radioButtons.AddRange(window.radioButtons()); 
+    		return radioButtons;
+    	}
     }
     
     

@@ -895,6 +895,101 @@ namespace O2.XRules.Database.APIs
  
  	}
  	
+ 	
+ 	public static class WatiN_IE_ExtensionMethods_RadioButton
+    {
+ 
+    	/*public static WatiN.Core.RadioButton radioButton(this WatiN_IE watinIe, string id)
+    	{
+    		//watinIe.textFields();   // after some events 
+    		foreach(var radioButton in watinIe.radioButtons())
+    			if (radioButton.id() == id || radioButton.title() == id)
+    				return radioButton;
+    		"in WatiN_IE could not find RadioButton with id or name:{0}".error(name ?? "[null value]");
+    		return null;    				
+    	}*/
+ 
+    	public static List<WatiN.Core.RadioButton> radioButtons(this WatiN_IE watinIe)
+    	{
+    		return (from radioButton in watinIe.IE.RadioButtons
+    				select radioButton).toList();
+    	}
+    	
+    	public static List<WatiN.Core.RadioButton> radioButtons(this WatiN_IE watinIe, string name)
+    	{
+    		return (from radioButton in watinIe.IE.RadioButtons
+    				where (radioButton.name() == name)
+    				select radioButton    				
+    				).toList();
+    	}
+    	    	
+ 
+    	public static string id(this WatiN.Core.RadioButton radioButton)
+    	{
+    		return (radioButton != null)
+    					? radioButton.Id
+    					: "";
+    	}
+ 
+    	public static List<string> ids(this List<WatiN.Core.RadioButton> radioButtons)
+    	{
+    		return (from radioButton in radioButtons 
+    				select radioButton.id()).toList();
+    	}
+    	
+    	public static string name(this WatiN.Core.RadioButton radioButton)
+    	{
+    		return (radioButton != null)
+    					? radioButton.attribute("name")
+    					: "";
+    	}
+ 
+    	public static List<string> names(this List<WatiN.Core.RadioButton> radioButtons)
+    	{
+    		return (from radioButton in radioButtons 
+    				select radioButton.name()).Distinct().toList();
+    	}
+ 
+    	public static string value(this WatiN.Core.RadioButton radioButton)
+    	{    		
+    		return (radioButton != null)
+    					? radioButton.attribute("value")
+    					: null;
+    	}
+ 
+    	public static List<string> values(this List<WatiN.Core.RadioButton> radioButtons)
+    	{
+    		return (from radioButton in radioButtons 
+    				select radioButton.value()).toList();
+    	}
+ 		 		
+ 		
+    	public static WatiN.Core.RadioButton check(this WatiN.Core.RadioButton radioButton, bool value)
+    	{
+    		if (radioButton!= null)    
+    		try
+    		{
+    			radioButton.Checked = value;    	
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log("in WatiN.Core.RadioButton value");
+    		}
+    		return radioButton;
+    	}
+ 
+    	/*public static WatiN.Core.RadioButton check(this WatiN.Core.RadioButton radioButton)
+    	{    		
+    		return radioButton.value(true);
+    	}
+ 
+    	public static WatiN.Core.RadioButton uncheck(this WatiN.Core.RadioButton radioButton)
+    	{    		
+    		return radioButton.value(false);
+    	}*/
+ 
+ 	}
+ 	
     public static class WatiN_IE_ExtensionMethods_TextField
     {	
     	public static TextField field(this WatiN_IE watinIe, string name)
@@ -929,6 +1024,7 @@ namespace O2.XRules.Database.APIs
     				return true;
     		return false;
     	}
+    	
     	public static List<TextField> textFields(this WatiN_IE watinIe)
     	{
     		return (from textField in watinIe.IE.TextFields
