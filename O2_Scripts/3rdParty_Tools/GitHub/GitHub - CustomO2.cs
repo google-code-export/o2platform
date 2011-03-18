@@ -106,6 +106,15 @@ namespace O2.XRules.Database.APIs
     
     public static class GitHub_CustomO2_IE_Helpers
     {
+    	public static GitHub_CustomO2 open(this GitHub_CustomO2 gitHub, string url)
+    	{
+    		var uri = url.starts("http") 
+    					? url.uri()
+    					: ("https://gitHub.com/" + url).uri();
+    		gitHub.IE.open(uri.str());
+    		return gitHub;
+    	}
+    	
     	public static GitHub_CustomO2 openLink(this GitHub_CustomO2 gitHub, string link)
 		{
 			gitHub.IE.link(link).click();
