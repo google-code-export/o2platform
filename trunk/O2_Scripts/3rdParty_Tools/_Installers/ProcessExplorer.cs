@@ -28,8 +28,7 @@ namespace O2.XRules.Database.APIs
 			config("ProcessExplorer", "ProcessExplorer v14.1", "ProcessExplorer.zip");			
     		Install_Uri = "http://download.sysinternals.com/Files/ProcessExplorer.zip".uri();
     		if (installNow)
-    			install();
-    		//Install_Dir = @"C:\strawberry\";
+    			install();		
 		}
 		
 		
