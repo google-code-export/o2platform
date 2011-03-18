@@ -5,9 +5,9 @@
 var ribbon = CustomO2.create(title); 		// stand alone version
 //var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
   
-var hacmeBankDemos = ribbon.add_Tab("Custom O2");
-hacmeBankDemos.add_RibbonGroup("Group")
-	 		  .add_RibbonButton_Script("IE Automation","ascx_IE_ScriptExecution.cs");	 		 
+var customO2 = ribbon.add_Tab("Custom O2");
+customO2.add_RibbonGroup("Group")
+		.add_RibbonButton_Script("IE Automation","ascx_IE_ScriptExecution.cs");	 		 
 
 
 //ribbon.add_Tab_BrowserAutomation();

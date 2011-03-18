@@ -16,7 +16,7 @@ namespace O2.XRules.Database.APIs
 			ToolName = "Perl";
     		Version = "Strawberry Perl 5.12.0";
     		Install_File = "strawberry-perl-5.12.1.0.msi";
-    		VersionWebDownload = "";
+    		VersionWebDownload = "http://strawberryperl.com/download/5.12.2.0/strawberry-perl-5.12.2.0.msi";
     		Install_Dir = @"C:\strawberry\";
 		}
 		
@@ -24,7 +24,7 @@ namespace O2.XRules.Database.APIs
 		public bool install()
 		{
 			"Installing Perl".info();
-			return installFromMsi_Local(localDownloadFile);
+			return installFromMsi_Web(localDownloadFile);
 			"Perl installation complete".info();
 		}
 		
