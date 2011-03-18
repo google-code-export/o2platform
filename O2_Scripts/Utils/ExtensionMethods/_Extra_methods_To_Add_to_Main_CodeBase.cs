@@ -303,7 +303,27 @@ namespace O2.XRules.Database.Utils
 			return process;
 		}
 	}
+	
+	public static class Int_ExtensionMethods
+	{
+		public static Action loop(this int count , Action action)
+		{
+			return count.loop(500,action);
+		}
 		
+		public static Action loop(this int count , int delay,  Action action)
+		{
+			"Executing provided action for {0} times with a delay of {1} milliseconds".info(count);
+			for(var i=0 ; i < count ; i ++)
+			{
+				action();
+				if (delay > 0)
+					count.sleep(delay);
+			}
+			return action;
+		}
+		
+	}
 	//REGISTRY
 	public static class RegistryKeyExtensionMethods
     {    

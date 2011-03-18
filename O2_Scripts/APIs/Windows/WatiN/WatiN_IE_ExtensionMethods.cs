@@ -622,8 +622,10 @@ namespace O2.XRules.Database.APIs
  
     	public static List<Link> links(this WatiN_IE watinIe)
     	{
-    		return (from link in watinIe.IE.Links
-    				select link).toList();
+    		if (watinIe.notNull() && watinIe.IE.notNull())
+    			return (from link in watinIe.IE.Links
+    					select link).toList();
+    		return new List<Link>();
     	}
  
     	public static string url(this Link link)

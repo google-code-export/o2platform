@@ -2,7 +2,7 @@
 <H2>
   <SourceCode>//panel.clear(); 
 //var topPanel = panel.add_Panel();
-var topPanel = O2Gui.open&lt;Panel&gt;("Wordpress Editor", 1024,600);
+
 
 var homepage = "http://o2platform.wordpress.com";
 
@@ -17,7 +17,7 @@ wordPress.addRequiredSitesToIETrustedZone(); //to make sure it works ok in WatiN
 //wordPress.login(credential.UserName, credential.Password); 
 
 
-
+var topPanel = O2Gui.open&lt;Panel&gt;("Wordpress Editor", 1024,600);
 var ribbon = topPanel.add_Ribbon_Above(); 
 ribbon.title("WordPress.com API: for o2platform.wordpress.com");
 

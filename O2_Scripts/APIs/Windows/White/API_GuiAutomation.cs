@@ -15,6 +15,7 @@ using White.Core;
 using White.Core.UIA;
 using White.Core.UIItems;
 using White.Core.Factory;
+using White.Core.WindowsAPI;
 using White.Core.InputDevices;
 using White.Core.UIItems.Finders;
 using White.Core.UIItems.TabItems;
@@ -143,9 +144,11 @@ namespace O2.XRules.Database.APIs
     	public static List<T> items<T>(this UIItemContainer container)
     		where T : IUIItem
     	{
-    		return (from item in container.Items
-    				where item is T
-    				select (T)item).toList();
+    		if (container.notNull())
+	    		return (from item in container.Items
+	    				where item is T
+	    				select (T)item).toList();
+	    	return new List<T>();
     	}
     	
     	public static List<Tab> tabs<T>(this T container)
@@ -173,6 +176,15 @@ namespace O2.XRules.Database.APIs
 	    	return null;
     	}    	    	
     	
+    	public static T id<T>(this List<T> items, int id)
+    		where T : IUIItem
+    	{
+    		foreach(var item in items)
+    			if (item.Id == id.str())
+    				return item;
+    		return default(T);
+    	}
+    		
     	public static MenuBar menu(this UIItemContainer container)
     	{
     		if (container.notNull())
@@ -300,6 +312,13 @@ namespace O2.XRules.Database.APIs
     	}*/
     	
     	//TextBox
+    	public static TextBox textBox(this UIItemContainer container, int automationId)    		
+    	{
+    		foreach(var textBox in container.textBoxes())
+    			if(textBox.Id == automationId.str())
+    				return textBox;
+    		return null;
+    	}
     	public static TextBox textBox(this UIItemContainer container, string text)    		
     	{
     		return container.get<TextBox>(text);
@@ -317,7 +336,9 @@ namespace O2.XRules.Database.APIs
     	
     	public static string get_Text(this TextBox textBox)    		
     	{
-    		return textBox.Text;
+    		return  (textBox.notNull())
+    					? textBox.Text
+    					: null;
     	}
     	
     	public static TextBox text(this TextBox textBox, string text)
@@ -327,7 +348,8 @@ namespace O2.XRules.Database.APIs
     	
     	public static TextBox set_Text(this TextBox textBox, string text)
     	{
-    		textBox.Text = text;
+    		if (textBox.notNull() && text.notNull())
+    			textBox.Text = text;
     		return textBox;
     	}
     	//TabPages
@@ -421,7 +443,18 @@ namespace O2.XRules.Database.APIs
 			return properties;
     	}
     	
-    	//Menu
+    	//Menu    	
+    	public static List<Menu> items(this PopUpMenu popUpMenu)
+    	{
+    		return popUpMenu.menus();
+    	}
+    	public static List<Menu> menus(this PopUpMenu popUpMenu)
+    	{
+    		if (popUpMenu.notNull())
+    			return (from menu in popUpMenu.Items
+    					select menu).toList();
+    		return new List<Menu>();
+    	}
     	public static MenuBar menuBar(this Window window, string name)
     	{
     		foreach(var menu in window.menuBars())
@@ -459,7 +492,19 @@ namespace O2.XRules.Database.APIs
     		return (from menu in menus
     				select menu.name()).toList();
     	}
-    	
+		
+		public static Menu menu(this PopUpMenu popUpMenu, string menuToFind)
+		{
+			return popUpMenu.menus().menu(menuToFind);
+		}
+		
+		public static Menu menu(this List<Menu> menus, string menuToFind)
+		{
+			foreach(var menu in menus)
+				if (menu.name() == menuToFind)
+					return menu;
+			return null;
+    	}
     	//this was not working
     	/*public static Menu menu_Click(this Window window, string menuName, string menuItemName)
     	{	
@@ -512,6 +557,19 @@ namespace O2.XRules.Database.APIs
     		return menu.Name;
     	}
     	
+    	public static PopUpMenu getContextMenu(this API_GuiAutomation guiAutomation)    	
+		{
+			try
+			{
+				var emptyWindow = guiAutomation.desktopWindow("");
+				return emptyWindow.Popup;
+			}
+			catch
+			{
+			}
+			return null;
+		}
+
     	
     	//window
     	public static API_GuiAutomation button_Click(this API_GuiAutomation guiAutomation, string windowName, string buttonName)
@@ -658,8 +716,80 @@ namespace O2.XRules.Database.APIs
     		// this makese sure we always end up in the desired location (namely for the cases where the Mouse_Move_SkipValue is quite high)
     		mouse.Location = new System.Windows.Point(originalX + x, originalY + y);    			
     		return mouse;    		
-    	}    	    	
+    	}
     	
+    	public static Mouse mouse(this API_GuiAutomation guiAutomation)
+    	{
+    		return Mouse.Instance;
+    	}
+    	
+    	public static Mouse click(this Mouse mouse)
+    	{
+    		mouse.Click();
+    		return mouse;
+    	}
+    	
+    	public static Mouse doubleClick(this Mouse mouse)
+    	{
+    		var location = mouse.Location;
+    		mouse.DoubleClick(location);
+    		return mouse;
+    	}
+    	
+    	public static Mouse rightClick(this Mouse mouse)
+    	{
+    		mouse.RightClick();
+    		return mouse;
+    	}
+    	
+    	public static API_GuiAutomation mouse_Click(this API_GuiAutomation guiAutomation)
+    	{
+    		guiAutomation.mouse().click();
+    		return guiAutomation;
+    	}
+    	
+    	public static API_GuiAutomation mouse_DoubleClick(this API_GuiAutomation guiAutomation)
+    	{
+    		guiAutomation.mouse().doubleClick();    		
+    		return guiAutomation;
+    	}
+    	
+    	public static API_GuiAutomation mouse_RightClick(this API_GuiAutomation guiAutomation)
+    	{
+    		guiAutomation.mouse().rightClick();
+    		return guiAutomation;
+    	}
+    }
+    
+    public static class API_GuiAutomation_ExtensionMethods_Keyboard
+    {
+    	public static Keyboard keyboard (this API_GuiAutomation guiAutomation)
+    	{
+    		return Keyboard.Instance;
+    	}
+    	
+    	public static Keyboard text (this Keyboard keyboard,string text)
+    	{
+    		keyboard.Enter(text);
+    		return keyboard;
+    	}
+    	
+    	public static API_GuiAutomation keyboard_sendText(this API_GuiAutomation guiAutomation, string text)
+    	{
+    		guiAutomation.keyboard().text(text);
+    		return guiAutomation;
+    	}
+    	
+    	public static Keyboard enter (this Keyboard keyboard)
+    	{
+    		return keyboard.text("".line());
+    	}
+    	
+    	public static Keyboard tab (this Keyboard keyboard)
+    	{
+    		keyboard.PressSpecialKey(KeyboardInput.SpecialKeys.TAB);
+    		return keyboard;
+    	}
     }
     
     public static class API_GuiAutomation_ExtensionMethods_Desktop

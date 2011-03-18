@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Text;
@@ -14,6 +15,8 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
+using O2.XRules.Database.Utils;
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.APIs
 {
@@ -31,6 +34,7 @@ namespace O2.XRules.Database.APIs
     	public string  toolsDir = PublicDI.config.O2TempDir.pathCombine("..\\_ToolsOrAPIs").createDir();
     	public string  localDownloadsDir = PublicDI.config.O2TempDir.pathCombine("..\\_O2Downloads").createDir();
     	public string  s3DownloadFolder = "http://s3.amazonaws.com/O2_Downloads/";
+    	public Process Install_Process {get;set;}
     	
     	//public bool Instaled { get { return isInstalled(); } }
     	
@@ -53,21 +57,37 @@ namespace O2.XRules.Database.APIs
     	
     	public virtual bool isInstalled()
     	{
+    		return isInstalled(true);
+    	}
+    	
+    	public virtual bool isInstalled(bool showLogMessage)
+    	{
     		if (Install_Dir.dirExists())
     		{
     			"{0} tool is installed because installation dir was found: {0}".debug(ToolName, Install_Dir);
     			return true;
     		}
-    		"{0} tool is NOT installed because installation dir was NOT found: {0}".debug(ToolName, Install_Dir);
+    		if (showLogMessage)
+    			"{0} tool is NOT installed because installation dir was NOT found: {0}".debug(ToolName, Install_Dir);
     		return false;
-    	}
-    	
-    	
+    	}    	    	
     	    	
     	public virtual bool installFromMsi_Local(string pathToMsi)
     	{    		
-    		if (pathToMsi.fileExists())    							
+    		if (isInstalled(false).isFalse() && pathToMsi.fileExists())    							
 				Processes.startProcess(pathToMsi).WaitForExit();
+			return isInstalled();
+    	}
+    	
+    	public virtual bool startInstaller_FromMsi_Web()
+    	{    		
+    		return install((msiFile)=> startInstaller_FromMsi_Local(msiFile));
+    	}
+    	
+    	public virtual bool startInstaller_FromMsi_Local(string pathToMsi)
+    	{    		
+    		if (isInstalled(false).isFalse() && pathToMsi.fileExists())    							
+				Install_Process = Processes.startProcess(pathToMsi);
 			return isInstalled();
     	}
     	
@@ -95,7 +115,7 @@ namespace O2.XRules.Database.APIs
     	public virtual bool installFromMsi_Web()
     	{    		
     		return install((msiFile)=> installFromMsi_Local(msiFile));
-    	}
+    	}    	    	
     	
     	public virtual bool installFromZip_Web()
     	{
@@ -156,7 +176,7 @@ namespace O2.XRules.Database.APIs
     	
     	public string download(string file)
     	{
-    		"downloading file: {0}".info(file);    		
+    		"downloading file: {0}".info(file);    	    		
     		var localPath = localDownloadsDir.pathCombine(file);
     		if (localPath.fileExists())
     		{
@@ -177,6 +197,7 @@ namespace O2.XRules.Database.APIs
     		
     	public string download(Uri uri)
     	{
+    		"Downloading from Uri: {0}".info(uri);
     		if (uri.isNull())
     			return null;
     		VersionWebDownload = uri.str();
@@ -184,12 +205,22 @@ namespace O2.XRules.Database.APIs
     		//var localFilePath = PublicDI.config.O2TempDir.pathCombine(CurrentVersionZipFile);    	
     		//"downloading file {0} from {1} to {2}".info(CurrentVersionZipFile, CurrentVersionWebDownload,localFilePath);
     		"downloading file {0}".info(VersionWebDownload);
-            if (new Web().httpFileExists(VersionWebDownload))            
-            {
-                var downloadedFile =  new Web().downloadBinaryFile(VersionWebDownload);                
+    		    		    	
+            //if (new Web().httpFileExists(VersionWebDownload))            
+            //{
+              //  var downloadedFile =  new Web().downloadBinaryFile(VersionWebDownload);                
+              var downloadedFile = VersionWebDownload.download();
                 if (downloadedFile.fileExists())
-                	return Files.MoveFile(downloadedFile, localDownloadsDir.pathCombine(Install_File));
-            }
+                {
+                	var targetFile = localDownloadsDir.pathCombine(Install_File);
+                	"Copying file: {0}".info(targetFile);
+                	Files.Copy(downloadedFile, targetFile);
+                	"Deleting file: {0}".info(targetFile);
+                	Files.deleteFile(downloadedFile);                	
+                	if (targetFile.fileExists())
+                		return targetFile;
+                }
+            //}
             return null;            
     	}
     	
