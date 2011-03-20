@@ -17,6 +17,7 @@ using O2.XRules.Database.Utils;
 //O2File:API_GitHub.cs
 //O2File:MsysGit.cs
 //O2File:ascx_AskUserForLoginDetails.cs
+//O2File:API_GitHub_Issues.cs
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:RibbonControlsLibrary.dll
 //O2Ref:WatiN.Core.1x.dll
@@ -27,7 +28,8 @@ namespace O2.XRules.Database.APIs
 	{
 		public void showGui()
 		{
-			new GitHub_CustomO2().buildGui();
+			new GitHub_CustomO2().buildGui()
+								 .homePage();
 		}
 	}
 	
@@ -63,7 +65,7 @@ namespace O2.XRules.Database.APIs
 				add_Tab_GitHub_Setup();
 				 
 				var customO2 = Ribbon.add_Tab("Custom O2");
-				customO2.add_RibbonGroup("Group")
+				customO2.add_RibbonGroup("Group") 
 						.add_RibbonButton_Script("IE Automation","ascx_IE_ScriptExecution.cs");	 		 
 							
 				//ribbon.add_Tab_BrowserAutomation();
@@ -79,7 +81,10 @@ namespace O2.XRules.Database.APIs
 			var gitHubWebsite = Ribbon.add_Tab("GitHub WebSite");
 			gitHubWebsite.add_Group("Pages")
 						 .add_Button("HomePage", ()=> this.homePage())
-						 .add_Button("Login", ()=> this.login());		
+						 .add_Button("Login", ()=> this.login());								 
+			gitHubWebsite.add_Group("Custom Editors")						 
+						 .add_Button("Issues", ()=> new API_GitHub_Issues().showEditor());
+
 			return this;
 						 
     	}
