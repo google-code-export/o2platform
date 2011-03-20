@@ -227,6 +227,13 @@ namespace O2.XRules.Database.Utils
 			return control;
 		}
 		
+		//CheckBox
+		public static CheckBox checkedChanged(this CheckBox checkBox, Action<bool> action)
+		{
+			checkBox.invokeOnThread(
+				()=> checkBox.CheckedChanged+= (sender,e) => {action(checkBox.value());});
+			return checkBox;
+		}
 		//ListBox
 		
 		public static ListBox add_ListBox(this Control control)
