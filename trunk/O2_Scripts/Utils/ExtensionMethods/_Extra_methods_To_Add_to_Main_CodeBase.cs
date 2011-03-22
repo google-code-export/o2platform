@@ -289,6 +289,28 @@ namespace O2.XRules.Database.Utils
 		
 		//processes
 		
+		
+		
+		public static string startProcess_getConsoleOut(this string processExe, string arguments)
+		{
+			return Processes.startProcessAsConsoleApplicationAndReturnConsoleOutput(processExe, arguments);
+		}
+		
+		public static Process startProcess(this string processExe, Action<string> onDataReceived)
+		{
+			return processExe.startProcess("", onDataReceived);
+		}
+		
+		public static Process startProcess(this string processExe, string arguments, Action<string> onDataReceived)
+		{
+			return Processes.startProcessAndRedirectIO(processExe, arguments, onDataReceived);			
+		}
+		
+		public static Process startProcess(this string processExe, string arguments)
+		{
+			return Processes.startProcess(processExe, arguments);
+		}
+		
 		public static Process startProcess(this string processExe)
 		{
 			return Processes.startProcess(processExe);
@@ -414,6 +436,11 @@ namespace O2.XRules.Database.Utils
 			return null;					
 		}
 		
+		public static string download(this string fileToDownload, string targetFile)
+		{
+			return downloadFile(fileToDownload.uri(),targetFile);
+		}
+		
 		public static string downloadFile(this Uri uri, string targetFile)
 		{
 			if (uri.isNull())
@@ -435,6 +462,91 @@ namespace O2.XRules.Database.Utils
 			if (targetFile.fileExists())		
 				return targetFile;
 			return null;
+		}								
+	}
+	
+	//TreeNode
+	
+	public static class TreeNode_ExtensionMethods
+	{
+		public static TreeNode set_Tag(this TreeNode treeNode, object value)
+		{
+			return (TreeNode)treeNode.treeView().invokeOnThread(
+				()=>{
+						treeNode.Tag = value;
+						return treeNode;
+					});
+		}
+		
+		public static TreeNode insert_TreeNode(this TreeView treeView, string text, object tag, int position)
+		{
+			return treeView.rootNode().insert_TreeNode(text,tag, position);
+		}
+		public static TreeNode insert_TreeNode(this TreeNode treeNode, string text, object tag, int position)
+		{
+			return (TreeNode)treeNode.treeView().invokeOnThread(
+				()=>{
+						var newNode = treeNode.Nodes.Insert(position, text);
+						newNode.Tag = tag;
+						return treeNode;
+					});
+		}
+	}
+	
+	public static class DataGridView_ExtensionMethods
+	{
+	
+		public static DataGridView dataSource(this DataGridView dataGridView, System.Data.DataTable dataTable)
+		{
+			dataGridView.invokeOnThread(
+				()=>{
+						dataGridView.DataSource = dataTable;
+					});
+			return dataGridView;
+		}
+		
+		public static DataGridView ignoreDataErrors(this DataGridView dataGridView)
+		{
+			return dataGridView.ignoreDataErrors(false);
+		}
+		
+		public static DataGridView ignoreDataErrors(this DataGridView dataGridView, bool showErrorInLog)
+		{
+			dataGridView.invokeOnThread(
+				()=>{
+						dataGridView.DataError+= 
+								(sender,e) => { 
+													if (showErrorInLog)
+														" dataGridView error: {0}".error(e.Context);
+											  };
+					});
+			return dataGridView;		
+		}
+		
+		public static DataGridView afterSelect(this DataGridView dataGridView, Action<DataGridViewRow> onSelect)
+		{
+			dataGridView.invokeOnThread(
+				()=>{
+						dataGridView.SelectionChanged+= 
+							(sender,e)=>{
+											if (dataGridView.SelectedRows.size() == 1)
+											{
+												var selectedRow = dataGridView.SelectedRows[0];
+												onSelect(selectedRow);
+											}
+										 };
+					});
+			return dataGridView;		
+		}
+	}
+	
+	public static class XmlLinq_ExtensiomMethods
+	{
+		public static XAttribute value(this XAttribute xAttribute, string value)
+		{	
+			if (xAttribute.notNull())
+				xAttribute.SetValue(value);
+			return xAttribute;
 		}		
 	}
 }

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Text;
+using System.Text; 
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
@@ -21,6 +21,7 @@ using O2.XRules.Database.Utils;
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:RibbonControlsLibrary.dll
 //O2Ref:WatiN.Core.1x.dll
+//O2Ref:White.Core.dll
 
 namespace O2.XRules.Database.APIs
 {
@@ -81,7 +82,9 @@ namespace O2.XRules.Database.APIs
 			var gitHubWebsite = Ribbon.add_Tab("GitHub WebSite");
 			gitHubWebsite.add_Group("Pages")
 						 .add_Button("HomePage", ()=> this.homePage())
-						 .add_Button("Login", ()=> this.login());								 
+						 .add_Button("Login", ()=> this.login())
+						 .add_Button("LoginAs", ()=> this.loginAs())
+						 .add_Button("add SSH Public Key", ()=> this.add_SSH_PublicKey());			 
 			gitHubWebsite.add_Group("Custom Editors")						 
 						 .add_Button("Issues", ()=> new API_GitHub_Issues().showEditor());
 
@@ -143,22 +146,41 @@ namespace O2.XRules.Database.APIs
     	{
     		var gitHubLogin = @"C:\O2\_USERDATA\accounts.xml".credential("github"); 
     		if (gitHubLogin.isNull())
-    			gitHubLogin  = ascx_AskUserForLoginDetails.ask();
-    		if (gitHubLogin.notNull())
-    			return  gitHub.login(gitHubLogin.username(), gitHubLogin.password()); 
-    		"No login credentials were provided".error();
-    		return gitHub;
+    			gitHubLogin  = ascx_AskUserForLoginDetails.ask();    		
+    		return gitHub.login(gitHubLogin.username(), gitHubLogin.password());     		    		
+    	}
+    	
+    	public static GitHub_CustomO2 loginAs(this GitHub_CustomO2 gitHub)
+    	{    	
+    		var gitHubLogin = ascx_AskUserForLoginDetails.ask();
+    		return gitHub.login(gitHubLogin.username(), gitHubLogin.password());
     	}
     	
     	public static GitHub_CustomO2 login(this GitHub_CustomO2 gitHub, string username, string password)
     	{
-    		var ie = gitHub.IE;
+    		if (username.inValid() || password.inValid())
+    		{
+    			"No valid login credentials were provided".error();
+    			return null;
+    		}
+    		gitHub.logout();
+    		var ie = gitHub.IE;    		    			
 			ie.open("https://github.com/login");
 			ie.field("login").value(username);
 			ie.field("password").value(password); 
 			ie.button("Log in").click();
 			return gitHub; 
 		}		
+		
+		public static GitHub_CustomO2 logout(this GitHub_CustomO2 gitHub)
+		{
+			"Logging out".info();
+			var ie = gitHub.IE;
+			if (ie.hasLink("Log Out"))
+				ie.link("Log Out").click();
+			return gitHub;
+		}
+
 		
 		public static GitHub_CustomO2 homePage(this GitHub_CustomO2 gitHub)
     	{
@@ -193,5 +215,17 @@ namespace O2.XRules.Database.APIs
 			}
 			return gitHub;
 		}
+		
+		public static GitHub_CustomO2 newRepository(this GitHub_CustomO2 gitHub, string name, string description, string homepageUrl)
+		{
+			var ie = gitHub.IE;
+			ie.open("https://github.com/repositories/new");
+			ie.field("repository[name]",name);
+			ie.field("repository[description]",description);
+			ie.field("repository[homepage]",homepageUrl);										
+			ie.radioButtons()[1].@checked();
+			ie.button("<SPAN>Create Repository</SPAN>").click();
+			return gitHub;
+		  }
     }
 }

@@ -262,7 +262,9 @@ namespace O2.XRules.Database.APIs
     	//Button
     	public static Button button(this UIItemContainer container, string text)    		
     	{
-    		return container.get<Button>(text);
+    		if (container.notNull())
+    			return container.get<Button>(text);
+    		return null;
     	}
     	 
     	public static List<Button> buttons(this UIItemContainer container)    		
@@ -278,6 +280,39 @@ namespace O2.XRules.Database.APIs
     		return buttons;
     	}
     	
+    	public static bool hasButton(this API_GuiAutomation guiAutomation, string text) //search on the first window
+    	{
+    		return guiAutomation.button(text).notNull();
+    	}
+    	
+    	public static Button button(this API_GuiAutomation guiAutomation, string text) //search on the first window
+    	{
+    		return guiAutomation.firstWindow().button(text);
+    	}
+    	
+    	public static Button button(this API_GuiAutomation guiAutomation, string text, int waitCount)
+    	{
+    		"Trying {0} times to find button '{1}'".info(waitCount,text);
+    		for(int i = 0 ; i< waitCount; i ++) 
+			{
+				guiAutomation.sleep(2000,true); // wait 2 secs and try again  				
+				try
+				{
+					var button = guiAutomation.button(text);
+					if (button.notNull())
+						return button;
+				}
+				catch
+				{}
+			}
+			"Could not find button '{0}'".error(text);
+    		return null;
+    	}
+    	
+    	public static List<Button> buttons(this API_GuiAutomation guiAutomation)    		
+    	{
+    		return guiAutomation.firstWindow().buttons();
+    	}
     	//Label
     	//TextBox
     	public static Label label(this UIItemContainer container, string text)    		
@@ -861,8 +896,15 @@ namespace O2.XRules.Database.APIs
     {	
     	public static List<Window> windows(this API_GuiAutomation guiAutomation)
     	{
-    		if (guiAutomation.notNull() && guiAutomation.Application.notNull())
-    			return guiAutomation.Application.GetWindows();
+    		try
+    		{
+    			if (guiAutomation.notNull() && guiAutomation.Application.notNull())
+    				return guiAutomation.Application.GetWindows();
+    		}
+    		catch(Exception ex)
+    		{
+    			ex.log();
+    		}
     		return new List<Window>();			// do a soft landing
     	}
     	    	    	
@@ -870,6 +912,15 @@ namespace O2.XRules.Database.APIs
     	{
     		return (from window in windows
     		        select window.Name).toList();
+    	}
+    	
+    	public static Window firstWindow(this API_GuiAutomation guiAutomation)
+    	{
+    		guiAutomation.sleep(100);			// needed on install wizards that change windows quite quickly
+    		var windows = guiAutomation.windows();
+    		if (windows.size() > 0)
+    			return windows[0];
+    		return null;
     	}
     	
     	public static Window window(this API_GuiAutomation guiAutomation, string windowName)

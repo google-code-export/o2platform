@@ -980,6 +980,16 @@ namespace O2.XRules.Database.APIs
     		return radioButton;
     	}
  
+    	public static WatiN.Core.RadioButton @checked(this WatiN.Core.RadioButton radioButton)
+    	{
+    		return radioButton.check(true);
+    	}
+    	
+    	public static WatiN.Core.RadioButton @checked(this WatiN.Core.RadioButton radioButton, bool value)
+    	{
+    		return radioButton.check(value);
+    	}
+    	
     	/*public static WatiN.Core.RadioButton check(this WatiN.Core.RadioButton radioButton)
     	{    		
     		return radioButton.value(true);

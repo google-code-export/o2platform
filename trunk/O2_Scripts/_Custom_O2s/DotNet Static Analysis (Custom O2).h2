@@ -43,6 +43,7 @@ mvcAntiXss.add_RibbonGroup("AntiXss Library")
 
 var dotNetUtils  = ribbon.add_Tab(".NET Utils");
 dotNetUtils.add_RibbonGroup("Reflection")
+	       .add_Button("ILSpy", ()=&gt; new ILSpy().start()) 
 		   .add_Script("View Assembly Attributes","ascx_AssemblyAttributes.cs.o2")
 		   .add_Script("Mono Decompiler","ascx_MonoDecompiler.cs.o2")		   
 		   .add_Script("View .NET Assembly References Mappings","Tool - View .NET Assembly References Mappings.h2");
@@ -63,14 +64,11 @@ dotNetUtils.add_RibbonGroup("Other")
            
 
 
-
-
-
-//ribbon.add_Tab_BrowserAutomation();
 ribbon.add_Tab_MiscTools();
 return ribbon;
 
 //O2File:CustomO2.cs  
+//O2File:ILSpy.cs
 
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:RibbonControlsLibrary.dll</SourceCode>
