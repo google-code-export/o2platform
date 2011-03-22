@@ -24,30 +24,40 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		public string Port {get;set;}
 		public string VirtualPath {get;set;}				
 		public Process WebServerProcess {get; set;}		
+		public string WebServerExe { get;set;}
 		
-		public MS_VS_WebServer(string localPath, int port, string virtualPath)
+		public MS_VS_WebServer()
 		{
+			WebServerExe = PublicDI.config.CurrentExecutableDirectory.pathCombine("MS_VS_WebDev.WebServer.exe"); 		
+		}
+		
+		public MS_VS_WebServer(string localPath, int port, string virtualPath) : this()
+		{					
+			start(localPath, port, virtualPath);
+		}
+		
+		public bool start(string localPath, int port, string virtualPath)
+		{	
 			LocalPath = localPath;
 			Port = port.str();
 			VirtualPath = virtualPath;
-			start();
-		}
-		
-		public bool start()
-		{				
 			DefaultUrl = "http://127.0.0.1.:{0}{1}".format(Port, VirtualPath);
+			return start();
+			
+		}
+		public bool start()
+		{							
 			if (DefaultUrl.uri().getHtml().valid().isFalse())
-			{
-				var webServerExe = PublicDI.config.CurrentExecutableDirectory.pathCombine("MS_VS_WebDev.WebServer.exe"); 
+			{				
 				//var webServerExe = @"C:\Program Files\Common Files\Microsoft Shared\DevServer\10.0\WebDev.WebServer20.EXE";			
-				if (webServerExe.fileExists().isFalse())
+				if (WebServerExe.fileExists().isFalse())
 				{
-					"error could not find WebServer at: {0}".error(webServerExe);
+					"error could not find WebServer at: {0}".error(WebServerExe);
 					return false; 
 				} 
 				
 				var webServerStartArguments = "/port:\"{0}\" /path:\"{1}\" /vpath:\"{2}\"".format(Port, LocalPath,VirtualPath);
-				WebServerProcess = Processes.startProcess(webServerExe, webServerStartArguments);			
+				WebServerProcess = Processes.startProcess(WebServerExe, webServerStartArguments);			
 				WebServerProcess.sleep(2000);
 				"website should be up now".debug();
 				return true;
@@ -134,9 +144,6 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			//	return null;			
 			MS_VS_WebServer.serverCache.Add(serverCacheKey, webServer);
 			return webServer;
-		}
-		
-		
-		
+		}			
     }
 }

@@ -7,16 +7,11 @@ topPanel.fill(false)
 		.height(170);  
 */
 var title = "OWASP Projects and Website (Custom O2)";
-var topPanel = O2Gui.open&lt;Panel&gt;(title, 800,283);         
-topPanel.insert_Below&lt;Panel&gt;(110).add_LogViewer();  
-topPanel.add_CustomO2_Image("owasp_logo.jpg");
-
-//topPanel.parentForm().top(60).left(60); 
-
-//var logoNoShadow = "O2_Logo_no_Shadow.jpg".local(); 
-//var smallLogo = "O2Logo_Small.gif".local();
-
-var ribbon = topPanel.add_Ribbon();
+var topPanel = O2Gui.open&lt;Panel&gt;(title, 800,283);   
+var ribbonPanel = topPanel.insert_Above&lt;Panel&gt;(150);
+ribbonPanel.add_CustomO2_Image("owasp_logo.jpg");
+var ribbon = ribbonPanel.add_Ribbon();
+topPanel.add_LogViewer();
  
 var owaspWiki = ribbon.Ribbon.add_RibbonTab("OWASP Wiki");   
 

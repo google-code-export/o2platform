@@ -27,7 +27,7 @@ notepad.menu("File").mouse().click()
 
 //Clicking on the No button of the popup window
 guiAutomation.window("Notepad").button("No").mouse().click();
-
+guiAutomation.window("Notepad").button("Don't Save").mouse().click();
 
 return "all done";
 
