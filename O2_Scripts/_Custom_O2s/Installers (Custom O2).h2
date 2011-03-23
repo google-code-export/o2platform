@@ -8,7 +8,8 @@ var ribbon = CustomO2.create(title); 		// stand alone version
 ribbon.add_Tab("Setup Apps")
       .add_RibbonGroup("Utils")
       		.add_Button("Firefox 3.6.10", ()=&gt; new Install_Firefox().install())
-      		.add_Button("ILSpy", ()=&gt; new ILSpy().start())      		      	 		  			  
+      		.add_Button("ILSpy", ()=&gt; new ILSpy().start()) 
+      		.add_Script("Sumatra PDF", "Sumatra_PDF.cs")
 	  
 	  .tab("Setup Apps")
 	  .add_RibbonGroup("O2 internals")

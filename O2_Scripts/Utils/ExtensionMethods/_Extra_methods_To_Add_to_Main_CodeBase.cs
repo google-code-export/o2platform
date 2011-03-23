@@ -49,7 +49,7 @@ using System.Security.Cryptography;
 
 namespace O2.XRules.Database.Utils
 {
-	public static class ExtraMethodsToAddToO2CodeBase_IO
+	public static class Reflection_ExtensionMethods
 	{
 		//Reflection
 		
@@ -62,6 +62,38 @@ namespace O2.XRules.Database.Utils
 			}
 			return null;
 		}
+		
+		public static List<System.Attribute> attributes(this MethodInfo method)
+		{
+			return PublicDI.reflection.getAttributes(method);
+		}
+		
+		//WebServices SOAP methods
+		public static List<MethodInfo> webService_SoapMethods(this Assembly assembly)
+		{
+			var soapMethods = new List<MethodInfo >(); 
+			foreach(var type in assembly.types())
+				soapMethods.AddRange(type.webService_SoapMethods());
+			return soapMethods;
+					
+		}
+		public static List<MethodInfo> webService_SoapMethods(this object _object)
+		{
+			Type type = (_object is Type) 	
+							? (Type)_object
+							: _object.type();				
+			var soapMethods = new List<MethodInfo >(); 
+			foreach(var method in type.methods())
+				foreach(var attribute in method.attributes())
+					if (attribute.typeFullName() == "System.Web.Services.Protocols.SoapDocumentMethodAttribute")
+						soapMethods.Add(method);
+			return soapMethods;
+		}
+
+	}
+	
+	public static class ConfigFiles_extensionMethods
+	{
 		// Config files (can't easily put this on the main
         public static Panel editLocalConfigFile(this string file)
         {
