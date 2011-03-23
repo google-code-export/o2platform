@@ -271,8 +271,15 @@ namespace O2.XRules.Database.APIs
  
  
     	public static string url(this WatiN_IE watinIe)
-    	{
-    		return watinIe.uri().str();
+    	{	
+    		try
+    		{
+    			return watinIe.uri().str();
+    		}
+    		catch
+    		{
+    			return null;
+    		}
     	}
     	
     	public static bool url(this WatiN_IE watinIe, string url)
@@ -1021,9 +1028,9 @@ namespace O2.XRules.Database.APIs
  
     	public static TextField textField(this WatiN_IE watinIe, string name)
     	{
-    		//watinIe.textFields();   // after some events 
+    		//watinIe.textFields();   // after some events     		
     		foreach(var textField in watinIe.textFields())
-    			if (textField.name() == name || textField.title() == name)
+    			if (textField.name() == name || textField.title() == name || textField.id() == name)
     				return textField;
     		"in WatiN_IE could not find TextField with name:{0}".error(name ?? "[null value]");
     		return null;    				
@@ -1031,10 +1038,7 @@ namespace O2.XRules.Database.APIs
  
     	public static bool textFieldExists(this WatiN_IE watinIe, string name)
     	{
-    		foreach(var textField in watinIe.textFields())
-    			if (textField.name() == name || textField.title() == name)
-    				return true;
-    		return false;
+    		return watinIe.textField(name).notNull();    		
     	}
     	
     	public static List<TextField> textFields(this WatiN_IE watinIe)
@@ -1172,8 +1176,14 @@ namespace O2.XRules.Database.APIs
     	{
     		return (from element in watinIe.IE.Elements
     				select element).toList();
+    	} 		 		
+ 		
+ 		public static List<Element> elements(this List<Element> elements, string tagName)
+    	{
+    		return (from element in elements
+    				where element.TagName == tagName
+    				select element).toList();
     	}
- 
     	public static List<string> tagNames(this List<Element> elements)
     	{    		
     		return (from element in elements
@@ -1321,6 +1331,11 @@ namespace O2.XRules.Database.APIs
     		return (from element in elementsContainer.Elements
     				select element).toList();
     	}
+    	
+    	public static List<Element> elements(this IElementsContainer elementsContainer, string tagName)
+ 		{
+ 			return elementsContainer.elements().elements(tagName);
+ 		}
  
     	public static List<T> elements<T>(this WatiN_IE watinIe)
     		where T : Element
