@@ -91,7 +91,52 @@ namespace O2.XRules.Database.Utils
 		}
 
 	}
-	
+	public static class XElement_LinqXML_extensionMethods
+	{
+		public static XElement parent(this XElement element)
+		{
+			return element.Parent;
+		}
+		
+		public static XElement element(this XElement elementToSearch, string name, bool createIfNotExistant)
+		{
+			var foundElement = elementToSearch.element(name);
+			if (foundElement.notNull())
+				return foundElement;
+			return createIfNotExistant 
+					? elementToSearch.add_Element(name)
+					: null;
+		}
+		
+		public static XElement add_Element(this XElement rootElement, string text)
+		{
+			var newElement = new XElement(text);
+			rootElement.Add(newElement);
+			return newElement;
+		}
+		
+		public static XAttribute add_Attribute(this XElement rootElement, string text, object value)
+		{
+			var newAttribute = new XAttribute(text.xName(), value);
+			rootElement.Add(newAttribute);
+			return newAttribute;
+		}
+		
+		public static XAttribute attribute(this XElement elementToSearch, string name, bool createIfNotExistant)
+		{
+			return elementToSearch.attribute(name, 	createIfNotExistant, null);
+		}
+		
+		public static XAttribute attribute(this XElement elementToSearch, string name, bool createIfNotExistant, object value)
+		{
+			var foundAttribute = elementToSearch.attribute(name);
+			if (foundAttribute.notNull())
+				return foundAttribute;
+			return createIfNotExistant 
+					? elementToSearch.add_Attribute(name, value ?? "")
+					: null;
+		}
+	}
 	public static class ConfigFiles_extensionMethods
 	{
 		// Config files (can't easily put this on the main
