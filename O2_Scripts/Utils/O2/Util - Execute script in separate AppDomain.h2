@@ -16,6 +16,26 @@ Action&lt;string,string,bool&gt; executeInAppDomain =
 		=&gt; {
 				O2Thread.mtaThread(
 					()=&gt;{
+							/*var tempDir = "_appDomain".tempDir();
+							"tempdir: {0}".info(tempDir);
+							
+							Action&lt;string, string&gt; copyFileToAppDomain = 
+							(file, target)=&gt;{
+												var fullPath = Environment.CurrentDirectory.pathCombine(file);												
+												if (fullPath.fileExists())
+													Files.Copy(fullPath,target);		
+												else
+													"file not found: {0}".error(fullPath);
+											}; 
+											
+							copyFileToAppDomain("O2_XRules_Database.exe", tempDir);			
+							copyFileToAppDomain("O2_Kernel.dll", tempDir);
+							copyFileToAppDomain("O2_DotNetWrappers.dll",tempDir);
+							copyFileToAppDomain("O2_Interfaces.dll",tempDir);
+							
+											
+							var o2AppDomain =  new O2.Kernel.Objects.O2AppDomainFactory(appDomainName,tempDir);
+							*/
 							var o2AppDomain =  new O2.Kernel.Objects.O2AppDomainFactory(appDomainName);
 							try
 							{
@@ -49,12 +69,14 @@ Action&lt;string,string,bool&gt; executeInAppDomain =
 executeButton.onClick(
 	()=&gt;{
 			var scriptToExecute = script.commandsToExecute.get_Text();
+			"Command to execute: {0}".info(scriptToExecute);
 			var name = appDomainName_TextBox.get_Text();
 			executeInAppDomain(name, scriptToExecute, checkBox1.value());  
 		});
 //default values
 
 script.set_Command("PublicDI.log.showMessageBox(\"Hello from app domain: \" + AppDomain.CurrentDomain.FriendlyName);"); 
+//script.set_Command("show.info(AppDomain.CurrentDomain);"); 
 appDomainName_TextBox.set_Text("Temp_AppDomain");
 
 

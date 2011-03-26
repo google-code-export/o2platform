@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using O2.Interfaces.O2Core;
 using O2.Interfaces.O2Findings;
 using O2.Kernel;
+using O2.Kernel.Objects;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.O2Findings;
 using O2.DotNetWrappers.ExtensionMethods;
@@ -53,6 +54,19 @@ namespace O2.XRules.Database.Utils
 	{
 		//Reflection
 		
+		public static object property(this object _object, string propertyName, object value)
+		{
+			var propertyInfo = PublicDI.reflection.getPropertyInfo(propertyName, _object.type());  
+			if (propertyInfo.isNull())
+				"Could not find property {0} in type {1}".error(propertyName, _object.type());  
+			else
+			{
+				PublicDI.reflection.setProperty(propertyInfo, _object,value);    
+				"set {0}.{1} = {2}".info(_object.type(),propertyName, value);
+			}
+			return _object;
+
+		}
 		public static MethodInfo method(this Type type, string name)
 		{
 			foreach(var method in type.methods())
@@ -626,5 +640,70 @@ namespace O2.XRules.Database.Utils
 			return xAttribute;
 		}		
 	}
+	
+	public static class AppDomain_ExtensionMethods
+	{
+		public static string executeScriptInSeparateAppDomain(this string scriptToExecute)
+		{
+			return scriptToExecute.executeScriptInSeparateAppDomain(true, false);
+		}
+		
+		public static string executeScriptInSeparateAppDomain(this string scriptToExecute, bool showLogViewer, bool openScriptGui)
+		{
+			var appDomainName = 12.randomLetters();
+			var o2AppDomain =  new O2AppDomainFactory(appDomainName);
+			o2AppDomain.load("O2_XRules_Database"); 	
+			o2AppDomain.load("O2_Kernel");
+			o2AppDomain.load("O2_DotNetWrappers");
+			
+			var o2Proxy =  (O2Proxy)o2AppDomain.getProxyObject("O2Proxy");
+			if (o2Proxy.isNull())
+			{
+				"in executeScriptInSeparateAppDomain, could not create O2Proxy object".error();
+				return null;
+			}
+			o2Proxy.InvokeInStaThread = true;
+			if (showLogViewer)
+				o2Proxy.executeScript( "O2Gui.open<Panel>(\"Util - LogViewer\", 400,140).add_LogViewer();");
+			if (openScriptGui)
+				o2Proxy.executeScript("O2Gui.open<Panel>(\"Script editor\", 700, 300)".line() + 
+ 	  								  "		.add_Script(false)".line() + 
+									  " 	.onCompileExecuteOnce()".line() + 
+									  " 	.Code = \"hello\";".line() + 
+									  "//O2File:Scripts_ExtensionMethods.cs");
+			o2Proxy.executeScript(scriptToExecute);
+			PublicDI.log.showMessageBox("Click OK to close the '{0}' AppDomain (and close all open windows)".format(appDomainName));										
+			o2AppDomain.unLoadAppDomain();
+			return scriptToExecute;
+		}
+		
+		public static O2Proxy executeScript(this O2Proxy o2Proxy, string scriptToExecute)
+		{
+			o2Proxy.staticInvocation("O2_External_SharpDevelop","FastCompiler_ExtensionMethods","executeSourceCode",new object[]{ scriptToExecute });						
+			return o2Proxy;
+		}
+		
+		public static string execute_InScriptEditor_InSeparateAppDomain(this string scriptToExecute)
+		{
+			var script_Base64Encoded = scriptToExecute.base64Encode();
+			var scriptLauncher = "O2Gui.open<Panel>(\"Script editor\", 700, 300)".line() + 
+ 	  								  "		.add_Script(false)".line() + 
+									  " 	.onCompileExecuteOnce()".line() + 
+									  " 	.Code = \"{0}\".base64Decode();".line().format(script_Base64Encoded) + 
+									  "//O2File:Scripts_ExtensionMethods.cs";
+			scriptLauncher.executeScriptInSeparateAppDomain(false,false);
+			return scriptLauncher;									  
+		}
+		
+		public static string localExeFolder(this string fileName)
+		{
+			var mappedFile = PublicDI.config.CurrentExecutableDirectory.pathCombine(fileName);
+			return (mappedFile.fileExists())
+						? mappedFile
+						: null;					
+		}
+	}
+	
+	
 }
     	

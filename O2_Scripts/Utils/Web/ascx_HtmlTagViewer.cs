@@ -97,7 +97,13 @@ namespace O2.XRules.Database.Utils
 				HtmlTags_TreeView.afterSelect<HtmlAgilityPack.HtmlNode>(
 				  (htmlNode)=> propertyGrid.show(htmlNode));
 				
-				PageToOpen.onEnter((text)=> show(text.uri()));								
+				PageToOpen.onEnter(
+							(text)=>{
+										if (text.fileExists())
+											show(text.fileContents());
+										else 
+											show(text.uri());
+									});
 			}
 			
 			HtmlNodeFilter = HtmlTags_TreeView.insert_Below<TextBox>(25).fill();
@@ -135,6 +141,8 @@ namespace O2.XRules.Database.Utils
 		public ascx_HtmlTagViewer reloadPage()
 		{
 			var url = PageToOpen.get_Text();
+			if (url.fileExists())	
+				show(url.fileContents());
 			if (url.isUri())
 				show(url.uri().getHtml());
 			return this;

@@ -16,7 +16,7 @@ browserAutomation.add_RibbonGroup("IE Script development environments")
 				 
 var html = ribbon.Ribbon.add_RibbonTab("Html");   	  
 html.add_RibbonGroup("Html") 
-	.add_RibbonButton_H2Script("Html Tag Viewer","ascx_HtmlTagViewer.cs")
+	.add_Script("Html Tag Viewer","ascx_HtmlTagViewer.cs")
 	.add_RibbonButton_Script("View WebPage details","ascx_View_WebPage_Details.cs.o2")
 	.add_RibbonButton_H2Script("Quick Html Viewer","Quick HtmlCode Viewer.h2")
 	.add_RibbonButton_H2Script("Simple Html Editor -&gt; Viewer","Util - Simple Html Viewer.h2")

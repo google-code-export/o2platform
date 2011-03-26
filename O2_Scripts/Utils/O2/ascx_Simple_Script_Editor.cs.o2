@@ -265,6 +265,7 @@ namespace O2.XRules.Database.Utils
                     break;
             }
         }
+        
 	    public void setCompilerEnvironment()
 	    {                     
 	    	csharpCompiler = new CSharp_FastCompiler();     
@@ -608,5 +609,11 @@ namespace O2.XRules.Database.Utils
      			commandsToExecute.set_Text(value);
      		}
      	}        
+     	
+     	public string set_Script(string script)
+     	{
+     		this.Code = script;
+     		return script;
+     	}
     }
 }
