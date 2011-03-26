@@ -36,24 +36,26 @@ ribbon.add_Tab("Custom O2s")
 
 // HELP tab
 ribbon.add_Tab("Help").add_Group("Websites")
-	  .add_StartProcess("Main O2 Website (http://o2platform)", "http://o2platform.com")	  
-	  .add_StartProcess("O2 @ OWASP.org website", "http://www.owasp.org/index.php/O2")
-	  .add_StartProcess("O2 @ CodePlex (for .NET Developers)", "http://o2platform.codeplex.com/")
-	  .add_StartProcess("O2 Source Code", "http://code.google.com/p/o2platform/source/browse/")
-	  
+					  .add_StartProcess("Main O2 Website (http://o2platform)", "http://o2platform.com")	  
+					  
+					  .add_StartProcess("O2 @ OWASP.org website", "http://www.owasp.org/index.php/O2")
+					  .add_StartProcess("O2 @ CodePlex (for .NET Developers)", "http://o2platform.codeplex.com/")
+					  .add_StartProcess("O2 Source Code", "http://code.google.com/p/o2platform/source/browse/")	  
+					  .add_Script("Wordpress Editor", "Tool - WordPress Editor.h2")	
 	  
 	  .tab("Help").add_Group("Blogs")	  
-	  .add_StartProcess("Developer focused Blog on O2 (o2platform.wordpress.com)", "http://o2platform.wordpress.com/")
-	  .add_StartProcess("Dinis Cruz Blog (Main O2 Developer)", "http://diniscruz.blogspot.com/")
-	  .add_StartProcess("Dinis Cruz on Twitter (Main O2 Developer)", "http://twitter.com/#!/diniscruz")
+				  .add_StartProcess("Developer focused Blog on O2 (o2platform.wordpress.com)", "http://o2platform.wordpress.com/")
+				      						  
+				  .add_StartProcess("Dinis Cruz Blog (Main O2 Developer)", "http://diniscruz.blogspot.com/")
+				  .add_StartProcess("Dinis Cruz on Twitter (Main O2 Developer)", "http://twitter.com/#!/diniscruz")
 	  
 	  .tab("Help").add_Group("Mailing List")	  	  
-	  .add_StartProcess("O2 Mailing List", "https://lists.owasp.org/mailman/listinfo/owasp-o2-platform")
-	  .add_StartProcess("Email O2 Mailing list", "mailto:owasp-o2-platform@lists.owasp.org")
+				  .add_StartProcess("O2 Mailing List", "https://lists.owasp.org/mailman/listinfo/owasp-o2-platform")
+				  .add_StartProcess("Email O2 Mailing list", "mailto:owasp-o2-platform@lists.owasp.org")
 	  
 	  .tab("Help").add_Group("Commercial Services")	  	  
-	  .add_StartProcess("O2 Subscriptions", "http://o2platform.com/wiki/O2_Subscriptions")
-	  .add_StartProcess("O2 Pledges", "http://o2platform.com/wiki/O2_Pledges");
+				  .add_StartProcess("O2 Subscriptions", "http://o2platform.com/wiki/O2_Subscriptions")
+				  .add_StartProcess("O2 Pledges", "http://o2platform.com/wiki/O2_Pledges");
 
 
 // Security Analsyis Tab
@@ -86,7 +88,9 @@ apiScriptDevelopment.add_RibbonGroup("Development GUIs")
 					.add_RibbonButton_Script("Simple Script Editor","ascx_Simple_Script_Editor.cs.o2")
 					.add_RibbonButton_Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")			
 					.add_RibbonButton_H2Script("O2 Development Environment","Util - O2 Development Environment.h2")					
-					.add_RibbonButton_H2Script("Source Code Viewer","Util - SourceCodeViewer.h2")
+//					.add_RibbonButton_H2Script("Source Code Viewer","Util - SourceCodeViewer.h2")
+					.add_RibbonButton_H2Script("Dev Gui and 2 Scripts Editors","Util - Development Gui and Two Script Editors")
+
 					.add_RibbonButton_H2Script("Source Code Editor","Util - SourceCodeEditor.h2")
 					.add_RibbonButton("O2 Object Model", () =&gt; open.o2ObjectModel());
 					

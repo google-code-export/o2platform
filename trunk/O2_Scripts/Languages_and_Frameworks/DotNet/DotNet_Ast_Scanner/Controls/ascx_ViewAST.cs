@@ -94,6 +94,21 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			DataTreeView.configureTreeViewForCodeDomViewAndNRefactoryDom();
 			AstData.afterSelect_ShowInSourceCodeEditor(DataTreeView, CodeViewer.editor());  
 
+			DataTreeView.onDrop(
+				(fileOrFolder)=>{
+									DataTreeView.backColor(Color.LightPink);
+									O2Thread.mtaThread(
+										()=>{
+												AstData.dispose();
+												AstData = new O2MappedAstData();
+												if (fileOrFolder.fileExists())
+													AstData.loadFile(fileOrFolder);
+												else
+													AstData.loadFiles(fileOrFolder.files("*.cs",true));
+												loadDataInGui();
+												DataTreeView.backColor(Color.White);
+											 });									
+								});
 			DataTreeView.afterSelect<string>(
 				(file)=>{
 						if (file.fileExists())

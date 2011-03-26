@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var title = "Sarah Baso";   // CHECK NAME SPELLING 
+  <SourceCode>var title = "Sarah Baso";  
 var currentScript = PublicDI.CurrentScript;   
    
 var ribbon = CustomO2.create(title, 1024,300); 		// stand alone version    
