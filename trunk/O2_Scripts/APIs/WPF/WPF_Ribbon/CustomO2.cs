@@ -90,8 +90,9 @@ namespace O2.XRules.Database.Utils
 			miscTools.add_RibbonGroup("Files Utils") 		 		
 					 .add_RibbonButton_H2Script("Map Files by Extension","Util - File Mapping (by extension).h2")	  
 					 .add_RibbonButton_H2Script("Quick File Search","Util - Quick File Search.h2")	  
+					 .add_RibbonButton_H2Script("Quick File Viewer","Util - Quick File Viewer.h2")
 					 .add_RibbonButton_H2Script("Simple Text Editor","Util - Simple Text Editor.h2")					 
-					 .add_RibbonButton_H2Script("Search Engine","Search Engine Tool.h2");
+					 .add_RibbonButton_H2Script("Search Engine","Search Engine Tool.h2");					 					 
 			miscTools.add_RibbonGroup("O2 Utils") 		 				 
 					 .add_Script("Execute Scripts","Util - Execute O2 Scripts.h2")
 					 .add_RibbonButton_Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")

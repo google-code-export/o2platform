@@ -196,22 +196,7 @@ namespace O2.XRules.Database.Utils
 				}
 			}
 			return clipboardImagePath;
-		}
-		
-		
-		//Split Container
-		
-		public static SplitContainer splitContainer(this Control control)
-		{
-			return control.parent<SplitContainer>();
-		}
-		
-		public static SplitContainer splitterWidth(this SplitContainer splitContainer, int value)
-		{
-			splitContainer.invokeOnThread(()=> splitContainer.SplitterWidth = value);
-			return splitContainer;
-		}
-		
+		}						
 		
 		//Label
 
@@ -556,9 +541,9 @@ namespace O2.XRules.Database.Utils
 		}								
 	}
 	
-	//TreeNode
+	//TreeNode & TreeView
 	
-	public static class TreeNode_ExtensionMethods
+	public static class TreeNode_and_TreeView_ExtensionMethods
 	{
 		public static TreeNode set_Tag(this TreeNode treeNode, object value)
 		{
@@ -581,6 +566,67 @@ namespace O2.XRules.Database.Utils
 						newNode.Tag = tag;
 						return treeNode;
 					});
+		}
+
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName)
+		{
+			treeView.rootNode().add_Nodes(collection, getNodeName,(item)=> item,(item)=> false);			
+			return treeView;
+		}
+				
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName)
+		{
+			return treeNode.add_Nodes(collection, getNodeName, (item)=> item, (item)=> false);			
+		}
+		
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, bool addDummyNode)
+		{
+			treeView.rootNode().add_Nodes(collection, getNodeName, (item)=> item,(item)=> addDummyNode);			
+			return treeView;
+		}
+				
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, bool addDummyNode)
+		{
+			return treeNode.add_Nodes(collection, getNodeName, (item)=> item,(item)=> addDummyNode);			
+		}
+		
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, object> getTagValue, Func<T,bool> addDummyNode)
+		{
+			treeView.rootNode().add_Nodes(collection, getNodeName, getTagValue, addDummyNode);
+			return treeView;
+		}
+		
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, object> getTagValue, Func<T,bool> addDummyNode)
+		{
+			foreach(var item in collection)
+				Ascx_ExtensionMethods.add_Node(treeNode,getNodeName(item), getTagValue(item), addDummyNode(item));
+			return treeNode;
+		}
+	}
+	
+	public static class SplitContainer_ExtensionMethods
+	{
+		public static T splitterDistance<T>(this T control, int distance)
+			where T : Control
+		{
+			var splitContainer = control.splitContainer();
+			if (splitContainer.notNull())
+				Ascx_ExtensionMethods.splitterDistance(splitContainer,distance);
+			return control;
+		}
+		
+		
+		//Split Container
+		
+		public static SplitContainer splitContainer(this Control control)
+		{
+			return control.parent<SplitContainer>();
+		}
+		
+		public static SplitContainer splitterWidth(this SplitContainer splitContainer, int value)
+		{
+			splitContainer.invokeOnThread(()=> splitContainer.SplitterWidth = value);
+			return splitContainer;
 		}
 	}
 	
@@ -705,5 +751,22 @@ namespace O2.XRules.Database.Utils
 	}
 	
 	
+	
+	public static class Misc_ExtensionMethods
+	{
+		public static string ascii(this int _int)
+		{
+			try
+			{				
+				return ((char)_int).str();					
+			}
+			catch(Exception ex)
+			{
+				ex.log();
+				return "";
+			}
+		}
+		
+	}
 }
     	
