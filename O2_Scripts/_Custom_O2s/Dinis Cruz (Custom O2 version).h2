@@ -20,19 +20,24 @@ topPanel.parent&lt;SplitContainer&gt;().backColor(Color.White);//.splitterDistan
 //Custom O2 tab
 ribbon.add_Tab("Custom O2s") 	
 
-	  .add_Group("Main GUIs")
+	  /*.add_Group("Main GUIs")
 	  .add_Script("v1.5 GUI  (TiddlyWiki based)","v1.5_MainGui.h2") 
 	  .add_Script("v1.4 GUI  (shows scripts)","O2 GUI.h2")
-	  .add_Script("v1.3  (Big O2 WPF GUI)","O2 Main WPF GUI.h2")
-
-	  .tab("Custom O2s").add_Group_FindAndExecuteScripts()
-	  
-	  .tab("Custom O2s").add_RibbonGroup("Custom O2s")
+	  .add_Script("v1.3  (Big O2 WPF GUI)","O2 Main WPF GUI.h2")*/
+	  	  
+	  //.tab("Custom O2s")
+	  .add_RibbonGroup("Custom O2s")
 					    .add_Script("BlackBox (plus IE Automation, Javascript, Html)", "BlackBox and Browser Automation (Custom O2).h2")	  
 					    .add_Script("DotNet Static Analysis", "DotNet Static Analysis (Custom O2).h2")	  
 					    .add_Script("OWASP Projects and Website", "OWASP Projects and Website (Custom O2).h2")
 					    .add_Script("GitHub", "GitHub - CustomO2.cs")	    					    	        					    
-					    .add_Script("Installers", "Installers (Custom O2).h2");			    					    	        
+					    .add_Script("Installers", "Installers (Custom O2).h2")					    	  
+	  .tab("Custom O2s").add_RibbonGroup("O2 Scripting")	  					
+	  					.add_Script("IE Automation","ascx_IE_ScriptExecution.cs")
+	  					.add_RibbonButton_Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")
+	  					.add_Script("Execute Scripts GUI","Util - Execute O2 Scripts.h2")
+	  .tab("Custom O2s").add_Group_FindAndExecuteScripts()    ;
+	  					
 
 // HELP tab
 ribbon.add_Tab("Help").add_Group("Websites")
@@ -89,7 +94,7 @@ apiScriptDevelopment.add_RibbonGroup("Development GUIs")
 					.add_RibbonButton_Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")			
 					.add_RibbonButton_H2Script("O2 Development Environment","Util - O2 Development Environment.h2")					
 //					.add_RibbonButton_H2Script("Source Code Viewer","Util - SourceCodeViewer.h2")
-					.add_RibbonButton_H2Script("Dev Gui and 2 Scripts Editors","Util - Development Gui and Two Script Editors")
+					.add_RibbonButton_H2Script("Dev Gui and 2 Scripts Editors","Util - Development Gui and Two Script Editors.h2")
 
 					.add_RibbonButton_H2Script("Source Code Editor","Util - SourceCodeEditor.h2")
 					.add_RibbonButton("O2 Object Model", () =&gt; open.o2ObjectModel());
@@ -110,7 +115,7 @@ apiScriptDevelopment.add_RibbonGroup("Custom O2")
 						() =&gt; O2Gui.open&lt;Panel&gt;("Custom O2",800,400)
 								   .add_SourceCodeEditor()
 								   .open(currentScript))
-				    .add_RibbonButton("Relaunch", 
+				    .add_RibbonButton("Relaunch GUI", 
 				    	()=&gt;{	
 								topPanel.parentForm().close();
 								currentScript.executeH2Script();
@@ -125,8 +130,7 @@ apiScriptDevelopment.add_RibbonGroup("Web Storage, Gui Automation")
 				    .add_RibbonButton_H2Script("Amazon S3 Browser","Amazon S3 Browser.h2")
 				    .add_StartProcess("DropBox","https://www.dropbox.com/home#/Public/;")
 					.add_RibbonButton_H2Script("Visual UIA Verify","Launch VisualUIAVerify.h2");
-apiScriptDevelopment.add_Group("Misc") 				
-					.add_Script("Execute Scripts","Util - Execute O2 Scripts.h2")	   
+apiScriptDevelopment.add_Group("Misc") 									
 				    .add_Script("O2 Command Prompt","ascx_O2_Command_Prompt.cs.o2")
 				    .add_Script("Stop O2 Instances","Uitl - Stop all (but current) O2_XRules_Database processes.h2");       	  	 	
 
