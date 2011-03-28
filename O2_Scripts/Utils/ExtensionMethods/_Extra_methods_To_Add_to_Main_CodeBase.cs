@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Xml;
+using System.Xml.Serialization;
 using System.Drawing;
 using System.Threading;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Collections;
 using System.Collections.Generic;
+using  System.Collections.Specialized;
 using System.Linq;
 using System.Xml.Linq;
 using System.Reflection;
@@ -50,9 +52,78 @@ using System.Security.Cryptography;
 
 namespace O2.XRules.Database.Utils
 {
+
+		[Serializable]
+	public  class NameValueItems : List<Item> 
+	{
+		
+	}
+	
+	[Serializable]
+	public  class Items : List<Item> 
+	{
+		
+	}
+	
+	[Serializable]
+	public  class Item : NameValuePair<string,string>
+	{
+		public Item()
+		{}
+		
+		public Item(string key, string value) : base(key,value)
+		{
+			
+		}
+	}
+	
+	[Serializable]
+	public  class NameValuePair<T,K>
+	{
+		[XmlAttribute]
+		public T Key {get;set;}
+		[XmlAttribute]
+		public K Value {get;set;}
+		
+		public NameValuePair()
+		{}
+		
+		public NameValuePair(T key, K value)
+		{
+			Key = key;
+			Value = value;
+		}
+	}
+
+	public static class NameValuePair_ExtensionMethods
+	{
+	
+		public static List<Item> add(this List<Item> list, string key, string value)
+		{
+			list.Add(new Item(key,value));
+			return list;
+		}
+		
+		public static List<NameValuePair<T,K>> add<T,K>(this List<NameValuePair<T,K>> list, T key, K value)
+		{
+			list.Add(new NameValuePair<T,K>(key,value));
+			return list;
+		}
+	}
+	
 	public static class Reflection_ExtensionMethods
 	{
 		//Reflection
+		public static T property<T>(this object _object, string propertyName)
+		{						
+			if (_object.notNull())
+			{
+				var result = _object.property(propertyName);
+				if (result.notNull())
+					return (T)result;
+			}
+			return default(T);
+		}
 		
 		public static object property(this object _object, string propertyName, object value)
 		{
@@ -67,6 +138,7 @@ namespace O2.XRules.Database.Utils
 			return _object;
 
 		}
+		
 		public static MethodInfo method(this Type type, string name)
 		{
 			foreach(var method in type.methods())
@@ -102,6 +174,14 @@ namespace O2.XRules.Database.Utils
 					if (attribute.typeFullName() == "System.Web.Services.Protocols.SoapDocumentMethodAttribute")
 						soapMethods.Add(method);
 			return soapMethods;
+		}
+		
+		public static Items property_Values_AsStrings(this object _object)
+		{		
+			var propertyValues_AsStrings = new Items();
+			foreach(var property in _object.type().properties())				
+				propertyValues_AsStrings.add(property.Name.str(), _object.property(property.Name).str());
+			return propertyValues_AsStrings;
 		}
 
 	}
@@ -677,6 +757,18 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
+	public static class ListView_ExtensionMethods
+	{
+		public static ascx_TableList show_In_ListView<T>(this IEnumerable<T> data)
+		{
+			return data.show_In_ListView("View data in List Viewer", 600,400);
+		}
+		public static ascx_TableList show_In_ListView<T>(this IEnumerable<T> data, string title, int width, int height)
+		{
+			return O2Gui.open<Panel>(title, width, height).add_TableList().show(data);
+		}
+	}
+	
 	public static class XmlLinq_ExtensiomMethods
 	{
 		public static XAttribute value(this XAttribute xAttribute, string value)
@@ -750,7 +842,7 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-	
+		
 	
 	public static class Misc_ExtensionMethods
 	{
