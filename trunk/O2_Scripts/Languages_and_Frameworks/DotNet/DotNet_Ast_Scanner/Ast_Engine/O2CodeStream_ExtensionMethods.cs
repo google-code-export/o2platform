@@ -20,11 +20,18 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
     public static class O2CodeStream_ExtensionMethods
     {    
-    	
+    	public static int maxLoop = 50000;
+    	public static int currentCount =0;
         #region create stream
 
         public static INode createStream(this O2CodeStream o2CodeStream, INode iNode, O2CodeStreamNode parentStreamNode)
-        {
+        {        	
+        	if (currentCount > maxLoop)
+        	{        		
+        		"MaxLoop reached: {0}".error(maxLoop);
+        		"]]]]]]]]]]]]]] {0} {1}".error(iNode, o2CodeStream.getTextForINode(iNode));        		        		
+        		return iNode;
+        	}
             return o2CodeStream.createStream(iNode, null, parentStreamNode);
         }
 
@@ -163,12 +170,14 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                 return null;
             if (taintRules.isNull())
             	taintRules = new O2CodeStreamTaintRules();
-            	
+            	            
             var codeStream = new O2CodeStream(astData, taintRules, methodStreamFile);
+                        
             //O2CodeStreamNode parentNode = null;
             // start with the first node and keep going up (via its parent) until we find a iNode type that is currently handled
             var originalINode = iNode;
             IdentifierExpression identifier = null;            
+            
             while (iNode != null)
             {
                 //"> iNode:{0}           :      {1}".debug(iNode.typeName(), iNode);
@@ -231,8 +240,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
                         return codeStream;
                     case "MethodDeclaration":
-                    case "TypeDeclaration":                            
-                        "in createO2CodeStream, not supported INode type:{0}".error(iNode.typeName());
+                    case "TypeDeclaration":      
+                    	if (codeStream.debugMode())
+                        	"**** in createO2CodeStream, not supported INode type:{0}".error(iNode.typeName());
                         return codeStream;
 
                     case "BlockStatement":
@@ -276,7 +286,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                     default:
                         iNode = iNode.Parent;
                         break;
-                }
+                }                
             }
             return codeStream;
         }
@@ -395,7 +405,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                     if (identifier.Identifier == parameterName)
                     {
                         o2CodeStream.createStream(identifier, parentStreamNode);    // create new stream from here
-                        o2CodeStream.popStack(parameter);                   // restore stack
+                        o2CodeStream.popStack(identifier);                   // restore stack                        
                     }
                 
             }
@@ -585,7 +595,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
                     break;
 
                 default:
-                    //if (o2CodeStream.debugMode())
+                    if (o2CodeStream.debugMode())
                         "in Expression.expandTaint unsupported INode type: {0}".error(expression.typeName());
                     break;
             }
@@ -678,12 +688,18 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 					parentStreamNode.ChildNodes.Add(streamNode);				
 				return streamNode;
     		}
+    		else
+    			if(o2CodeStream.debugMode())
+    				"o2CodeStream contained INode:".debug();
             
     		var existingStreamNode = o2CodeStream.O2CodeStreamNodes[iNode];
             if (o2CodeStream.stackContains(iNode).isFalse())            // to avoid circular references                    
                 if (parentStreamNode != null && parentStreamNode != existingStreamNode)
 //                 if (existingStreamNode.ChildNodes.Contains(parentStreamNode).isFalse()) 
                         parentStreamNode.ChildNodes.Add(existingStreamNode);					
+                else
+                	if(o2CodeStream.debugMode())
+	                	"parentStreamNode == null || parentStreamNode == existingStreamNode".error();
     		return existingStreamNode;
         }
 
@@ -929,8 +945,35 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         }
 
         public static bool stackContains(this O2CodeStream o2CodeStream, INode iNodeToFind)
-        {
-            return o2CodeStream.INodeStack.ToArray().Contains(iNodeToFind);
+        {        	
+        	return o2CodeStream.INodeStack.ToArray().Contains(iNodeToFind);
+        	/*var stackNodes = o2CodeStream.INodeStack.ToArray();
+        	if(stackNodes.Contains(iNodeToFind))
+        		return true;
+        	if (iNodeToFind is MethodDeclaration)
+        	{        	
+        		"************* PPPPP earching for MethodDeclaration".error();
+        		foreach(var stackNode in stackNodes)
+        		{
+        			if(stackNode == iNodeToFind)
+        				"MATCH on ==".error();
+        			if (stackNode.str() == iNodeToFind.str())
+        				"Match on str: {0}".error(stackNode.str());
+        			if(stackNode is MethodDeclaration)
+        			{
+        				var stackNode_Signature = o2CodeStream.O2MappedAstData.iMethod(stackNode as MethodDeclaration);
+        				var iNodeToFind_Signature = o2CodeStream.O2MappedAstData.iMethod(iNodeToFind as MethodDeclaration);
+        				"{0} == {1}".info(stackNode_Signature, iNodeToFind_Signature);
+        				if (stackNode_Signature == iNodeToFind_Signature)
+        					"Match on Signature".error();        				
+        			}
+        			else
+        				"stackNode is not MethodDeclaration is it: {0}".debug(stackNode.typeName());
+        		}	
+        		
+        	}
+        	return false;*/            
+            //o2CodeStream.O2MappedAstData.iMethod(nodeStack as MethodDeclaration)
         }
 
         #endregion            	  	    	    	 
@@ -939,7 +982,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 
         public static bool debugMode(this O2CodeStream o2CodeStream)
         {
-            return o2CodeStream.O2MappedAstData.debugMode;
+        	if (o2CodeStream.O2MappedAstData.notNull())
+	            return o2CodeStream.O2MappedAstData.debugMode;
+	        return false;
         }
 
         public static bool hasPaths(this O2CodeStream o2CodeStream)

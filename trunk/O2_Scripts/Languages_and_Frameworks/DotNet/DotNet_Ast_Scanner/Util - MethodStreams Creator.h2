@@ -188,8 +188,8 @@ sourceFiles.onDrop(
 									else
 										if(fileOrFolder.isFolder())
 										{
-											clearO2MethodStreamCache();
-											astData_LoadedFiles = new O2MappedAstData();
+											//clearO2MethodStreamCache();
+											//astData_LoadedFiles = new O2MappedAstData();
 											loadReferences();																						
 											astData_LoadedFiles.loadFiles(fileOrFolder.files("*.cs",true));
 										}
@@ -228,6 +228,8 @@ references.append_Line("System.Data");
 var testFiles = @"C:\O2\O2 Demos\HacmeBank_v2.0 (Dinis version - 7 Dec 08)\HacmeBank_v2_WS";
 
 
+//dev tests
+/*
 astData_LoadedFiles = (O2MappedAstData)O2LiveObjects.get("astData");
 
 
@@ -238,8 +240,9 @@ if (astData_LoadedFiles.isNull())
 	astData_LoadedFiles.loadFiles(testFiles.files("*.cs",true)); 
 	foreach(var reference in references.get_Text().lines())
 		astData_LoadedFiles.O2AstResolver.addReference(reference);
+		
 	O2LiveObjects.set("astData", astData_LoadedFiles);
-}
+}*/
 
 references.insert_Right&lt;Panel&gt;(100).add_PropertyGrid().show(astData_LoadedFiles);
 foreach(var file in testFiles.files("*.cs",true))

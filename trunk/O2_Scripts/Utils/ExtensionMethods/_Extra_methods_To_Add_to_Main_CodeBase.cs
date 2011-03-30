@@ -648,6 +648,28 @@ namespace O2.XRules.Database.Utils
 					});
 		}
 
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, bool addDummyNode)
+		{
+			treeView.rootNode().add_Nodes(collection, (item)=> item.str() ,(item)=> item,(item)=> addDummyNode);			
+			return treeView;
+		}
+		
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, bool addDummyNode)
+		{
+			return treeNode.add_Nodes(collection, (item)=> item.str() ,(item)=> item, (item)=> addDummyNode);						
+		}
+		
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T, bool> getAddDummyNode)
+		{
+			treeView.rootNode().add_Nodes(collection, (item)=> item.str() ,(item)=> item, getAddDummyNode);			
+			return treeView;
+		}
+		
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T, bool> getAddDummyNode)
+		{
+			return treeNode.add_Nodes(collection, (item)=> item.str() ,(item)=> item, getAddDummyNode);						
+		}
+		
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName)
 		{
 			treeView.rootNode().add_Nodes(collection, getNodeName,(item)=> item,(item)=> false);			
@@ -670,9 +692,9 @@ namespace O2.XRules.Database.Utils
 			return treeNode.add_Nodes(collection, getNodeName, (item)=> item,(item)=> addDummyNode);			
 		}
 		
-		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, object> getTagValue, Func<T,bool> addDummyNode)
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, object> getTagValue, Func<T,bool> getAddDummyNode)
 		{
-			treeView.rootNode().add_Nodes(collection, getNodeName, getTagValue, addDummyNode);
+			treeView.rootNode().add_Nodes(collection, getNodeName, getTagValue, getAddDummyNode);
 			return treeView;
 		}
 		
@@ -681,6 +703,27 @@ namespace O2.XRules.Database.Utils
 			foreach(var item in collection)
 				Ascx_ExtensionMethods.add_Node(treeNode,getNodeName(item), getTagValue(item), addDummyNode(item));
 			return treeNode;
+		}
+		
+		//add Files to TreeView
+		public static TreeView add_Files(this TreeView treeView, String folder)
+		{
+		return treeView.add_Files(folder, "*.*",true);
+		}
+		
+		public static TreeView add_Files(this TreeView treeView, String folder, string filter)
+		{
+		return treeView.add_Files(folder, filter,true);
+		}
+		
+		public static TreeView add_Files(this TreeView treeView, String folder, string filter, bool recursive)
+		{
+			return treeView.add_Files(folder.files(filter,recursive));
+		}
+		
+		public static TreeView add_Files(this TreeView treeView, List<string> files)
+		{
+			return treeView.add_Nodes(files, (file)=>file.fileName());
 		}
 	}
 	
@@ -843,6 +886,57 @@ namespace O2.XRules.Database.Utils
 	}
 	
 		
+	public static class WinFormControls_ExtensionMethods
+	{
+		public static List<Control> add_1x1(this Control control, Action<Control> buildPanel1,  Action<Control> buildPanel2)
+		{
+			var controls = control.add_1x1();
+			buildPanel1(controls[0].add_Panel());
+			buildPanel2(controls[1].add_Panel());
+			return controls;
+		}
+		
+		public static Panel insert_Left(this Control control)
+		{
+			return control.insert_Left<Panel>(control.width()/2);
+		}
+		
+		public static Panel insert_Right(this Control control)
+		{
+			return control.insert_Right<Panel>(control.width()/2);
+		}
+		
+		public static Panel insert_Above(this Control control)
+		{
+			return control.insert_Above<Panel>(control.width()/2);
+		}
+		
+		public static Panel insert_Below(this Control control)
+		{
+			return control.insert_Below<Panel>(control.width()/2);
+		}
+		
+		public static Panel insert_Left(this Control control, int width)
+		{
+			return control.insert_Left<Panel>(width);
+		}
+		
+		public static Panel insert_Right(this Control control, int width)
+		{
+			return control.insert_Right<Panel>(width);
+		}
+		
+		public static Panel insert_Above(this Control control, int width)
+		{
+			return control.insert_Above<Panel>(width);
+		}
+		
+		public static Panel insert_Below(this Control control, int width)
+		{
+			return control.insert_Below<Panel>(width);
+		}
+		
+	}
 	
 	public static class Misc_ExtensionMethods
 	{
@@ -858,6 +952,8 @@ namespace O2.XRules.Database.Utils
 				return "";
 			}
 		}
+		
+		
 		
 	}
 }

@@ -272,7 +272,25 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         }
 		
 		#endregion
-        //merge this one with fromMemberReferenceExpressionGetIMethod (and add support for use of Fields and Properties)
+        
+        
+        #region IField
+        public static FieldDeclaration fieldDeclaration(this O2MappedAstData astData, IField iField)
+        {
+        	if( astData.MapAstToNRefactory.IFieldToFieldDeclaration.ContainsKey(iField))
+				return astData.MapAstToNRefactory.IFieldToFieldDeclaration[iField];
+			return null;
+		}
+        #endregion
+        
+        #region IProperty
+        public static PropertyDeclaration propertyDeclaration(this O2MappedAstData astData, IProperty iProperty)
+        {
+        	if( astData.MapAstToNRefactory.IPropertyToPropertyDeclaration.ContainsKey(iProperty))
+				return astData.MapAstToNRefactory.IPropertyToPropertyDeclaration[iProperty];
+			return null;
+		}
+        #endregion
 
 	}
 	
@@ -1040,7 +1058,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
         
 
         #endregion
-	}
+	}		
 	
 	public static class O2MappedAstData_ExtensionMethods_GUI_WinForms
 	{
