@@ -89,14 +89,15 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 	
 	[Serializable]
 	public class CodeBlock
-	{		
+	{	
+		[XmlAttribute] public string VirtualPath { get; set; }	
 		[XmlAttribute] public string BuilderType { get; set; }
 		[XmlAttribute] public string BlockType { get; set; }
 		[XmlAttribute] public string ControlType { get; set; }
 		[XmlAttribute] public string ID { get; set; }		
 		[XmlAttribute] public int Line { get; set; }		
 		[XmlAttribute] public int Column { get; set; }				
-		[XmlAttribute] public string TagName { get; set; }				
+		[XmlAttribute] public string TagName { get; set; }						
 		
 		[XmlAttribute] public string SkinID { get; set; }
 		[XmlAttribute] public bool IsHtmlControl { get; set; }
@@ -116,6 +117,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			SubBlocks = new List<CodeBlock>();
 			SimplePropertyEntries = new NameValueItems();
 			EventEntries = new NameValueItems();
+		}
+		
+		public override string ToString()
+		{
+			return "{0} {1}".format(this.BlockType, this.ControlType);
 		}
 	}
 	
@@ -137,7 +143,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		
 		public static AspNet_Page map_Parser(this AspNet_Page aspNetPage, BaseParser parser)
 		{									
-									
+			aspNetPage.Virtual_Path = parser.property("CurrentVirtualPathString").str();
 			aspNetPage.ConfigItems.add("CurrentVirtualPathString",parser.property("CurrentVirtualPathString").str())
 					  			  .add("DefaultBaseType",parser.property("DefaultBaseType").str())
 								  .add("DefaultFileLevelBuilderType",parser.property("DefaultFileLevelBuilderType").str())
@@ -188,6 +194,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		public static CodeBlock mapControlBuilder(this ControlBuilder controlBuilder)
 		{
 			var codeBlock = new CodeBlock();  
+			codeBlock.VirtualPath = controlBuilder.property<string>("VirtualPathString");	
 			codeBlock.ID = controlBuilder.ID;   
 			codeBlock.BuilderType = controlBuilder.type().str(); 
 			if (controlBuilder.ControlType.notNull()) 
@@ -197,7 +204,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			codeBlock.TagName = controlBuilder.TagName;
 			codeBlock.SkinID = controlBuilder.property<string>("SkinID"); 
 			codeBlock.IsHtmlControl = controlBuilder.property<bool>("IsHtmlControl");
-			codeBlock.IsHtmlControl = controlBuilder.property<bool>("HasAspCode");							
+			codeBlock.IsHtmlControl = controlBuilder.property<bool>("HasAspCode");	
+			
 
 			codeBlock.Filter = controlBuilder.property<string>("Filter");
 			foreach(var simplePropertyEntry in (IEnumerable)controlBuilder.property("SimplePropertyEntries"))
@@ -247,6 +255,12 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 	
 	public static class AspNet_Page_ExtensionMethods_CodeBlocks
 	{
+	
+		public static List<CodeBlock> allCodeBlocks(this AspNet_Page aspNetPage)
+		{
+			return aspNetPage.CodeBlock.allCodeBlocks();
+		}
+		
 		public static List<CodeBlock> allCodeBlocks(this CodeBlock codeBlock)
 		{			
 			var codeBlocks = new List<CodeBlock>();

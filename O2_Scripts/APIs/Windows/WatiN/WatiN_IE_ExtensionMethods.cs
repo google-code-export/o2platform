@@ -356,6 +356,12 @@ namespace O2.XRules.Database.APIs
     		return watinIe;
     	}
     	
+    	public static WatiN_IE open_ASync(this WatiN_IE watinIe, string url)
+    	{
+    		O2Thread.mtaThread(()=> watinIe.open(url));
+    		return watinIe;
+    	}
+    	
     	public static WatiN_IE open_usingPOST(this WatiN_IE watinIe, string postUrl,string postData)
     	{
     		return watinIe.open_usingPOST(postUrl, "application/x-www-form-urlencoded", postData);

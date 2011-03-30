@@ -620,49 +620,56 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		public static O2MethodStream resolveInterfaceCalls(this O2MethodStream methodStream,IMethod iMethodToResolve)
 		{
 			var astData = methodStream.O2MappedAstData;
-		//Action<O2MethodStream , IMethod> resolveInterfaceCalls = 
- 
-			"Resolving Interface calls for: {0}".info(iMethodToResolve);
-			var declaringType = iMethodToResolve.DeclaringType; 
-			if (declaringType.ClassType.str() == "Interface") 
+			try
 			{
-				"Is interface".debug();
-				
-				foreach(var inheritedClass in astData.inheritedIClasses(declaringType))
+			//Action<O2MethodStream , IMethod> resolveInterfaceCalls = 
+	 
+				"Resolving Interface calls for: {0}".info(iMethodToResolve);
+				var declaringType = iMethodToResolve.DeclaringType; 
+				if (declaringType.ClassType.str() == "Interface") 
 				{
-					var iMethods = inheritedClass.iMethods();
-					var signatureToFind = iMethodToResolve.fullName().remove(iMethodToResolve.Namespace);
-					var methodDeclaration = astData.methodDeclaration(iMethodToResolve);
+					"Is interface".debug();
 					
-					foreach(var iMethod in iMethods)
+					foreach(var inheritedClass in astData.inheritedIClasses(declaringType))
 					{
-						var filteredSignature =  iMethod.fullName().remove(iMethod.Namespace);										
-						if (filteredSignature == signatureToFind) 
-						{ 
-							"Adding Interface Mapping: {0} -> {1}".debug(iMethodToResolve.fullName(), iMethod.fullName());     
-							if (methodStream.MappedIMethods.ContainsKey(iMethod.fullName()).isFalse())												
-								methodStream.add_IMethod(iMethod);
-										
-							// add call to this IMethod on its interface
-							"Body: {0}".info(methodDeclaration.Body.typeName());
-							"{0} = : {1}".debug(methodDeclaration.Body.str(), (methodDeclaration.Body.str() != "[NullBlockStatement]"));
-							var body = (methodDeclaration.Body.str() != "[NullBlockStatement]") 
-										? methodDeclaration.Body 
-										: methodDeclaration.add_Body();																						
-							var parameters = new List<IdentifierExpression>();			
-							foreach(var parameter in iMethod.Parameters)	
-								parameters.Add(new IdentifierExpression(parameter.Name)); 
-							var tempBlockStatement = new BlockStatement();
-							var tempInvocation = tempBlockStatement.add_Invocation(iMethod.Namespace,iMethod.name(), parameters.ToArray());			
-							//make sure we don't add this more than once 
-							if (body.csharpCode().contains(tempBlockStatement.csharpCode()).isFalse()) 
-							{											
-								"   Adding Interface Method call: {0}".info(tempBlockStatement.csharpCode().trim());     
-								body.add_Invocation(iMethod.Namespace,iMethod.name(), parameters.ToArray());												
-							}									 											 
+						var iMethods = inheritedClass.iMethods();
+						var signatureToFind = iMethodToResolve.fullName().remove(iMethodToResolve.Namespace);
+						var methodDeclaration = astData.methodDeclaration(iMethodToResolve);
+						
+						foreach(var iMethod in iMethods)
+						{
+							var filteredSignature =  iMethod.fullName().remove(iMethod.Namespace);										
+							if (filteredSignature == signatureToFind) 
+							{ 
+								"Adding Interface Mapping: {0} -> {1}".debug(iMethodToResolve.fullName(), iMethod.fullName());     
+								if (methodStream.MappedIMethods.ContainsKey(iMethod.fullName()).isFalse())												
+									methodStream.add_IMethod(iMethod);
+											
+								// add call to this IMethod on its interface
+								"Body: {0}".info(methodDeclaration.Body.typeName());
+								"{0} = : {1}".debug(methodDeclaration.Body.str(), (methodDeclaration.Body.str() != "[NullBlockStatement]"));
+								var body = (methodDeclaration.Body.str() != "[NullBlockStatement]") 
+											? methodDeclaration.Body 
+											: methodDeclaration.add_Body();																						
+								var parameters = new List<IdentifierExpression>();			
+								foreach(var parameter in iMethod.Parameters)	
+									parameters.Add(new IdentifierExpression(parameter.Name)); 
+								var tempBlockStatement = new BlockStatement();
+								var tempInvocation = tempBlockStatement.add_Invocation(iMethod.Namespace,iMethod.name(), parameters.ToArray());			
+								//make sure we don't add this more than once 
+								if (body.csharpCode().contains(tempBlockStatement.csharpCode()).isFalse()) 
+								{											
+									"   Adding Interface Method call: {0}".info(tempBlockStatement.csharpCode().trim());     
+									body.add_Invocation(iMethod.Namespace,iMethod.name(), parameters.ToArray());												
+								}									 											 
+							}
 						}
 					}
 				}
+			}
+			catch(Exception ex)
+			{
+				"[O2MethodStream.resolveInterfaceCalls]: {0}".error(ex.Message);
 			}
 			return methodStream;
 	   }	
