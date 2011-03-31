@@ -965,12 +965,29 @@ namespace O2.XRules.Database.APIs
     				select radioButton.name()).Distinct().toList();
     	}
  
+ 		public static List<WatiN.Core.RadioButton> withName(this List<WatiN.Core.RadioButton> radioButtons, string name)
+    	{
+    		return (from radioButton in radioButtons 
+    				where (radioButton.name() == name)
+    				select radioButton ).toList();
+    	}
+    	
+    	public static WatiN.Core.RadioButton withValue(this List<WatiN.Core.RadioButton> radioButtons, string value)
+    	{
+    		foreach(var radioButton in radioButtons)
+    			if (radioButton.value().trim()==value)
+    				return radioButton;
+    		return null;
+    	}
+    	
     	public static string value(this WatiN.Core.RadioButton radioButton)
     	{    		
     		return (radioButton != null)
-    					? radioButton.attribute("value")
+    					? radioButton.TextAfter
     					: null;
     	}
+    	
+    	
  
     	public static List<string> values(this List<WatiN.Core.RadioButton> radioButtons)
     	{
@@ -987,15 +1004,15 @@ namespace O2.XRules.Database.APIs
     			radioButton.Checked = value;    	
     		}
     		catch(Exception ex)
-    		{
-    			ex.log("in WatiN.Core.RadioButton value");
+    		{    			
+    			//ex.log("in WatiN.Core.RadioButton value::");  // there is an internal WatiN exception that occurs after the value is set
     		}
     		return radioButton;
     	}
  
-    	public static WatiN.Core.RadioButton @checked(this WatiN.Core.RadioButton radioButton)
+    	public static bool @checked(this WatiN.Core.RadioButton radioButton)
     	{
-    		return radioButton.check(true);
+    		return radioButton.Checked;
     	}
     	
     	public static WatiN.Core.RadioButton @checked(this WatiN.Core.RadioButton radioButton, bool value)
