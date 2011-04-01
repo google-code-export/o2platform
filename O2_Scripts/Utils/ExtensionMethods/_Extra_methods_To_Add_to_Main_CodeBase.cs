@@ -647,9 +647,23 @@ namespace O2.XRules.Database.Utils
 						return treeNode;
 					});
 		}
-
+		
+		//not working
+		/*public static TreeView add_Nodes<T>(this TreeView treeView, params string[] nodes)
+		{
+			treeView.rootNode().add_Nodes(nodes);
+			return treeView;
+		}
+		
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, params string[] nodes)
+		{
+			Ascx_ExtensionMethods.add_Nodes(treeNode,nodes);			
+			return treeNode;
+		}*/
+		
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, bool addDummyNode)
 		{
+				
 			treeView.rootNode().add_Nodes(collection, (item)=> item.str() ,(item)=> item,(item)=> addDummyNode);			
 			return treeView;
 		}
@@ -895,7 +909,7 @@ namespace O2.XRules.Database.Utils
 			buildPanel2(controls[1].add_Panel());
 			return controls;
 		}
-		
+		// insert_...()
 		public static Panel insert_Left(this Control control)
 		{
 			return control.insert_Left<Panel>(control.width()/2);
@@ -907,15 +921,15 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		public static Panel insert_Above(this Control control)
-		{
-			return control.insert_Above<Panel>(control.width()/2);
+		{			
+			return control.insert_Above<Panel>(control.height()/2);
 		}
 		
 		public static Panel insert_Below(this Control control)
 		{
-			return control.insert_Below<Panel>(control.width()/2);
-		}
-		
+			return control.insert_Below<Panel>(control.height()/2);
+		}		
+		// insert_...(width)
 		public static Panel insert_Left(this Control control, int width)
 		{
 			return control.insert_Left<Panel>(width);
@@ -935,6 +949,48 @@ namespace O2.XRules.Database.Utils
 		{
 			return control.insert_Below<Panel>(width);
 		}
+		// insert_...(title)
+		public static Panel insert_Left(this Control control, string title)
+		{
+			return control.insert_Left(control.width()/2, title);
+		}
+		
+		public static Panel insert_Right(this Control control, string title)
+		{
+			return control.insert_Right(control.width()/2, title);
+		}
+		
+		public static Panel insert_Above(this Control control, string title)
+		{
+			return control.insert_Above(control.height()/2, title);
+		}
+		
+		public static Panel insert_Below(this Control control, string title)
+		{
+			return control.insert_Below(control.height()/2, title);
+		}
+		// insert_...(width, title)
+		public static Panel insert_Left(this Control control, int width, string title)
+		{
+			return control.insert_Left<Panel>(width).add_GroupBox(title).add_Panel();
+		}
+		
+		public static Panel insert_Right(this Control control, int width, string title)
+		{
+			return control.insert_Right<Panel>(width).add_GroupBox(title).add_Panel();
+		}
+		
+		public static Panel insert_Above(this Control control, int width, string title)
+		{
+			return control.insert_Above<Panel>(width).add_GroupBox(title).add_Panel();
+		}
+		
+		public static Panel insert_Below(this Control control, int width, string title)
+		{
+			return control.insert_Below<Panel>(width).add_GroupBox(title).add_Panel();
+		}
+		
+		
 		
 	}
 	

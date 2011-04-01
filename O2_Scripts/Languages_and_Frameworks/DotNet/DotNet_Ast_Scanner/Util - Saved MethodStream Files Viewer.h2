@@ -5,6 +5,7 @@
  
 var codeStreams = topPanel.add_Control&lt;ascx_CodeStreams&gt;(); 
 var methodStreams= topPanel.insert_Left().add_TreeView();
+var filesLoaded = new List&lt;string&gt;();
 methodStreams.afterSelect&lt;string&gt;(
 				(file)=&gt;{	
 							codeStreams.loadMethodStreamFile(file); 
@@ -12,11 +13,26 @@ methodStreams.afterSelect&lt;string&gt;(
 methodStreams.onDrop(
 	(fileOrFolder)=&gt;{
 						if (fileOrFolder.fileExists())
+						{
+							filesLoaded.add(fileOrFolder);
 							methodStreams.add_Node(fileOrFolder.fileName(), fileOrFolder);
+						}
 						else
-							methodStreams.add_Files(fileOrFolder)				   
+						{
+							filesLoaded = fileOrFolder.files();
+							methodStreams.add_Files(filesLoaded)				   
 										 .selectFirst();		
+						}
 					});
+methodStreams.insert_Above(20).add_TextBox("Filter","")
+			 .onTextChange((text)=&gt; {
+			 							methodStreams.clear();
+			 							var filteredItems = (from file in filesLoaded
+			 												 where file.regEx(text)
+			 												 select file).toList();
+			 												 
+			 							methodStreams.add_Files(filteredItems);
+							 	 	});
 
 //O2File:ascx_CodeStreams.cs
 //using O2.XRules.Database.Languages_and_Frameworks.DotNet
