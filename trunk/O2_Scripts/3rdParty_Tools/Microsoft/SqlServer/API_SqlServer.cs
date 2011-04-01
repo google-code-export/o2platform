@@ -1,5 +1,6 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.Xml.Serialization;
 using System.Linq;
 using System.Data;
 using System.Drawing;
@@ -22,6 +23,7 @@ namespace O2.XRules.Database.APIs
     public class API_SqlServer
     {   
     	public string ConnectionString { get;set; }
+    	public string LastError { get; set; }
     	
     	public API_SqlServer()
 		{
@@ -32,7 +34,7 @@ namespace O2.XRules.Database.APIs
 	public class Database
 	{
 		public API_SqlServer SqlServer { get; set; }
-		public string Name { get; set; }
+		public string Name { get; set; }		
 		public List<Table> Tables { get; set; }
 		public List<StoredProcedure> StoredProcedures { get; set; }
 		
@@ -52,7 +54,7 @@ namespace O2.XRules.Database.APIs
 	
 	public class Table
 	{
-		public API_SqlServer SqlServer { get; set; }		
+		[XmlIgnore] public API_SqlServer SqlServer { get; set; }				
 		public string Catalog {get;set;}
 		public string Schema {get;set;}
 		public string Name {get;set;}
@@ -198,17 +200,25 @@ namespace O2.XRules.Database.APIs
 			return database;
 		}
 		
+		public static API_SqlServer map_Table_Data(this API_SqlServer SqlServer, Table table)
+		{
+			var sqlQuery = "select * from [{0}].[{1}].[{2}]".format(table.Catalog,table.Schema, table.Name);				
+			table.TableData = SqlServer.executeReader(sqlQuery);
+			return SqlServer;
+		}
+		
+		public static Database map_Table_Data(this Database database, Table table)
+		{
+			var sqlQuery = "select * from [{0}].[{1}].[{2}]".format(table.Catalog,table.Schema, table.Name);				
+			table.TableData = database.SqlServer.executeReader(sqlQuery);
+			return database;
+		}
 		public static Database map_Table_Data(this Database database)
 		{
 			"Mapping table data".info();
 			var timer = new O2Timer("Mapped tabled data").start();
-			foreach(var table in database.tables())
-			{					
-				var sqlQuery = "select * from [{0}].[{1}].[{2}]".format(table.Catalog,table.Schema, table.Name);
-				
-				table.TableData = database.SqlServer.executeReader(sqlQuery);
-				//"Table {0} had {1} rows".info(table.Name, table.TableData.Rows.Count);
-			}
+			foreach(var table in database.tables())					
+				database.map_Table_Data(table);
 			timer.stop();
 			return database;
 				
@@ -217,10 +227,42 @@ namespace O2.XRules.Database.APIs
 	}
 	public static class API_SqlServer_Queries
 	{
-		public static API_SqlServer executeNonQuery(this API_SqlServer sqlServer, string command)
-		{
-			SqlConnection sqlConnection = new SqlConnection(sqlServer.ConnectionString);
-			sqlConnection.Open();
+		public static SqlConnection getOpenConnection(this API_SqlServer sqlServer)
+		{						
+			"[API_SqlServer] Opening Connection".info();
+			try
+			{
+				SqlConnection sqlConnection = new SqlConnection(sqlServer.ConnectionString);			
+				sqlConnection.Open();
+				return sqlConnection;
+			}
+			catch(Exception ex)
+			{
+				sqlServer.LastError = ex.Message;
+				ex.log();
+			}			
+			return null;
+		}
+		
+		public static SqlConnection closeConnection(this API_SqlServer sqlServer, SqlConnection sqlConnection)
+		{						
+			"[API_SqlServer] Closing Connection".info();
+			try
+			{				
+				sqlConnection.Close();
+				return sqlConnection;
+			}
+			catch(Exception ex)
+			{
+				sqlServer.LastError = ex.Message;
+				ex.log();
+			}			
+			return null;
+		}
+		
+		public static API_SqlServer executeNonQuery(this API_SqlServer sqlServer, SqlConnection sqlConnection, string command)
+		{			
+			"[API_SqlServer] Executing Non Query: {0}".info(command);
 			try
 			{
 				SqlCommand sqlCommand = new SqlCommand();
@@ -231,21 +273,47 @@ namespace O2.XRules.Database.APIs
 			}
 			catch(Exception ex)
 			{
+				sqlServer.LastError = ex.Message;
+				ex.log();
+			}
+			return sqlServer;
+		}
+		
+		public static API_SqlServer executeNonQuery(this API_SqlServer sqlServer, string command)
+		{		
+			"[API_SqlServer] Executing Non Query: {0}".info(command);
+			SqlConnection sqlConnection = null;
+			try
+			{
+				sqlConnection = new SqlConnection(sqlServer.ConnectionString);			
+				sqlConnection.Open();
+				SqlCommand sqlCommand = new SqlCommand();
+				sqlCommand.Connection = sqlConnection;
+				sqlCommand.CommandText = command;
+				sqlCommand.CommandType = CommandType.Text;
+				sqlCommand.ExecuteNonQuery();
+			}
+			catch(Exception ex)
+			{
+				sqlServer.LastError = ex.Message;
 				ex.log();
 			}
 			finally
 			{
-				sqlConnection.Close();
+				if (sqlConnection.notNull())
+					sqlConnection.Close();
 			}
 			return sqlServer;
 		}
 		
 		public static object executeScalar(this API_SqlServer sqlServer, string command)
-		{
-			SqlConnection sqlConnection = new SqlConnection(sqlServer.ConnectionString);
-			sqlConnection.Open();
+		{	
+			"[API_SqlServer] Executing Scalar: {0}".info(command);
+			SqlConnection sqlConnection = null;
 			try
 			{
+				sqlConnection = new SqlConnection(sqlServer.ConnectionString);
+				sqlConnection.Open();
 				SqlCommand sqlCommand = new SqlCommand();
 				sqlCommand.Connection = sqlConnection;
 				sqlCommand.CommandText = command;
@@ -254,6 +322,7 @@ namespace O2.XRules.Database.APIs
 			}
 			catch(Exception ex)
 			{
+				sqlServer.LastError = ex.Message;
 				ex.log();
 			}
 			finally
@@ -280,11 +349,13 @@ namespace O2.XRules.Database.APIs
 			}
 			catch(Exception ex)
 			{
+				sqlServer.LastError = ex.Message;
 				ex.log();
 			}
 			finally
 			{
-				sqlConnection.Close();
+				if (sqlConnection.notNull())
+					sqlConnection.Close();
 			}
 			return null;
 		}
@@ -295,6 +366,7 @@ namespace O2.XRules.Database.APIs
 		public static T add_ConnectionStringTester<T>(this API_SqlServer sqlServer , T control)
 			where T : Control
 		{
+			control.clear();
 			var connectionString = control.add_GroupBox("Connection String").add_TextArea();
 			var connectionStringSamples = connectionString.parent().insert_Left<Panel>(200).add_GroupBox("Sample Connection Strings")
 														  .add_TreeView()
@@ -315,6 +387,7 @@ namespace O2.XRules.Database.APIs
 									}
 									catch(Exception ex)
 									{
+										sqlServer.LastError = ex.Message;
 										response.set_Text("Error: {0}".format(ex.Message));
 									}						
 									
@@ -339,9 +412,11 @@ namespace O2.XRules.Database.APIs
 		public static API_SqlServer add_Viewer_QueryResult<T>(this API_SqlServer sqlServer , T control, string sqlQuery)
 			where T : Control
 		{	
+			control.clear();
 			var dataTable = sqlServer.executeReader(sqlQuery);  
 			var dataGridView = control.add_DataGridView();
-			dataGridView.DataError+= (sender,e) => { " dataGridView error: {0}".error(e.Context);};
+			dataGridView.DataError+= (sender,e) => { // " dataGridView error: {0}".error(e.Context);
+												   };
 			dataGridView.invokeOnThread(()=> dataGridView.DataSource = dataTable );			
 			return sqlServer;
 		}
@@ -371,16 +446,29 @@ namespace O2.XRules.Database.APIs
 		public static API_SqlServer add_Viewer_StoredProcedures<T>(this API_SqlServer sqlServer , T control)
 			where T : Control
 		{
+			control.clear();
+			Database currentDatabase = null;
 			var value = control.add_TextArea();	
 			var storedProcedure_Names = value.insert_Left<Panel>(200).add_TreeView().sort();
 			var database_Names = storedProcedure_Names.insert_Above<Panel>(100).add_TreeView().sort();
+			
+			var filter = storedProcedure_Names.insert_Above(20)
+											  .add_TextBox("Filter:","")
+										  	  .onTextChange((text)=>{ 
+										  	  							storedProcedure_Names.clear();
+										  	  							var result = (from storedProcedure in currentDatabase.StoredProcedures
+										  	  										  where storedProcedure.Name.regEx(text)
+										  	  										  select storedProcedure);
+										  	  							storedProcedure_Names.add_Nodes(result);
+										  	  						});
+			
 			database_Names.afterSelect<string>(
 				(database_Name)=>{
 									value.set_Text("");
-									var database = new Database(sqlServer, database_Name);
-									database.map_StoredProcedures();
+									currentDatabase = new Database(sqlServer, database_Name);
+									currentDatabase.map_StoredProcedures();									
 									storedProcedure_Names.clear();						
-									storedProcedure_Names.add_Nodes(database.StoredProcedures);
+									storedProcedure_Names.add_Nodes(currentDatabase.StoredProcedures);
 									storedProcedure_Names.selectFirst(); 
 								 });
 			
@@ -393,9 +481,11 @@ namespace O2.XRules.Database.APIs
 			return sqlServer;
 		}
 		
+		
 		public static API_SqlServer add_Viewer_Tables<T>(this API_SqlServer sqlServer , T control)
 			where T : Control
 		{		
+			control.clear();
 			var value = control.add_TableList();	
 			var tables_Names = value.insert_Left<Panel>(200).add_TreeView().sort();		 	
 			var database_Names = tables_Names.insert_Above<Panel>(100).add_TreeView().sort();
@@ -429,15 +519,18 @@ namespace O2.XRules.Database.APIs
 		public static API_SqlServer add_Viewer_TablesData<T>(this API_SqlServer sqlServer , T control)
 			where T : Control
 		{		
+			control.clear();
 			var dataGridView = control.add_DataGridView();
 			
 			dataGridView.DataError+= (sender,e) => {}; //" dataGridView error: {0}".error(e.Context);};
 			var tables_Names = dataGridView.insert_Left<Panel>(200).add_TreeView().sort();		 	
 			var database_Names = tables_Names.insert_Above<Panel>(100).add_TreeView().sort();
-
+			var preloadAllData = false;
+			tables_Names.insert_Below(20).add_CheckBox("Preload all data from database",0,0,(value)=>preloadAllData = value).autoSize().check();
 			var rowData = dataGridView.insert_Below<Panel>(100).add_SourceCodeViewer(); 
 			var rowDataField = rowData.insert_Left<Panel>(100).add_TreeView();
 			var selectedField = "";
+			
 			rowDataField.afterSelect<DataGridViewCell>( 
 				(cell)=>{
 							selectedField = rowDataField.selected().get_Text();
@@ -473,9 +566,9 @@ namespace O2.XRules.Database.APIs
 									O2Thread.mtaThread(
 										()=>{
 												var database = new Database(sqlServer, database_Name);									
-												database.map_Tables()
-														//.map_Table_Columns()
-														.map_Table_Data();
+												database.map_Tables();
+												if (preloadAllData)																							
+													database.map_Table_Data();												
 												tables_Names.clear();						
 												tables_Names.add_Nodes(database.Tables);
 												tables_Names.selectFirst(); 
@@ -485,15 +578,95 @@ namespace O2.XRules.Database.APIs
 			
 			tables_Names.afterSelect<Table>( 
 				(table)=>{
-							rowDataField.clear();
-							rowData.set_Text("");	
-							dataGridView.remove_Columns();							
-							dataGridView.invokeOnThread(()=>dataGridView.DataSource= table.TableData);							
+							tables_Names.backColor(Color.Salmon);
+							O2Thread.mtaThread(
+										()=>{
+												rowDataField.clear();
+												rowData.set_Text("");	
+												dataGridView.remove_Columns();							
+												if (table.TableData.isNull())							
+													sqlServer.map_Table_Data(table);								
+												dataGridView.invokeOnThread(()=>dataGridView.DataSource= table.TableData);		
+												tables_Names.backColor(Color.White);
+											});
 						 });
 			
 			database_Names.add_Nodes(sqlServer.database_Names());
 			
 			database_Names.selectFirst();  
+			return sqlServer;
+		}
+		
+		public static API_SqlServer add_GUI_SqlCommandExecute<T>(this API_SqlServer sqlServer , T control)
+			where T : Control
+		{
+			Action<string> executeNonQuery=null;
+			Action<string> executeReader =null;
+			var resultsPanel = control.add_GroupBox("Result") ;  
+			var sqlCommandToExecute = resultsPanel.insert_Above("Sql Command to execute").add_TextArea(); 
+			var sampleQueries = sqlCommandToExecute.insert_Left(300, "Sample Queries")
+												   .add_TreeView()
+												   .afterSelect<string>((text)=>sqlCommandToExecute.set_Text(text));
+ 
+			sqlCommandToExecute.insert_Right(200)
+							   .add_Button("Execute Non Query") 
+							   .fill()
+							   .onClick(()=>{
+					 							"Executing Non Query".info();		 							
+					 							executeNonQuery(sqlCommandToExecute.get_Text());
+					 						})
+							  .insert_Above() 
+							  .add_Button("Execute Reader")
+							  .fill()
+							  .onClick(()=> {
+				 								"Executing Reader".info();
+				 								executeReader(sqlCommandToExecute.get_Text());
+				 							});;
+			
+			executeReader = (sqlQuery)=>{
+											sqlServer.add_Viewer_QueryResult(resultsPanel, sqlQuery);
+											"done".info();
+										};	
+										
+			executeNonQuery = (sqlText)=> {			
+												var	log = resultsPanel.control<TextBox>();
+												if (log.isNull())
+													log = resultsPanel.clear().add_TextArea();
+												if (sqlText.contains("GO".line())) 
+												{										
+													var sqlTexts = sqlText.line().split("GO".line()); 
+													log.append_Line("[{0}]Found a GO, so breaking it into {1} queries".format(DateTime.Now,sqlTexts.size()));		  								
+													var sqlConnection = sqlServer.getOpenConnection();
+													foreach(var text in sqlTexts)																					
+													{				
+														sqlServer.executeNonQuery(sqlConnection, text);																				
+														
+														if (sqlServer.LastError.valid())
+														{
+															log.append_Line("SQL ERROR: {0}".lineBeforeAndAfter().format(sqlServer.LastError)); 
+															log.append_Line("ERROR: stoping execution since there was an error which executing the query: {0}".format(text).lineBeforeAndAfter());
+															break;
+														}			
+													}
+													sqlServer.closeConnection(sqlConnection);
+												}
+												else
+													{
+														log.append_Line("Executing as Non Query: {0}".format(sqlText));
+														sqlServer.LastError = ""; 
+														sqlServer.executeNonQuery(sqlText);
+														if (sqlServer.LastError.valid())
+															log.append_Line("SQL ERROR: {0}".lineBeforeAndAfter().format(sqlServer.LastError)); 
+													}
+												"done".info();
+										   };			
+				
+			sampleQueries.add_Nodes(new string[] {
+													"select * from master..sysDatabases",
+													"select * from master.Information_Schema.Tables",
+													"select * from master.Information_Schema.Routines"
+												});
+			sampleQueries.selectFirst(); 
 			return sqlServer;
 		}
 	}		

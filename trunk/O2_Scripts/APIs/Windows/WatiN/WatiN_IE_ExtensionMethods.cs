@@ -1595,21 +1595,8 @@ namespace O2.XRules.Database.APIs
     	// Control Extensionmethods
  
     	public static WatiN_IE add_IE(this Control control)
-    	{
-    		var browser = control.add_Control<System.Windows.Forms.WebBrowser>();
-    		var ie = browser.ie();   
-    		ie.setWebBrowserObject(browser);    		
-    		var parentForm = control.parentForm();
-    		if (parentForm.notNull())
-    		{
-    			parentForm.Closed += 
-    				(sender,e)=> {
-    								"Parent form closed to detaching and close WatiN_IE".info();
-    								ie.detach();
-    								ie.close();
-    							 };
-    		}
-    		return ie;
+    	{    		
+    		return  WatiN_IE.window(control);
     	}
  
      }

@@ -1,5 +1,6 @@
 ﻿// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
+using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -40,9 +41,34 @@ namespace O2.XRules.Database.APIs
             if (WordPressXmlRpc.lower().starts("http").isFalse())
                 WordPressXmlRpc = "http://" + WordPressXmlRpc;
             WordPressServer = WordPressXmlRpc.replace("/xmlrpc.php","");
-    	}    	    	  
-    	    	
+    	}    	    	      	
     }
+    
+    [Serializable]
+    public class methodCall
+    {
+    	public string methodName { get; set; }
+    	public List<param> @params {get;set;}
+    	
+    	public methodCall()
+    	{
+    		@params = new List<param>();
+    	}
+    }
+    
+    public class param
+    {
+    	[XmlElement("param")]
+    	public string_Value username { get; set; }
+    	[XmlElement("param")]
+    	public string_Value password { get; set; }
+    }
+    
+    public class  string_Value
+    {       	
+    	public string @string {get;set;}
+    }
+    
     
     public static class API_WordPress_ExtensionMethods
     {

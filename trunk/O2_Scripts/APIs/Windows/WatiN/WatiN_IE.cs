@@ -17,6 +17,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX;
+using O2.Views.ASCX.classes.MainGUI; 
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 using WatiN.Core;
@@ -43,7 +44,8 @@ namespace O2.XRules.Database.APIs
  		public static int FlashingCount { get; set; }
  		
 		public int maxExecutionWaitTime = 5000;
- 
+ 		
+ 		public Control HostControl { get; set;}
  		
  		
 		public WatiN_IE()
@@ -248,17 +250,42 @@ namespace O2.XRules.Database.APIs
 			}
 			"in WatiN_IE attachTo(...) could not find an instance of IE to attach with locationName='{0}'".error(locationName);
 			return null;
-		}
- 
-		public static void stopAllIEProcesses()
-		{
-			Processes.getProcessesCalled("iexplore").stop();
-		}
+		} 		
 		
 		public WatiN_IE setWebBrowserObject(System.Windows.Forms.WebBrowser webBrowser)
 		{
 			this.WebBrowser = webBrowser;			 
 			return this;
+		}
+		
+		public static void stopAllIEProcesses()
+		{
+			Processes.getProcessesCalled("iexplore").stop();
+		}
+		
+		public static WatiN_IE window()
+		{
+			var control = O2Gui.open<Panel>("IE Window",500,400);
+			return window(control);
+		}
+		
+		public static WatiN_IE window(Control control)
+		{			
+			var webBrowser = control.add_Control<System.Windows.Forms.WebBrowser>();
+    		var ie = new WatiN_IE(webBrowser);
+    		ie.HostControl = control;
+    		ie.setWebBrowserObject(webBrowser);    		
+    		var parentForm = control.parentForm();
+    		if (parentForm.notNull())
+    		{
+    			parentForm.Closed += 
+    				(sender,e)=> {
+    								"Parent form closed to detaching and close WatiN_IE".info();
+    								ie.detach();
+    								ie.close();
+    							 };
+    		}
+    		return ie;
 		}
 		
 		[System.Runtime.InteropServices.ComVisible(true)]
