@@ -526,7 +526,7 @@ namespace O2.XRules.Database.APIs
 			var tables_Names = dataGridView.insert_Left<Panel>(200).add_TreeView().sort();		 	
 			var database_Names = tables_Names.insert_Above<Panel>(100).add_TreeView().sort();
 			var preloadAllData = false;
-			tables_Names.insert_Below(20).add_CheckBox("Preload all data from database",0,0,(value)=>preloadAllData = value).autoSize().check();
+			tables_Names.insert_Below(20).add_CheckBox("Preload all data from database",0,0,(value)=>preloadAllData = value).autoSize();//.check();
 			var rowData = dataGridView.insert_Below<Panel>(100).add_SourceCodeViewer(); 
 			var rowDataField = rowData.insert_Left<Panel>(100).add_TreeView();
 			var selectedField = "";
