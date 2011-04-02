@@ -92,7 +92,7 @@ namespace O2.XRules.Database.Utils
 					(selectedObject) => {
 											var treeNode = treeView.selected();
 											objectName.set_Text(treeNode.get_Text());
-											if (treeNode.get_Tag().notNull())// && tag.str() != treeNode.get_Text())
+											if (Ascx_ExtensionMethods.get_Tag(treeNode).notNull())// && tag.str() != treeNode.get_Text())
 											{								
 												propertyGrid.show(selectedObject);
 												var toString = selectedObject.str();
@@ -194,10 +194,13 @@ namespace O2.XRules.Database.Utils
 		
 		public void addFirstObject(object targetObject)
 		{
-			var objectNode = treeView.rootNode().add_Node(targetObject.str(), targetObject);
-			addObjectPropertyAndFields(objectNode,targetObject);
-			objectNode.expand();
-			treeView.selectFirst();
+			if (targetObject.notNull())
+			{								
+				var objectNode = treeView.rootNode().add_Node(targetObject.str(), targetObject);
+				addObjectPropertyAndFields(objectNode,targetObject);
+				objectNode.expand();
+				treeView.selectFirst();
+			}
 		}
 		
 		public void show(object _object)
@@ -224,11 +227,7 @@ namespace O2.XRules.Database.Utils
 	}
 	
 	public static class ascx_ObjectViewer_ExtensionMethods
-	{
-		public static T details<T>(this T _object)
-		{
-			return _object.showObject();
-		}
+	{		
 		
 		public static T showDetails<T>(this T _object)
 		{

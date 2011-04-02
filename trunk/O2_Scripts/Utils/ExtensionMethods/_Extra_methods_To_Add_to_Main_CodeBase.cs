@@ -50,6 +50,8 @@ using System.Security.Cryptography;
 
 //O2Ref:O2_API_AST.dll
 
+//O2File:ascx_ObjectViewer.cs
+
 namespace O2.XRules.Database.Utils
 {
 
@@ -622,9 +624,36 @@ namespace O2.XRules.Database.Utils
 	}
 	
 	//TreeNode & TreeView
-	
+	public static class O2Gui_ExtensionMethods
+	{				
+		public static T showAsForm<T>(this string title)
+			where T : Control
+		{
+			return title.showAsForm<T>(600,400);
+		}
+		
+		public static T showAsForm<T>(this string title, int width, int height)
+			where T : Control
+		{
+			return (T) O2Gui.open<T>(title, width,height);
+		}
+	}
 	public static class TreeNode_and_TreeView_ExtensionMethods
 	{
+		public static TreeView allow_TreeNode_Edits(this TreeView treeView)
+		{
+			if (treeView.notNull())
+				treeView.invokeOnThread(()=> treeView.LabelEdit = true);		
+			return treeView;
+		}
+		
+		public static TreeNode beginEdit(this TreeNode treeNode)
+		{
+			if (treeNode.notNull())
+				treeNode.treeView().invokeOnThread(()=> treeNode.BeginEdit());
+			return treeNode;
+		}				
+		
 		public static TreeNode set_Tag(this TreeNode treeNode, object value)
 		{
 			return (TreeNode)treeNode.treeView().invokeOnThread(
@@ -1009,7 +1038,11 @@ namespace O2.XRules.Database.Utils
 			}
 		}
 		
-		
+		// so that it is automatically available in the O2 Scriping environment (was in public static class ascx_ObjectViewer_ExtensionMethods)
+		public static void details<T>(this T _object)
+		{
+			O2Thread.mtaThread(()=>_object.showObject());
+		}
 		
 	}
 }
