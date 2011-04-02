@@ -623,9 +623,10 @@ namespace O2.XRules.Database.Utils
 		}								
 	}
 	
-	//TreeNode & TreeView
+		
 	public static class O2Gui_ExtensionMethods
-	{				
+	{		
+		//Control
 		public static T showAsForm<T>(this string title)
 			where T : Control
 		{
@@ -638,6 +639,18 @@ namespace O2.XRules.Database.Utils
 			return (T) O2Gui.open<T>(title, width,height);
 		}
 	}
+	
+	//PropertyGrid
+	public static class PropertyGrid_ExtensionMethods
+	{
+		public static PropertyGrid onValueChange(this PropertyGrid propertyGrid, Action callback)
+		{
+			propertyGrid.invokeOnThread(()=>propertyGrid.PropertyValueChanged+=(sender,e)=>callback() );
+			return propertyGrid;
+		}
+	}
+	
+	//TreeNode & TreeView
 	public static class TreeNode_and_TreeView_ExtensionMethods
 	{
 		public static TreeView allow_TreeNode_Edits(this TreeView treeView)
@@ -941,7 +954,7 @@ namespace O2.XRules.Database.Utils
 		// insert_...()
 		public static Panel insert_Left(this Control control)
 		{
-			return control.insert_Left<Panel>(control.width()/2);
+			return control.insert_Left(control.width()/2);			
 		}
 		
 		public static Panel insert_Right(this Control control)
@@ -960,8 +973,10 @@ namespace O2.XRules.Database.Utils
 		}		
 		// insert_...(width)
 		public static Panel insert_Left(this Control control, int width)
-		{
-			return control.insert_Left<Panel>(width);
+		{			
+			var panel = control.insert_Left<Panel>(width); 
+			panel.splitterDistance(width); 				// to deal with bug in insert_Left<Panel>
+			return panel;
 		}
 		
 		public static Panel insert_Right(this Control control, int width)
@@ -1021,6 +1036,24 @@ namespace O2.XRules.Database.Utils
 		
 		
 		
+	}
+	
+	public static class sourceCodeViewer_ExtensionMethods
+	{
+		public static ascx_SourceCodeViewer onTextChange(this ascx_SourceCodeViewer codeViewer, Action<string> callback)
+		{
+			codeViewer.editor().onTextChange(callback);
+			return codeViewer;
+		}
+		
+		public static ascx_SourceCodeEditor onTextChange(this ascx_SourceCodeEditor codeEditor, Action<string> callback)
+		{
+			codeEditor.invokeOnThread(
+				()=>{
+						codeEditor.eDocumentDataChanged+= callback;
+					});
+			return codeEditor;
+		}
 	}
 	
 	public static class Misc_ExtensionMethods
