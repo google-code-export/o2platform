@@ -21,15 +21,15 @@ using O2.XRules.Database.Languages_and_Frameworks.DotNet;
 
 namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 {
-	/*public class test_ascx_ViewAST
+	public class test_ascx_CodeStreams
 	{		
 		public void launchGui()
-		{
-			
-			
-			
+		{			
+			var ascxCodeStreams = "testing ascx_CodeStreams".showAsForm<ascx_CodeStreams>(1000,600);			
+			ascxCodeStreams.buildGuiToViewFolderContents();						
 		}
-	}*/
+	}
+	
 
 	public class ascx_CodeStreams : Control
 	{
@@ -243,6 +243,52 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 				}				
 			return ascxCodeStreams;
 			
+		}
+	}
+	
+	public static class ascx_CodeStreams_GUIs
+	{
+		public static ascx_CodeStreams buildGuiToViewFolderContents(this ascx_CodeStreams ascxCodeStreams)
+		{
+			return ascxCodeStreams.buildGuiToViewFolderContents(null);
+		}
+		
+		public static ascx_CodeStreams buildGuiToViewFolderContents(this ascx_CodeStreams ascxCodeStreams, string initialFolder)
+		{
+			"in buildGuiToViewFolderContents, with initialFolder set to: {0}".info(initialFolder);
+			var availableStreamsPanel = ascxCodeStreams.insert_Left(200,"Available Streams");
+			
+			var sourceFolder = availableStreamsPanel.insert_Above(20)
+													.add_Label("Source Folder:")
+													.top(2)
+												  	.append_TextBox("")
+												  	.align_Right(availableStreamsPanel);			
+												  	
+			Action<string> loadFilesFromFolder =
+				(folder)=> {
+								var availableStreams = availableStreamsPanel.clear().add_TreeViewWithFilter(folder.files());//, (filePath)=> filePath.fileName());
+					
+								availableStreams.afterSelect<string>(
+									(file)=>{
+												var savedMethodStream = file.load<Saved_MethodStream>();
+												ascxCodeStreams.loadMethodStream(savedMethodStream);
+											});
+								availableStreams.selectFirst();			
+							};
+					
+			
+											  
+			sourceFolder.onDrop(
+				(folder) => {
+								sourceFolder.set_Text(folder);
+								loadFilesFromFolder(folder);
+						    });
+			
+			sourceFolder.onEnter(loadFilesFromFolder);		
+			
+			if (initialFolder.valid() && initialFolder.dirExists())
+				loadFilesFromFolder(initialFolder);
+			return ascxCodeStreams;
 		}
 	}
 

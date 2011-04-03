@@ -54,7 +54,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
             		{
             			var fileCreated = splitData[1];
             			if (fileCreated.fileExists())
-            			{
+            			{	
+            				// add reference so that we can compile it in O2
+            				var extraLineToAdd = "//O2Ref:System.Web.Services.dll".line();
+            				fileCreated.fileInsertAt(0, extraLineToAdd); 
+            				
             				this.Created_CSharpFile = fileCreated;
             				return fileCreated;
             			}

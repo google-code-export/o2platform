@@ -10,10 +10,12 @@ using System.Windows.Forms;
 using System.Text;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
-
+using O2.External.SharpDevelop.Ascx;
+using O2.External.SharpDevelop.ExtensionMethods;
 //O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 using O2.XRules.Database.Utils;
 
@@ -23,11 +25,12 @@ namespace O2.XRules.Database.Utils
     {       		
 		public static void launchGui()
 		{						
+			//var _object = new List<string>().add("aaa").add("bbb").add("ccc");
 			var _object = new List<object>().add(PublicDI.config)
 											.add("aaa")											
 											.add(AppDomain.CurrentDomain );
 			_object.Add("789".wrapOnList().add("456").add("123")); 
-			
+					
 			_object.showObject();
 			
 		}
@@ -39,61 +42,104 @@ namespace O2.XRules.Database.Utils
 		public bool ShowMethods { get;set; }
 		public bool ShowPropertyAndFieldInfo { get;set; }		
 		public bool Sorted { get;set; }
+		public bool ShowSerializedString { get;set;}
+		public bool SimpleView { get;set; }
+		public bool CreateObjectWhenNull { get;set; }
 		
+		public PropertyGrid propertyGrid;		
 		public TreeView treeView;
+		public ascx_SourceCodeViewer serializedString;
+		public CheckBox showSerializedString_CheckBox;
+		public CheckBox createObjectWhenNull_CheckBox;
+		public CheckBox simpleView_CheckBox;
 		
+		public bool guiReady;
         public ascx_ObjectViewer()
     	{
     		//showMethods = true;
     		//showPropertyAndFieldInfo = true;
-    		this.Width = 300;
-    		this.Height = 300;    		
+    		this.Width = 800;
+    		this.Height = 500;    		
     		buildGui();
     	}
  
     	public void buildGui()
-    	{
+    	{    		
     		try
     		{
-	    		var topPanel = this.add_Panel();
-	    		var propertyGrid = topPanel.add_GroupBox("").add_PropertyGrid();  
+    			"[objectViewer] step 1".info();
+	    		var topPanel = this.add_Panel();	    		
+	    		serializedString = topPanel.insert_Right().add_GroupBox("Serialized Object").add_SourceCodeViewer();
+	    		var serializedStringPanel = serializedString.splitContainer().panel2Collapsed(true);	    		
+	    		propertyGrid = topPanel.add_GroupBox("").add_PropertyGrid();  
 				treeView = propertyGrid.parent().insert_Left<Panel>().add_TreeView().sort();;				
-				treeView.splitterDistance(300);
-				var toStringValue = propertyGrid.parent().insert_Above<Panel>(100).add_GroupBox("ToString Value:").add_TextArea(); 
-				var optionsPanel = treeView.insert_Below<Panel>(50);
-				var objectName = toStringValue.parent().insert_Above<Panel>(20).add_TextBox("name","");
+				//treeView.splitterDistance(300);
+				var toStringValue = propertyGrid.parent().insert_Below<Panel>(100).add_GroupBox("ToString Value (not editable):").add_TextArea(); 
+				var optionsPanel = treeView.insert_Below<Panel>(70);
+				var objectName = toStringValue.parent().insert_Above<Panel>(20).add_TextBox("name","");				
+				"[objectViewer] step 2".info();
+				propertyGrid.onValueChange(updateSerializedString);
+				//setSerializedStringSyncWithPropertyGrid();
+				
+				serializedString.insert_Above(20).add_Link("Sync Serialized String With PropertyGrid",0,0,()=>updateSerializedStringSyncWithPropertyGrid());
+				
 				optionsPanel.add_CheckBox("Show Methods",0,0,
 					(value)=>{
 								ShowMethods = value;
 								refresh();
 							 });
-				optionsPanel.add_CheckBox("Show Property and Field info",25,0,
+				optionsPanel.add_CheckBox("Show Property and Field info",22,0,
 					(value)=>{
 								ShowPropertyAndFieldInfo = value;
 								refresh();
 							 })
 							.autoSize()
-							.append_Link("refresh", ()=>refresh());
-				
-				optionsPanel.add_CheckBox("Sort Values",0,120, 
+							.append_Link("refresh", ()=>refresh())
+							.left(200);
+				"[objectViewer] step 3".info();
+				optionsPanel.add_CheckBox("Sort Values",0,110, 
 					(value)=>{								
 								Sorted = value;
 								try
 								{
 									treeView.sort(Sorted);  // throwing "Unable to cast object of type 'System.Boolean' to type 'System.Windows.Forms.TreeView'"
 								}
-								catch(Exception ex)
+								catch//(Exception ex)
 								{
-									ex.log();
+									//ex.log();
 								}								
 							 }).@checked(true);
+				"[objectViewer] step 4".info();
+				simpleView_CheckBox = optionsPanel.add_CheckBox("Simple View",0,200,
+					(value)=>{
+								SimpleView = value;
+								//propertyGrid.splitContainer().panel1Collapsed(value);
+								refresh();
+							 })
+							.bringToFront();
 							
+				showSerializedString_CheckBox = optionsPanel.add_CheckBox("Show serialized string",44,0,
+					(value)=>{
+								ShowSerializedString = value;								
+								serializedStringPanel.panel2Collapsed(!value);
+								refresh();
+							 })
+							 .autoSize();
+							 
+				createObjectWhenNull_CheckBox = optionsPanel.add_CheckBox("Create Object When Null",44,150,
+					(value)=>{
+								CreateObjectWhenNull = value;								
+							 })
+							.bringToFront()
+							.autoSize();							
+				"[objectViewer] step 5".info()	;		
 				treeView.afterSelect<object>( 
 					(selectedObject) => {
 											var treeNode = treeView.selected();
 											objectName.set_Text(treeNode.get_Text());
-											if (Ascx_ExtensionMethods.get_Tag(treeNode).notNull())// && tag.str() != treeNode.get_Text())
-											{								
+											var tag = Ascx_ExtensionMethods.get_Tag(treeNode);
+											if (tag.notNull())// && tag.str() != treeNode.get_Text())
+											{																										
 												propertyGrid.show(selectedObject);
 												var toString = selectedObject.str();
 												if (toString == "System.__ComObject")
@@ -107,20 +153,22 @@ namespace O2.XRules.Database.Utils
 												}												
 											}
 											else if (treeNode.nodes().size()==0)
-											{
+											{												
 												propertyGrid.show(null);
 												propertyGrid.parent().set_Text("[null value]"); 
 												toStringValue.set_Text("[null value]");
 												objectName.set_Text("");
-												treeNode.color(Color.Red);
+												treeNode.color(Color.Red);												
 											}
 											
 									  	});
+				"[objectViewer] step 6".info();								  	
 			}
 			catch(Exception ex)
 			{
 				ex.log("in buildGui",true);
 			}
+			guiReady = true;
 		}								  
 			
 		public void addObjectPropertyAndFields (TreeNode targetNode, object targetObject)
@@ -162,20 +210,62 @@ namespace O2.XRules.Database.Utils
 				}
 				else
 				{
-					//var objectNode = targetNode.add_Node(targetObject.str(), targetObject);				
-					targetNode.add_Node("properties",null).add_Nodes(targetObject.type().properties(), 
-															    (item)=> item.Name, 
-															    (item)=> PublicDI.reflection.getProperty(item,targetObject),   
-															    (item)=>false);																	   
-													 
-					targetNode.add_Node("fields",null).add_Nodes(targetObject.type().fields(), 
-															    (item)=> item.Name, 
-															    (item)=> targetObject.field(item.Name), //PublicDI.reflection.getField(item,_object),   
-															    (item)=>false);
-					targetNode.set_Text("{0}             ({1} properties {2} fields)"
-						.format(targetNode.get_Text(),
-								targetNode.nodes()[1].nodes().size(),
-								targetNode.nodes()[0].nodes().size()));
+					if(SimpleView)
+					{
+						foreach(var property in targetObject.type().properties())
+						{														
+							var propertyValue = PublicDI.reflection.getProperty(property,targetObject);
+							
+							var newNode = targetNode.add_Node(property.Name,propertyValue ,false );							
+							switch(property.PropertyType.FullName)
+							{
+								case "System.String":
+								case "System.String[]":
+								case "System.Boolean":
+								case "System.DateTime":
+								case "System.Int32":
+								case "System.Int32[]":
+								case "System.Byte":
+								case "System.Int64":									
+									newNode.color(Color.Gray);
+									break;
+								default:				
+									if (propertyValue.isNull())
+									{						
+										if (CreateObjectWhenNull)
+										{
+											propertyValue = property.PropertyType.ctor();																				
+											if (propertyValue.notNull())
+											{
+												"CREATE object for type: {0}".debug(propertyValue.type());
+												PublicDI.reflection.setProperty(property,targetObject,propertyValue);
+												newNode.set_Tag(propertyValue);
+											}
+											else
+												"Could not create instance of type: {0}".error(propertyValue.type());
+										}
+									}
+									break;							
+							}
+						}										
+					}
+					else
+					{
+						//var objectNode = targetNode.add_Node(targetObject.str(), targetObject);				
+						targetNode.add_Node("properties",null).add_Nodes(targetObject.type().properties(), 
+																    (item)=> item.Name, 
+																    (item)=> PublicDI.reflection.getProperty(item,targetObject),   
+																    (item)=>false);																	   
+														 
+						targetNode.add_Node("fields",null).add_Nodes(targetObject.type().fields(), 
+																    (item)=> item.Name, 
+																    (item)=> targetObject.field(item.Name), //PublicDI.reflection.getField(item,_object),   
+																    (item)=>false);
+						targetNode.set_Text("{0}             ({1} properties {2} fields)"
+							.format(targetNode.get_Text(),
+									targetNode.nodes()[1].nodes().size(),
+									targetNode.nodes()[0].nodes().size()));
+					}
 				}														    
 			if (ShowPropertyAndFieldInfo)
 			{
@@ -200,7 +290,71 @@ namespace O2.XRules.Database.Utils
 				addObjectPropertyAndFields(objectNode,targetObject);
 				objectNode.expand();
 				treeView.selectFirst();
+				updateSerializedString();
 			}
+		}
+		
+		public ascx_ObjectViewer simpleView()
+		{
+			simpleView_CheckBox.@checked(true);
+			return this;
+		}
+		
+		public ascx_ObjectViewer createObjectWhenNull()
+		{
+			createObjectWhenNull_CheckBox.@checked(true);
+			return this;
+		}
+		
+		public ascx_ObjectViewer showSerializedString()
+		{
+			return showSerializedString(true);
+		}
+		public ascx_ObjectViewer showSerializedString(bool value)
+		{
+			showSerializedString_CheckBox.@checked(value);
+			return this;
+		}				
+		
+		public void updateSerializedString()
+		{
+			if (guiReady && ShowSerializedString)
+			{				
+				var serializedText = this.RootObject.serialize(false);			
+				if (serializedText.valid())
+				{
+					this.serializedString.enabled(true);
+					if (this.serializedString.get_Text() != serializedText)
+						this.serializedString.set_Text( serializedText, "a.xml");
+				}
+				else
+					this.serializedString.enabled(false);				
+			}
+		}		
+		
+		public void updateSerializedStringSyncWithPropertyGrid()
+		{
+			//this.serializedString.onTextChange(
+			//	(text)=>{ 	
+			if (guiReady && ShowSerializedString)
+			{				
+				try
+				{											
+					var text = serializedString.get_Text();
+					var newObject = Serialize.getDeSerializedObjectFromXmlFile(text.save(), RootObject.type());									
+					if(newObject.notNull())						
+					{												
+						RootObject = newObject;
+						refresh();						
+					}
+				}
+				catch(Exception ex)
+				{
+					ex.log();
+				}				
+			}
+			//	});
+
 		}
 		
 		public void show(object _object)
@@ -215,14 +369,16 @@ namespace O2.XRules.Database.Utils
 			else
 			{				
 				RootObject = _object;
-				addFirstObject(_object);
+				//addFirstObject(_object);
+				refresh();
 			}
 		}
 		
 		public void refresh()
-		{
+		{								
 			treeView.clear();
-			addFirstObject(RootObject);
+			propertyGrid.show(null);
+			addFirstObject(RootObject);									
 		}
 	}
 	

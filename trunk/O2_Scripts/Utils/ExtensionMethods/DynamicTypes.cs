@@ -142,6 +142,12 @@ namespace O2.XRules.Database.Utils
 			return typeBuilder.DefineMethod(methodName, methodAttributes, returnType, parameterTypes);
 		}
 		
+		// Reflection Type
+		public static Type create(this TypeBuilder typeBuilder)
+		{
+			return typeBuilder.CreateType();
+		}
+		
 		//IL Generation Helpers
 		public static MethodBuilder il_get_field(this MethodBuilder methodBuilder, FieldBuilder fieldBuilder)
 		{
@@ -227,6 +233,28 @@ namespace O2.XRules.Database.Utils
     	public static PropertyBuilder add_Property(this TypeBuilder typeBuilder, string propertyName,  Type propertyType)
     	{
     		return typeBuilder.dynamicProperty(propertyName, propertyType);
+    	}    	    	
+    	
+    	public static object create_LiveObject_From_MethodInfo_Parameters(this MethodInfo methodInfo)
+    	{
+    		return methodInfo.create_LiveObject_From_MethodInfo_Parameters("Dynamic_Type_From_Parameters");
     	}
+    	
+    	public static object create_LiveObject_From_MethodInfo_Parameters(this MethodInfo methodInfo, string dynamicTypeName)
+    	{    	
+    		var dynamicType = dynamicTypeName.dynamicType(); 
+			foreach(var parameter in methodInfo.parameters())
+				dynamicType.add_Property(parameter.Name,parameter.ParameterType);
+			var liveObject = dynamicType.create().ctor(); 
+			return liveObject;
+		}
+		
+		public static object[] getProperties_AsArray(this object _object)
+		{
+			var properties = new List<object>();
+			foreach(var property in _object.type().properties())  
+				properties.add(_object.property(property.Name));  
+			return properties.ToArray();
+		}
     }
 }
