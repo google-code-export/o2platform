@@ -1003,7 +1003,7 @@ namespace O2.XRules.Database.APIs
     		{
     			radioButton.Checked = value;    	
     		}
-    		catch(Exception ex)
+    		catch//(Exception ex)
     		{    			
     			//ex.log("in WatiN.Core.RadioButton value::");  // there is an internal WatiN exception that occurs after the value is set
     		}

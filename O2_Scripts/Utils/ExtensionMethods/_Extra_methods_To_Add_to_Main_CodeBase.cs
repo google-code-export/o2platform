@@ -156,6 +156,43 @@ namespace O2.XRules.Database.Utils
 			return PublicDI.reflection.getAttributes(method);
 		}
 		
+		public static object enumValue(this Type enumType, string value)
+		{
+			return enumType.enumValue<object>(value);
+		}
+		public static T enumValue<T>(this Type enumType, string value)
+		{
+			var fieldInfo = (FieldInfo) enumType.field(value);
+			if (fieldInfo.notNull())
+				return (T)fieldInfo.GetValue(enumType);
+			return default(T);
+		}
+		
+		//Array		
+		
+		public static Array createArray<T>(this Type arrayType,  params T[] values)			
+		{
+			try
+			{
+				if (values.isNull())
+					return  Array.CreateInstance (arrayType,0);	
+					
+				var array =  Array.CreateInstance (arrayType,values.size());	
+				
+				if (values.notNull())
+					for(int i=0 ; i < values.size() ; i ++)
+						array.SetValue(values[i],i);
+				return array;								
+			}
+			catch(Exception ex)
+			{
+				ex.log("in Array.createArray");
+			}
+			return null;
+		}
+		
+		
+		
 		//WebServices SOAP methods
 		public static List<MethodInfo> webService_SoapMethods(this Assembly assembly)
 		{
@@ -627,6 +664,16 @@ namespace O2.XRules.Database.Utils
 	public static class O2Gui_ExtensionMethods
 	{		
 		//Control
+		public static Panel showAsForm(this string title)			
+		{
+			return title.showAsForm<Panel>(600,400);
+		}
+		
+		public static Panel showAsForm(this string title, int width, int height)			
+		{
+			return  O2Gui.open<Panel>(title, width,height);
+		}
+		
 		public static T showAsForm<T>(this string title)
 			where T : Control
 		{
@@ -638,6 +685,7 @@ namespace O2.XRules.Database.Utils
 		{
 			return (T) O2Gui.open<T>(title, width,height);
 		}
+		
 	}
 	
 	//PropertyGrid
