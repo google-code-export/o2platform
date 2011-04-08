@@ -30,7 +30,8 @@ ribbon.add_Tab("Development")
 	  .add_RibbonGroup("Source Control") 		
 	  		.add_Button("MsysGit", ()=&gt; new MsysGit().install())
        		.add_Button("TortoiseSVN", ()=&gt; new TortoiseSVN())
-       		.add_Button("GitExtensions", ()=&gt; new GitExtensions());
+       		.add_Button("GitExtensions", ()=&gt; new GitExtensions())
+       		.add_Script("MS SqlServer 2008", "MS_SqlServer.cs");
 			
 
 	  
