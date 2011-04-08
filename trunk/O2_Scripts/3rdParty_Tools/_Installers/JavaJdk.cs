@@ -25,7 +25,7 @@ namespace O2.XRules.Database.APIs
 		{
 			ToolName = "JavaJdk"; 
     		Version = "JavaJdk ";
-    		Install_File = "Git-1.7.4-preview20110204.exe";    		
+    		
 //    		Install_Dir = @"C:\Program Files\Java\";
     		if (installNow)
     			install();    		

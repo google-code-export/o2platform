@@ -4,7 +4,8 @@
 if (apiKey.isNull())
 	apiKey = ascx_AskUserForLoginDetails.ask();
 	
-var defaultRegion = "eu-west-1";//"us-west-1";
+var defaultRegion = "us-west-1";//"eu-west-1";
+
 
 Func&lt;List&lt;string&gt;&gt; getEC2Regions =
 	()=&gt;{
