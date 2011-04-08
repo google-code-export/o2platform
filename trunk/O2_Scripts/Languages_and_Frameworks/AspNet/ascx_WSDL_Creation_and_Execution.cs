@@ -125,14 +125,16 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 						foreach(var property in SoapParametersObject.type().properties())  
 							invocationParameters.add(SoapParametersObject.property(property.Name));  
 				
-						ExecutionResult.set_Text("[{0}] Executing method : {1}".format(DateTime.Now,CurrentMethod.Name)); 
+						ExecutionResult.set_Text("[{0}] Executing method : {1}".line().format(DateTime.Now,CurrentMethod.Name)); 
 						
 						var liveObject = CurrentMethod.DeclaringType.ctor();
 						ExecutionResult.append_Line("Created dynamic proxy object of type: {0}".format(liveObject));						
 						
 						try
 						{
+							var o2Timer = new O2Timer("Method execution time: ").start();
 							ResultObject = CurrentMethod.Invoke(liveObject, invocationParameters.ToArray());
+							ExecutionResult.append_Line("Method execution time: {0}".format(o2Timer.stop()));
 							ExecutionResult.append_Line("Method Executed OK, here is the return value:");
 							ExecutionResult.append_Line(ResultObject.str().lineBeforeAndAfter());
 							ExecutionResult_Properties.show(ResultObject);	
@@ -175,7 +177,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 						      			if (serializedResponse.notNull())
 						      				"".showInCodeViewer().set_Text(serializedResponse,"a.xml");
 						      	  	});
-			
+				
 			TestWebServices = topPanel.insert_Above(22).add_ComboBox();
 			
 			WsdlLocation = topPanel.insert_Above(22)
@@ -329,24 +331,28 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 					
 					foreach(var parameter in this.CurrentMethod.parameters())
 					{
-						var parameterName = parameter.Name;
+						var parameterName = parameter.Name.lowerCaseFirstLetter();
 						var parameterDefaultValue = "";
 						switch (parameter.ParameterType.FullName)
 						{
 							case "System.String":
 								parameterDefaultValue = "\"\"";
 								break;
+							case "System.Int32":
+								parameterDefaultValue = "0";
+								break;	
 							default:
 								parameterDefaultValue = "new {0}()".format(parameter.ParameterType.FullName);
 								break;
 						}
-						parametersCreation += "var _{0} = {1};".line().format(parameterName, parameterDefaultValue);
-						invocationParameters += "_{0} ,".format(parameterName);
+						parametersCreation += "var {0} = {1};".line().format(parameterName, parameterDefaultValue);
+						invocationParameters += "{0} ,".format(parameterName);
 					}
 										
 					parametersCreation = (parametersCreation.valid()) ? parametersCreation.lineBeforeAndAfter() : "";
 					invocationParameters = invocationParameters.removeLastChar();
-					var varName = "_{0}".format(this.CurrentMethod.DeclaringType.Name);
+					
+					var varName = this.CurrentMethod.DeclaringType.Name.lowerCaseFirstLetter();					
 					var scriptText = "var {0} = new {1}();".line().format(varName, this.CurrentMethod.DeclaringType.FullName) + 
 									 parametersCreation + 									 
 									 "var response = {0}.{1}({2});".line().format(varName, this.CurrentMethod.Name,  invocationParameters) + 

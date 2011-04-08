@@ -151,9 +151,37 @@ namespace O2.XRules.Database.Utils
 			return null;
 		}
 		
+		public static List<System.Attribute> attributes(this List<MethodInfo> methods)
+		{
+			return (from method in methods 
+					from attribute in method.attributes()
+					select attribute).toList();
+		}
 		public static List<System.Attribute> attributes(this MethodInfo method)
 		{
 			return PublicDI.reflection.getAttributes(method);
+		}
+		
+		public static List<MethodInfo> withAttribute(this Assembly assembly, string attributeName)
+		{
+			return assembly.methods().withAttribute(attributeName);
+		}
+		
+		public static List<MethodInfo> withAttribute(this List<MethodInfo> methods, string attributeName)
+		{ 
+			return (from method in methods 
+					from attribute in method.attributes()		  
+					where attributeName == (attribute.TypeId as Type).Name.remove("Attribute")
+					select method).toList();						
+		}
+
+		
+		public static string signature(this MethodInfo methodInfo)
+		{
+			return "mscorlib".assembly()
+							 .type("RuntimeMethodInfo")
+							 .invokeStatic("ConstructName",methodInfo)
+							 .str();
 		}
 		
 		public static object enumValue(this Type enumType, string value)
@@ -603,7 +631,20 @@ namespace O2.XRules.Database.Utils
 	}   
 	
 	//Download file
-	
+	public static class Uri_ExtensionMethods
+	{
+		public static Uri append(this Uri uri, string virtualPath)
+		{
+			try
+			{
+				return new Uri(uri, virtualPath);
+			}
+			catch
+			{
+				return null;
+			}
+		}
+	}
 	public static class DownloadFiles_ExtensionMethods
 	{		
 		public static string download(this string fileToDownload)
@@ -902,6 +943,23 @@ namespace O2.XRules.Database.Utils
 					});
 			return dataGridView;		
 		}
+		
+		public static DataGridView row_Height(this DataGridView dataGridView, int value)
+		{
+			dataGridView.invokeOnThread(()=>dataGridView.RowTemplate.Height = value);
+			return dataGridView;
+		}
+		
+		public static List<string> values(this DataGridViewRow dataViewGridRow)
+		{
+			return ( List<string>)dataViewGridRow.DataGridView.invokeOnThread(
+				()=>{
+						var values = new List<string>();
+						foreach(var cell in dataViewGridRow.Cells)
+							values.add(cell.property("Value").str());
+						return values;
+					});			
+		}
 	}
 	
 	public static class ListView_ExtensionMethods
@@ -914,6 +972,12 @@ namespace O2.XRules.Database.Utils
 		{
 			return O2Gui.open<Panel>(title, width, height).add_TableList().show(data);
 		}
+		
+		public static ascx_TableList columnsWidthToMatchControlSize(this ascx_TableList tableList)
+		{		
+			tableList.parent().widthAdd(1);		// this trick forces it (need to find how to invoke it directly
+			return tableList;
+		}
 	}
 	
 	public static class XmlLinq_ExtensiomMethods
@@ -923,6 +987,20 @@ namespace O2.XRules.Database.Utils
 			if (xAttribute.notNull())
 				xAttribute.SetValue(value);
 			return xAttribute;
+		}		
+	}
+	
+	public static class XML_ExtensionMethods
+	{		
+		public static List<XmlAttribute> add_XmlAttribute(this List<XmlAttribute> xmlAttributes, string name, string value)
+		{
+			var xmlDocument = (xmlAttributes.size() > 0) 
+									?  xmlAttributes[0].OwnerDocument
+									: new XmlDocument();						
+			var newAttribute = xmlDocument.CreateAttribute(name);
+			newAttribute.Value = value;
+			xmlAttributes.add(newAttribute);
+			return xmlAttributes;
 		}		
 	}
 	
@@ -1106,6 +1184,16 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Misc_ExtensionMethods
 	{
+		public static string add_RandomLetters(this string _string)
+		{
+			return _string.add_RandomLetters(10);
+		}
+		
+		public static string add_RandomLetters(this string _string, int count)
+		{
+			return "{0}_{1}".format(_string,count.randomLetters());
+		}
+		
 		public static string ascii(this int _int)
 		{
 			try
@@ -1119,11 +1207,45 @@ namespace O2.XRules.Database.Utils
 			}
 		}
 		
+		public static Guid next(this Guid guid)
+		{
+			return guid.next(1);
+		}
+		
+		public static Guid next(this Guid guid, int incrementValue)
+		{			
+			var guidParts = guid.str().split("-");
+			var lastPartNextNumber = Int64.Parse(guidParts[4], System.Globalization.NumberStyles.AllowHexSpecifier);
+			lastPartNextNumber+= incrementValue;
+			var lastPartAsString = lastPartNextNumber.ToString("X12");
+			var newGuidString = "{0}-{1}-{2}-{3}-{4}".format(guidParts[0],guidParts[1],guidParts[2],guidParts[3],lastPartAsString);
+			return new Guid(newGuidString); 					
+		}
+		
+		public static Guid emptyGuid(this Guid guid)
+		{
+			return Guid.Empty;
+		}
+		
+		public static Guid newGuid(this string guidValue)
+		{
+			return Guid.NewGuid();
+		}
+		
+		public static Guid guid(this string guidValue)
+		{
+			if (guidValue.inValid())
+				return Guid.Empty;			
+			return new Guid(guidValue);		
+		}
+		
 		// so that it is automatically available in the O2 Scriping environment (was in public static class ascx_ObjectViewer_ExtensionMethods)
 		public static void details<T>(this T _object)
 		{
 			O2Thread.mtaThread(()=>_object.showObject());
 		}
+		
+		
 		
 	}
 }

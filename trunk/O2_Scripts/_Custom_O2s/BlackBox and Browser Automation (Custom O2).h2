@@ -39,6 +39,10 @@ javascript.add_RibbonGroup("XSS")
 		  
 
 var frameworks = ribbon.Ribbon.add_RibbonTab("Frameworks");
+frameworks.add_RibbonGroup("ASP.NET")
+   		   .add_Script("ViewState_Decoder (for ASP.NET 3.0)","Util - ViewState_Decoder_ASP.NET 3.0.h2")		
+		   .add_Script("Aspx PoC Builder","Util - Aspx PoC Builder.h2");
+
 frameworks.add_RibbonGroup("DWR")
 		  .add_RibbonButton_H2Script("DWR Calls Monitor","Util - DWR Calls Monitor.h2")
 		  .add_RibbonButton_H2Script("DWR Functions Viewer and Invoker","Util - DWR Functions Viewer and Invoker.h2");

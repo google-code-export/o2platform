@@ -347,6 +347,8 @@ namespace O2.XRules.Database.APIs
  
 		public static WatiN_IE open(this WatiN_IE watinIe, string url, int miliseconds)
     	{
+    		if (watinIe.isNull())
+    			return watinIe;
     		"[WatIN] open: {0}".info(url);
     		watinIe.execute(
     			()=>{
