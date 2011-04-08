@@ -576,7 +576,7 @@ namespace O2.XRules.Database.APIs
 											});
 								 }); 
 			
-			tables_Names.afterSelect<Table>( 
+			Action<Table> loadTableData = 
 				(table)=>{
 							tables_Names.backColor(Color.Salmon);
 							O2Thread.mtaThread(
@@ -589,11 +589,26 @@ namespace O2.XRules.Database.APIs
 												dataGridView.invokeOnThread(()=>dataGridView.DataSource= table.TableData);		
 												tables_Names.backColor(Color.White);
 											});
+						 }; 
+			tables_Names.afterSelect<Table>( 
+				(table)=>{
+							loadTableData(table);
 						 });
 			
 			database_Names.add_Nodes(sqlServer.database_Names());
 			
 			database_Names.selectFirst();  
+			
+			tables_Names.add_ContextMenu().add_MenuItem("reload data",
+				()=>{
+						var selectedNode = tables_Names.selected();
+						if (selectedNode.notNull())
+						{
+							var table = (Table)tables_Names.selected().get_Tag();
+							table.TableData = null;
+							loadTableData(table);
+						}
+					});
 			return sqlServer;
 		}
 		

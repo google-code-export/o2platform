@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var apiKey = @"C:\O2\_USERDATA\accounts.xml".credential("AmazonAWS"); 
+if (apiKey.isNull())
+	apiKey = ascx_AskUserForLoginDetails.ask();
+	
+var defaultRegion = "eu-west-1";//"us-west-1";
+
+Func&lt;List&lt;string&gt;&gt; getEC2Regions =
+	()=&gt;{
+			var ec2Client = new AmazonEC2Client(apiKey.UserName, apiKey.Password); 
+			return (from region in  ec2Client.DescribeRegions(new DescribeRegionsRequest())
+		 		      			 			.DescribeRegionsResult.Region
+					select region.RegionName).toList();
+		};
+
+Func&lt;string, AmazonEC2Client&gt; getEC2Client = 
+	(region) =&gt; new AmazonEC2Client(apiKey.UserName, 
+									apiKey.Password, 
+										new AmazonEC2Config() 
+											{ServiceURL = "http://{0}.ec2.amazonaws.com".format(region)}
+									);
+
+Func&lt;string,List&lt;Reservation&gt;&gt; getReservationsInRegion =  
+	(region)=&gt;{
+		        "Gettting Reservations in region: {0}".info(region);
+				var ec2ClientInRegion = getEC2Client(region);
+				var describesInstance = new DescribeInstancesRequest(); 				
+				var reservations = ec2ClientInRegion.DescribeInstances(describesInstance)
+													.DescribeInstancesResult
+													.Reservation; 
+				
+				return reservations;									  
+			  };
+
+Func&lt;bool, Dictionary&lt;string,List&lt;RunningInstance&gt;&gt;&gt; getEC2Instances = 
+	(onlyShowDefaultRegion)=&gt;{		
+			var instances = new Dictionary&lt;string,List&lt;RunningInstance&gt;&gt;();		
+			
+			var reservations = new List&lt;Reservation&gt;();
+			if (onlyShowDefaultRegion)
+				reservations.add(getReservationsInRegion(defaultRegion));
+			else
+				foreach(var region in getEC2Regions())
+					reservations.add(getReservationsInRegion(region));				        
+			
+			
+			foreach(var reservation in reservations)
+					foreach(var runningInstance in reservation.RunningInstance)
+						instances.add(reservation.GroupName.Aggregate((a, b) =&gt; a + ',' + b),
+									  runningInstance); 			
+			return instances;			
+		};
+		
+		
+Action&lt;RunningInstance&gt; startInstance = 
+	(runningInstance)=&gt;{							
+							"Starting instance with ID: {0}".info(runningInstance.InstanceId);							
+							var ec2Client = getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
+							var result = ec2Client.StartInstances(new StartInstancesRequest()
+																	.WithInstanceId(runningInstance.InstanceId));
+					   };
+
+Action&lt;RunningInstance&gt; stopInstance = 
+	(runningInstance)=&gt;{							
+							"Stopping instance with ID: {0}".info(runningInstance.InstanceId);							
+							var ec2Client = getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
+							var result = ec2Client.StopInstances(new StopInstancesRequest() 
+																	.WithInstanceId(runningInstance.InstanceId));
+					   };		
+
+Action&lt;RunningInstance&gt; showConsoleOut = 
+	(runningInstance)=&gt;{							
+							"Getting Console out instance with ID: {0}".info(runningInstance.InstanceId);			
+							var ec2Client = getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
+							var consoleOutResult = ec2Client.GetConsoleOutput(new GetConsoleOutputRequest()
+																				    .WithInstanceId(runningInstance.InstanceId));``
+							var consoleOut = consoleOutResult.GetConsoleOutputResult.ConsoleOutput.Output.base64Decode();	
+							consoleOut.showInCodeViewer(".bat");
+						};
+						
+Action&lt;RunningInstance&gt; rdpIntoBox =
+	(runningInstance)=&gt;{				
+					"Creating RDP connection to instance with ID: {0} and IP ".info(runningInstance.InstanceId,runningInstance.IpAddress );			
+					var terminalServicesClient = Processes.startProcess("mstsc.exe");
+					var guiAutomation = new API_GuiAutomation(terminalServicesClient);
+					var window = guiAutomation.window("Remote Desktop Connection");
+					window.textBox("Computer:").set_Text(runningInstance.IpAddress );
+					window.button("Connect").mouse().click();
+
+				};
+
+/*Action&lt;RunningInstance&gt; testInstance = 
+	(runningInstance)=&gt;{							
+							"Tests on  instance with ID: {0}".info(runningInstance.InstanceId);										
+							
+					   };							   
+*/					   
+					   
+Action&lt;Panel&gt; showRunningInstancesDetails = 
+	(targetPanel)=&gt; {
+						
+						var treeView = targetPanel.add_GroupBox("Amazon EC Instances").add_TreeView();
+						var actionsPanel = treeView.insert_Below(100);	 	  	 			
+						treeView.beforeExpand&lt;List&lt;RunningInstance&gt;&gt;(
+							(treeNode, runningInstanceList) =&gt;{
+																treeNode.clear();
+																treeNode.add_Nodes(runningInstanceList , 
+																				   (runningInstance) =&gt; "{0}  -  {1}  -  {2}  -  {3}  -  {4} ".format(
+																				   						runningInstance.InstanceId, 
+																				   						runningInstance.InstanceType, 
+																				   						runningInstance.IpAddress,
+																				   						runningInstance.Placement.AvailabilityZone,
+																				   						runningInstance.InstanceState.Name))	;
+																foreach(var node in treeNode.nodes())
+																	if (node.get_Text().contains("stopped"))
+																		node.color(Color.DarkGreen);
+																	else if (node.get_Text().contains("running"))
+																		node.color(Color.DarkRed);
+																	else 
+																		node.color(Color.DarkBlue);  
+																		
+															 }); 
+						Action&lt;bool&gt; refresh = 
+							(onlyShowDefaultRegion)=&gt;{
+									treeView.backColor(Color.Azure);
+									O2Thread.mtaThread(
+										()=&gt;{																				
+												var ec2Instances = 	getEC2Instances(onlyShowDefaultRegion); 
+												treeView.clear();
+												treeView.add_Nodes(ec2Instances.keys(), (text)=&gt;text, (text) =&gt; ec2Instances.value(text), (text) =&gt; ec2Instances.value(text).size() &gt; 0);
+												treeView.selectFirst().selected().expand().nodes()[0].selected(); 
+												treeView.backColor(Color.White);
+											});
+								}; 
+								
+						actionsPanel.add_Link("Refresh Instances list (default Region)", 0,0, ()=&gt; refresh(true)).click();		
+						actionsPanel.add_Link("Refresh Instances list (all Regions)",20,0, ()=&gt; refresh(false)); 
+						 
+						RunningInstance selectedInstance = null;
+						actionsPanel.add_Link("Show Instance Details", 40,0, ()=&gt;  selectedInstance.details());
+						actionsPanel.add_Link("View Instance  Console Out", 60,0, ()=&gt;  showConsoleOut(selectedInstance));
+						actionsPanel.add_Link("Start Instance ", 0,220, ()=&gt; startInstance(selectedInstance));
+						actionsPanel.add_Link("Stop Instance ", 20,220, ()=&gt; stopInstance(selectedInstance));  
+						actionsPanel.add_Link("RDP Instance ", 40,220, ()=&gt; rdpIntoBox(selectedInstance));   
+						
+						
+						/*var link = actionsPanel.add_Link("Test request Instance ", 40,220, ()=&gt; testInstance(selectedInstance));
+						O2Thread.mtaThread(()=&gt;{
+								link.sleep(1000); 
+								link.click();
+							});*/
+						
+						//actionsPanel.add_Link("Show selected Instance Properties ", 20,0, ()=&gt;  selectedInstance.showInfo()));
+						//treeView.insert_Above(20)
+						
+						treeView.afterSelect&lt;RunningInstance&gt;((runningInstance)=&gt; selectedInstance = runningInstance);	
+						//var propertyGrid = actionsPanel.insert_Below().add_PropertyGrid();																											 
+						//treeView.afterSelect&lt;RunningInstance&gt;((runningInstance)=&gt; runningInstance.details());
+						//treeView.afterSelect&lt;RunningInstance&gt;((runningInstance)=&gt; propertyGrid.show(runningInstance));	
+						
+					};
+									
+//var topPanel = panel.clear().add_Panel();
+var topPanel = O2Gui.open&lt;Panel&gt;("AmazonEC2",500,400);
+topPanel.insert_Below(100).add_LogViewer();
+showRunningInstancesDetails(topPanel);  
+
+
+//using Amazon.EC2
+//using Amazon.EC2.Model
+//O2Ref:AWSSDK.dll
+//O2File:ascx_AskUserForLoginDetails.cs	
+//O2File:API_GuiAutomation.cs
+//O2Ref:White.Core.dll
+//O2Ref:WatiN.Core.1x.dll
+</SourceCode>
+  <ReferencedAssemblies />
+</H2>
