@@ -256,5 +256,12 @@ namespace O2.XRules.Database.Utils
 				properties.add(_object.property(property.Name));  
 			return properties.ToArray();
 		}
+		
+		public static List<string> getProperties_AsStringList(this object _object)
+		{
+			return (from item in _object.getProperties_AsArray()
+				    select item.str()).toList();
+		}
+		
     }
 }
