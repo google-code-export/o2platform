@@ -46,19 +46,26 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	public static List<ManagementBaseObject> wmiSearch(this string searchQuery)
-    	{
-	    	var results = new List<ManagementBaseObject>();
+    	{	    	
     		try
     		{
     			var searcher = new ManagementObjectSearcher(searchQuery);						
-				foreach(var result in searcher.Get())
-					results.Add(result);				
+    			return searcher.Get().toList();
+				
 			}
 			catch(Exception ex)
 			{
 				"[wmiSearch]: {0}".error(ex.Message);
 			}
-			return results;			
+			return new List<ManagementBaseObject>();		
+    	}
+    	
+    	public static List<ManagementBaseObject> toList(this ManagementObjectCollection managementObjectCollection)
+    	{
+    		var results = new List<ManagementBaseObject>();
+    		foreach(var result in managementObjectCollection)
+				results.Add(result);				
+			return results;
     	}
     	
     	public static Type createTypeFromSearchResults(this List<ManagementBaseObject> searchResults)
