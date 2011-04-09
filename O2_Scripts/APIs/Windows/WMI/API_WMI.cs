@@ -31,6 +31,7 @@ namespace O2.XRules.Database.APIs
     public class API_WMI
     {   
     	public static List<string> SampleQueries = new List<string>  {  
+    																	"SELECT Name, CommandLine,Caption, Description, ExecutablePath FROM Win32_Process",
 																		"SELECT * FROM Win32_Desktop", 
 																		"SELECT * FROM Win32_Service",
 																		"SELECT * FROM Win32_Process",
@@ -92,6 +93,12 @@ namespace O2.XRules.Database.APIs
     	{
     		var panel = O2Gui.open<Panel>("WMI Query Results Viewer",700,400);
     		return searchResults.show_in_TableList(panel);
+    	}
+    	
+    	public static ascx_TableList show<T>(this List<ManagementBaseObject> searchResults, T control)
+    		where T : Control
+    	{
+    		return searchResults.show_in_TableList(control);
     	}
     	
     	public static ascx_TableList show_in_TableList<T>(this List<ManagementBaseObject> searchResults, T control)
