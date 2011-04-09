@@ -135,7 +135,7 @@ namespace O2.XRules.Database.Utils
 			else
 			{
 				PublicDI.reflection.setProperty(propertyInfo, _object,value);    
-				"set {0}.{1} = {2}".info(_object.type(),propertyName, value);
+		//		"set {0}.{1} = {2}".info(_object.type(),propertyName, value);
 			}
 			return _object;
 
