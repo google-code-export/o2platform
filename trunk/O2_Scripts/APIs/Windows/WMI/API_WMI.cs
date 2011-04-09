@@ -185,5 +185,36 @@ namespace O2.XRules.Database.APIs
     		showInfo.show(searchResults.createObjectWithSearchResults()); 
     		return showInfo;
     	}
+    	
+    	public static TreeView show_in_TreeView<T>(this List<ManagementBaseObject> searchResults, T control)
+    		where T : Control
+    	{    		
+    		var treeView =  control.clear().add_TreeView().sort();
+    		searchResults.show_in_TreeView(treeView);    		
+    		return treeView;
+    	}
+    	
+    	public static TreeView show_in_TreeView(this List<ManagementBaseObject> searchResults, TreeView treeView)
+    	{    		
+    		var data =  searchResults.createObjectWithSearchResults();    	
+			    				    				   			
+			if (data.size() > 0)
+			{
+				var properties = data[0].type().properties();				
+				treeView.visible(false);
+				for(int i =0 ; i <  data.size() ; i++)
+				{
+					var item = data[i];
+					var node = treeView.add_Node("{0} #{1}".format(item, i));
+					foreach(var property in properties)
+					{
+						var propertyValue = item.property(property.Name);
+						node.add_Node("{0}: {1}".format(property.Name, propertyValue),propertyValue);
+					}
+				} 
+				treeView.visible(true);
+			}
+			return treeView;
+		}
     }
 }
