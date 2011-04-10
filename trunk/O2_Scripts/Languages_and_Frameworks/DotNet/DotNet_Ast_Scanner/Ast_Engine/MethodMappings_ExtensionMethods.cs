@@ -617,16 +617,19 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		public static Dictionary<string, List<MethodMapping>> indexedByKey(this MethodMappings methodMappings, string filter)
 		{
 			var result = new Dictionary<string, List<MethodMapping>>(); 
-			foreach(var mappingItem in methodMappings.MethodMappingItems)
-			{
-				var key = mappingItem.Key;   
-				if (filter.valid().isFalse() || key.regEx(filter)) 
-					foreach(var methodMapping in mappingItem.MethodMappings)
-					{
-						methodMapping.Key = key;					//Hack(26-Aug-2010): fix until we create all methodMappings with this Key valu	e
-						result.add(key, methodMapping);
-					}
-			}
+			if (methodMappings.MethodMappingItems.isNull())
+				"In IndexedByKey there were no methodMappingsItems (filer = '{0}'".error(filter ?? "");
+			else
+				foreach(var mappingItem in methodMappings.MethodMappingItems)
+				{
+					var key = mappingItem.Key;   
+					if (filter.valid().isFalse() || key.regEx(filter)) 
+						foreach(var methodMapping in mappingItem.MethodMappings)
+						{
+							methodMapping.Key = key;					//Hack(26-Aug-2010): fix until we create all methodMappings with this Key valu	e
+							result.add(key, methodMapping);
+						}
+				}
 			return result;
 		}
 	}
