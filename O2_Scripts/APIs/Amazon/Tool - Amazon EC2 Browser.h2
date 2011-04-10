@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var apiKey = @"C:\O2\_USERDATA\accounts.xml".credential("AmazonAWS"); 
+  <SourceCode>//var topPanel = panel.clear().add_Panel();
+var topPanel = O2Gui.open&lt;Panel&gt;("AmazonEC2",580,400);  
+topPanel.insert_Below(100).add_LogViewer();  
+
+var timerCount = 60;
+var timerSleep  = 60 * 1000;
+
+var apiKey = @"C:\O2\_USERDATA\accounts.xml".credential("AmazonAWS"); 
 if (apiKey.isNull())
 	apiKey = ascx_AskUserForLoginDetails.ask();
 	
@@ -91,12 +98,83 @@ Action&lt;RunningInstance&gt; rdpIntoBox =
 
 				};
 
+//the getPasswordDataRequest is not returning the expected xml file 
 /*Action&lt;RunningInstance&gt; testInstance = 
 	(runningInstance)=&gt;{							
 							"Tests on  instance with ID: {0}".info(runningInstance.InstanceId);										
-							
+							var ec2Client = getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
+							var passwordResponse = ec2Client.GetPasswordData(new GetPasswordDataRequest().WithInstanceId(runningInstance.InstanceId));
+							"password: {0}".info(passwordResponse.GetPasswordDataResult.PasswordData.Data);
+							"Done".info();
 					   };							   
-*/					   
+*/					    
+Action&lt;Panel,TreeView&gt; addStopInstanceGui =
+	(targetPanel,treeViewWithInstances)=&gt; {						
+						Action startTimer = null;
+						Action stopTimer = null;
+						var instancesToStop = targetPanel.add_GroupBox("Stop Instance in {0} minutes".format((timerCount * timerCount / 60))) 
+												         .add_TreeView();						
+						var timerBar = instancesToStop.insert_Below(20).add_ProgressBar();
+						instancesToStop.add_ContextMenu().add_MenuItem("Stop now",true, 
+																()=&gt;{
+																		"Stopping {0} instances now".debug(instancesToStop.nodes().size()); 
+																		foreach(var node in instancesToStop.nodes())
+																			stopInstance((RunningInstance)node.get_Tag());
+																	})
+														 .add_MenuItem("Clear list", ()=&gt;instancesToStop.clear());
+						var startTimerLink = instancesToStop.insert_Above(15).add_Link("Add instance to list",0,0, 
+																()=&gt;{
+																		var selectedNode = treeViewWithInstances.selected();
+																		if (selectedNode.notNull())
+																		{
+																			var tag = selectedNode.get_Tag();  
+																			if (tag is RunningInstance)
+																			{
+																				var selectedInstance = (RunningInstance)tag;
+																				var nodeText = "{0} - {1}".format(selectedInstance.InstanceId, selectedInstance.IpAddress);
+																				instancesToStop.add_Node(nodeText, selectedInstance);
+																			}
+																		}
+																		//treeViewWithInstances.nodes().showInfo();
+																	})
+														.append_Link("Start timer", ()=&gt;startTimer());  
+						var timerEnabled = false;								
+						var	stopTimerLink = startTimerLink.append_Link("Stop timer", ()=&gt;stopTimer()).enabled(false);  							
+						startTimer = ()=&gt;{											
+												"starting timer".info();
+												timerEnabled = true;												
+												timerBar.maximum(timerCount);
+												timerBar.value(0);
+												startTimerLink.enabled(false);
+												stopTimerLink.enabled(true);
+												while(timerEnabled &amp;&amp; timerBar.Value &lt; timerCount)
+												{
+													"In StopInstances Timer [{0}/{1}], sleeping for {2} seconds".info(timerBar.Value, timerCount, timerSleep/1000);
+													timerBar.sleep(timerSleep, false);
+													timerBar.increment(1);																										
+												}
+												if (timerEnabled)
+												{													
+													"Timer is completed stopping {0} instances now".debug(instancesToStop.nodes().size());
+													foreach(var node in instancesToStop.nodes())
+														stopInstance((RunningInstance)node.get_Tag());
+												}
+												else
+													"Timer was stopped so nothing to do".debug();			
+												startTimerLink.enabled(true);
+												stopTimerLink.enabled(false);
+	
+										 };
+						stopTimer = ()=&gt;{
+											
+												"stopping timer".info();
+												timerEnabled = false; 
+												
+												startTimerLink.enabled(true);
+												stopTimerLink.enabled(false);
+										 };
+						targetPanel.onClosed(()=&gt; 	timerEnabled=false);					 
+					};
 					   
 Action&lt;Panel&gt; showRunningInstancesDetails = 
 	(targetPanel)=&gt; {
@@ -145,13 +223,14 @@ Action&lt;Panel&gt; showRunningInstancesDetails =
 						actionsPanel.add_Link("Stop Instance ", 20,220, ()=&gt; stopInstance(selectedInstance));  
 						actionsPanel.add_Link("RDP Instance ", 40,220, ()=&gt; rdpIntoBox(selectedInstance));   
 						
+						addStopInstanceGui(actionsPanel.insert_Right(240),treeView);   
 						
-						/*var link = actionsPanel.add_Link("Test request Instance ", 40,220, ()=&gt; testInstance(selectedInstance));
+						/*var link = actionsPanel.add_Link("Test request Instance ", 60,220, ()=&gt; testInstance(selectedInstance));
 						O2Thread.mtaThread(()=&gt;{
 								link.sleep(1000); 
 								link.click();
 							});*/
-						
+						 
 						//actionsPanel.add_Link("Show selected Instance Properties ", 20,0, ()=&gt;  selectedInstance.showInfo()));
 						//treeView.insert_Above(20)
 						
@@ -162,9 +241,8 @@ Action&lt;Panel&gt; showRunningInstancesDetails =
 						
 					};
 									
-//var topPanel = panel.clear().add_Panel();
-var topPanel = O2Gui.open&lt;Panel&gt;("AmazonEC2",500,400);
-topPanel.insert_Below(100).add_LogViewer();
+
+
 showRunningInstancesDetails(topPanel);  
 
 
