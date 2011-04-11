@@ -457,6 +457,21 @@ namespace O2.XRules.Database.Utils
 				()=> checkBox.CheckedChanged+= (sender,e) => {action(checkBox.value());});
 			return checkBox;
 		}
+		//WebBrowser
+		
+		public static WebBrowser onNavigated(this WebBrowser webBrowser, Action<string> callback)
+		{
+			webBrowser.invokeOnThread(()=> webBrowser.Navigated+= (sender,e)=> callback(e.Url.str()));
+			return webBrowser;													
+		}
+		
+		public static WebBrowser add_NavigationBar(this WebBrowser webBrowser)
+		{
+			var navigationBar = webBrowser.insert_Above(20).add_TextBox("url","");
+			webBrowser.onNavigated((url)=> navigationBar.set_Text(url));
+			navigationBar.onEnter((text)=>webBrowser.open(text));
+			return webBrowser;
+		}
 		//ListBox
 		
 		public static ListBox add_ListBox(this Control control)

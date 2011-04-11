@@ -124,7 +124,15 @@ apiScriptDevelopment.add_RibbonGroup("Custom O2")
 					.add_Script("SecretData Editor", "SecretDataEditor.cs.o2")
 					.add_RibbonButton_H2Script("Check for ClickOnce Updates","AutoUpdate - Using Reflection.h2")	  					
 					.add_RibbonButton_H2Script("Compile ALL Scripts","Compile All Local O2 Scripts.h2")
-					.add_RibbonButton("Exit O2 (and close all windows)", () =&gt; PublicDI.config.closeO2Process());
+					.add_RibbonButton("Exit O2 (and close all windows)", () =&gt; PublicDI.config.closeO2Process())
+					.add_Button("Lanch O2 instance as Admin (without UAC)",
+						()=&gt;{				
+								var process = new System.Diagnostics.Process();
+								process.StartInfo.FileName = PublicDI.config.CurrentExecutableDirectory.pathCombine("O2_XRules_Database.exe");
+								process.StartInfo.Verb = "runas";
+								process.Start();		
+							});
+					
 
 apiScriptDevelopment.add_RibbonGroup("Web Storage, Gui Automation")
 				    .add_RibbonButton_H2Script("Amazon S3 Browser","Amazon S3 Browser.h2")
