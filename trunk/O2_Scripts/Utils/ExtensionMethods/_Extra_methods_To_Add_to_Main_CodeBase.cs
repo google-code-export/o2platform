@@ -457,21 +457,6 @@ namespace O2.XRules.Database.Utils
 				()=> checkBox.CheckedChanged+= (sender,e) => {action(checkBox.value());});
 			return checkBox;
 		}
-		//WebBrowser
-		
-		public static WebBrowser onNavigated(this WebBrowser webBrowser, Action<string> callback)
-		{
-			webBrowser.invokeOnThread(()=> webBrowser.Navigated+= (sender,e)=> callback(e.Url.str()));
-			return webBrowser;													
-		}
-		
-		public static WebBrowser add_NavigationBar(this WebBrowser webBrowser)
-		{
-			var navigationBar = webBrowser.insert_Above(20).add_TextBox("url","");
-			webBrowser.onNavigated((url)=> navigationBar.set_Text(url));
-			navigationBar.onEnter((text)=>webBrowser.open(text));
-			return webBrowser;
-		}
 		//ListBox
 		
 		public static ListBox add_ListBox(this Control control)
@@ -807,6 +792,7 @@ namespace O2.XRules.Database.Utils
 			return treeNode;
 		}*/
 		
+		//IEnumerable<T> collection, bool addDummyNode
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, bool addDummyNode)
 		{
 				
@@ -819,6 +805,7 @@ namespace O2.XRules.Database.Utils
 			return treeNode.add_Nodes(collection, (item)=> item.str() ,(item)=> item, (item)=> addDummyNode);						
 		}
 		
+		//IEnumerable<T> collection, Func<T, bool> getAddDummyNode
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T, bool> getAddDummyNode)
 		{
 			treeView.rootNode().add_Nodes(collection, (item)=> item.str() ,(item)=> item, getAddDummyNode);			
@@ -830,6 +817,7 @@ namespace O2.XRules.Database.Utils
 			return treeNode.add_Nodes(collection, (item)=> item.str() ,(item)=> item, getAddDummyNode);						
 		}
 		
+		//IEnumerable<T> collection, Func<T,string> getNodeName)
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName)
 		{
 			treeView.rootNode().add_Nodes(collection, getNodeName,(item)=> item,(item)=> false);			
@@ -841,6 +829,24 @@ namespace O2.XRules.Database.Utils
 			return treeNode.add_Nodes(collection, getNodeName, (item)=> item, (item)=> false);			
 		}
 		
+		//IEnumerable<T> collection, Func<T,string> getNodeName)
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, Color> getColor)
+		{
+			treeView.rootNode().add_Nodes(collection, getNodeName, getColor);
+			return treeView;
+		}
+				
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, Color> getColor)
+		{
+			foreach(var item in collection)
+			{
+				var newNode = Ascx_ExtensionMethods.add_Node(treeNode,getNodeName(item), item);
+				newNode.color(getColor(item));
+			}
+			return treeNode;
+		}
+		
+		//IEnumerable<T> collection, Func<T,string> getNodeName, bool addDummyNode
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, bool addDummyNode)
 		{
 			treeView.rootNode().add_Nodes(collection, getNodeName, (item)=> item,(item)=> addDummyNode);			
@@ -852,6 +858,7 @@ namespace O2.XRules.Database.Utils
 			return treeNode.add_Nodes(collection, getNodeName, (item)=> item,(item)=> addDummyNode);			
 		}
 		
+		//Func<T,string> getNodeName, Func<T, object> getTagValue, Func<T,bool> getAddDummyNode
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, object> getTagValue, Func<T,bool> getAddDummyNode)
 		{
 			treeView.rootNode().add_Nodes(collection, getNodeName, getTagValue, getAddDummyNode);
@@ -884,6 +891,12 @@ namespace O2.XRules.Database.Utils
 		public static TreeView add_Files(this TreeView treeView, List<string> files)
 		{
 			return treeView.add_Nodes(files, (file)=>file.fileName());
+		}
+		
+		public static List<string> texts(this List<TreeNode> treeNodes)
+		{
+			return (from treeNode in treeNodes
+					select treeNode.get_Text()).toList();
 		}
 	}
 	
@@ -1209,6 +1222,13 @@ namespace O2.XRules.Database.Utils
 			return "{0}_{1}".format(_string,count.randomLetters());
 		}
 		
+		public static string file(this string folder, string virtualFilePath)
+		{
+			var mappedFile = folder.pathCombine(virtualFilePath);
+			if (mappedFile.fileExists())
+				return mappedFile;
+			return null;
+		}
 		public static string ascii(this int _int)
 		{
 			try
@@ -1261,7 +1281,13 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		
-		
+		public static List<string> add_If_Not_There(this List<string> list, string item)
+		{
+			if (item.notNull())
+				if (list.contains(item).isFalse())
+					list.add(item);
+			return list;
+		}
 	}
 }
     	

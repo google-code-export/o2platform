@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var title = "Veracode";  
+ 
+var ribbon = CustomO2.create(title); 		// stand alone version
+//var ribbon = CustomO2.create(panel.clear().add_Panel(),title); 		// use when inside 'Quick Development GUI'
+  
+var customO2 = ribbon.add_Tab("Veracode Detailed Xml Findings");
+customO2.add_RibbonGroup("Guis")
+		.add_Button("View Veracode Findigs in TreeView", ()=&gt;{
+								var panel = O2Gui.open&lt;Panel&gt;("View Veracode Findigs in TreeView",700,400);   
+								new API_Veracode_DetailedXmlFindings().show_In_TreeView(panel); 
+							});
+
+
+//ribbon.add_Tab_BrowserAutomation();
+//ribbon.add_Tab_MiscTools();
+
+//O2File:CustomO2.cs  
+
+//O2Ref:WindowsFormsIntegration.dll
+//O2Ref:RibbonControlsLibrary.dll
+//O2File:API_Veracode_DetailedXmlFindings.cs </SourceCode>
+  <ReferencedAssemblies />
+</H2>
