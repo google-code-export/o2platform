@@ -67,8 +67,17 @@ namespace O2.XRules.Database.Utils
 													if (fileOrfolder.dirExists())
 														loadFolder(FolderView.rootNode(),fileOrfolder); 
 												});						
+			FolderView.add_ContextMenu()
+						.add_MenuItem("Refresh", ()=> refresh());
+						
 			CodeViewer.set_Text("....select file on the left to view its contents here...");												
 		}		
+		
+		public ascx_FolderView refresh()
+		{
+			this.loadFolder(RootFolder);
+			return this;
+		}
 		
 		public ascx_FolderView loadFolder(TreeNode treeNode, string path)
 		{
