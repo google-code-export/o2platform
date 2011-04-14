@@ -1231,6 +1231,40 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 	{
 		#region load
 
+		public static O2MappedAstData get_O2MappedAstData(this string sourceCodeFolder)
+		{
+			return sourceCodeFolder.get_O2MappedAstData_UsingCache(false);
+		}
+		
+		public static O2MappedAstData get_O2MappedAstData_UsingCache(this string sourceCodeFolder)
+		{
+			return sourceCodeFolder.get_O2MappedAstData_UsingCache(true);
+		}
+		
+		public static O2MappedAstData get_O2MappedAstData_UsingCache(this string sourceCodeFolder,bool useCache)
+		{
+			return sourceCodeFolder.get_O2MappedAstData_UsingCache(useCache,"AstData");
+		}
+		
+		public static O2MappedAstData get_O2MappedAstData_UsingCache(this string sourceCodeFolder, bool useCache, string cacheID)
+		{
+			return sourceCodeFolder.get_O2MappedAstData_UsingCache(cacheID, useCache, true, "*.cs","*.vb");
+		}
+				
+		public static O2MappedAstData get_O2MappedAstData_UsingCache(this string sourceCodeFolder, string cacheID ,bool useCache, bool recursive, params string[] sourceCodeFilters)
+		{
+			var cacheKey = "{0}  - {1}".format(sourceCodeFolder, cacheID);
+			var astData = (O2MappedAstData)O2LiveObjects.get(cacheKey);
+			if (useCache.isFalse() || astData.isNull())
+			{
+			    "loading AstData from: {0}".info(sourceCodeFolder);
+			    astData = new O2MappedAstData();
+			    astData.loadFiles(sourceCodeFolder.files(recursive, sourceCodeFilters));  
+			    O2LiveObjects.set(cacheKey,astData);
+			}  
+			return astData;
+		}
+		
         public static O2MappedAstData loadFiles(this O2MappedAstData o2MappedAstData, List<string> filesToLoad)
         {
             return o2MappedAstData.loadFiles(filesToLoad, false);

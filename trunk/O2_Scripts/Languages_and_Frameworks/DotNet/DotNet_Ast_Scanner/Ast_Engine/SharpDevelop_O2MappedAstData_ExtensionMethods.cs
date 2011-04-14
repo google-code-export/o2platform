@@ -13,7 +13,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.Ascx;
-
+using O2.Views.ASCX.classes.MainGUI; 
 using System.CodeDom;
 using ICSharpCode.NRefactory;
 using System.Drawing;
@@ -416,5 +416,43 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			treeView.visible(true);
 			return treeView;
 		}
+		
+		public static Panel view_INodes_SourceCode_Locations(this O2MappedAstData astData, List<INode> iNodes)				
+		{
+			var topPanel = O2Gui.open<Panel>("INodes Source Code Viewer",700,400);
+			return astData.view_INodes_SourceCode_Locations(iNodes, topPanel);
+		}
+		
+		public static T view_INodes_SourceCode_Locations<T>(this O2MappedAstData astData, List<INode> iNodes, T control)
+			where T : Control
+		{
+			var codeViewer = control.add_SourceCodeViewer();
+			var treeView = codeViewer.insert_Left<Panel>(400).add_TreeView().sort(); 
+			astData.afterSelect_ShowInSourceCodeEditor(treeView, codeViewer.editor()); 
+			foreach(var iNode in iNodes)				
+				treeView.add_Node("{0}   -    {1}".format(astData.getTextForINode(iNode), iNode),iNode);
+			treeView.selectFirst();
+			return control;
+		}
+		
+		public static Panel view_AstNodes_SourceCode_Locations(this O2MappedAstData astData, List<AbstractNode> astNodes)				
+		{
+			var topPanel = O2Gui.open<Panel>("INodes Source Code Viewer",700,400);
+			return astData.view_AstNodes_SourceCode_Locations(astNodes, topPanel);
+		}
+		
+		public static T view_AstNodes_SourceCode_Locations<T>(this O2MappedAstData astData, List<AbstractNode> astNodes, T control)
+			where T : Control
+		{
+			var codeViewer = control.add_SourceCodeViewer();
+			var treeView = codeViewer.insert_Left<Panel>(400).add_TreeView().sort(); 
+			astData.afterSelect_ShowInSourceCodeEditor(treeView, codeViewer.editor()); 
+			foreach(var astNode in astNodes)				
+				treeView.add_Node("{0}   -    {1}".format(astData.getTextForINode(astNode), astNode),astNode);
+			treeView.selectFirst();
+			return control;
+		}
+		
+		
 	}
 }
