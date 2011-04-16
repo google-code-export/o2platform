@@ -11,13 +11,22 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX;
+using O2.XRules.Database.Utils;
 using AxWMPLib;
-
 //O2Ref:Interop.WMPLib.dll
 //O2Ref:AxInterop.WMPLib.dll
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.APIs
 {
+
+	public class API_WindowsMediaPlayer_Test
+	{
+		public void launch()
+		{
+			"Windows Media Player".showAsForm<API_WindowsMediaPlayer>();		
+		}
+	}
     public class API_WindowsMediaPlayer : Panel
     {    
     	public AxWindowsMediaPlayer MediaPlayer { get; set; }
