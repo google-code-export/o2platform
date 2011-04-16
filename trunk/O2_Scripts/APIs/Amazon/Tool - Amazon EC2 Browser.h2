@@ -1,196 +1,42 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//var topPanel = panel.clear().add_Panel();
-var topPanel = O2Gui.open&lt;Panel&gt;("AmazonEC2",580,400);  
+  <SourceCode>//var topPanel = panel.clear().add_Panel(); 
+var topPanel = O2Gui.open&lt;Panel&gt;("AmazonEC2",580,400);   
 topPanel.insert_Below(100).add_LogViewer();  
-
-var timerCount = 60;
-var timerSleep  = 60 * 1000;
-
+ 
 var apiKey = @"C:\O2\_USERDATA\accounts.xml".credential("AmazonAWS"); 
-if (apiKey.isNull())
-	apiKey = ascx_AskUserForLoginDetails.ask();
 	
-var defaultRegion = "us-west-1";//"eu-west-1";
-
-
-Func&lt;List&lt;string&gt;&gt; getEC2Regions =
-	()=&gt;{
-			var ec2Client = new AmazonEC2Client(apiKey.UserName, apiKey.Password); 
-			return (from region in  ec2Client.DescribeRegions(new DescribeRegionsRequest())
-		 		      			 			.DescribeRegionsResult.Region
-					select region.RegionName).toList();
-		};
-
-Func&lt;string, AmazonEC2Client&gt; getEC2Client = 
-	(region) =&gt; new AmazonEC2Client(apiKey.UserName, 
-									apiKey.Password, 
-										new AmazonEC2Config() 
-											{ServiceURL = "http://{0}.ec2.amazonaws.com".format(region)}
-									);
-
-Func&lt;string,List&lt;Reservation&gt;&gt; getReservationsInRegion =  
-	(region)=&gt;{
-		        "Gettting Reservations in region: {0}".info(region);
-				var ec2ClientInRegion = getEC2Client(region);
-				var describesInstance = new DescribeInstancesRequest(); 				
-				var reservations = ec2ClientInRegion.DescribeInstances(describesInstance)
-													.DescribeInstancesResult
-													.Reservation; 
-				
-				return reservations;									  
-			  };
-
-Func&lt;bool, Dictionary&lt;string,List&lt;RunningInstance&gt;&gt;&gt; getEC2Instances = 
-	(onlyShowDefaultRegion)=&gt;{		
-			var instances = new Dictionary&lt;string,List&lt;RunningInstance&gt;&gt;();		
-			
-			var reservations = new List&lt;Reservation&gt;();
-			if (onlyShowDefaultRegion)
-				reservations.add(getReservationsInRegion(defaultRegion));
-			else
-				foreach(var region in getEC2Regions())
-					reservations.add(getReservationsInRegion(region));				        
-			
-			
-			foreach(var reservation in reservations)
-					foreach(var runningInstance in reservation.RunningInstance)
-						instances.add(reservation.GroupName.Aggregate((a, b) =&gt; a + ',' + b),
-									  runningInstance); 			
-			return instances;			
-		};
-		
-		
-Action&lt;RunningInstance&gt; startInstance = 
-	(runningInstance)=&gt;{							
-							"Starting instance with ID: {0}".info(runningInstance.InstanceId);							
-							var ec2Client = getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
-							var result = ec2Client.StartInstances(new StartInstancesRequest()
-																	.WithInstanceId(runningInstance.InstanceId));
-					   };
-
-Action&lt;RunningInstance&gt; stopInstance = 
-	(runningInstance)=&gt;{							
-							"Stopping instance with ID: {0}".info(runningInstance.InstanceId);							
-							var ec2Client = getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
-							var result = ec2Client.StopInstances(new StopInstancesRequest() 
-																	.WithInstanceId(runningInstance.InstanceId));
-					   };		
-
-Action&lt;RunningInstance&gt; showConsoleOut = 
-	(runningInstance)=&gt;{							
-							"Getting Console out instance with ID: {0}".info(runningInstance.InstanceId);			
-							var ec2Client = getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
-							var consoleOutResult = ec2Client.GetConsoleOutput(new GetConsoleOutputRequest()
-																				    .WithInstanceId(runningInstance.InstanceId));``
-							var consoleOut = consoleOutResult.GetConsoleOutputResult.ConsoleOutput.Output.base64Decode();	
-							consoleOut.showInCodeViewer(".bat");
-						};
-						
+var amazonEC2 = new API_AmazonEC2(apiKey);
+	 						
 Action&lt;RunningInstance&gt; rdpIntoBox =
 	(runningInstance)=&gt;{				
-					"Creating RDP connection to instance with ID: {0} and IP ".info(runningInstance.InstanceId,runningInstance.IpAddress );			
-					var terminalServicesClient = Processes.startProcess("mstsc.exe");
-					var guiAutomation = new API_GuiAutomation(terminalServicesClient);
-					var window = guiAutomation.window("Remote Desktop Connection");
-					window.textBox("Computer:").set_Text(runningInstance.IpAddress );
-					window.button("Connect").mouse().click();
+							"Creating RDP connection to instance with ID: {0} and IP ".info(runningInstance.InstanceId,runningInstance.IpAddress );			
+							new API_RDP().launchRdpClient(runningInstance.IpAddress);					
+						};
 
-				};
 
-//the getPasswordDataRequest is not returning the expected xml file 
 /*Action&lt;RunningInstance&gt; testInstance = 
 	(runningInstance)=&gt;{							
 							"Tests on  instance with ID: {0}".info(runningInstance.InstanceId);										
 							var ec2Client = getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
 							var passwordResponse = ec2Client.GetPasswordData(new GetPasswordDataRequest().WithInstanceId(runningInstance.InstanceId));
-							"password: {0}".info(passwordResponse.GetPasswordDataResult.PasswordData.Data);
+							"password: {0}".info(passwordResponse.GetPasswordDataResult.ToXML());
 							"Done".info();
 					   };							   
-*/					    
-Action&lt;Panel,TreeView&gt; addStopInstanceGui =
-	(targetPanel,treeViewWithInstances)=&gt; {						
-						Action startTimer = null;
-						Action stopTimer = null;
-						var instancesToStop = targetPanel.add_GroupBox("Stop Instance in {0} minutes".format((timerCount * timerCount / 60))) 
-												         .add_TreeView();						
-						var timerBar = instancesToStop.insert_Below(20).add_ProgressBar();
-						instancesToStop.add_ContextMenu().add_MenuItem("Stop now",true, 
-																()=&gt;{
-																		"Stopping {0} instances now".debug(instancesToStop.nodes().size()); 
-																		foreach(var node in instancesToStop.nodes())
-																			stopInstance((RunningInstance)node.get_Tag());
-																	})
-														 .add_MenuItem("Clear list", ()=&gt;instancesToStop.clear());
-						var startTimerLink = instancesToStop.insert_Above(15).add_Link("Add instance to list",0,0, 
-																()=&gt;{
-																		var selectedNode = treeViewWithInstances.selected();
-																		if (selectedNode.notNull())
-																		{
-																			var tag = selectedNode.get_Tag();  
-																			if (tag is RunningInstance)
-																			{
-																				var selectedInstance = (RunningInstance)tag;
-																				var nodeText = "{0} - {1}".format(selectedInstance.InstanceId, selectedInstance.IpAddress);
-																				instancesToStop.add_Node(nodeText, selectedInstance);
-																			}
-																		}
-																		//treeViewWithInstances.nodes().showInfo();
-																	})
-														.append_Link("Start timer", ()=&gt;startTimer());  
-						var timerEnabled = false;								
-						var	stopTimerLink = startTimerLink.append_Link("Stop timer", ()=&gt;stopTimer()).enabled(false);  							
-						startTimer = ()=&gt;{											
-												"starting timer".info();
-												timerEnabled = true;												
-												timerBar.maximum(timerCount);
-												timerBar.value(0);
-												startTimerLink.enabled(false);
-												stopTimerLink.enabled(true);
-												while(timerEnabled &amp;&amp; timerBar.Value &lt; timerCount)
-												{
-													"In StopInstances Timer [{0}/{1}], sleeping for {2} seconds".info(timerBar.Value, timerCount, timerSleep/1000);
-													timerBar.sleep(timerSleep, false);
-													timerBar.increment(1);																										
-												}
-												if (timerEnabled)
-												{													
-													"Timer is completed stopping {0} instances now".debug(instancesToStop.nodes().size());
-													foreach(var node in instancesToStop.nodes())
-														stopInstance((RunningInstance)node.get_Tag());
-												}
-												else
-													"Timer was stopped so nothing to do".debug();			
-												startTimerLink.enabled(true);
-												stopTimerLink.enabled(false);
-	
-										 };
-						stopTimer = ()=&gt;{
-											
-												"stopping timer".info();
-												timerEnabled = false; 
-												
-												startTimerLink.enabled(true);
-												stopTimerLink.enabled(false);
-										 };
-						targetPanel.onClosed(()=&gt; 	timerEnabled=false);					 
-					};
+*/					   
 					   
+					    
+
+						
 Action&lt;Panel&gt; showRunningInstancesDetails = 
-	(targetPanel)=&gt; {
+	(targetPanel)=&gt; { 
 						
 						var treeView = targetPanel.add_GroupBox("Amazon EC Instances").add_TreeView();
 						var actionsPanel = treeView.insert_Below(100);	 	  	 			
 						treeView.beforeExpand&lt;List&lt;RunningInstance&gt;&gt;(
 							(treeNode, runningInstanceList) =&gt;{
 																treeNode.clear();
-																treeNode.add_Nodes(runningInstanceList , 
-																				   (runningInstance) =&gt; "{0}  -  {1}  -  {2}  -  {3}  -  {4} ".format(
-																				   						runningInstance.InstanceId, 
-																				   						runningInstance.InstanceType, 
-																				   						runningInstance.IpAddress,
-																				   						runningInstance.Placement.AvailabilityZone,
-																				   						runningInstance.InstanceState.Name))	;
+																treeNode.add_Nodes(runningInstanceList , (runningInstance)=&gt;amazonEC2.getRunningInstanceSignature(runningInstance));
 																foreach(var node in treeNode.nodes())
 																	if (node.get_Text().contains("stopped"))
 																		node.color(Color.DarkGreen);
@@ -205,7 +51,7 @@ Action&lt;Panel&gt; showRunningInstancesDetails =
 									treeView.backColor(Color.Azure);
 									O2Thread.mtaThread(
 										()=&gt;{																				
-												var ec2Instances = 	getEC2Instances(onlyShowDefaultRegion); 
+												var ec2Instances = 	amazonEC2.getEC2Instances(onlyShowDefaultRegion); 
 												treeView.clear();
 												treeView.add_Nodes(ec2Instances.keys(), (text)=&gt;text, (text) =&gt; ec2Instances.value(text), (text) =&gt; ec2Instances.value(text).size() &gt; 0);
 												treeView.selectFirst().selected().expand().nodes()[0].selected(); 
@@ -216,43 +62,37 @@ Action&lt;Panel&gt; showRunningInstancesDetails =
 						actionsPanel.add_Link("Refresh Instances list (default Region)", 0,0, ()=&gt; refresh(true)).click();		
 						actionsPanel.add_Link("Refresh Instances list (all Regions)",20,0, ()=&gt; refresh(false)); 
 						 
-						RunningInstance selectedInstance = null;
-						actionsPanel.add_Link("Show Instance Details", 40,0, ()=&gt;  selectedInstance.details());
-						actionsPanel.add_Link("View Instance  Console Out", 60,0, ()=&gt;  showConsoleOut(selectedInstance));
-						actionsPanel.add_Link("Start Instance ", 0,220, ()=&gt; startInstance(selectedInstance));
-						actionsPanel.add_Link("Stop Instance ", 20,220, ()=&gt; stopInstance(selectedInstance));  
+						RunningInstance selectedInstance = null; 
+						actionsPanel.add_Link("Show Instance Details", 40,0, ()=&gt;  selectedInstance.details()); 
+						actionsPanel.add_Link("View Instance  Console Out", 60,0, ()=&gt;  amazonEC2.showConsoleOut(selectedInstance));
+						var link = actionsPanel.add_Link("Show Decrypted password  ", 80,0, ()=&gt; amazonEC2.getPassword(selectedInstance)); 
+						actionsPanel.add_Link("Start Instance ", 0,220, ()=&gt; amazonEC2.startInstance(selectedInstance));
+						actionsPanel.add_Link("Stop Instance ", 20,220, ()=&gt; amazonEC2.stopInstance(selectedInstance));  
 						actionsPanel.add_Link("RDP Instance ", 40,220, ()=&gt; rdpIntoBox(selectedInstance));   
 						
-						addStopInstanceGui(actionsPanel.insert_Right(240),treeView);   
+						amazonEC2.addStopInstanceGui(actionsPanel.insert_Right(240),treeView);   
 						
-						/*var link = actionsPanel.add_Link("Test request Instance ", 60,220, ()=&gt; testInstance(selectedInstance));
+						/*var link = actionsPanel.add_Link("Test request Instance ", 80,220, ()=&gt; testInstance(selectedInstance));
 						O2Thread.mtaThread(()=&gt;{
 								link.sleep(1000); 
 								link.click();
-							});*/
-						 
-						//actionsPanel.add_Link("Show selected Instance Properties ", 20,0, ()=&gt;  selectedInstance.showInfo()));
-						//treeView.insert_Above(20)
+							});*/						 											
 						
 						treeView.afterSelect&lt;RunningInstance&gt;((runningInstance)=&gt; selectedInstance = runningInstance);	
-						//var propertyGrid = actionsPanel.insert_Below().add_PropertyGrid();																											 
-						//treeView.afterSelect&lt;RunningInstance&gt;((runningInstance)=&gt; runningInstance.details());
-						//treeView.afterSelect&lt;RunningInstance&gt;((runningInstance)=&gt; propertyGrid.show(runningInstance));	
 						
 					};
-									
+									 
 
 
 showRunningInstancesDetails(topPanel);  
 
-
+//O2File:API_AmazonEC2.cs
+//O2File:API_RDP.cs
 //using Amazon.EC2
 //using Amazon.EC2.Model
 //O2Ref:AWSSDK.dll
 //O2File:ascx_AskUserForLoginDetails.cs	
-//O2File:API_GuiAutomation.cs
 //O2Ref:White.Core.dll
-//O2Ref:WatiN.Core.1x.dll
 </SourceCode>
   <ReferencedAssemblies />
 </H2>

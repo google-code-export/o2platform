@@ -73,7 +73,7 @@ namespace O2.XRules.Database.Utils
 				  					HtmlCodeViewer.showHtmlNodeLocation(htmlNode);
 				  					HtmlCodeViewer.editor().caret(htmlNode.Line, htmlNode.LinePosition);
 				  				});
-				var optionsPanel = HtmlCodeViewer.insert_Below<Panel>(30);
+				var optionsPanel = HtmlCodeViewer.insert_Below<Panel>(50);
 				optionsPanel.add_CheckBox("View as Xml",0,5, 
 					(value)=>{
 								ViewAsXml = value;
@@ -85,7 +85,8 @@ namespace O2.XRules.Database.Utils
 							 .onTextChange((text)=> HtmlCodeViewer.editor().invoke("searchForTextInTextEditor_findNext",text))
 							 .onEnter((text)=> HtmlCodeViewer.editor().invoke("searchForTextInTextEditor_findNext",text))
 							 .align_Right(optionsPanel);
-							 
+				
+				optionsPanel.add_Link("Refresh tags",30,0,()=> show(HtmlCodeViewer.get_Text()));
 			}
 			
 			if (addLoadUrlTextBox)	

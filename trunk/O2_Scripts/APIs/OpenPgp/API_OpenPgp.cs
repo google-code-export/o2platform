@@ -417,6 +417,7 @@ namespace O2.XRules.Database.APIs
 	                //
 	                // the first object might be a PGP marker packet.
 	                //
+	                
 	                if (o is PgpEncryptedDataList)
 	                {
 	                    enc = (PgpEncryptedDataList)o;
