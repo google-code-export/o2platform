@@ -526,8 +526,10 @@ namespace O2.XRules.Database.Utils
 		
 		
 		//processes
-		
-		
+	}
+	
+	public static class Processes_ExtensionMethods
+	{		
 		
 		public static string startProcess_getConsoleOut(this string processExe, string arguments)
 		{
@@ -720,6 +722,17 @@ namespace O2.XRules.Database.Utils
 	public static class O2Gui_ExtensionMethods
 	{		
 		//Control
+		
+		public static Panel popupWindow(this string title)
+		{
+			return title.showAsForm();
+		}		
+			
+		public static Panel createForm(this string title)			
+		{
+			return title.showAsForm();
+		}
+		
 		public static Panel showAsForm(this string title)			
 		{
 			return title.showAsForm<Panel>(600,400);
@@ -757,6 +770,32 @@ namespace O2.XRules.Database.Utils
 	//TreeNode & TreeView
 	public static class TreeNode_and_TreeView_ExtensionMethods
 	{
+		public static TreeView add_TreeView_with_PropertyGrid<T>(this T control)
+			where T : Control
+		{
+			return control.add_TreeView_with_PropertyGrid(true);
+		}
+		
+		public static TreeView add_TreeView_with_PropertyGrid<T>(this T control, bool insertBelow)
+			where T : Control
+		{			
+			var treeView = control.clear().add_TreeView();				
+			var targetPanel = (insertBelow) ? treeView.insert_Below() : treeView.insert_Right();
+			var propertyGrid = targetPanel.add_PropertyGrid().helpVisible(false);	 	
+			treeView.showSelected(propertyGrid);;
+			return treeView;
+		}
+
+		public static TreeView showSelected(this TreeView treeView, PropertyGrid propertyGrid)			
+		{
+			return treeView.showSelected<object>(propertyGrid);
+		}
+		
+		public static TreeView showSelected<T>(this TreeView treeView, PropertyGrid propertyGrid)			
+		{
+			return treeView.afterSelect<T>((item)=> propertyGrid.show(item));			
+		}
+		
 		public static TreeView allow_TreeNode_Edits(this TreeView treeView)
 		{
 			if (treeView.notNull())
@@ -1002,6 +1041,22 @@ namespace O2.XRules.Database.Utils
 							values.add(cell.property("Value").str());
 						return values;
 					});			
+		}
+	}
+	
+	public static class List_ExtensionMethods
+	{
+		public static List<T> where<T>(this List<T> list, Func<T,bool> query)
+		{
+			return list.Where<T>(query).toList();
+		}
+		
+		public static T first<T>(this List<T> list, Func<T,bool> query)
+		{
+			var results = list.Where<T>(query).toList();
+			if (results.size()>0)
+				return results.First();
+			return default(T);
 		}
 	}
 	

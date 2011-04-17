@@ -1,5 +1,4 @@
-// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
-// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
+// This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0
 using System;
 using System.Windows.Forms;
 using System.Drawing;
@@ -14,6 +13,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX;
 using O2.Views.ASCX.ExtensionMethods;
 
+
 using AForge.Video.VFW;
 using AForge.Controls;
 using AForge.Video.DirectShow;
@@ -27,8 +27,18 @@ using AForge.Video.DirectShow;
 //O2Ref:AForge.Controls.dll
 //O2Ref:AForge.Video.dll
 
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+
 namespace O2.XRules.Database.APIs
 {
+	public class API_AForge_Video_Test
+	{
+		public void test()
+		{
+			new API_AForge_Video();										
+		}
+	}
+	
     public class API_AForge_Video
     {    
     	public AVIWriter VideoWriter { get; set; }    	
@@ -62,8 +72,29 @@ namespace O2.XRules.Database.APIs
 			FrameCaptureDelay = 25;
 			CapturingImages = false;
 			AddDuplicateFrames = false;			
+			checkInstallation();
 			//start();
 		}  							
+		
+		public API_AForge_Video checkInstallation()
+		{
+			try
+			{
+				"Checking to see if  WMV3 Codec is installed".info();
+				var aviWriter = new AVIWriter(VideoCodec);  				
+				aviWriter.Open("a.avi".tempFile(),800,600);
+				"WMV3 is installed".info();
+			}
+			catch(Exception ex)
+			{				
+				"WMV3 Codec is not installed, so downloading it now and starting installation".debug();
+				var wmv3InstallerUrl = "http://www.microsoft.com/downloads/info.aspx?na=41&SrcFamilyId=0C99C648-5800-4AA3-A2FE-3DE948689DB8&SrcDisplayLang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f9%2f8%2fa%2f98a6cb2d-6659-485e-b1f9-2c0d9bf6c328%2fwmv9VCMsetup.exe";
+				var wmv3Installer = O2.XRules.Database.Utils.DownloadFiles_ExtensionMethods.download(wmv3InstallerUrl,"wmv9VCMsetup.exe".tempFile());				
+				O2.XRules.Database.Utils.Processes_ExtensionMethods.startProcess(wmv3Installer);
+				"wmv3Installer: {0}".info(wmv3Installer);				
+			}			
+			return this;
+		}
 		
 		public API_AForge_Video newVideo()
 		{
@@ -153,8 +184,8 @@ namespace O2.XRules.Database.APIs
 
 
 		public static string createVideo(this API_AForge_Video aforgeVideo, List<Bitmap> bitmaps)
-		{
-			show.info(bitmaps);
+		{			
+//			show.info(bitmaps);
 			aforgeVideo.newVideo();
 			aforgeVideo.add_Bitmaps(bitmaps);
 			aforgeVideo.saveAndClose();
@@ -164,6 +195,7 @@ namespace O2.XRules.Database.APIs
 		
 		public static string createVideo(this API_AForge_Video aforgeVideo, List<string> pathToImages)
 		{
+			"Creating Video with {0} images".debug(pathToImages.size());		
 			aforgeVideo.newVideo();
 			aforgeVideo.add_Images(pathToImages);
 			aforgeVideo.saveAndClose();

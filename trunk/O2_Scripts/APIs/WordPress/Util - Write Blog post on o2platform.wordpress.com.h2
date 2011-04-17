@@ -59,25 +59,28 @@ var ie2 = topPanel.insert_Right(150).add_IE();
 
 Action uploadImagefromClipboard = 
 	()=&gt;{
-			"uploading image".info();
-			var imageFromClipboard = 0.saveImageFromClipboard().info();
-			if (imageFromClipboard.fileExists())
-			{
-				"[in Wordpress.uploadImage_fromClipboard]: uploading file: {0}".info(imageFromClipboard);
-				var imageNumber = uploadFile(imageFromClipboard);
-				"[in Wordpress.uploadImage_fromClipboard]: got image reference {0}".info(imageNumber);
-				ie2.open("http://o2platform.wordpress.com/wp-admin/async-upload.php?attachment_id={0}&amp;fetch=1".format(imageNumber));
-				var pageHtml  = ie2.IE.Html.htmlDecode(); 
-				"got html with size: {0}".info(pageHtml.size());
-				var imageUrl = pageHtml.htmlDocument()
-									   .select("//img[@class='thumbnail']")
-									   .attributes("src")
-									   .values()[0].split("?")[0];
-				"found imageUrl: {0}".info(imageUrl); 
-				
-				//ie2.open("http://o2platform.wordpress.com/?attachment_id={0}".format(imageNumber));                         
-				ie2.open(imageUrl);
-			}
+			O2Thread.mtaThread(
+				()=&gt;{
+						"uploading image".info();
+						var imageFromClipboard = 0.saveImageFromClipboard().info();
+						if (imageFromClipboard.fileExists())
+						{
+							"[in Wordpress.uploadImage_fromClipboard]: uploading file: {0}".info(imageFromClipboard);
+							var imageNumber = uploadFile(imageFromClipboard);
+							"[in Wordpress.uploadImage_fromClipboard]: got image reference {0}".info(imageNumber);
+							ie2.open("http://o2platform.wordpress.com/wp-admin/async-upload.php?attachment_id={0}&amp;fetch=1".format(imageNumber));
+							var pageHtml  = ie2.IE.Html.htmlDecode(); 
+							"got html with size: {0}".info(pageHtml.size());
+							var imageUrl = pageHtml.htmlDocument()
+												   .select("//img[@class='thumbnail']")
+												   .attributes("src")
+												   .values()[0].split("?")[0];
+							"found imageUrl: {0}".info(imageUrl); 
+							
+							//ie2.open("http://o2platform.wordpress.com/?attachment_id={0}".format(imageNumber));                         
+							ie2.open(imageUrl);
+						}
+					});
 
 		};
 
@@ -130,8 +133,9 @@ Action newPost =
 
 actionPanel.add_Link("login", 0,0,()=&gt; login()) 		  
 		   .append_Link("stats", ()=&gt; ie.open("http://o2platform.wordpress.com/wp-admin/index.php?page=stats")) 
-		   .append_Link("new post", ()=&gt; newPost())
+		   .append_Link("new post", ()=&gt; newPost())		   
  		   .append_Link("Wrap clipboard data with Source Code tags", ()=&gt; wordPress.wrapClipboardTextInSourceCodeTags())
+ 		   .append_Link("open screenshot tool", ()=&gt; "Util - Show ScreenShot Tool.h2".local().executeH2Script())
  		   .append_Link("upload image (from clipboard)", ()=&gt; uploadImagefromClipboard());
  		 
  		 

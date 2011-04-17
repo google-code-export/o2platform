@@ -7,13 +7,13 @@
 var topPanel = O2Gui.open&lt;Panel&gt;("Util - Movie Creator (Simple)", 700,163);  
 
 topPanel.parentForm().height(163);
- 
+  
 var movieEditor = topPanel.add_Control&lt;ascx_MovieEditor&gt;()
 						  .buildGui();  
 
 var wpfRibbon = topPanel.add_Ribbon_Above();
 wpfRibbon.add_Tab("Movie Creation") 
-		 .add_Group("Load") 
+		 .add_Group("Load")  
 		 .add_Button_New(" New Movie",()=&gt; movieEditor.newMovie())
 		 .add_Button(" Load Images from Folder ","Open_16x16.png",		 
 		 		()=&gt;{ 

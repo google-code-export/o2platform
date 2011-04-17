@@ -19,7 +19,6 @@ using Amazon.EC2.Model;
 
 //O2Ref:AWSSDK.dll
 //O2File:ascx_AskUserForLoginDetails.cs	
-//O2File:API_GuiAutomation.cs
 //O2File:API_RSA.cs
 
 //O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
@@ -34,7 +33,7 @@ namespace O2.XRules.Database.APIs
 		
 		public int TimerCount = 60;
 		public int TimerSleep  = 60 * 1000;
-
+		public string CachedImageListRequest { get; set; }
 		
 		public API_AmazonEC2() : this(null)
 		{
@@ -60,6 +59,11 @@ namespace O2.XRules.Database.APIs
 					select region.RegionName).toList();
 		}
 		
+		public static AmazonEC2Client getEC2Client(this API_AmazonEC2 amazonEC2)
+		{
+			return amazonEC2.getEC2Client(amazonEC2.DefaultRegion);
+		}
+		
 		public static AmazonEC2Client getEC2Client(this API_AmazonEC2 amazonEC2, string region)
 		{
 			return new AmazonEC2Client(amazonEC2.ApiKey.UserName,
@@ -77,6 +81,11 @@ namespace O2.XRules.Database.APIs
 													.DescribeInstancesResult
 													.Reservation; 				
 				return reservations;									  
+		}
+		
+		public static Dictionary<string,List<RunningInstance>> getEC2Instances(this API_AmazonEC2 amazonEC2)
+		{
+			return amazonEC2.getEC2Instances(true);
 		}
 		
 		public static Dictionary<string,List<RunningInstance>> getEC2Instances(this API_AmazonEC2 amazonEC2,bool onlyShowDefaultRegion)
@@ -130,15 +139,22 @@ namespace O2.XRules.Database.APIs
 		}		
 	
 		public static string getPassword(this API_AmazonEC2 amazonEC2, RunningInstance runningInstance)	
-		{	
+		{
+			return amazonEC2.getPassword(runningInstance,null);
+		}
+		public static string getPassword(this API_AmazonEC2 amazonEC2, RunningInstance runningInstance, string pathToPemFile)	
+		{	 
 			"Tests on  instance with ID: {0}".info(runningInstance.InstanceId);										
 			var ec2Client = amazonEC2.getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
 			var passwordResponse = ec2Client.GetPasswordData(new GetPasswordDataRequest().WithInstanceId(runningInstance.InstanceId));
 			"raw password data : {0}".info(passwordResponse.GetPasswordDataResult.ToXML());						
+			if (amazonEC2.ApiRsa.isNull())
+				amazonEC2.ApiRsa = new API_RSA(pathToPemFile);
 			var decryptedPassword = amazonEC2.ApiRsa.decryptPasswordUsingPem(passwordResponse.GetPasswordDataResult.PasswordData.Data); 				
 			"decrypted password: {0}".info(decryptedPassword);
 			return decryptedPassword;			
 	   	}
+	   		   	
 	   	
 	   	public static string getRunningInstanceSignature(this API_AmazonEC2 amazonEC2, RunningInstance runningInstance)	
 	   	{
@@ -154,6 +170,136 @@ namespace O2.XRules.Database.APIs
 		   	return signature;
 		}
 	}
+
+	public static class API_AmazonEC2_ExtensionMethods_LaunchImage
+	{
+		public static RunningInstance launchInstance_Micro(this AmazonEC2Client ec2Client, string imageId, string securityGroup, string keyname)
+		{
+			return ec2Client.launchInstance(imageId, "t1.micro", securityGroup, keyname);
+		}
+		public static RunningInstance launchInstance(this AmazonEC2Client ec2Client, string imageId, string instanceType, string securityGroup, string keyname)
+		{
+			"Launching Amazon EC2 Instance".info();
+			var runInstancesRequest = new RunInstancesRequest();
+
+			runInstancesRequest.ImageId = imageId;
+			runInstancesRequest.MinCount = 1;
+			runInstancesRequest.MaxCount = 1;
+			runInstancesRequest.InstanceType = instanceType;
+			runInstancesRequest.SecurityGroup.Add(securityGroup);
+			runInstancesRequest.KeyName = keyname;
+			var runningInstance =  ec2Client.RunInstances(runInstancesRequest)
+											.RunInstancesResult
+											.Reservation
+											.RunningInstance.first();
+			"Launched Image with ID: {0}".info(runningInstance.ImageId);
+			return runningInstance;
+		}
+	}
+	
+	public static class API_AmazonEC2_ExtensionMethods_Images
+	{	
+		//Visibility
+		public static List<Image> @public(this List<Image> images)
+		{  
+			return images.where(image=>image.Visibility == "Public"); 
+		}
+		
+		public static List<Image> @private(this List<Image> images)
+		{  
+			return images.where(image=>image.Visibility == "Private"); 
+		}
+		
+		//Architecture
+		public static List<Image> _32Bit(this List<Image> images)
+		{  
+			return images.where(image=>image.Architecture == "i386"); 
+		}
+		
+		public static List<Image> _64Bit(this List<Image> images)
+		{  
+			return images.where(image=>image.Architecture == "x86_64"); 
+		}
+		
+		//ImageOwnerAlias
+		public static List<Image> amazon(this List<Image> images)
+		{  
+			return images.where(image=>image.ImageOwnerAlias == "amazon"); 
+		}
+		
+		public static List<Image> microsoft(this List<Image> images)
+		{  
+			return images.where(image=>image.ImageOwnerAlias == "microsoft");  
+		}
+		
+		//Platform
+		public static List<Image> windows(this List<Image> images)
+		{  
+			return images.where(image=>image.Platform == "windows");  
+		}		
+		
+		//ImageId
+		public static Image imageId(this List<Image> images, string imageId)
+		{  
+			return images.where(image=>image.ImageId == imageId).first();  
+		}		
+		
+		//Name
+		
+		public static Image name(this List<Image> images, string name)
+		{  
+			return images.where(image=>image.Name == name).first();
+		}		
+		
+		public static List<Image> name_Contains(this List<Image> images, string name)
+		{  
+			return images.where(image=>image.Name.contains(name));
+		}		
+		
+		public static List<Image> name_RegEx(this List<Image> images, string name)
+		{  
+			return images.where(image=>image.Name.regEx(name));
+		}		
+		
+		//Description
+		public static Image description(this List<Image> images, string description)
+		{  
+			return images.where(image=>image.Description == description).first();  
+		}		
+		
+		public static List<Image> description_Contains(this List<Image> images, string description)
+		{  
+			return images.where(image=>image.Description.contains(description));
+		}		
+		
+		public static List<Image> description_RegEx(this List<Image> images, string description)
+		{  
+			return images.where(image=>image.Description.regEx(description));
+		}		
+		
+		//this quite an expensive operation (3M of data retrieved) - so I added caching support
+		public static List<Image> getImagesList(this API_AmazonEC2 amazonEC2, AmazonEC2Client ec2Client)
+		{										
+			if (amazonEC2.CachedImageListRequest.fileExists())
+				return amazonEC2.CachedImageListRequest.load<List<Amazon.EC2.Model.Image>>(); 
+				
+			var describeImagesRequest = new DescribeImagesRequest(); 				
+			"Retrieving ImagesList from Amazon..".info();	
+			var images = ec2Client.DescribeImages(describeImagesRequest)
+					  .DescribeImagesResult.Image;
+			if (images.isNull() || images.size()==0)
+			{
+				"in getImagesList, there was an error retrieving list (are we online?)".error();				
+			}
+			else
+			{
+				amazonEC2.CachedImageListRequest = images.save();
+				"The Image List was saved to : {0}".info(amazonEC2.CachedImageListRequest);  
+			}
+			return images;
+		}				
+	}
+	
 	
 	public static class API_AmazonEC2_ExtensionMethods_GUIs
 	{
@@ -225,6 +371,61 @@ namespace O2.XRules.Database.APIs
 			targetPanel.onClosed(()=> 	timerEnabled=false);					 
 			
 			return amazonEC2;
+		}						
+
+		public static List<Image> show_ImagesList_In_TreeView(this API_AmazonEC2 amazonEC2)
+		{
+			return amazonEC2.show_ImagesList_In_TreeView(amazonEC2.getEC2Client());
+		}
+		
+		public static List<Image> show_ImagesList_In_TreeView(this API_AmazonEC2 amazonEC2, AmazonEC2Client ec2Client)
+		{
+			return amazonEC2.show_ImagesList_In_TreeView(ec2Client, "Amazon EC2 Images List".popupWindow());
+		}				
+		
+		public static List<Image> show_ImagesList_In_TreeView(this API_AmazonEC2 amazonEC2, AmazonEC2Client ec2Client, Control control)
+		{				
+			var treeView = control.clear().add_TreeView_with_PropertyGrid(false).sort();  	 
+			treeView.parent().backColor(System.Drawing.Color.Azure);
+			treeView.visible(false);
+			Application.DoEvents();
+			var imagesList = amazonEC2.getImagesList(ec2Client); 
+			
+			Func<Amazon.EC2.Model.Image,string> imageName = 
+				(image)=> (image.Description.valid())
+									? "{0} - {1}".format(image.Description, image.Name)
+									: "{0}".format(image.Name).trim();
+									
+			Action<string> mapByProperty  = 
+				(propertyName)=>{				
+									var byPropertyNode = treeView.add_Node("by {0}".format(propertyName),"");
+									foreach(var distinctPropertyValue in imagesList.Select((image)=>image.property(propertyName).str()).Distinct())
+									{										
+										var byDistinctPropertyValue = byPropertyNode.add_Node(distinctPropertyValue,"");
+
+										var mappedByImageName = new Dictionary<string, List<Image>>();
+										foreach(var imageInProperty in imagesList.Where((image) => image.property(propertyName).str() == distinctPropertyValue))
+											mappedByImageName.add(imageName(imageInProperty),imageInProperty);																				
+											
+										foreach(var mappedData in mappedByImageName)
+										{
+											if (mappedData.Value.size() > 1)
+												byDistinctPropertyValue.add_Node("{0}".format(mappedData.Key,mappedData.Value.size()))
+														      		   .add_Nodes(mappedData.Value, imageName);
+											else
+												byDistinctPropertyValue.add_Node(imageName(mappedData.Value.first()),mappedData.Value.first());
+										}			     
+									}													  			
+								};
+			mapByProperty("Visibility");
+			mapByProperty("ImageOwnerAlias");
+			mapByProperty("Platform"); 
+			mapByProperty("Architecture"); 
+			"Completed processing show_ImagesList_In_TreeView".info();
+			if (treeView.nodes().size()>0)
+				treeView.backColor(System.Drawing.Color.White); 
+			treeView.visible(true);				
+			return imagesList;
 		}
 	}
 	
