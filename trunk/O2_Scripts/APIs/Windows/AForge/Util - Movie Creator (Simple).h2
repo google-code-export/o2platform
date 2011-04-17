@@ -1,15 +1,16 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>
-//O2.DotNetWrappers.DotNet.CompileEngine.resetLocalScriptsFileMappings();
-//panel.clear();
-//var topPanel = panel.add_Panel();    
-var topPanel = O2Gui.open&lt;Panel&gt;("Util - Movie Creator (Simple)", 700,163);  
+  <SourceCode>//O2.DotNetWrappers.DotNet.CompileEngine.resetLocalScriptsFileMappings();
+//panel.clear(); 
+//var topPanel = panel.add_Panel();       
+var topPanel = O2Gui.open&lt;Panel&gt;("Util - Movie Creator (Simple)", 700,160);   
 
-topPanel.parentForm().height(163);
-  
+topPanel.parentForm().height(350);   
+    
 var movieEditor = topPanel.add_Control&lt;ascx_MovieEditor&gt;()
 						  .buildGui();  
+
+topPanel.insert_Below(100).add_LogViewer();
 
 var wpfRibbon = topPanel.add_Ribbon_Above();
 wpfRibbon.add_Tab("Movie Creation") 
@@ -75,9 +76,6 @@ wpfRibbon.tab("Options")
  		 .add_Button("Delete ListOfImagesToDelete ", ()=&gt; movieEditor.deleteListOfImagesToDelete())
  		 .add_Button("Set Movie Path", ()=&gt; movieEditor.setMoviePath(API_MiniFramework.askQuestion("Set Movie Images path", "What folder do you want to use?"))); 		 
 		 	
-							  
-			
-		 	 
 return "done"; 	 
  
 //using Microsoft.Windows.Controls.Ribbon;
@@ -88,7 +86,6 @@ return "done";
 //O2File:API_MiniFramework.cs
 //O2Ref:WindowsFormsIntegration.dll
 //O2Ref:O2_API_Visualization.dll
-//O2Ref:RibbonControlsLibrary.dll
-</SourceCode>
+//O2Ref:RibbonControlsLibrary.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>
