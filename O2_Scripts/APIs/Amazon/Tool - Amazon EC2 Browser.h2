@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <H2>
   <SourceCode>//var topPanel = panel.clear().add_Panel(); 
-var topPanel = O2Gui.open&lt;Panel&gt;("AmazonEC2",580,400);   
+var topPanel = O2Gui.open&lt;Panel&gt;("Tool - AmazonEC2 Browser",630,500);   
 topPanel.insert_Below(100).add_LogViewer();  
- 
+  
 var apiKey = @"C:\O2\_USERDATA\accounts.xml".credential("AmazonAWS"); 
 	
 var amazonEC2 = new API_AmazonEC2(apiKey);
 	 						
 Action&lt;RunningInstance&gt; rdpIntoBox =
 	(runningInstance)=&gt;{				
-							"Creating RDP connection to instance with ID: {0} and IP ".info(runningInstance.InstanceId,runningInstance.IpAddress );			
-							new API_RDP().launchRdpClient(runningInstance.IpAddress);					
+							"Creating RDP connection to instance with ID: {0} and IP ".info(runningInstance.InstanceId,runningInstance.IpAddress);			
+							var username = "Administrator";
+							var password = amazonEC2.getPassword(runningInstance);
+							new API_RDP().launchRdpClient(runningInstance.IpAddress,username,password);					
 						};
 
 
@@ -31,7 +33,7 @@ Action&lt;RunningInstance&gt; rdpIntoBox =
 Action&lt;Panel&gt; showRunningInstancesDetails = 
 	(targetPanel)=&gt; { 
 						
-						var treeView = targetPanel.add_GroupBox("Amazon EC Instances").add_TreeView();
+						var treeView = targetPanel.add_GroupBox("Amazon EC Instances").add_TreeView().sort();
 						var actionsPanel = treeView.insert_Below(100);	 	  	 			
 						treeView.beforeExpand&lt;List&lt;RunningInstance&gt;&gt;(
 							(treeNode, runningInstanceList) =&gt;{
@@ -54,7 +56,9 @@ Action&lt;Panel&gt; showRunningInstancesDetails =
 												var ec2Instances = 	amazonEC2.getEC2Instances(onlyShowDefaultRegion); 
 												treeView.clear();
 												treeView.add_Nodes(ec2Instances.keys(), (text)=&gt;text, (text) =&gt; ec2Instances.value(text), (text) =&gt; ec2Instances.value(text).size() &gt; 0);
-												treeView.selectFirst().selected().expand().nodes()[0].selected(); 
+												//treeView.selectFirst().selected().expand().nodes()[0].selected(); 
+												treeView.expand();
+												treeView.selectFirst();
 												treeView.backColor(Color.White);
 											});
 								}; 
@@ -68,7 +72,8 @@ Action&lt;Panel&gt; showRunningInstancesDetails =
 						var link = actionsPanel.add_Link("Show Decrypted password  ", 80,0, ()=&gt; amazonEC2.getPassword(selectedInstance)); 
 						actionsPanel.add_Link("Start Instance ", 0,220, ()=&gt; amazonEC2.startInstance(selectedInstance));
 						actionsPanel.add_Link("Stop Instance ", 20,220, ()=&gt; amazonEC2.stopInstance(selectedInstance));  
-						actionsPanel.add_Link("RDP Instance ", 40,220, ()=&gt; rdpIntoBox(selectedInstance));   
+						actionsPanel.add_Link("RDP Instance ", 40,220, ()=&gt; rdpIntoBox(selectedInstance));   						
+				 		actionsPanel.add_Link("View Available Images (AMIs) ", 80,220, ()=&gt; amazonEC2.show_ImagesList_In_TreeView());   
 						
 						amazonEC2.addStopInstanceGui(actionsPanel.insert_Right(240),treeView);   
 						

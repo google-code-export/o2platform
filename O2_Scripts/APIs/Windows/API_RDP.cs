@@ -17,23 +17,42 @@ using O2.XRules.Database.Utils;
 namespace O2.XRules.Database.APIs
 {
 
-	/*public class API_RDP_Test
+	public class API_RDP_Test
 	{
 		public void launch()
 		{
-			
+			new API_RDP().launchRdpClient("120.0.0.1","aaa","bbb");	
 		}
-	}*/
+	}
 	
     public class API_RDP 
     {
-    	public void launchRdpClient(string ipAddress)
+    	public API_GuiAutomation launchRdpClient(string ipAddress)
+    	{
+    		return launchRdpClient(ipAddress,null,null);
+    	}
+    	
+    	public API_GuiAutomation launchRdpClient(string ipAddress, string username, string password)
     	{
     		var terminalServicesClient = Processes.startProcess("mstsc.exe");
 			var guiAutomation = new API_GuiAutomation(terminalServicesClient);
 			var window = guiAutomation.window("Remote Desktop Connection");
 			window.textBox("Computer:").set_Text(ipAddress);
+			
+			if (username.valid())
+			{
+				window.button("Options ").click(); 					
+				this.sleep(1000) ;	
+				window.textBox("User name:").set_Text(username); 				
+			}
+			
 			window.button("Connect").mouse().click();
-    	}
+			var loginWindow = guiAutomation.window("Windows Security",3);	
+			if (password.valid())		
+				guiAutomation.keyboard_sendText(password);									
+			loginWindow.button("OK").click(); 
+			
+			return guiAutomation;
+		}
     }
 }
