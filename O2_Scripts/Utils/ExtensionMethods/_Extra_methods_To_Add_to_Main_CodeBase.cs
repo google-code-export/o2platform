@@ -571,6 +571,17 @@ namespace O2.XRules.Database.Utils
 					});
 			return process;
 		}
+		
+		public static Process executeH2_as_Admin(this string scriptToExecute)
+		{
+			var process = new Process();
+			process.StartInfo.FileName  = PublicDI.config.CurrentExecutableDirectory.pathCombine("O2_XRules_Database.exe");
+			process.StartInfo.Arguments = "\"{0}\"".format(scriptToExecute);
+			process.StartInfo.Verb = "runas";
+			process.Start();
+			return process;
+
+		}
 	}
 	
 	public static class Int_ExtensionMethods
@@ -727,6 +738,11 @@ namespace O2.XRules.Database.Utils
 		{
 			return title.showAsForm();
 		}		
+		
+		public static Panel popupWindow(this string title, int width, int height)
+		{
+			return title.showAsForm(width, height);
+		}
 			
 		public static Panel createForm(this string title)			
 		{

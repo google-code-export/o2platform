@@ -1600,6 +1600,23 @@ namespace O2.XRules.Database.APIs
     	{    		
     		return  WatiN_IE.window(control);
     	}
+    	
+    	public static WatiN_IE add_IE_with_NavigationBar(this Control control)
+    	{
+    		var watinIe = control.add_IE();
+    		watinIe.add_NavigationBar(control);
+    		return watinIe;
+    	}
+    	
+    	
+    	public static WatiN_IE add_NavigationBar(this WatiN_IE watinIe, Control control)
+    	{
+    		var urlTextBox = control.insert_Above(20)
+    								 .add_TextBox("Url:","")
+    								 .onEnter((text)=> watinIe.open_ASync(text));
+			watinIe.onNavigate((url)=> urlTextBox.set_Text(url));
+			return watinIe;
+    	}
  
      }
      

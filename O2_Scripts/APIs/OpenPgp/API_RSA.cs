@@ -21,11 +21,14 @@ namespace O2.XRules.Database.APIs
     	public string PathToPemKey { get;set;}
     	
     	public API_RSA()
-    	{}
+    	{
+    		PathToPemKey = @"C:\O2\_USERDATA";	// default to this location
+    	}
     	
     	public API_RSA(string pathToPemKey)
     	{
-    		PathToPemKey = pathToPemKey;
+    		if (pathToPemKey.valid())
+    			PathToPemKey = pathToPemKey;
     	}
     	
     	public  string decryptPasswordUsingPem(string password)
@@ -38,6 +41,7 @@ namespace O2.XRules.Database.APIs
 				
 				if (PathToPemKey.isFolder())
 					PathToPemKey = PathToPemKey.files("*.pem").first();
+					
 				if (PathToPemKey.valid() && PathToPemKey.fileExists())
 				{
 					using (var reader = File.OpenText(PathToPemKey))  

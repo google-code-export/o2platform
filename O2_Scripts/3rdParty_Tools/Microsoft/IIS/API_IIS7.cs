@@ -44,6 +44,21 @@ namespace O2.XRules.Database.APIs
 	
 	public static class API_IIS7_ExtensionMethods_API_IIS7
 	{
+		public static bool currentUserHasEnoughPermissions(this API_IIS7 iis7)
+		{
+			try
+			{
+				iis7.websites();  
+				return true;
+			}
+			catch(Exception ex)
+			{	
+				"[API_IIS7] could not get website list: {0}".error(ex.Message);
+			
+			}
+			return false;
+		}
+		
 		public static List<Site> websites(this API_IIS7 iis7)
 		{
 			return iis7.serverManager.Sites.toList();
