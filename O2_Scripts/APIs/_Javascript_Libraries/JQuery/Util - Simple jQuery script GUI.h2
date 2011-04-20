@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>//var topPanel = panel.clear().add_Panel();
+var topPanel = "Util - Simple jQuery script GUI".popupWindow(700,300);   
+
+var ie = topPanel.add_IE_with_NavigationBar().   
+				 silent(true); 
+
+ 
+var jQueryText = topPanel.insert_Right(400,"jQuery").add_TextArea();
+var executeJQuery = jQueryText.parent().parent().insert_Above(30).add_Button("Execute Javascript").fill().font_bold(); 
+
+executeJQuery.onClick(
+	()=&gt;{
+			var scriptToExecute = jQueryText.get_Text();
+			"executing script with size: {0}".info(scriptToExecute.size());
+			ie.eval(scriptToExecute);
+		});
+
+ 
+ie.showMessage("this is some text"); 
+ 
+var jQuery = new IE_JQuery(ie);    
+
+
+jQueryText.set_Text("jQuery(\"div\").html(\"which was changed by jQuery\");");   
+this.sleep(1000);
+executeJQuery.click();
+
+//O2File:IE_JQuery.cs
+//O2Ref:WatiN.Core.1x.dll
+//O2Ref:Microsoft.mshtml.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
