@@ -1,9 +1,18 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Tool - IIS Browser and Admin",700,400);     
+  <SourceCode>var iis7 = new API_IIS7();   
+if(iis7.currentUserHasEnoughPermissions().isFalse())
+	if ("It looks like your current account doesn't have the rights to access the IIS data, do you want to restart as admin?".askUserQuestion())
+	{
+		PublicDI.CurrentScript.executeH2_as_Admin();
+		return "restarting";
+	}
+
+
+var topPanel = O2Gui.open&lt;Panel&gt;("Tool - IIS Browser and Admin",700,400);     
 //var topPanel = panel.clear().add_Panel();     
     
-var iis7 = new API_IIS7();   
+
  
 var actionsPanel = topPanel.insert_Above(60, "Actions");  
 actionsPanel.add_Link("View ServerManager details",0,0, ()=&gt; iis7.serverManager.details()) 
@@ -60,11 +69,6 @@ return configPaths;
 //site.TraceFailedRequestsLogging.Enabled = true;
 //iis7.commitChanges(); 
 //return site.TraceFailedRequestsLogging;
-
-
-
- 
-
 
 return "ok"; 
 //using Microsoft.Web.Administration
