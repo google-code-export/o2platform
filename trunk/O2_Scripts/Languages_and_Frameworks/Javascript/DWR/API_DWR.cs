@@ -63,8 +63,20 @@ namespace O2.XRules.Database.APIs
 		public int Id { get; set; }
 		public int BatchId { get; set; }
 		public string Page { get; set; }		
+		public string ResponseData { get; set; }		
+		public DateTime RequestStartDate  { get; set; }
+		public DateTime RequestEndDate  { get; set; }		
+		public double RequestTotalSeconds { get; set; }
+		public bool processRequestData { get; set; }
+		public bool RemoveAllowScriptTagRemoting {get;set;}
 		
-		public DWR_Request(DWR_Session dwr_Session)
+		public DWR_Request()
+		{
+			processRequestData = true;
+			RemoveAllowScriptTagRemoting = true;
+		}
+		
+		public DWR_Request(DWR_Session dwr_Session) : this()
 		{
 			Dwr_Session = dwr_Session;
 		}
@@ -97,6 +109,11 @@ namespace O2.XRules.Database.APIs
 			Path = "";
 			Functions = new List<DWR_Function>();
 		}
+		
+		public override string ToString()
+		{
+			return this.ClassName;
+		}
 	}
 	
 	public class DWR_Function
@@ -128,6 +145,13 @@ namespace O2.XRules.Database.APIs
 		{	
 			Parameters = parameters;
 		}
+		
+		public override string ToString()
+    	{
+    		if (Parameters.size()>0)
+    			return "{0}( {1} )".format(FunctionName, Parameters.Aggregate((a,b)=> "{0} , {1}".format(a,b)));
+    		return "{0}()".format(FunctionName);
+    	}
 	}
 	
     public class API_DWR
@@ -146,20 +170,26 @@ namespace O2.XRules.Database.APIs
 			Dwr_Session.ScriptSessionId = scriptSessionId;
 		}
 		
-		public string invoke( DWR_Function dwrFunction)
-		{	
-			return invoke(dwrFunction.ClassName, dwrFunction.FunctionName, dwrFunction.emptyParameters());
+		public DWR_Request invoke( DWR_Function dwrFunction)
+		{				
+			return invoke(dwrFunction.ClassName, dwrFunction.FunctionName, dwrFunction.Parameters.getDefaultValues());
 		}
 		
-		public string invoke( string className, string methodName, params string[] parameters)
-		{
+		public DWR_Request invoke( string className, string methodName, params string[] parameters)
+		{			
 			return dwrRequest(className, methodName, parameters);
 		}
 		
-		public string dwrRequest( string className, string methodName, params string[] parameters)
+		public DWR_Request dwrRequest( string className, string methodName, params string[] parameters)
 		{
-			var dwr_Request = new DWR_Request(Dwr_Session, className, methodName,parameters);
-			return dwr_Request.makeRequest();
+			var dwr_Request = new DWR_Request(Dwr_Session, className, methodName,parameters);			
+			dwr_Request.RequestStartDate = DateTime.Now;
+			dwr_Request.makeRequest();			
+			dwr_Request.RequestEndDate = DateTime.Now;
+			dwr_Request.RequestTotalSeconds = (dwr_Request.RequestEndDate - dwr_Request.RequestStartDate).TotalSeconds;
+			if (dwr_Request.processRequestData)
+				dwr_Request.processRequestData();
+			return dwr_Request;
 		}				
     }
 
@@ -200,15 +230,81 @@ namespace O2.XRules.Database.APIs
 			return data;
 		}
 		
-		public static string makeRequest(this DWR_Request dwr_Request)
+		public static DWR_Request makeRequest(this DWR_Request dwr_Request)
 		{
 			return dwr_Request.makeCall_Plain();
 		}
 		
-		public static string makeCall_Plain(this DWR_Request dwr_Request)
+		public static DWR_Request makeCall_Plain(this DWR_Request dwr_Request)
 		{
 			//dwr_Request.createGetRequestData().info();
-			return dwr_Request.Dwr_Session.makeCall_Plain(dwr_Request.Dwr_Session.Cookie,dwr_Request.createPostRequestData());
+			var responseData = dwr_Request.Dwr_Session.makeCall_Plain( dwr_Request.Dwr_Session.Cookie,	
+																	  dwr_Request.createPostRequestData(),
+																	  dwr_Request.ScriptName,
+																	  dwr_Request.MethodName);
+			dwr_Request.ResponseData = responseData;
+			return dwr_Request;
+		}
+		
+		public static DWR_Request processRequestData(this DWR_Request dwr_Request)
+		{
+			if (dwr_Request.ResponseData.valid())
+			{
+				dwr_Request.handleNewScriptSession();
+				var processedData = dwr_Request.ResponseData;
+				if (dwr_Request.RemoveAllowScriptTagRemoting)
+					processedData = processedData.remove("throw 'allowScriptTagRemoting is false.';".line());				
+					
+				dwr_Request.ResponseData =  processedData;
+			}
+			else
+				"in processRequestData, there was no data in dwr_Request.RequestData".error();
+			return dwr_Request;
+		}
+		
+		public static DWR_Request handleNewScriptSession(this DWR_Request dwr_Request)
+		{
+			foreach(var line in dwr_Request.ResponseData.split_onLines())
+			if (line.contains("handleNewScriptSession"))
+			{
+				var newScriptSessionId =  line.split("\"")[1];
+				dwr_Request.Dwr_Session.ScriptSessionId = newScriptSessionId;
+				"found and mapped new ScriptSessionId: {0}".info(newScriptSessionId);
+			}	
+			return dwr_Request;
+		}
+
+
+		//I was trying to do the above search for handleNewScriptSession using jint but it wasn't working (part of the problem was going upwards once found the PropertyExpression with handleNewScriptSession
+		/*
+		treeView.jint_configureTreeViewFor_JintView();
+		
+		
+		var jintCompiled = responseData.jint_Compile();  
+		var handleNewScriptSession = (from memberExpression in jintCompiled.statements<MemberExpression>(true) 							  
+									  where memberExpression.Member is PropertyExpression  &&
+									        (memberExpression.Member as PropertyExpression).Text == "handleNewScriptSession" 
+									  select memberExpression
+									  ).first(); */
+
+		
+		public static string postRequest_safeFileName(this DWR_Request dwr_Request, DWR_Function function, string folder )
+		{
+			return folder.pathCombine("{0}.{1} - {2}.xml".format(function.ClassName,function, dwr_Request.RequestEndDate).safeFileName(240-folder.size()));
+		}
+		
+		public static string saveRequestToFolder(this DWR_Request dwr_Request, DWR_Function function, string folder)
+		{
+			try
+			{
+				var fileName = dwr_Request.postRequest_safeFileName(function,folder);
+				dwr_Request.serialize(fileName);
+				return fileName;
+			}
+			catch
+			{
+				return Files.Copy(dwr_Request.serialize(), folder);
+			}
 		}
 	}
 	
@@ -216,10 +312,20 @@ namespace O2.XRules.Database.APIs
 	{
 		public static string makeCall_Plain(this DWR_Session dwr_Session, string cookie, string postData)
 		{
-			var url = (dwr_Session.Url.contains(".dwr")) ? dwr_Session.Url : dwr_Session.Url +  "/dwr/call/plaincall/AAAAAABBB.dwr";
-			"[DWR][PlainCall] invoking: {0}".info(url);
-			
-			var html = new Web().getUrlContents_POST(url,"",cookie, postData);
+			return dwr_Session.makeCall_Plain(cookie, postData, "AAAAAA","BBB");
+		}
+		
+		public static string makeCall_Plain(this DWR_Session dwr_Session, string cookie, string postData, string scriptName, string methodName)
+		{
+			var url = (dwr_Session.Url.contains(".dwr")) ? dwr_Session.Url : dwr_Session.Url +  "/dwr/call/plaincall/{0}.{1}.dwr".format(scriptName,methodName) ;
+			return dwr_Session.makeCall_Plain(cookie, postData, url.uri());
+		}
+		
+		public static string makeCall_Plain(this DWR_Session dwr_Session, string cookie, string postData, Uri uri)
+		{
+			//show.info(dwr_Session);			
+			"[DWR][PlainCall] invoking: {0}".info(uri);			
+			var html = new Web().getUrlContents_POST(uri.str(),"",cookie, postData);			
 			return html;
 		}
 	}
@@ -338,12 +444,55 @@ namespace O2.XRules.Database.APIs
 	
 	public static class DWR_Function_ExtensionMethods
 	{
-		public static string[] emptyParameters(this DWR_Function dwrFunction)
+		public static string[] getDefaultValues(this List<string> valueTypes)
+		{
+			var defaultValues = new string[valueTypes.size()];
+			for(int i=0 ; i < valueTypes.size() ; i ++)
+			{ 
+				var defaultValue = valueTypes[i];
+				if (defaultValue.starts("enum["))
+				{
+					defaultValue = defaultValue.remove("enum[").removeLastChar().split(",")[0];
+				}
+				else
+					switch(defaultValue)
+					{
+						case "boolean":
+							defaultValue = "false";
+							break;
+						case "int":
+						case "integer":
+						case "long":
+						case "double":
+							defaultValue = "-1";
+							break;
+						case "object":		
+						case "string":	
+							defaultValue = "";	
+							break;
+						case "object[]":		
+						case "string[]":	
+						case "integer[]":
+						case "long[]":
+							defaultValue = "[]";
+							break;						
+						case "file":	
+							defaultValue = "";	
+							break;	
+						default:
+							defaultValue = "[UnMappedTye]: {0}".format(defaultValue);
+							break;
+					}
+				defaultValues[i] = defaultValue;
+			}
+			return defaultValues;
+		}
+		/*public static string[] emptyParameters(this DWR_Function dwrFunction)
 		{		
 			if (dwrFunction.isNull() || dwrFunction.Parameters.size() < 2)
 				return new string[0] ;
 			return new string[dwrFunction.Parameters.size()-1] ;			
-		}
+		}*/
 	}
 	public static class DWR_GUIs
 	{
@@ -393,7 +542,7 @@ namespace O2.XRules.Database.APIs
 							foreach(var row in functionParameters.rows())
 								parameters.add(row[1].str());
 							var response = dwr.invoke(dwrMethod.ClassName, dwrMethod.FunctionName, parameters.ToArray());
-							invocationResponse.set_Text(response);
+							invocationResponse.set_Text(response.ResponseData);
 							invocationResponse.backColor("White");
 						} 							
 					});

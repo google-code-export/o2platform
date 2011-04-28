@@ -41,9 +41,9 @@ namespace O2.XRules.Database.APIs
     		return this._jQueryObject ?? ie.invokeScript("jQuery");;
     	}
     	
-    	public void setJQueryObject(object _jQueryObject)
+    	public void setJQueryObject(object jQueryObject)
     	{    		
-    		this._jQueryObject = _jQueryObject;
+    		this._jQueryObject = jQueryObject;
     	}    	    	
     	
         public void write(string message)

@@ -1842,21 +1842,32 @@ namespace O2.XRules.Database.APIs
     		return ie.invokeScript("eval", "(function() { " + evalScript + "})();");   
     	}
     	
-    	public static WatiN_IE injectJavascriptFunctions(this WatiN_IE ie)
+    	public static WatiN_IE.ToCSharp injectJavascriptFunctions(this WatiN_IE ie)
     	{
     		if (ie.WebBrowser.isNull())
     			"in InjectJavascriptFunctions, ie.WebBrowser was null".error();
     		else
     		{
     			if (ie.WebBrowser.ObjectForScripting.isNull()) 
+    			{
     				ie.WebBrowser.ObjectForScripting = new WatiN_IE.ToCSharp();
     				
-    			"Injecting Javascript Hooks * Functions for page: {0}".debug(ie.url());
-				ie.eval("var o2Log = function(message) { window.external.write(message) };");
-				ie.invokeScript("o2Log","Test from Javascript (via toCSharp(message) )");
-				"Injection complete".info();
+	    			"Injecting Javascript Hooks * Functions for page: {0}".debug(ie.url());
+					ie.eval("var o2Log = function(message) { window.external.write(message) };");
+					ie.invokeScript("o2Log","Test from Javascript (via toCSharp(message) )");
+					"Injection complete".info();
+					return (ie.WebBrowser.ObjectForScripting as WatiN_IE.ToCSharp);
+				}
+				else 
+				{
+					if((ie.WebBrowser.ObjectForScripting is WatiN_IE.ToCSharp))
+						return (ie.WebBrowser.ObjectForScripting as WatiN_IE.ToCSharp);
+					else
+						"in WatiN_IE injectJavascriptFunctions, unexpected type in ie.WebBrowser.ObjectForScripting: {0}".error(ie.WebBrowser.ObjectForScripting.typeName());					
+				}
+						
 			}
-			return ie;
+			return null;
     	}
     	    	
     	public static WatiN_IE injectJavascriptFunctions_onNavigate(this WatiN_IE ie)
@@ -1889,6 +1900,53 @@ namespace O2.XRules.Database.APIs
     	{
     		return ie.eval("alert({0});".format(alertScript));
     	}
+    	
+    	public static object getJsObject(this WatiN_IE ie)
+    	{
+    		var toCSharpProxy = ie.injectJavascriptFunctions();
+    		if (toCSharpProxy.notNull())
+    			return toCSharpProxy.getJsObject();
+    		return null;    	
+    	}
+    	
+    	public static T getJsObject<T>(this WatiN_IE ie, string jsCommand)
+    	{
+    		var jsObject = ie.getJsObject(jsCommand);
+    		if (jsObject is T)
+    			return (T)jsObject;
+    		return default(T);
+    	}
+    	
+    	public static object getJsObject(this WatiN_IE ie, string jsCommand)
+    	{
+    		var toCSharpProxy = ie.injectJavascriptFunctions();
+    		if (toCSharpProxy.notNull())
+    		{
+    			var command = "window.external.setJsObject({0})".format(jsCommand);
+    			ie.invokeEval(command);
+    			ie.remapInternalJsObject();    			
+    			return toCSharpProxy.getJsObject();
+    		}
+    		return null;
+    	}
+    	
+		public static WatiN_IE remapInternalJsObject(this WatiN_IE ie)
+		{		
+			//"setting JS _jsObject variable to getJsObject()".info();
+    		ie.invokeEval("_jsObject = window.external.getJsObject()"); // creates JS variable to be used from JS
+    		return ie;
+    	}
+    	
+    	public static WatiN_IE setJsObject(this WatiN_IE ie, object jsObject)
+    	{
+    		var toCSharpProxy = ie.injectJavascriptFunctions();
+    		if (toCSharpProxy.notNull())    		
+    		{
+    			toCSharpProxy.setJsObject(jsObject);
+    			ie.remapInternalJsObject();
+    		}
+    		return ie;
+    	}
     	    	
     }
     public static class WatiN_IE_ExtensionMethods_JavaScript_Helpers
@@ -1897,7 +1955,74 @@ namespace O2.XRules.Database.APIs
     	{
     		return ie.invokeEval("var result = []; for(var item in " + targetObject + ") result.push(item);return result.toString();").str().split(",");
     	}
+    	
+    	public static T javascript_VariableValue<T>(this WatiN_IE ie, string variableName, string propertyName)
+    	{
+    		return ie.javascript_VariableValue<T>("{0}.{1}".format(variableName, propertyName));
+    	}
+    	
+    	public static T javascript_VariableValue<T>(this WatiN_IE ie, string variableName)
+    	{
+    		var result = ie.javascript_VariableValue(variableName);
+    		if (result is T)
+    			return (T)result;
+    		return default(T);
+    	}
+    	public static object javascript_VariableValue(this WatiN_IE ie, string variableName, string propertyName)
+    	{
+    		return ie.javascript_VariableValue("{0}.{1}".format(variableName, propertyName));
+    	}
+    	
+    	public static object javascript_VariableValue(this WatiN_IE ie, string variableName)
+    	{
+    		return ie.invokeEval("return {0}".format(variableName));
+    	}
     }
+    
+    public static class WatiN_IE_ExtensionMethods_Javascript_GuiViewers
+    {
+    	public static WatiN_IE view_JavaScriptVariable_AsTreeView(this WatiN_IE ie, string rootVariableName)
+    	{
+    		var treeView = "Javascript variable: {0}".format(rootVariableName).popupWindow(500,400).add_TreeView();
+    		
+    		Action<TreeNode,string> add_Object =
+				(treeNode, objRef)=>{
+										var _jsObject = ie.getJsObject(objRef);							
+										if (_jsObject is IEnumerable)
+											foreach(var item in _jsObject as IEnumerable)
+												treeNode.add_Node(item.comTypeName(), item, true); 
+										else
+											treeNode.add_Node(_jsObject); 								
+									}; 
+			 
+			treeView.beforeExpand<object>(
+				(treeNode, _object) => {
+											if (_object is IEnumerable)
+												foreach(var item in _object as IEnumerable)
+													treeNode.add_Node(item.comTypeName(), item, true); 
+											else
+											{
+												ie.setJsObject(_object);
+												foreach(var variableName in ie.javascript_ObjectItems("_jsObject"))
+												{
+													var variableValue = ie.javascript_VariableValue( "_jsObject.{0}".format(variableName));
+													if (variableValue.typeFullName() == "System.__ComObject") 										
+														treeNode.add_Node(variableName, variableValue,true);  										
+													else
+													{
+														var nodeText = "{0}: {1}".format(variableName, variableValue);
+													//add_Object(treeNode, "_jsObject.{0}".format(item));
+														treeNode.add_Node(nodeText);
+													}
+												}
+											}
+									   });
+						
+			add_Object(treeView.rootNode(),rootVariableName);
+			return ie;
+    	}
+    }
+    
     
     public static class WatiN_IE_ExtensionMethods_Inject_Html
     {
