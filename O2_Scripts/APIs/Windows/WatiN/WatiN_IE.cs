@@ -291,7 +291,12 @@ namespace O2.XRules.Database.APIs
 		[System.Runtime.InteropServices.ComVisible(true)]
 	    public class ToCSharp
 	    {
+	    	public object _jsObject { get; set;}
 	    	
+	    	public Func<string, string> OnFilter {get;set;}
+	        public Action<string, string, string, string> OnAjaxLog {get;set;}
+	        public Func<string, string, string, string> OnAjaxCall {get;set;}
+	        
 	        public void write(string message)
 	        {
 	            "[IE to ToCSharp] : {0}".info(message);
@@ -302,9 +307,16 @@ namespace O2.XRules.Database.APIs
 	            "[ping from IE] : {0}".info(message);
 	            return "pong: " + message;
 	        }
-	        public Func<string, string> OnFilter {get;set;}
-	        public Action<string, string, string, string> OnAjaxLog {get;set;}
-	        public Func<string, string, string, string> OnAjaxCall {get;set;}
+	      
+	        public object getJsObject()
+	    	{    		
+	    		return this._jsObject;// ?? ie.invokeScript("jQuery");;
+	    	}	    		    	
+	    	
+	    	public void setJsObject(object jsObject)
+	    	{    		
+	    		this._jsObject = jsObject;
+	    	} 
 	        
 	        public string filter(string data)
 	        {
