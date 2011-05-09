@@ -15,6 +15,7 @@ using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
 //O2File:SearchEngine.cs
 //O2File:SearchUtils.cs
+
 namespace O2.XRules.Database.Utils
 {
     public class test_ascx_SimpleFileSearch : ContainerControl
@@ -34,7 +35,7 @@ namespace O2.XRules.Database.Utils
 		
 		public TextBox Path { get;set; }		
 		public Panel leftPanel;
-		public ascx_SourceCodeViewer sourceCode;
+		public ascx_SourceCodeEditor sourceCode;
 		public DataGridView dataGridView;
 		public TreeView treeView;
 		public TextBox textSearch_TextBox;
@@ -44,7 +45,6 @@ namespace O2.XRules.Database.Utils
     	{
     		this.Width = 300;
     		this.Height = 300;
-    		searchEngine = new SearchEngine();
     		buildGui();
     	}
  
@@ -52,7 +52,7 @@ namespace O2.XRules.Database.Utils
     	{
     		var topPanel = this.add_Panel();
     		Path = topPanel.insert_Above<TextBox>(20);
-			sourceCode = topPanel.add_SourceCodeViewer();
+			sourceCode = topPanel.add_SourceCodeEditor();
 			dataGridView = sourceCode.insert_Above<Panel>(100).add_DataGridView();
 			leftPanel = topPanel.insert_Left<Panel>(300);									
 			
@@ -66,13 +66,13 @@ namespace O2.XRules.Database.Utils
 				(sender,e) => {
 						if (dataGridView.SelectedRows.size() == 1)
 						{
-							var selectedRow = dataGridView.SelectedRows[0];
+							var selectedRow = dataGridView.SelectedRows[0]; 
 							var filePath = selectedRow.Cells[0].Value.str();
 							var filename = selectedRow.Cells[1].Value.str();
 							var lineNumber = selectedRow.Cells[2].Value.str();
 							"opening up source code: {0}".info(filePath);
 							sourceCode.open(filePath.pathCombine(filename));  
-							sourceCode.editor().gotoLine(lineNumber.toInt() + 1);
+							sourceCode.gotoLine(lineNumber.toInt() + 1);
 							dataGridView.focus();
 						}
 				  };
@@ -86,7 +86,7 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		public void loadFiles(string filesPath, List<string> filesToLoad)
-		{			
+		{						
 			sourceCode.set_Text("Loading files from: {0}".format(filesPath));
 			Path.set_Text(filesPath);
 			var filesContent = new Dictionary<string,string>();
@@ -96,15 +96,20 @@ namespace O2.XRules.Database.Utils
 					nonBinaryFiles.add(file);
 			
 			foreach(var file in nonBinaryFiles) 
-					filesContent.add(file.remove(filesPath),file.contents());
+					filesContent.add(file.remove(filesPath),file.contents());	
+					
+			searchEngine = new SearchEngine();
 			searchEngine.loadFiles(nonBinaryFiles); 			
+			
+			//searchEngine.fixH2FileLoadingIssue();
+			
 			leftPanel.clear();
 			treeView = leftPanel.add_TreeViewWithFilter(filesContent); 
 			treeView.afterSelect<string>(
 				(fileContents)=>{					
 									sourceCode.open(filesPath + treeView.selected().get_Text());
 								});						
-			sourceCode.editor().colorCodeForExtension(treeView.selected().str());
+			sourceCode.colorCodeForExtension(treeView.selected().str());
 			sourceCode.set_Text("");
 			textSearch_TextBox = leftPanel.controls<TextBox>(true)[1];
 			textSearch_TextBox.onEnter(

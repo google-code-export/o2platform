@@ -11,6 +11,7 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 //O2File:TextSearchResult.cs
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.Utils
 {
@@ -105,7 +106,8 @@ namespace O2.XRules.Database.Utils
                     else
                         //if (false == bTryToFilesFromAssesmentRun)  // || false == tryToLoadAllFilesFromAssessmentRunFile(sFileToLoad, dLoadedFilesCache))
                     {
-                        String sFileContents = Files.getFileContents(sFileToLoad);
+                        //String sFileContents = Files.getFileContents(sFileToLoad);
+                        var sFileContents = sFileToLoad.scriptSourceCode();
                         if (sFileContents.IndexOf('\x00') > -1)
                         {
                             PublicDI.log.error("Skipping load of file since it has at least one char 0 (zero) on it: {0}", sFileToLoad);

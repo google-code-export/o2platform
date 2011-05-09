@@ -196,6 +196,64 @@ namespace O2.XRules.Database.Languages_and_Frameworks.Javascript
     		return statement.statements<Identifier>(true);
     	}
     	
+    	public static List<MethodCall> methods(this Statement statement)
+    	{
+    		return statement.statements<MethodCall>(true);  
+    	}
+    	
+    	public static string text(this Statement statement)
+    	{
+    		if (statement is Identifier)
+    			return (statement as Identifier).Text;
+    		if (statement is ValueExpression)
+    			return (statement as ValueExpression).Value.str();
+    			
+    		return statement.str();
+    	}
+    	
+    	public static Dictionary<string, object> jsonValues(this Statement statement)
+    	{
+    		if(statement is JsonExpression)
+    			return (statement as JsonExpression).jsonValues();
+    		return null; 
+    	}
+    	
+    	public static Dictionary<string, object> jsonValues(this Expression expression)
+    	{
+    		if(expression is JsonExpression)
+    			return (expression as JsonExpression).jsonValues();
+    		return null; 
+    	}
+    	
+    	public static Dictionary<string, object> jsonValues(this JsonExpression jsonExpression)
+    	{
+			var mappedValues = new Dictionary<string, object>();
+			foreach(var item in jsonExpression.Values)
+			{
+				if (item.Value is PropertyDeclarationExpression)
+				{					
+					var valueExpression = (item.Value as PropertyDeclarationExpression).Expression;	
+					if (valueExpression is ArrayDeclaration) 
+					{																	
+						mappedValues.add(item.Key, (valueExpression as ArrayDeclaration).Parameters);
+						continue;
+					}
+					if (valueExpression is UnaryExpression)
+					{
+						mappedValues.add(item.Key, (valueExpression as UnaryExpression).Expression.str());
+						continue;
+					}					
+					mappedValues.add(item.Key, valueExpression.text()); 
+					continue;
+				}																	
+				mappedValues.add(item.Key, item.Value); 
+			}
+			return mappedValues;
+  		}
+    }
+    
+    public static class Jint_ExtensionMehtods_SourceCode
+    {
     	public static SourceCodeDescriptor firstSourceCodeReference(this Statement statement)
     	{
     		if (statement.isNull())
@@ -225,6 +283,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.Javascript
     		return new SourceCodeDescriptor(sourceCode.Start.Line, sourceCode.Start.Char, 
     										sourceCode.Stop.Line, sourceCode.Stop.Char, "");
     	}
+    
+    }
+    
+    public static class Jint_ExtensionMethods_Javascripts
+    {
     	// calculate Javascripts from url 
     	
     	public static List<KeyValuePair<string,string>> javaScripts(this Uri baseUri)
@@ -291,9 +354,12 @@ namespace O2.XRules.Database.Languages_and_Frameworks.Javascript
 			}
 			return javaScripts;
     	}
-    	
-	    // view helpers	    	    
-	    
+    }
+
+
+	//View helpers    
+    public static class Jint_ExtensionMethods_ViewHelpers
+    {	    	    
 	    public static bool 	populateWithHtmlPageScripts(this TreeView treeView, IE_HtmlPage htmlPage)
 	    {	    	
 	    	var scripts = htmlPage.javaScripts();
@@ -501,7 +567,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.Javascript
 	    
 	    public static Statement highlightInCode(this Statement statement, ascx_SourceCodeViewer codeViewer)
 	    {	    	
-			"expression: {0}".info(statement);
+			//"expression: {0}".info(statement);
 			codeViewer.editor().clearBookmarksAndMarkers();
 			if (statement.Source.notNull())
 				statement.Source.highlightInCode(codeViewer);
@@ -536,10 +602,12 @@ namespace O2.XRules.Database.Languages_and_Frameworks.Javascript
 			if (sourceCodeDescriptor!= null)
 	    		textBox.set_Text(sourceCodeDescriptor.Code);
 	    	return sourceCodeDescriptor;
-		}
-		
-		// Jint_stats 
-		
+		}				
+	}
+	
+	//Jint Stats
+	public static class Jint_ExtensionMethods_Stats_View
+	{
 		public static ascx_TableList add_Jint_Stats_Columns(this ascx_TableList tableList)
 		{
 			var columnsNames = new string[] { "pos","url","# links", "# images", "# forms", "# js" ,"# all js ok" , "# js functions", "# js values","analyzed js size",  "original js size", "html size"};

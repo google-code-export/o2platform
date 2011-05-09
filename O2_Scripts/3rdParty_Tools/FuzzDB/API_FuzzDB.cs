@@ -32,9 +32,7 @@ namespace O2.XRules.Database.APIs
     		}
     	}
     }
-    
-    
-    
+            
     public class API_FuzzDB
     {    
     	public string _currentVersion = "fuzzdb-1.08";
@@ -93,7 +91,34 @@ namespace O2.XRules.Database.APIs
 			return payloads;
     	}
     }
-    
+
+	public static class API_FuzzDB_Generic_Lists
+	{
+		public static List<int> ints_getN(this API_FuzzDB fuzzDB, int end)
+		{
+			return fuzzDB.ints_getN(0, end);
+		}
+		
+		public static List<int> ints_getN(this API_FuzzDB fuzzDB, int start, int end)
+		{
+			var ints = new List<int>();
+			for(int i = start; i < end  ; i++)	
+				ints.Add(i);
+			return ints;
+		}
+		
+		public static List<int> ints_getN_Random(this API_FuzzDB fuzzDB, int count)
+		{
+			return fuzzDB.ints_getN_Random(count, 64000);
+		}
+		public static List<int> ints_getN_Random(this API_FuzzDB fuzzDB, int count, int range)
+		{
+			var ints = new List<int>();
+			for(int i = 0; i < count  ; i++)	
+				ints.Add(range.random());
+			return ints;
+		}
+	}
     public static class API_FuzzDB_ExtensionMethods_Fuzzing_Databases
     {
     	public static List<String> payloads_Xss(this API_FuzzDB fuzzDB)

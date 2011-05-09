@@ -1,6 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.Linq;
+using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Text;
@@ -13,10 +14,13 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.XRules.Database.Utils;
+using O2.External.SharpDevelop.ExtensionMethods;
 using O2.XRules.Database.Languages_and_Frameworks.Javascript;
 using Jint.Expressions;
 //O2Ref:Jint.dll
 //O2File:Jint_ExtensionMethods.cs
+//O2File:Jint_Objects.cs
+//O2File:Jint_Visitors.cs
 //O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.APIs
@@ -27,6 +31,9 @@ namespace O2.XRules.Database.APIs
     	public string Cookie {get;set;}
     	public string HttpSessionId {get;set;}
     	public string ScriptSessionId {get;set;}
+    	public string Page_DefaultValue {get;set;}
+    	public bool AutoSetCookiesAndSessionIDs { get; set; }
+    	public List<string> SkipFunctionsCalled { get; set; }
     	
     	public DWR_Session()
     	{
@@ -34,9 +41,12 @@ namespace O2.XRules.Database.APIs
     		Cookie = "";
     		HttpSessionId = "";
     		ScriptSessionId = "";
+    		Page_DefaultValue = "";
+    		AutoSetCookiesAndSessionIDs = true;
+    		SkipFunctionsCalled = new List<string>();
     	}
     	
-    	public DWR_Session(string url)
+    	public DWR_Session(string url) : this()
     	{
     		Url = url;
     	}
@@ -93,7 +103,16 @@ namespace O2.XRules.Database.APIs
 			Parameters = (parameters.notNull() && parameters.size() > 0)  
 								? parameters.toList()
 								: new List<String>();			
-		}						
+		}
+		
+		
+		public string ResponseErrorType
+		{
+			get 
+			{				
+				return this.ResponseData.resolveResponseData();		
+			}
+		}
 	}
 	
 	public class DWR_Class
@@ -175,24 +194,358 @@ namespace O2.XRules.Database.APIs
 			return invoke(dwrFunction.ClassName, dwrFunction.FunctionName, dwrFunction.Parameters.getDefaultValues());
 		}
 		
-		public DWR_Request invoke( string className, string methodName, params string[] parameters)
+		public DWR_Request invoke(string className, string methodName, params string[] parameters)
 		{			
 			return dwrRequest(className, methodName, parameters);
 		}
 		
 		public DWR_Request dwrRequest( string className, string methodName, params string[] parameters)
-		{
+		{					
 			var dwr_Request = new DWR_Request(Dwr_Session, className, methodName,parameters);			
-			dwr_Request.RequestStartDate = DateTime.Now;
-			dwr_Request.makeRequest();			
-			dwr_Request.RequestEndDate = DateTime.Now;
-			dwr_Request.RequestTotalSeconds = (dwr_Request.RequestEndDate - dwr_Request.RequestStartDate).TotalSeconds;
-			if (dwr_Request.processRequestData)
-				dwr_Request.processRequestData();
+			dwr_Request.RequestStartDate = DateTime.Now;			
+			if (Dwr_Session.SkipFunctionsCalled.contains(methodName))
+			{
+				"Skipping function {0}.{1} because {1} it was on the Dwr_Request.SkipFunctionsCalled list".error(className,methodName);
+				dwr_Request.ResponseData = "SKIPPED";
+			}
+			else
+			{
+				dwr_Request.makeRequest();			
+				dwr_Request.RequestEndDate = DateTime.Now;
+				dwr_Request.RequestTotalSeconds = (dwr_Request.RequestEndDate - dwr_Request.RequestStartDate).TotalSeconds;
+				if (dwr_Request.processRequestData)
+					dwr_Request.processRequestData();
+			}
 			return dwr_Request;
 		}				
     }
+	
+	// ******************* Fuzz Requests
+	
+    public class DWR_Fuzz_Requests : List<DWR_Fuzz_Request>
+    {    	
+    }
+    
+    public class DWR_Fuzz_Request
+    {
+    	[XmlAttribute] 					public string ClassName { get; set;}
+    	[XmlAttribute] 					public string FunctionName { get; set;}    	
+    	[XmlAttribute] 					public string LoggedInAs { get; set;}
+    	[XmlAttribute] 					public string ResponseHash { get; set;}   
+    	[XmlElement("Response")]		public string ResponseData { get; set;}
+    	[XmlElement("ResponseType")]	public string ResponseDataType { get; set;}    									
+    	[XmlElement("Parameter")]		public List<string> Parameters { get; set;}    	    	    	
+    									public string Parameters_AsString  { get { return Parameters.join(); }}
+    									public Dwr_ErrorMessage DwrErrorMessage { get; set; }
+    	
+    	public DWR_Fuzz_Request() 
+    	{
+    		Parameters = new List<string>();
+    	}
+    	    	
+    }
+    
+    public static class DWR_Fuzz_Request_ExtensionMethods
+    {
+    	public static DWR_Fuzz_Requests add_Target(this DWR_Fuzz_Requests fuzzRequests, string className, string functionName, int parameter)
+    	{
+    		return fuzzRequests.add_Target(className, functionName, parameter.str().wrapOnList());
+    	}
+    	
+    	public static DWR_Fuzz_Requests add_Target(this DWR_Fuzz_Requests fuzzRequests, string className, string functionName, params string[] parameters)
+    	{
+    		return fuzzRequests.add_Target(className, functionName, parameters.toList());
+    	}
+    	
+    	public static DWR_Fuzz_Requests add_Target(this DWR_Fuzz_Requests fuzzRequests, string className, string functionName, List<string> parameters)
+    	{
+    		fuzzRequests.Add(new DWR_Fuzz_Request
+			    					{
+			    						ClassName = className,
+			    						FunctionName = functionName,
+			    						Parameters = parameters
+			    					});	
+			return fuzzRequests;
+    	}
+    	
+    	public static DWR_Fuzz_Requests dwrFuzzRequest_mapDwrErrorMessage(this string file)
+    	{
+    		"mapping Dwr_ErrorMessage for DWR_Fuzz_Requests in file: {0}".debug(file);
+    		var fuzzRequests =  file.load<DWR_Fuzz_Requests>();
+    		if(fuzzRequests.notNull())
+    		{
+    			foreach(var fuzzRequest in fuzzRequests)
+    				fuzzRequest.mapDwrErrorMessage();
+    			fuzzRequests.saveAs(file);	
+    		}    		
+    		return fuzzRequests;
+    	}
+    	
+    	public static DWR_Fuzz_Request mapDwrErrorMessage(this DWR_Fuzz_Request dwrFuzzRequest)
+    	{
+    		if (dwrFuzzRequest.DwrErrorMessage.isNull())
+    			dwrFuzzRequest.DwrErrorMessage = dwrFuzzRequest.dwrErrorMessage();
+    		return dwrFuzzRequest;
+    	}
+    }
 
+	//*******************Dwr_ErrorMessage
+	
+	[Serializable]
+	public class Dwr_ErrorMessage
+	{
+		[XmlAttribute] 				public string Cause { get; set; }
+		[XmlAttribute] 				public string JavaClassName { get; set; }
+		//[XmlAttribute] 				public string LocalizedMessage { get; set; }
+		[XmlAttribute] 				public string Message { get; set; }
+		[XmlElement("StackTrace")] 	public List<Dwr_ErrorMessage_StackTrace> StackTrace { get; set; }
+									public string SourceCode { get; set; }
+		
+		public Dwr_ErrorMessage()
+		{
+			StackTrace = new List<Dwr_ErrorMessage_StackTrace>();
+		}
+		
+		public override string ToString()
+		{
+			return JavaClassName;
+		}
+	}
+	
+	public class Dwr_ErrorMessage_StackTrace
+	{
+		[XmlAttribute] public string ClassName { get; set; }
+		[XmlAttribute] public string FileName { get; set; }
+		[XmlAttribute] public string LineNumber { get; set; }
+		[XmlAttribute] public string MethodName { get; set; }
+		[XmlAttribute] public string NativeMethod { get; set; }
+	}
+	
+	public static class Dwr_ErrorMessage_ExtensionMethods
+	{
+		public static List<Dwr_ErrorMessage> dwrErrorMessages(this DWR_Fuzz_Requests dwrFuzzRequests)
+		{
+			var dwrErrorMessages = new List<Dwr_ErrorMessage> ();
+			foreach(var fuzzRequest in dwrFuzzRequests)
+			{
+				var dwrErrorMessage = fuzzRequest.dwrErrorMessage();
+				if (dwrErrorMessage.notNull())
+					dwrErrorMessages.add(dwrErrorMessage);
+			}
+			return dwrErrorMessages;
+		}
+		
+		public static Dwr_ErrorMessage dwrErrorMessage(this DWR_Fuzz_Request dwrFuzzRequest)
+		{
+			return dwrFuzzRequest.ResponseData.dwrErrorMessage();
+		}
+		
+		public static Dwr_ErrorMessage dwrErrorMessage(this string javascriptCode)
+		{	
+			if (javascriptCode.valid())
+			{
+				var jintData = new Jint_Visitor().map(javascriptCode.jint_Compile());
+ 				var methods = jintData.methods();
+ 				if (methods.size() != 1)
+ 					"in dwrErrorMessage, there were more than 1 method in the provided Javascript".error();
+ 				else 				
+ 					return jintData.jintFunction(methods[0]).dwrErrorMessage();
+ 			}
+			return null; 
+		}
+		
+		public static Dwr_ErrorMessage dwrErrorMessage(this Jint_Function jintFunction)
+		{
+			if (jintFunction.Class == "dwr.engine.remote.handleException")
+				return jintFunction.Arguments[2].dwrErrorMessage();
+			return null;
+		}
+		
+		public static Dwr_ErrorMessage dwrErrorMessage(this Expression expression)
+		{
+			if (expression is JsonExpression)
+				return (expression as JsonExpression).dwrErrorMessage();			
+			return null;
+		}
+		
+		public static Dwr_ErrorMessage dwrErrorMessage(this JsonExpression jsonExpression)
+		{
+			return jsonExpression.dwrErrorMessage(false);
+		}
+		
+		public static Dwr_ErrorMessage dwrErrorMessage(this JsonExpression jsonExpression, bool includeSourceCode)
+		{
+			var jsonValues = jsonExpression.jsonValues();							
+			if (jsonValues.isNull())
+				return null;
+				
+			var dwrErrorMessage = new Dwr_ErrorMessage 
+				{							
+					Cause = jsonValues.value("cause").str(),
+					JavaClassName = jsonValues.value("javaClassName").str(),
+					//LocalizedMessage = jsonValues.value("localizedMessage").str(),
+					Message = jsonValues.value("message").str(),
+					SourceCode = (includeSourceCode) ? jsonExpression.Source.Code : null
+				};			
+			var stackTrace = jsonValues.value("stackTrace");
+			if (stackTrace.notNull() && stackTrace is List<Statement>) 							
+				foreach(var statement in stackTrace as List<Statement>) 
+				{									
+					var statementJson = statement.jsonValues(); 									
+					if (statementJson.notNull())
+					{
+						dwrErrorMessage.StackTrace.Add(new Dwr_ErrorMessage_StackTrace
+							{
+								ClassName = statementJson.value("className").str(),
+								FileName = statementJson.value("fileName").str(),  
+								LineNumber = statementJson.value("lineNumber").str(),
+								MethodName = statementJson.value("methodName").str(), 
+								NativeMethod  = statementJson.value("nativeMethod").str()												 
+							});
+					}									
+				}
+			
+			return dwrErrorMessage;
+  		}  		  		
+	}
+	
+	public static class Dwr_ErrorMessage_ExtensionMethods_Gui_Helpers
+	{
+		public static T add_Dwr_Fuzz_Request_Viewer<T>(this T control, string fuzzFile, List<string> codeFolders ,string regExFilter )
+			where T : Control
+		{
+			var tableList = control.add_TableList();  
+			var _showStackTrace = tableList.insert_Right().add_StackTraceViewer(codeFolders, regExFilter);
+			DWR_Fuzz_Requests dwrRequests = null;
+			Action<int> showStackTraceForItem = 
+				(index)=>{
+							if (dwrRequests.notNull() && dwrRequests.size() > index) 														
+								_showStackTrace(dwrRequests[index].DwrErrorMessage); 				
+						};
+			Action<string> loadFile = 
+				(fileToLoad)=>{
+								"loading File: {0}".info(fileToLoad); 
+								tableList.clearTable(); 
+								dwrRequests = fileToLoad.load<DWR_Fuzz_Requests>(); 
+								if (dwrRequests.notNull())
+								{ 										
+									tableList.show(dwrRequests);
+									tableList.selectFirst();		
+								}
+			
+							  };			
+			tableList.afterSelect_get_RowIndex(showStackTraceForItem);
+			
+			loadFile(fuzzFile);								  
+			tableList.getListViewControl().onDrop((droppedFile)=>loadFile(droppedFile));   
+			return control;
+		}
+
+	
+		public static Action<Dwr_ErrorMessage>add_StackTraceViewer<T>(this T control, List<string> codeFolders, string regExFilter)  
+			where T : Control
+		{
+			var stackTracePanel = control.add_GroupBox("StackTrace").add_Panel();
+			var stackTrace = stackTracePanel.add_TableList(); 
+			var codeViewer = stackTrace.insert_Below().add_SourceCodeEditor(); 
+													
+			var hideGeneratedMethods = false;
+			
+			Func<string,string> resolveFile  = 
+				(className)=>{
+								var virtualPath = "{0}.java".format(className.replace(".", "\\"));
+								"Trying to find: {0}".info(virtualPath); 
+				  				foreach(var sourceCodeFolder in codeFolders)
+				  				{
+				  					var fullPath = sourceCodeFolder.pathCombine(virtualPath);
+				  					if (fullPath.fileExists())
+				  						return fullPath;	  					
+				  				}	  			
+								return "null";
+							 };
+			
+			Action<string,string> showTraceInCodeViewer  = 
+				(className, lineNumber)
+				  =>{ 
+				  		var sourceCodeFile = resolveFile(className);
+				  		if (sourceCodeFile.fileExists())
+				  		{
+				  			codeViewer.enabled(true);
+				  			codeViewer.open(sourceCodeFile);
+				  			codeViewer.editor().gotoLine(lineNumber.toInt());
+				  			stackTrace.focus();
+				  		}
+				  		else
+				  		{
+				  			"could not find the source code for class:{0}".error(className);
+				  			codeViewer.enabled(false);
+				  		}
+					};
+			
+			Dwr_ErrorMessage selectedDwrErrorMessage = null;
+			
+			Action<Dwr_ErrorMessage> showStackTrace = 
+				(dwrErrorMessage) => {	
+										selectedDwrErrorMessage = dwrErrorMessage;
+										if (selectedDwrErrorMessage.isNull())
+										{											
+											stackTrace.clearTable();
+											codeViewer.enabled(false);
+											return;
+										}
+										var filteredTraces = new List<Dwr_ErrorMessage_StackTrace>();
+										foreach(var trace in dwrErrorMessage.StackTrace)
+											if (hideGeneratedMethods.isFalse() || trace.LineNumber.toInt() > 1) 
+												if (regExFilter.valid().isFalse() || trace.ClassName.regEx(regExFilter) || trace.FileName.regEx(regExFilter) || trace.MethodName.regEx(regExFilter))
+												filteredTraces.Add(trace);
+								//var filteredTraces = traces;		
+										stackTrace.title("Showing  {0} traces".format(filteredTraces.size()));					
+										stackTrace.show(filteredTraces);
+										stackTrace.selectFirst();
+							};
+			
+								
+			Action refreshStackTrace = 
+				()=>{
+						if (selectedDwrErrorMessage.notNull())
+							showStackTrace(selectedDwrErrorMessage);
+						//show.info(selectedFuzzRequest); 	
+					};
+					
+			stackTracePanel.insert_Above(30)
+						   .add_CheckBox("Hide Generated Methods",0,0,(value)=> { hideGeneratedMethods = value; refreshStackTrace(); }).autoSize().check()
+						   .append_Label("RegEx Filter:").topAdd(2).leftAdd(40)
+						   .append_TextBox(regExFilter).onEnter((text)=> { regExFilter = text; refreshStackTrace();}) ; 
+						   
+			stackTrace.afterSelect_get_Row(
+				(row)=> {
+							var values = row.values();
+							 	showTraceInCodeViewer(values[0],values[2]);
+						});
+
+			
+			return showStackTrace;
+		}
+	}
+	
+
+	// ******************* API_DWR
+
+	public static class API_DWR_ExtensionMethods
+	{
+		public static API_DWR setHttpSessionId_and_ScriptSessionId(this API_DWR dwr, string httpSessionId, string scriptSessionId)
+		{
+			dwr.Dwr_Session.ScriptSessionId = scriptSessionId;
+			return dwr.setHttpSessionId(httpSessionId);			
+		}
+		
+		public static API_DWR setHttpSessionId(this API_DWR dwr, string httpSessionId)
+		{
+			dwr.Dwr_Session.HttpSessionId = httpSessionId;
+			dwr.Dwr_Session.Cookie = "JSESSIONID={0}".format(httpSessionId);
+			return dwr;
+		}
+	}
 	public static class DWR_Request_ExtensionMethods
 	{
 		public static string createPostRequestData(this DWR_Request dwr_Request)
@@ -222,7 +575,9 @@ namespace O2.XRules.Database.APIs
 									 dwr_Request.MethodName, 
 									 dwr_Request.Id, 
 									 dwr_Request.BatchId, 
-									 dwr_Request.Page,
+									 dwr_Request.Page.valid() 
+									 		? dwr_Request.Page
+									 		: dwr_Request.Dwr_Session.Page_DefaultValue,
 							         dwr_Request.Dwr_Session.HttpSessionId, 
 							         dwr_Request.Dwr_Session.ScriptSessionId);
 			for(int i=0; i < dwr_Request.Parameters.size() ; i++)
@@ -265,7 +620,7 @@ namespace O2.XRules.Database.APIs
 		public static DWR_Request handleNewScriptSession(this DWR_Request dwr_Request)
 		{
 			foreach(var line in dwr_Request.ResponseData.split_onLines())
-			if (line.contains("handleNewScriptSession"))
+			if (dwr_Request.Dwr_Session.AutoSetCookiesAndSessionIDs && line.contains("handleNewScriptSession"))
 			{
 				var newScriptSessionId =  line.split("\"")[1];
 				dwr_Request.Dwr_Session.ScriptSessionId = newScriptSessionId;
@@ -305,7 +660,7 @@ namespace O2.XRules.Database.APIs
 			{
 				return Files.Copy(dwr_Request.serialize(), folder);
 			}
-		}
+		}						
 	}
 	
 	public static class DWR_Session_ExtensionMethods
@@ -325,7 +680,15 @@ namespace O2.XRules.Database.APIs
 		{
 			//show.info(dwr_Session);			
 			"[DWR][PlainCall] invoking: {0}".info(uri);			
-			var html = new Web().getUrlContents_POST(uri.str(),"",cookie, postData);			
+			var web = new Web();
+			var html = web.getUrlContents_POST(uri.str(),"",cookie, postData);
+			if (dwr_Session.AutoSetCookiesAndSessionIDs && web.Headers_Response.hasKey("Set-Cookie"))
+			{
+				var newCookieValue = web.Headers_Response.value("Set-Cookie");
+				dwr_Session.Cookie = newCookieValue.split(";")[0];
+				dwr_Session.HttpSessionId = dwr_Session.Cookie.split("=")[1];
+				"Found Set-Cookie, so setting Cookie to {0} and HttpSessionId to {1}".info(dwr_Session.Cookie, dwr_Session.HttpSessionId);
+			}	
 			return html;
 		}
 	}
@@ -449,10 +812,10 @@ namespace O2.XRules.Database.APIs
 			var defaultValues = new string[valueTypes.size()];
 			for(int i=0 ; i < valueTypes.size() ; i ++)
 			{ 
-				var defaultValue = valueTypes[i];
+				var defaultValue = valueTypes[i].lower();
 				if (defaultValue.starts("enum["))
 				{
-					defaultValue = defaultValue.remove("enum[").removeLastChar().split(",")[0];
+					defaultValue = defaultValue.remove("enum[").removeLastChar().split(",")[0].upper();
 				}
 				else
 					switch(defaultValue)
@@ -480,7 +843,8 @@ namespace O2.XRules.Database.APIs
 							defaultValue = "";	
 							break;	
 						default:
-							defaultValue = "[UnMappedTye]: {0}".format(defaultValue);
+							"[UnMappedTye]: {0}".format(defaultValue).error();
+							defaultValue = valueTypes[i]; // use the original value
 							break;
 					}
 				defaultValues[i] = defaultValue;
@@ -493,6 +857,55 @@ namespace O2.XRules.Database.APIs
 				return new string[0] ;
 			return new string[dwrFunction.Parameters.size()-1] ;			
 		}*/
+		
+		public static string[] getParametersWithPayloads(this List<string> valueTypes, int intPayload, string stringPayload)
+		{
+			stringPayload = stringPayload.Replace("\"","\\\"") ;			
+			var payloads = new string[valueTypes.size()];
+			for(int i=0 ; i < valueTypes.size() ; i ++)
+			{ 
+				var payload = valueTypes[i].lower();
+				if (payload.starts("enum["))
+				{
+					payload = payload.remove("enum[").removeLastChar().split(",")[0].upper();
+				}
+				else
+					switch(payload)
+					{
+						case "boolean":
+							payload = "true";
+							break;
+						case "int":
+						case "integer":
+						case "long":
+						case "double":
+							payload = intPayload.str();
+							break;
+						case "object":		
+						case "string":	
+							payload = stringPayload;	
+							break;
+						case "object[]":		
+						case "string[]":	
+							payload = "[{0}]".format(stringPayload);
+							break;
+						case "integer[]":
+						case "long[]":
+							payload = "[{0}]".format(intPayload);
+							break;						
+						case "file":	
+							payload = stringPayload;	
+							break;	
+						default:
+							"[UnMappedTye]: {0}".format(payload).error();
+							payload = stringPayload;
+							break;
+					}
+				payloads[i] = payload;
+			}
+			return payloads;			
+		}
+
 	}
 	public static class DWR_GUIs
 	{
@@ -580,6 +993,29 @@ namespace O2.XRules.Database.APIs
 								});
 			return files_treeView;
 			
+		}
+	}
+	
+	public static class string_ExtensionMethods
+	{
+		public static string resolveResponseData(this string responseData)
+		{
+				if (responseData.valid().isFalse())
+					return "[no response data]";
+				if (responseData.contains("dwr.engine.remote.handleCallback"))
+					return "* Valid Response";	
+				if (responseData.contains("AuthenticationRequiredException") ||
+					responseData.contains("org.apache.shiro.authc.AuthenticationException"))
+					return "Authentication Required (org.apache.shiro.authc.AuthenticationException)";
+				if (responseData.contains("org.apache.shiro.authz.AuthorizationException"))
+					return "Authorization Required (org.apache.shiro.authz.AuthorizationException)";						
+				if (responseData.contains("java.lang.NullPointerException"))
+					return "Null Pointer Exception";
+				if (responseData.contains("Data conversion error"))
+					return "Data conversion error";	
+				if (responseData.contains("dwr.engine.remote.handleException"))
+					return "Other Type of Exception";					
+				return "! not recognized response";
 		}
 	}
 }

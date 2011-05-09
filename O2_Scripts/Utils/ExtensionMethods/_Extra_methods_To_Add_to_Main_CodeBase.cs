@@ -168,7 +168,7 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Reflection_ExtensionMethods
 	{
-		//Reflection
+		//Reflection		
 		public static T property<T>(this object _object, string propertyName)
 		{						
 			if (_object.notNull())
@@ -192,6 +192,21 @@ namespace O2.XRules.Database.Utils
 			}
 			return _object;
 
+		}
+		
+		public static List<string> names(this List<PropertyInfo> properties)
+		{
+			return (from property in properties
+					select property.Name).toList();
+		}
+		
+		public static List<object> propertyValues(this object _object)
+		{
+			var propertyValues = new List<object>();
+			var names = _object.type().properties().names();
+			foreach(var name in names)
+				propertyValues.Add(_object.prop(name));
+			return propertyValues;
 		}
 		
 		public static MethodInfo method(this Type type, string name)
@@ -515,6 +530,10 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		//CheckBox
+		public static CheckBox onChecked(this CheckBox checkBox, Action<bool> action)
+		{
+			return checkBox.checkedChanged(action);
+		}
 		public static CheckBox checkedChanged(this CheckBox checkBox, Action<bool> action)
 		{
 			checkBox.invokeOnThread(
@@ -590,6 +609,23 @@ namespace O2.XRules.Database.Utils
 		
 		
 		//processes
+	}
+	
+	public static class TextBox_ExtensionMethods
+	{
+		public static TextBox add_TextBox(this Control control, string text)
+		{
+			var textBox = control.add_TextBox();
+			textBox.set_Text(text);
+			return textBox;
+		}
+		
+		public static TextBox add_TextArea(this Control control, string text)
+		{
+			var textBox = control.add_TextArea();
+			textBox.set_Text(text);
+			return textBox;
+		}
 	}
 	
 	public static class Processes_ExtensionMethods
@@ -1039,6 +1075,12 @@ namespace O2.XRules.Database.Utils
 			return treeView.add_Nodes(files, (file)=>file.fileName());
 		}
 		
+		public static TreeView add_File(this TreeView treeView, string file)
+		{
+			return treeView.add_Files(file.wrapOnList());
+		}
+				
+		
 		public static List<string> texts(this List<TreeNode> treeNodes)
 		{
 			return (from treeNode in treeNodes
@@ -1118,7 +1160,45 @@ namespace O2.XRules.Database.Utils
 			return dataGridView;		
 		}
 		
-		public static DataGridView afterSelect(this DataGridView dataGridView, Action<DataGridViewRow> onSelect)
+		
+		public static DataGridView onDoubleClick<T>(this DataGridView dataGridView, Action<T> callback)
+		{
+			dataGridView.onDoubleClick(
+				(dataGridViewRow)=>{
+										if (dataGridViewRow.Tag.notNull() && dataGridViewRow.Tag is T)
+											callback((T)dataGridViewRow.Tag);
+								   });
+			return dataGridView;
+		}						
+		
+		public static DataGridView onDoubleClick(this DataGridView dataGridView, Action<DataGridViewRow> callback)
+		{
+			dataGridView.invokeOnThread(
+				()=>{
+						dataGridView.DoubleClick+= 
+							(sender,e)=>{
+											if (dataGridView.SelectedRows.size() == 1)
+											{
+												var selectedRow = dataGridView.SelectedRows[0];
+												callback(selectedRow);
+											}
+										 };
+					});
+			return dataGridView;		
+		}
+		
+		public static DataGridView afterSelect<T>(this DataGridView dataGridView, Action<T> callback)
+		{
+			dataGridView.afterSelect(
+				(dataGridViewRow)=>{
+										if (dataGridViewRow.Tag.notNull() && dataGridViewRow.Tag is T)
+											callback((T)dataGridViewRow.Tag);
+								   });
+			dataGridView.onDoubleClick<T>(callback);					   
+			return dataGridView;
+		}
+		
+		public static DataGridView afterSelect(this DataGridView dataGridView, Action<DataGridViewRow> callback)
 		{
 			dataGridView.invokeOnThread(
 				()=>{
@@ -1127,7 +1207,7 @@ namespace O2.XRules.Database.Utils
 											if (dataGridView.SelectedRows.size() == 1)
 											{
 												var selectedRow = dataGridView.SelectedRows[0];
-												onSelect(selectedRow);
+												callback(selectedRow);
 											}
 										 };
 					});
@@ -1150,6 +1230,36 @@ namespace O2.XRules.Database.Utils
 						return values;
 					});			
 		}
+		
+		
+		public static DataGridView show(this DataGridView dataGridView, object _object)
+		{
+			dataGridView.Tag = _object;	
+			dataGridView.remove_Columns();
+			if(_object is IEnumerable)
+			{
+				var list = (_object as IEnumerable); 
+				var first = list.first();  
+				var names = first.type().properties().names(); 
+				dataGridView.add_Columns(names);
+				foreach(var item in list)
+				{
+					var rowId = dataGridView.add_Row(item.propertyValues().ToArray()); 
+					dataGridView.get_Row(rowId).Tag = item;										
+				}
+			}
+			else
+			{
+				var names = _object.type().properties().names(); 
+				dataGridView.add_Column("Property name",150); 
+				dataGridView.add_Column("Property value");
+				foreach(var name in names)
+					dataGridView.add_Row(name, _object.prop(name));												
+			}		
+			return dataGridView;
+		 }
+
+		
 	}
 	
 	public static class List_ExtensionMethods
@@ -1174,6 +1284,7 @@ namespace O2.XRules.Database.Utils
 		{
 			return data.show_In_ListView("View data in List Viewer", 600,400);
 		}
+		
 		public static ascx_TableList show_In_ListView<T>(this IEnumerable<T> data, string title, int width, int height)
 		{
 			return O2Gui.open<Panel>(title, width, height).add_TableList().show(data);
@@ -1183,6 +1294,71 @@ namespace O2.XRules.Database.Utils
 		{		
 			tableList.parent().widthAdd(1);		// this trick forces it (need to find how to invoke it directly
 			return tableList;
+		}
+		
+		public static ascx_TableList afterSelect_get_Cell(this ascx_TableList tableList, int rowNumber, Action<string> callback)
+		{
+			tableList.afterSelect(
+				(selectedRows)=>{			
+						if (selectedRows.size()==1)
+						{
+						 	var selectedRow = selectedRows[0]; 
+						 	var values = selectedRow.values();
+						 	if (values.size() > rowNumber)
+						 		callback(values[rowNumber]);
+						}
+					});
+			return tableList;
+		}
+						
+		public static ascx_TableList afterSelect_set_Cell(this ascx_TableList tableList, int rowNumber, TextBox textBox)
+		{
+			return tableList.afterSelect_get_Cell(rowNumber,(value)=> textBox.set_Text(value));			
+		}
+		
+		public static ascx_TableList afterSelect_get_Row(this ascx_TableList tableList, Action<ListViewItem> callback)
+		{
+			tableList.afterSelect(
+				(selectedRows)=>{			
+						if (selectedRows.size()==1)
+						 	callback(selectedRows[0]);						
+					});
+			return tableList;
+		}
+		
+		public static ascx_TableList afterSelect_get_RowIndex(this ascx_TableList tableList, Action<int> callback)
+		{
+			tableList.afterSelect(
+				(selectedRows)=>{			
+						if (selectedRows.size()==1)
+						 	callback(selectedRows[0].Index);						
+					});
+			return tableList;
+		}
+		
+		public static ascx_TableList afterSelect<T>(this ascx_TableList tableList, List<T> items, Action<T> callback)
+		{
+			tableList.afterSelect(
+				(selectedRows)=>{			
+						if (selectedRows.size()==1)
+						{
+							var index = selectedRows[0].Index;							
+							if (index < items.size())
+						 		callback(items[index]);						
+						}
+					});
+			return tableList;
+		}
+		
+		public static ascx_TableList selectFirst(this ascx_TableList tableList)
+		{
+			return (ascx_TableList)tableList.invokeOnThread(
+				()=>{
+						var listView = tableList.getListViewControl();
+						listView.SelectedIndices.Clear();
+						listView.SelectedIndices.Add(0);
+						return tableList;
+					});
 		}
 	}
 	
@@ -1366,23 +1542,36 @@ namespace O2.XRules.Database.Utils
 			return control.insert_Below<Panel>(width).add_GroupBox(title).add_Panel();
 		}
 		
+		public static T white<T>(this T control)
+			where T : Control
+		{
+			return control.backColor(Color.White);
+		}
+		
+		public static T pink<T>(this T control)
+			where T : Control
+		{
+			return control.backColor(Color.LightPink);
+		}
+		
+		public static T azure<T>(this T control)
+			where T : Control
+		{
+			return control.backColor(Color.Azure);
+		}
+		
 		
 		
 	}
 	
 	public static class sourceCodeViewer_ExtensionMethods
 	{
-		public static ascx_SourceCodeViewer set_ColorsForXml(this ascx_SourceCodeViewer codeViewer)
+
+		public static ascx_SourceCodeEditor editor(this ascx_SourceCodeEditor codeEditor)
 		{
-			codeViewer.editor().set_ColorsForXml();
-			return codeViewer;
-		}
-		
-		public static ascx_SourceCodeEditor set_ColorsForXml(this ascx_SourceCodeEditor codeEditor)
-		{
-			codeEditor.setDocumentHighlightingStrategy(".xml");			
 			return codeEditor;
 		}
+		
 		public static ascx_SourceCodeViewer onTextChange(this ascx_SourceCodeViewer codeViewer, Action<string> callback)
 		{
 			codeViewer.editor().onTextChange(callback);
@@ -1401,9 +1590,20 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Misc_ExtensionMethods
 	{
-		public static UInt32 toUInt(this string _string)
+
+		public static string subString(this string _string, int startPosition)
 		{
-			return (UInt32)_string.toInt();
+			if (_string.size() < startPosition)
+				return "";
+			return _string.Substring(startPosition);
+		}
+		
+		public static string subString(this string _string,int startPosition, int size)
+		{
+			var subString = _string.subString(startPosition);
+			if (subString.size() < size)
+				return subString;
+			return subString.Substring(0,size);
 		}
 		
 		public static string add_RandomLetters(this string _string)
@@ -1482,6 +1682,19 @@ namespace O2.XRules.Database.Utils
 					list.add(item);
 			return list;
 		}
+		public static string join(this List<string> list)
+		{
+			return list.join(",");
+		}
+		
+		public static string join(this List<string> list, string separator)
+		{
+			if (list.size()==1)
+				return list[0];
+			if (list.size() > 1)
+				return list.Aggregate((a,b)=> "{0} {1} {2}".format(a,separator,b));
+			return "";
+		}
 	}
 	
 	public static class IEnumerable_ExtensionMethods
@@ -1505,7 +1718,15 @@ namespace O2.XRules.Database.Utils
 				count++;
 			return count;
 		}
-				
+		
+		public static object first(this IEnumerable list)
+		{
+			if(list.notNull())
+				foreach(var item in list)
+					return item;
+			return null;
+		}
+		
 		public static T first<T>(this IEnumerable<T> list)
 		{
 			try
@@ -1581,5 +1802,24 @@ namespace O2.XRules.Database.Utils
 			return treeView;
 		}
 	}
+	
+	public static class H2_ExtensionMethods
+	{
+		public static string scriptSourceCode(this string file)
+		{
+			if (file.extension(".h2"))
+				return file.h2_SourceCode();
+			return file.fileContents();
+		}
+		public static string h2_SourceCode(this string file)
+		{
+			if (file.extension(".h2"))
+			{
+				"return source code of H2 file".info();
+				return H2.load(file).SourceCode;
+			}
+			return null;
+		}			
+	}	
 }
     	
