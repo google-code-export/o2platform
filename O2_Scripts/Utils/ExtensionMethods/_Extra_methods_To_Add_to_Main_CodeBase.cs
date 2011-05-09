@@ -197,6 +197,16 @@ namespace O2.XRules.Database.Utils
 			return default(T);
 		}
 		
+		public static List<AssemblyName> referencedAssemblies(this Assembly assembly)
+		{
+			return assembly.GetReferencedAssemblies().toList();
+		}
+		
+		public static Assembly assembly(this AssemblyName assemblyName)
+		{
+			return assemblyName.str().assembly();
+		}
+		
 		//Array		
 		
 		public static Array createArray<T>(this Type arrayType,  params T[] values)			
@@ -211,7 +221,7 @@ namespace O2.XRules.Database.Utils
 				if (values.notNull())
 					for(int i=0 ; i < values.size() ; i ++)
 						array.SetValue(values[i],i);
-				return array;								
+				return array;				 				
 			}
 			catch(Exception ex)
 			{
@@ -239,7 +249,8 @@ namespace O2.XRules.Database.Utils
 			var soapMethods = new List<MethodInfo >(); 
 			foreach(var method in type.methods())
 				foreach(var attribute in method.attributes())
-					if (attribute.typeFullName() == "System.Web.Services.Protocols.SoapDocumentMethodAttribute")
+					if (attribute.typeFullName() == "System.Web.Services.Protocols.SoapDocumentMethodAttribute" ||
+					    attribute.typeFullName() == "System.Web.Services.Protocols.SoapRpcMethodAttribute")
 						soapMethods.Add(method);
 			return soapMethods;
 		}
@@ -802,7 +813,19 @@ namespace O2.XRules.Database.Utils
 			treeView.showSelected(propertyGrid);;
 			return treeView;
 		}
-
+		
+		// this is one of O2's weirdest bugs in the .NET Framework, but there are cases where 
+		// a treeview only has 1 node and it is not shown
+		public static TreeView applyPathFor_1NodeMissingNodeBug(this TreeView treeView)
+		{
+			if (treeView.nodes().size()==1)
+			{
+				var firstNode = treeView.nodes()[0];
+				firstNode.set_Text(firstNode.get_Text() + "");	
+			}
+			return treeView;
+		}
+						
 		public static TreeView showSelected(this TreeView treeView, PropertyGrid propertyGrid)			
 		{
 			return treeView.showSelected<object>(propertyGrid);
@@ -993,6 +1016,22 @@ namespace O2.XRules.Database.Utils
 		public static SplitContainer splitterWidth(this SplitContainer splitContainer, int value)
 		{
 			splitContainer.invokeOnThread(()=> splitContainer.SplitterWidth = value);
+			return splitContainer;
+		}
+		
+		public static SplitContainer splitContainerFixed(this Control control)
+		{
+			return control.splitContainer().isFixed(true);
+		}
+		
+		public static SplitContainer @fixed(this SplitContainer splitContainer, bool value)
+		{
+			return 	splitContainer.isFixed(value);
+		}
+		
+		public static SplitContainer isFixed(this SplitContainer splitContainer, bool value)
+		{
+			splitContainer.invokeOnThread(()=> splitContainer.IsSplitterFixed = value);
 			return splitContainer;
 		}
 	}
@@ -1281,6 +1320,17 @@ namespace O2.XRules.Database.Utils
 	
 	public static class sourceCodeViewer_ExtensionMethods
 	{
+		public static ascx_SourceCodeViewer set_ColorsForXml(this ascx_SourceCodeViewer codeViewer)
+		{
+			codeViewer.editor().set_ColorsForXml();
+			return codeViewer;
+		}
+		
+		public static ascx_SourceCodeEditor set_ColorsForXml(this ascx_SourceCodeEditor codeEditor)
+		{
+			codeEditor.setDocumentHighlightingStrategy(".xml");			
+			return codeEditor;
+		}
 		public static ascx_SourceCodeViewer onTextChange(this ascx_SourceCodeViewer codeViewer, Action<string> callback)
 		{
 			codeViewer.editor().onTextChange(callback);

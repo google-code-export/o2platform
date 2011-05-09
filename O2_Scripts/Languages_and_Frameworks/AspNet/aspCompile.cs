@@ -15,9 +15,10 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
-//O2Ref:System.Web.dll
 
+//O2Ref:System.Web.dll
 //O2File:Scripts_ExtensionMethods.cs
+
 using O2.XRules.Database.Utils;
 
 namespace O2.Script
@@ -54,7 +55,7 @@ namespace O2.Script
 				 .add_Script(false) 
 			 	 .onCompileExecuteOnce();
 			script.InvocationParameters.add("simpleWorkerRequest",simpleWorkerRequest);
-			script.Code = "hello";
+			script.Code = "hello"; 
 
 		}
 		
@@ -109,7 +110,7 @@ namespace O2.Script
 		{										
 			BinFolder = WebRootDir.pathCombine("bin");
 			//endure current dll is on the BinFolder						
-			copyToBinFolder(System.Reflection.Assembly.GetExecutingAssembly().Location);			
+			copyToBinFolder(System.Reflection.Assembly.GetExecutingAssembly().Location);
 			"Setup up complete for folder: {0}".info(WebRootDir);
 		}
 		
@@ -123,8 +124,9 @@ namespace O2.Script
 			var targetFile = BinFolder.pathCombine(fileName);
 			if (targetFile.fileExists().isFalse())
 			{
-				"copying to bin folder file: {0} - > {1} ".info(file, targetFile); 
+				"copying *.dll and *.pdb to bin folder file: {0} - > {1} ".info(file, targetFile); 
 	        	Files.Copy(file, targetFile);
+	        	Files.Copy(file.replace(".dll",".pdb"), targetFile); 
 	        }
 	        return this;
 		}

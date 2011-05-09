@@ -338,8 +338,8 @@ namespace O2.XRules.Database.APIs
  				if (watinIe.IE.InternetExplorer is IWebBrowser2)
  					(watinIe.IE.InternetExplorer as IWebBrowser2).Silent = value;
  			return watinIe; 			
- 		}
-		 
+ 		}				
+		
 		public static WatiN_IE open(this WatiN_IE watinIe, string url)
 		{
 			return watinIe.open(url,0);

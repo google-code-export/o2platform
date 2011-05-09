@@ -34,10 +34,18 @@ namespace O2.XRules.Database.APIs
     {   
     	public ServerManager serverManager { get; set;}
 		public Site CurrentSite { get; set; }    	
+		public bool ShowErrorIfTryingToCreateAWebsiteThatAlreadyExists {get; set; }
 		
     	public API_IIS7()
 		{
+			ShowErrorIfTryingToCreateAWebsiteThatAlreadyExists = true;
+			loadServerManager();
+		}
+		
+		public API_IIS7 loadServerManager()
+		{
 			this.serverManager = new ServerManager();
+			return this;
 		}
 				
 	}
@@ -53,10 +61,20 @@ namespace O2.XRules.Database.APIs
 			}
 			catch(Exception ex)
 			{	
-				"[API_IIS7] could not get website list: {0}".error(ex.Message);
-			
+				"[API_IIS7] could not get website list: {0}".error(ex.Message);			
 			}
 			return false;
+		}
+		
+		public static bool checkIfUserHasEnoughPermissions(this API_IIS7 iis7)
+		{
+			if(iis7.currentUserHasEnoughPermissions().isFalse())
+			{
+				if ("It looks like your current account doesn't have the rights to access the IIS data, do you want to try running this script with full priviledges?".askUserQuestion())				
+					PublicDI.CurrentScript.executeH2_as_Admin();
+				return false;
+			}														
+			return true;
 		}
 		
 		public static List<Site> websites(this API_IIS7 iis7)
@@ -84,7 +102,13 @@ namespace O2.XRules.Database.APIs
 		public static API_IIS7 commitChanges(this API_IIS7 iis7)
 		{
 			iis7.serverManager.CommitChanges();
+			iis7.loadServerManager();
 			return iis7;
+		}
+		
+		public static Site create_Website(this API_IIS7 iis7, string websiteName, string serverRoot)
+		{
+			return iis7.add_Website(websiteName,serverRoot); 
 		}
 		
 		public static Site add_Website(this API_IIS7 iis7)
@@ -110,11 +134,8 @@ namespace O2.XRules.Database.APIs
 			{				
 				var site = iis7.serverManager.Sites.Add(websiteName, serverRoot,  port);
 				iis7.commitChanges();
-				if (site.notNull())
-				{
-					"Created new website called {0} on port {1} at folder {2}".info(websiteName, serverRoot,  port);
-					return site;
-				}
+				if (site.notNull())				
+					"Created new website called {0} on port {1} at folder {2}".info(websiteName, serverRoot,  port);									
 				else
 				{
 					"Could not created website with the provided details".error();
@@ -122,7 +143,8 @@ namespace O2.XRules.Database.APIs
 				}
 			}
 			else
-				"Could not add site since it already existed a website with the same name: {0}".error(websiteName); 					
+				if (iis7.ShowErrorIfTryingToCreateAWebsiteThatAlreadyExists)
+					"Could not add site since it already existed a website with the same name: {0}".error(websiteName); 					
 			return iis7.website(websiteName);
 		}
 		
@@ -284,7 +306,9 @@ namespace O2.XRules.Database.APIs
 	{					
 		public static Panel show_IIS_Viewer(this API_IIS7 apiIIS)
 		{
-			return apiIIS.add_IIS_Viewer("Tool- IIS 7.x Viewer".showAsForm());
+			if (apiIIS.checkIfUserHasEnoughPermissions())
+				return apiIIS.add_IIS_Viewer("Tool- IIS 7.x Viewer".showAsForm());
+			return null;
 		}
 		
 		public static T add_IIS_Viewer<T>(this API_IIS7 iis7, T control)
@@ -366,7 +390,8 @@ namespace O2.XRules.Database.APIs
 		}
 		
 		public static API_IIS7 show_IIS_Websites(this API_IIS7 iis7, TreeView treeView)
-		{			
+		{	
+			iis7.loadServerManager();
 			treeView.clear();
 			iis7.setup_TreeView_IISView(treeView); 
 			try

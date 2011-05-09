@@ -45,6 +45,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 	public class ascx_WSDL_Creation_and_Execution : Control
 	{	
 		public TextBox WsdlLocation { get; set; }
+		public TextBox ExtraWsdlParameres { get; set; }
 		public ComboBox TestWebServices { get; set; }
 		public TreeView Methods_TreeView { get; set; } 	
 		public TextBox ExecutionResult { get; set; } 	
@@ -64,7 +65,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 		public ascx_WSDL_Creation_and_Execution()
 		{
 			this.Width = 700;
-			this.Height = 500;
+			this.Height = 500; 
 			buildGui();
 		}
 		
@@ -84,22 +85,17 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 		}
 		
 		public ascx_WSDL_Creation_and_Execution buildGui() 
-		{	
-			"step 1".info();
+		{				
 			var topPanel = this.add_Panel();
-			topPanel.insert_Below(100).add_LogViewer();
-			"step 2".info();
+			topPanel.insert_Below(100).add_LogViewer();			
 			//var assemblyInvoke = topPanel.add_Control<O2.External.SharpDevelop.Ascx.ascx_AssemblyInvoke>();
 			//assemblyInvoke.loadAssembly("OnlineStorage.dll".assembly());
-			//var methodProperties = topPanel.add_DataGridView();
-			"step 3".info();
-			var methodProperties = topPanel.add_GroupBox("Request Data").add_Control<ascx_ObjectViewer>();
-			"step 3a".info();
-			methodProperties.showSerializedString().createObjectWhenNull().simpleView();
-			"step 3b".info();
+			//var methodProperties = topPanel.add_DataGridView();			
+			var methodProperties = topPanel.add_GroupBox("Request Data").add_Control<ascx_ObjectViewer>();			
+			methodProperties.showSerializedString().createObjectWhenNull().simpleView();			
 			
 			Methods_TreeView = methodProperties.parent().insert_Left("Soap Methods").add_TreeView().sort();
-			ExecutionResult = methodProperties.parent().insert_Below(100).add_GroupBox("Web Service Invocation Response Data").add_TextArea();
+			ExecutionResult = methodProperties.parent().insert_Below(150).add_GroupBox("Web Service Invocation Response Data").add_TextArea();
 			ExecutionResult_Properties = ExecutionResult.insert_Right().add_PropertyGrid();
 			ExecutionResult_TreeView = ExecutionResult_Properties.insert_Below().add_TreeView();
 			ExecuteSoapRequest_Button = methodProperties.insert_Below(40)
@@ -117,7 +113,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 									methodProperties.show(SoapParametersObject);
 									//new O2FormsReflectionASCX().loadMethodInfoParametersInDataGridView(methodInfo, methodProperties);
 								});
-			"step 4".info();
+								
 			ExecuteSoapRequest_Button.onClick(
 				()=>{
 						//var parameters = new O2FormsReflectionASCX().getParameterObjectsFromDataGridColumn(methodProperties, "Value");				
@@ -158,7 +154,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 						ExecutionResult.append_Line("Execution complete");
 					});
 			
-			"step 5".info();
+			
 			Methods_TreeView.insert_Below(20)
 							.add_CheckBox("Show Full Method Signatures",0,0,(value)=> ShowFullMethodSignatures = value)
 							.autoSize()							
@@ -167,7 +163,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 							.autoSize()
 							.check();
 							
-							
+			 				
 							//.append_Link("Delete cached compiled dll", deleteCachedFile);
 			
 			ExecutionResult.insert_Below(20)
@@ -183,14 +179,15 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 			WsdlLocation = topPanel.insert_Above(22)
 								   .add_LabelAndTextAndButton("Load Custom WSDL from location (file or url)","","Load",(value) => open(value))
 								   .control<TextBox>();
-
+			ExtraWsdlParameres = topPanel.insert_Above(22).add_Label("Extra wsdl.exe parameters").left(WsdlLocation.Left).top(2)
+											  .append_TextBox("").align_Right(topPanel);
 			addScriptingSupport();
 			
-			"step 6".info();
+			
 			add_TestWebServices();
 			
 			return this;
-		}
+		} 
 		
 		public void load_Wsdl_From_Assembly(Assembly wsdlAssembly)
 		{
@@ -223,8 +220,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 			
 				var assembly = csharpFile.compile(); 
 				if (assembly.notNull())
-				{
-					CSharpFile = csharpFile;
+				{ 
+					CSharpFile = csharpFile; 
 					"Created Assembly:{0}".info(assembly.Location);
 					load_Wsdl_From_Assembly(assembly);	
 					return assembly.Location;
@@ -232,7 +229,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 				else
 					"Error creating assembly from wsdl file: {0}".error(csharpFile);
 			}
-			return "";
+			return ""; 
 		}
 		
 		public void load_Wsdl_From_WSDL_File(string wsdlToLoad)
@@ -244,9 +241,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 						
 						var sdl_Wsdl = new DotNet_SDK_WSDL(); 			
 						if (wsdlToLoad.fileExists().isFalse() && wsdlToLoad.isUri() && wsdlToLoad.ends("wsdl").isFalse())
-							wsdlToLoad += "?wsdl";							
-						sdl_Wsdl.wsdl_CreateAssembly(wsdlToLoad); 
-						var cSharpFile = sdl_Wsdl.wsdl_CreateCSharp(wsdlToLoad); 
+							wsdlToLoad += "?wsdl";						
+						var extraWsdlParameres = ExtraWsdlParameres.get_Text();	
+						"extraWsdlParameres: {0}".debug(extraWsdlParameres ?? "");
+						var cSharpFile = sdl_Wsdl.wsdl_CreateAssembly(wsdlToLoad,null,extraWsdlParameres); 
+						//var cSharpFile = sdl_Wsdl.wsdl_CreateCSharp(wsdlToLoad); 
 						var compiledAssemblyPath = load_Wsdl_From_CSharpFile(cSharpFile);	
 						if (Cache_WSDL_Dll)
 						{
@@ -290,11 +289,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 				return open(wsdlToLoad);			
 		}
 		
-		public void markGuiAs_Busy()
+		public void markGuiAs_Busy() 
 		{
 			Methods_TreeView.backColor(Color.LightPink);
 		}
-		
+		 
 		public void markGuiAs_OK()
 		{
 			Methods_TreeView.backColor(Color.White);
