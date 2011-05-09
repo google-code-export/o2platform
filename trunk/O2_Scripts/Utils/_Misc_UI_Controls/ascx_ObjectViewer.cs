@@ -15,7 +15,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.External.SharpDevelop.Ascx;
-using O2.External.SharpDevelop.ExtensionMethods;
+using O2.External.SharpDevelop.ExtensionMethods;   
 //O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 using O2.XRules.Database.Utils;
 
@@ -66,8 +66,7 @@ namespace O2.XRules.Database.Utils
     	public void buildGui()
     	{    		
     		try
-    		{
-    			"[objectViewer] step 1".info();
+    		{    			
 	    		var topPanel = this.add_Panel();	    		
 	    		serializedString = topPanel.insert_Right().add_GroupBox("Serialized Object").add_SourceCodeViewer();
 	    		var serializedStringPanel = serializedString.splitContainer().panel2Collapsed(true);	    		
@@ -76,18 +75,24 @@ namespace O2.XRules.Database.Utils
 				//treeView.splitterDistance(300);
 				var toStringValue = propertyGrid.parent().insert_Below<Panel>(100).add_GroupBox("ToString Value (not editable):").add_TextArea(); 
 				var optionsPanel = treeView.insert_Below<Panel>(70);
-				var objectName = toStringValue.parent().insert_Above<Panel>(20).add_TextBox("name","");				
-				"[objectViewer] step 2".info();
+				var objectName = toStringValue.parent().insert_Above<Panel>(20).add_TextBox("name","");								
 				propertyGrid.onValueChange(updateSerializedString);
+				
 				//setSerializedStringSyncWithPropertyGrid();
 				
 				serializedString.insert_Above(20).add_Link("Sync Serialized String With PropertyGrid",0,0,()=>updateSerializedStringSyncWithPropertyGrid());
 				
-				optionsPanel.add_CheckBox("Show Methods",0,0,
-					(value)=>{
-								ShowMethods = value;
-								refresh();
-							 });
+				LinkLabel invokeLink = null;
+				invokeLink = optionsPanel.add_CheckBox("Show Methods",0,0,
+								(value)=>{
+											ShowMethods = value;
+											invokeLink.enabled(value);
+											refresh();
+										 })
+										 .append_Link("invoke", invokeSelectedMethod)
+										 	.leftAdd(-16).topAdd(5).bringToFront()
+										 	.enabled(false);
+							 
 				optionsPanel.add_CheckBox("Show Property and Field info",22,0,
 					(value)=>{
 								ShowPropertyAndFieldInfo = value;
@@ -95,9 +100,8 @@ namespace O2.XRules.Database.Utils
 							 })
 							.autoSize()
 							.append_Link("refresh", ()=>refresh())
-							.left(200);
-				"[objectViewer] step 3".info();
-				optionsPanel.add_CheckBox("Sort Values",0,110, 
+							.left(200);				
+				optionsPanel.add_CheckBox("Sort Values",0,135, 
 					(value)=>{								
 								Sorted = value;
 								try
@@ -108,9 +112,9 @@ namespace O2.XRules.Database.Utils
 								{
 									//ex.log();
 								}								
-							 }).@checked(true);
-				"[objectViewer] step 4".info();
-				simpleView_CheckBox = optionsPanel.add_CheckBox("Simple View",0,200,
+							 }).@checked(true);			
+							 
+				simpleView_CheckBox = optionsPanel.add_CheckBox("Simple View",0,220,
 					(value)=>{
 								SimpleView = value;
 								//propertyGrid.splitContainer().panel1Collapsed(value);
@@ -132,7 +136,7 @@ namespace O2.XRules.Database.Utils
 							 })
 							.bringToFront()
 							.autoSize();							
-				"[objectViewer] step 5".info()	;		
+				
 				treeView.afterSelect<object>( 
 					(selectedObject) => {
 											var treeNode = treeView.selected();
@@ -161,8 +165,8 @@ namespace O2.XRules.Database.Utils
 												treeNode.color(Color.Red);												
 											}
 											
-									  	});
-				"[objectViewer] step 6".info();								  	
+									  	});				
+				treeView.add_ContextMenu().add_MenuItem("Invoke Method", ()=> invokeSelectedMethod());									  	
 			}
 			catch(Exception ex)
 			{
@@ -379,6 +383,25 @@ namespace O2.XRules.Database.Utils
 			treeView.clear();
 			propertyGrid.show(null);
 			addFirstObject(RootObject);									
+		}
+		
+		public void invokeSelectedMethod()
+		{
+			var selectedNodeTag = Ascx_ExtensionMethods.get_Tag(treeView.selected());
+			if (selectedNodeTag is MethodInfo)
+			{
+				var methodToInvoke = (MethodInfo)selectedNodeTag;				
+				"invoking Method: {0}".info(methodToInvoke);
+				"using root object: {0}".info(this.RootObject);		
+				
+				//PublicDI.reflection.invoke(targetObject,methodToInvoke);
+				var result = RootObject.invoke(methodToInvoke.Name);
+				"invocation result: {0}".debug(result);
+				if (result.notNull())
+					Kernel.show.info(result);
+			}
+			else
+				"Selected Node was not a Method, it was {0}".error(selectedNodeTag.typeName());
 		}
 	}
 	

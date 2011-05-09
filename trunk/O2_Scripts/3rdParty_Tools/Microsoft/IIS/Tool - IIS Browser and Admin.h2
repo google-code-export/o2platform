@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var iis7 = new API_IIS7();   
-if(iis7.currentUserHasEnoughPermissions().isFalse())
-	if ("It looks like your current account doesn't have the rights to access the IIS data, do you want to restart as admin?".askUserQuestion())
-	{
-		PublicDI.CurrentScript.executeH2_as_Admin();
-		return "restarting";
-	}
+  <SourceCode>var iis7 = new API_IIS7();  
+if (iis7.checkIfUserHasEnoughPermissions().isFalse()) 
+	return null;
 
 
 var topPanel = O2Gui.open&lt;Panel&gt;("Tool - IIS Browser and Admin",700,400);     
@@ -25,6 +21,8 @@ actionsPanel.add_Link("Start Website",20 ,0, ()=&gt; iis7.CurrentSite.start())
  
   
 var iisViewer = iis7.add_IIS_Viewer(topPanel);     
+
+return this;
 
 /*
 //this works 
