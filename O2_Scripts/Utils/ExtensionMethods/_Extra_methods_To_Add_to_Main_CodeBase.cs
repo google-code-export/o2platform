@@ -114,6 +114,58 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
+	
+		#region tuples
+
+    public class Tuple<T>
+    {
+        public Tuple(T first)
+        {
+            First = first;
+        }
+
+        public T First { get; set; }
+    }
+
+    public class Tuple<T, T2> : Tuple<T>
+    {
+        public Tuple(T first, T2 second)
+            : base(first)
+        {
+            Second = second;
+        }
+
+        public T2 Second { get; set; }
+    }
+
+    public class Tuple<T, T2, T3> : Tuple<T, T2>
+    {
+        public Tuple(T first, T2 second, T3 third)
+            : base(first, second)
+        {
+            Third = third;
+        }
+
+        public T3 Third { get; set; }
+    }
+
+    public class Tuple<T, T2, T3, T4> : Tuple<T, T2, T3>
+    {
+        public Tuple(T first, T2 second, T3 third, T4 fourth)
+            : base(first, second, third)
+        {
+            Fourth = fourth;
+        }
+
+        public T4 Fourth { get; set; }
+    }
+
+    #endregion
+
+	
+	
+	// Other extension method classes
+	
 	public static class Reflection_ExtensionMethods
 	{
 		//Reflection
@@ -1349,6 +1401,11 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Misc_ExtensionMethods
 	{
+		public static UInt32 toUInt(this string _string)
+		{
+			return (UInt32)_string.toInt();
+		}
+		
 		public static string add_RandomLetters(this string _string)
 		{
 			return _string.add_RandomLetters(10);
@@ -1463,6 +1520,13 @@ namespace O2.XRules.Database.Utils
 			}
 			return default(T);
 		}
+		
+/*		public static List<T> selectMany<T,T1>(this IEnumerable<T> list)
+		{
+			if (list.notNull()) 
+				list.SelectMany<T,T1>((a)=> a);
+			return new List<T>();
+		}*/
 		
 		/*public static List<T> toList<T>(this IEnumerable list)
 		{

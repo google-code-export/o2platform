@@ -27,6 +27,16 @@ namespace O2.XRules.Database.Findings
 
 	public static class Findings_ExtensionMethods_IO2Finding
 	{
+		public static IO2Finding o2Finding(this string vulnName)
+		{
+			return vulnName.o2Finding(vulnName);
+		}
+		
+		public static IO2Finding o2Finding(this string vulnName, string vulnType)
+		{
+			return new O2Finding(vulnName, vulnType);
+		}
+		
 		public static O2Finding o2Finding(this IO2Finding iO2Finding)
 		{
 			return (O2Finding)iO2Finding;
@@ -110,6 +120,23 @@ namespace O2.XRules.Database.Findings
 	
 	public static class Findings_ExtensionMethods_IO2Trace
 	{
+		public static IO2Trace add_Trace(this IO2Finding o2Finding, string text)
+		{
+			return o2Finding.o2Traces.add_Trace(text);
+		}
+		
+		public static IO2Trace add_Trace(this List<IO2Trace> iO2Traces, string text)
+		{
+			var newTrace = new O2Trace(text);
+			iO2Traces.Add(newTrace);
+			return newTrace;
+		}
+		
+		public static IO2Trace add_Trace(this IO2Trace o2Trace, string text)
+		{
+			return o2Trace.childTraces.add_Trace(text);
+		}
+	
 		public static List<string> values(this List<IO2Trace> iO2Traces)
 		{
 			return iO2Traces.signatures();
@@ -129,6 +156,7 @@ namespace O2.XRules.Database.Findings
 		{
 			return control.add_FindingsViewer(false);
 		}
+		
 		public static ascx_FindingsViewer add_FindingsViewer(this Control control, bool includeSourceCodeViewer)
         {
             "O2_ImportExport_OunceLabs.dll".assembly()
@@ -139,11 +167,30 @@ namespace O2.XRules.Database.Findings
 			{
 				var codeViewer = findingsViewer.insert_Right<Panel>(control.width()/2).add_SourceCodeViewer();
 				findingsViewer._onTraceSelected += 
-					(trace)=> codeViewer.show(trace);
+					(trace)=>{
+									codeViewer.show(trace);
+									findingsViewer.controls<ascx_TraceTreeView>().focus();
+							 };
 				findingsViewer._onFindingSelected +=
-					(finding)=> codeViewer.open(finding.file);
+					(finding)=> { 
+									"here".info();
+									codeViewer.open(finding.file);
+									codeViewer.editor().gotoLine((int)finding.lineNumber);
+									
+									//
+									O2Thread.mtaThread(
+										()=>{
+												findingsViewer.sleep(100,false);												
+												findingsViewer.getResultsTreeView().focus();												
+											});
+								};
 			}
             return findingsViewer;
+        }
+        
+        public static ascx_FindingEditor add_FindingEditor(this Control control)
+        {
+        	return control.add_Control<ascx_FindingEditor>();
         }
 
         public static List<IO2Finding> o2Findings(this ascx_FindingsViewer findingsViewer)
