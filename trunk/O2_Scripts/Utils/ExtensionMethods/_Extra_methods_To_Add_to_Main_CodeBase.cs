@@ -168,7 +168,30 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Reflection_ExtensionMethods
 	{
-		//Reflection		
+		//Reflection				
+		public static object field<T>(this object _object, string fieldName)
+		{
+			var type = typeof(T);  
+			return _object.field(type, fieldName);
+		}
+		
+		public static object field(this object _object, Type type, string fieldName)
+		{			
+			"**** type:{0}".error(type.typeName());
+			var fieldInfo =  (FieldInfo)type.field(fieldName);
+			return PublicDI.reflection.getFieldValue(fieldInfo, type);
+		}
+		
+		public static List<ConstructorInfo> ctors(this Type type)
+		{
+			return type.GetConstructors(System.Reflection.BindingFlags.NonPublic | 
+									    System.Reflection.BindingFlags.Public | 
+									    System.Reflection.BindingFlags.Instance).toList();
+		}
+		
+
+
+		
 		public static T property<T>(this object _object, string propertyName)
 		{						
 			if (_object.notNull())
@@ -630,7 +653,10 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Processes_ExtensionMethods
 	{		
-		
+		public static string startProcess_getConsoleOut(this string processExe)
+		{
+			return processExe.startProcess_getConsoleOut("");
+		}
 		public static string startProcess_getConsoleOut(this string processExe, string arguments)
 		{
 			return Processes.startProcessAsConsoleApplicationAndReturnConsoleOutput(processExe, arguments);
@@ -1711,11 +1737,16 @@ namespace O2.XRules.Database.Utils
 			return -1;
 		}
 		
-		public static int count(this IEnumerable list)
+		public static int size(this IEnumerable list)
 		{
+			return list.count();
+		}
+		public static int count(this IEnumerable list)
+		{			
 			var count = 0;
-			foreach(var item in list)
-				count++;
+			if (list.notNull())
+				foreach(var item in list)
+					count++;
 			return count;
 		}
 		
@@ -1821,5 +1852,42 @@ namespace O2.XRules.Database.Utils
 			return null;
 		}			
 	}	
+	
+	public static class Console_ExtensionMethods
+	{
+		public static MemoryStream capture_Console(this string firstLine)
+		{
+			var memoryStream = new MemoryStream();
+			memoryStream.capture_Console();  
+			Console.WriteLine(firstLine);
+			return memoryStream;
+		}
+		public static MemoryStream capture_Console(this MemoryStream memoryStream)
+		{
+			return memoryStream.capture_ConsoleOut()
+							   .capture_ConsoleError(); 
+		}
+		public static MemoryStream capture_ConsoleOut(this MemoryStream memoryStream)
+		{
+			var streamWriter = new StreamWriter(memoryStream);
+			System.Console.SetOut(streamWriter);
+			streamWriter.AutoFlush = true;
+			return memoryStream;
+		}
+		
+		public static MemoryStream capture_ConsoleError(this MemoryStream memoryStream)
+		{
+			var streamWriter = new StreamWriter(memoryStream);
+			System.Console.SetError(streamWriter);
+			streamWriter.AutoFlush = true;
+			return memoryStream;
+		}
+		
+		public static string readToEnd(this MemoryStream memoryStream)
+		{
+			memoryStream.Position =0;
+			return new StreamReader(memoryStream).ReadToEnd();
+		}
+	}
 }
     	

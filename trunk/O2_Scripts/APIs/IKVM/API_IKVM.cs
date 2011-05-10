@@ -10,11 +10,14 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
 using O2.XRules.Database.Utils;
+using O2.XRules.Database.Languages_and_Frameworks.DotNet;
+
+//O2File:DotNet_SDK_GacUtil.cs  
 //O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.APIs.IKVM
 {
-    public class API_IKVM
+    public class API_IKVM	
     {
         /*static IKVMConfig()
         {
@@ -82,7 +85,7 @@ namespace O2.XRules.Database.APIs.IKVM
             return false;
         }
 
-        public static void installIKVM(this API_IKVM ikvm)
+        public static API_IKVM installIKVM(this API_IKVM ikvm)
         {
 			var downloadedFile = ikvm.zippedIKVMRunTime.downloadFile();
             if (false == downloadedFile.fileExists())
@@ -97,6 +100,20 @@ namespace O2.XRules.Database.APIs.IKVM
                     "Problem installing/unziping _IKVMRuntimeDir: {0}".error(ikvm._IKVMRuntimeDir);
                 //JavaShell.testIKVM();
             }
+            return ikvm;
+        }
+        
+        public static API_IKVM install_IKVM_Assemblies_on_GAC(this API_IKVM ikvm)
+        {
+        	"Installing IKVM dlls in local GAC folder".info();
+        	var gacUtil =  new DotNet_SDK_GacUtil();  
+        	foreach(var file in ikvm.IKVMInstallationDir.files("ikvm*.*"))
+        		if (file.fileName().neq("ikvm-native.dll") && gacUtil.install(file).isFalse())              		
+        		{
+        			"Failed to install into GAC, so stopping installation process".error();
+        			break;
+        		}
+			return ikvm;
         }
 
         public static bool checkIfJavaPathIsCorrectlySet(this API_IKVM ikvm)
