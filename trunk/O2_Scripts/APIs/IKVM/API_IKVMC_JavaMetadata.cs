@@ -31,13 +31,14 @@ namespace O2.XRules.Database.APIs.IKVM
     	
     	public override string ToString()
     	{
-    		return "{0}    with    {1} classes".format(FileProcessed.fileName(), Classes.size());
+    		return "{0}            [{1} classes]".format(FileProcessed.fileName(), Classes.size());
     	}
 	}
 	
 	[Serializable]
 	public class Java_Class
 	{		
+		[XmlAttribute] public string Signature {get;set;}
 		[XmlAttribute] public string Name {get;set;}
 		[XmlAttribute] public string SuperClass {get;set;}
 		[XmlAttribute] public string SourceFile {get;set;}
@@ -61,7 +62,8 @@ namespace O2.XRules.Database.APIs.IKVM
 		
 		public override string ToString()
     	{
-    		return "{0}    with    {1} methods".format(Name, Methods.size());
+    		return Name;
+    		//return "{0}            [{1} methods]".format(Name, Methods.size());
     	}
 	}
 	
@@ -111,6 +113,7 @@ namespace O2.XRules.Database.APIs.IKVM
 		[XmlAttribute] public int Id {get;set;}
 		[XmlAttribute] public string Type {get;set;}
 		[XmlAttribute] public string Value {get;set;}
+		[XmlAttribute] public bool ValueEncoded {get;set;}
 		
 		public ConstantPool()
 		{
@@ -122,6 +125,17 @@ namespace O2.XRules.Database.APIs.IKVM
 			Type = type;
 			Value = value;
 		}
+		
+		public ConstantPool(int id, string type, string value, bool valueEncoded) : this(id, type, value)
+		{
+			ValueEncoded = valueEncoded;
+		}
+		
+		public override string ToString()	
+		{
+			return (ValueEncoded) ? Value.base64Decode() : Value;
+		}
+		
 	}
 	
 	[Serializable]
@@ -130,6 +144,7 @@ namespace O2.XRules.Database.APIs.IKVM
 		[XmlAttribute] public int Pc {get;set;}	
 		[XmlAttribute] public string OpCode {get;set;}		
 		[XmlAttribute] public int TargetIndex {get;set;}				
+		[XmlAttribute] public int Line_Number {get;set;}
 	}		
 	
 	[Serializable]
@@ -139,13 +154,34 @@ namespace O2.XRules.Database.APIs.IKVM
 		[XmlAttribute] public int Index {get;set;}		
 		[XmlAttribute] public int Length {get;set;}		
 		[XmlAttribute] public string Name {get;set;}		
-		[XmlAttribute] public int Start_Pc {get;set;}		
+		[XmlAttribute] public int Start_Pc {get;set;}			
 	}		
 	
 	[Serializable]
 	public class LineNumber
 	{
-		[XmlAttribute] public int Line_Number {get;set;}		
+		[XmlAttribute] public int Line_Number {get;set;}
 		[XmlAttribute] public int Start_Pc {get;set;}		
 	}
+	
+	
+	public static class API_IKVMC_Java_Metadata_ExtensionMethods
+	{
+		public static Dictionary<string, Java_Class> getClasses_IndexedBySignature(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			var classesBySignature = new Dictionary<string, Java_Class>();
+			foreach(var _class in javaMetadata.Classes)
+				classesBySignature.add(_class.Signature, _class);
+			return classesBySignature;
+		}
+		
+		public static List<int> uniqueTargetIndexes(this Java_Method method)
+		{
+			return  (from instruction in method.Instructions
+		 			 where instruction.TargetIndex > 0
+					 select instruction.TargetIndex).Distinct().toList();
+		}
+	}
+	
+	
 }

@@ -10,7 +10,7 @@ using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Collections;
 using System.Collections.Generic;
-using  System.Collections.Specialized;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Xml.Linq;
 using System.Reflection;
@@ -28,6 +28,7 @@ using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.H2Scripts;
+using O2.DotNetWrappers.Zip;
 using O2.Views.ASCX;
 using O2.Views.ASCX.CoreControls;
 using O2.Views.ASCX.classes.MainGUI;
@@ -45,10 +46,13 @@ using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
 using ICSharpCode.SharpDevelop.Dom.CSharp;
 using System.CodeDom;
+
 using O2.Views.ASCX.O2Findings;
 using O2.Views.ASCX.DataViewers;
 using System.Security.Cryptography;
 
+using Ionic.Zip;
+//O2Ref:Ionic.Zip.dll
 //O2Ref:O2_API_AST.dll
 
 //O2File:ascx_ObjectViewer.cs
@@ -939,7 +943,14 @@ namespace O2.XRules.Database.Utils
 			}
 			return treeView;
 		}
-						
+		
+		public static TreeView collapse(this TreeView treeView)
+		{
+			if (treeView.notNull())
+				treeView.invokeOnThread(()=> treeView.CollapseAll());
+			return treeView;
+		}
+		
 		public static TreeView showSelected(this TreeView treeView, PropertyGrid propertyGrid)			
 		{
 			return treeView.showSelected<object>(propertyGrid);
@@ -1037,18 +1048,30 @@ namespace O2.XRules.Database.Utils
 			return treeNode.add_Nodes(collection, getNodeName, (item)=> item, (item)=> false);			
 		}
 		
-		//IEnumerable<T> collection, Func<T,string> getNodeName)
+		
+		//IEnumerable<T> collection, Func<T,string> getNodeName, getColor)
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, Color> getColor)
 		{
-			treeView.rootNode().add_Nodes(collection, getNodeName, getColor);
+			return treeView.add_Nodes<T>(collection, getNodeName, (item)=> false, getColor);
+		}
+		
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, Color> getColor)
+		{
+			return treeNode.add_Nodes<T>(collection, getNodeName, (item)=> false, getColor);
+		}
+		
+		//IEnumerable<T> collection, Func<T,string> getNodeName, addDummyNode, getColor)
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, bool> getAddDummyNode, Func<T, Color> getColor)
+		{
+			treeView.rootNode().add_Nodes(collection, getNodeName, getAddDummyNode, getColor);
 			return treeView;
 		}
 				
-		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, Color> getColor)
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, bool> getAddDummyNode, Func<T, Color> getColor)
 		{
 			foreach(var item in collection)
 			{
-				var newNode = Ascx_ExtensionMethods.add_Node(treeNode,getNodeName(item), item);
+				var newNode = Ascx_ExtensionMethods.add_Node(treeNode,getNodeName(item), item, getAddDummyNode(item));
 				newNode.color(getColor(item));
 			}
 			return treeNode;
@@ -1485,6 +1508,14 @@ namespace O2.XRules.Database.Utils
 			buildPanel2(controls[1].add_Panel());
 			return controls;
 		}
+		
+		public static T insert_LogViewer<T>(this T control)
+			where T : Control
+		{
+			control.insert_Below(100)
+				   .add_LogViewer();
+			return control;
+		}
 		// insert_...()
 		public static Panel insert_Left(this Control control)
 		{
@@ -1773,6 +1804,30 @@ namespace O2.XRules.Database.Utils
 			return default(T);
 		}
 		
+		public static T last<T>(this IEnumerable<T> list)
+		{
+			try
+			{
+				if (list.notNull())
+					return list.Last();
+			}
+			catch(Exception ex)
+			{	
+				if (ex.Message != "Sequence contains no elements")
+					"[IEnumerable.first] {0}".error(ex.Message);
+			}
+			return default(T);
+		}
+		
+		public static object last(this IEnumerable list)
+		{
+			object lastItem = null;
+			if(list.notNull())
+				foreach(var item in list)
+					lastItem= item;
+			return lastItem;
+		}
+		
 /*		public static List<T> selectMany<T,T1>(this IEnumerable<T> list)
 		{
 			if (list.notNull()) 
@@ -1887,6 +1942,34 @@ namespace O2.XRules.Database.Utils
 		{
 			memoryStream.Position =0;
 			return new StreamReader(memoryStream).ReadToEnd();
+		}
+	}
+	
+	public static class Zip_ExtensionMethods
+	{	
+		public static string zip_File(this string filesToZip)
+		{
+			return filesToZip.zip_File(".zip".tempFile());
+		}
+		
+		public static string zip_Folder(this string filesToZip)
+		{
+			return filesToZip.zip_Folder(".zip".tempFile());
+		}
+		
+		public static string zip_Files(this List<string> filesToZip)
+		{
+			return filesToZip.zip_Files(".zip".tempFile());
+		}
+		
+		public static string zip_Files(this List<string> filesToZip, string targetZipFile)
+		{		
+            var zpZipFile = new ZipFile(targetZipFile);
+            foreach(var fileToZip in filesToZip)
+            	zpZipFile.AddFile(fileToZip, "");            
+            zpZipFile.Save();
+            zpZipFile.Dispose();
+            return targetZipFile;        
 		}
 	}
 }
