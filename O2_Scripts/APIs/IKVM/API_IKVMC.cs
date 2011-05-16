@@ -105,7 +105,7 @@ namespace O2.XRules.Database.APIs.IKVM
 				var bytes = item.Value;
 				var classFile = ikvmc.createClassFile(bytes,1);				// value of 1 gets the local variables
 				var javaClass = new Java_Class {
-													Signature = name,
+													Signature = name,													
 													Name = name.contains(".") ? name.split(".").last() : name,
 													SourceFile = classFile.prop("SourceFileAttribute").str(),
 							 						IsAbstract = classFile.prop("IsAbstract").str().toBool(),
@@ -115,6 +115,9 @@ namespace O2.XRules.Database.APIs.IKVM
 													SuperClass = classFile.prop("SuperClass").str()
 											   };
 				
+				if (classFile.prop("GenericSignature").notNull())
+					javaClass.GenericSignature = classFile.prop("GenericSignature").str();
+					
 				javaClass.ConstantsPool = classFile.getConstantPoolEntries();
 				javaClass.map_Annotations(classFile)
 						 .map_Interfaces(classFile)
@@ -133,7 +136,7 @@ namespace O2.XRules.Database.APIs.IKVM
 		
 		public static Java_Class map_EnclosingMethod(this Java_Class javaClass, object classFile)
 		{		
-			if (classFile.prop("EnclosingMethod").notNull())
+			if (classFile.prop("EnclosingMethod").notNull()) 
 			{
 				var enclosingMethodData = (string[])classFile.prop("EnclosingMethod");
 				if (enclosingMethodData.size()==3)  // when the size it is 1, it represents the case of normal inner classes (not annonymous classes defined inside methods which is what I'm after)				
@@ -198,16 +201,19 @@ namespace O2.XRules.Database.APIs.IKVM
 			{		
 				var javaMethod = new Java_Method {
 													Name = method.prop("Name").str(),
-													ParametersAndReturnValue = method.prop("Signature").str(),													
+													ParametersAndReturnType = method.prop("Signature").str(),														
 													ClassName = javaClass.Signature,
 													IsAbstract = method.prop("IsAbstract").str().toBool(), 
 													IsClassInitializer = method.prop("IsClassInitializer").str().toBool(), 
 													IsNative = method.prop("IsNative").str().toBool(), 
 													IsPublic = method.prop("IsPublic").str().toBool(), 
 													IsStatic = method.prop("IsStatic").str().toBool()
-												 };
-				javaMethod.SimpleSignature = "{0}{1}".format(javaMethod.Name,javaMethod.ParametersAndReturnValue);
+												 };															 
+				javaMethod.SimpleSignature = "{0}{1}".format(javaMethod.Name,javaMethod.ParametersAndReturnType);
+				javaMethod.ReturnType = javaMethod.ParametersAndReturnType.subString_After(")");
 				javaMethod.Signature =  "{0}.{1}".format(javaMethod.ClassName, javaMethod.SimpleSignature);
+				if (method.prop("GenericSignature").notNull())
+					javaMethod.GenericSignature = method.prop("GenericSignature").str();
 				javaMethod.map_Annotations(method)
 						  .map_Variables(method);
 				
