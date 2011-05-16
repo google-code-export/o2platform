@@ -3,13 +3,11 @@
   <SourceCode>var title = "Dinis Cruz - O2 version (Security Consultant)";
 var currentScript = PublicDI.CurrentScript;//"Dinis Cruz (Custom O2 version).h2".local();
  
-var topPanel = O2Gui.open&lt;Panel&gt;(title, 1024,300);        
-
-var ribbonPanel = topPanel.insert_Above&lt;Panel&gt;(150);
-
-var ribbon = ribbonPanel.add_Ribbon();
+var topPanel = O2Gui.open&lt;Panel&gt;(title, 1024,283);  
 topPanel.add_LogViewer();
-var leftPanel = ribbonPanel.insert_Right&lt;Panel&gt;(200).fill(false).width(200).height(148);
+topPanel = topPanel.insert_Above&lt;Panel&gt;(148);      
+//topPanel.insert_Below&lt;Panel&gt;(110).add_LogViewer(); 
+var leftPanel = topPanel.insert_Right&lt;Panel&gt;(200).fill(false).width(200).height(148);
 
 topPanel.parentForm().top(60).left(60); 
 
@@ -17,6 +15,11 @@ leftPanel.add_PictureBox().show("O2_Version_For_DinisCruz.jpg".local()).fill(fal
 topPanel.backColor("Control"); 
 topPanel.parent&lt;SplitContainer&gt;().backColor(Color.White);//.splitterDistance(200); 
  
+var logoNoShadow = "O2_Logo_no_Shadow.jpg".local();  
+var smallLogo = "O2Logo_Small.gif".local();
+
+var ribbon = topPanel.add_Control&lt;WPF_Ribbon&gt;(); 
+ribbon.title("O2 Platform main GUI");
 //Custom O2 tab
 ribbon.add_Tab("Custom O2s") 	
 

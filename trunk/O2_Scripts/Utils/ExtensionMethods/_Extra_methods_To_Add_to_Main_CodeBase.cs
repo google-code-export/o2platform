@@ -69,7 +69,17 @@ namespace O2.XRules.Database.Utils
 	[Serializable]
 	public  class Items : List<Item> 
 	{
-		
+		public string this[string key] 
+		{
+			get
+			{
+				foreach(var item in this)
+					if (item.Key == key)
+						return item.Value;
+				return null;
+					//return new Item(value,value);
+			}	
+		}
 	}
 	
 	[Serializable]
@@ -1063,15 +1073,26 @@ namespace O2.XRules.Database.Utils
 		//IEnumerable<T> collection, Func<T,string> getNodeName, addDummyNode, getColor)
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, bool> getAddDummyNode, Func<T, Color> getColor)
 		{
-			treeView.rootNode().add_Nodes(collection, getNodeName, getAddDummyNode, getColor);
+			return treeView.add_Nodes<T>(collection, getNodeName, (item)=>item, getAddDummyNode, getColor);
+		}
+		
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, bool> getAddDummyNode, Func<T, Color> getColor)
+		{
+			return treeNode.add_Nodes<T>(collection, getNodeName, (item)=>item, getAddDummyNode, getColor);
+		}
+		
+		//IEnumerable<T> collection, Func<T,string> getNodeName, getTagValue, addDummyNode, getColor)
+		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T,object> getTagValue,  Func<T, bool> getAddDummyNode, Func<T, Color> getColor)
+		{
+			treeView.rootNode().add_Nodes(collection, getNodeName,getTagValue, getAddDummyNode, getColor);
 			return treeView;
 		}
 				
-		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T, bool> getAddDummyNode, Func<T, Color> getColor)
+		public static TreeNode add_Nodes<T>(this TreeNode treeNode, IEnumerable<T> collection, Func<T,string> getNodeName, Func<T,object> getTagValue, Func<T, bool> getAddDummyNode, Func<T, Color> getColor)
 		{
 			foreach(var item in collection)
 			{
-				var newNode = Ascx_ExtensionMethods.add_Node(treeNode,getNodeName(item), item, getAddDummyNode(item));
+				var newNode = Ascx_ExtensionMethods.add_Node(treeNode,getNodeName(item), getTagValue(item), getAddDummyNode(item));
 				newNode.color(getColor(item));
 			}
 			return treeNode;
@@ -1643,11 +1664,54 @@ namespace O2.XRules.Database.Utils
 					});
 			return codeEditor;
 		}
+		
+		public static ascx_SourceCodeViewer open(this ascx_SourceCodeViewer codeViewer, string file , int line)
+		{
+			codeViewer.editor().open(file, line);
+			return codeViewer;
+		}
+		
+		public static ascx_SourceCodeEditor open(this ascx_SourceCodeEditor codeEditor, string file , int line)
+		{
+			codeEditor.open(file);
+			codeEditor.gotoLine(line);
+			return codeEditor;
+		}
+		
+		public static ascx_SourceCodeViewer gotoLine(this ascx_SourceCodeViewer codeViewer, int line)
+		{
+			codeViewer.editor().gotoLine(line);
+			return codeViewer;
+		}
+		
+		public static ascx_SourceCodeViewer gotoLine(this ascx_SourceCodeViewer codeViewer, int line, int showLinesBelow)
+		{
+			codeViewer.editor().gotoLine(line,showLinesBelow);
+			return codeViewer;
+		}
+		
+		public static ascx_SourceCodeEditor gotoLine(this ascx_SourceCodeEditor codeEditor, int line, int showLinesBelow)
+		{
+			if (line>0)
+			{
+				codeEditor.caret_Line(line,-showLinesBelow);			
+				codeEditor.caret_Line(line,showLinesBelow);						
+				codeEditor.gotoLine(line);
+			}
+			return codeEditor;
+		}
 	}
 	
 	public static class Misc_ExtensionMethods
 	{
-
+		public static List<string> lines(this string text, bool removeEmptyLines)
+		{
+			if (removeEmptyLines)
+				return text.lines();
+			return text.fixCRLF()
+					   .Split(new string[] { Environment.NewLine }, System.StringSplitOptions.None )
+					   .toList();
+		}
 		public static string subString(this string _string, int startPosition)
 		{
 			if (_string.size() < startPosition)
@@ -1662,6 +1726,17 @@ namespace O2.XRules.Database.Utils
 				return subString;
 			return subString.Substring(0,size);
 		}
+		
+		public static string subString_After(this string _string, string _stringToFind)
+		{
+			var index = _string.IndexOf(_stringToFind);
+			if (index >0)
+			{
+				return _string.subString(index + _stringToFind.size());
+			}
+			return "";
+		}
+		
 		
 		public static string add_RandomLetters(this string _string)
 		{
@@ -1680,6 +1755,25 @@ namespace O2.XRules.Database.Utils
 				return mappedFile;
 			return null;
 		}
+		
+		public static List<string> files(this List<string> folders)
+		{
+			return folders.files("*.*");
+		}
+		
+		public static List<string> files(this List<string> folders, string filter)
+		{
+			return folders.files(filter,false);
+		}
+		
+		public static List<string> files(this List<string> folders, string filter, bool recursive)
+		{
+			var files = new List<string>();
+			foreach(var folder in folders)
+				files.AddRange(folder.files(filter, recursive));
+			return files;
+		}
+		
 		public static string ascii(this int _int)
 		{
 			try
@@ -1724,6 +1818,21 @@ namespace O2.XRules.Database.Utils
 				return Guid.Empty;			
 			return new Guid(guidValue);		
 		}
+		
+		public static bool toBool(this string _string)
+		{
+			try
+			{
+				if (_string.valid())
+					return bool.Parse(_string);				
+			}
+			catch(Exception ex)
+			{
+				"in toBool, failed to convert provided value ('{0}') into a boolean: {2}".format(_string, ex.Message);				
+			}
+			return false;
+		}
+		
 		
 		// so that it is automatically available in the O2 Scriping environment (was in public static class ascx_ObjectViewer_ExtensionMethods)
 		public static void details<T>(this T _object)
@@ -1962,11 +2071,22 @@ namespace O2.XRules.Database.Utils
 			return filesToZip.zip_Files(".zip".tempFile());
 		}
 		
-		public static string zip_Files(this List<string> filesToZip, string targetZipFile)
+		public static string zip_Files(this List<string> filesToZip, string targetZipFile)//, string baseFolder)
 		{		
+			"Creating ZipFile with {0} files to {1}".info(filesToZip.size(), targetZipFile);
+			if (targetZipFile.fileExists())
+				Files.deleteFile(targetZipFile);
             var zpZipFile = new ZipFile(targetZipFile);
             foreach(var fileToZip in filesToZip)
-            	zpZipFile.AddFile(fileToZip, "");            
+            {            	
+            	{
+            		zpZipFile.AddFile(fileToZip);            
+            	}
+            	//catch(Exception ex)
+            	{
+            	//	"[zip_Files] {0} in file {1}".error(ex.Message, fileToZip);
+            	}
+            }
             zpZipFile.Save();
             zpZipFile.Dispose();
             return targetZipFile;        

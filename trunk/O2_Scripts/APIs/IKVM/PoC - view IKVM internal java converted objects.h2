@@ -135,7 +135,7 @@ Action&lt;string&gt; loadFile =
 						if (instructions.notNull())
 						{	
 							foreach(var instruction in instructions)
-							{
+							{ 
 								var normalizedOpCode = instruction.prop("NormalizedOpCode").str(); 
 								var targetIndex = instruction.prop("TargetIndex").str().toInt();
 								if (targetIndex&gt;0)
@@ -158,12 +158,13 @@ Action&lt;string&gt; loadFile =
 
 treeView.onDrop((file)=&gt;O2Thread.mtaThread(()=&gt;loadFile(file)));
 			
-var jarsFolder = @"C:\O2\Demos\WebGoat\WebGoat-5.3_RC1\tomcat\webapps\webgoat\WEB-INF\lib";
-var commons_Logging_Jar = jarsFolder.pathCombine("commons-logging-1.0.4.jar"); 
 
-loadFile( commons_Logging_Jar);			
+//loadFile( commons_Logging_Jar);			
 //loadFile( commons_Logging_Jar);	
 return "ok";
+
+var jarsFolder = @"C:\O2\Demos\WebGoat\WebGoat-5.3_RC1\tomcat\webapps\webgoat\WEB-INF\lib";
+var commons_Logging_Jar = jarsFolder.pathCombine("commons-logging-1.0.4.jar"); 
 
 //ikvmcCompiler.details(); 
 
@@ -238,12 +239,12 @@ var manifest = jarFile.getManifest();
 manifest.details();
 //jarFile.details();
 return jarFile;
-//O2Ref:C:\O2\_tempDir\_ToolsOrAPIs\_IKVM_Runtime\IKVM.Runtime.dll
-//O2Ref:C:\O2\_tempDir\_ToolsOrAPIs\_IKVM_Runtime\IKVM.OpenJDK.Util.dll
-//O2Ref:C:\O2\_tempDir\_ToolsOrAPIs\_IKVM_Runtime\IKVM.OpenJDK.Core.dll
-//O2Ref:C:\O2\_tempDir\_ToolsOrAPIs\_IKVM_Runtime\IKVM.Reflection.dll
-//O2Ref:C:\O2\_tempDir\_ToolsOrAPIs\_IKVM_Runtime\ikvmc.exe
-//O2Ref:C:\O2\_tempDir\_ToolsOrAPIs\_IKVM_Runtime\ICSharpCode.SharpZipLib.dll
+//O2Ref:IKVM.Runtime.dll
+//O2Ref:IKVM.OpenJDK.Util.dll
+//O2Ref:IKVM.OpenJDK.Core.dll
+//O2Ref:IKVM.Reflection.dll
+//O2Ref:ikvmc.exe
+//O2Ref:ICSharpCode.SharpZipLib.dll
 //
 var ikvmApi = new API_IKVM();
 //ikvmApi.install_IKVM_Assemblies_on_GAC();  // first time install on GAC
