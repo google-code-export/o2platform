@@ -38,7 +38,7 @@ namespace O2.XRules.Database.APIs.IKVM
     	public object IkvmRuntimeJni  { get; set;}
     	public object IkvmcCompiler   { get; set;}
     	public object CompilerOptions { get; set;}
-    	
+    	 
     	public API_IKVMC()
     	{
     		setup();
@@ -104,29 +104,42 @@ namespace O2.XRules.Database.APIs.IKVM
 				var name = item.Key;
 				var bytes = item.Value;
 				var classFile = ikvmc.createClassFile(bytes,1);				// value of 1 gets the local variables
-				var javaClass = new Java_Class {						
+				var javaClass = new Java_Class {
 													Signature = name,
 													Name = name.contains(".") ? name.split(".").last() : name,
 													SourceFile = classFile.prop("SourceFileAttribute").str(),
-													IsAbstract = classFile.prop("IsAbstract").str(),
-													IsInterface = classFile.prop("IsInterface").str(),
-													IsInternal = classFile.prop("IsInternal").str(),
-													IsPublic = classFile.prop("IsPublic").str(),
+							 						IsAbstract = classFile.prop("IsAbstract").str().toBool(),
+													IsInterface = classFile.prop("IsInterface").str().toBool(),
+													IsInternal = classFile.prop("IsInternal").str().toBool(),
+													IsPublic = classFile.prop("IsPublic").str().toBool(),
 													SuperClass = classFile.prop("SuperClass").str()
-											 };
+											   };
 				
 				javaClass.ConstantsPool = classFile.getConstantPoolEntries();
 				javaClass.map_Annotations(classFile)
 						 .map_Interfaces(classFile)
 						 .map_Fields(classFile)
-						 .map_Methods(classFile);
+						 .map_Methods(classFile)
+						 .map_EnclosingMethod(classFile);								
 						 				
 				javaClass.map_LineNumbers(ikvmc.createClassFile(bytes,2)); // for this we need to call createClassFile with the value of 2 (to get the source code references)
+				
 				javaMetaData.Classes.Add(javaClass);												
 				//break; // 
 			}
 			o2Timer.stop();
 			return javaMetaData;
+		}
+		
+		public static Java_Class map_EnclosingMethod(this Java_Class javaClass, object classFile)
+		{		
+			if (classFile.prop("EnclosingMethod").notNull())
+			{
+				var enclosingMethodData = (string[])classFile.prop("EnclosingMethod");
+				if (enclosingMethodData.size()==3)  // when the size it is 1, it represents the case of normal inner classes (not annonymous classes defined inside methods which is what I'm after)				
+					javaClass.EnclosingMethod = "{0}.{1}{2}".format(enclosingMethodData[0], enclosingMethodData[1],enclosingMethodData[2]);									
+			}
+			return javaClass;
 		}
 		
 		public static Java_Class map_Annotations(this Java_Class javaClass, object classFile)
@@ -187,14 +200,14 @@ namespace O2.XRules.Database.APIs.IKVM
 													Name = method.prop("Name").str(),
 													ParametersAndReturnValue = method.prop("Signature").str(),													
 													ClassName = javaClass.Signature,
-													IsAbstract = method.prop("IsAbstract").str(), 
-													IsClassInitializer = method.prop("IsClassInitializer").str(), 
-													IsNative = method.prop("IsNative").str(), 
-													IsPublic = method.prop("IsPublic").str(), 
-													IsStatic = method.prop("IsStatic").str()
+													IsAbstract = method.prop("IsAbstract").str().toBool(), 
+													IsClassInitializer = method.prop("IsClassInitializer").str().toBool(), 
+													IsNative = method.prop("IsNative").str().toBool(), 
+													IsPublic = method.prop("IsPublic").str().toBool(), 
+													IsStatic = method.prop("IsStatic").str().toBool()
 												 };
-				javaMethod.Signature = "{0}{1}".format(javaMethod.Name,javaMethod.ParametersAndReturnValue);												 								
-				
+				javaMethod.SimpleSignature = "{0}{1}".format(javaMethod.Name,javaMethod.ParametersAndReturnValue);
+				javaMethod.Signature =  "{0}.{1}".format(javaMethod.ClassName, javaMethod.SimpleSignature);
 				javaMethod.map_Annotations(method)
 						  .map_Variables(method);
 				
@@ -207,7 +220,7 @@ namespace O2.XRules.Database.APIs.IKVM
 						var javaInstruction = new Java_Instruction();
 						javaInstruction.Pc = instruction.prop("PC").str().toInt(); 
 						javaInstruction.OpCode = instruction.prop("NormalizedOpCode").str(); 
-						javaInstruction.TargetIndex =  instruction.prop("TargetIndex").str().toInt();
+						javaInstruction.Target_Index =  instruction.prop("TargetIndex").str().toInt();
 						javaMethod.Instructions.Add(javaInstruction);						
 					}
 				}
@@ -284,49 +297,63 @@ namespace O2.XRules.Database.APIs.IKVM
 			
 			var constantPoolRaw = new Dictionary<int,object>();
 			var constantPool =  (IEnumerable)classFile.field("constantpool");  
-			var index = 0;
-			foreach(var constant in constantPool)
-				constantPoolRaw.add(index++, constant); 
+			if (constantPool.isNull())
+				"in getConstantPoolEntries , classFile.field(\"constantpool\") was null".error();
+			else
+			{;
+				var index = 0;
+				foreach(var constant in constantPool)
+					constantPoolRaw.add(index++, constant); 
 				
 			//var constantPoolValues = new Dictionary<int,string>();	 
 		//	var stillToMap = new List<object>();
-			for(int i=0; i < constantPoolRaw.size() ; i++)
-			{
-				var currentItem = constantPoolRaw[i];
-				var currentItemType = currentItem.str();
-				switch(currentItemType)
+				for(int i=0; i < constantPoolRaw.size() ; i++)
 				{
-					case "IKVM.Internal.ClassFile+ConstantPoolItemClass":											
-						constantsPool.add_Entry(i, currentItemType.remove("IKVM.Internal.ClassFile+ConstantPoolItem"), currentItem.prop("Name").str());						
-						break;
-					case "IKVM.Internal.ClassFile+ConstantPoolItemMethodref":						
-					case "IKVM.Internal.ClassFile+ConstantPoolItemFieldref":									
-						constantsPool.add_Entry(i,currentItemType.remove("IKVM.Internal.ClassFile+ConstantPoolItem"), 
-												"{0}.{1} : {2}".format(currentItem.prop("Class"),
-												   	 				   currentItem.prop("Name"),
-												   	 				   currentItem.prop("Signature")));									
-						break;
-					case "IKVM.Internal.ClassFile+ConstantPoolItemNameAndType":	 // skip this one since don;t know what they point to
-						//constantPoolValues.Add(i,"IKVM.Internal.ClassFile+ConstantPoolItemNameAndType");	
-						break; 
-					case "IKVM.Internal.ClassFile+ConstantPoolItemString":
-					case "IKVM.Internal.ClassFile+ConstantPoolItemInteger":
-					case "IKVM.Internal.ClassFile+ConstantPoolItemFloat":
-					case "IKVM.Internal.ClassFile+ConstantPoolItemDouble": 
-					case "IKVM.Internal.ClassFile+ConstantPoolItemLong":
-						var value = currentItem.prop("Value").str();
-						value = value.base64Encode();//HACK to deal with BUG in .NET Serialization and Deserialization (to reseatch further)
-						constantsPool.add_Entry(i,currentItemType.remove("IKVM.Internal.ClassFile+ConstantPoolItem"),value, true);
-						break;
-					case "IKVM.Internal.ClassFile+ConstantPoolItemInterfaceMethodref": // doesn't have any value to use
-						break;
-					case "[null value]":
-						//constantsPool.add_Entry(i,"[null value]", null);						
-						break; 
-					default:
-						"Unsupported constantPoll type: {0}".error(currentItem.str());
-						break;
-				}		
+					var currentItem = constantPoolRaw[i];
+					var currentItemType = currentItem.str();
+					switch(currentItemType)
+					{
+						case "IKVM.Internal.ClassFile+ConstantPoolItemClass":											
+							constantsPool.add_Entry(i, currentItemType.remove("IKVM.Internal.ClassFile+ConstantPoolItem"), currentItem.prop("Name").str());						
+							break;
+						case "IKVM.Internal.ClassFile+ConstantPoolItemMethodref":											
+							constantsPool.add_Entry(i,currentItemType.remove("IKVM.Internal.ClassFile+ConstantPoolItem"), 
+													"{0}.{1}{2}".format(currentItem.prop("Class"),
+													   	 				   currentItem.prop("Name"),
+													   	 				   currentItem.prop("Signature")));									
+							break;												   	 				   
+						case "IKVM.Internal.ClassFile+ConstantPoolItemInterfaceMethodref": 
+							constantsPool.add_Entry(i,currentItemType.remove("IKVM.Internal.ClassFile+ConstantPoolItem"),
+													"{0}.{1}{2}".format(currentItem.prop("Class"),
+													   	 				   currentItem.prop("Name"),
+													   	 				   currentItem.prop("Signature")));									
+							break;	
+						case "IKVM.Internal.ClassFile+ConstantPoolItemFieldref":																		
+							constantsPool.add_Entry(i,currentItemType.remove("IKVM.Internal.ClassFile+ConstantPoolItem"), 
+													"{0}.{1} : {2}".format(currentItem.prop("Class"),
+													   	 				   currentItem.prop("Name"),
+													   	 				   currentItem.prop("Signature")));									
+							break;
+						case "IKVM.Internal.ClassFile+ConstantPoolItemNameAndType":	 // skip this one since don;t know what they point to
+							//constantPoolValues.Add(i,"IKVM.Internal.ClassFile+ConstantPoolItemNameAndType");	
+							break; 
+						case "IKVM.Internal.ClassFile+ConstantPoolItemString":
+						case "IKVM.Internal.ClassFile+ConstantPoolItemInteger":
+						case "IKVM.Internal.ClassFile+ConstantPoolItemFloat":
+						case "IKVM.Internal.ClassFile+ConstantPoolItemDouble": 
+						case "IKVM.Internal.ClassFile+ConstantPoolItemLong":
+							var value = currentItem.prop("Value").str();
+							value = value.base64Encode();//HACK to deal with BUG in .NET Serialization and Deserialization (to reseatch further)
+							constantsPool.add_Entry(i,currentItemType.remove("IKVM.Internal.ClassFile+ConstantPoolItem"),value, true);
+							break;					
+						case "[null value]":
+							//constantsPool.add_Entry(i,"[null value]", null);						
+							break; 
+						default:
+							"Unsupported constantPoll type: {0}".error(currentItem.str());
+							break;
+					}		
+				}
 			}
 			return constantsPool;	
 		}		
@@ -346,7 +373,7 @@ namespace O2.XRules.Database.APIs.IKVM
 			return _class.ConstantsPool.getDictionary_byType();
 		}
 		
-		public static Dictionary<string,List<ConstantPool>> constantsPool_byType(this Java_Class _class, Java_Method method)
+		public static Dictionary<string,List<ConstantPool>> constantsPool_byType(this Java_Method method, Java_Class _class)
 		{
 			return _class.ConstantsPool.getDictionary_byType(method);
 		}
@@ -371,15 +398,24 @@ namespace O2.XRules.Database.APIs.IKVM
 				dictionary.Add(item.Id, item);			
 			return dictionary;
 		}
-		
+		 
 		public static Dictionary<string,List<ConstantPool>> getDictionary_byType(this  List<ConstantPool> constantsPool)
 		{
 			var dictionary = new Dictionary<string,List<ConstantPool>>();
 			foreach(var item in constantsPool)								
 				dictionary.add(item.Type, item);			
 			return dictionary;
-		}
+		} 
 		
+		public static Dictionary<int,List<Java_Instruction>> getConstantsPoolUsage_byIndex_WithLineNumbers(this Java_Method method)
+		{
+			var dictionary = new Dictionary<int,List<Java_Instruction>>(); 
+			foreach(var instruction in method.Instructions)	 						
+				if(instruction.Target_Index >0)
+				dictionary.add(instruction.Target_Index, instruction);			
+			return dictionary;
+		} 
+
 		public static Dictionary<string,List<ConstantPool>> getDictionary_byType(this  List<ConstantPool> constantsPool, Java_Method method)		
 		{
 			var usedInMethod = method.uniqueTargetIndexes();
@@ -396,7 +432,7 @@ namespace O2.XRules.Database.APIs.IKVM
 				}
 			}
 			return dictionary;
-		}
+		}					
 		
 
 	}
@@ -437,8 +473,8 @@ namespace O2.XRules.Database.APIs.IKVM
 			foreach(var instruction in method.Instructions)
 			{
 				var nodeText = "[line:{0}] \t {1}".format(instruction.Line_Number,instruction.OpCode);
-				if (instruction.TargetIndex > 0 && values.hasKey(instruction.TargetIndex))								
-					nodeText = "{0} {1}".format(nodeText , values[instruction.TargetIndex]);
+				if (instruction.Target_Index > 0 && values.hasKey(instruction.Target_Index))								
+					nodeText = "{0} {1}".format(nodeText , values[instruction.Target_Index]);
 				treeNode.add_Node(nodeText, instruction)
 						.color(Color.DarkGreen);
 			
@@ -481,11 +517,20 @@ namespace O2.XRules.Database.APIs.IKVM
 		public static TreeNode add_ConstantsPool(this TreeNode treeNode, Java_Method method, Java_Class methodClass)
 		{
 			var constantsPoolNode = treeNode.add_Node("_ConstantsPool");
-			foreach(var item in methodClass.constantsPool_byType(method))
+			foreach(var item in method.constantsPool_byType(methodClass))
 				constantsPoolNode.add_Node(item.Key, item.Value, true);
 			return treeNode;
-		}
+		}				
 		
+		public static string file(this Java_Class _class)
+		{
+			var file = (_class.Signature.EndsWith(_class.Name)) 
+							? _class.Signature.subString(0, _class.Signature.size() - _class.Name.size())
+							: _class.Signature;
+						
+			file = "{0}{1}".format(file.replace(".","\\"), _class.SourceFile); 
+			return file;
+		}
 		
 		public static ascx_SourceCodeViewer showInCodeViewer(this ascx_SourceCodeViewer codeViewer ,Java_Class _class, Java_Method method)
 		{
@@ -496,28 +541,61 @@ namespace O2.XRules.Database.APIs.IKVM
 		public static ascx_SourceCodeEditor showInCodeEditor(this ascx_SourceCodeEditor codeEditor ,Java_Class _class, Java_Method method)
 		{										
 			//var _class = classes_bySignature[classSignature];
-			var file = _class.Signature.remove(_class.Name);
-			file = "{0}{1}".format(file.replace(".","\\"), _class.SourceFile); 
+			var file = _class.file();
 			codeEditor.open(file);
 			var lineNumber = 0; 
+			if (method.isNull() ||method.LineNumbers.isNull())
+				return codeEditor;
 			foreach(var item in method.LineNumbers)
 				if (item.Line_Number > 1)
 					if (lineNumber == 0 || item.Line_Number < lineNumber)
-						lineNumber = item.Line_Number;								
-			codeEditor.gotoLine(lineNumber);			
+						lineNumber = item.Line_Number;
+						
+			//this to match the method name to the location (vs the first method)
+			var sourceCodeLines = codeEditor.getSourceCode().lines(false);
+			if (method.Name.regEx("<.*init*.>").isFalse())
+			{
+				for(int i=0 ; i < 10 ; i++)
+				{
+					
+					if (lineNumber > i &&   sourceCodeLines.size() > lineNumber-i)
+					{
+						var line = sourceCodeLines[lineNumber-i];					
+						if (sourceCodeLines[lineNumber-i].contains(method.Name) &&
+							line.regEx("public|private|internal|protected"))
+						{						
+							lineNumber = lineNumber -i + 1;						
+							break;
+						}
+					}
+				}
+			}			
+			codeEditor.gotoLine(lineNumber,4);
+			
 			return codeEditor;
    		}
-			
-		public static T viewJavaMappings<T>(this T control, API_IKVMC_Java_Metadata javaMappings)
-			where T : Control
+			 
+		public static Action<string> viewJavaMappings(this Control control, API_IKVMC_Java_Metadata javaMappings)			
 		{	
 			control.clear();
 			Dictionary<string, Java_Class> classes_bySignature = null;
+			Dictionary<string, Java_Method> methods_bySignature = null;
+			Dictionary<string, List<Java_Class>> classes_MappedTo_Implementations = null;
+			
 			var showFullClassNames = false;
 			var openSourceCodeReference = false;
+			var classFilter = "";
+			Action refresh = null;
+			API_IKVMC_Java_Metadata currentJavaMetaData = null;
 			var treeView = control.add_TreeView_with_PropertyGrid();
 			var codeEditor = control.insert_Right().add_SourceCodeEditor();
 			var configPanel = control.insert_Below(40,"Config");
+			
+			treeView.insert_Above(20).add_TextBox("Class Filter","")
+									 .onEnter((text) => { 
+											 				classFilter = text ;
+											 				refresh();
+											 			});
 			
 			configPanel.add_CheckBox("Show Full Class names", 0,0, 
 							(value)=>{
@@ -529,28 +607,45 @@ namespace O2.XRules.Database.APIs.IKVM
 					   							  .onChecked((value)=> openSourceCodeReference=value)
 					   							  .check();
 			//BeforeExpand Events
+			Action<TreeNode, List<Java_Class>> add_Classes = 
+				(treeNode, classes)=>{
+										treeNode.add_Nodes(classes.Where((_class)=> classFilter.inValid() || _class.Signature.regEx(classFilter))
+																  .OrderBy((_class)=>_class.Name),
+														   (_class)=> (showFullClassNames)
+														   					? _class.Signature
+														   					: _class.Name ,
+							 							   (_class)=> true,
+														   (_class)=> (_class.IsInterface) 
+														   					? Color.DarkRed 
+														   					: Color.DarkOrange);
+									 };
+									 
 			treeView.beforeExpand<API_IKVMC_Java_Metadata>(
-				(treeNode, javaMetadata)=>{
-												treeNode.add_Nodes(javaMetadata.Classes.OrderBy((item)=>item.Name), 	
-																   (_class)=> (showFullClassNames)
-																   					? _class.Signature
-																   					: _class.Name ,
-																   (_class)=> true,
-																   (_class)=> Color.DarkOrange);
+				(treeNode, javaMetadata)=>{												
+												add_Classes(treeNode, javaMetadata.Classes);
 										  });
-										  
+					 					  
 			treeView.beforeExpand<Java_Class>(   
 				(treeNode, _class)=>{
+										if(classes_MappedTo_Implementations.hasKey(_class.Signature))
+										{
+											add_Classes(treeNode.add_Node("_Implementations"), 
+														classes_MappedTo_Implementations[_class.Signature]);
+										}
+										
+										
 										treeNode.add_ConstantsPool(_class)
 												.add_Annotations(true, _class.Annotations);
 										treeNode.add_Nodes(_class.Methods.OrderBy((item)=>item.Name),
 														   (method)=> method.str(),
-														   (method)=> true,
-													 	   (method)=> Color.DarkBlue);
+														   (method)=> method.IsAbstract.isFalse(),
+													 	   (method)=> (method.IsAbstract)
+													 	   					? Color.DarkRed
+													 	   					: Color.DarkBlue);
 									});
 										    
 			treeView.beforeExpand<Java_Method>( 
-				(treeNode, method)=>{  
+				(treeNode, method)=>{  																						
 										treeNode.add_ConstantsPool(method,classes_bySignature[method.ClassName])
 												.add_Annotations(true, method.Annotations)
 											    .add_Variables(method);
@@ -570,7 +665,9 @@ namespace O2.XRules.Database.APIs.IKVM
 											treeNode.add_Nodes(constantsPool.OrderBy((item)=>item.str()),
 															   (constant)=> constant.str(),
 														       (constant)=> false,
-													 	       (constant)=> Color.Sienna);
+													 	       (constant)=> methods_bySignature.hasKey(constant.Value)
+													 	       					? Color.Green
+													 	       					: Color.Sienna);
 										});												
 			//AfterSelect Events
 						  
@@ -582,7 +679,7 @@ namespace O2.XRules.Database.APIs.IKVM
 									treeView.focus();  
 								}
 							});
-			
+			 
 			treeView.afterSelect<Java_Method>(
 				(method) => {
 								if (openSourceCodeReference)
@@ -596,37 +693,60 @@ namespace O2.XRules.Database.APIs.IKVM
 				(instruction) => {	
 									if (openSourceCodeReference)
 									{
-										codeEditor.gotoLine(instruction.Line_Number); 
+										codeEditor.gotoLine(instruction.Line_Number,4); 
 										treeView.focus();  
 									}
 							});				
-						
-			//Other events
-			Action<API_IKVMC_Java_Metadata> loadJavaMappings =
-				(_javaMappings)=>{		
-									if (_javaMappings.notNull())
+			treeView.afterSelect<ConstantPool>(			
+				(constantPool)=> {
+									if (methods_bySignature.hasKey(constantPool.Value))
 									{
-										treeView.clear();
-										classes_bySignature =  _javaMappings.getClasses_IndexedBySignature();    			
-										treeView.add_Node(_javaMappings.str(), _javaMappings, true); 				
+										var method = methods_bySignature[constantPool.Value];
+										codeEditor.showInCodeEditor(classes_bySignature[method.ClassName], method); 									
 										treeView.focus();
 									}
+								});
+			//Other events						
+			
+			refresh = ()=>{
+								if(currentJavaMetaData.notNull())
+								{
+									treeView.clear();
+									classes_bySignature				 = currentJavaMetaData.classes_IndexedBySignature();    			
+									methods_bySignature 			 = currentJavaMetaData.methods_IndexedBySignature();    										
+									classes_MappedTo_Implementations = currentJavaMetaData.classes_MappedTo_Implementations(); 									
+									treeView.add_Node(currentJavaMetaData.str(), currentJavaMetaData, true); 				
+									treeView.nodes().first().expand();
+									//treeView.focus();
+								}
 									else
-										treeView.add_Node("Drop Jar/Zip or class file to view its contents");
+										treeView.add_Node("Drop Jar/Zip or class file to view its contents");		
+							};
+			
+			Action<API_IKVMC_Java_Metadata> loadJavaMappings =
+				(_javaMappings)=>{		
+									currentJavaMetaData = _javaMappings;
+									refresh();									
 								 };
-			treeView.onDrop((
-				file)=>{
+								 
+			Action<string> loadFile = 
+				(file)=>{
 							treeView.azure();
 							O2Thread.mtaThread(
 								()=>{
-										loadJavaMappings(new API_IKVMC().create_JavaMetadata(file));
+										if(file.extension(".xml"))
+											loadJavaMappings(file.load<API_IKVMC_Java_Metadata>());
+										else
+											loadJavaMappings(new API_IKVMC().create_JavaMetadata(file));
 										treeView.white();
 									});
-						});
-						
+						};
+					
+			treeView.onDrop(loadFile);
+			
 			loadJavaMappings(javaMappings);			
 		
-			return control;
+			return loadFile;
 		}
 	}	
 }

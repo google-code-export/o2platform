@@ -11,10 +11,11 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.Windows;
 using O2.DotNetWrappers.Zip;
 using O2.XRules.Database.Utils;
- 
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
-namespace O2.XRules.Database.APIs.IKVM
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+//O2File:API_IKVMC.cs
+
+namespace O2.XRules.Database.APIs.IKVM 
 {	
 	[Serializable]
     public class API_IKVMC_Java_Metadata
@@ -41,11 +42,12 @@ namespace O2.XRules.Database.APIs.IKVM
 		[XmlAttribute] public string Signature {get;set;}
 		[XmlAttribute] public string Name {get;set;}
 		[XmlAttribute] public string SuperClass {get;set;}
+		[XmlAttribute] public string EnclosingMethod {get;set;}
 		[XmlAttribute] public string SourceFile {get;set;}
-		[XmlAttribute] public string IsAbstract {get;set;}
-		[XmlAttribute] public string IsInterface {get;set;}
-		[XmlAttribute] public string IsInternal {get;set;}
-		[XmlAttribute] public string IsPublic {get;set;}
+		[XmlAttribute] public bool IsAbstract {get;set;}
+		[XmlAttribute] public bool IsInterface {get;set;}
+		[XmlAttribute] public bool IsInternal {get;set;}
+		[XmlAttribute] public bool IsPublic {get;set;}
 					   public Object[] Annotations {get;set;}
 					   public List<string> Interfaces {get;set;}					   
 					   public List<Java_Field> Fields {get;set;}
@@ -83,11 +85,12 @@ namespace O2.XRules.Database.APIs.IKVM
 		[XmlAttribute] 				public string ParametersAndReturnValue {get;set;}		
 		[XmlAttribute] 				public string ClassName {get;set;}
 		[XmlAttribute]				public string Signature {get;set;}
-		[XmlAttribute] 				public string IsAbstract {get;set;}
-		[XmlAttribute] 			  	public string IsClassInitializer {get;set;}		
-		[XmlAttribute] 			  	public string IsNative {get;set;}		
-		[XmlAttribute] 			  	public string IsPublic {get;set;}
-		[XmlAttribute] 			  	public string IsStatic {get;set;}		
+		[XmlAttribute]				public string SimpleSignature {get;set;}
+		[XmlAttribute] 				public bool IsAbstract {get;set;}
+		[XmlAttribute] 			  	public bool IsClassInitializer {get;set;}		
+		[XmlAttribute] 			  	public bool IsNative {get;set;}		
+		[XmlAttribute] 			  	public bool IsPublic {get;set;}
+		[XmlAttribute] 			  	public bool IsStatic {get;set;}		
 									public Object[] Annotations {get;set;}
 									public Object[] ParameterAnnotations {get;set;}
 		[XmlElement("Variable")]	public List<Java_Variable> Variables {get;set;}
@@ -103,7 +106,7 @@ namespace O2.XRules.Database.APIs.IKVM
 		
 		public override string ToString()
     	{
-    		return "{0} {1}".format(Name, ParametersAndReturnValue);
+    		return "{0}{1}".format(Name, ParametersAndReturnValue);
     	}
 	}
 	
@@ -143,7 +146,7 @@ namespace O2.XRules.Database.APIs.IKVM
 	{		
 		[XmlAttribute] public int Pc {get;set;}	
 		[XmlAttribute] public string OpCode {get;set;}		
-		[XmlAttribute] public int TargetIndex {get;set;}				
+		[XmlAttribute] public int Target_Index {get;set;}				
 		[XmlAttribute] public int Line_Number {get;set;}
 	}		
 	
@@ -162,24 +165,184 @@ namespace O2.XRules.Database.APIs.IKVM
 	{
 		[XmlAttribute] public int Line_Number {get;set;}
 		[XmlAttribute] public int Start_Pc {get;set;}		
-	}
-	
+	}	
 	
 	public static class API_IKVMC_Java_Metadata_ExtensionMethods
 	{
-		public static Dictionary<string, Java_Class> getClasses_IndexedBySignature(this API_IKVMC_Java_Metadata javaMetadata)
+		public static API_IKVMC_Java_Metadata javaMetadata(this string file)
+		{
+			API_IKVMC_Java_Metadata javaMetadata = null;
+			try
+			{	
+				javaMetadata = (API_IKVMC_Java_Metadata)O2LiveObjects.get(file);	// try first to get a cached version of this file
+			}
+			catch
+			{}
+			if (javaMetadata.isNull() && file.fileExists())
+			{
+				"Cached version not found, loading from disk".info();
+				if (file.extension(".xml"))
+					javaMetadata =  file.load<API_IKVMC_Java_Metadata>();
+				else
+					javaMetadata =  new API_IKVMC().create_JavaMetadata(file);						
+				O2LiveObjects.set(file, javaMetadata);
+			}
+			return javaMetadata;
+		}
+		
+		public static Dictionary<string, Java_Class> classes_IndexedBySignature(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			return javaMetadata.Classes.indexedBySignature();				
+		}
+					
+		public static Dictionary<string, Java_Method> methods_IndexedBySignature(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			var methodsBySignature = new Dictionary<string, Java_Method>();
+			foreach(var _class in javaMetadata.Classes)
+				foreach(var item in _class.Methods.indexedBySignature())
+					methodsBySignature.Add(item.Key, item.Value);
+			return methodsBySignature;
+		}
+
+
+		public static Dictionary<string, Java_Class> indexedBySignature(this List<Java_Class> classes)
 		{
 			var classesBySignature = new Dictionary<string, Java_Class>();
-			foreach(var _class in javaMetadata.Classes)
-				classesBySignature.add(_class.Signature, _class);
+			if (classes.notNull())
+				foreach(var _class in classes) 
+					classesBySignature.add(_class.Signature, _class);
 			return classesBySignature;
+		}			
+		
+		public static Dictionary<string, Java_Method> indexedBySignature(this List<Java_Method> methods)
+		{
+			var methodsBySignature = new Dictionary<string, Java_Method>();			
+			foreach(var method in methods)
+				methodsBySignature.Add(method.Signature, method);
+			return methodsBySignature;
 		}
+		
+		public static List<Java_Class> classes_ThatAre_Interfaces(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			return (from _class in javaMetadata.Classes
+					where _class.IsInterface					
+					select _class).toList();
+		}
+		
+		public static Dictionary<string, List<Java_Class>> classes_MappedTo_Implementations(this API_IKVMC_Java_Metadata javaMetadata)
+		{	
+			//next map the Interfaces
+			var implementations = new Dictionary<string, List<Java_Class>>();
+			foreach(var _class in javaMetadata.Classes)			
+				foreach(var _interface in _class.Interfaces)
+					implementations.add(_interface, _class);
+					
+					
+			//next map the SuperClasses
+			var classes_bySignature = javaMetadata.classes_IndexedBySignature();
+			foreach(var _class in javaMetadata.Classes)			
+				if (_class.SuperClass.valid() && classes_bySignature.hasKey(_class.SuperClass))
+					implementations.add(_class.SuperClass, _class);//.Signature, classes_bySignature[_class.SuperClass]);
+					
+			return implementations;
+		}
+		
+		public static Dictionary<string, List<Java_Class>> classes_MappedTo_EnclosingMethod(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			var enclosingMethods = new Dictionary<string, List<Java_Class>>();
+			foreach(var _class in javaMetadata.Classes)
+				if (_class.EnclosingMethod.notNull())
+					enclosingMethods.add(_class.EnclosingMethod, _class);
+			return 	enclosingMethods;	
+		}
+		
+		public static Dictionary<string, string> methods_MappedTo_EnclosingMethod(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			var enclosingMethods = new Dictionary<string, string>();
+			foreach(var _class in javaMetadata.Classes)
+				if (_class.EnclosingMethod.notNull())
+					foreach(var method in _class.Methods)
+						enclosingMethods.add(method.Signature, _class.EnclosingMethod);
+			return 	enclosingMethods;			
+		}		
+		
+		public static List<Java_Method> implementations(this Java_Method method, Dictionary<string, List<Java_Class>> classesImplementations)
+		{
+			var implementations = new List<Java_Method>();
+			if (classesImplementations.hasKey(method.ClassName))
+			{
+				foreach(var _class in classesImplementations[method.ClassName])
+					foreach(var implementationMethod in _class.Methods)
+						if (method.SimpleSignature == implementationMethod.SimpleSignature)
+						{
+							implementations.Add(implementationMethod);
+							break;
+						}
+			}
+			return implementations;						
+		}
+		
 		
 		public static List<int> uniqueTargetIndexes(this Java_Method method)
 		{
 			return  (from instruction in method.Instructions
-		 			 where instruction.TargetIndex > 0
-					 select instruction.TargetIndex).Distinct().toList();
+		 			 where instruction.Target_Index > 0
+					 select instruction.Target_Index).Distinct().toList();
+		}
+		
+		public static List<string> values(this List<ConstantPool> list)
+		{
+			return (from item in list
+					select item.str()).toList();
+		}
+		
+		public static List<Java_Class> java_Classes(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			return javaMetadata.Classes;
+		}
+		
+		public static List<Java_Class> java_Classes_with_EnclosingMethod(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			return (from _class in javaMetadata.java_Classes()
+					where _class.EnclosingMethod.notNull()
+					select _class).toList();
+		}
+		
+		public static List<Java_Method> java_Methods(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			return (from _class in javaMetadata.Classes
+					from method in _class.Methods
+					select method).toList();			
+		}
+		
+		public static List<Java_Method> java_Methods_Abstract(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			return (from method in javaMetadata.java_Methods()
+					where method.IsAbstract
+					select method).toList();
+		}
+		
+		public static Java_Method name(this List<Java_Method> methods, string value)
+		{
+			return methods.withValue("Name", value);
+		}
+		
+		public static Java_Method signature(this List<Java_Method> methods, string value)
+		{
+			return methods.withValue("Signature", value);
+		}
+		
+		public static Java_Method simpleSignature(this List<Java_Method> methods, string value)
+		{
+			return methods.withValue("SimpleSignature", value);
+		}
+		
+		public static Java_Method withValue(this List<Java_Method> methods, string name, string value)
+		{
+			foreach(var method in methods)
+				if (method.prop(name).str() == value)
+					return method;
+			return null;
 		}
 	}
 	
