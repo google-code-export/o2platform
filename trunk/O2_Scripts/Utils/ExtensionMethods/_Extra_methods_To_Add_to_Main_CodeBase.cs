@@ -1704,6 +1704,14 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Misc_ExtensionMethods
 	{
+		public static string upperCaseFirstLetter(this string _string)
+		{
+			if (_string.valid())
+			{
+				return _string[0].str().upper() + _string.subString(1); 
+			}
+			return _string;
+		}
 		public static List<string> lines(this string text, bool removeEmptyLines)
 		{
 			if (removeEmptyLines)

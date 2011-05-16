@@ -117,7 +117,12 @@ namespace O2.XRules.Database.APIs.IKVM
 		{
 			return new MethodCall_Location { File = _class.file() , Line = line , Pc = pc};
 		}
-															 	
+		
+		public static JavaMetadata_XRefs get_XRefs(this API_IKVMC_Java_Metadata javaMetadata)
+		{
+			return javaMetadata.map_JavaMetadata_XRefs();
+		}
+		
 		public static JavaMetadata_XRefs map_JavaMetadata_XRefs(this API_IKVMC_Java_Metadata javaMetadata)
 		{
 			return new JavaMetadata_XRefs(javaMetadata).map_JavaMetadata_XRefs();

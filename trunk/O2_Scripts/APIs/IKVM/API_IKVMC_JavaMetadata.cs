@@ -40,6 +40,7 @@ namespace O2.XRules.Database.APIs.IKVM
 	public class Java_Class
 	{		
 		[XmlAttribute] public string Signature {get;set;}
+		[XmlAttribute] public string GenericSignature {get;set;}
 		[XmlAttribute] public string Name {get;set;}
 		[XmlAttribute] public string SuperClass {get;set;}
 		[XmlAttribute] public string EnclosingMethod {get;set;}
@@ -82,10 +83,12 @@ namespace O2.XRules.Database.APIs.IKVM
 	public class Java_Method 
 	{
 		[XmlAttribute] 				public string Name {get;set;}
-		[XmlAttribute] 				public string ParametersAndReturnValue {get;set;}		
+		[XmlAttribute] 				public string ParametersAndReturnType {get;set;}		
+		[XmlAttribute] 				public string ReturnType {get;set;}		
 		[XmlAttribute] 				public string ClassName {get;set;}
 		[XmlAttribute]				public string Signature {get;set;}
 		[XmlAttribute]				public string SimpleSignature {get;set;}
+		[XmlAttribute] 				public string GenericSignature {get;set;}
 		[XmlAttribute] 				public bool IsAbstract {get;set;}
 		[XmlAttribute] 			  	public bool IsClassInitializer {get;set;}		
 		[XmlAttribute] 			  	public bool IsNative {get;set;}		
@@ -106,7 +109,9 @@ namespace O2.XRules.Database.APIs.IKVM
 		
 		public override string ToString()
     	{
-    		return "{0}{1}".format(Name, ParametersAndReturnValue);
+    		return GenericSignature.isNull()
+    					? "{0}{1}".format(Name, ParametersAndReturnType)
+    					: "{0}{1}   - GenericSignature:  {2}".format(Name, ParametersAndReturnType, GenericSignature);
     	}
 	}
 	
@@ -308,6 +313,13 @@ namespace O2.XRules.Database.APIs.IKVM
 					select _class).toList();
 		}
 		
+		public static List<Java_Method> java_Methods(this Java_Class _class)
+		{
+			if (_class.notNull())				
+				return _class.Methods;
+			return new List<Java_Method>();
+		}
+		
 		public static List<Java_Method> java_Methods(this API_IKVMC_Java_Metadata javaMetadata)
 		{
 			return (from _class in javaMetadata.Classes
@@ -320,6 +332,71 @@ namespace O2.XRules.Database.APIs.IKVM
 			return (from method in javaMetadata.java_Methods()
 					where method.IsAbstract
 					select method).toList();
+		}
+		
+		public static List<Java_Method> java_Methods_Setters_Public(this Java_Class _class)
+		{
+			return (from method in _class.Methods
+					where method.IsPublic && method.Name.starts("set")
+					select method).toList();
+		}
+		
+		public static List<Java_Method> java_Methods_Getters_Public(this Java_Class _class)
+		{
+			return (from method in _class.Methods
+					where method.IsPublic && method.Name.starts("get")
+					select method).toList();
+		}
+		
+		public static List<Java_Method> with_Primitive_Parameter(this List<Java_Method> methods, bool value)
+		{
+			var primitiveReturnTypes = 
+				new List<string> { 
+									"(Ljava.lang.Integer;)V",
+									"(Ljava.util.Date;)V",
+									"(Ljava.lang.String;)V",
+									"(Ljava.lang.Boolean;)V"
+								 };
+											
+			return (from method in methods	
+					where primitiveReturnTypes.contains(method.ParametersAndReturnType) == value	// need to make this search in the actual parameter values
+					select method).toList();
+		}
+		
+		public static List<Java_Method> with_Primitive_ReturnType(this List<Java_Method> methods, bool value)
+		{
+			var primitiveReturnTypes = 
+				new List<string> { 
+									"Ljava.lang.Integer;",
+									"Ljava.util.Date;",
+									"Ljava.lang.String;",
+									"Ljava.lang.Boolean;"
+								 };
+											
+			return (from method in methods
+					where primitiveReturnTypes.contains(method.ReturnType) == value
+					select method).toList();
+		}
+		
+		
+		public static string returnType(this Java_Method method)
+		{
+			var returnType = "";
+			if (method.GenericSignature.isNull())
+				returnType = method.ReturnType;
+			
+			if (returnType.inValid())	
+				returnType = method.GenericSignature.subString_After("java/util/Set<")
+													.removeLastChar().removeLastChar()
+													.replace("/",".").trim();
+			if (returnType.inValid())				
+				returnType = method.GenericSignature.subString_After("java/util/Collection<")
+													.removeLastChar().removeLastChar()
+													.replace("/",".").trim();
+			return (returnType.starts("L"))
+					? returnType.removeFirstChar().removeLastChar()
+					: returnType;												
+
 		}
 		
 		public static Java_Method name(this List<Java_Method> methods, string value)
@@ -343,6 +420,35 @@ namespace O2.XRules.Database.APIs.IKVM
 				if (method.prop(name).str() == value)
 					return method;
 			return null;
+		}
+		
+		public static Java_Class signature(this List<Java_Class> classes, string value)
+		{
+			return classes.withValue("Signature", value);
+		}		
+		
+		public static Java_Class withValue(this List<Java_Class> classes, string name, string value)
+		{
+			foreach(var _class in classes)
+				if (_class.prop(name).str() == value)
+					return _class;
+			return null;
+		}
+		
+		public static Dictionary<int, Java_Instruction> instructions_byPc(this Java_Method method)
+		{
+			var instructions_byPc = new Dictionary<int, Java_Instruction>();
+			foreach(var instruction in method.Instructions)
+				instructions_byPc.Add(instruction.Pc, instruction);
+			return instructions_byPc;
+		}
+		
+		public static Dictionary<int, List<Java_Variable>> variables_byIndex(this Java_Method method)
+		{
+			var variables_byIndex = new Dictionary<int, List<Java_Variable>>();
+			foreach(var variable in method.Variables)
+				variables_byIndex.add(variable.Index, variable);
+			return variables_byIndex;
 		}
 	}
 	
