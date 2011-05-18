@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<ArrayOfItem>
+  <Item Key="alert - jQuery" Value="alert(jQuery);" />
+  <Item Key="jQuery - change all links to 'test'" Value="jQuery('a').html('test')" />
+  <Item Key="jQuery - inner html of link" Value="alert(jQuery('a').html())" />
+  <Item Key="jQuery - view 1st img src" Value="alert(jQuery('img').attr('src'))" />
+  <Item Key="jQuery - change img to owasp logo" Value="jQuery('img').attr('src','https://www.owasp.org/images/7/78/Owasp_logo_122106.png')" />
+  <Item Key="sQuery - open iFrame if not there already" Value="if ($('#myFrame').length ==0 )&#xD;&#xA;{&#xD;&#xA;   $('&lt;iframe id=&quot;myFrame&quot; width=&quot;450px&quot; height=&quot;300px&quot; style=&quot;position:absolute; top:50px; left:50px&quot; &gt;').appendTo('body');&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;$('#myFrame').attr('src', 'http://o2platform.com'); &#xD;&#xA;" />
+  <Item Key="jQuert - open IFrame" Value="$('&lt;iframe id=&quot;myFrame&quot; width=&quot;450px&quot; height=&quot;300px&quot; style=&quot;position:absolute; top:50px; left:50px&quot; &gt;')&#xD;&#xA;     .appendTo('body')&#xD;&#xA;     .attr('src', 'http://o2platform.com'); " />
+  <Item Key="jQuery - open IFrame and popup its contents" Value=" if ($('#myFrame').length ==0 )&#xD;&#xA;{&#xD;&#xA;   $('&lt;iframe id=&quot;myFrame&quot; width=&quot;450px&quot; height=&quot;300px&quot; style=&quot;position:absolute; top:50px; left:50px&quot; &gt;').appendTo('body');&#xD;&#xA;   $('#myFrame').load(function() {  alert(    $('#myFrame').contents().find('body').html()  ) ; } );&#xD;&#xA;}&#xD;&#xA;    &#xD;&#xA;$('#myFrame').attr('src', '/');&#xD;&#xA;//alert($('#myFrame').contents());&#xD;&#xA;//alert(  );" />
+</ArrayOfItem>

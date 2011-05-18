@@ -110,6 +110,11 @@ namespace O2.XRules.Database.Utils
 			Key = key;
 			Value = value;
 		}
+		
+		public override string ToString()
+		{
+			return Key.str();
+		}
 	}
 
 	public static class NameValuePair_ExtensionMethods
@@ -1156,7 +1161,19 @@ namespace O2.XRules.Database.Utils
 			return (from treeNode in treeNodes
 					select treeNode.get_Text()).toList();
 		}
-	}
+		
+		public static List<T> tags<T>(this TreeView treeView)
+		{
+			return treeView.nodes().tags<T>();
+		}
+		
+		public static List<T> tags<T>(this List<TreeNode> treeNodes)
+		{
+			return (from treeNode in treeNodes
+					where treeNode.get_Tag() is T
+					select (T)treeNode.get_Tag()).toList();
+		}
+	}	
 	
 	public static class SplitContainer_ExtensionMethods
 	{
