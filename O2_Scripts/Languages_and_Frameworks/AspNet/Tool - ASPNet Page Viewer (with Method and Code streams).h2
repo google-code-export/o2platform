@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//var topPanel = O2Gui.open&lt;Panel&gt;("AspNet_Page_Viewer",1400,700);  
+  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("AspNet_Page_Viewer",1400,700);  
 
-var topPanel = panel.clear().add_Panel();
+//var topPanel = panel.clear().add_Panel();
  
 topPanel.insert_Below(150).add_LogViewer();
 var webSiteUrl = "";
@@ -190,7 +190,7 @@ actionsPanel.add_Link("view all codeblocks",0,0, ()=&gt; viewAllCodeBlocks())
 
 
 //TM Specific stuff
-/*
+
 var folderWithMethodStreams = @"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3";
 
 if (ascxCodeStreams.AllSavedMethodStreams.isNull())
@@ -210,14 +210,14 @@ foreach(var savedMethodStream in ascxCodeStreams.AllSavedMethodStreams)
 	
 	ascxCodeStreams.AllSavedMethodStreams_MappedByFileName.add(remappedFile, savedMethodStream);	
 }	
-*/
+
 //return ascxCodeStreams.AllSavedMethodStreams_MappedByFileName.keys();
 
-webSiteUrl = "http://127.0.0.1.:8181";
-var sourceFolder = @"C:\O2\Demos\HacmeBank\_AspNet_Page_HacmeBank_v2.0 (7 Dec 08)\HacmeBank_v2_Website\bin\_Saved_AspNetPage_Objects";
-//sourceFolder = @"C:\O2\Demos\WebClient\bin\_Saved_AspNetPage_Objects";
+//webSiteUrl = "http://127.0.0.1.:8181";
+//var sourceFolder = @"C:\O2\Demos\HacmeBank\_AspNet_Page_HacmeBank_v2.0 (7 Dec 08)\HacmeBank_v2_Website\bin\_Saved_AspNetPage_Objects";
+//var sourceFolder = @"C:\O2\Demos\WebClient\bin\_Saved_AspNetPage_Objects";
 
-loadFilesFromFolder(sourceFolder);
+//loadFilesFromFolder(sourceFolder);
 //files.selectFirst();
 
 
