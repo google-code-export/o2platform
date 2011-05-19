@@ -1170,8 +1170,8 @@ namespace O2.XRules.Database.Utils
 		public static List<T> tags<T>(this List<TreeNode> treeNodes)
 		{
 			return (from treeNode in treeNodes
-					where treeNode.get_Tag() is T
-					select (T)treeNode.get_Tag()).toList();
+					where Ascx_ExtensionMethods.get_Tag(treeNode) is T
+					select (T)Ascx_ExtensionMethods.get_Tag(treeNode)).toList();
 		}
 	}	
 	
