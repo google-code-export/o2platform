@@ -38,8 +38,8 @@ ribbon.add_Tab("Custom O2s")
 	  .tab("Custom O2s").add_RibbonGroup("O2 Scripting")	  					
 	  					.add_Script("IE Automation","ascx_IE_ScriptExecution.cs")
 	  					.add_RibbonButton_Script("Quick development GUI","ascx_Quick_Development_GUI.cs.o2")
-	  					.add_Script("Execute Scripts GUI","Util - Execute O2 Scripts.h2")
-	  .tab("Custom O2s").add_Group_FindAndExecuteScripts()    ;
+	  					.add_Script("Find Available Scripts","Util - O2 Available scripts.h2")
+	  .tab("Custom O2s").add_Group_FindAndExecuteScripts();
 	  					
 
 // HELP tab

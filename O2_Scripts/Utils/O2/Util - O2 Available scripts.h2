@@ -116,8 +116,9 @@ treeView.add_ContextMenu().add_MenuItem("Execute selected",true, ()=&gt; invokeS
 										})
 				          .add_MenuItem("Refresh (reload files)",true, ()=&gt; refresh());
 
-optionsPanel.add_Link("open log viewer", 23,0, ()=&gt; "Util - LogViewer.h2".local().executeH2Script()).left(filterText.Left)
-			.append_Link("invoke selected script", ()=&gt;invokeSelected());			
+optionsPanel.add_Link("invoke selected script", 22, 0, ()=&gt;invokeSelected()).left(filterText.Left)
+			.append_Link("open log viewer", ()=&gt; "Util - LogViewer.h2".local().executeH2Script());
+						
 /*optionsPanel.add_Link("Show selected Node", 40,0, 
 			()=&gt;{
 					var selectedNode2 = treeView.selected();

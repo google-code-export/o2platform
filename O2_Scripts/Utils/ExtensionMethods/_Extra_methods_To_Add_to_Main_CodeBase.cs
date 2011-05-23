@@ -717,6 +717,13 @@ namespace O2.XRules.Database.Utils
 			return process;
 		}
 		
+		public static Process executeH2_as_Admin_askUserBefore(this string scriptName)
+		{
+			if ("It looks like your current account doesn't have the rights to run this script, do you want to try running this script with full priviledges?".askUserQuestion())				
+				return scriptName.executeH2_as_Admin();
+			return null;
+		}
+		
 		public static Process executeH2_as_Admin(this string scriptToExecute)
 		{
 			var process = new Process();

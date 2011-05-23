@@ -648,8 +648,8 @@ namespace O2.XRules.Database.APIs
 			return (link != null)
 					? link.Url
 					: "";
-    	}
- 
+    	}     	
+    	
     	public static Link click(this Link link)
     	{
     		return link.click(0);    		
@@ -744,7 +744,7 @@ namespace O2.XRules.Database.APIs
     					? button.Value
     					: "";
     	}
- 
+ 		 
     	public static WatiN.Core.Button click(this WatiN.Core.Button button)
     	{    		
     		if (button != null)
