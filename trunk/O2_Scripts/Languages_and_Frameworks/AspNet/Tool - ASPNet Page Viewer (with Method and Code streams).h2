@@ -191,7 +191,7 @@ actionsPanel.add_Link("view all codeblocks",0,0, ()=&gt; viewAllCodeBlocks())
 
 //TM Specific stuff
 
-var folderWithMethodStreams = @"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3";
+/*var folderWithMethodStreams = @"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3";
 
 if (ascxCodeStreams.AllSavedMethodStreams.isNull())
 {
@@ -209,7 +209,7 @@ foreach(var savedMethodStream in ascxCodeStreams.AllSavedMethodStreams)
 										 .replace(@"C:\_WorkDir\SI\GitHub\TeamMentor\WebProjects\WebClient", @"C:\O2\Demos\WebClient");
 	
 	ascxCodeStreams.AllSavedMethodStreams_MappedByFileName.add(remappedFile, savedMethodStream);	
-}	
+}*/	
 
 //return ascxCodeStreams.AllSavedMethodStreams_MappedByFileName.keys();
 

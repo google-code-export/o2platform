@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode> //var topPanel = O2Gui.open&lt;Panel&gt;("Util - GitHub Browser",1000,400);  
-var topPanel = panel.clear().add_Panel(); 
+  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Util - GitHub Browser",1000,400);  
+//var topPanel = panel.clear().add_Panel(); 
  
 var folderToSaveSelectedFiles = "";		
 var recursiveDownload = false;
