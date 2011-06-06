@@ -7,6 +7,7 @@ var optionsPanel = treeView.insert_Below(65);
 var filterText = optionsPanel.add_TextBox("filter","");
  
 var runAsAdmin = false;   
+var startNewProcess = false;
 			 
 optionsPanel.splitContainerFixed();
 
@@ -43,7 +44,10 @@ Action&lt;string&gt; invokeScript =
 						        		target.executeH2_as_Admin();
 						        	else
 						        	{
-						        		target.executeFirstMethod();
+						        		if (startNewProcess)
+							        		target.startProcess();
+							        	else	
+						        			target.executeFirstMethod();
 						        	}
 						        	treeView.backColor(Color.White);						            						        
 						    });
@@ -123,9 +127,11 @@ optionsPanel.add_Link("invoke selected script", 22, 0, ()=&gt;invokeSelected()).
 			()=&gt;{
 					var selectedNode2 = treeView.selected();
 					selectedNode2.showInfo();
-					selectedNode2.details();  
+					selectedNode2.details();   
 				});*/
-optionsPanel.add_CheckBox("Run as Admin (with no UAC)",40 ,0,(value)=&gt;runAsAdmin = value).autoSize().left(filterText.Left);   
+optionsPanel.add_CheckBox("Run with no UAC)",40 ,0,(value)=&gt;runAsAdmin = value).autoSize().left(filterText.Left)
+			.append_CheckBox("Start new Process", (value)=&gt;startNewProcess = value);
+		    
 
 filterText.onEnter(
 	(text)=&gt;{

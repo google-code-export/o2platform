@@ -39,8 +39,12 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
     {   
     	public string File_Path { get; set;}
 		public string Virtual_Path { get; set; }				
-								
-		//public string Server { get; set; }		
+		public string CSProj_File {get; set;}
+		
+		public bool ShowFilesWithExtension_CS {get;set;}
+		public bool ShowFilesWithExtension_AscxAsaxConfig {get;set;}	
+		public bool OpenSourceCodeFiles {get;set;}
+		
 		public string Web_Address { get; set; }
 			
 		public Panel ActionsPanel { get; set; }
@@ -59,54 +63,116 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
     	}
     	
     	public ascx_Edit_AspNet_Pages buildGui()
-    	{
-    		"step 1".info();
+    	{    		
     		var topPanel = this.add_Panel();    		
 
-			ActionsPanel = topPanel.insert_Above<Panel>(40).add_GroupBox("Actions").add_Panel() ;
-			AspNetFiles = topPanel.insert_Left<Panel>().add_GroupBox("ASP.NET Files").add_TreeView();
-			"step 2".info();
+			ActionsPanel = topPanel.insert_Above<Panel>(45).add_GroupBox("Actions").add_Panel() ;
+			AspNetFiles = topPanel.insert_Left<Panel>(300).add_GroupBox("ASP.NET Files")
+													   .add_TreeView()
+													   .sort();
+			
+			
+			
 			Aspx_CodeViewer = topPanel.add_GroupBox("Aspx page").add_SourceCodeViewer();
 			CSharp_CodeViewer = Aspx_CodeViewer.parent().insert_Below().add_GroupBox("CSharp page").add_SourceCodeEditor();
-			"step 3".info();
+			
 			this.ie = topPanel.add_IE_SideView();
-			"step 4".info();
+			ActionsPanel.add_Link("Compile project",5,0,
+							()=>{
+									if (this.CSProj_File.fileExists())
+									{
+										var msBuild = @"C:\Windows\Microsoft.NET\Framework\v3.5\MSBuild.exe"; 
+										var parameters = "\"{0}\"".format(CSProj_File);
+										msBuild.startProcess(parameters,										
+													(log)=> {
+																if (log.isNull())
+																	return;
+																if (log.lower().contains("error "))
+																	log.error();
+																else
+																	if (log.lower().contains("warning "))	
+																		log.debug();
+																	else
+																		log.info();
+															});
+									}
+									else
+										"CSProj_File variable is not set of file does not exist: {0}".error(CSProj_File);
+								})
+						.append_Link("refresh IE", ()=>ie.open_ASync(ie.url()));
+			
+			this.ActionsPanel.add_CheckBox("Show *.cs files", 5,200,
+									(value) => { 	
+													this.ShowFilesWithExtension_CS = value;
+													this.loadFiles_FromLocalFolder();
+												}).autoSize();
+			
+			this.ActionsPanel.add_CheckBox("Show *.ascx, *.asax, *.config files", 5,320,
+									(value) => { 	
+													this.ShowFilesWithExtension_AscxAsaxConfig = value;
+													this.loadFiles_FromLocalFolder();
+												}).autoSize();
+												
+			var splitContainers = this.controls<SplitContainer>(true);												
+			this.ActionsPanel.add_CheckBox("show/open source code files", 5,550,
+									(value) =>  {
+													this.OpenSourceCodeFiles = value;								
+													splitContainers[2].panel1Collapsed(value.isFalse());
+												}).autoSize().@check();
+
 			setPageViewers();
+						
 			return this;
     	}
     	
     	public ascx_Edit_AspNet_Pages setPageViewers()
     	{
     		AspNetFiles.afterSelect<string>(
-				(file)=>{				
-					Aspx_CodeViewer.open(file);
-					var csharpFile = "{0}.cs".format(file);
-					if (csharpFile.fileExists())
-						CSharp_CodeViewer.open(csharpFile);
-					else
-					{					
-						var folder = file.directoryName();
-						var fileName = System.IO.Path.GetFileNameWithoutExtension(file);
-						csharpFile = folder.pathCombine("App_Code").pathCombine("{0}.cs".format(fileName));
-						if (csharpFile.fileExists())
-							CSharp_CodeViewer.open(csharpFile); 
-					}
-					var pageUrl = new Uri(this.Web_Address.uri(), file.remove(this.File_Path));					
-					this.ie.open_ASync(pageUrl.str()); 
-					//var codeBehind = 
-				});	
+				(file)=>{	
+							if (OpenSourceCodeFiles)
+							{
+								Aspx_CodeViewer.open(file);
+								var csharpFile = "{0}.cs".format(file);
+								if (csharpFile.fileExists())
+									CSharp_CodeViewer.open(csharpFile);
+								else
+								{					
+									var folder = file.directoryName();
+									var fileName = System.IO.Path.GetFileNameWithoutExtension(file);
+									csharpFile = folder.pathCombine("App_Code").pathCombine("{0}.cs".format(fileName));
+									if (csharpFile.fileExists())
+										CSharp_CodeViewer.open(csharpFile); 
+								}
+							}							
+							var pageUrl = new Uri(this.Web_Address.uri(), file.remove(this.File_Path));					
+							this.ie.open_ASync(pageUrl.str()); 
+						
+						});	
 			return this;
     	}
 	}
 	
 	public static class ascx_Edit_AspNet_Pages_ExtensionMethods
 	{
+		public static ascx_Edit_AspNet_Pages loadFiles_FromLocalFolder(this ascx_Edit_AspNet_Pages editAspNet)
+		{
+			return editAspNet.loadFiles_FromLocalFolder(editAspNet.File_Path);
+		}
+		
 		public static ascx_Edit_AspNet_Pages loadFiles_FromLocalFolder(this ascx_Edit_AspNet_Pages editAspNet, string folder)
 		{
-			editAspNet.File_Path = folder;
-			
-			var files = folder.files(true, "*.aspx", "*.asmx","*.ashx", "*.asax");			
-			editAspNet.AspNetFiles.add_Nodes(files, (file)=> file.remove(folder));  
+			if (folder.notNull())
+			{
+				editAspNet.File_Path = folder;
+				
+				var files = folder.files(true, "*.aspx", "*.asmx","*.ashx");
+				if (editAspNet.ShowFilesWithExtension_CS)
+					files.add(folder.files(true,"*.cs"));
+				if (editAspNet.ShowFilesWithExtension_AscxAsaxConfig)
+					files.add(folder.files(true,"*.ascx","*.asax", "*.config"));
+				editAspNet.AspNetFiles.clear();
+				editAspNet.AspNetFiles.add_Nodes(files, (file)=> file.remove(folder));  
+			}
 			return editAspNet;
 		}
 	}

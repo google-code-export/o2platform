@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Xml.Linq;
-using System.Reflection;
+using System.Reflection; 
 using System.Text;
 using System.ComponentModel;
 using Microsoft.Win32;
@@ -486,9 +486,23 @@ namespace O2.XRules.Database.Utils
 					});
 			return label;
 		}				
+		
+		//LinkLabel
+		
+		public static List<LinkLabel> links(this Control control)
+		{
+			return control.controls<LinkLabel>(true);
+		}
+		
+		public static LinkLabel link(this Control control, string text)
+		{
+			foreach(var link in control.links())
+				if (link.get_Text() == text)
+					return link;
+			return null;
+		}
 		//Control (Font)			
-		
-		
+				
 		public static T size<T>(this T control, int value)
 			where T : Control
 		{
@@ -572,6 +586,18 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		//CheckBox
+		public static CheckBox append_CheckBox(this Control control, string text, Action<bool> action)
+		{
+			return control.append_Control<CheckBox>()
+						  .set_Text(text)
+						  .autoSize()
+						  .onChecked(action);
+		}
+		public static CheckBox onClick(this CheckBox checkBox, Action<bool> action)
+		{
+			return checkBox.onChecked(action);
+		}
+		
 		public static CheckBox onChecked(this CheckBox checkBox, Action<bool> action)
 		{
 			return checkBox.checkedChanged(action);
@@ -668,6 +694,7 @@ namespace O2.XRules.Database.Utils
 			textBox.set_Text(text);
 			return textBox;
 		}
+				
 	}
 	
 	public static class Processes_ExtensionMethods
@@ -1934,6 +1961,37 @@ namespace O2.XRules.Database.Utils
 			if (list.size() > 1)
 				return list.Aggregate((a,b)=> "{0} {1} {2}".format(a,separator,b));
 			return "";
+		}
+	}
+	public static class Dictionary_ExtensionMethods
+	{
+		public static Dictionary<string,string> toStringDictionary(this string targetString, string rowSeparator, string keySeparator)
+		{
+			var stringDictionary = new Dictionary<string,string>();
+			try
+			{
+				foreach(var row in targetString.split(rowSeparator))
+				{
+					if(row.valid())
+					{
+						var splittedRow = row.split(keySeparator);
+						if (splittedRow.size()!=2)
+							"[toStringDictionary] splittedRow was not 2: {0}".error(row);
+						else
+						{
+							if (stringDictionary.hasKey(splittedRow[0]))
+								"[toStringDictionary] key already existed in the collection: {0}".error(splittedRow[0]);		
+							else
+								stringDictionary.Add(splittedRow[0], splittedRow[1]);
+						}
+					}
+				}
+			}
+			catch(Exception ex)
+			{
+				"[toStringDictionary] {0}".error(ex.Message);
+			}
+			return stringDictionary;
 		}
 	}
 	

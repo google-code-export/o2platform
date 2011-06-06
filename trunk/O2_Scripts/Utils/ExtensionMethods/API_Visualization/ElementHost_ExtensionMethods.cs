@@ -64,9 +64,9 @@ namespace O2.XRules.Database.Utils
 			return elementHost.add_Control_Wpf<StackPanel>();
 		}
 		
-        public static ListView add_ListView_Wpf(this ElementHost elementHost)
+        public static System.Windows.Controls.ListView add_ListView_Wpf(this ElementHost elementHost)
         {
-            return elementHost.add_Control_Wpf<ListView>();
+            return elementHost.add_Control_Wpf<System.Windows.Controls.ListView>();
         }
                 
         #endregion

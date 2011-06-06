@@ -313,8 +313,43 @@ namespace O2.XRules.Database.APIs
     	{
     		return guiAutomation.firstWindow().buttons();
     	}
-    	//Label
-    	//TextBox
+
+		//Link		
+    	public static Hyperlink link(this UIItemContainer container, string text)    		
+    	{
+    		if (container.notNull())
+    			return container.get<Hyperlink>(text);
+    		return null;
+    	}
+    	 
+    	public static List<Hyperlink> links(this UIItemContainer container)    		
+    	{
+    		return container.items<Hyperlink>();
+    	}
+    	
+    	public static List<Hyperlink> links(this List<Window> windows)    		
+    	{
+    		var links = new List<Hyperlink>();
+    		foreach(var window in windows)
+    			links.AddRange(window.links());
+    		return links;
+    	}
+    	
+    	public static bool hasLink(this API_GuiAutomation guiAutomation, string text) //search on the first window
+    	{
+    		return guiAutomation.link(text).notNull();
+    	}
+    	
+    	public static Button link(this API_GuiAutomation guiAutomation, string text) //search on the first window
+    	{
+    		return guiAutomation.firstWindow().button(text);
+    	}
+    	    	    	       	
+		public static List<Hyperlink> links(this API_GuiAutomation guiAutomation)    		
+    	{
+    		return guiAutomation.firstWindow().links();
+    	}
+    	//Label    	
     	public static Label label(this UIItemContainer container, string text)    		
     	{
     		return container.get<Label>(text);
@@ -619,7 +654,7 @@ namespace O2.XRules.Database.APIs
     		return guiAutomation;
     	}
     	
-    	//Button
+    	//radioButton
     	public static RadioButton radioButton(this UIItemContainer container, string text)    		
     	{
     		return container.get<RadioButton>(text);
@@ -682,8 +717,7 @@ namespace O2.XRules.Database.APIs
     		}
     		return uiItem;    		
     	}
-
-			
+		
 		public static T mouse_MoveTo_WinForm<T>(this T control)		
 			where T : System.Windows.Forms.Control 
 		{
