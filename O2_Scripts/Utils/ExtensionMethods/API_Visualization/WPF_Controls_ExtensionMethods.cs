@@ -1171,20 +1171,20 @@ textBox1.prop("",true);
 
         #region ListView        
 
-        public static ListView add_ListView_Wpf<T>(this  T uiElement)
+        public static System.Windows.Controls.ListView add_ListView_Wpf<T>(this  T uiElement)
             where T : UIElement
         {
-            return uiElement.add_Control_Wpf<ListView>();
+            return uiElement.add_Control_Wpf<System.Windows.Controls.ListView>();
         }
 
-		public static ListView add_Item(this ListView listView, string text)        
+		public static System.Windows.Controls.ListView add_Item(this System.Windows.Controls.ListView listView, string text)        
 		{
 			return listView.add_Items(text);
 		}
 		
-		public static ListView add_Items(this ListView listView, params string[] texts)        
+		public static System.Windows.Controls.ListView add_Items(this System.Windows.Controls.ListView listView, params string[] texts)        
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {	foreach(var text in texts) 
                     	listView.Items.Add(text);
@@ -1193,10 +1193,10 @@ textBox1.prop("",true);
 
         }
 
-        public static ListView add_Item<T>(this ListView listView, T item)
+        public static System.Windows.Controls.ListView add_Item<T>(this System.Windows.Controls.ListView listView, T item)
             where T : UIElement
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                     listView.Items.Add(item);
@@ -1204,14 +1204,14 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView add_Image_Wpf(this ListView listView, string pathToImage)
+        public static System.Windows.Controls.ListView add_Image_Wpf(this System.Windows.Controls.ListView listView, string pathToImage)
         {
             return listView.add_Image_Wpf(pathToImage, -1, -1);
         }
 
-        public static ListView add_Image_Wpf(this ListView listView, string pathToImage, int width, int height)
+        public static System.Windows.Controls.ListView add_Image_Wpf(this System.Windows.Controls.ListView listView, string pathToImage, int width, int height)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                     var image = new Image().open(pathToImage);
@@ -1226,14 +1226,14 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView add_Images_Wpf(this ListView listView, List<string> pathToImages)
+        public static System.Windows.Controls.ListView add_Images_Wpf(this System.Windows.Controls.ListView listView, List<string> pathToImages)
         {
             return listView.add_Images_Wpf(pathToImages, -1, -1);
         }
 
-        public static ListView add_Images_Wpf(this ListView listView, List<string> pathToImages, int width, int height)
+        public static System.Windows.Controls.ListView add_Images_Wpf(this System.Windows.Controls.ListView listView, List<string> pathToImages, int width, int height)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                     foreach (var image in pathToImages.images_Wpf(width, height))
@@ -1242,12 +1242,12 @@ textBox1.prop("",true);
                 });
         }
 
-        public static object selectedValue(this ListView listView)
+        public static object selectedValue(this System.Windows.Controls.ListView listView)
         {
             return (object)listView.wpfInvoke(() => listView.SelectedValue);
         }
         
-        public static List<object> selectedValues(this ListView listView)
+        public static List<object> selectedValues(this System.Windows.Controls.ListView listView)
         {
             return (List<object>)listView.wpfInvoke(
             	()=>{
@@ -1264,7 +1264,7 @@ textBox1.prop("",true);
             return (object)listView.wpfInvoke(()=> listView.SelectedItems);					
         }*/
 
-		public static int selectedIndex(this ListView listView)
+		public static int selectedIndex(this System.Windows.Controls.ListView listView)
 		{
             return (int)listView.wpfInvoke(
                 ()=>{
@@ -1272,7 +1272,7 @@ textBox1.prop("",true);
                 	});
         }               
         
-        public static T selected<T>(this ListView listView)
+        public static T selected<T>(this System.Windows.Controls.ListView listView)
         {
             return (T)listView.wpfInvoke(
                 () =>
@@ -1283,9 +1283,9 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView afterSelect(this ListView listView, Action callback)
+        public static System.Windows.Controls.ListView afterSelect(this System.Windows.Controls.ListView listView, Action callback)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                     listView.SelectionChanged += (sender, e) => callback();
@@ -1293,9 +1293,9 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView afterSelect<T>(this ListView listView, Action<T> callback)
+        public static System.Windows.Controls.ListView afterSelect<T>(this System.Windows.Controls.ListView listView, Action<T> callback)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {                	
                     listView.SelectionChanged +=
@@ -1311,9 +1311,9 @@ textBox1.prop("",true);
                 });
         }
         
-        public static ListView afterSelects<T>(this ListView listView, Action<List<T>> callback)
+        public static System.Windows.Controls.ListView afterSelects<T>(this System.Windows.Controls.ListView listView, Action<List<T>> callback)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                     listView.SelectionChanged +=
@@ -1334,14 +1334,14 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView remove_SelectedValue(this ListView listView)
+        public static System.Windows.Controls.ListView remove_SelectedValue(this System.Windows.Controls.ListView listView)
         {
-            return (ListView)listView.wpfInvoke(() => listView.remove_Item(listView.selectedValue()));
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(() => listView.remove_Item(listView.selectedValue()));
         }
 
-        public static ListView remove_Item(this ListView listView, object itemToRemove)
+        public static System.Windows.Controls.ListView remove_Item(this System.Windows.Controls.ListView listView, object itemToRemove)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                     if (itemToRemove.notNull())
@@ -1350,9 +1350,9 @@ textBox1.prop("",true);
                 });
         }
         
-        public static ListView remove_Item(this ListView listView, List<object> itemsToRemove)
+        public static System.Windows.Controls.ListView remove_Item(this System.Windows.Controls.ListView listView, List<object> itemsToRemove)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                 	foreach(var itemToRemove in itemsToRemove)
@@ -1362,14 +1362,14 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView remove_Items(this ListView listView, List<object> itemsToRemove)
+        public static System.Windows.Controls.ListView remove_Items(this System.Windows.Controls.ListView listView, List<object> itemsToRemove)
         {
             foreach (var itemToRemove in itemsToRemove)
                 listView.remove_Item(itemToRemove);
             return listView;
         }
         
-        public static ListView remove_SelectedItems(this ListView listView)
+        public static System.Windows.Controls.ListView remove_SelectedItems(this System.Windows.Controls.ListView listView)
         {
         	var originalSelectedIndex = listView.selectedIndex();	
         	var selectedValues = listView.selectedValues();        	        
@@ -1378,7 +1378,7 @@ textBox1.prop("",true);
             return listView;
         }
         
-        public static List<object> items(this ListView listView)
+        public static List<object> items(this System.Windows.Controls.ListView listView)
         {
             return (List<object>)listView.wpfInvoke(
                 () =>
@@ -1388,7 +1388,7 @@ textBox1.prop("",true);
                 });
         }
 
-        public static List<T> items<T>(this ListView listView)
+        public static List<T> items<T>(this System.Windows.Controls.ListView listView)
         {
             return (List<T>)listView.wpfInvoke(
                 () =>
@@ -1400,9 +1400,9 @@ textBox1.prop("",true);
 
         }
 
-        public static ListView clear(this ListView listView)
+        public static System.Windows.Controls.ListView clear(this System.Windows.Controls.ListView listView)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                     listView.Items.Clear();
@@ -1410,14 +1410,14 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView remove_All(this ListView listView)
+        public static System.Windows.Controls.ListView remove_All(this System.Windows.Controls.ListView listView)
         {
             return listView.clear();
         }
 
-        public static ListView selectIndex(this ListView listView, int index)
+        public static System.Windows.Controls.ListView selectIndex(this System.Windows.Controls.ListView listView, int index)
         {
-            return (ListView)listView.wpfInvoke(
+            return (System.Windows.Controls.ListView)listView.wpfInvoke(
                 () =>
                 {
                     var items = listView.items();
@@ -1430,19 +1430,19 @@ textBox1.prop("",true);
                 });
         }
 
-        public static ListView selectFirst(this ListView listView)
+        public static System.Windows.Controls.ListView selectFirst(this System.Windows.Controls.ListView listView)
         {
             return listView.selectIndex(0);
 
         }
 		
-		public static ListView onDeleteKey_Remove_SelectedItems(this ListView listView)
+		public static System.Windows.Controls.ListView onDeleteKey_Remove_SelectedItems(this System.Windows.Controls.ListView listView)
 		{
 			listView.onKeyPress_Wpf(Key.Delete, ()=> listView.remove_SelectedItems());
 			return listView;
 		}
 		
-		public static ListView useWrapPanel(this ListView listView)
+		public static System.Windows.Controls.ListView useWrapPanel(this System.Windows.Controls.ListView listView)
 		{
 			listView.wpfInvoke(
 				()=>{

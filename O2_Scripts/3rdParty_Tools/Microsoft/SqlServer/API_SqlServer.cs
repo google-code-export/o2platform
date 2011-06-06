@@ -27,8 +27,13 @@ namespace O2.XRules.Database.APIs
     	
     	public API_SqlServer()
 		{
-			ConnectionString = @"Data Source=.\SQLExpress;Trusted_Connection=True";	 //default to this one			
+			ConnectionString = @"Data Source=.;Trusted_Connection=True";	 //default to this one			
 		}		
+		
+		public API_SqlServer(string connectionString)
+		{
+			ConnectionString = connectionString;
+		}
 	}
 	
 	public class Database

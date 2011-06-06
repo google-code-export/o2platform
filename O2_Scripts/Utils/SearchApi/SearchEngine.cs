@@ -40,19 +40,20 @@ namespace O2.XRules.Database.Utils
             }
         }
 
-        public void clearLoadedFiles()
+        public SearchEngine clearLoadedFiles()
         {
             dLoadedFilesCache = new Dictionary<String, List<String>>();
             //dLines = new Dictionary<string, string>();
             //dWords = new Dictionary<string, string>();
+            return this;
         }
        
-        public void loadFiles(List<String> lFilesToLoad)
+        public SearchEngine loadFiles(List<String> lFilesToLoad)
         {
-            loadFiles(lFilesToLoad, null);
+            return loadFiles(lFilesToLoad, null);
         }
 
-        public void loadFiles(List<String> lFilesToLoad, O2Thread.FuncVoidT1<int> onPartialLoad)
+        public SearchEngine loadFiles(List<String> lFilesToLoad, O2Thread.FuncVoidT1<int> onPartialLoad)
         {
             int iFilesProcessed = 0;
             foreach (String sFileToLoad in lFilesToLoad)
@@ -74,24 +75,25 @@ namespace O2.XRules.Database.Utils
             foreach (var lsLines in dLoadedFilesCache.Values)
                 iLinesOfCode += lsLines.Count;
             PublicDI.log.debug("Number of Lines of Code Currently Loaded: {0}", iLinesOfCode);
+            return this;
         }
 
-        public void loadFiles(String sTargetDir, String sExtension, bool bRecursive)
+        public SearchEngine loadFiles(String sTargetDir, String sExtension, bool bRecursive)
         {
-            loadAllFilesFromDirectoryThatMatchExtension(sTargetDir, sExtension, bRecursive);
+            return loadAllFilesFromDirectoryThatMatchExtension(sTargetDir, sExtension, bRecursive);
         }
 
-        public void loadAllFilesFromDirectoryThatMatchExtension(String sTargetDir, String sExtension, bool bRecursive)
+        public SearchEngine loadAllFilesFromDirectoryThatMatchExtension(String sTargetDir, String sExtension, bool bRecursive)
         {
             if (false == Directory.Exists(sTargetDir))
             {
                 PublicDI.log.debug("Directory provide does not exist: {0}", sTargetDir);
-                return;
+                return this;
             }
             var lFilesToLoad = new List<string>();
             Files.getListOfAllFilesFromDirectory(lFilesToLoad, sTargetDir, bRecursive, sExtension, false);
             PublicDI.log.debug("{0} files found, loading them", lFilesToLoad.Count);
-            loadFiles(lFilesToLoad);
+            return loadFiles(lFilesToLoad);
         }
 
         public bool loadFile(String sFileToLoad)//, bool bTryToFilesFromAssesmentRun)
@@ -134,12 +136,13 @@ namespace O2.XRules.Database.Utils
             // public void updateListOfLoadedFiles()
         }
 
-        public void clearLoadedFileCache()
+        public SearchEngine clearLoadedFileCache()
         {
             dLoadedFilesCache.Clear();
+            return this;
         }
 
-        public void loadListBoxWithListOfFilesLoaded(ListBox lBoxTargetListBox)
+        public SearchEngine loadListBoxWithListOfFilesLoaded(ListBox lBoxTargetListBox)
         {
             lBoxTargetListBox.invokeOnThread(
                 () =>
@@ -148,7 +151,8 @@ namespace O2.XRules.Database.Utils
                         foreach (String sFile in dLoadedFilesCache.Keys)
                             lBoxTargetListBox.Items.Add(sFile);
                         lBoxTargetListBox.Sorted = true;
-                    });            
+                    });     
+			return this;
         }
 
         public List<TextSearchResult> searchFor(String sRegExToSearch)
