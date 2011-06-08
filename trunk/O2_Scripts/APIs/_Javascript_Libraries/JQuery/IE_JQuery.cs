@@ -87,7 +87,7 @@ namespace O2.XRules.Database.APIs
         	else
         	{
         		var jQueryCode = jQuery.PathToJQueryFile.fileContents();
-        		jQuery.ie.eval(jQueryCode);  
+        		jQuery.ie.eval(jQueryCode); 
         		if(jQuery.isJQueryAvaialble())
         			"[IE_JQuery][installJQuery]: JQuery was instaled ok in this page".info();
         		else        		
@@ -99,25 +99,27 @@ namespace O2.XRules.Database.APIs
 	}
 	
 	public static class IE_JQuery_ExtensionMethods_Invoke
-	{		
+	{	
+	
 		public static IE_JQuery invokeJQuery(this IE_JQuery jQuery, string parameters)
     	{
     		var script = "window.external.setJQueryObject(jQuery);" +
-		 				  "var jQueryObject = window.external.getJQueryObject();" +   
-		 				  "window.external.setJQueryObject(jQueryObject({0}));".format(parameters);
+		 				 "var jQueryObject = window.external.getJQueryObject();" +   
+		 				 "window.external.setJQueryObject(jQueryObject({0}));".format(parameters);
 			if (jQuery.DebugMode)	 				  
 				"[IE_JQuery][invokeJQuery]: {0}".debug(script);
     		jQuery.ie.invokeEval(script);
-		 	return jQuery;			    
+		 	return jQuery;
     	}
+    	
     	
     	public static IE_JQuery invokeJQuery(this IE_JQuery jQuery, string method, string parameters)
     	{	
-    		var script =  "var jQueryObject = window.external.getJQueryObject();" +   
-		 				  "window.external.setJQueryObject(jQueryObject.{0}({1}));".format(method,parameters);
+    		var script = "var jQueryObject = window.external.getJQueryObject();" +   
+		 				 "window.external.setJQueryObject(jQueryObject.{0}({1}));".format(method,parameters);
 			if (jQuery.DebugMode)	 				  
 				"[IE_JQuery][invokeJQuery]: {0}".debug(script);		 				  				
-			jQuery.ie.invokeEval(script);						
+			jQuery.ie.invokeEval(script);
 		 	return jQuery;			    
     	}    	    	
 	}
@@ -133,6 +135,11 @@ namespace O2.XRules.Database.APIs
 		public static IE_JQuery css(this IE_JQuery jQuery, string name, string value)
 		{
 			return jQuery.invokeJQuery("css", "'{0}' , '{1}'".format(name, value));
+		}
+		
+		public static IE_JQuery attr(this IE_JQuery jQuery, string name, string value)
+		{
+			return jQuery.invokeJQuery("attr", "'{0}' , '{1}'".format(name, value));
 		}
 		
 		public static IE_JQuery border(this IE_JQuery jQuery, int value)
@@ -159,6 +166,7 @@ namespace O2.XRules.Database.APIs
 		{
 			return jQuery.backgroundColor(value);
 		}
+		
 		public static IE_JQuery backgroundColor(this IE_JQuery jQuery, string value)
 		{
 			return jQuery.css("background-color", value);
@@ -180,13 +188,38 @@ namespace O2.XRules.Database.APIs
 			jQuery.invokeJQuery("html",value);
 			return jQuery.getJQueryObject().str();
 		}
+		
+		public static string attr(this IE_JQuery jQuery)
+		{
+			jQuery.invokeJQuery("attr","");
+			return jQuery.getJQueryObject().str();
+		}
+		
+		public static string attr(this IE_JQuery jQuery, string value)
+		{
+			if (value.valid())
+				value = "'{0}'".format(value);
+			jQuery.invokeJQuery("attr",value);
+			return jQuery.getJQueryObject().str();
+		}
 	}
 	
 	public static class IE_JQuery_ExtensionMethods_HtmlElements
 	{	
+	
+		public static IE_JQuery id(this IE_JQuery jQuery, string elementName)
+		{
+			return jQuery.invokeJQuery("'#{0}'".format(elementName));
+		}
+		
 		public static IE_JQuery element(this IE_JQuery jQuery, string elementName)
 		{
 			return jQuery.invokeJQuery("'{0}'".format(elementName));
+		}
+		
+		public static IE_JQuery value(this IE_JQuery jQuery, string value)
+		{
+			return jQuery.attr("value",value);
 		}
 		
 		public static IE_JQuery h1(this IE_JQuery jQuery)
@@ -210,7 +243,34 @@ namespace O2.XRules.Database.APIs
 		}		
 	}
 	
-	public static class IE_JQuery_ExtensionMethods_Misc
+	public static class IE_JQuery_ExtensionMethods_MiscMethods
+	{
+		public static IE_JQuery parent(this IE_JQuery jQuery)
+		{
+			return jQuery.invokeJQuery("parent", "");		
+		}
+		
+		public static IE_JQuery click(this IE_JQuery jQuery)
+		{
+			return jQuery.invokeJQuery("click", "");		
+		}
+	}
+	
+	public static class IE_JQuery_ExtensionMethods_Events
+	{
+		public static IE_JQuery trigger(this IE_JQuery jQuery, string eventName)
+		{
+			return jQuery.invokeJQuery("trigger", "'{0}'".format(eventName));	
+		}
+		
+		public static IE_JQuery keydown(this IE_JQuery jQuery)
+		{
+			return jQuery.trigger("keydown");
+		}
+		
+	}
+	
+	public static class IE_JQuery_ExtensionMethods_Utils
 	{
 		public static IE_JQuery wait(this IE_JQuery jQuery, int miliSeconds)
 		{

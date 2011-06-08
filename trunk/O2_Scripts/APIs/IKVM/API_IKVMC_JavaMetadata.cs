@@ -370,7 +370,10 @@ namespace O2.XRules.Database.APIs.IKVM
 									"Ljava.lang.Integer;",
 									"Ljava.util.Date;",
 									"Ljava.lang.String;",
-									"Ljava.lang.Boolean;"
+									"Ljava.lang.Boolean;",
+									"I",
+									"D"
+									
 								 };
 											
 			return (from method in methods

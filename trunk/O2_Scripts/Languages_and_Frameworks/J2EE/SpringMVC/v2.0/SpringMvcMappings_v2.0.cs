@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using O2.XRules.Database.Utils;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
-using www.springframework.org.schema.beans;
+//using www.springframework.org.schema.beans;
 using O2.XRules.Database.APIs.IKVM;
-//O2File:spring-servlet.xsd.cs
+//O2File:spring-servlet-2.0.xsd.cs
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 
 //O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
@@ -102,7 +102,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 					controller.Properties.add(_property.name, _property.value + 
 															 (((_property.@ref).valid()) ? "ref:{0}".format(_property.@ref) : "" ));
 				
-				if (controller.JavaClass.inValid() && beans_byId.hasKey(urlBean.parent))
+/*				if (controller.JavaClass.inValid() && beans_byId.hasKey(urlBean.parent))
 				{
 					controller.JavaClass = beans_byId[urlBean.parent].@class;								
 					foreach(var _property in beans_byId[urlBean.parent].property)	
@@ -110,7 +110,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 															 (((_property.@ref).valid()) ? "ref:{0}".format(_property.@ref) : "" ));
 				
 				} 
-				
+*/				
 				if (controller.JavaClass.valid())
 					controller.FileName = "{0}.java".format(controller.JavaClass.replace(".","\\")); 
 					
@@ -143,6 +143,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 						"Found XRefs for Class: {0}".debug(controller.JavaClass);
 						var javaClass = xRefs.Classes_by_Signature[controller.JavaClass];
 						controller.mapCommandClass(javaClass.SuperClass,xRefs);			
+					}
+					else
+					{
+						"here".error();
 					}
 				}
 			}
