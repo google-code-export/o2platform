@@ -162,16 +162,19 @@ Action viewAllCodeBlocks =
 
 Action&lt;string&gt; loadFilesFromFolder = 
 	(folder) =&gt; {
-					foreach(var file in folder.files())
-					{						
-						var aspNetPage = file.load&lt;AspNet_Page&gt;();						
-						aspNetPages.add(aspNetPage.Virtual_Path, aspNetPage);		
-						show.info(aspNetPage);
-						file.showInCodeViewer();
-						break;
-					}					
-					files.add_Nodes(aspNetPages.Values, (aspNetPage)=&gt; aspNetPage.Virtual_Path);  
+					O2Thread.mtaThread(
+						()=&gt;{					
+								foreach(var file in folder.files())
+								{						
+									"processing file:{0}".info(file);
+									var aspNetPage = file.load&lt;AspNet_Page&gt;();						
+									aspNetPages.add(aspNetPage.Virtual_Path, aspNetPage);		
+									show.info(aspNetPage);									
+								}					
+								files.add_Nodes(aspNetPages.Values, (aspNetPage)=&gt; aspNetPage.Virtual_Path);  
+							});
 				};
+				
 
 
 actionsPanel.add_Link("view all codeblocks",0,0, ()=&gt; viewAllCodeBlocks())
@@ -188,6 +191,8 @@ actionsPanel.add_Link("view all codeblocks",0,0, ()=&gt; viewAllCodeBlocks())
 					})
 			.append_Link("refresh IE", ()=&gt;ie.open_ASync(ie.url()));
 
+
+files.onDrop(loadFilesFromFolder);
 
 //TM Specific stuff
 

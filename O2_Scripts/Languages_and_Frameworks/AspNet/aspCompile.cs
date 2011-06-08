@@ -75,12 +75,12 @@ namespace O2.Script
 			var stringWriter = new StringWriter();
 		   	simpleWorkerRequest = new SimpleWorkerRequest(Page, string.Empty, stringWriter);
 		   	
-		   	openScript();
+		   	//openScript();
 		   	
 		   	//"Good Morning".execute_InScriptEditor_InSeparateAppDomain();
 		   	"processing request for: {0}".info(Page);
 		   	HttpRuntime.ProcessRequest(simpleWorkerRequest);
-		   	var Html = "-----".line() + stringWriter.str();
+		   	var Html = stringWriter.str();
 		   	o2Timer.stop();
 		   	return Html;	
 	   }	   	   	   	
