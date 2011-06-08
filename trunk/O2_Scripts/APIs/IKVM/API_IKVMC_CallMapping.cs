@@ -260,6 +260,14 @@ namespace O2.XRules.Database.APIs.IKVM
 			return new List<MethodCall>();
 		}
 		
+		public  static MethodCall regExSignature(this List<MethodCall> methodCalls, string value)
+		{
+			foreach(var methodCall in methodCalls)
+				if (methodCall.Signature.regEx(value) || methodCall.Signature.contains(value))
+					return methodCall;
+			return null;
+		}
+		
 		public static List<string> methodRefs_old(this Java_Class methodClass, Java_Method method)
 		{
 			var constants_byType = method.constantsPool_byType(methodClass);
