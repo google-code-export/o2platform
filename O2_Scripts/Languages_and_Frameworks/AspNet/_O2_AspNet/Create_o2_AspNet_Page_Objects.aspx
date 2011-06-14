@@ -1,11 +1,8 @@
 <%@ Page Language="C#"%>
-<% @Import Namespace="O2.XRules.Database.Languages_and_Frameworks.DotNet" %>
 <% @Import Namespace="O2.Kernel" %>
 <% @Import Namespace="O2.Kernel.ExtensionMethods" %>
 <% @Import Namespace="O2.DotNetWrappers.ExtensionMethods" %>
-<% @Import Namespace="O2.Views.ASCX.classes.MainGUI" %>
 <% @Import Namespace="O2.External.SharpDevelop.ExtensionMethods" %>
-<% @Import Namespace="O2.Views.ASCX.ExtensionMethods" %>
 
 
 <html>
@@ -13,55 +10,14 @@
 		<title>Create O2 AspNet_Page objects</title>
 	</head>
 	<body>
-		<h1> Creating AspNnet_Page objects</h1>
-		for current website
-	<%		
-
+		<h1> Creating AspNet_Page objects</h1>
+		for current website<br/>
+		<%		
+	
+			var script = @"C:\O2\O2Scripts_Database\_Scripts\Languages_and_Frameworks\AspNet\_O2_AspNet\Create_o2_AspNet_Page_Objects.h2";
+			Response.Write(script.compile_H2Script().executeFirstMethod());
 		
-		
-		O2Gui.open<System.Windows.Forms.Panel>("Util - LogViewer", 400,140).add_LogViewer().bringToFront();
-		
-		var binFolder = AppDomain.CurrentDomain.RelativeSearchPath;
-		var targetFolder = binFolder.pathCombine("_Saved_AspNetPage_Objects").createDir();
-		Response.Write("<h3>Files will be saved at: {0}</h3>".format(targetFolder));
-		
-		//show.info(Request);
-		var rootFolder = AppDomain.CurrentDomain.BaseDirectory;
-		var server = "localhost";
-
-		Action<string> processPage =
-			(page)=>{			
-						"Processing page: {0}".info(page);
-						try
-						{
-							var aspNetPage  = new AspNet_Page(rootFolder, "/", server);		
-							aspNetPage.Store_AspNet_SourceCode = true;
-							aspNetPage.Store_Compiled_AspNet_SourceCode = true;
-							aspNetPage.parseAspNetPage(page);     						
-							var targetPage = targetFolder.pathCombine(page.safeFileName()+".xml");
-							if (aspNetPage.saveAs(targetPage))
-								Response.Write("processed: {0}<br/>".format(page));						
-						}
-						catch(Exception ex)
-						{
-							"Error processing page: {0}: {1}".format(page, ex.Message);
-							Response.Write("error: {0} - {1}<br/>".format(page, ex.Message));						
-						}
-						Response.Flush();
-					};							
-		
-		
-		foreach(var file in rootFolder.files("*.aspx", true))
-		{
-			var virtualPath = "/" + file.remove(rootFolder).replace("\\","/");			
-			processPage(virtualPath);			
-		}
-		var pageName = "/a.aspx";
-		//processPage(pageName);
-		Response.Flush();		
-		//PublicDI.log.showMessageBox("click 2");
-		//Response.Write(AppDomain.CurrentDomain.RelativeSearchPath);
-	%>
+		%>
 	<hr/>
 	</body>
 </body>

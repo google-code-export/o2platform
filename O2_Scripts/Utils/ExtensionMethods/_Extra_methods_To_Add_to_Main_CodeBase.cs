@@ -676,7 +676,45 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		
-		//processes
+		//TabControl
+		
+		public static TabControl remove_Tab(this TabControl tabControl, string text)
+		{
+			var tabToRemove = tabControl.tab(text);
+			if (tabToRemove.notNull())
+				tabControl.remove_Tab(tabToRemove);
+			return tabControl;
+		}
+		
+		public static bool has_Tab(this TabControl tabControl, string text)
+		{
+			return tabControl.tab(text).notNull();
+		}
+		
+		public static TabPage tab(this TabControl tabControl, string text)
+		{
+			foreach(var tab in tabControl.tabs())
+				if (tab.get_Text() == text)
+					return tab;
+			return null;
+		}
+		public static List<TabPage> tabs(this TabControl tabControl)
+		{
+			return tabControl.tabPages();
+		}
+		
+		public static List<TabPage> tabPages(this TabControl tabControl)
+		{
+			return (List<TabPage>)tabControl.invokeOnThread(
+									()=>{
+											var tabPages = new List<TabPage>();
+											foreach(TabPage tabPage in tabControl.TabPages)
+												tabPages.Add(tabPage);
+											return tabPages;											
+										});
+		}
+		
+		
 	}
 	
 	public static class TextBox_ExtensionMethods
@@ -1797,6 +1835,10 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Misc_ExtensionMethods
 	{
+		public static string fileName_WithoutExtension(this string filePath)
+		{
+			return Path.GetFileNameWithoutExtension(filePath);
+		}
 		public static string upperCaseFirstLetter(this string _string)
 		{
 			if (_string.valid())
@@ -2223,6 +2265,39 @@ namespace O2.XRules.Database.Utils
             zpZipFile.Dispose();
             return targetZipFile;        
 		}
+	}
+	
+	public static class Compile_ExtensionMethods
+	{
+		public static string compileIntoDll_inFolder(this string fileToCompile, string targetFolder)
+		{
+				"Compiling file: {0} ".debug(fileToCompile);
+				//var fileToCompile = currentFolder.pathCombine(file + ".cs");
+				var filenameWithoutExtension = fileToCompile.fileName_WithoutExtension();
+				var compiledDll = targetFolder.pathCombine(filenameWithoutExtension + ".dll");
+				var mainClass = "";
+				if (fileToCompile.fileExists().isFalse()) 
+					"could not find file to compile: {0}".error(fileToCompile);  
+				else
+				{ 
+					var assembly = new CompileEngine().compileSourceFiles(new List<string> {fileToCompile}, 
+																		  mainClass, 
+																		  filenameWithoutExtension);
+					if (assembly.isNull()) 
+						"no compiled assembly object created for: {0}".error(fileToCompile);
+					else
+					{ 
+						Files.Copy(assembly.Location, compiledDll);
+						"Copied: {0} to {1}".info(assembly.Location, compiledDll);
+						if (compiledDll.fileExists().isFalse())
+							"compiled file not created in: {0}".error(compiledDll);
+						else
+							return compiledDll;
+					}
+				}  
+				return null;
+			}
+
 	}
 }
     	

@@ -58,19 +58,19 @@ namespace O2.XRules.Database.Utils
     	{
     		//showMethods = true;
     		//showPropertyAndFieldInfo = true;
-    		this.Width = 800;
-    		this.Height = 500;    		
+    		this.Width = 400;
+    		this.Height = 300;    		
     		buildGui();
     	}
  
     	public void buildGui()
     	{    		
-    		try
+    		try 
     		{    			
 	    		var topPanel = this.add_Panel();	    		
-	    		serializedString = topPanel.insert_Right().add_GroupBox("Serialized Object").add_SourceCodeViewer();
+	    		serializedString = topPanel.insert_Right(200).add_GroupBox("Serialized Object").add_SourceCodeViewer();
 	    		var serializedStringPanel = serializedString.splitContainer().panel2Collapsed(true);	    		
-	    		propertyGrid = topPanel.add_GroupBox("").add_PropertyGrid();  
+	    		propertyGrid = topPanel.add_GroupBox("").add_PropertyGrid().helpVisible(false);  
 				treeView = propertyGrid.parent().insert_Left<Panel>().add_TreeView().sort();;				
 				//treeView.splitterDistance(300);
 				var toStringValue = propertyGrid.parent().insert_Below<Panel>(100).add_GroupBox("ToString Value (not editable):").add_TextArea(); 

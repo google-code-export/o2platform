@@ -64,15 +64,29 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
     	
     	public ascx_Edit_AspNet_Pages buildGui()
     	{    		
-    		var topPanel = this.add_Panel();    		
+    		var topPanel = this.add_Panel();
+    		topPanel.insert_LogViewer();
 
-			ActionsPanel = topPanel.insert_Above<Panel>(45).add_GroupBox("Actions").add_Panel() ;
+			ActionsPanel = topPanel.insert_Above<Panel>(70).add_GroupBox("Actions").add_Panel() ;
 			AspNetFiles = topPanel.insert_Left<Panel>(300).add_GroupBox("ASP.NET Files")
 													   .add_TreeView()
 													   .sort();
 			
-			
-			
+			 
+			ActionsPanel.add_Label("WebRoot",30,0).autoSize()
+						.append_TextBox(this.File_Path)
+							.width(200)
+							.onEnter(
+								(text)=>{	
+											this.File_Path = text;
+											this.loadFiles_FromLocalFolder();
+										})
+						.append_Label("Url").top(30).autoSize()
+						.append_TextBox(this.Web_Address)
+							.width(200)
+							.onTextChange((text)=> this.Web_Address = text)
+						.append_Link("refresh IE", ()=>ie.open_ASync(ie.url()));
+						
 			Aspx_CodeViewer = topPanel.add_GroupBox("Aspx page").add_SourceCodeViewer();
 			CSharp_CodeViewer = Aspx_CodeViewer.parent().insert_Below().add_GroupBox("CSharp page").add_SourceCodeEditor();
 			
@@ -98,8 +112,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 									}
 									else
 										"CSProj_File variable is not set of file does not exist: {0}".error(CSProj_File);
-								})
-						.append_Link("refresh IE", ()=>ie.open_ASync(ie.url()));
+								});
+						
 			
 			this.ActionsPanel.add_CheckBox("Show *.cs files", 5,200,
 									(value) => { 	
@@ -127,8 +141,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
     	
     	public ascx_Edit_AspNet_Pages setPageViewers()
     	{
-    		AspNetFiles.afterSelect<string>(
-				(file)=>{	
+    		Action<string> showFile =
+    				(file)=>{	
 							if (OpenSourceCodeFiles)
 							{
 								Aspx_CodeViewer.open(file);
@@ -147,7 +161,10 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 							var pageUrl = new Uri(this.Web_Address.uri(), file.remove(this.File_Path));					
 							this.ie.open_ASync(pageUrl.str()); 
 						
-						});	
+						}	;	
+    		AspNetFiles.afterSelect<string>(showFile);
+    		AspNetFiles.onDoubleClick<string>(showFile);
+			
 			return this;
     	}
 	}
@@ -165,7 +182,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 			{
 				editAspNet.File_Path = folder;
 				
-				var files = folder.files(true, "*.aspx", "*.asmx","*.ashx");
+				var files = folder.files(true, "*.aspx", "*.asmx","*.ashx","*.svc");
 				if (editAspNet.ShowFilesWithExtension_CS)
 					files.add(folder.files(true,"*.cs"));
 				if (editAspNet.ShowFilesWithExtension_AscxAsaxConfig)

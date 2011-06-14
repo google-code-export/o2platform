@@ -5,7 +5,7 @@
 //var topPanel = panel.clear().add_Panel();  
 var topPanel = O2Gui.open&lt;Panel&gt;("Util - Javascrit Object viewer", 1100, 500);
 topPanel.insert_Below&lt;Panel&gt;(100).add_LogViewer();
-var ie = topPanel.add_IE().silent(true);
+var ie = topPanel.add_IE().silent(false);
 var scriptText = topPanel.insert_Left&lt;GroupBox&gt;(350).set_Text("Script to execute").add_TextArea().allowTabs();   
 //scriptText.splitContainer().splitterDistance(300); 
 var domTree = scriptText.insert_Below&lt;GroupBox&gt;().set_Text("Current page DOM tree").add_TreeView().sort();
