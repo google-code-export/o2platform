@@ -168,8 +168,7 @@ Action&lt;string&gt; loadFilesFromFolder =
 								{						
 									"processing file:{0}".info(file);
 									var aspNetPage = file.load&lt;AspNet_Page&gt;();						
-									aspNetPages.add(aspNetPage.Virtual_Path, aspNetPage);		
-									show.info(aspNetPage);									
+									aspNetPages.add(aspNetPage.Virtual_Path, aspNetPage);																			
 								}					
 								files.add_Nodes(aspNetPages.Values, (aspNetPage)=&gt; aspNetPage.Virtual_Path);  
 							});
@@ -196,14 +195,15 @@ files.onDrop(loadFilesFromFolder);
 
 //TM Specific stuff
 
-/*var folderWithMethodStreams = @"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3";
+var folderWithMethodStreams = @"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3";
 
 if (ascxCodeStreams.AllSavedMethodStreams.isNull())
 {
 	ascxCodeStreams.load_SavedMethodStreams(folderWithMethodStreams.files());
 	O2.Kernel.O2LiveObjects.set("AllSavedMethodStreams", ascxCodeStreams.AllSavedMethodStreams);	
 }
-
+return "ok";
+/*
 ascxCodeStreams.AllSavedMethodStreams_MappedByFileName = new Dictionary&lt;string,List&lt;Saved_MethodStream&gt;&gt;();
 
 foreach(var savedMethodStream in ascxCodeStreams.AllSavedMethodStreams)

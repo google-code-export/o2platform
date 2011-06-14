@@ -71,8 +71,18 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		
 		public void stop()
 		{
-			WebServerProcess.Kill();
-			WebServerProcess.WaitForExit();			
+			if (WebServerProcess.notNull())
+			{
+				if (WebServerProcess.HasExited)
+					"WebServer process already has Exited".error();
+				else
+				{
+					WebServerProcess.Kill();
+					WebServerProcess.WaitForExit();			
+				}
+			}
+			else
+				"WebServerProcess was null".error();
 			serverCache.Remove(serverCacheKey()); 
 		}
 		

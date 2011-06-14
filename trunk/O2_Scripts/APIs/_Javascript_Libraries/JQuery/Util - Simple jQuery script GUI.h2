@@ -4,7 +4,7 @@
 var topPanel = "Util - Simple jQuery script GUI".popupWindow(700,400);   
 
 var ie = topPanel.add_IE_with_NavigationBar().   
-				 silent(true); 
+				 silent(false); 
 
  
 var jQueryText = topPanel.insert_Right(400,"jQuery").add_SourceCodeViewer();

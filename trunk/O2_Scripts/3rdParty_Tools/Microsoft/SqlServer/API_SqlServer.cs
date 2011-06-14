@@ -368,7 +368,7 @@ namespace O2.XRules.Database.APIs
 		
 	public static class API_SqlServer_GUI_Controls
     {
-		public static T add_ConnectionStringTester<T>(this API_SqlServer sqlServer , T control)
+		public static T add_ConnectionStringTester<T>(this API_SqlServer sqlServer , T control, Action afterConnect)
 			where T : Control
 		{
 			control.clear();
@@ -389,6 +389,7 @@ namespace O2.XRules.Database.APIs
 										var sqlConnection = new SqlConnection(text);
 										sqlConnection.Open();
 										response.set_Text("Connected ok");
+										afterConnect();
 									}
 									catch(Exception ex)
 									{

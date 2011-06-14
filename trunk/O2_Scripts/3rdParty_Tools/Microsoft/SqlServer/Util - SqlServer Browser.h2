@@ -7,80 +7,29 @@ topPanel.insert_Below(100).add_LogViewer();
 var sqlServer = new API_SqlServer(); 
 var show= false;
 show = true;
+TabControl tabControl = null;
+Action loadDataFromCurrentConnection = 
+	()=&gt;{
+			tabControl.remove_Tab("Database details viewer");
+			tabControl.remove_Tab("Table's Schema");
+			tabControl.remove_Tab("Table's Data");
+			tabControl.remove_Tab("Stored Procedures");
+			sqlServer.add_Viewer_DataBases(tabControl.add_Tab("Database details viewer"));
+			sqlServer.add_Viewer_Tables(tabControl.add_Tab("Table's Schema")); 
+			sqlServer.add_Viewer_TablesData(tabControl.add_Tab("Table's Data")); 
+			sqlServer.add_Viewer_StoredProcedures(tabControl.add_Tab("Stored Procedures"));  
+		};
 
 if(show)
 {
-	var tabControl = topPanel.add_TabControl(); 
-	sqlServer.add_ConnectionStringTester(tabControl.add_Tab("Test/Set SqlConnection string"));
-	sqlServer.add_GUI_SqlCommandExecute(tabControl.add_Tab("Execute SQL Commands"));	
-	sqlServer.add_Viewer_DataBases(tabControl.add_Tab("Database details viewer"));
-	sqlServer.add_Viewer_Tables(tabControl.add_Tab("Table's Schema")); 
-	sqlServer.add_Viewer_TablesData(tabControl.add_Tab("Table's Data")); 
-	sqlServer.add_Viewer_StoredProcedures(tabControl.add_Tab("Stored Procedures"));  
-	
-	 
-	return "done";
+	tabControl = topPanel.add_TabControl(); 	
+	sqlServer.add_ConnectionStringTester(tabControl.add_Tab("Test/Set SqlConnection string"), loadDataFromCurrentConnection);
+	sqlServer.add_GUI_SqlCommandExecute(tabControl.add_Tab("Execute SQL Commands"));					 	
 } 
 
   
 
- //var dbName = "TeamMentorEnterpriseStore";//"master"; 
- //var database2 = sqlServer.database(dbName);  
- //database2.map_Tables()
- //		  .map_Table_Data();
- //return database2.Tables;
- 
- //var table  = database2.map_Tables().map_Table_Columns().Tables[0];
- //topPanel.add_TableList().show(table.Columns);
- //topPanel.add_DataGridView().add_Columns((typeof Table_Column).properties()).add_Rows(table.Columns);
- //return table;
- 
- ////var sqlQuery = "select * from {0}.Information_Schema.Columns where table_Schema='{1}' and table_name='{2}'".format(table.Catalog, table.Schema,table.Name);
- //sqlServer.add_Viewer_QueryResult(topPanel,sqlQuery);  
- //return sqlServer.executeReader(sqlQuery);
- //return table.fields();
- //return "ok";
-	//var value = topPanel.add_TableList();	
-/*var teamMentor = sqlServer.database("TeamMentorEnterpriseStore"); 
-teamMentor.map_StoredProcedures();
-foreach(var sp in teamMentor.StoredProcedures)
-{
-	if (sp.Value.lower().contains("exec ")) 
-		return sp.Value;
-} 
-return teamMentor;
-return "ok";*/
-//
-//foreach(var storedProcedure in storedProcedures)
-//	names.add_Node(storedProcedure.Name, storedProcedure);
-//names.selectFirst();	
-// return storedProcedures;
-//sqlServer.add_QueryResult(topPanel, ); 
-
-
-
-/*var dataTable = sqlServer.executeReader("select * from master.Information_Schema.Tables"); 
-
-var dataGridView = panel.add_DataGridView();
-dataGridView.DataError+= (sender,e) =&gt; { " dataGridView error: {0}".error(e.Context);};
-dataGridView.*/
-//return dataGridView.Rows[0];
-//foreach(DataRow row in dataTable.Rows)
-//	row.ItemArray[2].str().info(); 
-//var a = from DataRow row in dataTable.Rows  
-//	    select row;
-//using System.Data	 
-return "ok_";
-/*var dataGridView = panel.add_DataGridView();
-dataGridView.DataError+= (sender,e) =&gt; { " dataGridView error: {0}".error(e.Context);};
-var dataTable = sqlServer.executeReader(sqlQuery);   
-"records fetched: {0}".info (dataTable.Rows.size());
-dataGridView.invokeOnThread(()=&gt;{ dataGridView.DataSource = dataTable; });
-*/
-//return sqlServer; 
-//using System.Data.SqlClient
 //O2Ref:System.Data.dll
-
 //O2File:API_SqlServer.cs</SourceCode>
   <ReferencedAssemblies />
 </H2>
