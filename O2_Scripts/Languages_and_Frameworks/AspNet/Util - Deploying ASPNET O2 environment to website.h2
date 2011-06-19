@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Util - Deploying ASPNET O2 environment to website",700,400);
+  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Util - Deploying ASPNET O2 environment to website",700,550);
 //var topPanel = panel.clear().add_Panel();
 
+topPanel.insert_LogViewer();
 var actionsPanel = topPanel.insert_Left(300,"Actions");
 var configPanel = actionsPanel.parent().insert_Below(100,"Config Panel");
 MS_VS_WebServer webServer = null;
@@ -151,9 +152,12 @@ actionsPanel.add_Link("Create Test Site", 180, 0,
 
 var returnValues = new Dictionary&lt;string,Object&gt;();
 returnValues.add("topPanel",topPanel);
+returnValues.add("actionsPanel",actionsPanel);
 returnValues.add("set_Values",set_Values);
 returnValues.add("copySupportFilesToServer",copySupportFilesToServer);
 returnValues.add("addFileToCompile",addFileToCompile);
+returnValues.add("supportDlls",supportDlls);
+
 
 
 return returnValues;
