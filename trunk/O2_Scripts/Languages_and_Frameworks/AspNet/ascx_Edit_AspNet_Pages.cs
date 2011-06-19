@@ -135,7 +135,9 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 												}).autoSize().@check();
 
 			setPageViewers();
-						
+			
+			
+			AspNetFiles.add_ContextMenu().add_MenuItem("refresh", ()=> this.loadFiles_FromLocalFolder());
 			return this;
     	}
     	

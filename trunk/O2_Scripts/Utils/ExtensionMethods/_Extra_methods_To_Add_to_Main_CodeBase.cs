@@ -501,6 +501,15 @@ namespace O2.XRules.Database.Utils
 					return link;
 			return null;
 		}
+		
+		public static LinkLabel onClick(this LinkLabel link, Action callback)
+		{
+			link.invokeOnThread(	
+				()=>{
+						link.Click += (sender,e) => callback();
+					});
+			return link;
+		}
 		//Control (Font)			
 				
 		public static T size<T>(this T control, int value)
@@ -1960,6 +1969,19 @@ namespace O2.XRules.Database.Utils
 			if (guidValue.inValid())
 				return Guid.Empty;			
 			return new Guid(guidValue);		
+		}
+		
+		public static bool isGuid(this String guidValue)
+		{
+			try
+			{
+				new Guid(guidValue);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 		
 		public static bool toBool(this string _string)

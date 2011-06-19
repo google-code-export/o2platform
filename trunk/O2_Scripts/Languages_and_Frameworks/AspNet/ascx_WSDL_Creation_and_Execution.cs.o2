@@ -92,6 +92,13 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 			//assemblyInvoke.loadAssembly("OnlineStorage.dll".assembly());
 			//var methodProperties = topPanel.add_DataGridView();			
 			
+			TestWebServices = topPanel.insert_Above(22).add_ComboBox();
+			
+			WsdlLocation = topPanel.insert_Above(22)
+								   .add_LabelAndTextAndButton("Load Custom WSDL from location (file or url)","","Load",(value) => open(value))
+								   .control<TextBox>();
+			ExtraWsdlParameres = topPanel.insert_Above(22).add_Label("Extra wsdl.exe parameters").left(WsdlLocation.Left).top(2)
+											  .append_TextBox("").align_Right(topPanel);
 			
 			Methods_TreeView = topPanel.insert_Left(300,"Soap Methods").add_TreeView().sort();
 			ExecutionResult = topPanel.insert_Below(150).add_GroupBox("Web Service Invocation Response Data").add_TextArea();
@@ -175,13 +182,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 						      				"".showInCodeViewer().set_Text(serializedResponse,"a.xml");
 						      	  	});
 				
-			TestWebServices = topPanel.insert_Above(22).add_ComboBox();
 			
-			WsdlLocation = topPanel.insert_Above(22)
-								   .add_LabelAndTextAndButton("Load Custom WSDL from location (file or url)","","Load",(value) => open(value))
-								   .control<TextBox>();
-			ExtraWsdlParameres = topPanel.insert_Above(22).add_Label("Extra wsdl.exe parameters").left(WsdlLocation.Left).top(2)
-											  .append_TextBox("").align_Right(topPanel);
 			addScriptingSupport();
 			
 			
