@@ -124,7 +124,8 @@ namespace O2.XRules.Database.APIs
 				()=>{
 						InjectedProcess = Processes.startProcess(ProcessToInject);
 						"waiting for inputIdle".info();
-						InjectedProcess.WaitForInputIdle();
+						if (InjectedProcess.WaitForInputIdle(4000).isFalse())
+							"waited 4s for input idle so continuing...".debug();
 						"after inputIdle".info();
 						win32.SetWindowText(InjectedProcess.MainWindowHandle,InjectedProcess_WindowTitle);
 					};
