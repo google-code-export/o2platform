@@ -38,13 +38,33 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			return wsdl_CreateCSharp(wsdlSourceFileOrUrl,"wsdl".tempDir(),null);
 		}
 		
+		public string wsdl_CreateCSharp(string wsdlSourceFileOrUrl, string targetFolder)
+		{
+			return wsdl_CreateCSharp(wsdlSourceFileOrUrl, targetFolder ,null);
+		}
+		
+		//tryed to support /sharetypes
+        /*public string wsdl_CreateCSharp(string wsdlSourceFileOrUrl, string targetFolder, string extraWsdlParameres)
+        {
+        	return  wsdl_CreateCSharp(wsdlSourceFileOrUrl.wrapOnList(), targetFolder, extraWsdlParameres);
+        }
+        //public string wsdl_CreateCSharp(List<string> wsdlsSourceFilesOrUrls, string targetFolder, string extraWsdlParameres)
+        */
+        
         public string wsdl_CreateCSharp(string wsdlSourceFileOrUrl, string targetFolder, string extraWsdlParameres)
         {        	
         	if (wsdl_exe_exists())
-        	{        		        		
+        	{        		     
+        		if (targetFolder.Last() =='\\') 
+					targetFolder = targetFolder.removeLastChar();
         		this.Original_Wsdl_FileOrUrl = wsdlSourceFileOrUrl;
         		this.Created_CSharpFile = "";
-            	var parameters = "\"{0}\" /out:\"{1}\" {2}".format(wsdlSourceFileOrUrl, targetFolder, extraWsdlParameres ?? "");
+        		var wsdlTargets = wsdlSourceFileOrUrl;
+        		/*
+        		foreach(var wsdlSourceFileOrUrl in wsdlsSourceFilesOrUrls)
+        			wsdlTargets += "\"{0}\" ".format(wsdlSourceFileOrUrl);
+        		*/
+            	var parameters = " {2} {0} /out:\"{1}\"".format(wsdlTargets, targetFolder, extraWsdlParameres ?? "");
             	var executionResult = Processes.startProcessAsConsoleApplicationAndReturnConsoleOutput(Wsdl_Exe, parameters);            	            	
             	executionResult.info();
             	if (executionResult.valid())
@@ -91,5 +111,23 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			return cSharpFile;
 			//return Created_AssemblyPath;
 		}				
+    }
+    
+    public static class DotNet_SDK_WSDL_ExtensionMethods
+    {
+    	public static string wsdl_CreateCSharp(this string wsdlSourceFileOrUrl)
+    	{
+    		return new DotNet_SDK_WSDL().wsdl_CreateCSharp(wsdlSourceFileOrUrl);
+    	}
+    	
+    	public static string wsdl_CreateCSharp(this string wsdlSourceFileOrUrl, string targetFolder)
+    	{
+    		return new DotNet_SDK_WSDL().wsdl_CreateCSharp(wsdlSourceFileOrUrl, targetFolder);
+    	}
+    	
+    	public static string wsdl_CreateCSharp(this string wsdlSourceFileOrUrl, string targetFolder, string extraWsdlParameters)
+    	{
+    		return new DotNet_SDK_WSDL().wsdl_CreateCSharp(wsdlSourceFileOrUrl, targetFolder, extraWsdlParameters);
+    	}
     }
 }

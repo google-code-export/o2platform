@@ -418,7 +418,31 @@ namespace O2.XRules.Database.Utils
 					? elementToSearch.add_Attribute(name, value ?? "")
 					: null;
 		}
+
+		public static string add_xmlns(this string name, XElement xElement)				
+		{
+			return name.prepend_AttributeValue(xElement, "xmlns");
+		}
+		
+		public static string prepend_AttributeValue(this string name, XElement xElement, string attributeName)
+		{
+			var xmlns =  xElement.attribute(attributeName).value();
+			return "{" + xmlns + "}" + name; 
+		}
+		
+		public static XElement innerXml(this XElement xElement, string value)
+		{
+			return xElement.value(value);			
+		}
+		
+		public static XElement value(this XElement xElement, string value)
+		{
+			xElement.Value = value;
+			return xElement;
+		}
+		
 	}
+	
 	public static class ConfigFiles_extensionMethods
 	{
 		// Config files (can't easily put this on the main
@@ -427,6 +451,27 @@ namespace O2.XRules.Database.Utils
             var panel = O2Gui.open<Panel>("Editing local config file: {0}".format(file), 700, 300);
             return file.editLocalConfigFile(panel);
         }
+	}
+	
+	public static class Control_extensionMethods
+	{
+		public static T closeForm<T>(this T control)
+			where T : Control
+		{
+			control.parentForm().close();
+			return control;
+		}
+		
+		public static T closeForm_InNSeconds<T>(this T control, int seconds)
+			where T : Control
+		{
+			O2Thread.mtaThread(
+				()=>{
+						control.sleep(seconds*1000);
+						control.closeForm();
+					});
+			return control;
+		}
 		
 		// new one
 		public static T resizeFormToControlSize<T>(this T control, Control controlToSync)
@@ -1844,6 +1889,14 @@ namespace O2.XRules.Database.Utils
 	
 	public static class Misc_ExtensionMethods
 	{
+		public static T deserialize<T>(this string _string, bool fromDisk)
+		{
+			if (fromDisk && _string.fileExists())
+				return _string.deserialize<T>();
+			
+			return (T)Serialize.getDeSerializedObjectFromString(_string, typeof(T));  
+		}
+		
 		public static string fileName_WithoutExtension(this string filePath)
 		{
 			return Path.GetFileNameWithoutExtension(filePath);
@@ -1864,6 +1917,33 @@ namespace O2.XRules.Database.Utils
 					   .Split(new string[] { Environment.NewLine }, System.StringSplitOptions.None )
 					   .toList();
 		}
+		
+		public static List<string> deleteFiles(this List<string> files)
+		{
+			foreach(var file in files)
+				Files.deleteFile(file);
+			return files;
+		}
+		
+		public static List<string> filesContains(this List<string> files, string textToSearch)
+		{
+			return (from file in files
+					where file.fileContents().contains(textToSearch)
+					select file).toList();
+		}
+		
+		public static List<string> filesContains_RegEx(this List<string> files, string regExToSearch)
+		{
+			return (from file in files
+					where file.fileContents().regEx(regExToSearch)
+					select file).toList();
+		}
+		
+		public static string fromLines_getText(this List<string> lines)
+		{
+			return StringsAndLists.fromStringList_getText(lines);
+		}
+		
 		public static string subString(this string _string, int startPosition)
 		{
 			if (_string.size() < startPosition)
@@ -2056,6 +2136,15 @@ namespace O2.XRules.Database.Utils
 				"[toStringDictionary] {0}".error(ex.Message);
 			}
 			return stringDictionary;
+		}
+		
+		public static Dictionary<string,string> remove(this Dictionary<string,string> dictionary, Func<KeyValuePair<string,string>, bool> filter)
+		{
+			var itemsToRemove = dictionary.Where(filter).toList();
+			//var itemsToRemove = CompileEngine.CachedCompiledAssemblies.Where((item)=>item.Value.str().contains("O2_TeamMentor_AspNet"));  
+			foreach(var itemToRemove in itemsToRemove)
+				dictionary.Remove(itemToRemove.Key);    
+			return dictionary;
 		}
 	}
 	
