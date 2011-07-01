@@ -303,7 +303,14 @@ namespace O2.XRules.Database.APIs
 										()=>{									
 												if (fileOrFolder.dirExists())						
 													foreach(var file in fileOrFolder.files(true,"*.xml", "*.zip"))
-														loadFile(file);
+														try
+														{
+															loadFile(file);
+														}
+														catch(Exception ex)
+														{
+															"error loading file: {0} : {1}".error(file.fileName(), ex.Message);
+														}
 												else
 													loadFile(fileOrFolder);
 												treeView.white();
