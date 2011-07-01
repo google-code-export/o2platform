@@ -200,6 +200,7 @@ namespace O2.XRules.Database.APIs
     	public static API_Veracode_DetailedXmlFindings add_MultipleGuiViewers(this API_Veracode_DetailedXmlFindings apiVeracode , Control control)
     	{
     		var topPanel = control.clear();
+    		topPanel.insert_LogViewer();
     		var viewersPanel = topPanel.insert_Left(200,"Viewers");
 
 			var viewInTreeView = viewersPanel.add_Link("View in TreeView",0, 0, ()=> apiVeracode.show_In_TreeView(topPanel)); 
@@ -240,19 +241,37 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	public static ascx_TableList show_In_TableList(this List<FlawType> flaws , Control control)
-    	{
-    			control.clear();
-				var selectedRows =  from flaw in flaws
-									select new {flaw.severity, flaw.categoryname, flaw.issueid,
-												flaw.module, flaw.type, flaw.description, flaw.cweid,  
-												flaw.exploitLevel, flaw.categoryid, 
-												flaw.sourcefile, flaw.line,  flaw.sourcefilepath,
-												flaw.scope, flaw.functionprototype, flaw.functionrelativelocation};
-		  
-
-				var tableList = control.add_TableList().show(selectedRows);
-				tableList.makeColumnWidthMatchCellWidth();
-				return tableList;
+    	{    	
+    		control.clear();
+    		var tableList = control.add_TableList();
+    		Action showData = 
+    			()=>{
+		    			
+						var selectedRows =  from flaw in flaws
+											select new {flaw.severity, flaw.categoryname, flaw.issueid,
+														flaw.module, flaw.type, flaw.description, flaw.cweid,  
+														flaw.exploitLevel, flaw.categoryid, 
+														flaw.sourcefile, flaw.line,  flaw.sourcefilepath,
+														flaw.scope, flaw.functionprototype, flaw.functionrelativelocation};
+				  
+		
+						tableList.show(selectedRows);
+						tableList.makeColumnWidthMatchCellWidth();
+					};
+			tableList.onDrop(
+				(file)=>{
+							var apiVeracode = new API_Veracode_DetailedXmlFindings().load(file);
+							flaws = apiVeracode.flaws();
+							showData();
+						});
+			if (flaws.size()>0)
+				showData(); 
+			else
+				tableList.add_Column("note")
+						 .add_Row("drop a Veracode DetailedFindings Xml (or zip) file to view it")
+						 .makeColumnWidthMatchCellWidth();
+				
+			return tableList;
 		}
     
     	public static API_Veracode_DetailedXmlFindings show_In_TreeView(this API_Veracode_DetailedXmlFindings apiVeracode)
@@ -264,19 +283,31 @@ namespace O2.XRules.Database.APIs
     	{
     		var treeView = control.clear().add_TreeView();
     		Action<TreeNode,string> removeSchemaReference = 
-				(treeNode, textToRemove)=>{
-					"here".info();
-								treeNode.set_Text(treeNode.get_Text().remove(textToRemove));					
-							};
+				(treeNode, textToRemove) => {
+												treeNode.set_Text(treeNode.get_Text().remove(textToRemove));					
+											};
 			treeView.afterSelect(
 				(treeNode)=>{
 								removeSchemaReference(treeNode,"{" + apiVeracode.schemaName + "}"); 
 							});
 			
+			Action<string> loadFile = 
+				(file) =>{
+								apiVeracode.load(file);
+								treeView.rootNode().showXml(apiVeracode.ReportXmlFile); 			
+							};
 			treeView.onDrop(
-				(file)=>{
-							apiVeracode.load(file);
-							treeView.rootNode().showXml(apiVeracode.ReportXmlFile); 			
+				(fileOrFolder)=>{
+									treeView.azure();
+									O2Thread.mtaThread(
+										()=>{									
+												if (fileOrFolder.dirExists())						
+													foreach(var file in fileOrFolder.files(true,"*.xml", "*.zip"))
+														loadFile(file);
+												else
+													loadFile(fileOrFolder);
+												treeView.white();
+											});
 						});
 						
 			if (apiVeracode.ReportXmlFile.valid())
@@ -327,7 +358,7 @@ namespace O2.XRules.Database.APIs
 													   );
 							}
 						 });
-			
+										
 			Action<TreeNode, Dictionary<string, List<FlawType>>> addFlawsToTreeNode =
 				(treeNode, mappedFlaws) 
 				   =>{
@@ -336,26 +367,41 @@ namespace O2.XRules.Database.APIs
 									/*.*/
 					  };
 					  
-			var o2Timer = new O2Timer("Building XRefs for flaws").start();
-			var mappedFlawsByType = new Dictionary<string, List<FlawType>>();
-			var mappedFlawsByCategoryName = new Dictionary<string, List<FlawType>>();
-			var mappedFlawsByFile = new Dictionary<string, List<FlawType>>();
-			var mappedFlawsBySeverity = new Dictionary<string, List<FlawType>>();
+			Action showData = 		  
+				()=>{
+						treeView.clear();
+						var o2Timer = new O2Timer("Building XRefs for flaws").start();
+						var mappedFlawsByType = new Dictionary<string, List<FlawType>>();
+						var mappedFlawsByCategoryName = new Dictionary<string, List<FlawType>>();
+						var mappedFlawsByFile = new Dictionary<string, List<FlawType>>();
+						var mappedFlawsBySeverity = new Dictionary<string, List<FlawType>>();
+						
+						foreach(var flaw in apiVeracode.flaws()) 
+						{
+							mappedFlawsByCategoryName.add(flaw.categoryname, flaw);
+							mappedFlawsByType.add(flaw.type, flaw);
+							mappedFlawsByFile.add(flaw.sourceCodeFile(), flaw);
+							mappedFlawsBySeverity.add(flaw.severity.str(), flaw);	
+						}
+						o2Timer.stop();
+						o2Timer = new O2Timer("Populating treeview").start();			
+						addFlawsToTreeNode(treeView.add_Node("by Category Name"), mappedFlawsByCategoryName);
+						addFlawsToTreeNode(treeView.add_Node("by Type"), mappedFlawsByType);
+						addFlawsToTreeNode(treeView.add_Node("by File"), mappedFlawsByFile);
+						addFlawsToTreeNode(treeView.add_Node("by Severity"),mappedFlawsBySeverity);
+						o2Timer.stop();		
+					};
 			
-			foreach(var flaw in apiVeracode.flaws()) 
-			{
-				mappedFlawsByCategoryName.add(flaw.categoryname, flaw);
-				mappedFlawsByType.add(flaw.type, flaw);
-				mappedFlawsByFile.add(flaw.sourceCodeFile(), flaw);
-				mappedFlawsBySeverity.add(flaw.severity.str(), flaw);	
-			}
-			o2Timer.stop();
-			o2Timer = new O2Timer("Populating treeview").start();			
-			addFlawsToTreeNode(treeView.add_Node("by Category Name"), mappedFlawsByCategoryName);
-			addFlawsToTreeNode(treeView.add_Node("by Type"), mappedFlawsByType);
-			addFlawsToTreeNode(treeView.add_Node("by File"), mappedFlawsByFile);
-			addFlawsToTreeNode(treeView.add_Node("by Severity"),mappedFlawsBySeverity);
-			o2Timer.stop();		
+			treeView.onDrop(
+				(file)=>{
+							apiVeracode.load(file);
+							showData(); 			
+						});
+			if (apiVeracode.ReportXmlFile.valid())
+				showData(); 
+			else
+				treeView.add_Node("drop a Veracode DetailedFindings Xml (or zip) file to view it"); 			
+			
 			
 //			"There were {0} Files That Could Not Mapped Locally".error(apiVeracode.FilesThatCouldNotMappedLocally.size());			
 			/*if (treeView.nodes()>0))
