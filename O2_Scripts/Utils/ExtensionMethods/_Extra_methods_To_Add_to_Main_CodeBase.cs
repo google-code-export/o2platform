@@ -52,15 +52,16 @@ using O2.Views.ASCX.DataViewers;
 using System.Security.Cryptography;
 
 using Ionic.Zip;
+
+//O2File:ascx_ObjectViewer
+
 //O2Ref:Ionic.Zip.dll
 //O2Ref:O2_API_AST.dll
 
-//O2File:ascx_ObjectViewer.cs
-
 namespace O2.XRules.Database.Utils
-{
-
-		[Serializable]
+{	
+	
+	[Serializable]
 	public  class NameValueItems : List<Item> 
 	{
 		
@@ -2382,33 +2383,32 @@ namespace O2.XRules.Database.Utils
 	{
 		public static string compileIntoDll_inFolder(this string fileToCompile, string targetFolder)
 		{
-				"Compiling file: {0} ".debug(fileToCompile);
-				//var fileToCompile = currentFolder.pathCombine(file + ".cs");
-				var filenameWithoutExtension = fileToCompile.fileName_WithoutExtension();
-				var compiledDll = targetFolder.pathCombine(filenameWithoutExtension + ".dll");
-				var mainClass = "";
-				if (fileToCompile.fileExists().isFalse()) 
-					"could not find file to compile: {0}".error(fileToCompile);  
+			"Compiling file: {0} ".debug(fileToCompile);
+			//var fileToCompile = currentFolder.pathCombine(file + ".cs");
+			var filenameWithoutExtension = fileToCompile.fileName_WithoutExtension();
+			var compiledDll = targetFolder.pathCombine(filenameWithoutExtension + ".dll");
+			var mainClass = "";
+			if (fileToCompile.fileExists().isFalse()) 
+				"could not find file to compile: {0}".error(fileToCompile);  
+			else
+			{ 
+				var assembly = new CompileEngine().compileSourceFiles(new List<string> {fileToCompile}, 
+																	  mainClass, 
+																	  filenameWithoutExtension);
+				if (assembly.isNull()) 
+					"no compiled assembly object created for: {0}".error(fileToCompile);
 				else
 				{ 
-					var assembly = new CompileEngine().compileSourceFiles(new List<string> {fileToCompile}, 
-																		  mainClass, 
-																		  filenameWithoutExtension);
-					if (assembly.isNull()) 
-						"no compiled assembly object created for: {0}".error(fileToCompile);
+					Files.Copy(assembly.Location, compiledDll);
+					"Copied: {0} to {1}".info(assembly.Location, compiledDll);
+					if (compiledDll.fileExists().isFalse())
+						"compiled file not created in: {0}".error(compiledDll);
 					else
-					{ 
-						Files.Copy(assembly.Location, compiledDll);
-						"Copied: {0} to {1}".info(assembly.Location, compiledDll);
-						if (compiledDll.fileExists().isFalse())
-							"compiled file not created in: {0}".error(compiledDll);
-						else
-							return compiledDll;
-					}
-				}  
-				return null;
-			}
-
-	}
+						return compiledDll;
+				}
+			}  
+			return null;
+		}
+	}	
 }
     	

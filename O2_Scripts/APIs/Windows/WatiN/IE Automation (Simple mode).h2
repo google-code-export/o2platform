@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>ascx_IE_ScriptExecution.launchGui();
+  <SourceCode>O2Gui.open&lt;ascx_IE_ScriptExecution&gt;("IE Script Execution", 955,542)					    
+						.buildGui()
+						.parentForm()
+						.top(2).left(0);
 
 //O2File:ascx_IE_ScriptExecution.cs</SourceCode>
   <ReferencedAssemblies />

@@ -56,7 +56,9 @@ Action&lt;string&gt; invokeScript =
 
 Action invokeSelected = 
 	()=&gt;{
-			invokeScript(treeView.selected().get_Tag().str()); 
+			var selectedItem = treeView.selected();
+			if (selectedItem.notNull())			
+				invokeScript(selectedItem.get_Tag().str());							
 	    };
 treeView.onDoubleClick&lt;string&gt;(invokeScript);	
 
