@@ -230,8 +230,8 @@ namespace O2.XRules.Database.APIs
  		
  		public static string html(this WatiN_IE ie)
     	{
-    		
-    		return ie.documentElement().html();
+    		return ie.IE.Html;
+    		//return ie.documentElement().html();
     		/*
 			try
     		{    			
@@ -692,6 +692,24 @@ namespace O2.XRules.Database.APIs
 					return true;
 			return false;
 			//return watinIe.links().ids().Contains(id);
+		}
+		
+		public static Link waitForLink(this WatiN_IE watinIe, string nameOrId)
+		{
+			return watinIe.waitForLink(nameOrId, 500, 10);
+		}
+		
+		public static Link waitForLink(this WatiN_IE watinIe, string nameOrId, int sleepMiliseconds, int maxSleepTimes)
+		{
+		
+			var count = 0;
+			while(watinIe.hasLink(nameOrId).isFalse())
+			{
+				if (count++ >=maxSleepTimes)
+					break;
+				watinIe.sleep(500, false);
+			}
+			return watinIe.link(nameOrId);
 		}
 
  	}
@@ -2180,5 +2198,24 @@ namespace O2.XRules.Database.APIs
     	{    		    		    		
     		return ie.viewState().showValues(control);    		
     	}    	    	   	
+	}
+	
+	public static class WatiN_IE_ExtensionMethods_FireBugLite
+	{
+		public static WatiN_IE inject_FirebugLite(this WatiN_IE ie)
+		{
+			var firebugLiteScript = "(function(F,i,r,e,b,u,g,L,I,T,E){if(F.getElementById(b))return;E=F[i+'NS']&&F.documentElement.namespaceURI;E=E?F[i+'NS'](E,'script'):F[i]('script');E[r]('id',b);E[r]('src',I+g+T);E[r](b,u);(F[e]('head')[0]||F[e]('body')[0]).appendChild(E);E=new Image;E[r]('src',I+L);})(document,'createElement','setAttribute','getElementsByTagName','FirebugLite','4','firebug-lite.js','releases/lite/latest/skin/xp/sprite.png','https://getfirebug.com/','#startOpened');";
+			ie.eval(firebugLiteScript);  
+			return ie;
+		}
+	}
+	
+	public static class WatiN_IE_ExtensionMethods_JQuery
+	{	
+		public static WatiN_IE inject_jQuery(this WatiN_IE ie)
+		{
+			ie.eval("http://code.jquery.com/jquery-1.6.2.min.js".uri().getHtml()); 
+			return ie;
+		}
 	}
 }

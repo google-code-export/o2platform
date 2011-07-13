@@ -88,37 +88,66 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
     	{
     		var mvcMappings = new SpringMvcMappings(xmlFile);
 
-			var urlBeans = mvcMappings.springBeans.urlBeans(); 
-			var beans_byId = mvcMappings.springBeans.beans_byId();
-			 
-			foreach(var urlBean in urlBeans)
-			{ 
-				var controller = new SpringMvcController()
-										{
-											HttpRequestUrl = urlBean.name,
-											JavaClass = urlBean.@class							
-										};
-				foreach(var _property in urlBean.property)	
-					controller.Properties.add(_property.name, _property.value + 
-															 (((_property.@ref).valid()) ? "ref:{0}".format(_property.@ref) : "" ));
-				
+			//**** Step 1: map the controlers that have an name that starts with an URL, for example:
+			// 			   <bean name="/shop/viewItem.do"
+			
+			var urlBeans = mvcMappings.springBeans.urlBeans(); 			
+			foreach(var urlBean in urlBeans)			 
+				mvcMappings.map_ControllerBean(urlBean.name, urlBean);
+			
+			//**** Step 2: map items defined in the SimpleUrlHandlerMapping
+			var simpleUrlHandlerMappings = (from bean in mvcMappings.springBeans.bean
+	   							where bean.@class == "org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"
+								select bean).toList();
+			//simpleUrlHandlerMappings[0].details(); 
+			var entries =  from simpleUrlHandlerMapping in simpleUrlHandlerMappings
+						   from property in simpleUrlHandlerMapping.property
+						   from map in property.map
+						   from entry in map.entry			   
+						   where property.name == "urlMap" 
+						   select entry;
+						   
+			var mappedBeans = from bean in mvcMappings.springBeans.bean
+							  from entry in entries
+							  where entry.valueref == bean.id
+							  select new {url = entry.key , bean = bean};
+			foreach(var mappedBean in mappedBeans)				  
+				mvcMappings.map_ControllerBean(mappedBean.url, mappedBean.bean);
+				  
+			
+			return mvcMappings;
+		}
+		
+		public static SpringMvcMappings map_ControllerBean(this SpringMvcMappings mvcMappings, string httpRequestUrl, beans.beanLocalType urlBean)
+		{
+			var controller = new SpringMvcController()
+									{
+										HttpRequestUrl = httpRequestUrl, 
+										JavaClass = urlBean.@class							
+									};
+			foreach(var _property in urlBean.property)	
+				controller.Properties.add(_property.name, _property.value + 
+														 (((_property.@ref).valid()) ? "ref:{0}".format(_property.@ref) : "" ));
+
+//not used in the current case
+//var beans_byId = mvcMappings.springBeans.beans_byId();			 				
 /*				if (controller.JavaClass.inValid() && beans_byId.hasKey(urlBean.parent))
-				{
-					controller.JavaClass = beans_byId[urlBean.parent].@class;								
-					foreach(var _property in beans_byId[urlBean.parent].property)	
-						controller.Properties.add(_property.name, _property.value + 
-															 (((_property.@ref).valid()) ? "ref:{0}".format(_property.@ref) : "" ));
-				
-				} 
+			{
+				controller.JavaClass = beans_byId[urlBean.parent].@class;								
+				foreach(var _property in beans_byId[urlBean.parent].property)	
+					controller.Properties.add(_property.name, _property.value + 
+														 (((_property.@ref).valid()) ? "ref:{0}".format(_property.@ref) : "" ));
+			
+			} 
 */				
-				if (controller.JavaClass.valid())
-					controller.FileName = "{0}.java".format(controller.JavaClass.replace(".","\\")); 
-					
-				controller.CommandName = controller.Properties["commandName"];
-				controller.CommandClass= controller.Properties["commandClass"];  
+			if (controller.JavaClass.valid())
+				controller.FileName = "{0}.java".format(controller.JavaClass.replace(".","\\")); 
 				
-				mvcMappings.Controllers.Add(controller); 
-			}
+			controller.CommandName = controller.Properties["commandName"];
+			controller.CommandClass= controller.Properties["commandClass"];  
+			
+			mvcMappings.Controllers.Add(controller); 
+			
 			return mvcMappings;
     	}
     	
@@ -138,7 +167,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 				if(controller.CommandName.notNull() && controller.CommandClass.isNull())
 				{
 					"CommandClass not found but CommandName exists: {0}".debug(controller);
-					if (xRefs.Classes_by_Signature.hasKey(controller.JavaClass))
+					if (xRefs.Classes_by_Signature.hasKey(controller.JavaClass))	
 					{
 						"Found XRefs for Class: {0}".debug(controller.JavaClass);
 						var javaClass = xRefs.Classes_by_Signature[controller.JavaClass];
@@ -159,7 +188,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
     	}
     	
     	public static SpringMvcController mapCommandClass(this SpringMvcController controller, string javaClass, JavaMetadata_XRefs xRefs)
-    	{
+    	{    		
     		if (controller.CommandClass.isNull() && controller.JavaClass.valid()) 
 			{ 		 
 				 var _class = xRefs.JavaMetadata.java_Classes().signature(javaClass);				 
@@ -179,11 +208,12 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 								break;
 							}
 					}
+					//try to find it via the return value of the formBackingObject
 					if (controller.CommandClass.isNull())
 					{										
 						var formBackingObject = _class.java_Methods().name("formBackingObject"); 
 						if (formBackingObject.notNull())
-						{
+						{							
 							var numberOfInstructions = formBackingObject.Instructions.size();
 							if (formBackingObject.Instructions[numberOfInstructions-3].OpCode == "__aload" && 
 								formBackingObject.Instructions[numberOfInstructions-2].OpCode == "__areturn")
@@ -197,8 +227,22 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 									"resolved CommandClass for CommandName {0} -> {1}".info(controller.CommandName, controller.CommandClass);
 								}								
 							}
-						}											
+						}									
 					}						
+					//try to find CommandClass via CommandName
+					if (controller.CommandName.notNull() && controller.CommandClass.isNull())
+					{
+						foreach(var @class in xRefs.Classes_by_Signature) 
+						{
+							if (@class.Value.Name == controller.CommandName.upperCaseFirstLetter())
+							{
+								
+								controller.CommandClass = @class.Value.Signature;
+								"resolved CommandClass for CommandName {0} -> {1}".info(controller.CommandName, controller.CommandClass);
+								break;
+							}															
+						}						
+					}
 				}		 				 
 			}		
 			return controller;
@@ -251,6 +295,11 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 	{
 		public static TreeView add_TreeView_For_CommandClasses_Visualization(this Control control, JavaMetadata_XRefs xRefs)
 		{
+			return control.add_TreeView_For_CommandClasses_Visualization(xRefs,null, null);
+		}
+		
+		public static TreeView add_TreeView_For_CommandClasses_Visualization(this Control control, JavaMetadata_XRefs xRefs, Action<string> onClassSelected, Func<string,string,string> resolveGetterReturnType	)
+		{
 			var treeView = control.add_TreeView();   
 
 			var showHttpName = false; 
@@ -270,7 +319,14 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 								//											? method.ParametersAndReturnType
 								//											: method.GenericSignature.returnType());
 							};
-			Action<TreeNode, string> add_Getters = 
+			Func<string,string,string> localResolveGetterReturnType =
+				(methodName, returnType) => {
+												if (resolveGetterReturnType.isNull())
+													return returnType;
+												return resolveGetterReturnType(methodName, returnType);									
+											};
+			
+			Action<TreeNode, string> add_Getters =  
 				(treeNode, className)=> {
 											if (xRefs.Classes_by_Signature.hasKey(className))
 											{									
@@ -280,12 +336,12 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 												treeNode.add_Nodes( getters.Where((method)=>method.returnType()!="java.lang.String"),   
 																	(method)=> getMethodNodeText(method),
 																	//(method)=> method.str(),
-																	(method)=> method.returnType(), 
+								 									(method)=> localResolveGetterReturnType(method.Name,method.returnType()), 
 																	(method)=> true, 
 																	(method)=> Color.DarkBlue);
 			
 											}
-											else
+											else											
 												treeNode.add_Node("[Getters] ... class not found: {0}".format(className))
 														.color(Color.DarkRed);
 										}; 
@@ -323,6 +379,13 @@ namespace O2.XRules.Database.Languages_and_Frameworks.J2EE
 											//else
 											//	treeNode.add_Node(returnType);					
 							  			});
+			
+			treeView.afterSelect<string>(
+				(@class)=>{
+							if (onClassSelected.notNull())
+								onClassSelected(@class);
+						  });
+						  
 			return treeView;							  			
 		}
 		

@@ -33,9 +33,14 @@ namespace O2.XRules.Database.APIs
 		public Dictionary<int, string> MenuCommands { get; set; }		
 		public Action<int, string> CommandSelected { get; set;}
 		
+		public int MaxWaitForWaitForInputIdle {get;set;}
+		public int ExtraSleepAfterWaitForInputIdle {get;set;}		
+		
 		public API_InjectMenu_AnotherProcess()
 		{
 			MenuCommands = new Dictionary<int, string>();
+			MaxWaitForWaitForInputIdle = 4000;
+			ExtraSleepAfterWaitForInputIdle = 0;
 		}
 		
 		public API_InjectMenu_AnotherProcess buildGui()
@@ -83,7 +88,11 @@ namespace O2.XRules.Database.APIs
 						var _Handle = process.MainWindowHandle;//Processes.getProcessCalled("notepad").MainWindowHandle;
 					
 						"Main Window HANDLE: {0}".info(_Handle);
-						
+						if (_Handle==IntPtr.Zero)
+						{
+							"Could not get main window handle from process.MainWindowHandle (stopping addMenuItem sequence)".error();
+							return;
+						}
 						//insert normal menu
 						
 						var windowMenuHandle = win32.GetMenu(_Handle);
@@ -122,11 +131,22 @@ namespace O2.XRules.Database.APIs
 			
 			Action startProcessToInject =
 				()=>{
-						InjectedProcess = Processes.startProcess(ProcessToInject);
-						"waiting for inputIdle".info();
-						if (InjectedProcess.WaitForInputIdle(4000).isFalse())
+						InjectedProcess = Processes.startProcess(ProcessToInject);						
+						"waiting for inputIdle: {0}s".info(MaxWaitForWaitForInputIdle/1000);
+						if (InjectedProcess.WaitForInputIdle(MaxWaitForWaitForInputIdle).isFalse())
 							"waited 4s for input idle so continuing...".debug();
-						"after inputIdle".info();
+						"after inputIdle".info();						
+						if (InjectedProcess.MainWindowHandle == IntPtr.Zero)
+							for(var i=0 ; i < 10 ; i++)
+							{
+								"waiting for process.MainWindowHandle".info();
+								InjectedProcess = Processes.getProcess(InjectedProcess.Id); //help to make sure the InjectedProcess.MainWindowHandle is set
+								if (InjectedProcess.MainWindowHandle != IntPtr.Zero)
+									break;
+								this.sleep(5000);	
+							}						
+						if (ExtraSleepAfterWaitForInputIdle > 0)
+							this.sleep(MaxWaitForWaitForInputIdle);
 						win32.SetWindowText(InjectedProcess.MainWindowHandle,InjectedProcess_WindowTitle);
 					};
 					

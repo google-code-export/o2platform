@@ -128,7 +128,8 @@ Action newPost =
 			ie.open("http://o2platform.wordpress.com/wp-admin/post-new.php");
 			var browser = topPanel.control&lt;WebBrowser&gt;(true); 			
 			browser.focus(); 
-			browser.sendKeys("{TAB}%+g"); 
+			ie.link("Toggle fullscreen mode (Alt+Shift+G)").click();
+			//browser.sendKeys("{TAB}%+g"); 
 		};
 
 actionPanel.add_Link("login", 0,0,()=&gt; login()) 		  
@@ -136,7 +137,8 @@ actionPanel.add_Link("login", 0,0,()=&gt; login())
 		   .append_Link("new post", ()=&gt; newPost())		   
  		   .append_Link("Wrap clipboard data with Source Code tags", ()=&gt; wordPress.wrapClipboardTextInSourceCodeTags())
  		   .append_Link("open screenshot tool", ()=&gt; "Util - Show ScreenShot Tool.h2".local().executeH2Script())
- 		   .append_Link("upload image (from clipboard)", ()=&gt; uploadImagefromClipboard());
+ 		   .append_Link("upload image (from clipboard)", ()=&gt; uploadImagefromClipboard())
+ 		   .append_Link("exit full screen", ()=&gt;{ ie.link("Exit fullscreen").click();} );
  		 
  		 
 login();

@@ -355,7 +355,10 @@ namespace O2.XRules.Database.APIs.IKVM
 									"(Ljava.lang.Integer;)V",
 									"(Ljava.util.Date;)V",
 									"(Ljava.lang.String;)V",
-									"(Ljava.lang.Boolean;)V"
+									"(Ljava.lang.Boolean;)V",
+									"(D)V",
+									"(Z)V",
+									"(I)V"
 								 };
 											
 			return (from method in methods	
@@ -372,6 +375,7 @@ namespace O2.XRules.Database.APIs.IKVM
 									"Ljava.lang.String;",
 									"Ljava.lang.Boolean;",
 									"I",
+									"Z",
 									"D"
 									
 								 };
