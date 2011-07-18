@@ -18,7 +18,7 @@ using Moq;
 
 //O2Ref:moq.dll
 //O2Ref:System.Web.Abstractions.dll
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+//_O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.APIs
 {

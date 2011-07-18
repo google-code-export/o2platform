@@ -2,6 +2,8 @@
 <H2>
   <SourceCode>//var topPanel = panel.clear().add_Panel();
 var topPanel = "Get O2 Reference dll (double click on file to download it)".popupWindow(400,500);  
+topPanel.insert_LogViewer();
+
 var ie = topPanel.add_IE().silent(true);
 
 var treeView = topPanel.insert_Left().add_TreeView().sort();
@@ -22,44 +24,13 @@ topPanel.splitContainer().panel2Collapsed(true);
 
 treeView.onDoubleClick&lt;string&gt;( 
 	(url)=&gt; {
+				treeView.pink(); 
 				"you selected the url: {0}".info(url);
 				var localTempFile = url.uri().download();
 				var copiedFile = Files.Copy(localTempFile,PublicDI.config.CurrentExecutableDirectory);
 				"file was copied to: {0}".info(copiedFile);
+				treeView.white();
 			});
-
-//topPanel.clear().add_TableList().show(links);
-
-return "ok";
-
-
-
-var baseDir = @"http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/_3rdPartyDlls/FilesWithNoCode/";
-Func&lt;string, string&gt; downloadFile = 
-	(fileToDownload)=&gt;
-		{
-			var fullUri = "{0}{1}".format(baseDir, fileToDownload);			
-			return fullUri.uri().download();
-		};
-
-Action&lt;string&gt; copyToO2Directory = 
-	(fileToCopy) =&gt; {
-						"copying file {0} to O2 execution directory".info(fileToCopy.fileName());
-						Files.Copy(fileToCopy,PublicDI.config.CurrentExecutableDirectory);
-					};
-					
-Action&lt;string&gt; downloadAndCopyFile =
-	(fileName) =&gt;{	
-					var targetFile = PublicDI.config.CurrentExecutableDirectory.pathCombine(fileName);
-					if (targetFile.fileExists())
-						"Skipping file because it already exists: {0}".info(targetFile);
-					else
-						copyToO2Directory(downloadFile(fileName));  
-				 };
-
-downloadAndCopyFile("White.Core.dll");
-
-
 return "ok";
 
 //O2File:WatiN_IE_ExtensionMethods.cs
