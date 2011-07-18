@@ -302,26 +302,19 @@ namespace O2.XRules.Database.APIs
 		{
 			foreach(var context in fortifyScan._fvdl.ContextPool.Context)
 			{
-				//var location = context.FunctionDeclarationSourceLocation;
-				fortifyScan.Contexts.Add( 
-					new Fortify_Context()
-							{
-								Id = context.id.str() ,	
-								Function = new Fortify_Function(context.Function.name,context.FunctionDeclarationSourceLocation)
-								/*Function = new Fortify_Function()
-												{
-													FunctionName = context.Function.name, 													
-													CodeLocation = new Fortify_CodeLocation()
-																	{
-																		Path = location.path,
-																		Line = location.line,
-																		LineEnd = location.lineEnd,
-																		ColStart = location.colStart,
-																		ColEnd = location.colEnd
-																	}
-												}*/
-											
+				try
+				{
+					fortifyScan.Contexts.Add( 
+						new Fortify_Context()
+								{
+									Id = context.id.str() ,	
+									Function = new Fortify_Function(context.Function.name,context.FunctionDeclarationSourceLocation)											
 							});										
+				}
+				catch(Exception ex)
+				{
+					"Error Adding ContextPool Item: {0}".error(ex.Message);
+				}
 			}
 			return fortifyScan;		
 		}				
@@ -367,12 +360,19 @@ namespace O2.XRules.Database.APIs
 		{
 			foreach(var sink in fortifyScan._fvdl.ProgramData.Sinks.SinkInstance)
 			{				
-				fortifyScan.Sinks.Add( 
-					new Fortify_Sink()
-							{
-								RuleID = sink.ruleID.str() ,
-								Function_Call = new Fortify_Function(sink.FunctionCall.Function.name,sink.FunctionCall.SourceLocation)
-							});										
+				try
+				{
+					fortifyScan.Sinks.Add( 
+						new Fortify_Sink()
+								{
+									RuleID = sink.ruleID.str() ,
+									Function_Call = new Fortify_Function(sink.FunctionCall.Function.name,sink.FunctionCall.SourceLocation)
+								});										
+				}
+				catch(Exception ex)
+				{
+					"Error Adding Sink: {0}".error(ex.Message);
+				}							
 			}
 			return fortifyScan;		
 		}
@@ -380,19 +380,26 @@ namespace O2.XRules.Database.APIs
 		public static Fortify_Scan mapSources(this Fortify_Scan fortifyScan)
 		{
 			foreach(var source in fortifyScan._fvdl.ProgramData.Sources.SourceInstance)
-			{				
-				var fortifySource = new Fortify_Source()
-											{
-												RuleID = source.ruleID.str() ,												
-											};
-				if (source.FunctionCall.notNull())											
-					fortifySource.Function_Call = new Fortify_Function(source.FunctionCall.Function.name,source.FunctionCall.SourceLocation);
-				if (source.FunctionCall.notNull())	
-					fortifySource.Function_Entry = new Fortify_Function(source.FunctionCall.Function.name,source.FunctionCall.SourceLocation);
-				if (source.TaintFlags.notNull())
-					fortifySource.TaintFlags = (from taintFlag in source.TaintFlags.TaintFlag
-												select taintFlag.name).toList();
-				fortifyScan.Sources.Add(fortifySource); 
+			{		
+				try
+				{
+					var fortifySource = new Fortify_Source()
+												{
+													RuleID = source.ruleID.str() ,												
+												};
+					if (source.FunctionCall.notNull())											
+						fortifySource.Function_Call = new Fortify_Function(source.FunctionCall.Function.name,source.FunctionCall.SourceLocation);
+					if (source.FunctionCall.notNull())	
+						fortifySource.Function_Entry = new Fortify_Function(source.FunctionCall.Function.name,source.FunctionCall.SourceLocation);
+					if (source.TaintFlags.notNull())
+						fortifySource.TaintFlags = (from taintFlag in source.TaintFlags.TaintFlag
+													select taintFlag.name).toList();
+					fortifyScan.Sources.Add(fortifySource); 
+				}
+				catch(Exception ex)
+				{
+					"Error Adding Source: {0}".error(ex.Message);
+				}
 			}
 			return fortifyScan;		
 		}		
