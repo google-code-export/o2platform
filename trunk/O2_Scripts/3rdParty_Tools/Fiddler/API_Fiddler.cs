@@ -8,7 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Text;
-using O2.Interfaces.O2Core;
+using O2.Interfaces.O2Core; 
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
@@ -19,10 +19,10 @@ using White.Core.UIItems.WindowItems;
 //O2File:Tool_API.cs
 
 
-using O2.XRules.Database.Utils;
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+//using O2.XRules.Database.Utils;
+//_O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
-namespace O2.XRules.Database.APIs
+namespace O2.XRules.Database.APIs  
 {	
  
 	public class API_Fiddler : Tool_API
