@@ -19,6 +19,7 @@ Action&lt;string&gt; addUrlMappingsToTreeView =
 					};
 addUrlMappingsToTreeView("http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/_3rdPartyDlls/FilesWithNoCode/");
 addUrlMappingsToTreeView("http://o2platform.googlecode.com/svn/trunk/O2%20-%20All%20Active%20Projects/_3rdPartyDlls/");
+addUrlMappingsToTreeView("http://o2platform.googlecode.com/svn/trunk/O2_Binaries");
 
 topPanel.splitContainer().panel2Collapsed(true); 
 

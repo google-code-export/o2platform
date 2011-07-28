@@ -19,7 +19,7 @@ using O2.Views.ASCX.ExtensionMethods;
 namespace O2.XRules.Database.Utils
 {	
 	//TreeNode & TreeView
-	public static class TreeNode_and_TreeView_ExtensionMethods
+	public static class _Extra_TreeNode_and_TreeView_ExtensionMethods
 	{
 		public static TreeView add_TreeView_with_PropertyGrid<T>(this T control)
 			where T : Control

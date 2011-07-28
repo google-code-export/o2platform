@@ -18,7 +18,7 @@ using O2.Views.ASCX.ExtensionMethods;
 
 namespace O2.XRules.Database.Utils
 {	
-	public static class Control_extensionMethods
+	public static class _Extra_Control_extensionMethods
 	{
 		public static T closeForm<T>(this T control)
 			where T : Control

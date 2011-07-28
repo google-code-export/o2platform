@@ -71,7 +71,7 @@ namespace O2.XRules.Database.Utils
 	// Other extension method classes
 	
 	
-	public static class XElement_LinqXML_extensionMethods
+	public static class _Extra_XElement_LinqXML_extensionMethods
 	{
 		public static XElement parent(this XElement element)
 		{
@@ -141,7 +141,7 @@ namespace O2.XRules.Database.Utils
 		
 	}
 	
-	public static class ConfigFiles_extensionMethods
+	public static class _Extra_ConfigFiles_extensionMethods
 	{
 		// Config files (can't easily put this on the main
         public static Panel editLocalConfigFile(this string file)
@@ -151,7 +151,7 @@ namespace O2.XRules.Database.Utils
         }
 	}
 		
-	public static class Processes_ExtensionMethods
+	public static class _Extra_Processes_ExtensionMethods
 	{		
 		public static string startProcess_getConsoleOut(this string processExe)
 		{
@@ -216,8 +216,8 @@ namespace O2.XRules.Database.Utils
 
 		}
 	}
-	
-	public static class Int_ExtensionMethods
+	 
+	public static class _Extra_Int_ExtensionMethods
 	{
 		public static Action loop(this int count , Action action)
 		{
@@ -238,7 +238,7 @@ namespace O2.XRules.Database.Utils
 		
 	}
 	//REGISTRY
-	public static class RegistryKeyExtensionMethods
+	public static class _Extra_RegistryKeyExtensionMethods
     {    
     	public static string makeDomainTrusted(this string rootDomain, string subDomain)
     	{
@@ -292,7 +292,7 @@ namespace O2.XRules.Database.Utils
 	}   
 	
 	//Download file
-	public static class Uri_ExtensionMethods
+	public static class _Extra_Uri_ExtensionMethods
 	{
 		public static Uri append(this Uri uri, string virtualPath)
 		{
@@ -306,7 +306,7 @@ namespace O2.XRules.Database.Utils
 			}
 		}
 	}
-	public static class DownloadFiles_ExtensionMethods
+	public static class _Extra_DownloadFiles_ExtensionMethods
 	{		
 		public static string download(this string fileToDownload)
 		{
@@ -363,7 +363,7 @@ namespace O2.XRules.Database.Utils
 	}
 	
 		
-	public static class O2Gui_ExtensionMethods
+	public static class _Extra_O2Gui_ExtensionMethods
 	{		
 		//Control
 		
@@ -406,7 +406,7 @@ namespace O2.XRules.Database.Utils
 	}			
 	
 	
-	public static class XmlLinq_ExtensiomMethods
+	public static class _Extra_XmlLinq_ExtensiomMethods
 	{
 		public static XAttribute value(this XAttribute xAttribute, string value)
 		{	
@@ -416,7 +416,7 @@ namespace O2.XRules.Database.Utils
 		}		
 	}
 	
-	public static class Xml_XSD_ExtensionMethods
+	public static class _Extra_Xml_XSD_ExtensionMethods
 	{
 		//replace current xml_CreateCSharpFile with this one (inside O2.External.SharpDevelop.ExtensionMethods)
 		public static string xmlCreateCSharpFile_Patched(this string xmlFile)
@@ -458,7 +458,7 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 
-	public static class XML_ExtensionMethods
+	public static class _Extra_XML_ExtensionMethods
 	{		
 		public static List<XmlAttribute> add_XmlAttribute(this List<XmlAttribute> xmlAttributes, string name, string value)
 		{
@@ -472,7 +472,7 @@ namespace O2.XRules.Database.Utils
 		}		
 	}
 	
-	public static class AppDomain_ExtensionMethods
+	public static class _Extra_AppDomain_ExtensionMethods
 	{
 		public static string executeScriptInSeparateAppDomain(this string scriptToExecute)
 		{
@@ -536,7 +536,7 @@ namespace O2.XRules.Database.Utils
 	}
 	
 		
-	public static class ListView_ExtensionMethods
+	public static class _Extra_ListView_ExtensionMethods
 	{
 		public static ascx_TableList show_In_ListView<T>(this IEnumerable<T> data)
 		{
@@ -622,7 +622,7 @@ namespace O2.XRules.Database.Utils
 
 
 	
-	public static class sourceCodeViewer_ExtensionMethods
+	public static class _Extra_sourceCodeViewer_ExtensionMethods
 	{
 
 		public static ascx_SourceCodeEditor editor(this ascx_SourceCodeEditor codeEditor)
@@ -682,7 +682,7 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-	public static class Misc_ExtensionMethods
+	public static class _Extra_Misc_ExtensionMethods
 	{
 		public static T deserialize<T>(this string _string, bool fromDisk)
 		{
@@ -882,7 +882,7 @@ namespace O2.XRules.Database.Utils
 	}
 	
 	
-	public static class ComObject_ExtensionMethods
+	public static class _Extra_ComObject_ExtensionMethods
 	{
 		//the results of this are not consistent
 		public static TreeView showInfo_ComObject(this  object _rootObject)
@@ -930,7 +930,7 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-	public static class H2_ExtensionMethods
+	public static class _Extra_H2_ExtensionMethods
 	{
 		public static string scriptSourceCode(this string file)
 		{
@@ -949,7 +949,7 @@ namespace O2.XRules.Database.Utils
 		}			
 	}	
 	
-	public static class Console_ExtensionMethods
+	public static class _Extra_Console_ExtensionMethods
 	{
 		public static MemoryStream capture_Console(this string firstLine)
 		{
@@ -986,7 +986,7 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-	public static class Zip_ExtensionMethods
+	public static class _Extra_Zip_ExtensionMethods
 	{	
 		public static string zip_File(this string filesToZip)
 		{
@@ -1025,7 +1025,7 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-	public static class Compile_ExtensionMethods
+	public static class _Extra_Compile_ExtensionMethods
 	{
 		public static string compileIntoDll_inFolder(this string fileToCompile, string targetFolder)
 		{
