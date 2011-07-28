@@ -1,20 +1,25 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Util - Write Blog post on o2platform.wordpress.com",1200,600); 
+  <SourceCode>Web.Https.ignoreServerSslErrors();
+
+var topPanel = O2Gui.open&lt;Panel&gt;("Util - Write Blog post on o2platform.wordpress.com",1200,600); 
 //var topPanel = panel.clear().add_Panel(); 
 
-
+topPanel.insert_LogViewer();
 var cookies = "";
 var loggedInCookie = "";
 var authCookie = "";
 var wpnonce = "";
 var postId = "";
 
+var serverUrl = "";
+var homepage = "";
+
 Func&lt;string,string&gt; uploadFile = 
 	(fileToUpload)=&gt;{
 				var httpMultiPartForm = new HttpMultiPartForm();
 				
-				string postUrl = "http://o2platform.wordpress.com/wp-admin/async-upload.php";
+				string postUrl = serverUrl + "/wp-admin/async-upload.php";
 				//string fileContentType = "multipart/form-data; boundary=----------Ij5Ef1ae0ei4ae0gL6gL6ae0gL6KM7";
 				//string fileToUpload = @"C:\O2\_tempDir\4-16-2011\tmp2D26.tmp.jpeg";
 				string fileName = fileToUpload.fileName(); //"tmp2D26.tmp.jpeg";
@@ -68,7 +73,7 @@ Action uploadImagefromClipboard =
 							"[in Wordpress.uploadImage_fromClipboard]: uploading file: {0}".info(imageFromClipboard);
 							var imageNumber = uploadFile(imageFromClipboard);
 							"[in Wordpress.uploadImage_fromClipboard]: got image reference {0}".info(imageNumber);
-							ie2.open("http://o2platform.wordpress.com/wp-admin/async-upload.php?attachment_id={0}&amp;fetch=1".format(imageNumber));
+							ie2.open(serverUrl + "/wp-admin/async-upload.php?attachment_id={0}&amp;fetch=1".format(imageNumber));
 							var pageHtml  = ie2.IE.Html.htmlDecode(); 
 							"got html with size: {0}".info(pageHtml.size());
 							var imageUrl = pageHtml.htmlDocument()
@@ -86,7 +91,7 @@ Action uploadImagefromClipboard =
 
 Action mapCookies =
 	()=&gt;{
-			ie2.open("http://o2platform.wordpress.com/wp-admin/media-upload.php?post_id={0}&amp;type=image".format(postId));			
+			ie2.open(serverUrl + "/wp-admin/media-upload.php?post_id={0}&amp;type=image".format(postId));			
 			var scriptElement =  ie2.IE.Html.htmlDocument()
 											.select(@"//script[contains(text(),'logged_in_cookie')]"); 
 			var jint = scriptElement.innerHtml().str().jint_Compile();   
@@ -105,11 +110,8 @@ Action mapCookies =
 			"logged_in_cookie is: {0}".info(loggedInCookie); 
 		};
 		
-var wordPress = new API_WordPress("o2platform.wordpress.com"); 	  
-wordPress.addRequiredSitesToIETrustedZone(); //to make sure it works ok in WatiN    
+API_WordPress wordPress = null;
 
-
-var homepage = "http://o2platform.wordpress.com";
 
 var credential = @"C:\O2\_USERDATA\Accounts.xml".credential("o2platform"); 
 if (credential.isNull())
@@ -117,7 +119,7 @@ if (credential.isNull())
 
 Action login = 
 	()=&gt;{
-			ie.open("http://o2platform.wordpress.com/wp-login.php");
+			ie.open(serverUrl + "/wp-login.php");
   			ie.field("log", credential.UserName);
   			ie.field("pwd", credential.Password);
   			ie.button("Log In").click();
@@ -125,28 +127,42 @@ Action login =
 
 Action newPost = 
 	()=&gt;{
-			ie.open("http://o2platform.wordpress.com/wp-admin/post-new.php");
+			ie.open(serverUrl + "/wp-admin/post-new.php");
 			var browser = topPanel.control&lt;WebBrowser&gt;(true); 			
 			browser.focus(); 
 			ie.link("Toggle fullscreen mode (Alt+Shift+G)").click();
+			
+			postId = ie.field("post_ID").value();
+			"postId is: {0}".info(postId);
+
+			mapCookies();
 			//browser.sendKeys("{TAB}%+g"); 
 		};
 
+Action&lt;string&gt; setTargetServer =
+	(server)=&gt;{
+				new API_WordPress(server); 	  
+				serverUrl = "https://{0}".format(server);
+				homepage = serverUrl;
+				wordPress.addRequiredSitesToIETrustedZone(); //to make sure it works ok in WatiN    
+				login();
+				newPost(); 
+			  };
+
+
 actionPanel.add_Link("login", 0,0,()=&gt; login()) 		  
-		   .append_Link("stats", ()=&gt; ie.open("http://o2platform.wordpress.com/wp-admin/index.php?page=stats")) 
+		   .append_Link("stats", ()=&gt; ie.open(serverUrl + "/wp-admin/index.php?page=stats")) 
 		   .append_Link("new post", ()=&gt; newPost())		   
  		   .append_Link("Wrap clipboard data with Source Code tags", ()=&gt; wordPress.wrapClipboardTextInSourceCodeTags())
  		   .append_Link("open screenshot tool", ()=&gt; "Util - Show ScreenShot Tool.h2".local().executeH2Script())
  		   .append_Link("upload image (from clipboard)", ()=&gt; uploadImagefromClipboard())
- 		   .append_Link("exit full screen", ()=&gt;{ ie.link("Exit fullscreen").click();} );
- 		 
- 		 
-login();
-newPost(); 
-postId = ie.field("post_ID").value();
-"postId is: {0}".info(postId);
+ 		   .append_Link("exit full screen", ()=&gt;{ ie.link("Exit fullscreen").click();} )
+ 		   .append_Link("o2platform.wordpress.com", ()=&gt; setTargetServer("o2platform.wordpress.com"))
+ 		   .append_Link("teammentordevelopment.wordpress.com", ()=&gt; setTargetServer("teammentordevelopment.wordpress.com"));
+;
 
-mapCookies();
+ 		  
+setTargetServer("o2platform.wordpress.com"); 		 
 
 return "ok";
  

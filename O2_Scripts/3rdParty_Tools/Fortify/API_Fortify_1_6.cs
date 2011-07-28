@@ -226,10 +226,24 @@ namespace O2.XRules.Database.APIs
 			ReplacementDefinitions = new Fortify_ReplacementDefinitions();
 			Traces = new List<Fortify_TraceEntry>();
 		}
+		
+		public override string ToString()
+		{
+			return "{0} {1} {2} [{3} / {4}]".format(Kingdom, Type, SubType, InstanceSeverity, Confidence);
+		}
 	}
 	
     public class API_Fortify
     {    	    	
+		public API_Fortify()
+		{
+		}				
+		
+		public Fortify_Scan fortifyScan(string fvdlFile)
+		{
+			return convertToFortifyScan(fvdlFile);
+		}
+		
     	public Fortify_Scan convertToFortifyScan(string fvdlFile)
     	{
     		var scan = new Fortify_Scan();
@@ -254,6 +268,14 @@ namespace O2.XRules.Database.APIs
 	 		O2LiveObjects.set(fvdlFile,_fvdl);
 	 		o2Timer.stop();
 		 	return _fvdl;  
+		}
+	}
+	
+	public static class Fortify_Scan_ExtensionMethods
+	{
+		public static Fortify_Scan fortifyScan(this string fvdlFile)
+		{
+			return new API_Fortify().fortifyScan(fvdlFile);
 		}
 	}
 	
@@ -500,7 +522,7 @@ namespace O2.XRules.Database.APIs
 									{
 										traceEntry.SourceLocation = new Fortify_CodeLocation(node.SourceLocation);
 										traceEntry.SourceLocation_ContextId = node.SourceLocation.contextId ?? 0;
-										traceEntry.SourceLocation_Snippet = "node.SourceLocation.snippet";
+										traceEntry.SourceLocation_Snippet = node.SourceLocation.snippet;
 									}
 									if (node.SecondaryLocation.notNull())
 									{
@@ -517,6 +539,22 @@ namespace O2.XRules.Database.APIs
 			return fortifyScan;
 		}
     }        
+    
+    public static class Fortify_Fvdl_GUI_Helpers
+    {
+    	public static PropertyGrid createFvdlViewer_PropertyGrid(this Control control)
+    	{    		
+			var propertyGrid = control.add_PropertyGrid().helpVisible(false);    
+			Action<string> loadAndShowFile =    
+				(file)=> O2Thread.mtaThread(
+					()=>	propertyGrid.show(new API_Fortify().convertToFortifyScan(file)));
+			
+			propertyGrid.onDrop(loadAndShowFile);	
+			return propertyGrid;
+    	}
+    	
+    	
+    }
 }    
     
     	

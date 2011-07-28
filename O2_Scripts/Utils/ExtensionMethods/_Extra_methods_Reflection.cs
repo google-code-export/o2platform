@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Windows.Forms;
-using System.Collections;
+using System.Collections;  
 using System.Collections.Generic;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
@@ -16,7 +16,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 namespace O2.XRules.Database.Utils
 {	
 	
-	public static class Reflection_ExtensionMethods
+	public static class _Extra_Reflection_ExtensionMethods
 	{
 		//Reflection				
 		public static object field<T>(this object _object, string fieldName)

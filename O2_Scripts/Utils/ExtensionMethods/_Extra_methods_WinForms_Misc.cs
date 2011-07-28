@@ -19,7 +19,7 @@ using O2.Views.ASCX.ExtensionMethods;
 namespace O2.XRules.Database.Utils
 {	
 	
-	public static class TextBox_ExtensionMethods
+	public static class _Extra_TextBox_ExtensionMethods
 	{
 		public static TextBox add_TextBox(this Control control, string text)
 		{
@@ -38,7 +38,7 @@ namespace O2.XRules.Database.Utils
 	}
 	
 		//PropertyGrid
-	public static class PropertyGrid_ExtensionMethods
+	public static class _Extra_PropertyGrid_ExtensionMethods
 	{
 		public static PropertyGrid onValueChange(this PropertyGrid propertyGrid, Action callback)
 		{
@@ -48,7 +48,7 @@ namespace O2.XRules.Database.Utils
 	}
 	
 	//SplitContainer
-	public static class SplitContainer_ExtensionMethods
+	public static class _Extra_SplitContainer_ExtensionMethods
 	{
 		public static T splitterDistance<T>(this T control, int distance)
 			where T : Control
@@ -91,7 +91,7 @@ namespace O2.XRules.Database.Utils
 	}		
 	
 	//TabControl
-	public static class TabControl_ExtensionMethods
+	public static class _Extra_TabControl_ExtensionMethods
 	{
 		public static TabControl selectedIndex(this TabControl tabControl, int index)
 		{
