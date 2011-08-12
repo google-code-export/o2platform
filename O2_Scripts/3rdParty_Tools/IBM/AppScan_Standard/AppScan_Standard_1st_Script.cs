@@ -80,7 +80,7 @@ namespace V2.O2.Platform
                         {
                             "Got reference to the main window".info();
                             
-                            var scriptToExecute = @"C:\O2\O2Scripts_Database\_Scripts\3rdParty_Tools\IBM\AppScan_7.9\In AppScan - Create O2 Gui.h2";
+                            var scriptToExecute = @"C:\O2\O2Scripts_Database\_Scripts\3rdParty_Tools\IBM\AppScan_Standard\In AppScan - Create O2 Gui.h2";
                             "Executing Script: {0}".info(scriptToExecute);
                             scriptToExecute.compile_H2Script().executeFirstMethod();
                             //var tab =      nUnit.controls<TabControl>(true)[1];     

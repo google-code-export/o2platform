@@ -8,6 +8,11 @@ var showGui = false;
 var o2LauncherName = "AppScan_Standard_O2_Launcher";  
 var firstScriptName = "AppScan_Standard_1st_Script.cs";
 var targetFolder = @"C:\Program Files\IBM\Rational AppScan";
+if (targetFolder.dirExists().isFalse())
+{
+	PublicDI.log.showMessageBox("IBM AppScan is not installed on this machine, stoping script execution");
+	return "AppScan not installed";
+}
 var compiledDllsFolder = targetFolder;
 var o2Lancher = currentFolder.pathCombine(o2LauncherName + ".cs");
 
@@ -101,6 +106,9 @@ else
 }
 
 //runCompilationProcess();
-return "done";</SourceCode>
+return "done";
+
+//O2Ref:White.Core.dll
+</SourceCode>
   <ReferencedAssemblies />
 </H2>
