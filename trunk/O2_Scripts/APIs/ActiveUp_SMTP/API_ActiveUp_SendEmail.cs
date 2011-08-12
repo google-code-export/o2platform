@@ -25,25 +25,31 @@ namespace O2.XRules.Database.APIs
     	
     	public API_ActiveUp_SendEmail()
     	{
-    		To = new Dictionary<string,string>();    		
-    		_message = new ActiveUp.Net.Mail.Message();
+    		To = new Dictionary<string,string>();    		    		
     		
     		Body_SpoofEmailAlertFooter = "NOTE: this is a spoofed email, i.e. this was not sent by the current contact show in the To field.".line() + 
 				    					 "      this email was sent using an O2 Platform (http://o2platform.com) script that is designed to show".line() + 
 				    					 "      how easy it is to send spoofed emails ";
     	}
     	
+    	public ActiveUp.Net.Mail.Message buildMessageObject()
+    	{
+    		_message = new ActiveUp.Net.Mail.Message();
+			_message.From = new Address(From_Email,From_Name);
+			foreach(var item in To)    		
+				_message.To.Add(new Address(item.Key,item.Value)); //syntax: (email, name)
+	
+			_message.Subject = Subject;
+			_message.BodyText.Text = Body.line().line() + Body_SpoofEmailAlertFooter;
+			return _message;
+    	}
+    	
     	public bool sendEmail()
     	{    	
     		"In send email".info();
     		try
-    		{
-    			_message.From = new Address(From_Email,From_Name);
-    			foreach(var item in To)    		
-					_message.To.Add(new Address(item.Key,item.Value)); //syntax: (email, name)
-		
-				_message.Subject = Subject;
-				_message.BodyText.Text = Body.line().line() + Body_SpoofEmailAlertFooter;
+    		{    	
+    			buildMessageObject();
 				"about to send message".info();
 				SmtpClient.DirectSend(_message);
 				"message sent".info();
