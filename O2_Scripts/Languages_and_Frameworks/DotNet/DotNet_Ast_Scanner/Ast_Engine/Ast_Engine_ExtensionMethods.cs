@@ -10,7 +10,7 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.API.AST.CSharp;
 using O2.API.AST.ExtensionMethods;
-using O2.API.AST.ExtensionMethods.CSharp;
+using O2.API.AST.ExtensionMethods.CSharp; 
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
 using O2.DotNetWrappers.O2Findings;

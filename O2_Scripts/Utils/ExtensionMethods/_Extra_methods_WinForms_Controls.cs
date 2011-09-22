@@ -458,7 +458,36 @@ namespace O2.XRules.Database.Utils
 			where T : Control
 		{
 			return control.backColor(Color.Azure);
-		}					
+		}	
+		
+		public static int top<T>(this T control)
+			where T : Control
+		{
+			return (int)control.invokeOnThread(()=>  control.Top);
+		}
+		public static int left<T>(this T control)
+			where T : Control
+		{
+			return (int)control.invokeOnThread(()=>  control.Left);
+		}
+		
+		public static int width<T>(this T control)
+			where T : Control
+		{
+			return (int)control.invokeOnThread(()=>  control.Width);
+		}
+		
+		public static int height<T>(this T control)
+			where T : Control
+		{
+			return (int)control.invokeOnThread(()=>  control.Height);
+		}
+		
+		//add links
+		public static LinkLabel append_Below_Link(this Control control, string label, Action onClickCallback)
+		{
+			return control.parent().add_Link(label, control.top() + 20 , control.left(), ()=> onClickCallback());
+		}
 	}
 
 }    	

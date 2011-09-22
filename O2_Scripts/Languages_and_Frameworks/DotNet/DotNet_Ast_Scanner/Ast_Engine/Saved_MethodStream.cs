@@ -101,8 +101,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
     	{
     		if (methodStreams_CacheLocation.isNull())
     			methodStreams_CacheLocation = "_methodStreams_CacheLocation".tempDir();
-    		var safeFileName = 	iMethod.fullName().safeFileName(240 - methodStreams_CacheLocation.size());
-    		var pathToSaveSerializedObject = methodStreams_CacheLocation.pathCombine(safeFileName + ".methodStream.xml");    											
+    		var safeFileName = 	iMethod.fullName().safeFileName();//240 - methodStreams_CacheLocation.size());
+    		var pathToSaveSerializedObject = methodStreams_CacheLocation.pathCombine_MaxSize(safeFileName + ".methodStream.xml");    											
 			if (forceCreate.isFalse() && pathToSaveSerializedObject.fileExists())												
 			{
 				"Skipping iMethod '{0}' since serialized object already exists ".debug(iMethod.Name);
@@ -234,7 +234,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 			savedMethodStream.o2MethodStream = astData.createO2MethodStream(iMethod);
 			savedMethodStream.MethodStream = savedMethodStream.o2MethodStream.csharpCode();
 			
-			var fileCachePath = "_methodStreams".tempDir(false).pathCombine(savedMethodStream.RootMethod.Signature.safeFileName() + ".cs");
+			var fileCachePath = "_methodStreams".tempDir(false).pathCombine_MaxSize(savedMethodStream.RootMethod.Signature.safeFileName() + ".cs");
 			savedMethodStream.MethodStream_FileCache = savedMethodStream.MethodStream.saveAs(fileCachePath);
 			return savedMethodStream;			
 		}

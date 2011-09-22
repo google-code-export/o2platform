@@ -672,6 +672,37 @@ namespace O2.XRules.Database.APIs
     			radioButtons.AddRange(window.radioButtons()); 
     		return radioButtons;
     	}
+    	
+    	//checkBox
+    	public static CheckBox checkBox(this UIItemContainer container, string text)    		
+    	{
+    		return container.get<CheckBox>(text);
+    	}
+    	 
+    	public static List<CheckBox> checkBoxes(this UIItemContainer container)    		
+    	{
+    		return container.items<CheckBox>();
+    	}
+    	
+    	public static List<CheckBox> checkBoxes(this List<Window> windows)    		
+    	{
+    		var checkBoxes = new List<CheckBox>();
+    		foreach(var window in windows)
+    			checkBoxes.AddRange(window.checkBoxes()); 
+    		return checkBoxes;
+    	}
+    	//GroupBox
+    	
+    	//checkBox
+    	public static GroupBox groupBox(this UIItemContainer container, string text)    		
+    	{
+    		return container.get<GroupBox>(text);
+    	}
+    	 
+    	public static List<GroupBox> groupBoxes(this UIItemContainer container)    		
+    	{
+    		return container.items<GroupBox>();
+    	}
     }
     
     

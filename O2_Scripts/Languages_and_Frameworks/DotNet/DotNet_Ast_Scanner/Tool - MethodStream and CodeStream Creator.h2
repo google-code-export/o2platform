@@ -148,7 +148,7 @@ createButton.onClick(()=&gt;{
 												 sourceCodeFolders.get_Text().trim().split_onLines());
 							cancelButton.enabled(false);
 							createButton.enabled(true);
-						 });
+						 }); 
 
 cancelButton.onClick(()=&gt;{
 							statusLabel.set_Text("Cancel Button was clicked, stopping create process");
@@ -160,7 +160,7 @@ targetFolderFiles.insert_Above&lt;Panel&gt;(15).add_Link("refresh list below",0,
 statusLabel.set_Text("Method and Code Streams Creator");
 
 //DemoData
-var sourceCodeDir = @"C:\_WorkDir\SI\GitHub\TeamMentor";  
+/*var sourceCodeDir = @"C:\_WorkDir\SI\GitHub\TeamMentor";  
 
 addToSourceCodeFolders(new List&lt;string&gt;()  
 							{
@@ -170,9 +170,12 @@ addToSourceCodeFolders(new List&lt;string&gt;()
 								sourceCodeDir.pathCombine(@"Libraries\UserManagementLib"),
 								sourceCodeDir.pathCombine(@"Authentication")
 							});
-
+targetFolder.set_Text(@"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3"); 							
+*/
+addToSourceCodeFolders(@"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\Web Applications\TM_Website".wrapOnList());
+targetFolder.set_Text(@"C:\_WorkDir\SI\O2 Data\TM_V3_MethodStreams");
 addReferences( new List&lt;string&gt;() { "System.Web","System.Data", "System.Xml", "System.Linq" }); 
-targetFolder.set_Text(@"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3"); 
+
 refreshCreatedFilesList();
 				
 return "ok";
@@ -208,12 +211,12 @@ return "ok";
 //return "done";
 //astData_LoadedFiles.createO2MethodStream_UseCache_ReturnFile(iMethod, fileCache, ".cs");
 
-
+ 
 //astData_LoadedFiles.loadFiles(sourceFolder.files("*.cs",true));
 //return astData_LoadedFiles;
 
 //using ICSharpCode.SharpDevelop.Dom;
-//using ICSharpCode.NRefactory;
+//using ICSharpCode.NRefactory; 
 //using ICSharpCode.NRefactory.Ast;
 
 //using O2.API.AST.CSharp

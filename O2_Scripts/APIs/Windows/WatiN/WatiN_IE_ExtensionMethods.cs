@@ -715,14 +715,14 @@ namespace O2.XRules.Database.APIs
  	}
  	
     public static class WatiN_IE_ExtensionMethods_Button
-    {
- 
-    	public static WatiN.Core.Button button(this WatiN_IE watinIe, string name)
+    {  	    	
+    	public static WatiN.Core.Button button(this WatiN_IE watinIe, string identifier)
     	{
-    		foreach(var button in watinIe.buttons())
-    			if (button.id() == name || button.value() == name)
-    				return button;
-    		"in WatiN_IE could not find Button with name:{0}".error(name ?? "[null value]");
+    		if (identifier.valid())
+    			foreach(var button in watinIe.buttons())
+    				if (button.id() == identifier || button.value() == identifier || button.className() == identifier)
+    					return button;
+    		"in WatiN_IE could not find Button with identifier (searched on id,name and classname):{0}".error(identifier ?? "[null value]");
     		return null;    				
     	}
  
@@ -777,6 +777,24 @@ namespace O2.XRules.Database.APIs
 					return true;
 			return false;
 			//return watinIe.buttons().ids().Contains(id);						
+		}
+ 
+ 		public static WatiN.Core.Button waitForButton(this WatiN_IE watinIe, string nameOrId)
+		{
+			return watinIe.waitForButton(nameOrId, 500, 10);
+		}
+		
+		public static WatiN.Core.Button waitForButton(this WatiN_IE watinIe, string nameOrId, int sleepMiliseconds, int maxSleepTimes)
+		{
+		
+			var count = 0;
+			while(watinIe.hasButton(nameOrId).isFalse())
+			{
+				if (count++ >=maxSleepTimes)
+					break;
+				watinIe.sleep(500, false);
+			}
+			return watinIe.button(nameOrId);
 		}
  
 		public static WatiN_IE click(this WatiN_IE watinIe, string id)
@@ -1084,6 +1102,25 @@ namespace O2.XRules.Database.APIs
     		return watinIe.textField(name).notNull();    		
     	}
     	
+    	
+    	public static TextField waitForField(this WatiN_IE watinIe, string nameOrId)
+		{
+			return watinIe.waitForField(nameOrId, 500, 10);
+		}
+		
+		public static TextField waitForField(this WatiN_IE watinIe, string nameOrId, int sleepMiliseconds, int maxSleepTimes)
+		{
+		
+			var count = 0;
+			while(watinIe.hasField(nameOrId).isFalse())
+			{
+				if (count++ >=maxSleepTimes)
+					break;
+				watinIe.sleep(500, false);
+			}
+			return watinIe.field(nameOrId);
+		}
+    	
     	public static List<TextField> textFields(this WatiN_IE watinIe)
     	{
     		return (from textField in watinIe.IE.TextFields
@@ -1189,8 +1226,7 @@ namespace O2.XRules.Database.APIs
 						   "disabled",
 						   ! value);
 			return field;			
-		}
-
+		}		
     }
     
     public static class WatiN_IE_ExtensionMethods_Forms
@@ -1256,6 +1292,13 @@ namespace O2.XRules.Database.APIs
     	{
     		return (element != null)
     					? element.Id
+    					: "";
+    	}
+    	
+    	public static string className(this Element element)
+    	{
+    		return (element != null)
+    					? element.ClassName
     					: "";
     	}
  
