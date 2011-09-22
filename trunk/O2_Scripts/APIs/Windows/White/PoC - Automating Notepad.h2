@@ -1,9 +1,18 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//Starting notepad
-var notepadProcess = Processes.startProcess("Notepad.exe");
-var guiAutomation = new API_GuiAutomation(notepadProcess);  
+  <SourceCode>return Processes.getProcesses(); 
+//Starting notepad 
+var ieProcess = Processes.getProcesses()
+						.Where((process)=&gt; process.MainWindowTitle == "SI Question Pool - Windows Internet Explorer")
+						.first();
+//return Processes.GetProcesses();
 
+return ieProcess;
+var guiAutomation = new API_GuiAutomation(ieProcess);  
+
+var ieWindow = guiAutomation.windows().first();
+ieWindow.bringToFront();
+return "ok";
 //grabbing reference to notepad window 
 var notepad = guiAutomation.window("Untitled - Notepad");
 

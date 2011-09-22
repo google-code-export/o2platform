@@ -45,13 +45,19 @@ namespace O2.XRules.Database.APIs
     	}
     	
     	public bool sendEmail()
+    	{
+    		return sendEmail(true);
+    	}
+    	
+    	public bool sendEmail(bool sendEmail)
     	{    	
     		"In send email".info();
     		try
     		{    	
     			buildMessageObject();
 				"about to send message".info();
-				SmtpClient.DirectSend(_message);
+				if (sendEmail)
+					SmtpClient.DirectSend(_message);
 				"message sent".info();
 				return true;
 			}
@@ -64,12 +70,17 @@ namespace O2.XRules.Database.APIs
     	
     	public bool sendEmail(string fromEmail, string fromName, string toEmail, string toName, string subject ,string body)
     	{
+    		return sendEmail(fromEmail, fromName, toEmail, toName, subject, body, true);
+    	}
+    	
+    	public bool sendEmail(string fromEmail, string fromName, string toEmail, string toName, string subject ,string body, bool sendIt)
+    	{
     		this.From_Email = fromEmail;
 			this.From_Name = fromName;
 			this.To.add(toEmail, toName);
 			this.Subject = subject;
 			this.Body = body;
-			return  this.sendEmail();
+			return  this.sendEmail(sendIt);
     	}
     }
 }

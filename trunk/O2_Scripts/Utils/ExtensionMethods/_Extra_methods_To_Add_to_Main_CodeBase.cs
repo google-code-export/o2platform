@@ -58,6 +58,7 @@ using Ionic.Zip;
 //O2Ref:O2_API_AST.dll
 
 //O2File:_Extra_methods_Collections.cs
+//O2File:_Extra_methods_Files.cs
 //O2File:_Extra_methods_Items.cs
 //O2File:_Extra_methods_Reflection.cs
 //O2File:_Extra_methods_WinForms_Controls.cs
@@ -684,18 +685,7 @@ namespace O2.XRules.Database.Utils
 	
 	public static class _Extra_Misc_ExtensionMethods
 	{
-		public static T deserialize<T>(this string _string, bool fromDisk)
-		{
-			if (fromDisk && _string.fileExists())
-				return _string.deserialize<T>();
-			
-			return (T)Serialize.getDeSerializedObjectFromString(_string, typeof(T));  
-		}
 		
-		public static string fileName_WithoutExtension(this string filePath)
-		{
-			return Path.GetFileNameWithoutExtension(filePath);
-		}
 		public static string upperCaseFirstLetter(this string _string)
 		{
 			if (_string.valid())
@@ -703,41 +693,7 @@ namespace O2.XRules.Database.Utils
 				return _string[0].str().upper() + _string.subString(1); 
 			}
 			return _string;
-		}
-		public static List<string> lines(this string text, bool removeEmptyLines)
-		{
-			if (removeEmptyLines)
-				return text.lines();
-			return text.fixCRLF()
-					   .Split(new string[] { Environment.NewLine }, System.StringSplitOptions.None )
-					   .toList();
-		}
-		
-		public static List<string> deleteFiles(this List<string> files)
-		{
-			foreach(var file in files)
-				Files.deleteFile(file);
-			return files;
-		}
-		
-		public static List<string> filesContains(this List<string> files, string textToSearch)
-		{
-			return (from file in files
-					where file.fileContents().contains(textToSearch)
-					select file).toList();
-		}
-		
-		public static List<string> filesContains_RegEx(this List<string> files, string regExToSearch)
-		{
-			return (from file in files
-					where file.fileContents().regEx(regExToSearch)
-					select file).toList();
-		}
-		
-		public static string fromLines_getText(this List<string> lines)
-		{
-			return StringsAndLists.fromStringList_getText(lines);
-		}
+		}								
 		
 		public static string subString(this string _string, int startPosition)
 		{
@@ -774,33 +730,7 @@ namespace O2.XRules.Database.Utils
 		{
 			return "{0}_{1}".format(_string,count.randomLetters());
 		}
-		
-		public static string file(this string folder, string virtualFilePath)
-		{
-			var mappedFile = folder.pathCombine(virtualFilePath);
-			if (mappedFile.fileExists())
-				return mappedFile;
-			return null;
-		}
-		
-		public static List<string> files(this List<string> folders)
-		{
-			return folders.files("*.*");
-		}
-		
-		public static List<string> files(this List<string> folders, string filter)
-		{
-			return folders.files(filter,false);
-		}
-		
-		public static List<string> files(this List<string> folders, string filter, bool recursive)
-		{
-			var files = new List<string>();
-			foreach(var folder in folders)
-				files.AddRange(folder.files(filter, recursive));
-			return files;
-		}
-		
+				
 		public static string ascii(this int _int)
 		{
 			try
