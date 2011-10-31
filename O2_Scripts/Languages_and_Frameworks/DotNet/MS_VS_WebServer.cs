@@ -136,7 +136,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
     	{    					
 			var port = ("112" + 2.randomNumbers()).toInt(); 
 			return localPath.startWebServer(port);			
-    	}
+    	} 
     	
     	public static MS_VS_WebServer startWebServer(this string localPath, int port)
     	{
@@ -145,14 +145,20 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
     	}
     	
 		public static MS_VS_WebServer startWebServer(this string localPath, int port, string virtualPath)
-		{
+		{						
 			var serverCacheKey = MS_VS_WebServer.serverCacheKey(localPath, port.str(), virtualPath);
 			if (MS_VS_WebServer.serverCache.hasKey(serverCacheKey))
-				return MS_VS_WebServer.serverCache[serverCacheKey];
+			{
+				"found MS_VS_WebServer object in cache".info();
+				var msWebServer = MS_VS_WebServer.serverCache[serverCacheKey];
+				if (msWebServer.WebServerProcess.notNull() && msWebServer.WebServerProcess.HasExited.isFalse())
+					return MS_VS_WebServer.serverCache[serverCacheKey];
+			}
+			"creating new instance of MS_VS_WebServer".info();
 			var webServer = new MS_VS_WebServer(localPath, port, virtualPath);			
 			//if (webServer.WebServerProcess.isNull());	
 			//	return null;			
-			MS_VS_WebServer.serverCache.Add(serverCacheKey, webServer);
+			MS_VS_WebServer.serverCache.add(serverCacheKey, webServer);
 			return webServer;
 		}			
     }

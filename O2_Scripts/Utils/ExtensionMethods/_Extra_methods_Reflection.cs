@@ -115,6 +115,21 @@ namespace O2.XRules.Database.Utils
 					where attributeName == (attribute.TypeId as Type).Name.remove("Attribute")
 					select method).toList();						
 		}
+		
+		public static List<MethodInfo> methodsWithAttribute<T>(this Assembly assembly)
+			where T : Attribute
+		{
+			return assembly.methods().withAttribute<T>();
+		}
+		
+		public static List<MethodInfo> withAttribute<T>(this List<MethodInfo> methods)
+			where T : Attribute
+		{
+			return (from method in methods 
+					from attribute in method.attributes()		  
+					where attribute is T
+					select method).toList();						
+		}
 
 		
 		public static string signature(this MethodInfo methodInfo)
@@ -147,6 +162,71 @@ namespace O2.XRules.Database.Utils
 			return assemblyName.str().assembly();
 		}
 		
+		public static List<MethodInfo> methods(this List<Type> types)
+		{
+			return (from type in types
+					from method in type.methods()
+					select method).toList();					
+		}
+		
+		
+		public static List<T> attributes<T>(this MethodInfo methods)
+			where T : Attribute
+		{
+			return methods.attributes().attributes<T>();
+		}
+		
+		public static List<T> attributes<T>(this List<MethodInfo> methods)
+			where T : Attribute
+		{
+			return methods.attributes<T>();
+		}
+		
+		public static List<T> attributes<T>(this List<Attribute> attributes)
+			where T : Attribute
+		{
+			return (from attribute in attributes
+					where attribute is T
+					select (T)attribute).toList();
+		}
+				
+		
+		public static List<Attribute> attributes(this List<MethodInfo> methods, string name)
+		{
+			return methods.attributes().withName(name);
+		}
+		
+		public static Attribute attribute(this MethodInfo methodInfo, string name)
+		{
+			foreach(var attribute in methodInfo.attributes())
+				if (attribute.name() == name)
+					return attribute;
+			return null;			
+		}
+		
+		public static T attribute<T>(this MethodInfo methodInfo)
+			where T : Attribute
+		{
+			return methodInfo.attributes<T>().first();			
+		}
+		
+		public static string name(this Attribute attribute)
+		{
+			return attribute.typeName().remove("Attribute");
+		}
+		
+		public static List<string> names(this List<Attribute> attributes)
+		{
+			return (from attribute in attributes
+					select attribute.name()).toList();
+		}
+		
+		public static List<Attribute> withName(this List<Attribute> attributes, string name)
+		{
+			return (from attribute in attributes
+					where attribute.name() == name
+					select attribute).toList();
+		}
 		//Array		
 		
 		public static Array createArray<T>(this Type arrayType,  params T[] values)			
