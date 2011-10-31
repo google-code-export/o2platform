@@ -718,11 +718,18 @@ namespace O2.XRules.Database.APIs
     {  	    	
     	public static WatiN.Core.Button button(this WatiN_IE watinIe, string identifier)
     	{
+    		identifier = identifier.trim();
     		if (identifier.valid())
+    		{
+    			identifier = identifier.trim();
     			foreach(var button in watinIe.buttons())
-    				if (button.id() == identifier || button.value() == identifier || button.className() == identifier)
+    				if ((button.id().notNull() && button.id().trim() == identifier) || 
+    					(button.value().notNull() && button.value().trim() == identifier) ||
+    					(button.className().notNull() && button.className().trim() == identifier) ||
+    					(button.outerText().notNull() && button.outerText().trim() == identifier) )
     					return button;
-    		"in WatiN_IE could not find Button with identifier (searched on id,name and classname):{0}".error(identifier ?? "[null value]");
+			}    				
+    		"in WatiN_IE could not find Button with identifier (searched on id,name, classname and outerText):{0}".error(identifier ?? "[null value]");
     		return null;    				
     	}
  
@@ -760,6 +767,12 @@ namespace O2.XRules.Database.APIs
     	{    		
     		return (button != null)
     					? button.Value
+    					: "";
+    	}
+    	public static string outerText(this WatiN.Core.Button button)
+    	{    		
+    		return (button != null)
+    					? button.OuterText
     					: "";
     	}
  		 
