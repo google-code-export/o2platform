@@ -84,8 +84,8 @@ namespace O2.XRules.Database.Utils
 		
 		public string getScriptWrapper()
 		{
-			var scriptWrapper = "panel.clear();".line() + 
-								"var ie = panel.add_IE().silent(true);".line().line() +
+			var scriptWrapper = "var topPanel = panel.clear().add_Panel();".line() + 
+								"var ie = topPanel.add_IE().silent(true);".line().line() +
 								"{0}".line().line() +
 								"//O2File:WatiN_IE_ExtensionMethods.cs".line() + 
 								"//using O2.XRules.Database.Utils.O2".line() + 

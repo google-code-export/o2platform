@@ -553,11 +553,15 @@ namespace O2.XRules.Database.Findings
         }
 
         //[XRule(Name="Only Findings With Traces")]
+        public static List<IO2Finding> withTraces(this List<IO2Finding> o2Findings)
+        {
+        	return o2Findings.onlyTraces();
+        }
+        
         public static List<IO2Finding> onlyTraces(this List<IO2Finding> o2Findings)
         {        	
-            return 
-                (from IO2Finding o2Finding in o2Findings 
-                 where o2Finding.o2Traces.Count > 0  select o2Finding).ToList();
+            return (from IO2Finding o2Finding in o2Findings 
+                 	where o2Finding.o2Traces.Count > 0  select o2Finding).ToList();
             //return o2Assesment.o2Findings;
         }
 

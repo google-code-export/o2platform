@@ -66,7 +66,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 											};
 											
 			Action<TreeView, CodeStreamPath> showCodeStreamPath= 
-				(treeView, codeStreamPath)=>{									
+				(treeView, codeStreamPath)=>{																		
 												treeView.clear(); 
 												add_CodeStreamPath(treeView.rootNode(), codeStreamPath);
 												treeView.expandAll();
@@ -144,7 +144,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 									}
 							}
 							if (lastMatch.notNull())
-							{
+							{								
 								showCodeStreamPath(codeStreamViewer, lastMatch);
 								var codeStreamPaths = (from node in codeStreamViewer.allNodes() 
 													   select (CodeStreamPath)node.get_Tag()).toList();
@@ -164,11 +164,18 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 		{
 			codeStreams.clear();
 			codeStreams.add_Nodes(savedMethodStream.CodeStreams, (codeStream) => codeStream.CodeStreamPaths.size() > 0 );  
+			codeViewer.editor().clearMarkers(); 	
+			O2.DotNetWrappers.DotNet.O2Thread.mtaThread(
+				()=>{						
+						codeStreams.selectFirst(); 						
+					});
 		}
+		
 		public void loadMethodStreamFile(string pathToFile)
 		{
 			 loadMethodStream(pathToFile.load<Saved_MethodStream>());
 		}
+		
 		public void loadMethodStream(Saved_MethodStream _savedMethodStream)
 		{
 			if (_savedMethodStream.isNull())
@@ -178,8 +185,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 				savedMethodStream = _savedMethodStream;
 				codeViewer.set_Text(savedMethodStream.MethodStream );
 				//codeViewer.open(savedMethodStream.MethodStream_FileCache );
-				refresh_AllCodeStreams_TreeView();
-				codeStreams.selectFirst();					    
+				refresh_AllCodeStreams_TreeView();				
+				//codeStreams.selectFirst();					    				
 			}
 		}
 	}

@@ -87,7 +87,7 @@ Action&lt;string&gt; applyFilter =
 					if(filter.valid())
 					{
 						treeView.clear(); 
-						var files = allScripts.where((file)=&gt;file.regEx(filter));
+						var files = allScripts.where((file)=&gt; file.regEx(filter) || file.lower().contains(filter.lower()) );
 						treeView.add_Nodes(files, (file)=&gt; file.fileName());
 						
 						treeView.applyPathFor_1NodeMissingNodeBug(); 												
@@ -120,6 +120,16 @@ treeView.add_ContextMenu().add_MenuItem("Execute selected",true, ()=&gt; invokeS
 											else
 												selectedNodeScript.showInCodeEditor();
 										})
+						  .add_MenuItem("Copy Script Name to Clipboard",true, 
+				          			()=&gt;{
+											var selectedNodeScript = selectedNode(); 				
+											selectedNodeScript.fileName().toClipboard();
+										})
+						  .add_MenuItem("Copy Script Full Path to Clipboard",true, 
+				          			()=&gt;{
+											var selectedNodeScript = selectedNode(); 				
+											selectedNodeScript.toClipboard();
+										})				
 				          .add_MenuItem("Refresh (reload files)",true, ()=&gt; refresh());
 
 optionsPanel.add_Link("invoke selected script", 22, 0, ()=&gt;invokeSelected()).left(filterText.Left)
