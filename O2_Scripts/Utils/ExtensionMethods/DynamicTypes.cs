@@ -145,7 +145,15 @@ namespace O2.XRules.Database.Utils
 		// Reflection Type
 		public static Type create(this TypeBuilder typeBuilder)
 		{
-			return typeBuilder.CreateType();
+			try
+			{
+				return typeBuilder.CreateType();
+			}
+			catch(Exception ex)
+			{
+				"Error in Type create(this TypeBuilder typeBuilder): {0}".error(ex.Message);
+				return null;
+			}
 		}
 		
 		//IL Generation Helpers

@@ -59,16 +59,19 @@ Action&lt;string, int, int&gt; handleCaretMove =
 							};
 
 Action&lt;AspNet_Page&gt; viewFile = 
-	(aspNetPage)=&gt;{			
+	(aspNetPage)=&gt;{				
 						var virtualPath = aspNetPage.Virtual_Path;//ConfigItems[0].Value.info();
 						if (currentPath == virtualPath)
-							return;
+							return;						
+						
 						ie.open_ASync(webSiteUrl + virtualPath);	
 						otherFilesTab.visible(false);
 						currentPath= virtualPath;
 						otherFilesTab.clear();
-						var csharpFile = virtualPath + ".cs";
+						var csharpFile = virtualPath + ".cs";		
+						
 						csharp_codeViewer = otherFilesTab.add_Tab(csharpFile).add_SourceCodeEditor();    
+							
 						var sourceCodeFolder = aspNetPage.File_Path;  
 						
 						var fileContents = sourceCodeFolder.pathCombine(virtualPath).fileContents();
@@ -76,9 +79,13 @@ Action&lt;AspNet_Page&gt; viewFile =
 							//aspNet_codeViewer.set_Text(fileContents, "a.aspx");
 							aspNet_codeViewer.open(sourceCodeFolder.pathCombine(virtualPath))
 											 .setDocumentHighlightingStrategy("a.aspx");
+											 
 						var csharp_codeViewer_File = sourceCodeFolder.pathCombine(csharpFile);						
-						csharp_codeViewer.open(csharp_codeViewer_File)
-										 .onCaretMove((caret)=&gt; handleCaretMove(csharp_codeViewer_File, caret.Line, caret.Column));
+						if (csharp_codeViewer_File.fileExists())
+						{
+							csharp_codeViewer.open(csharp_codeViewer_File)
+											 .onCaretMove((caret)=&gt; handleCaretMove(csharp_codeViewer_File, caret.Line, caret.Column));
+						}
 												
 						foreach(var sourceDependency in aspNetPage.SourceDependencies)					
 							if (sourceDependency != aspNetPage.Virtual_Path)
@@ -99,7 +106,10 @@ Action&lt;AspNet_Page&gt; viewFile =
 											 	.onCaretMove((caret)=&gt; handleCaretMove(sourceDependency_CSharpFile, caret.Line, caret.Column));
 							}
 								
-						otherFilesTab.visible(true);			
+						otherFilesTab.visible(true);	
+						handleCaretMove(csharp_codeViewer_File,0,0);
+						availableStreams.selectFirst();
+						
 					};
 
 
@@ -173,8 +183,26 @@ Action&lt;string&gt; loadFilesFromFolder =
 								files.add_Nodes(aspNetPages.Values, (aspNetPage)=&gt; aspNetPage.Virtual_Path);  
 							});
 				};
-				
+ 
+Action&lt;string&gt; loadMethodStreams = 
+	(methodStreamsDir)=&gt;{	
+							if (ascxCodeStreams.AllSavedMethodStreams.isNull())
+							{
+								ascxCodeStreams.load_SavedMethodStreams(methodStreamsDir.files());
+								O2.Kernel.O2LiveObjects.set("AllSavedMethodStreams", ascxCodeStreams.AllSavedMethodStreams);	
+							}
 
+						};	
+							
+Action&lt;string,string, string&gt; loadData = 
+	(filesFolder, methodsStreamsFolder, _websiteUrl)=&gt;{
+			//loadFilesFromFolder("what is the folder with the Methods Streams".askUser());
+			//loadMethodStreams("what is the folder with the Methods Streams".askUser());			
+			loadFilesFromFolder(filesFolder);
+			loadMethodStreams(methodsStreamsFolder);
+			webSiteUrl = _websiteUrl;			
+			files.selectFirst();
+		};
 
 actionsPanel.add_Link("view all codeblocks",0,0, ()=&gt; viewAllCodeBlocks())
 			.append_Link("show compiled source code", 
@@ -191,18 +219,18 @@ actionsPanel.add_Link("view all codeblocks",0,0, ()=&gt; viewAllCodeBlocks())
 			.append_Link("refresh IE", ()=&gt;ie.open_ASync(ie.url()));
 
 
-files.onDrop(loadFilesFromFolder);
+files.onDrop(
+	(folder)=&gt;{
+					loadFilesFromFolder(folder);
+					//loadMethodStreams(folder);
+			  });
+
 
 //TM Specific stuff
+//var tmFolderWithMethodStreams = @"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3";
+//loadMethodStreams(tmFolderWithMethodStreams);
 
-var folderWithMethodStreams = @"C:\_WorkDir\SI\O2 Data\WebSite_Library_MethodStreams_ALL_3";
-
-if (ascxCodeStreams.AllSavedMethodStreams.isNull())
-{
-	ascxCodeStreams.load_SavedMethodStreams(folderWithMethodStreams.files());
-	O2.Kernel.O2LiveObjects.set("AllSavedMethodStreams", ascxCodeStreams.AllSavedMethodStreams);	
-}
-return "ok";
+return loadData;
 /*
 ascxCodeStreams.AllSavedMethodStreams_MappedByFileName = new Dictionary&lt;string,List&lt;Saved_MethodStream&gt;&gt;();
 

@@ -1,19 +1,8 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>return Processes.getProcesses(); 
-//Starting notepad 
-var ieProcess = Processes.getProcesses()
-						.Where((process)=&gt; process.MainWindowTitle == "SI Question Pool - Windows Internet Explorer")
-						.first();
-//return Processes.GetProcesses();
+  <SourceCode>var process = "Notepad".startProcess();
+API_GuiAutomation guiAutomation = new API_GuiAutomation("Notepad");
 
-return ieProcess;
-var guiAutomation = new API_GuiAutomation(ieProcess);  
-
-var ieWindow = guiAutomation.windows().first();
-ieWindow.bringToFront();
-return "ok";
-//grabbing reference to notepad window 
 var notepad = guiAutomation.window("Untitled - Notepad");
 
 //move it to the top left coner
@@ -22,7 +11,7 @@ notepad.move(0,0,800,600);
 //notepad.syncWithControl(panel);   // use this to sync the size of notepad with a particular control
  
 //enter some text into the notepad textbox 
-notepad.textBoxes()[0]  
+notepad.textBoxes()[0] 
 	   .mouse()
 	   .mouse_MoveBy(-100,-100)    
 	   .set_Text("This is a fully automated script, with no user interaction".line()  + " ...".line() + "going to sleep for 3 sec")

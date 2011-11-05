@@ -110,7 +110,13 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 									"Current Method: Signature = {0}".info(CurrentMethod.str());
 									"Current Method: DeclaringType = {0}".info(CurrentMethod.DeclaringType.FullName);
 									SoapParametersObject = methodInfo.create_LiveObject_From_MethodInfo_Parameters("Soap_Invocation_Parameters");
-									methodProperties.show(SoapParametersObject);
+									if (SoapParametersObject.notNull())
+									{
+										methodProperties.visible(true);
+										methodProperties.show(SoapParametersObject);
+									}
+									else
+										methodProperties.visible(false);
 									//new O2FormsReflectionASCX().loadMethodInfoParametersInDataGridView(methodInfo, methodProperties);
 								});
 								

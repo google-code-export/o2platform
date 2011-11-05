@@ -109,7 +109,8 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 														.font_bold()														
 														.fill();
 			var methodProperties = topPanel.add_GroupBox("Request Data").add_Control<ascx_ObjectViewer>();			
-			methodProperties.showSerializedString().createObjectWhenNull().simpleView();			
+			//methodProperties.showSerializedString().createObjectWhenNull().simpleView();			
+			methodProperties.createObjectWhenNull().simpleView();			
 			
 			Methods_TreeView.afterSelect<MethodInfo>(
 				(methodInfo) => {								
@@ -118,7 +119,13 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 									"Current Method: Signature = {0}".info(CurrentMethod.str());
 									"Current Method: DeclaringType = {0}".info(CurrentMethod.DeclaringType.FullName);
 									SoapParametersObject = methodInfo.create_LiveObject_From_MethodInfo_Parameters("Soap_Invocation_Parameters");
-									methodProperties.show(SoapParametersObject);
+									if (SoapParametersObject.notNull())
+									{
+										methodProperties.visible(true);
+										methodProperties.show(SoapParametersObject);
+									}
+									else
+										methodProperties.visible(false);
 									//new O2FormsReflectionASCX().loadMethodInfoParametersInDataGridView(methodInfo, methodProperties);
 								});
 								
@@ -150,9 +157,16 @@ namespace O2.XRules.Database.Languages_and_Frameworks.AspNet
 						//}
 						catch (Exception ex)
 						{	
-							ExecutionResult.append_Line((ex.InnerException.property("Detail") as System.Xml.XmlElement).OuterXml);
-							ExecutionResult.append_Line(ex.InnerException.Message);
-							ExecutionResult.append_Line(ex.InnerException.StackTrace);
+							if(ex.InnerException.notNull())
+							{
+								var detail = (ex.InnerException.property("Detail") as System.Xml.XmlElement);
+								if (detail.notNull())
+									ExecutionResult.append_Line(detail.OuterXml);
+								ExecutionResult.append_Line(ex.InnerException.Message);
+								ExecutionResult.append_Line(ex.InnerException.StackTrace);
+							}
+							else
+								ex.log();
 							//show.info(ex);
 							//ex.details();
 						}

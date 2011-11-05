@@ -2,6 +2,8 @@
 <H2>
   <SourceCode>//var topPanel = panel.clear().add_Panel();
 var topPanel = "Altoro - SQLi using FuzzDB (with screenshots)".popupWindow(1000,600); 
+topPanel.insert_LogViewer();
+ 
 var actionPanel = topPanel.insert_Above(20); 
 var ie = topPanel.add_IE().silent(true); 
 var treeView = topPanel.insert_Left(300).add_TreeView();
@@ -24,7 +26,7 @@ Func&lt;string,string,bool&gt; login =
               };
 
 Action startFuzz =
-	()=&gt;{	
+	()=&gt;{				
 			stopFuzz = false;
 			var fuzzDb = new API_FuzzDB();
 			foreach(var payload in fuzzDb.payloads_SQLi_Generic())

@@ -60,8 +60,7 @@
 			<li><a href="?action=QuickDevelopmentGui">Quick Development Gui</a></li>
 			<li><a href="?action=O2DevelopmentEnviroment">O2 Development Environment</a></li>
 			<li><a href="?action=AspNetPageRender">AspNet Page Render</a></li>						
-			<li><a href="Create_o2_AspNet_Page_Objects.aspx">Create o2 AspNet Page Objects.aspx</a>
-				 (<a href="Create_o2_AspNet_Page_Objects.aspx"> view created files</a>)</li>
+			<li><a href="Create_o2_AspNet_Page_Objects.aspx">Create o2 AspNet Page Objects.aspx</a></li>
 			
 		</ul>			
 

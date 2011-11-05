@@ -365,4 +365,31 @@ namespace O2.XRules.Database.Utils
 
         #endregion
     }
+    
+    public static class GraphLayout_Options
+    {
+    	public static System.Windows.Forms.Panel add_GraphOptions(this System.Windows.Forms.Control control, GraphLayout graphLayout)
+    	{    		    		 
+    		var targePanel = control.insert_Below<System.Windows.Forms.Panel>(25);
+			var label = targePanel.add_Label("Select graph Layout", 0,5);
+			 
+			var OptionsLayoutCombox = label.append_Control<System.Windows.Forms.ComboBox>().dropDownList();
+			
+			OptionsLayoutCombox.add_Items(new List<string> {
+																"Tree",
+																"CompoundFDP", 
+																"LinLog",
+																"ISOM",
+																"KK",
+																"BoundedFR",
+																"FR",
+																"Circular"
+															});
+			OptionsLayoutCombox.select_Item(0);												
+			OptionsLayoutCombox.onSelection(()=> graphLayout.layout(OptionsLayoutCombox.get_Text()));
+			OptionsLayoutCombox.append_Link("refresh", ()=>graphLayout.layout(OptionsLayoutCombox.get_Text()))
+							   .append_Link("animate Graph Layouts", ()=> graphLayout.showAllLayouts(2000));
+			return targePanel;
+    	}
+    }
 }
