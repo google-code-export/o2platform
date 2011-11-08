@@ -12,7 +12,7 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX;
 using O2.Views.ASCX.ExtensionMethods;
-
+using O2.XRules.Database.Utils;
 
 using AForge.Video.VFW;
 using AForge.Controls;
@@ -89,8 +89,9 @@ namespace O2.XRules.Database.APIs
 			{				
 				"WMV3 Codec is not installed, so downloading it now and starting installation".debug();
 				var wmv3InstallerUrl = "http://www.microsoft.com/downloads/info.aspx?na=41&SrcFamilyId=0C99C648-5800-4AA3-A2FE-3DE948689DB8&SrcDisplayLang=en&u=http%3a%2f%2fdownload.microsoft.com%2fdownload%2f9%2f8%2fa%2f98a6cb2d-6659-485e-b1f9-2c0d9bf6c328%2fwmv9VCMsetup.exe";
-				var wmv3Installer = O2.XRules.Database.Utils.DownloadFiles_ExtensionMethods.download(wmv3InstallerUrl,"wmv9VCMsetup.exe".tempFile());				
-				O2.XRules.Database.Utils.Processes_ExtensionMethods.startProcess(wmv3Installer);
+				//var wmv3Installer = O2.XRules.Database.Utils.DownloadFiles_ExtensionMethods.download(wmv3InstallerUrl,"wmv9VCMsetup.exe".tempFile());				
+				var wmv3Installer = wmv3InstallerUrl.download("wmv9VCMsetup.exe".tempFile());				
+				wmv3Installer.startProcess();
 				"wmv3Installer: {0}".info(wmv3Installer);				
 			}			
 			return this;

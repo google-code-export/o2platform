@@ -1,31 +1,18 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>
-var topPanel = O2Gui.open&lt;Panel&gt;("OWASP O2 Platform v2.0 Beta", 800,200);
+  <SourceCode>var topPanel = "OWASP O2 Platform v2.0 Beta".popupWindow(800,190);
 topPanel.parent().backColor(Color.White); 
-//var menuPanel = topPanel.insert_Above&lt;Panel&gt;(61);
 topPanel.insert_LogViewer();
+topPanel.add_PictureBox().open("OWASP_O2_Platform.png".local()).fill(false).width(351).height(41).top(10);
 var menuPanel = topPanel.insert_Right&lt;Panel&gt;(420);
 
-topPanel.add_PictureBox().open("OWASP_O2_Platform.png".local()).fill(false).width(351).height(41).top(10)
-		.onDrop((script)=&gt;{
-		  					"dropped script: {0}".info(script);
-		  				  });
-Action&lt;string&gt; executeH2Script = 
-	(script)=&gt;{
-				script.local().compile_H2Script().executeFirstMethod();
-			  }; 
+Action&lt;string&gt; executeH2Script = (script)=&gt;{ script.local().compile_H2Script().executeFirstMethod(); };
 
 menuPanel.add_Link("Write an IE Automation Script",15,0, () =&gt; executeH2Script("IE Automation (Simple mode).h2"));
-
-menuPanel.add_Link("Find and Execute an O2 Script",35,0,()=&gt; executeH2Script("Util - O2 Available scripts.h2"));
- 
+menuPanel.add_Link("Find and Execute an O2 Script",35,0,()=&gt; executeH2Script("Util - O2 Available scripts.h2")); 
 menuPanel.add_Link("Open Custom O2 for Security Consultants",15,185, ()=&gt; executeH2Script("Security Consultants (Custom O2 version).h2"));
-
 menuPanel.add_Label("Are you lost?",35,185)
 		 .append_Link("Open Help",()=&gt; "http://o2platform.com/wiki/Documentation".startProcess()) 
-		 .append_Link("Mailing List",()=&gt; "https://lists.owasp.org/mailman/listinfo/owasp-o2-platform".startProcess());
-
-return "done";</SourceCode>
+		 .append_Link("Mailing List",()=&gt; "https://lists.owasp.org/mailman/listinfo/owasp-o2-platform".startProcess());</SourceCode>
   <ReferencedAssemblies />
 </H2>

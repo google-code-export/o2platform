@@ -55,7 +55,8 @@ Action runCompilationProcess =
             Files.Copy("O2_Interfaces.dll".assembly().Location, compiledDllsFolder);
             Files.Copy("O2_DotNetWrappers.dll".assembly().Location, compiledDllsFolder);
             Files.Copy("O2_Views_ASCX.dll".assembly().Location, compiledDllsFolder);
-            //required for script execution
+            //required for script execution            
+            Files.Copy("O2_External_WinformsUI.dll".assembly().Location, compiledDllsFolder);
             Files.Copy("O2_External_SharpDevelop.dll".assembly().Location, compiledDllsFolder);
             Files.Copy("O2SharpDevelop.dll".assembly().Location, compiledDllsFolder);
             Files.Copy("O2_API_AST.dll".assembly().Location, compiledDllsFolder);
