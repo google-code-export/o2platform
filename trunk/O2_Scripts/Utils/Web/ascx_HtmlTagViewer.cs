@@ -181,7 +181,7 @@ namespace O2.XRules.Database.Utils
 				var htmlDocument = htmlCode.htmlDocument();  	
 				if (filter.valid())
 					HtmlTags_TreeView.add_Nodes(htmlDocument.select(filter));
-				else
+				else 
 				{
 					HtmlTags_TreeView.add_Node(htmlDocument);
 					HtmlTags_TreeView.expand();

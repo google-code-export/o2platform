@@ -238,6 +238,13 @@ namespace O2.XRules.Database.Utils
 		}
 		
 	}
+	public static class _Extra_UInt_ExtensionMethods
+	{
+		public static uint toUInt(this string value)
+		{
+			return UInt32.Parse(value);
+		}
+	}
 	//REGISTRY
 	public static class _Extra_RegistryKeyExtensionMethods
     {    
@@ -363,48 +370,7 @@ namespace O2.XRules.Database.Utils
 		}								
 	}
 	
-		
-	public static class _Extra_O2Gui_ExtensionMethods
-	{		
-		//Control
-		
-		public static Panel popupWindow(this string title)
-		{
-			return title.showAsForm();
-		}		
-		
-		public static Panel popupWindow(this string title, int width, int height)
-		{
-			return title.showAsForm(width, height);
-		}
-			
-		public static Panel createForm(this string title)			
-		{
-			return title.showAsForm();
-		}
-		
-		public static Panel showAsForm(this string title)			
-		{
-			return title.showAsForm<Panel>(600,400);
-		}
-		
-		public static Panel showAsForm(this string title, int width, int height)			
-		{
-			return  O2Gui.open<Panel>(title, width,height);
-		}
-		
-		public static T showAsForm<T>(this string title)
-			where T : Control
-		{
-			return title.showAsForm<T>(600,400);
-		}
-		
-		public static T showAsForm<T>(this string title, int width, int height)
-			where T : Control
-		{
-			return (T) O2Gui.open<T>(title, width,height);
-		}		
-	}			
+						
 	
 	
 	public static class _Extra_XmlLinq_ExtensiomMethods
@@ -539,6 +505,14 @@ namespace O2.XRules.Database.Utils
 		
 	public static class _Extra_ListView_ExtensionMethods
 	{
+		public static ascx_TableList setWidthToContent(this ascx_TableList tableList)
+		{
+			tableList.makeColumnWidthMatchCellWidth();
+			tableList.Resize+=(e,s)=> {	 tableList.makeColumnWidthMatchCellWidth();};
+			tableList.getListViewControl().ColumnClick+=(e,s)=> { tableList.makeColumnWidthMatchCellWidth();};
+			return tableList;
+		}
+		
 		public static ascx_TableList show_In_ListView<T>(this IEnumerable<T> data)
 		{
 			return data.show_In_ListView("View data in List Viewer", 600,400);
@@ -694,6 +668,16 @@ namespace O2.XRules.Database.Utils
 			}
 			return _string;
 		}								
+		
+		public static string append(this string _string, string stringToAppend)
+		{
+			return _string + stringToAppend;
+		}
+		
+		public static string insertAt(this string _string,  int index, string stringToInsert)
+		{
+			return _string.Insert(index,stringToInsert);
+		}
 		
 		public static string subString(this string _string, int startPosition)
 		{

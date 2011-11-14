@@ -1,12 +1,19 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var appScan =  "".lastFormLoaded();
+  <SourceCode>//current test files:
+//C:\_WorkDir\IBM\Altoro\AltoroJ21.scan
+//C:\_WorkDir\IBM\Altoro\AltoroJ2.1-src\WebContent
+//C:\_WorkDir\IBM\Altoro\_AltoroMutual2.1  9-28-11 144PM.ozasmt
+
+var appScan =  "".lastFormLoaded();
 Action&lt;Panel&gt; showO2ScriptEditor =
 	(targetPanel)=&gt; {
 						var scriptEditor = targetPanel.add_Script(false) ;
 						scriptEditor.InvocationParameters.add("MainForm", appScan);
+						//scriptEditor.Code = "Inside AppScan Standard - Add AltoroJ Menu.h2".local().h2_SourceCode();
 						scriptEditor.Code = "return MainForm;".line() + 
 											"//O2Ref:appscan.exe";
+											
 					};
 
 var menuStrip =  appScan.controls&lt;MenuStrip&gt;();  

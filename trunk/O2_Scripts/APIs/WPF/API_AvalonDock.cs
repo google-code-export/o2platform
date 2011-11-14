@@ -134,12 +134,29 @@ namespace O2.XRules.Database.APIs
     	public static T add_WinForms_Control<T>(this ManagedContent managedContent)
     		where T : Control
     	{
-    		var panel =  managedContent.add_WinForms_Panel();
-			panel.width(400) 		// give the panel a decent size to that it doesn't cause problems during the new T Control dynamic Gui creation
-				 .height(400);    		
-			//"[panel] width: {0} height:{0}".info(panel.width(), panel.height());
-			//"[panel] new control: {0}".info(typeof(T).typeFullName());
-			return panel.add_Control<T>();	  	     									
+    		try
+    		{
+	    		var panel =  managedContent.add_WinForms_Panel();	    		
+				panel.width(400) 		// give the panel a decent size to that it doesn't cause problems during the new T Control dynamic Gui creation
+					 .height(400);												
+				"[add_WinForms_Control] new control size -  width: {0} height:{0}".info(panel.width(), panel.height());
+				Application.DoEvents();
+				var newControl = panel.add_Control<T>();
+				if (newControl.isNull())
+					"[add_WinForms_Control] failed the creation of control : {0}...".error(typeof(T));
+				else
+				{
+					"[add_WinForms_Control] created ok control : {0}...".info(typeof(T));
+					return newControl;
+				}
+			}
+			catch(Exception ex)
+			{
+				ex.log();
+				"[add_WinForms_Control] error creating control of type: {0}...".error(typeof(T));
+				
+			}
+			return null;
 		}
 		
 		public static T selectedItem<T>(this T managedContent)

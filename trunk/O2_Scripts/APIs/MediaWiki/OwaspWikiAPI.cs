@@ -31,7 +31,7 @@ namespace O2.XRules.Database.APIs
 		public OwaspWikiAPI(bool loadStylesFromWebsite)
 		{	
 			this.ApiName = "OwaspWiki";
-			init("http://www.owasp.org/api.php");
+			init("https://www.owasp.org/api.php");
 			this.Styles = (loadStylesFromWebsite) ? owaspStyles() : "";
 		}
 		

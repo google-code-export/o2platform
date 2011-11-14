@@ -1,10 +1,11 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
-using System.Reflection;
 using System.Text;
-using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using System.Reflection;
+using System.Threading;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using O2.Kernel;
 using O2.Kernel.CodeUtils;
@@ -17,6 +18,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
+using O2.External.SharpDevelop;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
@@ -33,11 +35,20 @@ using O2.API.AST.ExtensionMethods.CSharp;
 namespace O2.XRules.Database.Utils
 {
 
+	public class ascx_Simple_Script_Editor_Test
+	{
+		public void testGui()
+		{
+			//ascx_Simple_Script_Editor.startControl();
+			ascx_Simple_Script_Editor.startControl_NoCodeComplete();
+		}
+	}
 	// Comments: (24 Feb 2010): This was the 6th pass at building an O2 Command Prompt (i.e. simple script editor)	
 	
     public class ascx_Simple_Script_Editor: UserControl
     {            
     	private static IO2Log log = PublicDI.log;
+    	
 		public ascx_SourceCodeViewer sourceCodeViewer {get ; set;}
 		public ascx_SourceCodeViewer commandsToExecute {get ; set;}
 		public RichTextBox result_RichTextBox {get ; set;}
@@ -58,11 +69,12 @@ namespace O2.XRules.Database.Utils
         public string AutoSaveDir { get; set; }
 		public int width = 300;
 		public int height = 300;
-        public bool ExecuteOnEnter { get; set; }
+        public bool ExecuteOnEnter { get; set; }        
         public object ReturnData { get; set; }
 		public MethodInvoker onCompilationOk {get ;set;}
         public string previousCompiledCodeText { get; set; }
-
+		public Thread TriggerCompilationThread { get; set; }
+		
         public string defaultCode = "PublicDI.log.info(\"Dynamic Data: {0},{1}\", testString, testNumber);"
                                .line("return \"Dynamic Data = \" + testString + \" :: \" + testNumber;");
     		
@@ -217,8 +229,10 @@ namespace O2.XRules.Database.Utils
                        .add_MenuItem("enable Code Complete", (menuitem) => commandsToExecute.enableCodeComplete())
                        .add_MenuItem("enable /disabled 'Only Show Code Complete Results From O2 Namespace'", (menuitem) => enableDisableFullCodeComplete());
             contextMenu.add_MenuItem("code snippets (helper)")
-                       .add_MenuItem("generate debug symbols (and create temp assembly)", (menuitem) => insertCodeSnipptet(menuitem.Text))
-                       .add_MenuItem("when compiling, only add referenced assemblies", (menuitem) => insertCodeSnipptet(menuitem.Text))
+            		   .add_MenuItem("when compiling: remove all auto references to O2 scripts and dlls (same as next two options)", (menuitem) => insertCodeSnipptet(menuitem.Text))
+            		   .add_MenuItem("when compiling: don't include extra cs file (with extension methods)", (menuitem) => insertCodeSnipptet(menuitem.Text))
+            		   .add_MenuItem("when compiling, only add referenced assemblies", (menuitem) => insertCodeSnipptet(menuitem.Text))
+                       .add_MenuItem("generate debug symbols (and create temp assembly)", (menuitem) => insertCodeSnipptet(menuitem.Text))                       
                        .add_MenuItem("add using statement", (menuitem) => insertCodeSnipptet(menuitem.Text))
                        .add_MenuItem("add additional source code (when compile)", (menuitem) => insertCodeSnipptet(menuitem.Text))
                        .add_MenuItem("add external reference (dll or exe or GAC assembly)", (menuitem) => insertCodeSnipptet(menuitem.Text))
@@ -238,6 +252,12 @@ namespace O2.XRules.Database.Utils
                 case "generate debug symbols (and create temp assembly)":
                     commandsToExecute.insert_Text("".line() + "//generateDebugSymbols".line()); 
                     break;
+                case "when compiling: remove all auto references to O2 scripts and dlls (same as next two options)":
+                    commandsToExecute.insert_Text("".line() + "//O2Tag_CleanCompilation".line());
+                    break;
+                case "when compiling: don't include extra cs file (with extension methods)":
+                    commandsToExecute.insert_Text("".line() + "//O2Tag_DontAddExtraO2Files".line());
+                    break;    
                 case "when compiling, only add referenced assemblies":
                     commandsToExecute.insert_Text("".line() + "//O2Tag_OnlyAddReferencedAssemblies".line());
                     break;
@@ -258,7 +278,7 @@ namespace O2.XRules.Database.Utils
                     break;
                 case "clear 'AssembliesCheckedIfExists' cache":
                     commandsToExecute.insert_Text("".line() + "//ClearAssembliesCheckedIfExists".line());
-                    break;
+                    break;                                		
                 default:
                     
 //                    commandsToExecute.insert_Text(".........");                    
@@ -268,40 +288,40 @@ namespace O2.XRules.Database.Utils
         
 	    public void setCompilerEnvironment()
 	    {                     
-	    	csharpCompiler = new CSharp_FastCompiler();     
-					
-			csharpCompiler.beforeSnippetAst = 
-     		 	()=>{
-     		 			csharpCompiler.InvocationParameters = this.InvocationParameters;
+	    	this.csharpCompiler = new CSharp_FastCompiler();     	
+	    	//csharpCompiler.field("forceAstBuildDelay",250); 		// try to prevent the problem with missing the compilation of the last char
+			this.csharpCompiler.beforeSnippetAst = 
+     		 	()=>{     		 			
+     		 			this.csharpCompiler.InvocationParameters = this.InvocationParameters;
      		 		};	    	
      		
      		
-	    	csharpCompiler.onAstFail = 
+	    	this.csharpCompiler.onAstFail = 
      			()=>{        					     					
      					//"AST creation failed".error();
-     					sourceCodeViewer.enabled(false);    	 				
-	     				executeButton.enabled(false);
-    	 				result_RichTextBox.textColor(Color.Red)
+     					this.sourceCodeViewer.enabled(false);    	 				
+	     				this.executeButton.enabled(false);
+    	 				this.result_RichTextBox.textColor(Color.Red)
      		 							  .set_Text("Ast Parsing Errors:\r\n\r\n")										  
 										  .append_Text(csharpCompiler.AstErrors);
 	     			};
 	     			 
-	     	csharpCompiler.onAstOK = 
+	     	this.csharpCompiler.onAstOK = 
 	     		()=>{		     		     			
-	     				commandsToExecute.editor().refresh();
-	     				sourceCodeViewer.enabled(true);
-	     				commandsToExecute.invokeOnThread(()=>commandsToExecute.Refresh());;
-	     				GeneratedCode = csharpCompiler.SourceCode;                        
-                        commandsToExecute.updateCodeComplete(csharpCompiler);	     				
-						sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);
+	     				this.commandsToExecute.editor().refresh();
+	     				this.sourceCodeViewer.enabled(true);
+	     				this.commandsToExecute.invokeOnThread(()=>commandsToExecute.Refresh());;
+	     				this.GeneratedCode = csharpCompiler.SourceCode;                        
+                        this.commandsToExecute.updateCodeComplete(csharpCompiler);	     				
+						this.sourceCodeViewer.setDocumentContents(csharpCompiler.SourceCode);						
      		 		};     		      		 
      		 		
-     		 csharpCompiler.onCompileFail = 
+     		 this.csharpCompiler.onCompileFail = 
      		 	()=>{
      		 			//"AST OK, but compilation failed".error();
-                        executeButton.enabled(false);
-                        Location codeOffset = csharpCompiler.getGeneratedSourceCodeMethodLineOffset();
-     		 			csharpCompiler.CompilationErrors.runForEachCompilationError( 
+                        this.executeButton.enabled(false);
+                        var codeOffset = csharpCompiler.getGeneratedSourceCodeMethodLineOffset();
+     		 			this.csharpCompiler.CompilationErrors.runForEachCompilationError( 
      											  (row,col)=> 
      											  	{ 
      											  		sourceCodeViewer.editor().setSelectedText(row,col, true,false);                                                        
@@ -313,22 +333,22 @@ namespace O2.XRules.Database.Utils
                                                             false); /*decrementLineAndColumn*/
      											  		
      											  	});
-     		 			result_RichTextBox.textColor(Color.Red)
+     		 			this.result_RichTextBox.textColor(Color.Red)
      		 							  .set_Text("Compilation Errors:\r\n\r\n")										  
 										  .append_Text(csharpCompiler.CompilationErrors);
 						
      		 		};
-     		 csharpCompiler.onCompileOK =
+     		 this.csharpCompiler.onCompileOK =
      		 	()=>{
      		 			"Compilation OK".debug();
-     		 			commandsToExecute.editor().refresh();
-     		 			sourceCodeViewer.editor().refresh();
-     		 			result_RichTextBox.set_Text("Compilation OK:\r\n\r\n")
-										  .textColor(Color.Green);
-						executeButton.enabled(true);
+     		 			this.commandsToExecute.editor().refresh();
+     		 			this.sourceCodeViewer.editor().refresh();
+     		 			this.result_RichTextBox.set_Text("Compilation OK:\r\n\r\n")
+										  	   .textColor(Color.Green);
+						this.executeButton.enabled(true);
                         if (AutoSaveOnCompileSuccess && Code != defaultCode)
                         {
-                            AutoSaveDir.createDir();    // make sure it exits
+                            this.AutoSaveDir.createDir();    // make sure it exits
                             var targetFile = AutoSaveDir.pathCombine(Files.getFileSaveDateTime_Now().trim() + ".cs");
                             targetFile.fileWrite(Code);
                         }
@@ -336,30 +356,67 @@ namespace O2.XRules.Database.Utils
                         if (onCompilationOk != null)
                         	onCompilationOk();
                         // once all is done update the codeComplete information
-                        if (commandsToExecute.editor().o2CodeCompletion.notNull())
-                            commandsToExecute.editor().o2CodeCompletion.addReferences(csharpCompiler.ReferencedAssemblies);
+                        if (this.commandsToExecute.editor().o2CodeCompletion.notNull())
+                            this.commandsToExecute.editor().o2CodeCompletion.addReferences(csharpCompiler.ReferencedAssemblies);                         
 
+						add_ExtraMethodsFile();									// restore previous mappings here
+						
+						if(this.csharpCompiler.SourceCode.contains(this.Text).isFalse())							
+							"**** Source code didn't match, please compile again".error();
 					};
      		 		 
 	    }	         	
 
+		//extra O2 Tags (ideally all should be handled here)	
+		public string handleExtraO2TagsInSourceCode(string codeToCompile)
+		{
+			if(codeToCompile.contains("O2Tag_CleanCompilation"))
+				codeToCompile = codeToCompile.insertAfter("".line() + "//O2Tag_DontAddExtraO2Files" + 
+										  				  "".line() + " //O2Tag_OnlyAddReferencedAssemblies");
+			
+			if(codeToCompile.contains("//O2Tag_DontAddExtraO2Files"))
+		 		add_No_ExtraMethodsFile();
+		 	else
+		 		add_ExtraMethodsFile();
+			
+			return codeToCompile;			
+		}
+		
+		//these two next methods are a hack to handle the problem caused by EXTRA_EXTENSION_METHODS_FILE being a constant
+		public void add_ExtraMethodsFile()
+		{
+			//"HACK: add_ExtraMethodsFile".error();
+			var extraMethodsFile = PublicDI.config.LocalScriptsFolder.pathCombine(@"Utils\ExtensionMethods\_Extra_methods_To_Add_to_Main_CodeBase.cs");
+			CompileEngine.LocalScriptFileMappings["_Extra_methods_To_Add_to_Main_CodeBase.cs"] = extraMethodsFile;					
+		}
+		
+		public void add_No_ExtraMethodsFile()
+		{
+			//"HACK: add_No_ExtraMethodsFile".error();
+			var noExtraMethodsFile = PublicDI.config.LocalScriptsFolder.pathCombine(@"Utils\ExtensionMethods\_No_Extra_methods.cs");
+			CompileEngine.LocalScriptFileMappings["_Extra_methods_To_Add_to_Main_CodeBase.cs"] = noExtraMethodsFile;
+		}
+		
+		public void triggerCompilation(string newText)
+		{								
+			TriggerCompilationThread = O2Thread.mtaThread(
+				()=>{
+						this.sleep(300,false);
+						// this will only trigger the compilation when the current thread matches the last one created (which doesn't happen when the user types fast
+						if (Thread.CurrentThread.ManagedThreadId == TriggerCompilationThread.ManagedThreadId)
+							compileCodeSnippet(newText);												
+						
+					});								
+		}
+		
         public void onTextChanged(string newText)
         {
             if (AutoCompileOnCodeChange)
-            {
-                // handle the case where the only changes made where a space or an enter (which shouldn't trigger a compilation)
-               /* var codeWithOutSpacesOrEnter = newText.remove(" ", "".line());
-                if (codeWithOutSpacesOrEnter == previousCompiledCodeText)
-                {
-                    "Skipping compilation since new text is equal to the previous one".info();
-                    return;
-                }*/
-                //previousCompiledCodeText = codeWithOutSpacesOrEnter;
-                compileCodeSnippet(newText);
-
+            {                
+                triggerCompilation(newText);
             }
         }
-
+		
         public void compile()
         {
             compileCodeSnippet(commandsToExecute.get_Text());
@@ -368,7 +425,8 @@ namespace O2.XRules.Database.Utils
 		public void compileCodeSnippet(string codeSnippet)
      	{     		 
      		try
-     		{                
+     		{              	
+     			codeSnippet = handleExtraO2TagsInSourceCode(codeSnippet);
 	     		result_RichTextBox.visible(true);
 	     		result_Panel.visible(false);
 	     		if (codeSnippet.size() > 200)
@@ -380,7 +438,7 @@ namespace O2.XRules.Database.Utils
 	     		var currentFile = commandsToExecute.editor().getFullPathTOCurrentSourceCodeFile();
 	     		if (currentFile.fileExists())
 	     			csharpCompiler.SourceCodeFile = currentFile;
-	     		csharpCompiler.compileSnippet(codeSnippet);                
+	     		csharpCompiler.compileSnippet(codeSnippet);                	     		
 			}
 			catch(Exception ex)
 			{
@@ -450,7 +508,7 @@ namespace O2.XRules.Database.Utils
                 compileCodeSnippet(Code);
                 
             }
-            if (e.Modifiers == Keys.Control && e.KeyValue == 'S')           // Ctrl+B compiles code
+            if (e.Modifiers == Keys.Control && e.KeyValue == 'S')           // Ctrl+S saves code
             {
                 "Saving Script".debug();
                 saveScript();

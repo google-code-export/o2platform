@@ -233,6 +233,13 @@ namespace O2.XRules.Database.Utils
     
     public static class add_Helpers_ExtensionMethods
     {
+    	public static List<PropertyBuilder> add_Properties<T>(this TypeBuilder typeBuilder, params string[] propertyNames)
+    	{
+    		var properties = new List<PropertyBuilder>();
+    		foreach(var propertyName in propertyNames)
+    			properties.Add(typeBuilder.add_Property(propertyName, typeof(T)));
+    		return properties;
+    	}
     	public static PropertyBuilder add_Property<T>(this TypeBuilder typeBuilder, string propertyName)
     	{
     		return typeBuilder.add_Property(propertyName, typeof(T));

@@ -14,6 +14,8 @@ using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.Views.ASCX;
+using O2.Views.ASCX.DataViewers;
+using O2.Views.ASCX.ExtensionMethods;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
@@ -1179,6 +1181,7 @@ namespace O2.XRules.Database.APIs
             return browser;
         }
         
+        
         public static T show_Diff_LatestChanges<T>(this T control, O2MediaWikiAPI wikiApi)
         	where T : Control
         {
@@ -1275,5 +1278,33 @@ namespace O2.XRules.Database.APIs
 		
 		#endregion
 
+    }
+    
+    public static class O2MediaWikiAPI_ExtensionMethods_GuiHelpers
+    {
+    	public static ascx_TableList add_Table_with_RecentChanges(this O2MediaWikiAPI wikiApi, Control control)
+    	{    		
+    		return wikiApi.add_Table_with_XElements(control, wikiApi.recentChangesRaw(20));
+    	}
+    	
+    	public static ascx_TableList add_Table_with_XElements(this O2MediaWikiAPI wikiApi, Control control, List<XElement> xElements)
+    	{
+    		var tableList = control.add_TableList();
+			tableList.add_Column("#");
+									
+			if (xElements.size() > 0)
+				foreach(var attribute in xElements.first().attributes())
+					tableList.add_Column(attribute.Name.str()); 
+			var id = 1;		
+			foreach(var xElement in xElements) 
+			{
+				var rowValues = new List<string>().add(id++.str());
+				foreach(var attribute in xElement.attributes())
+					rowValues.add(attribute.Value);
+				tableList.add_Row(rowValues);
+			}
+			tableList.makeColumnWidthMatchCellWidth(); 
+			return tableList;
+    	}
     }
  }

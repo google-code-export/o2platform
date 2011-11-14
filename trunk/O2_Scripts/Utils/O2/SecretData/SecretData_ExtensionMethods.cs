@@ -5,7 +5,9 @@ using System.Text;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.XRules.Database.Utils.O2;
 //O2File:ISecretData.cs
+//O2File:SecretDataEditor.cs.o2
 
 namespace O2.XRules.Database.Utils
 {
@@ -31,8 +33,10 @@ namespace O2.XRules.Database.Utils
             return credentials;
         }
                 
-            public static ICredential credential(this string fileWithSecretData, string credentialTypeOrName)
+		public static ICredential credential(this string fileWithSecretData, string credentialTypeOrName)
         {
+        	if (fileWithSecretData.fileExists().isFalse())
+    			fileWithSecretData = @"C:\O2\_USERDATA".pathCombine(fileWithSecretData);
             if (fileWithSecretData.fileExists())
             {
                 var secretData = fileWithSecretData.deserialize<SecretData>();
@@ -42,7 +46,7 @@ namespace O2.XRules.Database.Utils
         }
 
         public static ICredential credential(this SecretData secretData, string credentialTypeOrName)
-        {
+        {        	
             if (secretData != null)
             {
                 var credentials = secretData.credentialTypes(credentialTypeOrName);
@@ -50,9 +54,9 @@ namespace O2.XRules.Database.Utils
                     return credentials[0];
                 "Finding by Username".debug();
                 foreach(var credential in secretData.Credentials)
-                	if (credential.UserName == credentialTypeOrName)
+                	if (credential.CredentialType ==credentialTypeOrName || credential.UserName == credentialTypeOrName)
                 	{                		
-                		"credential.UserName: {0}".info(credential.UserName);
+                		"found credential.UserName: {0} with type: {1}".info(credential.UserName, credential.CredentialType);
                 		return credential;
                 	}
             }
@@ -61,6 +65,8 @@ namespace O2.XRules.Database.Utils
         
         public static List<Credential> credentials(this string fileWithSecretData)
     	{
+    		if (fileWithSecretData.fileExists().isFalse())
+    			fileWithSecretData = @"C:\O2\_USERDATA".pathCombine(fileWithSecretData);
     		if (fileWithSecretData.fileExists())
             {
             	var secretData = fileWithSecretData.deserialize<SecretData>();
@@ -195,6 +201,15 @@ namespace O2.XRules.Database.Utils
         }
         #endregion
 
-
+		#region SecretDataEditor
+		
+		public static string show_SecretDataEditor(this string userDataDirectory)
+		{
+			return new SecretDataEditor().showGui(userDataDirectory);
+		}
+		
+		#endregion
     }   
+    
+    
 }

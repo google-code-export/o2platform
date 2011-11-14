@@ -144,6 +144,13 @@ namespace O2.XRules.Database.APIs
     		var xssPayloads = fuzzDB.getPayloads(@"attack-payloads\sql-injection\detect\ms-sql\sql-injection-ms-sql.txt",
     											 @"attack-payloads\sql-injection\detect\ms-sql\sql-injection-ms-sql-blind-ninja.txt");
 			return xssPayloads;
-    	}    	    	
+    	} 
+    	
+    	public static List<String> payloads_SQLi_MySql(this API_FuzzDB fuzzDB)
+    	{
+    		var xssPayloads = fuzzDB.getPayloads(@"attack-payloads\sql-injection\exploit\mysql-injection-login-bypass.txt",
+    											 @"attack-payloads\sql-injection\exploit\mysql-read-local-files.txt");
+			return xssPayloads;
+    	}    
     }
 }
