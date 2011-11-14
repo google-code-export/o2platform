@@ -126,6 +126,15 @@ namespace O2.XRules.Database.APIs
 													.WithInstanceId(runningInstance.InstanceId)); 
 	    	return runningInstance;
 		}
+		
+		public static RunningInstance rebootInstance(this API_AmazonEC2 amazonEC2, RunningInstance runningInstance)
+	    {													
+			"Rebooting instance with ID: {0}".info(runningInstance.InstanceId);							
+			var ec2Client = amazonEC2.getEC2Client(runningInstance.Placement.AvailabilityZone.removeLastChar());
+			var result = ec2Client.RebootInstances(new RebootInstancesRequest() 
+													.WithInstanceId(runningInstance.InstanceId)); 
+	    	return runningInstance;
+		}
 	   
 		public static RunningInstance showConsoleOut(this API_AmazonEC2 amazonEC2, RunningInstance runningInstance)
 	    {							

@@ -13,11 +13,54 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX.ExtensionMethods;
-
+using O2.Views.ASCX.classes.MainGUI;
 
 
 namespace O2.XRules.Database.Utils
 {	
+
+	public static class _Extra_Control_extensionMethods_PopupWindow
+	{		
+		//Control
+		
+		public static Panel popupWindow(this string title)
+		{
+			return title.showAsForm();
+		}		
+		
+		public static Panel popupWindow(this string title, int width, int height)
+		{
+			return title.showAsForm(width, height);
+		}
+			
+		public static Panel createForm(this string title)			
+		{
+			return title.showAsForm();
+		}
+		
+		public static Panel showAsForm(this string title)			
+		{
+			return title.showAsForm<Panel>(600,400);
+		}
+		
+		public static Panel showAsForm(this string title, int width, int height)			
+		{
+			return  O2Gui.open<Panel>(title, width,height);
+		}
+		
+		public static T showAsForm<T>(this string title)
+			where T : Control
+		{
+			return title.showAsForm<T>(600,400);
+		}
+		
+		public static T showAsForm<T>(this string title, int width, int height)
+			where T : Control
+		{
+			return (T) O2Gui.open<T>(title, width,height);
+		}		
+	}			
+
 	public static class _Extra_Control_extensionMethods
 	{
 		public static T closeForm<T>(this T control)
@@ -333,10 +376,60 @@ namespace O2.XRules.Database.Utils
 										});
 		}
 		
+		//ComboBox
+		public static ComboBox add_Items(this ComboBox comboBox, params object[] items)
+		{
+			foreach(var item in items)
+			{
+				"adding : {0}".info(item);
+				comboBox.add_Item(item);
+			}
+			return comboBox;
+		}
+		public static object selectedItem(this ComboBox comboBox)
+		{
+			return comboBox.invokeOnThread(
+				()=>{
+						return comboBox.SelectedItem;
+					});
+		}
 		
+		public static ComboBox onSelection(this ComboBox comboBox, Action<object> callback)
+		{			
+			comboBox.onSelection(
+				()=>{						
+						callback(comboBox.selectedItem());
+					});
+			return comboBox;
+		}
+		
+		/*public static ComboBox onSelection<T>(this ComboBox comboBox, Action<T> callback)
+		{			
+			comboBox.onSelection(
+				()=>{						
+						var itemValue = comboBox.selectedItem();
+						if (itemValue is T)
+							callback((T)itemValue);
+					});
+			return comboBox;
+		}*/
+		
+		public static ComboBox comboBoxHeight(this ComboBox comboBox, int height)
+		{
+			return comboBox.dropDownHeight(height);
+		}
+		
+		public static ComboBox dropDownHeight(this ComboBox comboBox, int height)
+		{
+			return (ComboBox)comboBox.invokeOnThread(
+				()=>{
+						comboBox.DropDownHeight = height;
+						return comboBox;
+					});
+		}
 	}
 	
-		public static class WinFormControls_ExtensionMethods
+		public static class _Extra_WinFormControls_ExtensionMethods
 	{
 		public static List<Control> add_1x1(this Control control, Action<Control> buildPanel1,  Action<Control> buildPanel2)
 		{
@@ -484,6 +577,11 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		//add links
+		public static LinkLabel add_Link(this Control control, string label, Action onClickCallback)
+		{
+			return control.add_Link(label, 0,0, ()=> onClickCallback());
+		}
+		
 		public static LinkLabel append_Below_Link(this Control control, string label, Action onClickCallback)
 		{
 			return control.parent().add_Link(label, control.top() + 20 , control.left(), ()=> onClickCallback());

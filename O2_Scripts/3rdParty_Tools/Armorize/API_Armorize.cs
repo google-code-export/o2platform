@@ -13,6 +13,7 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.XRules.Database.Utils;
+
 //O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
 
 namespace O2.XRules.Database.APIs
@@ -63,7 +64,7 @@ namespace O2.XRules.Database.APIs
 		{
 			return element.notNullAttributeValue("name");			
 		}
-		
+		 
 		public static string indent(this XElement element)
 		{
 			return element.notNullAttributeValue("indent");			

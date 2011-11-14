@@ -22,7 +22,7 @@ Action&lt;string&gt; executeWmiQuery =
 								searchResults.show_in_TableList(tableList);
 								searchResults.show_in_PropertyGrid(showInfo); 																							
 							}
-							tabControl.enabled(false);
+							tabControl.enabled(true);
 						});	
 			 };
 			 

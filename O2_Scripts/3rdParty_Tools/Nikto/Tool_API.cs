@@ -30,6 +30,7 @@ namespace O2.XRules.Database.APIs
     	public Uri Install_Uri {get;set;}
     	public string Install_Dir {get;set;}     	    
     	public string DownloadedInstallerFile {get; set;}
+    	public string Executable { get;set;}
     	
     	public string  toolsDir = PublicDI.config.O2TempDir.pathCombine("..\\_ToolsOrAPIs").createDir();
     	public string  localDownloadsDir = PublicDI.config.O2TempDir.pathCombine("..\\_O2Downloads").createDir();

@@ -140,7 +140,7 @@ namespace O2.XRules.Database.APIs
 			showLogViewer();
 			
 			WpfGui.add_Section("Media Wiki Editor", "Welcome to the O2 MediaWiki Editor")
-				  .add_Link("Help",showHelp)
+				  //.add_Link("Help",showHelp)
 				  .add_Link("Login",showLoginPanel)
 				  .add_Link("Edit Page", showEditPage)
 				  .add_Link("Edit using Categories", showEditUsingCategories)
@@ -153,14 +153,14 @@ namespace O2.XRules.Database.APIs
 				  .add_Link("Util: Backup",showBackup)
 				  .add_Link("Util: Show O2 Log Viewer",showLogViewer);
 									
-			WpfGui.GuiSections[0].links().name("Help").click();
+			WpfGui.GuiSections[0].links().name("Login").click(); 
 			//showLoginPanel();	// default page		
 			//WpfGui.show_O2Browser();
 			//WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);
 			return this;
 		}
 		
-        public MediaWikiEditor buildGui_Old()
+        /*public MediaWikiEditor buildGui_Old()
         {
         	return (MediaWikiEditor)this.invokeOnThread(
         		()=>{        					        	
@@ -183,7 +183,7 @@ namespace O2.XRules.Database.APIs
        					return this;
         			});
         }
-        
+        */
         /*public void buildCommandsPanel(Control panel)
         {
         	panel.add_Button("Login",0,0,80, 60,showLoginPanel).align_Right(panel);
@@ -191,37 +191,49 @@ namespace O2.XRules.Database.APIs
         	panel.add_Button("Backup",200,0,80, 60, showBackup).align_Right(panel);
         }*/
         
+        public void hackToFixNewPanelWindowSizeBug()
+        {
+        	WpfGui.WinFormPanel.fill(false)			  
+							   .height(WpfGui.WinFormPanel.height() + 1)
+							   .fill(true);				 
+        }
+        
         public void showLogViewer()
         {
         	this.insert_Below<Panel>(100).add_LogViewer();
         }
         
-        public void showHelp()
+        public void showHelp()  
         {
-        	 var webBrowser = MainDocumentPane.add_DocumentContent("Help")
-			        	 				 	   .setAsActive()
+        	 var webBrowser = MainDocumentPane.add_DocumentContent("Help") 
+			        	 				 	   .setAsActive() 
 			        	 				 	   .add_WinForms_Control<Panel>()
 			        	 				 	   .add_WebBrowser_Control();			        	 				         	 				 
 			 //webBrowser.parent().parent().backColor(Color.White);  // because of a current bug prevents the webbrowser control from resizing to fill (on first view)
 			 webBrowser.open(WpfGui.Wiki_O2.html(helpPageInO2PlatformWiki).saveWithExtension(".html"));			 
-			 //WpfGui.show_O2Browser();
+			 //WpfGui.show_O2Browser();  
 			//WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);        	 				 
         	 //WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);				 
-        			         
-        }
-        public void showLoginPanel()
-        {        	        	
-        	 MainDocumentPane.add_DocumentContent("Login Panel")
-        	 				 .setAsActive()
-        	 				 .add_WinForms_Control<ascx_MediaWiki_ConfigAndLogin>()
-        			         .buildGui(WikiApi, setWikiApi);
+        			          
+        }    
+        
+        public void showLoginPanel()   
+        {        	       	 
+        	var newControl = MainDocumentPane.add_DocumentContent("Login Panel")
+        	 				 				 .setAsActive()
+							 				 .add_WinForms_Control<ascx_MediaWiki_ConfigAndLogin>();
+			hackToFixNewPanelWindowSizeBug();											
+			if (newControl.notNull())				 
+				newControl.buildGui(WikiApi, setWikiApi); 			
+			else  
+				"in showLoginPanel, could not create ascx_MediaWiki_ConfigAndLogin control".error();
         	
         	//RightPanel.clear();
         	/*if (ConfigAndLogin == null)
         		ConfigAndLogin = RightPanel.add_Control<ascx_MediaWiki_ConfigAndLogin>().buildGui(WikiApi, setWikiApi);
         	else
         		 RightPanel.add_Control(ConfigAndLogin);        		*/
-        }
+        }   
         
         public void showEditPage()
         {        	
@@ -278,7 +290,7 @@ namespace O2.XRules.Database.APIs
         {
         	var panel = MainDocumentPane.add_DocumentContent("Edit All Pages")
 			        					.setAsActive()
-			        					.add_WinForms_Panel();						   
+			        					.add_WinForms_Panel();
 			showEditGui(panel,"All Content Pages", "Page's Wiki Text",WikiApi.pages);			        					
 			/*RightPanel.clear();
         	if (EditAllPages == null)
@@ -520,10 +532,10 @@ namespace O2.XRules.Database.APIs
 		public void setWikiApi(O2MediaWikiAPI newWikiApi)
 		{
 			//perform a shallow copy from newWikiApi to WikiApi)
-			"before:{0}".info(WikiApi.HostUrl);
+			//"before:{0}".info(WikiApi.HostUrl);
 			foreach(var property in WikiApi.type().properties())						
 				Reflection_ExtensionMethods.prop(WikiApi,property.Name,newWikiApi.prop(property.Name));
-			"after:{0}".info(WikiApi.HostUrl);
+			//"after:{0}".info(WikiApi.HostUrl);
 		}
 		
 		

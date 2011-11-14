@@ -43,14 +43,14 @@ namespace O2.XRules.Database.APIs
 	    public string defaultSecretsFile = "Accounts.xml";
 	    
 	    public static void launchGui()
-	    {
+	    {	    	
 	    	O2Gui.open<ascx_MediaWiki_ConfigAndLogin>("MediaWiki Config and Login", 400,400)
 	    		.buildGui(new O2MediaWikiAPI(), (wikiApi)=>{});
 	    }
-	    
+	      
 	    
 	    public ascx_MediaWiki_ConfigAndLogin()
-	    {
+	    {	    	
 	    	this.Width = 400;
 	    	this.Height = 400;
 	    }
@@ -61,7 +61,7 @@ namespace O2.XRules.Database.APIs
 	  	}		  						
 		
 		public ascx_MediaWiki_ConfigAndLogin buildGui(O2MediaWikiAPI wikiApi, Action<O2MediaWikiAPI> setWikiApi)
-		{
+		{			
 			WikiApi = wikiApi;	
 			SetWikiApi = setWikiApi;
 			var controls = this.add_1x1("Config", "Login Details",false); 
