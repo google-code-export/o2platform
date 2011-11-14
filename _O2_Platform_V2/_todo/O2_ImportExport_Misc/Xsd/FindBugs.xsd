@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="BugCollection">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Project">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Jar" type="xs:string" />
+              <xs:element maxOccurs="unbounded" name="SrcDir" type="xs:string" />
+              <xs:element name="SuppressionFilter">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="LastVersion">
+                      <xs:complexType>
+                        <xs:attribute name="value" type="xs:byte" use="required" />
+                        <xs:attribute name="relOp" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="filename" type="xs:string" use="required" />
+            <xs:attribute name="projectName" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" name="BugInstance">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:choice maxOccurs="unbounded">
+                <xs:element name="UserAnnotation" />
+                <xs:element name="Class">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="SourceLine">
+                        <xs:complexType>
+                          <xs:attribute name="classname" type="xs:string" use="required" />
+                          <xs:attribute name="sourcefile" type="xs:string" use="optional" />
+                          <xs:attribute name="sourcepath" type="xs:string" use="optional" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="classname" type="xs:string" use="required" />
+                    <xs:attribute name="role" type="xs:string" use="optional" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Method">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="SourceLine">
+                        <xs:complexType>
+                          <xs:attribute name="classname" type="xs:string" use="required" />
+                          <xs:attribute name="start" type="xs:unsignedShort" use="optional" />
+                          <xs:attribute name="end" type="xs:unsignedShort" use="optional" />
+                          <xs:attribute name="startBytecode" type="xs:unsignedByte" use="optional" />
+                          <xs:attribute name="endBytecode" type="xs:unsignedShort" use="optional" />
+                          <xs:attribute name="sourcefile" type="xs:string" use="optional" />
+                          <xs:attribute name="sourcepath" type="xs:string" use="optional" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="classname" type="xs:string" use="required" />
+                    <xs:attribute name="name" type="xs:string" use="required" />
+                    <xs:attribute name="signature" type="xs:string" use="required" />
+                    <xs:attribute name="isStatic" type="xs:boolean" use="required" />
+                    <xs:attribute name="role" type="xs:string" use="optional" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="SourceLine">
+                  <xs:complexType>
+                    <xs:attribute name="classname" type="xs:string" use="required" />
+                    <xs:attribute name="start" type="xs:unsignedShort" use="required" />
+                    <xs:attribute name="end" type="xs:unsignedShort" use="required" />
+                    <xs:attribute name="startBytecode" type="xs:unsignedShort" use="required" />
+                    <xs:attribute name="endBytecode" type="xs:unsignedShort" use="required" />
+                    <xs:attribute name="sourcefile" type="xs:string" use="required" />
+                    <xs:attribute name="sourcepath" type="xs:string" use="required" />
+                    <xs:attribute name="role" type="xs:string" use="optional" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="LocalVariable">
+                  <xs:complexType>
+                    <xs:attribute name="name" type="xs:string" use="required" />
+                    <xs:attribute name="register" type="xs:unsignedByte" use="required" />
+                    <xs:attribute name="pc" type="xs:unsignedShort" use="required" />
+                    <xs:attribute name="role" type="xs:string" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="String">
+                  <xs:complexType>
+                    <xs:attribute name="value" type="xs:string" use="required" />
+                    <xs:attribute name="role" type="xs:string" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Field">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="SourceLine">
+                        <xs:complexType>
+                          <xs:attribute name="classname" type="xs:string" use="required" />
+                          <xs:attribute name="sourcefile" type="xs:string" use="required" />
+                          <xs:attribute name="sourcepath" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="classname" type="xs:string" use="required" />
+                    <xs:attribute name="name" type="xs:string" use="required" />
+                    <xs:attribute name="signature" type="xs:string" use="required" />
+                    <xs:attribute name="isStatic" type="xs:boolean" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Int">
+                  <xs:complexType>
+                    <xs:attribute name="value" type="xs:unsignedByte" use="required" />
+                    <xs:attribute name="role" type="xs:string" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Type">
+                  <xs:complexType>
+                    <xs:sequence>
+                      <xs:element name="SourceLine">
+                        <xs:complexType>
+                          <xs:attribute name="classname" type="xs:string" use="required" />
+                        </xs:complexType>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="descriptor" type="xs:string" use="required" />
+                    <xs:attribute name="role" type="xs:string" use="required" />
+                  </xs:complexType>
+                </xs:element>
+                <xs:element name="Property">
+                  <xs:complexType>
+                    <xs:attribute name="name" type="xs:string" use="required" />
+                    <xs:attribute name="value" type="xs:string" use="required" />
+                  </xs:complexType>
+                </xs:element>
+              </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="required" />
+            <xs:attribute name="priority" type="xs:unsignedByte" use="required" />
+            <xs:attribute name="abbrev" type="xs:string" use="required" />
+            <xs:attribute name="category" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Errors">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="MissingClass" type="xs:string" />
+            </xs:sequence>
+            <xs:attribute name="errors" type="xs:unsignedByte" use="required" />
+            <xs:attribute name="missingClasses" type="xs:unsignedByte" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="FindBugsSummary">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="PackageStats">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="ClassStats">
+                      <xs:complexType>
+                        <xs:attribute name="class" type="xs:string" use="required" />
+                        <xs:attribute name="sourceFile" type="xs:string" use="required" />
+                        <xs:attribute name="interface" type="xs:boolean" use="required" />
+                        <xs:attribute name="size" type="xs:unsignedShort" use="required" />
+                        <xs:attribute name="bugs" type="xs:unsignedByte" use="required" />
+                        <xs:attribute name="priority_2" type="xs:unsignedByte" use="optional" />
+                        <xs:attribute name="priority_1" type="xs:unsignedByte" use="optional" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="package" type="xs:string" use="required" />
+                  <xs:attribute name="total_bugs" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="total_types" type="xs:unsignedByte" use="required" />
+                  <xs:attribute name="total_size" type="xs:unsignedShort" use="required" />
+                  <xs:attribute name="priority_2" type="xs:unsignedByte" use="optional" />
+                  <xs:attribute name="priority_1" type="xs:unsignedByte" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="FindBugsProfile">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="ClassProfile">
+                      <xs:complexType>
+                        <xs:attribute name="name" type="xs:string" use="required" />
+                        <xs:attribute name="totalMilliseconds" type="xs:unsignedShort" use="required" />
+                        <xs:attribute name="invocations" type="xs:unsignedInt" use="required" />
+                        <xs:attribute name="avgMicrosecondsPerInvocation" type="xs:unsignedInt" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="timestamp" type="xs:string" use="required" />
+            <xs:attribute name="total_classes" type="xs:unsignedByte" use="required" />
+            <xs:attribute name="referenced_classes" type="xs:unsignedShort" use="required" />
+            <xs:attribute name="total_bugs" type="xs:unsignedShort" use="required" />
+            <xs:attribute name="total_size" type="xs:unsignedShort" use="required" />
+            <xs:attribute name="num_packages" type="xs:unsignedByte" use="required" />
+            <xs:attribute name="vm_version" type="xs:string" use="required" />
+            <xs:attribute name="cpu_seconds" type="xs:decimal" use="required" />
+            <xs:attribute name="clock_seconds" type="xs:decimal" use="required" />
+            <xs:attribute name="peak_mbytes" type="xs:decimal" use="required" />
+            <xs:attribute name="alloc_mbytes" type="xs:decimal" use="required" />
+            <xs:attribute name="gc_seconds" type="xs:decimal" use="required" />
+            <xs:attribute name="priority_2" type="xs:unsignedShort" use="required" />
+            <xs:attribute name="priority_1" type="xs:unsignedByte" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="ClassFeatures" />
+        <xs:element name="History" />
+      </xs:sequence>
+      <xs:attribute name="version" type="xs:string" use="required" />
+      <xs:attribute name="sequence" type="xs:unsignedByte" use="required" />
+      <xs:attribute name="timestamp" type="xs:unsignedLong" use="required" />
+      <xs:attribute name="analysisTimestamp" type="xs:unsignedLong" use="required" />
+      <xs:attribute name="release" type="xs:string" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

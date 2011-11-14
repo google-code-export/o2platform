@@ -1,0 +1,16 @@
+C:\O2\O2Scripts_Database\O2_Core_APIs\_compiled_Dlls\V2_O2SharpDevelop.dll
+C:\O2\O2Scripts_Database\O2_Core_APIs\_compiled_Dlls\V2_O2SharpDevelop.pdb
+C:\O2\O2Scripts_Database\O2_Core_APIs\3rdPartyCode\SharpDevelop\obj\Debug\ResolveAssemblyReference.cache
+C:\O2\O2Scripts_Database\O2_Core_APIs\3rdPartyCode\SharpDevelop\obj\Debug\CSharpEditor.MainForm.resources
+C:\O2\O2Scripts_Database\O2_Core_APIs\3rdPartyCode\SharpDevelop\obj\Debug\GenerateResource-ResGen.read.1.tlog
+C:\O2\O2Scripts_Database\O2_Core_APIs\3rdPartyCode\SharpDevelop\obj\Debug\GenerateResource-ResGen.write.1.tlog
+C:\O2\O2Scripts_Database\O2_Core_APIs\3rdPartyCode\SharpDevelop\obj\Debug\V2_O2SharpDevelop.dll
+C:\O2\O2Scripts_Database\O2_Core_APIs\3rdPartyCode\SharpDevelop\obj\Debug\V2_O2SharpDevelop.pdb
+C:\O2\O2Scripts_Database\V2_O2_Platform\_compiled_Dlls\V2_O2SharpDevelop.dll
+C:\O2\O2Scripts_Database\V2_O2_Platform\_compiled_Dlls\V2_O2SharpDevelop.pdb
+C:\O2\O2Scripts_Database\V2_O2_Platform\3rdPartyCode\SharpDevelop\obj\Debug\ResolveAssemblyReference.cache
+C:\O2\O2Scripts_Database\V2_O2_Platform\3rdPartyCode\SharpDevelop\obj\Debug\CSharpEditor.MainForm.resources
+C:\O2\O2Scripts_Database\V2_O2_Platform\3rdPartyCode\SharpDevelop\obj\Debug\GenerateResource-ResGen.read.1.tlog
+C:\O2\O2Scripts_Database\V2_O2_Platform\3rdPartyCode\SharpDevelop\obj\Debug\GenerateResource-ResGen.write.1.tlog
+C:\O2\O2Scripts_Database\V2_O2_Platform\3rdPartyCode\SharpDevelop\obj\Debug\V2_O2SharpDevelop.dll
+C:\O2\O2Scripts_Database\V2_O2_Platform\3rdPartyCode\SharpDevelop\obj\Debug\V2_O2SharpDevelop.pdb

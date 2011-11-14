@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="taintResultSet">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="TaintResult">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="taintSource">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="snippetText" />
+                  </xs:sequence>
+                  <xs:attribute name="fileName" type="xs:string" use="required" />
+                  <xs:attribute name="packageName" type="xs:string" use="required" />
+                  <xs:attribute name="className" type="xs:string" use="required" />
+                  <xs:attribute name="methodName" type="xs:string" use="required" />
+                  <xs:attribute name="methodSignature" type="xs:string" use="required" />
+                  <xs:attribute name="isPossibleSanitizer" type="xs:boolean" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element maxOccurs="unbounded" name="taintStep">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="snippetText" type="xs:string" />
+                    <xs:element name="highlight">
+                      <xs:complexType>
+                        <xs:attribute name="lineNumber" type="xs:unsignedShort" use="required" />
+                        <xs:attribute name="color" type="xs:string" use="required" />
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute name="fileName" type="xs:string" use="required" />
+                  <xs:attribute name="projectName" type="xs:string" use="required" />
+                  <xs:attribute name="packageName" type="xs:string" use="required" />
+                  <xs:attribute name="className" type="xs:string" use="required" />
+                  <xs:attribute name="methodName" type="xs:string" use="required" />
+                  <xs:attribute name="methodSignature" type="xs:string" use="required" />
+                  <xs:attribute name="lineNumber" type="xs:unsignedShort" use="required" />
+                  <xs:attribute name="snippetStartLine" type="xs:unsignedShort" use="required" />
+                  <xs:attribute name="isPossibleSanitizer" type="xs:boolean" use="required" />
+                  <xs:attribute name="hasMapping" type="xs:boolean" use="required" />
+                  <xs:attribute name="rawFileName" type="xs:string" use="optional" />
+                  <xs:attribute name="rawClassName" type="xs:string" use="optional" />
+                  <xs:attribute name="rawLineNumber" type="xs:unsignedByte" use="optional" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="taintSink">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="snippetText" />
+                  </xs:sequence>
+                  <xs:attribute name="fileName" type="xs:string" use="required" />
+                  <xs:attribute name="packageName" type="xs:string" use="required" />
+                  <xs:attribute name="className" type="xs:string" use="required" />
+                  <xs:attribute name="methodName" type="xs:string" use="required" />
+                  <xs:attribute name="methodSignature" type="xs:string" use="required" />
+                  <xs:attribute name="isPossibleSanitizer" type="xs:boolean" use="required" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:unsignedByte" use="required" />
+            <xs:attribute name="ruleID" type="xs:string" use="required" />
+            <xs:attribute name="issueID" type="xs:string" use="required" />
+            <xs:attribute name="userSeverity" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="scanStartTime" type="xs:dateTime" use="required" />
+      <xs:attribute name="scanEndTime" type="xs:dateTime" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

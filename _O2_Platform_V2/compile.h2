@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>//var topPanel = O2Gui.open&lt;Panel&gt;("{name}",700,400);
+var currentFolder = PublicDI.CurrentScript.directoryName(); 
+currentFolder = @"C:\O2\O2Scripts_Database\O2_Platform_V2";
+
+CompileEngine.lsGACExtraReferencesToAdd.Clear();
+//O2Tag_OnlyAddReferencedAssemblies
+
+//O2Ref:System.dll
+//O2Ref:System.Drawing.dll
+//O2Ref:System.Windows.Forms.dll
+//O2Ref:System.Xml.dll
+//O2Ref:System.Core.dll 
+//O2Ref:System.Data.dll  
+//O2Ref:System.Xml.Linq.dll
+
+//O2Ref:C:\O2\O2Scripts_Database\O2_Platform_V2\_compiled_Dlls\FluentSharp_O2.dll
+
+//using FluentSharp.O2.Kernel
+//using FluentSharp.O2.Kernel.ExtensionMethods 
+//using FluentSharp.O2.DotNetWrappers.ExtensionMethods
+//using FluentSharp.O2.DotNetWrappers.DotNet 
+//using FluentSharp.O2.DotNetWrappers.Windows
+//using System
+//using System.Collections.Generic 
+
+var compiledDllsFolder = currentFolder.pathCombine("_compiled_Dlls"); 
+   
+Action&lt;string,string, string&gt; compileToExtension = 
+	(file, extension,mainClass) =&gt;{
+				"Compiling file: {0} ".debug(file);
+				var fileToCompile = currentFolder.pathCombine(file + ".cs");
+				var compiledDll = compiledDllsFolder.pathCombine(file + extension);
+				if (fileToCompile.fileExists().isFalse()) 
+					"could not find file to compile: {0}".error(fileToCompile);  
+				else
+				{ 
+					var assembly = (mainClass.valid())
+										? new CompileEngine().compileSourceFiles(new List&lt;string&gt; {fileToCompile}, mainClass)
+										: new CompileEngine().compileSourceFiles(new List&lt;string&gt; {fileToCompile}, mainClass, System.IO.Path.GetFileNameWithoutExtension(compiledDll));
+					if (assembly.isNull()) 
+						"no compiled assembly object created for: {0}".error(fileToCompile);
+					else
+					{ 
+						Files.Copy(assembly.Location, compiledDll);
+						"Copied: {0} to {1}".info(assembly.Location, compiledDll);
+						if (compiledDll.fileExists().isFalse())
+							"compiled file not created in: {0}".error(compiledDll);
+						
+					}
+				}  
+			};
+ 
+Action&lt;string&gt; compile = 
+	(file)=&gt; compileToExtension(file,".dll", "");  
+
+
+  
+//FluentSharp.O2.Views.ASCX.classes.MainGUI.O2Gui.open&lt;System.Windows.Forms.Panel&gt;("aaa");
+//FluentSharp.O2.Views.ASCX.classes.MainGUI.O2Gui.open&lt;FluentSharp.O2.Views.ASCX.Ascx.MainGUI.ascx_LogViewer&gt;(); 
+ 
+panel.clear().add_Control&lt;FluentSharp.O2.Views.ASCX.Ascx.MainGUI.ascx_LogViewer&gt;();
+
+ 
+//compileToExtension("O2_Launcher", ".exe", "V2.O2.Platform.Launcher");  
+
+
+compile("V2_O2_API_AST"); 
+compile("V2_O2_External_WindFormsUI");  
+
+compile("V2_O2_External_SharpDevelop"); 
+compileToExtension("O2_Launcher", ".exe", "V2.O2.Platform.Launcher");  
+Files.Copy(currentFolder.pathCombine("O2_1st_Script.cs"), compiledDllsFolder);
+
+//compile("V2_O2_External_IE"); 
+
+//compileToExtension("V2_O2_XRules_Database", ".exe", "V2.O2.XRules.Database.Program");  
+
+//var file = @"FluentSharp_O2_Kernel";
+return "ok2.";</SourceCode>
+  <ReferencedAssemblies />
+</H2>
