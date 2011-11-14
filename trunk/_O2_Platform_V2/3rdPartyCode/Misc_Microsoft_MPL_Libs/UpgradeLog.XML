@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="O2_Misc_Microsoft_MPL_Libs">
+</Property><Property Name="Solution File" Value="C:\O2\O2Scripts_Database\O2_Core_APIs\3rdPartyCode\Misc_Microsoft_MPL_Libs\O2_Misc_Microsoft_MPL_Libs.sln">
+</Property><Property Name="Date" Value="Sunday, June 05, 2011">
+</Property><Property Name="Time" Value="18:22 PM">
+</Property></Properties><Event ErrorLevel="0" Project="O2_Misc_Microsoft_MPL_Libs" Source="O2_Misc_Microsoft_MPL_Libs.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="O2_Misc_Microsoft_MPL_Libs" Source="O2_Misc_Microsoft_MPL_Libs.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="O2_Misc_Microsoft_MPL_Libs.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="O2_Misc_Microsoft_MPL_Libs.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="O2_Misc_Microsoft_MPL_Libs" Source="O2_Misc_Microsoft_MPL_Libs.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{83957D55-86AB-4C26-9F82-6182999F09E8}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>O2.XRules.Database</RootNamespace>
+    <AssemblyName>O2_XRules_Database</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <ManifestCertificateThumbprint>4803CBA9CEFB3E39BED805EC44F043311994C953</ManifestCertificateThumbprint>
+    <ManifestKeyFile>O2_XRules_Database_TemporaryKey.pfx</ManifestKeyFile>
+    <GenerateManifests>true</GenerateManifests>
+    <SignManifests>true</SignManifests>
+    <ApplicationIcon>O2Logo.ico</ApplicationIcon>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>C:\_O2_SVN\O2_ClickOnce_Installers\O2_XRules_Database\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Background</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://o2platform.googlecode.com/svn/O2_ClickOnce_Installers/O2_XRules_Database/</InstallUrl>
+    <ProductName>OWASP O2 Platform %28ClickOnce version%29</ProductName>
+    <PublisherName>OWASP O2 Platform</PublisherName>
+    <MinimumRequiredVersion>1.0.0.45</MinimumRequiredVersion>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>index.htm</WebPage>
+    <OpenBrowserOnPublish>false</OpenBrowserOnPublish>
+    <ApplicationRevision>145</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\O2_Binaries\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Cropper">
+      <HintPath>..\_3rdPartyDlls\Cropper.exe</HintPath>
+    </Reference>
+    <Reference Include="DiagramDesigner">
+      <HintPath>..\_3rdPartyDlls\DiagramDesigner.exe</HintPath>
+    </Reference>
+    <Reference Include="GraphSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\GraphSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphSharp.Controls, Version=1.0.3438.42543, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\GraphSharp.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="HTMLparserLibDotNet20, Version=3.1.4.235, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\HTMLparserLibDotNet20.dll</HintPath>
+    </Reference>
+    <Reference Include="Merlin, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Merlin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.mshtml, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\FilesWithNoCode\Microsoft.mshtml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Windows.Shell, Version=3.5.40729.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\FilesWithNoCode\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="O2SharpDevelop, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\O2SharpDevelop.dll</HintPath>
+    </Reference>
+    <Reference Include="Odyssey, Version=1.4.22.23608, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\Odyssey.dll</HintPath>
+    </Reference>
+    <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="RibbonControlsLibrary, Version=3.5.40729.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\FilesWithNoCode\RibbonControlsLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpSvn, Version=1.6006.1373.40218, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\FilesWithNoCode\SharpSvn.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WatiN.Core.1x, Version=1.3.0.4000, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\WatiN.Core.1x.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WPFExtensions, Version=1.0.3437.34043, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_3rdPartyDlls\WPFExtensions.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DI.cs" />
+    <Compile Include="InstallXRules.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="O2_XRules_Database_TemporaryKey.pfx" />
+    <Compile Include="_Rules\O2 Utils\ascx_Execute_Scripts.cs.o2">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="_Rules\O2 Utils\SvnApi.cs" />
+    <Compile Include="_Rules\O2 Utils\Wizard_SyncViaSvn.cs" />
+    <Compile Include="_Rules\Stub_Namespaces.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="H2Logo.ico" />
+    <Content Include="Images\O2Logo_Medium.gif" />
+    <Content Include="O2Logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <FileAssociation Include=".h2">
+      <Visible>False</Visible>
+      <Description>O2 H2 Script</Description>
+      <Progid>O2.XRule.Script.h2</Progid>
+      <DefaultIcon>H2Logo.ico</DefaultIcon>
+    </FileAssociation>
+    <FileAssociation Include=".o2">
+      <Visible>False</Visible>
+      <Description>O2 XRule Script</Description>
+      <Progid>O2.XRule.Script.o2</Progid>
+      <DefaultIcon>O2Logo.ico</DefaultIcon>
+    </FileAssociation>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="_tempDevFiles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_IE\O2_External_IE.csproj">
+      <Project>{F6942664-5E64-4182-B3EB-11F481F461FB}</Project>
+      <Name>O2_External_IE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2 Modules Using 3rd Party Dlls\O2_External_SharpDevelop\O2_External_SharpDevelop.csproj">
+      <Project>{E76BCE43-8511-4CE8-A965-C0150F713CE9}</Project>
+      <Name>O2_External_SharpDevelop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_DotNetWrappers\O2 DotNet Wrappers.csproj">
+      <Project>{1F252725-D8BE-408A-BE5C-2D11D0DE8586}</Project>
+      <Name>O2 DotNet Wrappers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_Interfaces\O2_Interfaces.csproj">
+      <Project>{64223518-03C2-4818-8C82-F045037E3DFE}</Project>
+      <Name>O2_Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_Kernel\O2 Kernel.csproj">
+      <Project>{BDB9EFED-296A-4535-99C6-F0B83316E80C}</Project>
+      <Name>O2 Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2Core\O2_Views_ASCX\O2_Views_ASCX.csproj">
+      <Project>{7BFDC99E-0FC7-42FC-9E32-83F77B2BE8F0}</Project>
+      <Name>O2_Views_ASCX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_APIs\O2_API_AST\O2_API_AST.csproj">
+      <Project>{0E18EDC8-718D-4E77-BFC4-4F930741B2FD}</Project>
+      <Name>O2_API_AST</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\O2_APIs\O2_API_Visualization\O2_API_Visualization.csproj">
+      <Project>{7226283F-7C31-4EBB-9940-97AB0F676319}</Project>
+      <Name>O2_API_Visualization</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
