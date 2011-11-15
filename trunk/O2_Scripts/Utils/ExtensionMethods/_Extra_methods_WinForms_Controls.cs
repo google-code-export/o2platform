@@ -619,6 +619,11 @@ namespace O2.XRules.Database.Utils
 		{
 			return control.parent().add_Link(label, control.top() + 20 , control.left(), ()=> onClickCallback());
 		}
+		
+		public static Label append_Below_Label(this Control control, string label)
+		{
+			return control.parent().add_Label(label, control.top() + 22 , control.left());
+		}
 	}
 
 }    	

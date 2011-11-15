@@ -69,7 +69,12 @@ namespace O2.XRules.Database.APIs
 			return this;
 		}
     	
-    	public API_IE_ExecutionGUI open(string virtualPath)
+    	public T open<T>(string virtualPath) where T : API_IE_ExecutionGUI
+    	{
+    		return (T)open(virtualPath);
+    	}
+    	
+    	public API_IE_ExecutionGUI open(string virtualPath) 
 		{
 			if (virtualPath.isUri())
 				ie.open(virtualPath);
@@ -91,7 +96,7 @@ namespace O2.XRules.Database.APIs
 		public string Folder {get;set;}
 	}
 	
-	public static class API_IE_ExecutionGUI_ExtensionMethods_Actions
+/*	public static class API_IE_ExecutionGUI_ExtensionMethods_Actions
 	{
 		[ShowInGui(Folder ="root")]
 		public static API_IE_ExecutionGUI homePage(this API_IE_ExecutionGUI ieExecution)
@@ -99,7 +104,7 @@ namespace O2.XRules.Database.APIs
 			return ieExecution.open(""); 
 		}
 		
-	}
+	}*/
 	
 	public static class API_IE_Execution_BuildGui
 	{
