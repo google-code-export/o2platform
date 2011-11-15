@@ -36,6 +36,12 @@ namespace O2.XRules.Database.APIs
     public static class IE_Google_Actions
     {    					
 		
+		[ShowInGui(Folder ="root")]
+		public static API_IE_ExecutionGUI homepage(this IE_Google ieExecution)
+		{
+			return ieExecution.open(""); 
+		}
+		
 		[ShowInGui(Folder ="links")]
 		public static API_IE_ExecutionGUI images(this IE_Google ieExecution)
 		{

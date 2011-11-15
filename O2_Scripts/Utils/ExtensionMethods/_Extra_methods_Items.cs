@@ -1,6 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.Xml;
+using System.Linq;
 using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Collections;
@@ -21,6 +22,9 @@ namespace O2.XRules.Database.Utils
 	[Serializable]
 	public  class Items : List<Item> 
 	{
+		public bool overrideIfExists = true;
+		public bool alertOnOverriding = true;
+		
 		public string this[string key] 
 		{
 			get
@@ -31,7 +35,21 @@ namespace O2.XRules.Database.Utils
 				return null;
 					//return new Item(value,value);
 			}	
+			set
+			{
+				if (overrideIfExists)				
+					foreach(var item in this)
+						if (item.Key == key)
+						{	
+							if(alertOnOverriding)
+								"Item Override: on key value '{0}', overriding the original value '{1}' with '{2}'".debug(item.Key,item.Value, value);					
+							item.Value = value;
+							return;
+						}
+				this.Add(new Item(key, value));
+			}
 		}
+				
 	}
 	
 	[Serializable]
@@ -43,6 +61,103 @@ namespace O2.XRules.Database.Utils
 		public Item(string key, string value) : base(key,value)
 		{
 			
+		}
+	}
+	
+	public static class Items_ExtensionMethods
+	{
+		public static Item item(this Items items, string key)
+		{
+			foreach(var item in items)
+				if (item.Key == key)
+					return item;
+			return null;				
+		}
+		
+		public static string value(this Item item)
+		{
+			if(item.notNull())
+				return item.Value;
+			return null;
+		}
+		
+		public static Item value(this Item item, string value)
+		{
+			if(item.notNull())
+				item.Value = value;
+			return item;
+		}
+		
+		public static bool hasKey(this Items items, string key)
+		{
+			foreach(var item in items)
+				if (item.Key == key)
+					return true;
+			return false;		
+					
+		}			
+		
+		public static Items add(this Items items, string key, string value)
+		{
+			items[key] = value;
+			return items;
+		}		
+		
+		public static Dictionary<string,string> toDictionary(this Items items)
+		{
+			var dictionary = new Dictionary<string,string>();
+			foreach(var item in items)	
+			{
+				if(dictionary.hasKey(item.Key))
+					"alert: in Items.toDictionary there was a duplicate key value for {0}, the original value ('{1}') will be overritten with '{2}')".debug(item.Key, dictionary[item.Key], item.Value);					
+				dictionary.add(item.Key, item.Value);
+			}
+			return dictionary;
+		}
+		
+		public static Items toItems(this Dictionary<string,string> dictionary)
+		{
+			var items = new Items();
+			foreach(var keyValuePair in dictionary)
+				items.add(keyValuePair.toItem());
+			return items;
+		}
+		
+		public static Item toItem(this KeyValuePair<string,string> keyValuePair)
+		{
+			return new Item(keyValuePair.Key,keyValuePair.Value);
+		}
+		
+		public static Items remove(this Items items, string key)
+		{
+			var itemToRemove = items.item(key);
+			if(itemToRemove.isNull())
+				"in Items.remove, could not find item with key: '{0}'".error(key);
+			else
+				items.Remove(itemToRemove);
+			return items;
+		}
+		
+		public static Items set(this Items items, string key, string value)
+		{
+			return items.add(key,value);
+		}
+		
+		public static string get(this Items items, string key)
+		{
+			return items[key];
+		}
+		
+		public static List<string> keys(this Items items)
+		{
+			return (from item in items
+					select item.Key).toList();
+		}
+		
+		public static List<string> values(this Items items)
+		{
+			return (from item in items
+					select item.Value).toList();
 		}
 	}
 	
@@ -70,14 +185,7 @@ namespace O2.XRules.Database.Utils
 	}
 
 	public static class NameValuePair_ExtensionMethods
-	{
-	
-		public static List<Item> add(this List<Item> list, string key, string value)
-		{
-			list.Add(new Item(key,value));
-			return list;
-		}
-		
+	{									
 		public static List<NameValuePair<T,K>> add<T,K>(this List<NameValuePair<T,K>> list, T key, K value)
 		{
 			list.Add(new NameValuePair<T,K>(key,value));

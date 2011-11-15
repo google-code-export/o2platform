@@ -1,18 +1,61 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var topPanel = "OWASP O2 Platform v2.0 Beta".popupWindow(800,190);
-topPanel.parent().backColor(Color.White); 
+  <SourceCode>var topPanel = "OWASP O2 Platform v2.0 Beta".popupWindow(800,215);
+//var topPanel = panel.fill(false).width(800).height(190).clear().add_Panel();  
+topPanel.parent().backColor(Color.White);  
 topPanel.insert_LogViewer();
 topPanel.add_PictureBox().open("OWASP_O2_Platform.png".local()).fill(false).width(351).height(41).top(10);
-var menuPanel = topPanel.insert_Right&lt;Panel&gt;(420);
+var menuPanel = topPanel.insert_Right&lt;Panel&gt;(440);  
+var scriptMappings = new Items(); 
+ 
+var scripting_Mappings = new Items().add("Simple Script","ascx_Quick_Development_GUI.cs.o2") 
+							  		.add("IE Script","IE Automation (Simple mode).h2") 
+							  		.add("Graph Script","ascx_GraphWithInspector.cs.o2")
+							  		.add("IE Google", "IE_Google - Execution.h2")
+							  		.add("O2 Dev Environment", "Util - O2 Development Environment.h2");							  		
+							  		
+var o2tools_Mappings = 	 new Items().add("Screenshot tool", "Util - Show ScreenShot Tool.h2")
+									.add("Search Engine", "Search Engine Tool.h2")
+									.add("Quick File Search", "Util - Quick File Search.h2");
 
-Action&lt;string&gt; executeH2Script = (script)=&gt;{ script.local().compile_H2Script().executeFirstMethod(); };
+var otherTools_Mapping = new Items().add("Process Explorer", "ProcessExplorer.cs")
+									.add("Process Monitor", "ProcessMonitor.cs")
+									.add("AppScan Standard + O2","Util - Launch AppScan Standard (O2 version).h2");
 
-menuPanel.add_Link("Write an IE Automation Script",15,0, () =&gt; executeH2Script("IE Automation (Simple mode).h2"));
-menuPanel.add_Link("Find and Execute an O2 Script",35,0,()=&gt; executeH2Script("Util - O2 Available scripts.h2")); 
-menuPanel.add_Link("Open Custom O2 for Security Consultants",15,185, ()=&gt; executeH2Script("Security Consultants (Custom O2 version).h2"));
-menuPanel.add_Label("Are you lost?",35,185)
-		 .append_Link("Open Help",()=&gt; "http://o2platform.com/wiki/Documentation".startProcess()) 
-		 .append_Link("Mailing List",()=&gt; "https://lists.owasp.org/mailman/listinfo/owasp-o2-platform".startProcess());</SourceCode>
+var o2Guis_Mappings = 	 new Items().add("Security Consultants", "Security Consultants (Custom O2 version).h2")
+									.add("OWASP Projects &amp; Wiki", "OWASP Projects and Website (Custom O2).h2")
+									.add(".NET Static Analysis", "DotNet Static Analysis (Custom O2).h2")
+									.add("BlackBox", "BlackBox and Browser Automation (Custom O2).h2")
+									.add("SuperSecureBank", "_SSB - Custom O2.h2")
+									.add("HacmeBank", "HacmeBank - Vulnerable Web Application (Custom O2).h2");
+
+var help_Mappings = 	 new Items().add("O2 Documentation", "http://o2platform.com/wiki/Documentation")
+								  	.add("O2 Mailing list", "https://lists.owasp.org/mailman/listinfo/owasp-o2-platform")
+								  	.add("O2 Blog (tons of script samples", "http://o2platform.wordpress.com")
+								  	.add("O2 Website (at OWASP)", "http://owasp.org/index.php/O2");
+			  
+
+
+Action&lt;string&gt; executeH2Script = 
+	(script)=&gt; O2Thread.mtaThread( ()=&gt; script.executeFirstMethod());				
+
+menuPanel.add_ExecutionComboBox("Write Script:",15,0,scripting_Mappings);  
+menuPanel.add_ExecutionComboBox("O2 Tools:",36,0,o2tools_Mappings).leftAdd(13);   
+   
+menuPanel.add_Link("Find an O2 Script",57,69,()=&gt; executeH2Script("Util - O2 Available scripts.h2")); 
+
+menuPanel.add_ExecutionComboBox("Open O2 Gui for:",15,200, o2Guis_Mappings).leftAdd(-5).widthAdd(20); 
+menuPanel.add_ExecutionComboBox("3rd Party Tools:",36,200,otherTools_Mapping).widthAdd(20);
+
+menuPanel.add_ExecutionComboBox("Need Help?",57,200, help_Mappings).leftAdd(20).widthAdd(20);
+
+//menuPanel.add_Link("Open Custom O2 for Security Consultants",15,185, ()=&gt; executeH2Script("Security Consultants (Custom O2 version).h2"));
+
+/*menuPanel.add_Label("Are you lost?",35,185)
+		 .append_Link("Open Help",()=&gt; "".startProcess()) 
+		 .append_Link("Mailing List",()=&gt; "".startProcess());
+*/		 
+		 
+return "done";		 </SourceCode>
   <ReferencedAssemblies />
 </H2>

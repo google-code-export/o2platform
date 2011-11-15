@@ -28,7 +28,7 @@ namespace O2.XRules.Database.APIs
 	{
 		public void testGui()
 		{
-			var popupWindow = "IE Execution GUI".popupWindow(600,500);
+			var popupWindow = "IE Execution GUI".popupWindow(700,500);
 			popupWindow.add_IE_ExecutionGui("");
 			//var ieExecution = new API_IE_ExecutionGUI();
 		}
@@ -160,7 +160,8 @@ namespace O2.XRules.Database.APIs
 														.add_Nodes(methodMapping.Value, (method)=>method.Name.replace("_"," "));
 												else
 													treeView.add_Nodes(methodMapping.Value, (method)=>method.Name.replace("_"," "));
-														   
+										
+										treeView.expandAll().selectFirst();
 										//treeView.add_Nodes(methodsToInvoke, (method)=>method.Name);
 									};
 									
@@ -206,8 +207,9 @@ namespace O2.XRules.Database.APIs
 									
 							topPanel.insert_Above(20)									
 									.add_Link("Reload Gui",0,0, ()=> loadGui())
-									.append_Link("Open Gui SourceCode", ()=> script.showInCodeEditor())									
-									.append_Link("Rreload IE_Google.cs", ()=> loadFile("IE_Google.cs")) 
+									.append_Link("Open Gui SourceCode", ()=> scriptToLoad.showInCodeEditor())
+									.append_Link("Open IE Automation GUI", ()=> "IE Automation (Simple mode).h2".local().executeH2Script())
+									.append_Link("Test file: Reload IE_Google.cs", ()=> loadFile("IE_Google.cs")) 
 									.append_Link("Load another IE Automation Script", ()=> loadFile("which script do you want to load".askUser()) ) ;
 									//.append_Link("Open IE Automation Development Environment", ()=> devEnvironment.executeH2Script());;
 							
