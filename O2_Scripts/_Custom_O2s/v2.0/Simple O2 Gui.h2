@@ -8,7 +8,7 @@ topPanel.add_PictureBox().open("OWASP_O2_Platform.png".local()).fill(false).widt
 var menuPanel = topPanel.insert_Right&lt;Panel&gt;(440);  
 var scriptMappings = new Items(); 
  
-var scripting_Mappings = new Items().add("Simple Script","ascx_Quick_Development_GUI.cs.o2") 
+var scripting_Mappings = new Items().add("O2 Script","ascx_Quick_Development_GUI.cs.o2") 
 							  		.add("IE Script","IE Automation (Simple mode).h2") 
 							  		.add("Graph Script","ascx_GraphWithInspector.cs.o2")
 							  		.add("IE Google", "IE_Google - Execution.h2")
