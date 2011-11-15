@@ -124,6 +124,18 @@ namespace O2.XRules.Database.Utils
 			return lastItem;
 		}
 		
+		
+		public static List<T> insert<T>(this List<T> list, T value)
+		{
+			return list.insert(0, value);
+		}
+		
+		public static List<T> insert<T>(this List<T> list, int position, T value)
+		{
+			list.Insert(position, value);
+			return list;
+		}
+		
 /*		public static List<T> selectMany<T,T1>(this IEnumerable<T> list)
 		{
 			if (list.notNull()) 

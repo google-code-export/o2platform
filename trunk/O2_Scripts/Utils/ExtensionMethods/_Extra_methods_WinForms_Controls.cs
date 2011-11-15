@@ -14,7 +14,10 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.Views.ASCX.classes.MainGUI;
+using O2.External.SharpDevelop.ExtensionMethods;
 
+//O2File:_Extra_methods_Items.cs
+//O2File:_Extra_methods_Collections.cs
 
 namespace O2.XRules.Database.Utils
 {	
@@ -379,11 +382,8 @@ namespace O2.XRules.Database.Utils
 		//ComboBox
 		public static ComboBox add_Items(this ComboBox comboBox, params object[] items)
 		{
-			foreach(var item in items)
-			{
-				"adding : {0}".info(item);
-				comboBox.add_Item(item);
-			}
+			foreach(var item in items)			
+				comboBox.add_Item(item);			
 			return comboBox;
 		}
 		public static object selectedItem(this ComboBox comboBox)
@@ -402,6 +402,39 @@ namespace O2.XRules.Database.Utils
 					});
 			return comboBox;
 		}
+		
+		public static ComboBox executeScriptOnSelection(this ComboBox comboBox, Items mappings)
+		{			
+			comboBox.onSelection<string>(
+						(key)=>{
+									if (mappings.hasKey(key))
+									{										
+										"executing script mapped to '{0}: {1}".info(key, mappings[key]);
+										var itemToExecute = mappings[key];
+										if (itemToExecute.isUri())
+											Processes.startProcess(itemToExecute);
+											//itemToExecute.startProcess();
+										else
+											O2Thread.mtaThread(()=>itemToExecute.executeFirstMethod());
+									}
+								});		
+			return comboBox;			
+		}
+		
+		public static ComboBox add_ExecutionComboBox(this Control control, string labelText, int top, int left, Items scriptMappings)
+		{
+			return control.add_ExecutionComboBox(labelText, top, left, scriptMappings, scriptMappings.keys());
+		}
+		public static ComboBox add_ExecutionComboBox(this Control control, string labelText, int top, int left, Items scriptMappings, List<string> comboBoxItems)
+		{						
+			return control.add_Label(labelText, top, left)
+		 				  .append_Control<ComboBox>().top(top-3).dropDownList() // .width(100)		 				  
+ 						  .add_Items(comboBoxItems.insert("... select one...").ToArray())
+ 						  .executeScriptOnSelection(scriptMappings)		 							
+ 						  .selectFirst(); 
+		}
+		
+
 		
 		/*public static ComboBox onSelection<T>(this ComboBox comboBox, Action<T> callback)
 		{			
