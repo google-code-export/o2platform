@@ -12,14 +12,21 @@ var scripting_Mappings = new Items().add("Simple Script","ascx_Quick_Development
 							  		.add("IE Script","IE Automation (Simple mode).h2") 
 							  		.add("Graph Script","ascx_GraphWithInspector.cs.o2")
 							  		.add("IE Google", "IE_Google - Execution.h2")
+							  		.add("Write Unit Tests", "Write and Execute Unit Tests.h2")
 							  		.add("O2 Dev Environment", "Util - O2 Development Environment.h2");							  		
 							  		
 var o2tools_Mappings = 	 new Items().add("Screenshot tool", "Util - Show ScreenShot Tool.h2")
 									.add("Search Engine", "Search Engine Tool.h2")
-									.add("Quick File Search", "Util - Quick File Search.h2");
+									.add("Quick File Search", "Util - Quick File Search.h2")
+									.add("Execute Unit Tests", "Execute Unit Tests.h2")
+									.add("Movie Creator", "Util - Movie Creator.h2")
+									.add("OpenPGP Tool", "Tool - Using OpenPgp to Encrypt or Decrypt.h2")
+									.add("Amazon EC2 Browser", "Tool - Amazon EC2 Browser.h2")
+									.add("Amazon S3 Browser", "Amazon S3 Browser.h2");									
 
 var otherTools_Mapping = new Items().add("Process Explorer", "ProcessExplorer.cs")
 									.add("Process Monitor", "ProcessMonitor.cs")
+									.add("Putty", "Putty.cs")
 									.add("AppScan Standard + O2","Util - Launch AppScan Standard (O2 version).h2");
 
 var o2Guis_Mappings = 	 new Items().add("Security Consultants", "Security Consultants (Custom O2 version).h2")
@@ -40,7 +47,7 @@ Action&lt;string&gt; executeH2Script =
 	(script)=&gt; O2Thread.mtaThread( ()=&gt; script.executeFirstMethod());				
 
 menuPanel.add_ExecutionComboBox("Write Script:",15,0,scripting_Mappings);  
-menuPanel.add_ExecutionComboBox("O2 Tools:",36,0,o2tools_Mappings).leftAdd(13);   
+menuPanel.add_ExecutionComboBox("O2 Tools:",36,0,o2tools_Mappings).leftAdd(13).dropDownHeight(300);   
    
 menuPanel.add_Link("Find an O2 Script",57,69,()=&gt; executeH2Script("Util - O2 Available scripts.h2")); 
 
