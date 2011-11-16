@@ -259,7 +259,7 @@ namespace O2.XRules.Database.Languages_and_Frameworks.DotNet
 				//break;
 			return savedMethodStream;
     	}
-    }
+    } 
     
     public static class Saved_MethodStream_ExtensionMethods_MethodStreamItem
     {
