@@ -14,7 +14,7 @@ namespace O2.XRules.Database.Utils
 {	
 	
 	[Serializable]
-	public  class NameValueItems : List<Item> 
+	public  class NameValueItems : Items
 	{
 		
 	}
@@ -192,6 +192,15 @@ namespace O2.XRules.Database.Utils
 			return list;
 		}
 	}
+	
+	/*public static class NameValueItems_ExtensionMethods
+	{
+		public static NameValueItems add(this NameValueItems items, string key, string value)
+		{
+			Items_ExtensionMethods.add((Items)items,key,value);
+			return items;
+		}
+	}*/
 	
 	
 		#region tuples

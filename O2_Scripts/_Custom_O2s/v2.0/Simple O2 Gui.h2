@@ -13,6 +13,7 @@ var scripting_Mappings = new Items().add("O2 Script","ascx_Quick_Development_GUI
 							  		.add("Graph Script","ascx_GraphWithInspector.cs.o2")
 							  		.add("IE Google", "IE_Google - Execution.h2")
 							  		.add("Write Unit Tests", "Write and Execute Unit Tests.h2")
+							  		.add("SourceCode Editor", "Util - SourceCodeEditor.h2")
 							  		.add("O2 Dev Environment", "Util - O2 Development Environment.h2");							  		
 							  		
 var o2tools_Mappings = 	 new Items().add("Screenshot tool", "Util - Show ScreenShot Tool.h2")

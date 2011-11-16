@@ -22,6 +22,8 @@ html.add_RibbonGroup("Html")
 	.add_RibbonButton_H2Script("Simple Html Editor -&gt; Viewer","Util - Simple Html Viewer.h2")
 	.add_RibbonButton_Script("Html Editor","ascx_Html_Editor.cs.o2")    
 	.add_RibbonButton_H2Script("View and Search Web Page","Util - View and search WebPage code.h2");
+html.add_RibbonGroup("Html Transformations") 	
+	.add_Script("Util - Web Encoder &amp; Decoder","Util - Web Encoder (with AntiXss Support).h2");
 	
 
 var javascript = ribbon.Ribbon.add_RibbonTab("Javascript"); 

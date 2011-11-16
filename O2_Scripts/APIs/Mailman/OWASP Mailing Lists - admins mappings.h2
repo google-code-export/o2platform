@@ -3,7 +3,7 @@
   <SourceCode>var hideTableDuringLoad = true;
 var topPanel = "OWASP Mailing Lists - List admin mappings/emails".popupWindow(1200,500);
 //var topPanel = panel.clear().add_Panel(); 
-var tableList = topPanel.add_GroupBox("OWASP Mailing list mappigs").add_TableList();  
+var tableList = topPanel.add_GroupBox("OWASP Mailing list mappings").add_TableList();  
 var browser = topPanel.insert_Right("List Admin WebPage").add_WebBrowser_Control();
 
 tableList.afterSelect_get_Cell(3,
@@ -17,6 +17,7 @@ var tempDir = "_owasp-leaders_mainmanMappings".tempDir(false);
 var baseUrl = "https://lists.owasp.org/mailman/admin";
 Func&lt;string, string&gt; getHtml_UsingCache =
 	(urlToGet)=&gt; {
+					"processing: {0}".info(urlToGet);
 					var cacheFilePath = tempDir.pathCombine(urlToGet.safeFileName() + ".html");					
 					return (cacheFilePath.fileExists())
 								? cacheFilePath.fileContents()

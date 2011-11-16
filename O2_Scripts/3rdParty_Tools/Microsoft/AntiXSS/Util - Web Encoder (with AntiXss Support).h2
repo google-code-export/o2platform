@@ -7,7 +7,8 @@ var configPanel = topPanel.insert_Above(40,"Config");
 var sourceText = topPanel.add_GroupBox("Source Text").add_SourceCodeViewer();  
 var transformedText = topPanel.insert_Right("Transformed Text").add_SourceCodeViewer(); 
  
-var transformationsAvailable = new List&lt;string&gt; { "HtmlDecode",	"HtmlEncode","UrlDecode", "UrlEncode",
+var transformationsAvailable = new List&lt;string&gt; { "none", 
+												  "HtmlDecode",	"HtmlEncode","UrlDecode", "UrlEncode",
 												  "AntiXss.HtmlEncode", 		 	"AntiXss.UrlEncode", 		 			"AntiXss.JavaScriptEncode",  	"AntiXss.CssEncode",
 												  "AntiXss.HtmlAttributeEncode",	"AntiXss.HtmlFormUrlEncode",		 	"AntiXss.XmlAttributeEncode",	"AntiXss.XmlEncode",
 												  "AntiXss.VisualBasicScriptEncode","AntiXss.LdapDistinguishedNameEncode",	"AntiXss.LdapFilterEncode",
@@ -24,6 +25,7 @@ Func&lt;string,string, string&gt; applyTransformation =
 					{
 						switch(type)
 						{
+							case "none":								break;
 							case "HtmlDecode":							return text.htmlDecode();
 							case "HtmlEncode":							return text.htmlEncode();
 							case "UrlDecode":							return text.urlDecode();
