@@ -475,10 +475,21 @@ namespace O2.XRules.Database.Utils
 		public static T insert_LogViewer<T>(this T control)
 			where T : Control
 		{
+			return control.insert_LogViewer(false);
+		}
+			
+		public static T insert_LogViewer<T>(this T control, bool make_Panel1_Fixed)
+			where T : Control	
+		{
 			control.insert_Below(100)
 				   .add_LogViewer();
+			if (make_Panel1_Fixed)
+				control.parent<SplitContainer>()
+					   .fixedPanel1();
 			return control;
 		}
+		
+		
 		// insert_...()
 		public static Panel insert_Left(this Control control)
 		{

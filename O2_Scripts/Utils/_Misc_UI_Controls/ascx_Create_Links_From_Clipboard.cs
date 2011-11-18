@@ -69,7 +69,7 @@ namespace O2.XRules.Database.Utils
 			                    var pdfParser = new PDFParser();
 			                    var tempFile = PublicDI.config.getTempFileInTempDirectory(".txt");                    
 			                    pdfParser.ExtractText(fileToConvert, tempFile);
-			                    textBox.set_Text(tempFile.contents());
+			                    textBox.set_Text(tempFile.contents().fixCRLF());
 			                    Files.deleteFile(tempFile);
 			                }
 			                else

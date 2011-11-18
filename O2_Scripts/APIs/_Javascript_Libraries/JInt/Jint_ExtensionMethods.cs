@@ -25,7 +25,7 @@ using O2.External.IE.ExtensionMethods;
 using O2.External.IE.Interfaces;
 using O2.External.IE.Wrapper;
 using O2.External.IE.WebObjects;
-using O2.XRules.Database.Utils.ExtensionMethods;
+using O2.XRules.Database.Utils;
 
 //O2File:HtmlAgilityPack_ExtensionMethods.cs
 

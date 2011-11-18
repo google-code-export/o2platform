@@ -14,7 +14,7 @@ using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
 using O2.External.SharpDevelop.ExtensionMethods;
-using O2.XRules.Database.Utils.ExtensionMethods;
+using O2.XRules.Database.Utils;
 
 //O2File:HtmlAgilityPack_ExtensionMethods.cs
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
@@ -32,19 +32,11 @@ namespace O2.XRules.Database.Utils
     	public string HtmlCode { get; set; }
     	public bool ViewAsXml { get; set; }
     	public static string defaultPage = "http://www.google.com";
-	
-		public static List<String> sampleXPathQueries 
-						= new List<string> {
-												"//a",  
-												"//img",
-												"//a[contains(@href,'news')]",
-												"//a[contains(text(),'S')]",
-												"//a[text()='Blogs']"
-											};
+			
     	public static void launchGui()
     	{
     		O2Gui.open<ascx_HtmlTagViewer>("Control - Html Tag Viewer", 1000,400)
-    			 .buildGui(true, true)
+    			 .buildGui(true, true)    			 
     			 .show(defaultPage.uri());
     	}
     	
@@ -62,17 +54,15 @@ namespace O2.XRules.Database.Utils
 			//return (ascx_HtmlTagViewer)this.invokeOnThread(
 			//	()=>{
 			var TopPanel = this.add_Panel();
-			HtmlTags_TreeView =  TopPanel.add_TreeView()
-									 .showSelection();			
+			HtmlTags_TreeView =  TopPanel.add_TreeView_for_HtmlTags()
+									 	 .showSelection();			
 			
 			if (addHtmlCodeViewer)
 			{
 				HtmlCodeViewer = HtmlTags_TreeView.insert_Left<Panel>(TopPanel.width()/2).add_SourceCodeViewer(); 
-				HtmlTags_TreeView.afterSelect<HtmlAgilityPack.HtmlNode>(
-				  	(htmlNode)=>{ 
-				  					HtmlCodeViewer.showHtmlNodeLocation(htmlNode);
-				  					HtmlCodeViewer.editor().caret(htmlNode.Line, htmlNode.LinePosition);
-				  				});
+				
+				HtmlTags_TreeView.after_TagSelect_showIn_SouceCodeViewer(HtmlCodeViewer);
+				
 				var optionsPanel = HtmlCodeViewer.insert_Below<Panel>(50);
 				optionsPanel.add_CheckBox("View as Xml",0,5, 
 					(value)=>{
@@ -104,36 +94,10 @@ namespace O2.XRules.Database.Utils
 											show(text.fileContents());
 										else 
 											show(text.uri());
-									});
-			}
+									}); 
+			}																						
 			
-			HtmlNodeFilter = HtmlTags_TreeView.insert_Below<TextBox>(25).fill();
-			var sampleQueries_MenuItem = HtmlNodeFilter.add_ContextMenu().add_MenuItem("Sample queries");
-			
-			var treeView_ContextMenu = HtmlTags_TreeView.add_ContextMenu();
-			
-			treeView_ContextMenu.add_MenuItem("Sort Nodes", ()=> HtmlTags_TreeView.sort());
-			treeView_ContextMenu.add_MenuItem("Don't Sort Nodes", ()=> HtmlTags_TreeView.sort(false));
-			treeView_ContextMenu.add_MenuItem("Show all nodes",()=> HtmlNodeFilter.sendKeys("//*".line()));   
-			foreach(var xPathQuery in sampleXPathQueries)
-				sampleQueries_MenuItem.add_MenuItem(xPathQuery , (text) => HtmlNodeFilter.set_Text(text.str()));
-			
-			HtmlTags_TreeView.beforeExpand<HtmlAgilityPack.HtmlNode>(
-					(treeNode, htmlNode)=>{																
-											  if (htmlNode.Attributes != null)
-											  	  foreach(var attribute in htmlNode.Attributes)
-											 	  	  treeNode.add_Node("a: {0}={1}".format(attribute.Name, attribute.Value)); 
-											  treeNode.add_Node("v: {0}".format(htmlNode.InnerHtml));  	
-											  if (htmlNode.ChildNodes != null)
-											  	  foreach(var childNode in htmlNode.ChildNodes)
-												  	  if (childNode.html().valid()) 
-													  	  treeNode.add_Node("n: {0}".format(childNode.Name), childNode, true);  
-										  });			
-			HtmlNodeFilter.onEnter(
-					(text)=>{
-								show(HtmlCode, text);
-							});										
-			
+			HtmlNodeFilter = HtmlTags_TreeView.insert_Below_HtmlTagFilter((filter) => show(HtmlCode, filter) );
 			
 			return this;
 		//});
@@ -172,31 +136,9 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		public ascx_HtmlTagViewer show(string htmlCode, string filter)
-		{		
-			HtmlTags_TreeView.clear();
-			try
-			{
-				">showing htmlcode with size: {0}".info(htmlCode.size());
-				HtmlNodeFilter.backColor(Color.White);
-				var htmlDocument = htmlCode.htmlDocument();  	
-				if (filter.valid())
-					HtmlTags_TreeView.add_Nodes(htmlDocument.select(filter));
-				else 
-				{
-					HtmlTags_TreeView.add_Node(htmlDocument);
-					HtmlTags_TreeView.expand();
-				}
-				"HtmlTags_TreeView nodes: {0}".info(HtmlTags_TreeView.nodes().size());
-				
-			}
-			catch(System.Exception ex)
-			{
-				ex.log("in htmlNodeFilter.onEnter");
-				HtmlNodeFilter.backColor(Color.Red);
-			}			
+		{					
+			htmlCode.showFilteredHtmlContentInTreeView(filter, HtmlTags_TreeView, HtmlNodeFilter);			
 			return this;
-		}
-		
-		
+		}		
     }
 }

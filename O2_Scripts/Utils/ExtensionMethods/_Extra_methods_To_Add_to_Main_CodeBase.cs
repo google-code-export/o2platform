@@ -155,14 +155,23 @@ namespace O2.XRules.Database.Utils
 	 
 	public static class _Extra_Int_ExtensionMethods
 	{
+		public static int mod( this int num1, int num2)
+		{
+			return num1 % num2;
+		}
+		public static bool mod0( this int num1, int num2)
+		{
+			return num1.mod(num2) ==0;
+		}
+		
 		public static Action loop(this int count , Action action)
 		{
-			return count.loop(500,action);
+			return count.loop(0,action);
 		}
 		
 		public static Action loop(this int count , int delay,  Action action)
 		{
-			"Executing provided action for {0} times with a delay of {1} milliseconds".info(count);
+			"Executing provided action for {0} times with a delay of {1} milliseconds".info(count, delay);
 			for(var i=0 ; i < count ; i ++)
 			{
 				action();
@@ -172,6 +181,40 @@ namespace O2.XRules.Database.Utils
 			return action;
 		}
 		
+		public static Action<int> loop(this int count , Action<int> action)
+		{
+			return count.loop(0, action);
+		}
+		
+		public static Action<int> loop(this int count , int start, Action<int> action)
+		{
+			return count.loop(start,1, action);
+		}
+		
+		public static Action<int> loop(this int count, int start , int step, Action<int> action)
+		{
+			for(var i=start ; i < count ; i+=step)			
+				action(i);							
+			return action;
+		}
+		
+		public static List<T> loopIntoList<T>(this int count , Func<int,T> action)
+		{
+			return count.loopIntoList(0, action);
+		}
+		
+		public static List<T> loopIntoList<T>(this int count , int start, Func<int,T> action)
+		{
+			return count.loopIntoList(start,1, action);
+		}
+		
+		public static List<T> loopIntoList<T>(this int count, int start , int step, Func<int,T> action)
+		{
+			var results = new List<T>();
+			for(var i=start ; i < count ; i+=step)			
+				results.Add(action(i));
+			return results;
+		}		
 	}
 	public static class _Extra_UInt_ExtensionMethods
 	{
@@ -542,7 +585,13 @@ namespace O2.XRules.Database.Utils
 	}
 	
 	public static class _Extra_Misc_ExtensionMethods
-	{
+	{		 
+		public static string ifEmptyUse(this string _string , string textToUse)
+		{
+			return (_string.empty() )
+						?  textToUse
+						: _string;
+		}
 		
 		public static string upperCaseFirstLetter(this string _string)
 		{

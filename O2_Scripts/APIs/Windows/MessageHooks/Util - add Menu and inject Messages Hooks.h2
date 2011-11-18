@@ -178,7 +178,6 @@ showProcessToHook();
 return "done"; 
 
 //using TransparencyMenu
-//using O2.Script 
 //using System.Text
 //using System.Diagnostics;
 //using win32 = TransparencyMenu.Win32

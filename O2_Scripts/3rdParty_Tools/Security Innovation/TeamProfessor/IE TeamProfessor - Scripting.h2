@@ -1,22 +1,15 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>// persist the ie objects accross multiple executions
-var ie = panel.tag&lt;WatiN_IE&gt;(); if (ie == null) { ie = panel.clear().add_IE(); panel.tag(ie); }
-var ieChannel = new IE_Channel(ie); 
-var sChannelAPI = ieChannel.sChannelAPI;
-var sChannel = sChannelAPI.sChannel;
-return PublicDI.CurrentScript;
-return sChannel.testAccounts();
-
-if (ie.url().inValid())
-	ieChannel.homePage();   
-return ie.link("Login").click();
+  <SourceCode>//var topPanel = panel.clear().add_Panel();
+var topPanel = "IE TeamProfessor Scripting".popupWindow();
+var ie = topPanel.add_IE();
+var ieteamProfessor = new IE_TeamProfessor(ie); 
+ieteamProfessor.homePage();
+return ie.links();
 
 
-
-
-
-//O2File:..\API_Sony_Channel_IE_Automation.cs
-//O2Ref:WatiN.Core.1x.dll</SourceCode>
+//O2File:IE_TeamProfessor.cs
+//O2Ref:WatiN.Core.1x.dll
+</SourceCode>
   <ReferencedAssemblies />
 </H2>

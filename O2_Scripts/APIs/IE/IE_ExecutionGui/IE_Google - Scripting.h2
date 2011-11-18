@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//var topPanel = O2Gui.open&lt;Panel&gt;("IE Google - Scripting",1200,700);
-var topPanel = panel.clear().add_Panel();
+  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("IE Google - Scripting",1200,700);
+//var topPanel = panel.clear().add_Panel();
 
 var ie =topPanel.add_IE();
 
 var ieGoogle = new IE_Google(ie); 
-ieGoogle.homePage();   
+ieGoogle.homepage();   
 ieGoogle.maps();
 ieGoogle.videos();
 ieGoogle.images();

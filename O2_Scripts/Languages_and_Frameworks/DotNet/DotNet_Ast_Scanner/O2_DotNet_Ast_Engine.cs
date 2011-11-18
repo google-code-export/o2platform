@@ -30,7 +30,6 @@ using ICSharpCode.NRefactory;
 using ICSharpCode.NRefactory.Ast;
 using ICSharpCode.SharpDevelop.Dom;
 using GraphSharp.Controls;
-using O2.XRules.Database.Utils.ExtensionMethods;
 using O2.XRules.Database.Utils;
 using O2.XRules.Database.Findings;
 using O2.XRules.Database.APIs;
