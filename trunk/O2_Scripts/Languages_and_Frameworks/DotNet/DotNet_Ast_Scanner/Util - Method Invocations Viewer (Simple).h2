@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>//panel.clear();
+  <SourceCode>//panel.clear(); 
 //var topPanel = panel;  
 var topPanel = O2Gui.open&lt;Panel&gt;("Tool - View Method Invocations", 1000,600); 
 
@@ -114,6 +114,7 @@ return astData;
 //O2Ref:O2_API_AST.dll  
 //O2Ref:Quickgraph.dll
 //O2Ref:GraphSharp.dll 
-//O2Ref:GraphSharp.Controls.dll</SourceCode>
+//O2Ref:GraphSharp.Controls.dll
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

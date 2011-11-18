@@ -88,6 +88,7 @@ showRecentChanges();
 
 //O2File:OwaspWikiAPI.cs 
 //O2File:ISecretData.cs
-//O2File:ascx_AskUserForLoginDetails</SourceCode>
+//O2File:ascx_AskUserForLoginDetails
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

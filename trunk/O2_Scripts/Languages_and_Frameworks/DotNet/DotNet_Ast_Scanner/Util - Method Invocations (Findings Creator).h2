@@ -331,6 +331,6 @@ return "ok";
 //O2Ref:O2_API_AST.dll  
 //O2Ref:Quickgraph.dll
 //O2Ref:GraphSharp.dll 
-</SourceCode>
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

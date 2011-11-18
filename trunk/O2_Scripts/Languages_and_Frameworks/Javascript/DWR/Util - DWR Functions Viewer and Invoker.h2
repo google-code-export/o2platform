@@ -37,7 +37,6 @@ loadData(demoServer);
 
 
 //O2File:API_DWR.cs  
-//using O2.XRules.Database.Utils.ExtensionMethods
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
 
 </SourceCode>

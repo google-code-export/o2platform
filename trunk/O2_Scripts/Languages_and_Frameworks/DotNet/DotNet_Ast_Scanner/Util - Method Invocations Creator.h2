@@ -3,7 +3,7 @@
   <SourceCode>//panel.clear();
 //var topPanel = panel;  
 var topPanel = O2Gui.open&lt;Panel&gt;("Tool - Method Invocations Creator", 1000,600); 
-
+ 
 var baseFolder = "";
 O2MappedAstData astData = null;
 var useCachedData = true; //false;//true ;

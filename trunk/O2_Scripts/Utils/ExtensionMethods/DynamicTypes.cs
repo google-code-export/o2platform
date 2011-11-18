@@ -156,6 +156,20 @@ namespace O2.XRules.Database.Utils
 			}
 		}
 		
+		public static object create_Object(this TypeBuilder typeBuilder)
+		{
+			return typeBuilder.create().ctor();
+		}
+		
+		public static List<object> create_List(this TypeBuilder typeBuilder)
+		{
+			var typeObject = typeBuilder.create_Object();
+			var list = typeObject.wrapOnList();
+			list.Clear();
+			return list;
+		}
+		//pageData_Type.ctor().wrapOnList().Clear(); 
+		
 		//IL Generation Helpers
 		public static MethodBuilder il_get_field(this MethodBuilder methodBuilder, FieldBuilder fieldBuilder)
 		{
@@ -233,6 +247,11 @@ namespace O2.XRules.Database.Utils
     
     public static class add_Helpers_ExtensionMethods
     {
+    	public static List<PropertyBuilder> add_Properties(this TypeBuilder typeBuilder, params string[] propertyNames)
+    	{
+    		return typeBuilder.add_Properties<string>(propertyNames);
+    	}
+    	
     	public static List<PropertyBuilder> add_Properties<T>(this TypeBuilder typeBuilder, params string[] propertyNames)
     	{
     		var properties = new List<PropertyBuilder>();

@@ -16,7 +16,6 @@ using O2.External.IE.ExtensionMethods;
 using SHDocVw;
 using WatiN.Core;
 using O2.XRules.Database.Utils;
-using O2.XRules.Database.Utils.ExtensionMethods;
 
 //O2File:WatiN_IE_ExtensionMethods.cs    
 //O2File:WatiN_IE.cs

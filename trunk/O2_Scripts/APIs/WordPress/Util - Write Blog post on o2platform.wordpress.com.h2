@@ -176,7 +176,6 @@ return "ok";
 //O2Ref:WatiN.Core.1x.dll
 //using Jint.Expressions
 //using O2.XRules.Database.Languages_and_Frameworks.Javascript
-//using O2.XRules.Database.Utils.ExtensionMethods
 //O2File:Jint_ExtensionMethods.cs 
 //O2File:HtmlAgilityPack_ExtensionMethods.cs 
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll

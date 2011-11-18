@@ -71,9 +71,9 @@ tableList.getListViewControl().onDrop(loadAndShowFile);
 	
  
 return "done";  
-
+ 
 //using xmlns.www.fortifysoftware.com.schema.fvdl 
-//O2File:C:\O2\_tempDir\_Fortify-Sate-2008\Fortify-Sate-2008\Fortify.fvdl.1.6.cs
+//O2File:Fortify.fvdl.1.6.xsd.cs
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

@@ -34,6 +34,7 @@ browser.onDocumentCompleted += (htmlPage)=&gt;
 //O2Ref:O2_External_IE.dll
 //O2Ref:Microsoft.mshtml.dll
 //using O2.External.IE.ExtensionMethods
-//using O2.External.IE.Interfaces</SourceCode>
+//using O2.External.IE.Interfaces
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

@@ -278,6 +278,7 @@ return "ok";
 
 //generateDebugSymbols
 
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs</SourceCode>
+//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

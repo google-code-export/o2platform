@@ -85,6 +85,7 @@ scriptEditor.onCompileExecuteOnce();
 //O2File:ascx_WriteRule.cs
 //O2File:ascx_ManualMethodStreams.cs
 //O2Ref:O2_API_AST.dll
-//O2Ref:O2_ImportExport_OunceLabs.dll</SourceCode>
+//O2Ref:O2_ImportExport_OunceLabs.dll
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

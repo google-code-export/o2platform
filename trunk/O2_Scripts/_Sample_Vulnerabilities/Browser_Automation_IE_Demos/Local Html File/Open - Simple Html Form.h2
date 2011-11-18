@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>panel.clear();
-var ie = panel.add_IE().silent(true);
+  <SourceCode>//var topPanel = panel.clear().add_Panel();
+var topPanel = "Simple Html Form".popupWindow();
+var ie = topPanel.add_IE().silent(true);
 
 ie.open("Simple_Html_Form.html".local());
 return ie.fields();

@@ -8,7 +8,7 @@ var baseFolder = "";
 var useCachedData = true; //false;//true ;
 var referencesToLoad = new List&lt;string&gt;();  
 var astData = (O2MappedAstData)O2LiveObjects.get(astDataCacheKey);
-//var codeViewer = topPanel.add_SourceCodeEditor();   
+
  
 //var treeView = codeViewer.insert_Left&lt;TreeView&gt;(400) 
 //							     .showSelection();
@@ -57,6 +57,7 @@ foreach(var interfaceMethod in methodsToMap)
 methodsToMap = myMethodStream.MappedIMethods.Values.ToArray();
 "XXXXXXXxx  XXXXXXXxx   There are: {0} methods".error(methodsToMap.size()); 
 */
+var codeViewer = topPanel.add_SourceCodeEditor();   
 var csharpCode = myMethodStream.csharpCode();  
 codeViewer.set_Text(csharpCode, ".cs");	   			
 
