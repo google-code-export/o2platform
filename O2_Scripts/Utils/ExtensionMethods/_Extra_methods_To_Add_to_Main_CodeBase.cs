@@ -58,9 +58,10 @@ using Ionic.Zip;
 //O2Ref:O2_API_AST.dll
 
 //O2File:_Extra_methods_Collections.cs
+//O2File:_Extra_methods_Misc.cs
 //O2File:_Extra_methods_Files.cs
-//O2File:_Extra_methods_Windows.cs
 //O2File:_Extra_methods_Items.cs
+//O2File:_Extra_methods_Windows.cs
 //O2File:_Extra_methods_Reflection.cs
 //O2File:_Extra_methods_WinForms_Controls.cs
 //O2File:_Extra_methods_WinForms_DataGridView.cs
@@ -584,143 +585,8 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-	public static class _Extra_Misc_ExtensionMethods
-	{		 
-		public static string ifEmptyUse(this string _string , string textToUse)
-		{
-			return (_string.empty() )
-						?  textToUse
-						: _string;
-		}
-		
-		public static string upperCaseFirstLetter(this string _string)
-		{
-			if (_string.valid())
-			{
-				return _string[0].str().upper() + _string.subString(1); 
-			}
-			return _string;
-		}								
-		
-		public static string append(this string _string, string stringToAppend)
-		{
-			return _string + stringToAppend;
-		}
-		
-		public static string insertAt(this string _string,  int index, string stringToInsert)
-		{
-			return _string.Insert(index,stringToInsert);
-		}
-		
-		public static string subString(this string _string, int startPosition)
-		{
-			if (_string.size() < startPosition)
-				return "";
-			return _string.Substring(startPosition);
-		}
-		
-		public static string subString(this string _string,int startPosition, int size)
-		{
-			var subString = _string.subString(startPosition);
-			if (subString.size() < size)
-				return subString;
-			return subString.Substring(0,size);
-		}
-		
-		public static string subString_After(this string _string, string _stringToFind)
-		{
-			var index = _string.IndexOf(_stringToFind);
-			if (index >0)
-			{
-				return _string.subString(index + _stringToFind.size());
-			}
-			return "";
-		}
-		
-		
-		public static string add_RandomLetters(this string _string)
-		{
-			return _string.add_RandomLetters(10);
-		}
-		
-		public static string add_RandomLetters(this string _string, int count)
-		{
-			return "{0}_{1}".format(_string,count.randomLetters());
-		}
-				
-		public static string ascii(this int _int)
-		{
-			try
-			{				
-				return ((char)_int).str();					
-			}
-			catch(Exception ex)
-			{
-				ex.log();
-				return "";
-			}
-		}
-		
-		public static Guid next(this Guid guid)
-		{
-			return guid.next(1);
-		}
-		
-		public static Guid next(this Guid guid, int incrementValue)
-		{			
-			var guidParts = guid.str().split("-");
-			var lastPartNextNumber = Int64.Parse(guidParts[4], System.Globalization.NumberStyles.AllowHexSpecifier);
-			lastPartNextNumber+= incrementValue;
-			var lastPartAsString = lastPartNextNumber.ToString("X12");
-			var newGuidString = "{0}-{1}-{2}-{3}-{4}".format(guidParts[0],guidParts[1],guidParts[2],guidParts[3],lastPartAsString);
-			return new Guid(newGuidString); 					
-		}
-		
-		public static Guid emptyGuid(this Guid guid)
-		{
-			return Guid.Empty;
-		}
-		
-		public static Guid newGuid(this string guidValue)
-		{
-			return Guid.NewGuid();
-		}
-		
-		public static Guid guid(this string guidValue)
-		{
-			if (guidValue.inValid())
-				return Guid.Empty;			
-			return new Guid(guidValue);		
-		}
-		
-		public static bool isGuid(this String guidValue)
-		{
-			try
-			{
-				new Guid(guidValue);
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
-		}
-		
-		public static bool toBool(this string _string)
-		{
-			try
-			{
-				if (_string.valid())
-					return bool.Parse(_string);				
-			}
-			catch(Exception ex)
-			{
-				"in toBool, failed to convert provided value ('{0}') into a boolean: {2}".format(_string, ex.Message);				
-			}
-			return false;
-		}
-		
-		
+	public static class _Extra_ShowObject_ExtensionMethods
+	{		 				
 		// so that it is automatically available in the O2 Scriping environment (was in public static class ascx_ObjectViewer_ExtensionMethods)
 		public static void details<T>(this T _object)
 		{

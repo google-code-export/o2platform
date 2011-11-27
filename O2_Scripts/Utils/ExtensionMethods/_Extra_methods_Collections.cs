@@ -15,6 +15,13 @@ namespace O2.XRules.Database.Utils
 {	
 	public static class List_ExtensionMethods
 	{
+		public static List<string> removeEmpty(this List<string> list)
+		{
+			return (from item in list
+					where item.valid()
+					select item).toList();
+		}
+				
 		public static List<string> add_If_Not_There(this List<string> list, string item)
 		{
 			if (item.notNull())
@@ -36,6 +43,13 @@ namespace O2.XRules.Database.Utils
 			return "";
 		}
 		
+		public static T value<T>(this List<T> list, int index)
+		{
+			if (list.size() > index)
+				return list[index];
+			return default(T);
+		}
+		
 		public static List<T> where<T>(this List<T> list, Func<T,bool> query)
 		{
 			return list.Where<T>(query).toList();
@@ -48,6 +62,13 @@ namespace O2.XRules.Database.Utils
 				return results.First();
 			return default(T);
 		}
+		
+		public static List<T> removeRange<T>(this List<T> list, int start, int end)
+		{
+			list.RemoveRange(start,end);
+			return list;
+		}
+		
 	}
 	
 	public static class IEnumerable_ExtensionMethods

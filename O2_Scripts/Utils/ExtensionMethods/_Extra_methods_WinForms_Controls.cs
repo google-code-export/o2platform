@@ -18,6 +18,7 @@ using O2.External.SharpDevelop.ExtensionMethods;
 
 //O2File:_Extra_methods_Items.cs
 //O2File:_Extra_methods_Collections.cs
+//O2File:_Extra_methods_Windows.cs 
 
 namespace O2.XRules.Database.Utils
 {	
@@ -166,6 +167,7 @@ namespace O2.XRules.Database.Utils
 					});
 			return link;
 		}
+		
 		//Control (Font)			
 				
 		public static T size<T>(this T control, int value)
@@ -249,6 +251,24 @@ namespace O2.XRules.Database.Utils
 				()=> control.Font = new Font( control.Font, control.Font.Style | FontStyle.Italic ));
 			return control;
 		}
+		
+		
+		
+		//Control (KeyPress)			
+		
+		public static T onKeyPress_getChar<T>(this T control, Func<char, bool> callback)
+            where T : Control
+        {
+            control.KeyPress += (sender, e) => e.Handled = callback(e.KeyChar);
+            return control;
+        }
+        
+		public static T onKeyPress_getChar<T>(this T control, Action<char> callback)
+            where T : Control
+        {
+            control.KeyPress += (sender, e) => callback(e.KeyChar);
+            return control;
+        }
 		
 		//CheckBox
 		public static CheckBox append_CheckBox(this Control control, string text, Action<bool> action)
@@ -415,7 +435,17 @@ namespace O2.XRules.Database.Utils
 											Processes.startProcess(itemToExecute);
 											//itemToExecute.startProcess();
 										else
-											O2Thread.mtaThread(()=>itemToExecute.executeFirstMethod());
+											if (Control.ModifierKeys == Keys.Shift)
+											{
+												"Shift Key was pressed, so launching in new process: {0}".info(itemToExecute);
+												itemToExecute.executeH2_or_O2_in_new_Process();
+											}
+											else
+											{
+												"Shift Key was not pressed, so running script in current process".debug(itemToExecute);
+												O2Thread.mtaThread(()=>itemToExecute.executeFirstMethod());
+											}
+											
 									}
 								});		
 			return comboBox;			
@@ -425,6 +455,7 @@ namespace O2.XRules.Database.Utils
 		{
 			return control.add_ExecutionComboBox(labelText, top, left, scriptMappings, scriptMappings.keys());
 		}
+		
 		public static ComboBox add_ExecutionComboBox(this Control control, string labelText, int top, int left, Items scriptMappings, List<string> comboBoxItems)
 		{						
 			return control.add_Label(labelText, top, left)
