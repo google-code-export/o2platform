@@ -10,7 +10,7 @@
 			catch(Exception ex)
 			{		
 				"[PackerMonitor] got this error when starting PacketMonitorForm: {0}".error(ex.Message);
-				PublicDI.CurrentScript.executeH2_as_Admin_askUserBefore().isNull();					
+				PublicDI.CurrentScript.executeH2_as_Admin_askUserBefore();					
 			}			
 		}); 
 

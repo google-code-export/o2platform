@@ -1,6 +1,7 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.IO;
+using System.Text;
 using System.Linq;
 using System.Diagnostics;
 using System.Reflection;
@@ -15,6 +16,8 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+ 
+//O2File:_Extra_methods_Misc.cs
  
 namespace O2.XRules.Database.Utils
 {	
@@ -50,7 +53,7 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		public static Process startProcess(this string processExe)
-		{
+		{			
 			return Processes.startProcess(processExe);
 		}
 		
@@ -68,6 +71,26 @@ namespace O2.XRules.Database.Utils
 						process.stop();
 					});
 			return process;
+		}
+		
+		public static Process startH2(this string scriptFile)
+		{
+			return scriptFile.executeH2_or_O2_in_new_Process();
+		}
+		
+		public static Process executeH2_or_O2_in_new_Process(this string scriptFile)
+		{
+			"[executeH2_or_O2_in_new_Process] executing: {0}".info(scriptFile);
+			if(scriptFile.fileExists())
+				return scriptFile.startProcess();
+			else
+			{
+				scriptFile = scriptFile.local();
+				if(scriptFile.fileExists())
+					return scriptFile.startProcess();
+			}
+			"[executeH2_or_O2_in_new_Process] could not find O2 or H2 script to execute: {0}".error(scriptFile);
+			return null;
 		}
 		
 		public static Process executeH2_as_Admin_askUserBefore(this string scriptName)
@@ -180,6 +203,5 @@ namespace O2.XRules.Database.Utils
 			return new StreamReader(memoryStream).ReadToEnd();
 		}
 	}
-
 }
     	

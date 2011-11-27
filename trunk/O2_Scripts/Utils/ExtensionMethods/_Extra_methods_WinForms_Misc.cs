@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Collections;
 using System.Collections.Generic;
-using O2.Kernel;
+using O2.Kernel; 
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
@@ -15,10 +15,69 @@ using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX.ExtensionMethods;
 
 
-
 namespace O2.XRules.Database.Utils
 {	
 	
+	//RichTextBox
+	public static class _Extra_RichTextBox_ExtensionMethods
+	{
+		public static RichTextBox scrollToCaret(this RichTextBox richTextBox)
+		{
+			return (RichTextBox)richTextBox.invokeOnThread(
+						()=>{
+								richTextBox.ScrollToCaret();
+								return richTextBox;
+							});						
+		}
+		
+		public static RichTextBox scrollToEnd(this RichTextBox richTextBox)
+		{
+			return (RichTextBox)richTextBox.invokeOnThread(
+						()=>{
+								richTextBox.SelectionStart = richTextBox.get_Text().size()-1;
+								richTextBox.ScrollToCaret();
+								return richTextBox;
+							});						
+		}
+		public static RichTextBox scrollToStart(this RichTextBox richTextBox)
+		{
+			return (RichTextBox)richTextBox.invokeOnThread(
+						()=>{
+								richTextBox.SelectionStart = 0;
+								richTextBox.ScrollToCaret();
+								return richTextBox;
+							});						
+		}
+		
+		public static RichTextBox wordWrap(this RichTextBox richTextBox, bool value)
+		{
+			return (RichTextBox)richTextBox.invokeOnThread(
+						()=>{
+								richTextBox.WordWrap = value;
+								return richTextBox;
+							});						
+		}
+		
+		public static RichTextBox hideSelection(this RichTextBox richTextBox, bool value)
+		{
+			return (RichTextBox)richTextBox.invokeOnThread(
+						()=>{
+								richTextBox.HideSelection = value;
+								return richTextBox;
+							});						
+		}
+		
+		public static RichTextBox hideSelection(this RichTextBox richTextBox)
+		{
+			return richTextBox.hideSelection(true);
+		}
+		
+		public static RichTextBox showSelection(this RichTextBox richTextBox)
+		{
+			return richTextBox.hideSelection(false);
+		}
+	}
+	//TextBox
 	public static class _Extra_TextBox_ExtensionMethods
 	{
 		public static TextBox add_TextBox(this Control control, string text)
