@@ -1,4 +1,4 @@
-﻿using System;
+ using System;
 using System.Text;
 using System.IO;
 using System.Net;
@@ -6,7 +6,8 @@ using O2.Kernel.ExtensionMethods;
 
 namespace O2.XRules.Database.APIs 
 {       
-	public class RequestResponseData
+  //Web Edited
+	public class RequestResponseData 
 	{
 		public HttpWebRequest  WebRequest 	 { get; set; }
 		public HttpWebResponse WebResponse   { get; set; }
