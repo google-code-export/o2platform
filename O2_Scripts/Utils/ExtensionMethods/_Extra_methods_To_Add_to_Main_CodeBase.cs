@@ -53,11 +53,11 @@ using System.Security.Cryptography;
 
 using Ionic.Zip;
 
-//O2File:ascx_ObjectViewer
 //O2Ref:Ionic.Zip.dll
 //O2Ref:O2_API_AST.dll
 
 //O2File:_Extra_methods_Collections.cs
+//O2File:_Extra_methods_Web.cs
 //O2File:_Extra_methods_Misc.cs
 //O2File:_Extra_methods_Files.cs
 //O2File:_Extra_methods_Items.cs
@@ -67,6 +67,7 @@ using Ionic.Zip;
 //O2File:_Extra_methods_WinForms_DataGridView.cs
 //O2File:_Extra_methods_WinForms_Misc.cs
 //O2File:_Extra_methods_WinForms_TreeView.cs
+//O2File:_Extra_methods_ObjectDetails.cs
 
 namespace O2.XRules.Database.Utils
 {		
@@ -585,14 +586,7 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-	public static class _Extra_ShowObject_ExtensionMethods
-	{		 				
-		// so that it is automatically available in the O2 Scriping environment (was in public static class ascx_ObjectViewer_ExtensionMethods)
-		public static void details<T>(this T _object)
-		{
-			O2Thread.mtaThread(()=>_object.showObject());
-		}						
-	}
+	
 	
 	
 	public static class _Extra_ComObject_ExtensionMethods

@@ -25,7 +25,7 @@ var o2tools_Mappings = 	 new Items().add("Screenshot tool", "Util - Show ScreenS
 									.add("OpenPGP Tool", "Tool - Using OpenPgp to Encrypt or Decrypt.h2")
 									.add("Amazon EC2 Browser", "Tool - Amazon EC2 Browser.h2")
 									.add("Amazon S3 Browser", "Amazon S3 Browser.h2")
-									.add("O2 Web Proxy", "Tool - O2 Web Proxy.h2")									
+									.add("O2 Web Proxy", "Util - O2 Web Proxy (simple Gui).h2")
 									.add("Stop O2 Instances", "Uitl - Stop all (but current) O2_XRules_Database processes.h2");
 
 var otherTools_Mapping = new Items().add("Process Explorer", "ProcessExplorer.cs")

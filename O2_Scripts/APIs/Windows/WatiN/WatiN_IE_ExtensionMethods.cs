@@ -35,7 +35,9 @@ using mshtml;
 //O2File:ascx_AskUserForLoginDetails.cs
 //O2File:ISecretData.cs
 //O2File:DotNet_Viewstate.cs
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+
+//O2File:_Extra_methods_WinForms_Controls.cs
+
 
 //O2Ref:O2_External_IE.dll
 //O2Ref:WatiN.Core.1x.dll
