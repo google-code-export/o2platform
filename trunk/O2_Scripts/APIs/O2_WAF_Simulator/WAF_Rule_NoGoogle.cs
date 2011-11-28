@@ -18,7 +18,7 @@ namespace O2.XRules.Database.APIs
 		{
 			base.InterceptRemoteUrl(remoteUrl);
 			//"[WAF_Rule_NoGoogle] IN InterceptRemoteUrl".error();			
-			if (remoteUrl.contains("google.com","google.co.uk"))
+			if (remoteUrl.contains("google"))
 			{
 				"No google here, going to bing now".info();
 				return "http://bing.com";

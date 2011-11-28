@@ -19,7 +19,7 @@ using O2.XRules.Database.Utils;
 
 //O2File:ascx_Simple_Script_Editor.cs.o2
 //O2File:Scripts_ExtensionMethods.cs
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
+
 
 namespace O2.XRules.Database.Utils
 {
@@ -84,12 +84,17 @@ namespace O2.XRules.Database.Utils
 		
 		public string getScriptWrapper()
 		{
-			var scriptWrapper = "var topPanel = panel.clear().add_Panel();".line() + 
-								"var ie = topPanel.add_IE().silent(true);".line().line() +
-								"{0}".line().line() +
-								"//O2File:WatiN_IE_ExtensionMethods.cs".line() + 
-								"//using O2.XRules.Database.Utils.O2".line() + 
-								"//O2Ref:WatiN.Core.1x.dll";
+			var scriptWrapper = 
+@"var topPanel = panel.clear().add_Panel();
+var ie = topPanel.add_IE().silent(true);
+
+ie.open(""http://www.google.com"");  
+
+//O2File:WatiN_IE_ExtensionMethods.cs 
+//using O2.XRules.Database.Utils.O2
+//O2Ref:WatiN.Core.1x.dll
+
+//O2Tag_DontAddExtraO2Files;";
 			return scriptWrapper;								
 		}
 		

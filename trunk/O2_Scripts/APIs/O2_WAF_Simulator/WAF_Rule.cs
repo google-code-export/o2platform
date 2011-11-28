@@ -54,13 +54,13 @@ namespace O2.XRules.Database.APIs
 		 	return htmlContent;
 		 }		 		 
 		 
-		 public virtual void InterceptOnResponseReceived(object requestResponseData)
+/*		 public virtual void InterceptOnResponseReceived(object requestResponseData)
 		 {
 		 	"OnResponseReceived...".error();
 		 	//show.info(requestResponseData);
 //O2File:_Extra_methods_WinForms_Controls.cs		 	
 //O2File:Scripts_ExtensionMethods.cs		 	
-			"aaa1".popupWindow().add_Script().InvocationParameters.Add("BinaryWriter",requestResponseData.prop("ResponseBytes"));
+			//"aaa1".popupWindow().add_Script().InvocationParameters.Add("bytes",requestResponseData.prop("ResponseBytes"));
 		 	
 		 	
 		 	
@@ -70,7 +70,8 @@ namespace O2.XRules.Database.APIs
 																				requestResponseData.ResponseString.size());
 			if (OnResponseReceived.notNull())
 				OnResponseReceived(requestResponseData);
-			*/
+			
 		 }
+		 */
     }
 }

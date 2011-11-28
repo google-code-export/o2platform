@@ -3,10 +3,7 @@
 
 // see O2_Web_Proxy.cs API for a way to consume this Proxy from O2
 
-//O2File:CacheEntry.cs
-//O2File:CacheKey.cs
 //O2File:ProxyCache.cs
-//O2File:ProxyServer.cs
 
 //O2Ref:System.Configuration.dll 
 using System;
@@ -25,8 +22,10 @@ using System.Security.Cryptography.X509Certificates;
 
 using O2.Kernel.ExtensionMethods;
 using O2.XRules.Database.APIs;
+using O2.XRules.Database.Utils;
 
 //O2File:HttpData.cs
+//O2File:_Extra_methods_Web.cs
 
 namespace HTTPProxyServer
 {       
@@ -457,7 +456,10 @@ namespace HTTPProxyServer
 		                                                                                    
 		                            if (OnResponseReceived.notNull()) 
 		                            {
-		                            	var responseString = UTF8Encoding.UTF8.GetString(memoryStream.ToArray(), 0, (int)memoryStream.Length);
+		                            	var responseString = (response.ContentEncoding == "gzip")
+		                            							? memoryStream.ToArray().gzip_Decompress()
+		                            							: memoryStream.ToArray().ascii();
+		                            							//UTF8Encoding.UTF8.GetString(memoryStream.ToArray(), 0, (int)memoryStream.Length);
 		                            	//OnRequestReceived(webReq, response,UTF8Encoding.UTF8.GetString(memoryStream.ToArray(), 0, (int)memoryStream.Length));
 		                            	var requestResponseData = new RequestResponseData()
 		                            									{
@@ -465,7 +467,7 @@ namespace HTTPProxyServer
 																			WebResponse = response, 
 																			ResponseBytes = memoryStream.ToArray(),
 																			ResponseString = responseString 
-		                            									};
+		                            									};										
 		                            	OnResponseReceived(requestResponseData);//webReq, response,memoryStream.ToArray().ascii());//UTF8Encoding.UTF8.GetString(memoryStream.ToArray(), 0, (int)memoryStream.Length));
 		                            }
 		                            	
@@ -586,7 +588,7 @@ namespace HTTPProxyServer
                     returnHeaders.Add(new Tuple<String, String>("Set-Cookie", cookie));
 
             }
-            returnHeaders.Add(new Tuple<String, String>("X-Proxied-By", "matt-dot-net proxy"));
+            returnHeaders.Add(new Tuple<String, String>("X-Proxied-By", "O2-Platform-Proxy")); //"matt-dot-net proxy"));
             return returnHeaders;
         }
 
@@ -677,7 +679,7 @@ namespace HTTPProxyServer
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine(String.Format("Could not add header {0}.  Exception message:{1}", header[0], ex.Message));
+                            String.Format("Could not add header {0}.  Exception message:{1}".error(header[0], ex.Message));
                             ex.log();
                         }
                         break;
@@ -685,30 +687,5 @@ namespace HTTPProxyServer
             } while (!String.IsNullOrEmpty(httpCmd)); //(!String.IsNullOrWhiteSpace(httpCmd));
             return contentLen;
         }
-    }
-    
-    
-    
-    //added to this code since the original version was compiled in .Net 4.0 which has equivalent classes
-    public class Tuple<T>
-    {
-        public Tuple(T first)
-        {
-            Item1 = first;
-        }
-
-        public T Item1 { get; set; }
-    }
-
-    public class Tuple<T, T2> : Tuple<T>
-    {
-        public Tuple(T first, T2 second)
-            : base(first)
-        {
-            Item2 = second;
-        }
-
-        public T2 Item2 { get; set; }
-        
-    }
+    }                
 }
