@@ -37,6 +37,13 @@ namespace O2.XRules.Database.APIs
     		config();
     	}
     	
+    	public ProxyServer Proxy 
+    	{
+    		get {
+    				return ProxyServer.Server;
+    			}
+    	}
+    	
     	public O2_Web_Proxy config()
     	{
     		CertLocation = @"cert.cer".local();
@@ -73,6 +80,11 @@ namespace O2.XRules.Database.APIs
 		
 		public static bool startWebProxy(this O2_Web_Proxy o2WebProxy)
 		{
+			if (o2WebProxy.Proxy.ProxyStarted)
+			{
+				"There was already a proxy started so reusing exising proxy object and port".info();
+				return true;
+			}
 			//if (o2WebProxy.Port == o2WebProxy.DEFAULT_PORT)				
 				o2WebProxy.Port = o2WebProxy.DEFAULT_PORT + 1000.randomNumber();
 			return o2WebProxy.startWebProxy(o2WebProxy.Port);
@@ -98,7 +110,9 @@ namespace O2.XRules.Database.APIs
 			"Stopping Web Proxy".info();
 			ProxyServer.Server.Stop();
 			return o2WebProxy;
-		 }
+		}
+		
+		
 	}
 }
 

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>
+var topPanel = O2Gui.open&lt;Panel&gt;("Util - O2 Web Proxy (Simple View)",300,400); 
+//var topPanel = panel.clear().add_Panel(); 
+var o2WebProxy = new O2_Web_Proxy();   
+o2WebProxy.startWebProxy();   
+//o2WebProxy.createGui_Proxy_LargeView(topPanel);  
+o2WebProxy.createGui_Proxy_SimpleView(topPanel); 
+
+"http://www.google.com".get_Html();
+return "done";    
+ 
+//using HTTPProxyServer
+//O2File:ProxyServer.cs
+//O2File:O2_Web_Proxy.cs
+//O2File:O2_Web_Proxy_ExtensionMethods_GUI_Helpers.cs
+//O2File:_Extra_methods_WinForms_TableList.cs</SourceCode>
+  <ReferencedAssemblies />
+</H2>

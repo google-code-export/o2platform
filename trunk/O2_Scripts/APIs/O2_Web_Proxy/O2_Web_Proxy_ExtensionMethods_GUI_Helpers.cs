@@ -10,10 +10,12 @@ using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Kernel.ExtensionMethods; 
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.Views.ASCX.DataViewers;
+using O2.Views.ASCX.ExtensionMethods;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.XRules.Database.Utils;
 using HTTPProxyServer;
-
+ 
 //O2File:O2_Web_Proxy.cs
 //O2File:O2_Web_Proxy_ExtensionMethods_Waf_Rules.cs
 
@@ -21,19 +23,28 @@ using HTTPProxyServer;
 //_O2File:_Extra_methods_Reflection.cs
 //_O2File:_Extra_methods_WinForms_Controls.cs
 //O2File:_Extra_methods_WinForms_TreeView.cs
+//O2File:_Extra_methods_WinForms_TableList.cs
 //O2File:_Extra_methods_ObjectDetails.cs
-
+ 
 //_O2Ref:System.Configuration.dll
   
   
 namespace O2.XRules.Database.APIs
 {
 	public class O2_Web_Proxy_Test
-	{				
- 		public void launchTestGui_Proxy()
+	{	
+		public void launchTestGui_Proxy_SimpleView()
+		{
+			var topPanel = "Testing O2 Web Proxy".popupWindow(300,400);
+			new O2_Web_Proxy().createGui_Proxy_SimpleView(topPanel)
+						   	  .startWebProxy();
+			"http://google.com".uri().getHtml();
+		}
+		
+ 		public void launchTestGui_Proxy_LargeView()
 		{
 			var topPanel = "Testing O2 Web Proxy".popupWindow(1000,700);
-			new O2_Web_Proxy().createGui_Proxy(topPanel)
+			new O2_Web_Proxy().createGui_Proxy_LargeView(topPanel)
 						   	  .startWebProxy();
 			"http://google.com".uri().getHtml();
 		}
@@ -49,19 +60,101 @@ namespace O2.XRules.Database.APIs
 	}		
 	
 	public static class O2_Web_Proxy_ExtensionMethods_GUI_Helpers
-	{
-		public static O2_Web_Proxy createGui_Proxy(this O2_Web_Proxy o2WebProxy,  Control panel)		
+	{					
+		public static O2_Web_Proxy createGui_Proxy_SimpleView(this O2_Web_Proxy o2WebProxy,  Control panel)		
+		{	
+			var topPanel = panel.clear().add_Panel(); 
+			o2WebProxy.stopOnFormClose(topPanel);		  
+			var actions_Panel = topPanel.insert_Above(40,"");
+			var requests = topPanel.add_GroupBox("Requests").add_TableList().title("O2 Web Proxy");
+			var properties = requests.insert_Below(100,"Request & Response Object").add_PropertyGrid()
+																				   .helpVisible(false)
+																				   .toolBarVisible(false);
+			var showLiveRequests = false;
+			
+			var requestId = 0;
+			requests.add_Columns("#","Method","Size","Url");
+			
+			Action setColumnsWidth = ()=> requests.set_ColumnsWidth(30, 60,60);			 
+			setColumnsWidth();
+			
+			requests.onDoubleClick<RequestResponseData>(
+				(requestResponseData)=> {
+											var responseCode = "Html for: {0}".format(requestResponseData.RequestUri)
+																			  .popupWindow()
+																			  .add_GroupBox("Response Data")
+																			  .add_SourceCodeViewer().maximizeViewer()
+																			  .set_Text(requestResponseData.ResponseString, ".html");
+											if (requestResponseData.RequestPostString.valid())
+												responseCode.parent()
+															.insert_Above(200,"Request Post Data")
+															.add_SourceCodeViewer().maximizeViewer()
+															.set_Text(requestResponseData.RequestPostString, ".html");	
+										});																	  
+			  
+			Action<RequestResponseData> add_Row = 
+				(rrData)=>{
+						 	requests.add_Row(rrData, 
+								()=>{
+										var rowData = new List<string>()
+											{	(++requestId).str(),
+												rrData.WebRequest.Method.str(),									
+												rrData.ResponseString.size().str(),
+												rrData.WebRequest.RequestUri.str()
+											 };
+										return rowData;	   	
+									});							
+						  };			
+			
+			requests.afterSelect<RequestResponseData>(
+				(requestResponseData)=>	{
+											properties.show(requestResponseData);
+									   	});
+															
+			Action showPastRequests =   
+				()=>{ 
+						requests.clearRows();					
+						requests.title("Showing {0} web Requests".format(o2WebProxy.Proxy.requests().size()));
+						foreach(var request in o2WebProxy.Proxy.requests())
+							add_Row(request);
+						requests.setWidthToContent();	
+					};
+			
+			ProxyServer.OnResponseReceived = 
+				(requestResponseData)=> add_Row(requestResponseData);
+										      
+			requests.add_ContextMenu().add_MenuItem("See Selected Row RequestResponseData Object Details", true,()=>requests.tag().details())
+									  .add_MenuItem("Refresh request list ({0} at start)".format(o2WebProxy.Proxy.requests().size()), true, ()=> showPastRequests())
+									  .add_MenuItem("Clear list", true, ()=> requests.clearRows())
+									  .add_MenuItem("Reset Columns Width", ()=> { setColumnsWidth();setColumnsWidth(); });
+						 
+			actions_Panel.add_Label("Actions:")
+						 .append_Link("Proxy Start",()=> o2WebProxy.startWebProxy())
+						 .append_Link("Proxy Stop",()=> o2WebProxy.stopWebProxy())			 
+						 .append_CheckBox("Real-Time View", (value)=> showLiveRequests = value).@check();
+			
+			/*actions_Panel.add_Label("Test sites:",20,0)		 
+						 .append_Link("BBC", ()=> "http://news.bbc.co.uk".get_Html())
+						 .append_Link("OWASP",  ()=> "http://www.owasp.org".get_Html())
+						 .append_Link("google",  ()=> "http://www.google.com".get_Html()).click();*/
+			return o2WebProxy;						 
+		}
+		
+		
+		//createGui_Proxy_LargeView
+		public static O2_Web_Proxy createGui_Proxy_LargeView(this O2_Web_Proxy o2WebProxy,  Control panel)		
 		{
 			var topPanel = panel.clear().add_Panel();
 			topPanel.insert_LogViewer();
-			o2WebProxy.add_Proxy_ActionsPanel(topPanel)
-					  .add_Proxy_ToolsPanel();           
+			o2WebProxy.stopOnFormClose(topPanel)		  
+					  .add_Proxy_ActionsPanel(topPanel)
+					  .add_Proxy_ToolsPanel();           			
 			
 			var requestsList = topPanel.add_GroupBox("Requests List").add_TreeView();
 			var requestDetails = topPanel.insert_Right();
 			var requestProperties = requestDetails.add_GroupBox("Request details").add_PropertyGrid().helpVisible(false);
 			var responseProperties = requestDetails.insert_Right("Response details").add_PropertyGrid().helpVisible(false);
-			var requestData = requestProperties.insert_Below(40,"Request Data").add_TextArea();
+			var requestData = requestProperties.insert_Below(100,"Request Data").add_TextArea();
 			var responseData = responseProperties.insert_Below(100,"Response Data").add_SourceCodeViewer();
 			responseData.textEditorControl().fill().bringToFront();
 			
@@ -76,7 +169,7 @@ namespace O2.XRules.Database.APIs
 														requestProperties.show(requestResponseData.WebRequest);
 														responseProperties.show(requestResponseData.WebResponse); 
 														responseData.set_Text(requestResponseData.ResponseString);
-														requestData.set_Text("...not implemented");
+														requestData.set_Text(requestResponseData.RequestPostString);
 													});			
 			requestsList.onDoubleClick<RequestResponseData>(
 							(requestResponseData)=> {
@@ -85,16 +178,19 @@ namespace O2.XRules.Database.APIs
 														"done".debug();
 													});
 			
-						return o2WebProxy;
+			return o2WebProxy;
 		}
 		
+		
+		//createGui_WAF
 		public static O2_Web_Proxy createGui_WAF<T>(this O2_Web_Proxy o2WebProxy,  T panel)		
 			where T : Control
 		{
 			var topPanel = panel.clear().add_Panel();
 			topPanel.insert_LogViewer();
 			
-			o2WebProxy.add_Proxy_ActionsPanel(panel)
+			o2WebProxy.stopOnFormClose(topPanel)
+					  .add_Proxy_ActionsPanel(panel)
 					  .add_Proxy_ToolsPanel();
 					
 			
@@ -211,6 +307,11 @@ namespace O2.XRules.Database.APIs
 		}
 		
 		
+		public static O2_Web_Proxy stopOnFormClose(this O2_Web_Proxy o2WebProxy, Control topPanel)
+		{
+			topPanel.onClosed(()=> o2WebProxy.stopWebProxy());
+			return o2WebProxy;
+		}
 			
 	}
 }

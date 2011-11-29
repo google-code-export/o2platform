@@ -17,7 +17,7 @@ namespace O2.XRules.Database.APIs
 		public override string InterceptRemoteUrl(string remoteUrl)	    	    	    	    	    
 		{
 			base.InterceptRemoteUrl(remoteUrl);
-			//"[WAF_Rule_NoGoogle] IN InterceptRemoteUrl".error();			
+			"[WAF_Rule_NoGoogle] IN InterceptRemoteUrl".error();			
 			if (remoteUrl.contains("Porto"))
 			{
 				"No Porto here, replacing it with Benfica".info();
