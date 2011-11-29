@@ -67,7 +67,9 @@ using Ionic.Zip;
 //O2File:_Extra_methods_WinForms_DataGridView.cs
 //O2File:_Extra_methods_WinForms_Misc.cs
 //O2File:_Extra_methods_WinForms_TreeView.cs
+//O2File:_Extra_methods_WinForms_TableList.cs
 //O2File:_Extra_methods_ObjectDetails.cs
+//O2File:_Extra_methods_SourceCodeEditor.cs
 
 namespace O2.XRules.Database.Utils
 {		
@@ -429,166 +431,8 @@ namespace O2.XRules.Database.Utils
 						? mappedFile
 						: null;					
 		}
-	}
-	
+	}			
 		
-	public static class _Extra_ListView_ExtensionMethods
-	{
-		public static ascx_TableList setWidthToContent(this ascx_TableList tableList)
-		{
-			tableList.makeColumnWidthMatchCellWidth();
-			tableList.Resize+=(e,s)=> {	 tableList.makeColumnWidthMatchCellWidth();};
-			tableList.getListViewControl().ColumnClick+=(e,s)=> { tableList.makeColumnWidthMatchCellWidth();};
-			return tableList;
-		}
-		
-		public static ascx_TableList show_In_ListView<T>(this IEnumerable<T> data)
-		{
-			return data.show_In_ListView("View data in List Viewer", 600,400);
-		}
-		
-		public static ascx_TableList show_In_ListView<T>(this IEnumerable<T> data, string title, int width, int height)
-		{
-			return O2Gui.open<Panel>(title, width, height).add_TableList().show(data);
-		}
-		
-		public static ascx_TableList columnsWidthToMatchControlSize(this ascx_TableList tableList)
-		{		
-			tableList.parent().widthAdd(1);		// this trick forces it (need to find how to invoke it directly
-			return tableList;
-		}
-		
-		public static ascx_TableList afterSelect_get_Cell(this ascx_TableList tableList, int rowNumber, Action<string> callback)
-		{
-			tableList.afterSelect(
-				(selectedRows)=>{			
-						if (selectedRows.size()==1)
-						{
-						 	var selectedRow = selectedRows[0]; 
-						 	var values = selectedRow.values();
-						 	if (values.size() > rowNumber)
-						 		callback(values[rowNumber]);
-						}
-					});
-			return tableList;
-		}
-						
-		public static ascx_TableList afterSelect_set_Cell(this ascx_TableList tableList, int rowNumber, TextBox textBox)
-		{
-			return tableList.afterSelect_get_Cell(rowNumber,(value)=> textBox.set_Text(value));			
-		}
-		
-		public static ascx_TableList afterSelect_get_Row(this ascx_TableList tableList, Action<ListViewItem> callback)
-		{
-			tableList.afterSelect(
-				(selectedRows)=>{			
-						if (selectedRows.size()==1)
-						 	callback(selectedRows[0]);						
-					});
-			return tableList;
-		}
-		
-		public static ascx_TableList afterSelect_get_RowIndex(this ascx_TableList tableList, Action<int> callback)
-		{
-			tableList.afterSelect(
-				(selectedRows)=>{			
-						if (selectedRows.size()==1)
-						 	callback(selectedRows[0].Index);						
-					});
-			return tableList;
-		}
-		
-		public static ascx_TableList afterSelect<T>(this ascx_TableList tableList, List<T> items, Action<T> callback)
-		{
-			tableList.afterSelect(
-				(selectedRows)=>{			
-						if (selectedRows.size()==1)
-						{
-							var index = selectedRows[0].Index;							
-							if (index < items.size())
-						 		callback(items[index]);						
-						}
-					});
-			return tableList;
-		}
-		
-		public static ascx_TableList selectFirst(this ascx_TableList tableList)
-		{
-			return (ascx_TableList)tableList.invokeOnThread(
-				()=>{
-						var listView = tableList.getListViewControl();
-						listView.SelectedIndices.Clear();
-						listView.SelectedIndices.Add(0);
-						return tableList;
-					});
-		}
-	}
-
-
-	
-	public static class _Extra_sourceCodeViewer_ExtensionMethods
-	{
-
-		public static ascx_SourceCodeEditor editor(this ascx_SourceCodeEditor codeEditor)
-		{
-			return codeEditor;
-		}
-		
-		public static ascx_SourceCodeViewer onTextChange(this ascx_SourceCodeViewer codeViewer, Action<string> callback)
-		{
-			codeViewer.editor().onTextChange(callback);
-			return codeViewer;
-		}
-		
-		public static ascx_SourceCodeEditor onTextChange(this ascx_SourceCodeEditor codeEditor, Action<string> callback)
-		{
-			codeEditor.invokeOnThread(
-				()=>{
-						codeEditor.eDocumentDataChanged+= callback;
-					});
-			return codeEditor;
-		}
-		
-		public static ascx_SourceCodeViewer open(this ascx_SourceCodeViewer codeViewer, string file , int line)
-		{
-			codeViewer.editor().open(file, line);
-			return codeViewer;
-		}
-		
-		public static ascx_SourceCodeEditor open(this ascx_SourceCodeEditor codeEditor, string file , int line)
-		{
-			codeEditor.open(file);
-			codeEditor.gotoLine(line);
-			return codeEditor;
-		}
-		
-		public static ascx_SourceCodeViewer gotoLine(this ascx_SourceCodeViewer codeViewer, int line)
-		{
-			codeViewer.editor().gotoLine(line);
-			return codeViewer;
-		}
-		
-		public static ascx_SourceCodeViewer gotoLine(this ascx_SourceCodeViewer codeViewer, int line, int showLinesBelow)
-		{
-			codeViewer.editor().gotoLine(line,showLinesBelow);
-			return codeViewer;
-		}
-		
-		public static ascx_SourceCodeEditor gotoLine(this ascx_SourceCodeEditor codeEditor, int line, int showLinesBelow)
-		{
-			if (line>0)
-			{
-				codeEditor.caret_Line(line,-showLinesBelow);			
-				codeEditor.caret_Line(line,showLinesBelow);						
-				codeEditor.gotoLine(line);
-			}
-			return codeEditor;
-		}
-	}
-	
-	
-	
-	
 	public static class _Extra_ComObject_ExtensionMethods
 	{
 		//the results of this are not consistent
