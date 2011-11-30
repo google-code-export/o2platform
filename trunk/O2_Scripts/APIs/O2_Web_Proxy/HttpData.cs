@@ -4,6 +4,8 @@ using System.IO;
 using System.Net;
 using System.Collections.Generic;
 using O2.Kernel.ExtensionMethods;
+using O2.XRules.Database.Utils;
+//O2File:_Extra_methods_Misc.cs
 
 namespace O2.XRules.Database.APIs 
 {         
@@ -12,48 +14,59 @@ namespace O2.XRules.Database.APIs
 		public HttpWebRequest  WebRequest 	 { get; set; }
 		public HttpWebResponse WebResponse   { get; set; }				
 		
-		public String    	   RequestHeaders_Raw { get; set; }	
-		public String    	   ResponseHeaders_Raw { get; set; }			
+		public String    	   				Request_Headers_Raw { get; set; }	
+		public String    	   				Response_Headers_Raw { get; set; }			
+		public List<Tuple<String,String>>	Response_Headers { get; set; }			
 		
-		public String    	   RequestPostString { get; set; }			
-		public String    	   ResponseString { get; set; }	
+		public String    	   Request_PostString { get; set; }			
+		public String    	   Response_String { get; set; }	
 		
-		public byte[]    	   RequestPostBytes;
-		public byte[]    	   ResponseBytes;
+		public byte[]    	   Request_PostBytes;
+		public byte[]    	   Response_Bytes;
 		
 		public override string ToString()
 		{
-			return "{0} : {1}".format(WebRequest.RequestUri, ResponseBytes.Length);
+			return "{0} : {1}".format(WebRequest.RequestUri, Response_Bytes.Length);
 		}
 		
-		public string	RequestUri
+		public string	Request_QueryString
 		{
-			get { return WebRequest.RequestUri.str(); } 
+			get { return WebRequest.RequestUri.Query.firstChar("?") 
+							? WebRequest.RequestUri.Query.removeFirstChar()
+							: WebRequest.RequestUri.Query; }
+			set {}
+		}
+		
+		public Uri	Request_Uri
+		{
+			get { return WebRequest.RequestUri; } 
+			set {}
 		}
 	}
-	
-	
-	public static class RequestResponseData_ExtensionMethods
-	{
-		public static RequestResponseData add(this  List<RequestResponseData> requests, 
-													HttpWebRequest webRequest,
-													HttpWebResponse webResponse,
-													byte[] responseBytes,
-													string responseString )
-		{			
-			var requestResponseData = new RequestResponseData()
-            									{
-            										WebRequest = webRequest, 
-													WebResponse = webResponse, 
-													ResponseBytes = responseBytes,
-													ResponseString = responseString 
-            									};	
-			requests.Add(requestResponseData);
-			return requestResponseData;
-		}
-	}
-			                            	
+			
+		
+/*	public class Tuple<T>
+    {
+        public Tuple(T first)
+        {
+            Item1 = first;
+        }
 
+        public T Item1 { get; set; }
+    }
+
+    public class Tuple<T, T2> : Tuple<T>
+    {
+        public Tuple(T first, T2 second)
+            : base(first)
+        {
+            Item2 = second;
+        }
+
+        public T2 Item2 { get; set; }
+        
+    }
+*/
 	
 }
 	

@@ -1,11 +1,4 @@
-﻿//based on the code from http://www.codeproject.com/KB/IP/HTTPSDebuggingProxy.aspx
-//originally coded by @matt_mcknight  
-
-// see O2_Web_Proxy.cs API for a way to consume this Proxy from O2
-
-//O2File:Cache_Objects.cs
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,15 +6,108 @@ using System.Collections;
 using System.Net;
 using System.Threading;
 using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.ExtensionMethods;
+using O2.XRules.Database.APIs;
+//O2File:HttpData.cs
 
 namespace HTTPProxyServer
 {
+	public class ProxyCache
+	{				
+		public static List<RequestResponseData> Requests { get; set; }
+		
+		
+		public static Dictionary<string, RequestResponseData> RequestCache { get; set; }
+		
+//foreach(var requestResponseData in webProxy.requests())
+//	requestCache.add(requestResponseData.Request_Uri.AbsolutePath,requestResponseData);
+		static ProxyCache()
+		{
+			Requests = new List<RequestResponseData>();
+			RequestCache = new Dictionary<string, RequestResponseData>();
+		}		
+	}
+	
+	public static class ProxyCache_ExtensionMethods
+	{
+		public static Dictionary<string, RequestResponseData> requestMappings(this ProxyCache proxyCache)
+		{
+			return ProxyCache.RequestCache;
+		}
+		
+		public static bool hasMapping(this ProxyCache proxyCache, string key)
+		{
+			return proxyCache.requestMappings().hasKey(key);
+		}
+		
+		public static byte[] response_Bytes(this ProxyCache proxyCache, string key)
+		{
+			if (proxyCache.hasMapping(key))
+				return proxyCache.requestMappings().value(key).Response_Bytes;
+			return null;
+		}
+		
+		public static string response_String(this ProxyCache proxyCache, string key)
+		{
+			if (proxyCache.hasMapping(key))
+				return proxyCache.requestMappings().value(key).Response_String;
+			return null;
+		}
+		
+		public static ProxyCache add_ToCache(this ProxyCache proxyCache, RequestResponseData requestResponseData)
+		{
+			ProxyCache.Requests.Add(requestResponseData);
+			ProxyCache.RequestCache.add(requestResponseData.Request_Uri.AbsolutePath,requestResponseData);
+			return proxyCache;
+		}
+	}
+	
+	public static class RequestResponseData_ExtensionMethods
+	{
+		public static RequestResponseData add(	this  ProxyCache proxyCache, 
+												HttpWebRequest webRequest,
+												HttpWebResponse webResponse,
+												byte[] responseBytes,
+												string responseString )
+{			
+			var requestResponseData = new RequestResponseData()
+            									{
+            										WebRequest = webRequest, 
+													WebResponse = webResponse, 
+													Response_Bytes = responseBytes,
+													Response_String = responseString 
+            									};	
+			
+			proxyCache.add_ToCache(requestResponseData);
+			return requestResponseData;
+		}
+	}
+	
+}
+
+
+
+/*
+
+
+//based on the code from http://www.codeproject.com/KB/IP/HTTPSDebuggingProxy.aspx
+//originally coded by @matt_mcknight  
+
+// see O2_Web_Proxy.cs API for a way to consume this Proxy from O2
+
     public static class ProxyCache
     {
-        private static Hashtable _cache = new Hashtable();
+        public static Hashtable _cache  	{ get; set;} 
+        public static Int32 _hits			{ get; set;} 
+        
         private static Object _cacheLockObj = new object();
         private static Object _statsLockObj = new object();
-        private static Int32 _hits;
+        
+        
+        static ProxyCache()
+        {
+        	_cache = new Hashtable();
+        }
 
         public static CacheEntry GetData(HttpWebRequest request)
         {
@@ -146,3 +232,5 @@ namespace HTTPProxyServer
 
     }
 }
+*/    
+
