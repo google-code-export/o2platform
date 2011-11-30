@@ -33,12 +33,13 @@ namespace O2.XRules.Database.APIs
 {
 	public class O2_Web_Proxy_Test
 	{	
-		public void launchTestGui_Proxy_SimpleView()
+		public Panel launchTestGui_Proxy_SimpleView()
 		{
 			var topPanel = "Testing O2 Web Proxy".popupWindow(300,400);
 			new O2_Web_Proxy().createGui_Proxy_SimpleView(topPanel)
 						   	  .startWebProxy();
 			"http://google.com".uri().getHtml();
+			return topPanel;
 		}
 		
  		public void launchTestGui_Proxy_LargeView()
@@ -60,7 +61,7 @@ namespace O2.XRules.Database.APIs
 	}		
 	
 	public static class O2_Web_Proxy_ExtensionMethods_GUI_Helpers
-	{					
+	{								
 		public static O2_Web_Proxy createGui_Proxy_SimpleView(this O2_Web_Proxy o2WebProxy,  Control panel)		
 		{	
 			var topPanel = panel.clear().add_Panel(); 
@@ -73,23 +74,23 @@ namespace O2.XRules.Database.APIs
 			var showLiveRequests = false;
 			
 			var requestId = 0;
-			requests.add_Columns("#","Method","Size","Url");
+			requests.add_Columns("#","Method","Size","AbsolutePath", "Url");
 			
 			Action setColumnsWidth = ()=> requests.set_ColumnsWidth(30, 60,60);			 
 			setColumnsWidth();
 			
 			requests.onDoubleClick<RequestResponseData>(
 				(requestResponseData)=> {
-											var responseCode = "Html for: {0}".format(requestResponseData.RequestUri)
+											var responseCode = "Html for: {0}".format(requestResponseData.Request_Uri)
 																			  .popupWindow()
 																			  .add_GroupBox("Response Data")
 																			  .add_SourceCodeViewer().maximizeViewer()
-																			  .set_Text(requestResponseData.ResponseString, ".html");
-											if (requestResponseData.RequestPostString.valid())
+																			  .set_Text(requestResponseData.Response_String, ".html");
+											if (requestResponseData.Request_PostString.valid())
 												responseCode.parent()
 															.insert_Above(200,"Request Post Data")
 															.add_SourceCodeViewer().maximizeViewer()
-															.set_Text(requestResponseData.RequestPostString, ".html");	
+															.set_Text(requestResponseData.Request_PostString, ".html");	
 										});																	  
 			  
 			Action<RequestResponseData> add_Row = 
@@ -99,11 +100,12 @@ namespace O2.XRules.Database.APIs
 										var rowData = new List<string>()
 											{	(++requestId).str(),
 												rrData.WebRequest.Method.str(),									
-												rrData.ResponseString.size().str(),
+												rrData.Response_String.size().str(),
+												rrData.WebRequest.RequestUri.AbsolutePath,
 												rrData.WebRequest.RequestUri.str()
 											 };
 										return rowData;	   	
-									});							
+									});							 
 						  };			
 			
 			requests.afterSelect<RequestResponseData>(
@@ -133,10 +135,10 @@ namespace O2.XRules.Database.APIs
 						 .append_Link("Proxy Stop",()=> o2WebProxy.stopWebProxy())			 
 						 .append_CheckBox("Real-Time View", (value)=> showLiveRequests = value).@check();
 			
-			/*actions_Panel.add_Label("Test sites:",20,0)		 
+			actions_Panel.add_Label("Test sites:",20,0)		 
 						 .append_Link("BBC", ()=> "http://news.bbc.co.uk".get_Html())
 						 .append_Link("OWASP",  ()=> "http://www.owasp.org".get_Html())
-						 .append_Link("google",  ()=> "http://www.google.com".get_Html()).click();*/
+						 .append_Link("google",  ()=> "http://www.google.com".get_Html());//.click();
 			return o2WebProxy;						 
 		}
 		
@@ -168,8 +170,8 @@ namespace O2.XRules.Database.APIs
 							(requestResponseData)=>{
 														requestProperties.show(requestResponseData.WebRequest);
 														responseProperties.show(requestResponseData.WebResponse); 
-														responseData.set_Text(requestResponseData.ResponseString);
-														requestData.set_Text(requestResponseData.RequestPostString);
+														responseData.set_Text(requestResponseData.Response_String);
+														requestData.set_Text(requestResponseData.Request_PostString);
 													});			
 			requestsList.onDoubleClick<RequestResponseData>(
 							(requestResponseData)=> {
@@ -213,7 +215,7 @@ namespace O2.XRules.Database.APIs
 											//show.info(requestResponseData.WebRequest);
 											//"Content for {0} with size {1}".info(requestResponseData, htmlContent.size());
 											//htmlContent.info();
-											sourceCodeViewer.set_Text(requestResponseData.ResponseString, ".html");
+											sourceCodeViewer.set_Text(requestResponseData.Response_String, ".html");
 										});
 //O2File:_Extra_methods_WinForms_Controls.cs		 	
 //O2File:Scripts_ExtensionMethods.cs

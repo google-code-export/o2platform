@@ -25,7 +25,9 @@ using O2.XRules.Database.APIs;
 using O2.XRules.Database.Utils;
 
 //O2File:HttpData.cs
+//O2File:ProxyCache.cs
 //O2File:_Extra_methods_Web.cs
+//O2File:_Extra_methods_Items.cs
 
 namespace HTTPProxyServer
 {       
@@ -39,10 +41,11 @@ namespace HTTPProxyServer
         public static Func<Uri,string, string> HtmlContentReplace;
         public static Action<HttpWebRequest> InterceptWebRequest;
         public static Action<RequestResponseData> OnResponseReceived;
-        
-        public static List<RequestResponseData> Requests { get; set; }
+                
         public bool CaptureRequests { get; set; }
         public bool ProxyStarted { get; set; }
+        
+        public static ProxyCache proxyCache;
 
 		//Original
         private static readonly ProxyServer _server = new ProxyServer();
@@ -60,20 +63,14 @@ namespace HTTPProxyServer
 
         private TcpListener _listener;
         private Thread _listenerThread;
-        private Thread _cacheMaintenanceThread;
+//        private Thread _cacheMaintenanceThread;
                 
         public IPAddress ListeningIPInterface 	{ get ; set; } //DC                
         public Int32 ListeningPort 				{ get ; set; } //DC        
 
         private ProxyServer()
-        {
-        	
+        {        	
         	setDefaultValues();
-        	        	
-         /*   ServicePointManager.ServerCertificateValidationCallback = 
-                    delegate { 
-                                return true; 
-                        }      ;            */
             ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
         }
 		
@@ -89,6 +86,7 @@ namespace HTTPProxyServer
 		
 		public void setDefaultValues()
 		{
+			proxyCache = new ProxyCache();
 			CaptureRequests = true;
 			this.clearPastRequests();
 			IPAddress ipAddress = IPAddress.Loopback;
@@ -126,10 +124,10 @@ namespace HTTPProxyServer
 			"[ProxyServer] listener started".info();
             _listenerThread = new Thread(new ParameterizedThreadStart(Listen));
                         
-            _cacheMaintenanceThread = new Thread(new ThreadStart(ProxyCache.CacheMaintenance));
+            //_cacheMaintenanceThread = new Thread(new ThreadStart(ProxyCache.CacheMaintenance));
 
             _listenerThread.Start(_listener);
-            _cacheMaintenanceThread.Start();
+//            _cacheMaintenanceThread.Start();
 			this.ProxyStarted = true;
             return true;
         }
@@ -143,7 +141,7 @@ namespace HTTPProxyServer
             //wait for server to finish processing current connections...
 
             _listenerThread.Abort();
-            _cacheMaintenanceThread.Abort();
+//            _cacheMaintenanceThread.Abort();
             _listenerThread.Join();
             _listenerThread.Join();
         }
@@ -189,7 +187,7 @@ namespace HTTPProxyServer
             Stream outStream = clientStream; //use this stream for writing out - may change if we use ssl
             SslStream sslStream = null;
             StreamReader clientStreamReader = new StreamReader(clientStream);
-            CacheEntry cacheEntry = null;
+            //CacheEntry cacheEntry = null;
             MemoryStream cacheStream = null;
 
 			Action setMonitor = 
@@ -229,7 +227,7 @@ namespace HTTPProxyServer
                 
                 int contentLen = 0;
                 
-                Action handleSLL_CONNECT = 
+                Action handleSLL_CONNECT_withCaller = 
                 	()=>{
 			                if (splitBuffer[0].ToUpper() == "CONNECT")
 			                {
@@ -245,7 +243,15 @@ namespace HTTPProxyServer
 			                    connectStreamWriter.WriteLine("Proxy-agent: matt-dot-net");
 			                    connectStreamWriter.WriteLine();
 			                    connectStreamWriter.Flush();
-			
+			                    
+			                    connectStreamWriter.Close();   //see if it has side effects with ssl sites
+			                }
+						};
+
+				Action handleSLL_CONNECT_withRemote = 
+                	()=>{
+			                if (splitBuffer[0].ToUpper() == "CONNECT")
+			                {			                			
 			                    sslStream = new SslStream(clientStream, false);
 			                    try
 			                    {
@@ -255,11 +261,12 @@ namespace HTTPProxyServer
 			                    catch (Exception ex)
 			                    {
 			                    	"[Proxy Server] in sslStream.AuthenticateAsServer: {0}".error(ex.Message);
-			                    	ex.log();
+			                    	"NOTE: this error is usually caused by running with UAC, start the script in non UAC".lineBefore().lineBeforeAndAfter().info();
+			                    	//ex.log();
 			                        //Console.WriteLine(ex.Message);
 			                        sslStream.Close();
 			                        clientStreamReader.Close();
-			                        connectStreamWriter.Close();
+			                        //connectStreamWriter.Close();
 			                        clientStream.Close();
 			                        return;
 			                    }
@@ -283,18 +290,23 @@ namespace HTTPProxyServer
 			                }
 		                };
 
-				handleSLL_CONNECT();
+				//handleSLL_CONNECT();
+				handleSLL_CONNECT_withCaller();
 				
-                //construct the web request that we are going to issue on behalf of the client.				
-								
+				handleSLL_CONNECT_withRemote();
+				                
+				
 				// O2 callback				
                 if (InterceptRemoteUrl.notNull())						
                 {                	
                     remoteUri = InterceptRemoteUrl(remoteUri);
 				}
 				
+				
+				
 				Action createWebRequest =
 					()=>{								
+							//construct the web request that we are going to issue on behalf of the client.
 			                webReq = (HttpWebRequest)HttpWebRequest.Create(remoteUri);
 			                webReq.Method = method;
 			                webReq.ProtocolVersion = version;
@@ -327,10 +339,12 @@ namespace HTTPProxyServer
                 if (InterceptWebRequest.notNull())
                     InterceptWebRequest(webReq);
                             
-                //using the completed request, check our cache
+/*                //using the completed request, check our cache
                 if (method.ToUpper() == "GET")
                     cacheEntry = ProxyCache.GetData(webReq);
-                else if (method.ToUpper() == "POST")
+                else 
+*/                
+                if (method.ToUpper() == "POST")
                 {
                     char[] postBuffer = new char[contentLen];
                     int bytesRead;
@@ -343,7 +357,7 @@ namespace HTTPProxyServer
                         sw.Write(postBuffer, 0, bytesRead);
                         
                         postData.Write(postBuffer, 0, bytesRead);
-                        "totalBytesRead: {0}".error(totalBytesRead);
+                        //"totalBytesRead: {0}".error(totalBytesRead);
                         //if (ProxyServer.Server.DumpPostData)
                         //    Console.Write(postBuffer, 0, bytesRead);
                     }              
@@ -369,26 +383,55 @@ namespace HTTPProxyServer
 						};
 						
 				Action handleResponse = 
-					()=>{										
-	                        List<Tuple<String,String>> responseHeaders = ProcessResponse(response, rawResponseHeaders);
+					()=>{											                        
 	                        StreamWriter myResponseWriter = new StreamWriter(outStream);
 	                        Stream responseStream = response.GetResponseStream();
+	                        	                        
+	                        //use cache
+	                        if (proxyCache.hasMapping(webReq.RequestUri.AbsolutePath))
+	                        {
+	                        	"Cache Hit for: {0}".error(webReq.RequestUri.AbsolutePath);
+	                        	
+	                        	var cacheObject = proxyCache.requestMappings()[webReq.RequestUri.AbsolutePath];
+	                        	
+	                        	WriteResponseStatus(cacheObject.WebResponse.StatusCode,
+	                        					    cacheObject.WebResponse.StatusDescription, 
+	                        					    myResponseWriter);
+	                        					    
+	                            WriteResponseHeaders(myResponseWriter, cacheObject.Response_Headers);
+	                            /*var message = cacheObject.Response_String.replace("Web","Web_");
+	                            var bytes = Encoding.ASCII.GetBytes(message);
+	                            outStream.Write(bytes, 0 , bytes.Length);
+	                            */
+	                        	outStream.Write(cacheObject.Response_Bytes, 0, cacheObject.Response_Bytes.Length);
+	                        	//"cacheObject.Response_String: {0}".info(cacheObject.Response_String);
+	                        	
+		                        responseStream.Close();
+		                        outStream.Flush();
+		                        
+		                        responseStream.Close();
+		                        response.Close();
+		                        myResponseWriter.Close();		                            		                        
+		                        return;
+		                    }
+		                    "no Cache Hit for: {0}".debug(webReq.RequestUri.AbsolutePath);
+							List<Tuple<String,String>> responseHeaders = ProcessResponse(response, rawResponseHeaders);	                        
 	                        try
 	                        {	                        	
 	                            //send the response status and response headers
 	                            WriteResponseStatus(response.StatusCode,response.StatusDescription, myResponseWriter);
 	                            WriteResponseHeaders(myResponseWriter, responseHeaders);
 	
-	                            DateTime? expires = null;
-	                            CacheEntry entry = null;
-	                            Boolean canCache = (sslStream == null && ProxyCache.CanCache(response.Headers, ref expires));
+	                            //DateTime? expires = null;
+	                            //CacheEntry entry = null;
+/*	                            Boolean canCache = (sslStream == null && ProxyCache.CanCache(response.Headers, ref expires));
 	                            if (canCache)
 	                            {
 	                                entry = ProxyCache.MakeEntry(webReq, response,responseHeaders, expires);
 	                                if (response.ContentLength > 0)
 	                                    cacheStream = new MemoryStream(entry.ResponseBytes);
 	                            }
-	
+*/	
 	                            Byte[] buffer;
 	                            if (response.ContentLength > 0)
 	                                buffer = new Byte[response.ContentLength];
@@ -421,14 +464,16 @@ namespace HTTPProxyServer
                             							? memoryStream.ToArray().gzip_Decompress()
                             							: memoryStream.ToArray().ascii();                            							                            	
                             	                            	
-                            	var requestResponseData = ProxyServer.Requests.add(webReq, response, memoryStream.ToArray(), responseString);
+                            	var requestResponseData = proxyCache.add(webReq, response, memoryStream.ToArray(), responseString);
                             	
-                            	requestResponseData.RequestHeaders_Raw = rawRequestHeaders.str();                            	
-                            	requestResponseData.ResponseHeaders_Raw = rawResponseHeaders.str();
+                            	requestResponseData.Request_Headers_Raw = rawRequestHeaders.str();                            	
+                            	requestResponseData.Response_Headers_Raw = rawResponseHeaders.str();                            	
+                            	requestResponseData.Response_Headers = responseHeaders;
+                            	
                             	if (requestPostBytes.notNull())
                             	{
-                            		requestResponseData.RequestPostBytes = requestPostBytes; 
-                    				requestResponseData.RequestPostString = requestPostBytes.ascii();
+                            		requestResponseData.Request_PostBytes = requestPostBytes; 
+                    				requestResponseData.Request_PostString = requestPostBytes.ascii();
                     			}
                             	
 	                            if (OnResponseReceived.notNull()) 	                            
@@ -436,15 +481,16 @@ namespace HTTPProxyServer
 	                            		
 	                            responseStream.Close();
 	                            
-	                            if (cacheStream != null)
+	                            /*if (cacheStream != null)
 	                            {
 	                                cacheStream.Flush();
 	                                cacheStream.Close();
-	                            }
+	                            }*/
 	
 	                            outStream.Flush();
-	                            if (canCache)
+/*	                            if (canCache)
 	                                ProxyCache.AddData(entry);
+*/	                                
 	                        }
 	                        catch (Exception ex)
 	                        {
@@ -471,7 +517,7 @@ namespace HTTPProxyServer
 		                		"[ProxyServer] Response was null".error();
 						};
 				
-				Action handleResponse_viaCache = 
+/*				Action handleResponse_viaCache = 
 					()=>{
 							"CACHE SHOULD BE DISABLED (for now)".error();
 		                    //serve from cache
@@ -507,6 +553,8 @@ namespace HTTPProxyServer
                 {
                 	handleResponse_viaCache();
                 }
+                */
+                handleResponse_noCache();
             }
             catch (Exception ex)
             {
@@ -665,19 +713,19 @@ namespace HTTPProxyServer
     {
     	public static ProxyServer clearPastRequests(this ProxyServer proxyServer)
     	{
-    		if (ProxyServer.Requests.notNull())
+    		if (ProxyCache.Requests.notNull())
     		{
     			"[ProxyServer] clearing PastRequests object".info();
-    			ProxyServer.Requests.Clear();
+    			ProxyCache.Requests.Clear();
     		}
     		else    		
-	    		ProxyServer.Requests = new List<RequestResponseData>();
+	    		ProxyCache.Requests = new List<RequestResponseData>();
 	    	return proxyServer;
     	}
     	
     	public static List<RequestResponseData> requests(this ProxyServer proxyServer)
     	{
-    		return ProxyServer.Requests;
+    		return ProxyCache.Requests;
     	}
     }
     

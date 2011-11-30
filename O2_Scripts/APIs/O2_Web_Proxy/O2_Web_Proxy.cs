@@ -17,9 +17,7 @@ using HTTPProxyServer;
 //O2File:API_WinProxy.cs 
 //O2File:ProxyServer.cs
 
-//O2File:_Extra_methods_Misc.cs
-//O2File:_Extra_methods_Files.cs  
-  
+
 namespace O2.XRules.Database.APIs
 {
 	
@@ -50,7 +48,7 @@ namespace O2.XRules.Database.APIs
     		IP = "127.0.0.1";
     		Port = this.DEFAULT_PORT;    		
     		return this;
-    	}
+    	}    	    	
 	}
 	
 	public static class O2_Web_Proxy_ExtensionMethods_ProxyActions
@@ -106,14 +104,19 @@ namespace O2.XRules.Database.APIs
 		
 		public static O2_Web_Proxy stopWebProxy(this O2_Web_Proxy o2WebProxy)
 		{ 
-			o2WebProxy.clearBrowserProxy();
-			"Stopping Web Proxy".info();
-			ProxyServer.Server.Stop();
+			try
+			{
+				o2WebProxy.clearBrowserProxy();
+				"Stopping Web Proxy".info();
+				ProxyServer.Server.Stop();
+			}
+			catch(Exception ex)
+			{
+				"[O2_Web_Proxy] stopWebProxy : {0}".error(ex.Message);
+			}
 			return o2WebProxy;
-		}
-		
-		
-	}
+		}												
+	}			
 }
 
 	

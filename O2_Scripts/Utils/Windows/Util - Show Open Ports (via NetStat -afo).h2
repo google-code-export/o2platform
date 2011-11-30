@@ -17,8 +17,8 @@ Action showNetStatOnTable =
 							   let value0 = fragments.value(0)
 							   let value1 = fragments.value(1)
 							   let value2 = fragments.value(2)
-							   let value3 = fragments.value(3)
-							   let value4 = fragments.value(4)							   
+							   let value3 = (fragments.value(4).isNull()) ? "" : fragments.value(3)
+							   let value4 = fragments.value(4) ?? fragments.value(3)
 							   select new { 
 							   				@Type = value0 ,   
 							   				//Local_Address = value1, 
