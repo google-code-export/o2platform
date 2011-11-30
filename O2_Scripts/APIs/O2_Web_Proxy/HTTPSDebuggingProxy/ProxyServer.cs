@@ -387,34 +387,36 @@ namespace HTTPProxyServer
 	                        StreamWriter myResponseWriter = new StreamWriter(outStream);
 	                        Stream responseStream = response.GetResponseStream();
 	                        	                        
-	                        //use cache
-	                        if (proxyCache.hasMapping(webReq.RequestUri.AbsolutePath))
+	                        if (false) // disable cache for now
 	                        {
-	                        	"Cache Hit for: {0}".error(webReq.RequestUri.AbsolutePath);
-	                        	
-	                        	var cacheObject = proxyCache.requestMappings()[webReq.RequestUri.AbsolutePath];
-	                        	
-	                        	WriteResponseStatus(cacheObject.WebResponse.StatusCode,
-	                        					    cacheObject.WebResponse.StatusDescription, 
-	                        					    myResponseWriter);
-	                        					    
-	                            WriteResponseHeaders(myResponseWriter, cacheObject.Response_Headers);
-	                            /*var message = cacheObject.Response_String.replace("Web","Web_");
-	                            var bytes = Encoding.ASCII.GetBytes(message);
-	                            outStream.Write(bytes, 0 , bytes.Length);
-	                            */
-	                        	outStream.Write(cacheObject.Response_Bytes, 0, cacheObject.Response_Bytes.Length);
-	                        	//"cacheObject.Response_String: {0}".info(cacheObject.Response_String);
-	                        	
-		                        responseStream.Close();
-		                        outStream.Flush();
-		                        
-		                        responseStream.Close();
-		                        response.Close();
-		                        myResponseWriter.Close();		                            		                        
-		                        return;
-		                    }
-		                    "no Cache Hit for: {0}".debug(webReq.RequestUri.AbsolutePath);
+		                        if (proxyCache.hasMapping(webReq.RequestUri.AbsolutePath))
+		                        {
+		                        	"Cache Hit for: {0}".error(webReq.RequestUri.AbsolutePath);
+		                        	
+		                        	var cacheObject = proxyCache.requestMappings()[webReq.RequestUri.AbsolutePath];
+		                        	
+		                        	WriteResponseStatus(cacheObject.WebResponse.StatusCode,
+		                        					    cacheObject.WebResponse.StatusDescription, 
+		                        					    myResponseWriter);
+		                        					    
+		                            WriteResponseHeaders(myResponseWriter, cacheObject.Response_Headers);
+		                            /*var message = cacheObject.Response_String.replace("Web","Web_");
+		                            var bytes = Encoding.ASCII.GetBytes(message);
+		                            outStream.Write(bytes, 0 , bytes.Length);
+		                            */
+		                        	outStream.Write(cacheObject.Response_Bytes, 0, cacheObject.Response_Bytes.Length);
+		                        	//"cacheObject.Response_String: {0}".info(cacheObject.Response_String);
+		                        	
+			                        responseStream.Close();
+			                        outStream.Flush();
+			                        
+			                        responseStream.Close();
+			                        response.Close();
+			                        myResponseWriter.Close();		                            		                        
+			                        return;
+			                    }
+			                    "no Cache Hit for: {0}".debug(webReq.RequestUri.AbsolutePath);
+		                   	}
 							List<Tuple<String,String>> responseHeaders = ProcessResponse(response, rawResponseHeaders);	                        
 	                        try
 	                        {	                        	
