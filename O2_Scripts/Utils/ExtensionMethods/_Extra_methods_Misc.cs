@@ -88,6 +88,23 @@ namespace O2.XRules.Database.Utils
 			return _string.lastChar() == lastChar;
 		}
 		
+		public static string firstChar(this string _string)
+		{
+			if (_string.size() > 0)
+				return _string[0].str();
+			return "";			
+		}
+		
+		public static bool firstChar(this string _string, char lastChar)
+		{
+			return _string.firstChar(lastChar.str());
+		}
+		
+		public static bool firstChar(this string _string, string lastChar)
+		{
+			return _string.firstChar() == lastChar;
+		}
+		
 		public static string add_RandomLetters(this string _string)
 		{
 			return _string.add_RandomLetters(10);

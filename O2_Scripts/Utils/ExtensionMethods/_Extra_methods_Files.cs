@@ -26,6 +26,11 @@ namespace O2.XRules.Database.Utils
 			return (T)Serialize.getDeSerializedObjectFromString(_string, typeof(T));  
 		}
 		
+		public static string parentFolder(this string path)
+		{
+			return path.directoryName();
+		}
+		
 		public static string fileName_WithoutExtension(this string filePath)
 		{
 			return Path.GetFileNameWithoutExtension(filePath);
@@ -90,6 +95,22 @@ namespace O2.XRules.Database.Utils
 			foreach(var folder in folders)
 				files.AddRange(folder.files(filter, recursive));
 			return files;
+		}
+		
+		public static bool deleteIfExists(this string file)
+		{
+			try
+			{
+				if (file.fileExists())
+					Files.deleteFile(file);
+				return true;
+			}
+			catch(Exception ex)
+			{
+				"[deleteIfExists] : {0}".error(ex.Message);
+				return false;
+			}
+			
 		}
 		
 		public static string findParentFolderCalled(this string fullPath, string folderToFind)
