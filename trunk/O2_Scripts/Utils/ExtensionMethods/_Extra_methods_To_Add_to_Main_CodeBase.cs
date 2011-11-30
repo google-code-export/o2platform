@@ -245,65 +245,6 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-	public static class _Extra_DownloadFiles_ExtensionMethods
-	{		
-		public static string download(this string fileToDownload)
-		{
-			return fileToDownload.uri().download();
-		}
-		
-		public static string download(this Uri uri)
-		{
-			return uri.downloadFile();
-		}
-		public static string downloadFile(this Uri uri)
-		{
-			if (uri.isNull())
-				return null;
-			var fileName = uri.Segments.Last();
-			if (fileName.valid())
-			{
-				var targetFile = "".tempDir().pathCombine(fileName);
-				Files.deleteFile(targetFile);
-				return downloadFile(uri, targetFile);
-			}
-			else
-				"Could not extract filename from provided uri: {0}".error(uri.str());
-			return null;					
-		}
-		
-		public static string download(this string fileToDownload, string targetFile)
-		{
-			return downloadFile(fileToDownload.uri(),targetFile);
-		}
-		
-		public static string downloadFile(this Uri uri, string targetFile)
-		{
-			if (uri.isNull())
-				return null;
-			"Downloading file {0} to location:{1}".info(uri.str(), targetFile);
-			if (targetFile.fileExists())		// don't download if file already exists
-			{
-				"File already existed, so skipping download".debug();
-				return targetFile;
-			}
-			var sync = new System.Threading.AutoResetEvent(false); 
-				var downloadControl = O2Gui.open<ascx_DownloadFile>("Downloading: {0}".format(uri.str()), 455  ,170 );							
-				downloadControl.setAutoCloseOnDownload(true);							
-				downloadControl.setCallBackWhenCompleted((file)=>	downloadControl.parentForm().close());
-				downloadControl.onClosed(()=>sync.Set());
-				downloadControl.setDownloadDetails(uri.str(), targetFile);							
-				downloadControl.downloadFile();
-			sync.WaitOne();					 	// wait for download complete or form to be closed
-			if (targetFile.fileExists())		
-				return targetFile;
-			return null;
-		}								
-	}
-	
-						
-	
-	
 	public static class _Extra_XmlLinq_ExtensiomMethods
 	{
 		public static XAttribute value(this XAttribute xAttribute, string value)

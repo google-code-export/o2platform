@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.IO;
 using System.Text;
+using System.Linq;
 using System.IO.Compression;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,10 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
+using O2.Views.ASCX.CoreControls;
+using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
+
 using System.Runtime.Serialization.Json;
 
 //O2Ref:System.ServiceModel.Web.dll
@@ -19,9 +23,20 @@ using System.Runtime.Serialization.Json;
 
 namespace O2.XRules.Database.Utils
 {	
+	public static class _Extra_Web_ExtensionMethods_Uri
+	{
+		public static string pathNoQuery(this Uri uri)
+		{
+			return uri.AbsoluteUri.remove(uri.Query);
+		}
+	}
 	
 	public static class _Extra_Web_ExtensionMethods_Http
 	{
+		public static string html(this string url)
+		{
+			return url.get_Html();
+		}
 		public static string get_Html(this string url)
 		{
 			if (url.isUri())
@@ -34,6 +49,62 @@ namespace O2.XRules.Database.Utils
 		{
 			return url.getHtml();
 		}
+	}
+	
+	public static class _Extra_DownloadFiles_ExtensionMethods
+	{		
+		public static string download(this string fileToDownload)
+		{
+			return fileToDownload.uri().download();
+		}
+		
+		public static string download(this Uri uri)
+		{
+			return uri.downloadFile();
+		}
+		public static string downloadFile(this Uri uri)
+		{
+			if (uri.isNull())
+				return null;
+			var fileName = uri.Segments.Last();
+			if (fileName.valid())
+			{
+				var targetFile = "".tempDir().pathCombine(fileName);
+				Files.deleteFile(targetFile);
+				return downloadFile(uri, targetFile);
+			}
+			else
+				"Could not extract filename from provided uri: {0}".error(uri.str());
+			return null;					
+		}
+		
+		public static string download(this string fileToDownload, string targetFile)
+		{
+			return downloadFile(fileToDownload.uri(),targetFile);
+		}
+		
+		public static string downloadFile(this Uri uri, string targetFile)
+		{
+			if (uri.isNull())
+				return null;
+			"Downloading file {0} to location:{1}".info(uri.str(), targetFile);
+			if (targetFile.fileExists())		// don't download if file already exists
+			{
+				"File already existed, so skipping download".debug();
+				return targetFile;
+			}
+			var sync = new System.Threading.AutoResetEvent(false); 
+				var downloadControl = O2Gui.open<ascx_DownloadFile>("Downloading: {0}".format(uri.str()), 455  ,170 );							
+				downloadControl.setAutoCloseOnDownload(true);							
+				downloadControl.setCallBackWhenCompleted((file)=>	downloadControl.parentForm().close());
+				downloadControl.onClosed(()=>sync.Set());
+				downloadControl.setDownloadDetails(uri.str(), targetFile);							
+				downloadControl.downloadFile();
+			sync.WaitOne();					 	// wait for download complete or form to be closed
+			if (targetFile.fileExists())		
+				return targetFile;
+			return null;
+		}								
 	}
 	
 	public static class _Extra_Web_ExtensionMethods_GZip

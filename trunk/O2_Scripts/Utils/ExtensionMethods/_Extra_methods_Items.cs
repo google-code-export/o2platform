@@ -213,6 +213,8 @@ namespace O2.XRules.Database.Utils
         }
 
         public T First { get; set; }
+        
+        public T Item1 { get { return First; } set { First = value;} } // to make it compatible with .NET 4.0 ones
     }
 
     public class Tuple<T, T2> : Tuple<T>
@@ -224,6 +226,8 @@ namespace O2.XRules.Database.Utils
         }
 
         public T2 Second { get; set; }
+        
+        public T2 Item2  { get { return Second; } set { Second = value;} }
     }
 
     public class Tuple<T, T2, T3> : Tuple<T, T2>
