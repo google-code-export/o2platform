@@ -27,6 +27,7 @@ using O2.XRules.Database.Utils;
 //O2File:HttpData.cs
 //O2File:ProxyCache.cs
 //O2File:_Extra_methods_Web.cs
+//O2File:_Extra_methods_Misc.cs
 //O2File:_Extra_methods_Items.cs
 
 namespace HTTPProxyServer
@@ -387,8 +388,9 @@ namespace HTTPProxyServer
 	                        StreamWriter myResponseWriter = new StreamWriter(outStream);
 	                        Stream responseStream = response.GetResponseStream();
 	                        	                        
-	                        if (false) // disable cache for now
+	                        if (proxyCache.enabled()) // disable cache for now
 	                        {
+	                        	"proxyCache was enabled".info();
 		                        if (proxyCache.hasMapping(webReq.RequestUri.AbsolutePath))
 		                        {
 		                        	"Cache Hit for: {0}".error(webReq.RequestUri.AbsolutePath);
@@ -417,7 +419,8 @@ namespace HTTPProxyServer
 			                    }
 			                    "no Cache Hit for: {0}".debug(webReq.RequestUri.AbsolutePath);
 		                   	}
-							List<Tuple<String,String>> responseHeaders = ProcessResponse(response, rawResponseHeaders);	                        
+							var responseHeaders = ProcessResponse(response, rawResponseHeaders);
+							"Got {0} respone headers".info(responseHeaders.Count);
 	                        try
 	                        {	                        	
 	                            //send the response status and response headers
@@ -497,7 +500,7 @@ namespace HTTPProxyServer
 	                        catch (Exception ex)
 	                        {
 	                            Console.WriteLine(ex.Message);
-	                            ex.log("handleResponse_noCache");
+	                            "[ProxyServer] handleResponse_noCache: {0}".error(ex.logStackTrace().Message);	                            
 	                        }
 	                        finally
 	                        {
@@ -584,6 +587,7 @@ namespace HTTPProxyServer
 
         private static List<Tuple<String,String>> ProcessResponse(HttpWebResponse response, StringBuilder rawResponseHeaders)
         {
+        	"ProcessResponse start".debug();
             String value=null;
             String header=null;
             List<Tuple<String, String>> returnHeaders = new List<Tuple<String, String>>();
@@ -610,6 +614,9 @@ namespace HTTPProxyServer
 
             }
             returnHeaders.Add(new Tuple<String, String>("X-Proxied-By", "O2-Platform-Proxy")); //"matt-dot-net proxy"));
+            
+            "ProcessResponse end".debug();
+            
             return returnHeaders;
         }
 

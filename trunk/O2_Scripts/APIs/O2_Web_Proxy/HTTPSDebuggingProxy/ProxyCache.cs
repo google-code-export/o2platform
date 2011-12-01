@@ -8,28 +8,59 @@ using System.Threading;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.XRules.Database.APIs;
+using O2.XRules.Database.Utils;
 //O2File:HttpData.cs
 
+//O2File:_Extra_methods_Web.cs
+//O2File:_Extra_methods_Items.cs
+
+
 namespace HTTPProxyServer
-{
+{	
 	public class ProxyCache
 	{				
-		public static List<RequestResponseData> Requests { get; set; }
-		
-		
+		public static List<RequestResponseData> Requests { get; set; }				
 		public static Dictionary<string, RequestResponseData> RequestCache { get; set; }
 		
-//foreach(var requestResponseData in webProxy.requests())
-//	requestCache.add(requestResponseData.Request_Uri.AbsolutePath,requestResponseData);
+		public ProxyCache_Brain_DefaultMode ProxyCache_Brain 	{ get; set; }
+		public bool 						ProxyEnabled 	 	{ get; set; }			
+		
 		static ProxyCache()
 		{
 			Requests = new List<RequestResponseData>();
-			RequestCache = new Dictionary<string, RequestResponseData>();
+			RequestCache = new Dictionary<string, RequestResponseData>();			
 		}		
+		
+		public ProxyCache()
+		{
+			ProxyCache_Brain = new ProxyCache_Brain_DefaultMode(this);
+			ProxyEnabled = false;
+		}
 	}
+	
+	public class ProxyCache_Brain_DefaultMode
+	{
+		public ProxyCache proxyCache;
+		
+		public ProxyCache_Brain_DefaultMode(ProxyCache _proxyCache)
+		{
+			this.proxyCache = _proxyCache;
+		}
+		
+		public virtual string cacheKey(RequestResponseData requestRessponseData)
+		{
+			return requestRessponseData.Request_Uri.pathNoQuery();
+		}
+	}
+	
 	
 	public static class ProxyCache_ExtensionMethods
 	{
+		public static bool enabled(this ProxyCache proxyCache)
+		{
+			return proxyCache.ProxyEnabled;
+		}
+		
 		public static Dictionary<string, RequestResponseData> requestMappings(this ProxyCache proxyCache)
 		{
 			return ProxyCache.RequestCache;
@@ -56,10 +87,18 @@ namespace HTTPProxyServer
 		
 		public static ProxyCache add_ToCache(this ProxyCache proxyCache, RequestResponseData requestResponseData)
 		{
+			var cacheKey = proxyCache.cacheKey(requestResponseData);
 			ProxyCache.Requests.Add(requestResponseData);
-			ProxyCache.RequestCache.add(requestResponseData.Request_Uri.AbsolutePath,requestResponseData);
+			ProxyCache.RequestCache.add(cacheKey,requestResponseData);
 			return proxyCache;
 		}
+		
+		
+		public static string cacheKey(this ProxyCache proxyCache, RequestResponseData requestResponseData)
+		{
+			return proxyCache.ProxyCache_Brain.cacheKey(requestResponseData);
+		}
+		
 	}
 	
 	public static class RequestResponseData_ExtensionMethods

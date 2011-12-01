@@ -301,11 +301,34 @@ namespace O2.XRules.Database.Utils
 			return webBrowser;													
 		}
 		
-		public static WebBrowser add_NavigationBar(this WebBrowser webBrowser)
+		public static WebBrowser add_WebBrowser_with_NavigationBar(this Control control)
 		{
-			var navigationBar = webBrowser.insert_Above(20).add_TextBox("url","");
-			webBrowser.onNavigated((url)=> navigationBar.set_Text(url));
-			navigationBar.onEnter((text)=>webBrowser.open(text));
+			return control.add_WebBrowser_Control().add_NavigationBar();
+		}
+		
+		public static WebBrowser add_NavigationBar(this WebBrowser webBrowser)
+		{		
+//			var navigationBar = webBrowser.insert_Above(20).add_TextBox("url","");
+//			webBrowser.onNavigated((url)=> navigationBar.set_Text(url));
+//			navigationBar.onEnter((text)=>webBrowser.open(text));
+			Action<string> openUrl = 
+				(url)=> {
+							"[WebBrowser] opening: {0}".info(url);
+							webBrowser.open(url);
+						};
+						
+			var actionPanel = webBrowser.insert_Above(40,"location")
+						 	     	    .add_LabelAndComboBoxAndButton("Url","","Go",(text)=>{});
+			var comboBox = actionPanel.controls<ComboBox>();
+			var button = actionPanel.controls<Button>().onClick(()=> openUrl(comboBox.get_Text())) ;
+			comboBox.onEnter(openUrl);
+			webBrowser.onNavigated(
+				(url)=>{
+							if(url != "about:blank")
+							 	comboBox.add_Item(url).selectLast();
+					   });
+			
+
 			return webBrowser;
 		}
 		//ListBox
@@ -405,7 +428,13 @@ namespace O2.XRules.Database.Utils
 			foreach(var item in items)			
 				comboBox.add_Item(item);			
 			return comboBox;
+		}				
+		
+		public static ComboBox selectLast(this ComboBox comboBox)
+		{
+			return comboBox.select_Item(comboBox.items().size()-1);
 		}
+		
 		public static object selectedItem(this ComboBox comboBox)
 		{
 			return comboBox.invokeOnThread(

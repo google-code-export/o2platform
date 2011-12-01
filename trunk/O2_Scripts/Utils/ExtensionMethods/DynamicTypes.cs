@@ -22,7 +22,17 @@ namespace O2.XRules.Database.Utils
     	
     	public static AssemblyBuilder assemblyBuilder(this string assemblyName, AppDomain appDomain)
     	{
-    		return appDomain.DefineDynamicAssembly(new AssemblyName(assemblyName),AssemblyBuilderAccess.Run	); 
+    		return appDomain.DefineDynamicAssembly(new AssemblyName(assemblyName),AssemblyBuilderAccess.Run); 
+    	}
+    	
+    	public static AssemblyBuilder assemblyBuilder_forSave(this string assemblyName, string targetDir)
+    	{
+    		return assemblyName.assemblyBuilder_forSave(AppDomain.CurrentDomain, targetDir);
+    	}
+    	
+    	public static AssemblyBuilder assemblyBuilder_forSave(this string assemblyName, AppDomain appDomain, string targetDir)
+    	{
+    		return appDomain.DefineDynamicAssembly(new AssemblyName(assemblyName),AssemblyBuilderAccess.RunAndSave, targetDir); 
     	}
     	
     	//ModuleBuilder
@@ -125,7 +135,11 @@ namespace O2.XRules.Database.Utils
 		{						
 			return typeBuilder.dynamicMethod(methodName, returnType,  Type.EmptyTypes);
 		}*/				
-
+		public static MethodBuilder dynamicMethod(this TypeBuilder typeBuilder, string methodName)
+		{
+			return typeBuilder.dynamicMethod(methodName, null);
+		}
+		
 		public static MethodBuilder dynamicMethod(this TypeBuilder typeBuilder, string methodName, Type returnType, params Type[] parameterTypes)		
 		{			
 			var methodAttributes = MethodAttributes.Public | MethodAttributes.HideBySig;

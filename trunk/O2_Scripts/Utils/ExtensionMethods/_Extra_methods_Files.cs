@@ -45,6 +45,11 @@ namespace O2.XRules.Database.Utils
 					   .toList();
 		}
 		
+		public static bool deleteFile(this string file)
+		{
+			return Files.deleteFile(file);
+		}
+		
 		public static List<string> deleteFiles(this List<string> files)
 		{
 			foreach(var file in files)

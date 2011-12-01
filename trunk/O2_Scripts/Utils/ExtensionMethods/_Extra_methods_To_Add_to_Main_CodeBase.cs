@@ -69,6 +69,7 @@ using Ionic.Zip;
 //O2File:_Extra_methods_WinForms_TreeView.cs
 //O2File:_Extra_methods_WinForms_TableList.cs
 //O2File:_Extra_methods_ObjectDetails.cs
+//O2File:_Extra_methods_TypeConfusion.cs
 //O2File:_Extra_methods_SourceCodeEditor.cs
 
 namespace O2.XRules.Database.Utils

@@ -36,8 +36,7 @@ namespace O2.XRules.Database.APIs
 		public static O2_Web_Proxy add_WebProxy(this Control panel)
 		{			
 			var o2WebProxy = new O2_Web_Proxy().createGui_Proxy_SimpleView(panel);
-			o2WebProxy.startWebProxy();
-			//"http://google.com".uri().getHtml();
+			o2WebProxy.startWebProxy();			
 			return o2WebProxy;
 		}
 		
@@ -51,11 +50,16 @@ namespace O2.XRules.Database.APIs
 			return "Web Proxy with: {0}".format(url).popupWindow().add_WebProxy_with_Browser(url);
 		}
 		
+		public static O2_Web_Proxy add_WebProxy_with_Browser(this Control panel)
+		{
+			return panel.add_WebProxy_with_Browser("about:blank");
+		}
+		
 		public static O2_Web_Proxy add_WebProxy_with_Browser(this Control panel, string url)
 		{
 			var topPanel = panel.clear().add_Panel();
-			var browser = panel.add_WebBrowser_Control().add_NavigationBar();
-			var o2WebProxy = browser.insert_Right_WebProxy();				   
+			var o2WebProxy = topPanel.insert_Right_WebProxy();				   
+			var browser = topPanel.add_WebBrowser_Control().add_NavigationBar();			
 			browser.open(url);
 			return o2WebProxy;
 		}
