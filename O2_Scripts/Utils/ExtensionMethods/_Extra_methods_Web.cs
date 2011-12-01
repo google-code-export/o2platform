@@ -26,8 +26,10 @@ namespace O2.XRules.Database.Utils
 	public static class _Extra_Web_ExtensionMethods_Uri
 	{
 		public static string pathNoQuery(this Uri uri)
-		{
-			return uri.AbsoluteUri.remove(uri.Query);
+		{			
+			return uri.Query.valid() 
+						? uri.AbsoluteUri.remove(uri.Query)
+						: uri.AbsoluteUri;
 		}
 	}
 	

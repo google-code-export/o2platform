@@ -283,6 +283,6 @@ namespace O2.XRules.Database.Utils
 			return propertyValues_AsStrings;
 		}
 
-	}
+	}		
 }
     	

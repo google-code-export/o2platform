@@ -1,6 +1,7 @@
 // Tshis file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
 using System.Net;
+using System.Text;
 using System.Linq;
 using System.Drawing;
 using System.Xml;
@@ -14,12 +15,63 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX.ExtensionMethods;
+using System.Runtime.InteropServices;
 
 namespace O2.XRules.Database.Utils
-{	
+{		
+	public static class _Extra_LiveObjects_ExtensionMethods
+	{
+		public static T castIfType<T>(this object _object)
+		{
+			if (_object is T)
+				return (T)_object;
+			return default(T);
+		}
 		
+		public static object liveObject(this string key, object value)
+		{
+			O2LiveObjects.set(key,value);
+			return value;
+		}
+		
+		public static object liveObject(this string key)
+		{
+			return O2LiveObjects.get(key);	
+		}
+		
+		public static T o2Cache<T>(this string key, T value)
+		{
+			O2LiveObjects.set(key,value);
+			return value;
+		}
+		
+		public static T o2Cache<T>(this string key)
+		{
+			var value =  O2LiveObjects.get(key);
+			if (value is T)
+				return (T)value;
+			return default(T);
+		}
+		
+		public static T o2Cache<T>(this string key, Func<T> ctor)
+		{
+			if (key.o2Cache<T>().isNull())
+			{
+				"there was no o2Chache object for type '{0}' so invoking the contructor callback".info(typeof(T));
+				key.o2Cache<T>(ctor());
+			}
+			return key.o2Cache<T>();			
+		}		
+	}
+	
 	public static class _Extra_String_ExtensionMethods
 	{		 
+		public static Exception logStackTrace(this Exception ex)
+		{
+			"Error strackTrace: \n\n {0}".error(ex.StackTrace);
+			return ex;
+		}
+		
 		public static string ifEmptyUse(this string _string , string textToUse)
 		{
 			return (_string.empty() )
@@ -192,6 +244,20 @@ namespace O2.XRules.Database.Utils
 			return false;
 		}
 		
+		public static double toDouble(this string _string)
+		{
+			try
+			{
+				if (_string.valid())
+					return Double.Parse(_string);				
+			}
+			catch(Exception ex)
+			{
+				"in toDouble, failed to convert provided value ('{0}') into a double: {2}".format(_string, ex.Message);				
+			}
+			return default(double);
+		}
+		
 		public static IPAddress toIPAddress(this string _string)
 		{
 			try
@@ -206,6 +272,55 @@ namespace O2.XRules.Database.Utils
 				return null;
 			}
 		}
-										
+		
+		public static byte hexToByte(this string hexNumber)
+		{
+			try
+			{
+				return Byte.Parse(hexNumber,System.Globalization.NumberStyles.HexNumber);
+			}
+			catch(Exception ex)
+			{
+				"[hexToByte]	Failed to convert {0} : {1}".error(hexNumber, ex.Message);
+				return default(byte);
+			}
+		}
+		
+		public static byte[] hexToBytes(this List<string> hexNumbers)
+		{
+			var bytes = new List<byte>();
+			foreach(var hexNumber in hexNumbers)
+				bytes.add(hexNumber.hexToByte());
+			return bytes.ToArray();
+		}
+		
+		public static int hexToInt(this string hexNumber)
+		{
+			try
+			{
+				return Int32.Parse(hexNumber,System.Globalization.NumberStyles.HexNumber);
+			}
+			catch(Exception ex)
+			{
+				"[hexToInt]	Failed to convert {0} : {1}".error(hexNumber, ex.Message);
+				return -1;
+			}
+		}
+		
+		public static string hexToAscii(this string hexNumber)
+		{
+			var value = hexNumber.hexToInt();
+			if (value > 0)
+				return value.ascii();
+			return "";
+		}
+		
+		public static string hexToAscii(this List<string> hexNumbers)
+		{
+			var asciiString = new StringBuilder();
+			foreach(var hexNumber in hexNumbers)
+				asciiString.Append(hexNumber.hexToAscii());
+			return asciiString.str();
+		}
 	}		
 }    	
