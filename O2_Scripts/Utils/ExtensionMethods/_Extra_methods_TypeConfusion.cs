@@ -17,8 +17,41 @@ using O2.DotNetWrappers.ExtensionMethods;
 namespace O2.XRules.Database.Utils
 {	
 		
-	public static class _extra_TypeConfusion_ExtensionMethods
+	public class TypeConfusion
 	{
+		public static string create_DLL_TO_castViaTypeConfusion()
+		{
+			var assemblyName = "TypeConfusion";
+			var dllName = assemblyName + ".dll";
+			var appDomain = AppDomain.CurrentDomain;
+			var targetDir = "".tempDir(false);			
+			var assemblyBuilder = assemblyName.assemblyBuilder_forSave(targetDir);  // use this if wanting to Save the assembly created
+			var moduleBuilder = assemblyBuilder.dynamicModule(dllName);			
+			var typeBuilder = moduleBuilder.dynamicType(assemblyName);
+			
+			var methodBuilder = typeBuilder.dynamicMethod("castObjectIntoType", null, typeof(object));
+			
+			var genericParameters = methodBuilder.DefineGenericParameters("T");
+			var returnType = genericParameters[0];
+			methodBuilder.SetReturnType(returnType);
+			
+			var ilGenerator = methodBuilder.il();
+			ilGenerator.DeclareLocal(typeof(object));
+			ilGenerator.Emit(OpCodes.Ldarg_1);
+			ilGenerator.Emit(OpCodes.Stloc_0);
+			ilGenerator.Emit(OpCodes.Ldloc_0);
+			ilGenerator.ret();
+			
+			var type = typeBuilder.create();
+			
+			assemblyBuilder.Save(dllName);
+			return targetDir.pathCombine(dllName);			
+		}
+	}
+	public static class _extra_TypeConfusion_ExtensionMethods
+	{		
+		
+		//this one doesn't work all the time	
 		public static T castViaTypeConfusion<T>(this object _objectToCast)
 		{
 			var assemblyName = "TypeConfusion";

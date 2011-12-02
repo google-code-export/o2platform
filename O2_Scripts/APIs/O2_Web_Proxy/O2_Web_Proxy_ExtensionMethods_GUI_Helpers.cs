@@ -74,7 +74,7 @@ namespace O2.XRules.Database.APIs
 			var showLiveRequests = false;
 			
 			var requestId = 0;
-			requests.add_Columns("#","Method","Size","AbsolutePath", "Url");
+			requests.add_Columns("#","Method","Size", "Url");
 			
 			Action setColumnsWidth = ()=> requests.set_ColumnsWidth(30, 60,60);			 
 			setColumnsWidth();
@@ -100,8 +100,7 @@ namespace O2.XRules.Database.APIs
 										var rowData = new List<string>()
 											{	(++requestId).str(),
 												rrData.WebRequest.Method.str(),									
-												rrData.Response_String.size().str(),
-												rrData.WebRequest.RequestUri.AbsolutePath,
+												rrData.Response_String.size().str(),												
 												rrData.WebRequest.RequestUri.str()
 											 };
 										return rowData;	   	
@@ -122,10 +121,17 @@ namespace O2.XRules.Database.APIs
 						requests.setWidthToContent();	
 					};
 			
+			Action copySelectedUtlToClipboard =   
+				()=>{
+						var selected = requests.selected<RequestResponseData>();
+						if (selected.notNull())													
+							selected.Request_Uri.str().clipboardText_Set();
+					};
 			ProxyServer.OnResponseReceived = 
 				(requestResponseData)=> add_Row(requestResponseData);
 										      
-			requests.add_ContextMenu().add_MenuItem("See Selected Row RequestResponseData Object Details", true,()=>requests.tag().details())
+			requests.add_ContextMenu().add_MenuItem("Copy Utl to clipboard", true,()=> copySelectedUtlToClipboard() )
+									  .add_MenuItem("See Selected Row RequestResponseData Object Details", true,()=>requests.tag().details())
 									  .add_MenuItem("Refresh request list ({0} at start)".format(o2WebProxy.Proxy.requests().size()), true, ()=> showPastRequests())
 									  .add_MenuItem("Clear list", true, ()=> requests.clearRows())
 									  .add_MenuItem("Reset Columns Width", ()=> { setColumnsWidth();setColumnsWidth(); });

@@ -11,13 +11,15 @@ using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
+using O2.DotNetWrappers.Network;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX.CoreControls;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 
 using System.Runtime.Serialization.Json;
-
+using System.Web.Script.Serialization ;
+//O2Ref:System.Web.Extensions.dll
 //O2Ref:System.ServiceModel.Web.dll
 //O2Ref:System.Runtime.Serialization.dll
 
@@ -35,7 +37,8 @@ namespace O2.XRules.Database.Utils
 	
 	public static class _Extra_Web_ExtensionMethods_Http
 	{
-		public static string html(this string url)
+		//GET requests
+		public static string html(this string url) 
 		{
 			return url.get_Html();
 		}
@@ -43,13 +46,31 @@ namespace O2.XRules.Database.Utils
 		{
 			if (url.isUri())
 				return url.uri().get_Html();
-			"in get_Html, url provided was not a valid URI: {0}".error(url);
+			"in get_Html (GET), url provided was not valid URI: {0}".error(url);
 			return null;
 		}
 		
 		public static string get_Html(this Uri url)	// this is a better way to represent it
 		{
 			return url.getHtml();
+		}
+		
+		//POST requests
+		public static string html(this string url, string postData)
+		{
+			return url.get_Html(postData);
+		}
+		
+		public static string get_Html(this string url,  string postData)
+		{
+			if (url.isUri())
+				return url.uri().get_Html(postData);
+			"in get_Html (POST), url provided was not  valid URI: {0}".error(url);
+			return null;
+		}
+		public static string get_Html(this Uri url, string postData)		
+		{ 
+			return new Web().getUrlContents_POST(url.str(), postData);
 		}
 	}
 	
@@ -136,8 +157,11 @@ namespace O2.XRules.Database.Utils
 			}	
 			return outputStream.ToArray().ascii();
 		}
-		
-		public static string json_Serialize<T>(T _object)
+	}
+	
+	public static class _Extra_Web_ExtensionMethods_Json
+	{
+		public static string json_Serialize<T>(this T _object)
 	    {
 	        var serializer = new DataContractJsonSerializer(_object.type());
 	        var memoryStream = new MemoryStream();
@@ -147,15 +171,26 @@ namespace O2.XRules.Database.Utils
 	        return serializedObject;
 	    }
 
-	    public static T json_Deserialize<T>(string json)
+	    public static T json_Deserialize<T>(this string json)
 	    {
-	        T obj = Activator.CreateInstance<T>();
+	        //T obj = Activator.CreateInstance<T>();
 	        MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(json));
-	        System.Runtime.Serialization.Json.DataContractJsonSerializer serializer = new System.Runtime.Serialization.Json.DataContractJsonSerializer(obj.GetType());
-	        obj = (T)serializer.ReadObject(ms);
+	        var serializer = new DataContractJsonSerializer(typeof(T));
+	        var obj = (T)serializer.ReadObject(ms);
 	        ms.Close();
 	        ms.Dispose();
 	        return obj;
+	    }
+	    
+	    public static string javascript_Serialize<T>(this T _object)
+	    {
+	        return new JavaScriptSerializer().Serialize(_object);
+	    }
+
+	    public static T javascript_Deserialize<T>(this string json)
+	    {
+	        //T obj = Activator.CreateInstance<T>();
+	        return new JavaScriptSerializer().Deserialize<T>(json);	        
 	    }
 	}
 }    	

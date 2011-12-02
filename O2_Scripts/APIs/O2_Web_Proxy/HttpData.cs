@@ -5,7 +5,9 @@ using System.Net;
 using System.Collections.Generic;
 using O2.Kernel.ExtensionMethods;
 using O2.XRules.Database.Utils;
+
 //O2File:_Extra_methods_Misc.cs
+//O2File:_Extra_methods_Items.cs
 
 namespace O2.XRules.Database.APIs 
 {         
@@ -18,11 +20,13 @@ namespace O2.XRules.Database.APIs
 		public String    	   				Response_Headers_Raw { get; set; }			
 		public List<Tuple<String,String>>	Response_Headers { get; set; }			
 		
-		public String    	   Request_PostString { get; set; }			
-		public String    	   Response_String { get; set; }	
+		public String    	   	Request_PostString { get; set; }			
+		public String    	   	Response_String { get; set; }	
 		
-		public byte[]    	   Request_PostBytes;
-		public byte[]    	   Response_Bytes;
+		public byte[]    	   	Request_PostBytes;
+		public byte[]    	   	Response_Bytes;
+		
+		public int				CacheHits { get ; set;}		
 		
 		public override string ToString()
 		{
