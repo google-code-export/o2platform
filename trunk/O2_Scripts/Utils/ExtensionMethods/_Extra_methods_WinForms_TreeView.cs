@@ -13,6 +13,8 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
 using O2.Views.ASCX.ExtensionMethods;
+using O2.External.SharpDevelop.Ascx;
+using O2.External.SharpDevelop.ExtensionMethods;
 
 //O2File:_Extra_methods_WinForms_Controls.cs
 
@@ -65,6 +67,20 @@ namespace O2.XRules.Database.Utils
 		{
 			return treeView.afterSelect<T>((item)=> propertyGrid.show(item));			
 		}
+		
+		public static TreeView hideSelection(this TreeView treeView)
+		{
+			return treeView.showSelection(false);
+		}
+
+		public static TreeView showSelection(this TreeView treeView, bool value)
+		{
+			return (TreeView)treeView.invokeOnThread(
+									()=>{
+											treeView.HideSelection = value.isFalse();
+											return treeView;
+										});
+		}		
 		
 		public static TreeView allow_TreeNode_Edits(this TreeView treeView)
 		{
@@ -263,8 +279,32 @@ namespace O2.XRules.Database.Utils
 					where Ascx_ExtensionMethods.get_Tag(treeNode) is T
 					select (T)Ascx_ExtensionMethods.get_Tag(treeNode)).toList();
 		}
-	}	
+
 	
+	
+		//SourceCodeEditor
+		
+		public static ascx_SourceCodeEditor showCodeEditorForFilesInFolder(this string path, string filter)		
+		{	
+			var topPanel = "Code Editor for {0} files in folder {1}".format(path,filter).popupWindow(900,400);
+			var codeEditor = topPanel.add_GroupBox("SourceCode Editor")
+									 .add_SourceCodeEditor();										 
+									 
+			var treeView = topPanel .insert_Left(200,"Files: {0}".format(filter))
+									.add_TreeView()
+									.onDrag<string>()					
+									.afterSelect<string>((file)=>codeEditor.open(file));
+			Action loadFiles = 
+				()=>{
+						treeView.clear();
+						treeView.add_Files(path,filter)
+								.selectFirst();
+					};
+			treeView.add_ContextMenu().add_MenuItem("reload files", ()=>loadFiles());			
+			loadFiles();
+			return codeEditor;		  
+		}
+	}
 	
 }
     	

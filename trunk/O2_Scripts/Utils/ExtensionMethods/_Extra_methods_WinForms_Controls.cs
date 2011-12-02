@@ -122,7 +122,7 @@ namespace O2.XRules.Database.Utils
 			}
 			return clipboardImagePath;
 		}						
-		
+				
 		//Label
 
 		public static Label autoSize(this Label label, bool value)

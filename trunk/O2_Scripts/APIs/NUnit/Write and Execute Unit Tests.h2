@@ -9,7 +9,7 @@ var unitTest = codeEditor.insert_Right&lt;ascx_XRules_UnitTests&gt;(300);
 unitTest.insert_Below&lt;Panel&gt;(130)
 		  .add_LogViewer();
 
-Action&lt;string&gt; loadFile = 
+Action&lt;string&gt; loadFileAndCompile = 
 	(file)=&gt;{
 				codeEditor.open(file);
 				codeEditor.compileSourceCode();
@@ -17,13 +17,17 @@ Action&lt;string&gt; loadFile =
 
 
 var textBox = topPanel.insert_Above&lt;Panel&gt;(25)
-					  .add_LabelAndTextAndButton("Unit Test file","","load", loadFile)
+					  .add_LabelAndTextAndButton("Unit Test file","","load", loadFileAndCompile)
 					  .controls&lt;TextBox&gt;();
+					  
+Action&lt;string&gt; loadFile = 
+	(file)=&gt;{
+				textBox.set_Text(file); 
+				loadFileAndCompile(file);				
+			};
+			
 textBox.onDrop(
-	(text)=&gt;{
-				textBox.set_Text(text); 
-				loadFile(text);				
-			});
+	(text)=&gt; loadFile(text));
 
 			
 			//unitTest.loadFile(text));	
@@ -32,6 +36,8 @@ textBox.onDrop(
 //Default data
 textBox.set_Text("DefaultUnitTest.cs".local().fileContents().saveWithExtension(".cs"));  
 textBox.sendEnter();
+
+return loadFile;
 
 //return unitTest.type().methods(); 
 //using O2.Core.XRules.Ascx

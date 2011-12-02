@@ -35,6 +35,13 @@ namespace O2.XRules.Database.APIs
     		config();
     	}
     	
+    	public O2_Web_Proxy(bool startWebProxy) : this()
+    	{
+    		if (startWebProxy)
+    			this.startWebProxy();	
+    	}
+    	
+    	
     	public ProxyServer Proxy 
     	{
     		get {
