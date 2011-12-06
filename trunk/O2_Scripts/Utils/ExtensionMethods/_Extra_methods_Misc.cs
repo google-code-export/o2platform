@@ -14,7 +14,6 @@ using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.Windows;
-using O2.Views.ASCX.ExtensionMethods;
 using System.Runtime.InteropServices;
 
 namespace O2.XRules.Database.Utils
@@ -37,6 +36,17 @@ namespace O2.XRules.Database.Utils
 		public static object liveObject(this string key)
 		{
 			return O2LiveObjects.get(key);	
+		}
+		
+		
+		public static object o2Cache(this string key)
+		{
+			return key.liveObject();
+		}
+		
+		public static object o2Cache(this string key, object value)
+		{
+			return key.liveObject(value);
 		}
 		
 		public static T o2Cache<T>(this string key, T value)
@@ -322,5 +332,56 @@ namespace O2.XRules.Database.Utils
 				asciiString.Append(hexNumber.hexToAscii());
 			return asciiString.str();
 		}
-	}		
+	}	
+	
+		public static class _Extra_Int_ExtensionMethods
+	{
+		public static int mod( this int num1, int num2)
+		{
+			return num1 % num2;
+		}
+		public static bool mod0( this int num1, int num2)
+		{
+			return num1.mod(num2) ==0;
+		}
+		
+	}	
+	
+	public static class _Extra_UInt_ExtensionMethods
+	{
+		public static uint toUInt(this string value)
+		{
+			return UInt32.Parse(value);
+		}
+	}
+	
+	
+	public static class _Extra_Uri_ExtensionMethods
+	{
+		public static Uri append(this Uri uri, string virtualPath)
+		{
+			try
+			{
+				return new Uri(uri, virtualPath);
+			}
+			catch
+			{
+				return null;
+			}
+		}
+	}
+	
+	public static class _Extra_XML_ExtensionMethods
+	{		
+		public static List<XmlAttribute> add_XmlAttribute(this List<XmlAttribute> xmlAttributes, string name, string value)
+		{
+			var xmlDocument = (xmlAttributes.size() > 0) 
+									?  xmlAttributes[0].OwnerDocument
+									: new XmlDocument();						
+			var newAttribute = xmlDocument.CreateAttribute(name);
+			newAttribute.Value = value;
+			xmlAttributes.add(newAttribute);
+			return xmlAttributes;
+		}		
+	}
 }    	

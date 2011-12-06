@@ -286,7 +286,7 @@ namespace O2.XRules.Database.Utils
 		
 		public static ascx_SourceCodeEditor showCodeEditorForFilesInFolder(this string path, string filter)		
 		{	
-			var topPanel = "Code Editor for {0} files in folder {1}".format(path,filter).popupWindow(900,400);
+			var topPanel = "Code Editor for {0} files in folder {1}".format(filter,path).popupWindow(900,400);
 			var codeEditor = topPanel.add_GroupBox("SourceCode Editor")
 									 .add_SourceCodeEditor();										 
 									 

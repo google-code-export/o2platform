@@ -158,93 +158,7 @@ namespace O2.XRules.Database.Utils
 	}
 		
 	 
-	public static class _Extra_Int_ExtensionMethods
-	{
-		public static int mod( this int num1, int num2)
-		{
-			return num1 % num2;
-		}
-		public static bool mod0( this int num1, int num2)
-		{
-			return num1.mod(num2) ==0;
-		}
-		
-		public static Action loop(this int count , Action action)
-		{
-			return count.loop(0,action);
-		}
-		
-		public static Action loop(this int count , int delay,  Action action)
-		{
-			"Executing provided action for {0} times with a delay of {1} milliseconds".info(count, delay);
-			for(var i=0 ; i < count ; i ++)
-			{
-				action();
-				if (delay > 0)
-					count.sleep(delay);
-			}
-			return action;
-		}
-		
-		public static Action<int> loop(this int count , Action<int> action)
-		{
-			return count.loop(0, action);
-		}
-		
-		public static Action<int> loop(this int count , int start, Action<int> action)
-		{
-			return count.loop(start,1, action);
-		}
-		
-		public static Action<int> loop(this int count, int start , int step, Action<int> action)
-		{
-			for(var i=start ; i < count ; i+=step)			
-				action(i);							
-			return action;
-		}
-		
-		public static List<T> loopIntoList<T>(this int count , Func<int,T> action)
-		{
-			return count.loopIntoList(0, action);
-		}
-		
-		public static List<T> loopIntoList<T>(this int count , int start, Func<int,T> action)
-		{
-			return count.loopIntoList(start,1, action);
-		}
-		
-		public static List<T> loopIntoList<T>(this int count, int start , int step, Func<int,T> action)
-		{
-			var results = new List<T>();
-			for(var i=start ; i < count ; i+=step)			
-				results.Add(action(i));
-			return results;
-		}		
-	}
-	public static class _Extra_UInt_ExtensionMethods
-	{
-		public static uint toUInt(this string value)
-		{
-			return UInt32.Parse(value);
-		}
-	}
-	
-	
-	//Download file
-	public static class _Extra_Uri_ExtensionMethods
-	{
-		public static Uri append(this Uri uri, string virtualPath)
-		{
-			try
-			{
-				return new Uri(uri, virtualPath);
-			}
-			catch
-			{
-				return null;
-			}
-		}
-	}
+
 	
 	public static class _Extra_XmlLinq_ExtensiomMethods
 	{
@@ -297,20 +211,7 @@ namespace O2.XRules.Database.Utils
 			return null;	
 		}
 	}
-
-	public static class _Extra_XML_ExtensionMethods
-	{		
-		public static List<XmlAttribute> add_XmlAttribute(this List<XmlAttribute> xmlAttributes, string name, string value)
-		{
-			var xmlDocument = (xmlAttributes.size() > 0) 
-									?  xmlAttributes[0].OwnerDocument
-									: new XmlDocument();						
-			var newAttribute = xmlDocument.CreateAttribute(name);
-			newAttribute.Value = value;
-			xmlAttributes.add(newAttribute);
-			return xmlAttributes;
-		}		
-	}
+	
 	
 	public static class _Extra_AppDomain_ExtensionMethods
 	{
@@ -408,7 +309,17 @@ namespace O2.XRules.Database.Utils
 												add_Objects(treeNode, _object as IEnumerable);
 											else
 												foreach(PropertyDescriptor property in TypeDescriptor.GetProperties(_object))
-													treeNode.add_Node(property.Name.str(), property.GetValue(_object),true);
+												{
+													try
+													{
+														var value =  property.GetValue(_object);
+														treeNode.add_Node(property.Name.str(),value,true);
+													}
+													catch(Exception ex)
+													{
+														treeNode.add_Node(property.Name.str(),"O2 ERROR:".format(ex.Message) ,false);
+													}
+												}
 										}
 									 });
 			

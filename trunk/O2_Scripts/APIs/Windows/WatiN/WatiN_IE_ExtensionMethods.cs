@@ -1892,6 +1892,7 @@ namespace O2.XRules.Database.APIs
     	
     	public static object invokeScript(this WatiN_IE ie, string functionName, params object[] parameters)
     	{
+    		//"[WatiN_IE] invokeScript '{0}' with parameters:{1}".info(functionName ,parameters.size());
     		return ie.invokeScript(true, functionName, parameters);
     	}	
     		
@@ -1915,23 +1916,30 @@ namespace O2.XRules.Database.APIs
     	
     	public static object invokeEval(this WatiN_IE ie, string evalScript)
     	{
-    		return ie.invokeScript("eval", "(function() { " + evalScript + "})();");   
+    		var evalParam = "(function() { " + evalScript + "})();";
+    		//"[WatiN_IE] invokeEval evalParam: {0}".debug(evalParam);
+    		return ie.invokeScript("eval", evalParam);   
+    	}
+    	public static WatiN_IE.ToCSharp injectJavascriptFunctions(this WatiN_IE ie)
+    	{
+    		return ie.injectJavascriptFunctions(false);
     	}
     	
-    	public static WatiN_IE.ToCSharp injectJavascriptFunctions(this WatiN_IE ie)
+    	public static WatiN_IE.ToCSharp injectJavascriptFunctions(this WatiN_IE ie, bool resetHooks)
     	{
     		if (ie.WebBrowser.isNull())
     			"in InjectJavascriptFunctions, ie.WebBrowser was null".error();
     		else
     		{
-    			if (ie.WebBrowser.ObjectForScripting.isNull()) 
+    			if (ie.WebBrowser.ObjectForScripting.isNull() || resetHooks)  
     			{
     				ie.WebBrowser.ObjectForScripting = new WatiN_IE.ToCSharp();
     				
 	    			"Injecting Javascript Hooks * Functions for page: {0}".debug(ie.url());
 					ie.eval("var o2Log = function(message) { window.external.write(message) };");
 					ie.invokeScript("o2Log","Test from Javascript (via toCSharp(message) )");
-					"Injection complete".info();
+					ie.eval("$o2 = window.external");
+					"Injection complete (use o2Log(...) or $o2.write(...)  to talk back to O2".info();
 					return (ie.WebBrowser.ObjectForScripting as WatiN_IE.ToCSharp);
 				}
 				else 
@@ -1944,6 +1952,15 @@ namespace O2.XRules.Database.APIs
 						
 			}
 			return null;
+    	}
+    	
+    	public static object downloadAndExecJavascriptFile(this WatiN_IE ie, string url)
+    	{
+    		"[WatiN_IE] downloadAndExecJavascriptFile: {0}".info(url);
+    		var javascriptCode = url.uri().getHtml();
+    		if (javascriptCode.valid())
+    			ie.eval(javascriptCode);
+    		return ie;
     	}
     	    	
     	public static WatiN_IE injectJavascriptFunctions_onNavigate(this WatiN_IE ie)
@@ -1993,6 +2010,24 @@ namespace O2.XRules.Database.APIs
     		return default(T);
     	}
     	
+    	public static bool doesJsObjectExists(this WatiN_IE ie, string jsCommand)
+    	{
+    		var toCSharpProxy = ie.injectJavascriptFunctions();
+    		if (toCSharpProxy.notNull())
+    		{
+    			var command = "window.external.setJsObject(typeof({0}))".format(jsCommand);
+    			ie.invokeEval(command);
+    			ie.remapInternalJsObject();    			
+    			return toCSharpProxy.getJsObject().str()!="undefined";
+    		}
+    		return false;
+    	}
+    	
+    	public static object getJsVariable(this WatiN_IE ie, string jsCommand)
+    	{
+    		return ie.getJsObject(jsCommand);
+    	}
+    	
     	public static object getJsObject(this WatiN_IE ie, string jsCommand)
     	{
     		var toCSharpProxy = ie.injectJavascriptFunctions();
@@ -2004,7 +2039,7 @@ namespace O2.XRules.Database.APIs
     			return toCSharpProxy.getJsObject();
     		}
     		return null;
-    	}
+    	}    	    	
     	
 		public static WatiN_IE remapInternalJsObject(this WatiN_IE ie)
 		{		
@@ -2023,6 +2058,53 @@ namespace O2.XRules.Database.APIs
     		}
     		return ie;
     	}
+    	
+    	public static object waitForJsObject(this WatiN_IE watinIe)
+		{
+			return watinIe.waitForJsObject(500, 20);
+		}
+		
+		public static object waitForJsObject(this WatiN_IE watinIe, int sleepMiliseconds, int maxSleepTimes)
+		{					
+			"[WatiN_IE][waitForJsObject] trying to find jsObject for {0} x {1} ms".info(maxSleepTimes, sleepMiliseconds);
+			watinIe.setJsObject(null);
+			for(var i = 0; i < maxSleepTimes ; i++)
+			{
+				var jsObject = watinIe.getJsObject();
+				if(jsObject.notNull())
+				{
+					"[watinIe][waitForJsObject] got value: {0} (n tries)".info(jsObject, i);
+					return jsObject;
+				}
+					
+				watinIe.sleep(500, false);
+			}
+			"[WatiN_IE][waitForJsObject] didn't find jsObject after {0} sleeps of {1} ms".error(maxSleepTimes, sleepMiliseconds);
+			return null;
+		}
+		
+		public static object waitForJsVariable(this WatiN_IE watinIe, string jsCommand)
+		{
+			return watinIe.waitForJsVariable(jsCommand,  500, 20);
+		}
+		
+		public static object waitForJsVariable(this WatiN_IE watinIe, string jsCommand, int sleepMiliseconds, int maxSleepTimes)
+		{	
+			"[WatiN_IE][waitForJsVariable] trying to find jsObject called '{0}' for {1} x {2} ms".info(jsCommand, maxSleepTimes, sleepMiliseconds);			
+			watinIe.setJsObject(null);
+			for(var i = 0; i < maxSleepTimes ; i++)
+			{
+				if (watinIe.doesJsObjectExists(jsCommand))
+				{
+					var jsObject = watinIe.getJsObject(jsCommand);
+					"[watinIe][waitForJsVariable] got value: {0} (n tries)".info(jsObject, i);
+					return jsObject;
+				}					
+				watinIe.sleep(500, false);
+			}
+			"[WatiN_IE][waitForJsVariable] didn't find jsObject called '{0}' after {1} sleeps of {2} ms".error(jsCommand, maxSleepTimes, sleepMiliseconds);
+			return null;
+		}
     	    	
     }
     public static class WatiN_IE_ExtensionMethods_JavaScript_Helpers
@@ -2261,9 +2343,10 @@ namespace O2.XRules.Database.APIs
 	public static class WatiN_IE_ExtensionMethods_FireBugLite
 	{
 		public static WatiN_IE inject_FirebugLite(this WatiN_IE ie)
-		{
+		{			
 			var firebugLiteScript = "(function(F,i,r,e,b,u,g,L,I,T,E){if(F.getElementById(b))return;E=F[i+'NS']&&F.documentElement.namespaceURI;E=E?F[i+'NS'](E,'script'):F[i]('script');E[r]('id',b);E[r]('src',I+g+T);E[r](b,u);(F[e]('head')[0]||F[e]('body')[0]).appendChild(E);E=new Image;E[r]('src',I+L);})(document,'createElement','setAttribute','getElementsByTagName','FirebugLite','4','firebug-lite.js','releases/lite/latest/skin/xp/sprite.png','https://getfirebug.com/','#startOpened');";
 			ie.eval(firebugLiteScript);  
+			"[Injected FirebugLite]".info();
 			return ie;
 		}
 	}
@@ -2272,7 +2355,15 @@ namespace O2.XRules.Database.APIs
 	{	
 		public static WatiN_IE inject_jQuery(this WatiN_IE ie)
 		{
-			ie.eval("http://code.jquery.com/jquery-1.6.2.min.js".uri().getHtml()); 
+			var jQueryFile = "jquery-1.6.2.min.js";
+			var jQueryHtml = jQueryFile.local().fileContents();
+			if (jQueryHtml.valid())
+			{				
+				ie.eval(jQueryHtml); 
+				"[Injected jQuery]".info();// (jQuery script {0} size: {1}".info(jQueryFile, jQueryHtml.size());
+			}
+			else
+				"[Injecting jQuery] could find local jQuery file: {0}".error(jQueryFile);
 			return ie;
 		}
 	}
