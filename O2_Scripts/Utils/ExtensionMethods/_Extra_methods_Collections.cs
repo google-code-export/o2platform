@@ -157,17 +157,28 @@ namespace O2.XRules.Database.Utils
 			return list;
 		}
 		
-/*		public static List<T> selectMany<T,T1>(this IEnumerable<T> list)
-		{
-			if (list.notNull()) 
-				list.SelectMany<T,T1>((a)=> a);
-			return new List<T>();
-		}*/
 		
-		/*public static List<T> toList<T>(this IEnumerable list)
+		//these helps with COM Objects received from IE	
+		public static List<string> extractList_String(this object _object)
 		{
-			return list.Cast<T>().toList();
-		}*/
+			return _object.extractList<string>();
+		}
+		
+		public static List<T> extractList<T>(this object _object)
+		{
+			var results = new List<T>();
+			if (_object is IEnumerable)
+			{
+				foreach(var item in (IEnumerable)_object)
+					if (item is T)
+						results.Add((T)item);
+					else
+						"[extractList] inside the IEnumerable, this item was not of type '{0}: {1}".error(item.type(), item);
+			}
+			else
+				"[extractList] the provided object was not IEnumerable: {0}".error(_object);
+			return results;
+		}
 	}
 	
 	public static class Dictionary_ExtensionMethods
@@ -211,5 +222,59 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
+	public static class Loop_ExtensionMethods
+	{
+		public static Action loop(this int count , Action action)
+		{
+			return count.loop(0,action);
+		}
+		
+		public static Action loop(this int count , int delay,  Action action)
+		{
+			"Executing provided action for {0} times with a delay of {1} milliseconds".info(count, delay);
+			for(var i=0 ; i < count ; i ++)
+			{
+				action();
+				if (delay > 0)
+					count.sleep(delay);
+			}
+			return action;
+		}
+		
+		public static Action<int> loop(this int count , Action<int> action)
+		{
+			return count.loop(0, action);
+		}
+		
+		public static Action<int> loop(this int count , int start, Action<int> action)
+		{
+			return count.loop(start,1, action);
+		}
+		
+		public static Action<int> loop(this int count, int start , int step, Action<int> action)
+		{
+			for(var i=start ; i < count ; i+=step)			
+				action(i);							
+			return action;
+		}
+		
+		public static List<T> loopIntoList<T>(this int count , Func<int,T> action)
+		{
+			return count.loopIntoList(0, action);
+		}
+		
+		public static List<T> loopIntoList<T>(this int count , int start, Func<int,T> action)
+		{
+			return count.loopIntoList(start,1, action);
+		}
+		
+		public static List<T> loopIntoList<T>(this int count, int start , int step, Func<int,T> action)
+		{
+			var results = new List<T>();
+			for(var i=start ; i < count ; i+=step)			
+				results.Add(action(i));
+			return results;
+		}		
+	}
+		
 }
-    	
