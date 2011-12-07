@@ -40,7 +40,8 @@ namespace O2.XRules.Database.APIs
 		{
 			config("Fiddler", "Fiddler 2 Beta", "Fiddler2BetaSetup.exe");			
     		Install_Uri = "http://www.fiddler2.com/dl/Fiddler2BetaSetup.exe".uri();    		    		    		
-    		Fiddler_Exe = Install_Dir.pathCombine("fiddler.exe");    		    		
+    		Fiddler_Exe = Install_Dir.pathCombine("fiddler.exe"); 
+    		Install_Dir = @"C:\Program Files\Fiddler2";
     		Uninstall_Exe = Install_Dir.pathCombine("uninst.exe");
 		}
 		 

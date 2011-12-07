@@ -696,5 +696,30 @@ namespace O2.XRules.Database.Utils
 			return control.parent().add_Label(label, control.top() + 22 , control.left());
 		}
 	}
+	
+	public static class _extra_Form_ExtensionMethod
+	{
+		public static Form form_Currently_Running(this string titleOrType)
+		{
+			return titleOrType.applicationWinForm();
+		}
+		
+		public static Form applicationWinForm(this string titleOrType)
+		{
+			return titleOrType.applicationWinForms().first();		
+		}
+		
+		public static List<Form> applicationWinForms(this string titleOrType)
+		{
+			var forms = new List<Form>();
+            foreach (Form form in Application.OpenForms)
+            	if (form.get_Text() == titleOrType 		||  form.str() == titleOrType || 
+				    form.typeFullName() == titleOrType  ||  form.typeName() == titleOrType)
+				{
+                	forms.Add(form);
+                }
+            return forms;				    
+		}
+	}
 
 }    	

@@ -36,6 +36,7 @@ var otherTools_Mapping = new Items().add("Process Explorer", "ProcessExplorer.cs
 									.add("Open Ports via Netstat", "Util - Show Open Ports (via NetStat -afo).h2")
 									.add("Putty", "Putty.cs")
 									.add("ILSpy (like Reflector)", "ILSpy.cs")
+									.add("LINQPad", "Util - Inject O2 into LinqPad.h2")
 									.add("AppScan Standard + O2","Util - Launch AppScan Standard (O2 version).h2");
 
 var o2Guis_Mappings = 	 new Items().add("Security Consultants", "Security Consultants (Custom O2 version).h2")
