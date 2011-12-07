@@ -464,6 +464,9 @@ namespace O2.XRules.Database.Utils
 											Processes.startProcess(itemToExecute);
 											//itemToExecute.startProcess();
 										else
+										{
+											if(itemToExecute.fileExists().isFalse() && itemToExecute.local().fileExists().isFalse())																							
+												CompileEngine.clearLocalScriptFileMappings();											
 											if (Control.ModifierKeys == Keys.Shift)
 											{
 												"Shift Key was pressed, so launching in new process: {0}".info(itemToExecute);
@@ -474,6 +477,7 @@ namespace O2.XRules.Database.Utils
 												"Shift Key was not pressed, so running script in current process".debug(itemToExecute);
 												O2Thread.mtaThread(()=>itemToExecute.executeFirstMethod());
 											}
+										}
 											
 									}
 								});		
