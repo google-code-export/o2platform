@@ -334,8 +334,26 @@ namespace O2.XRules.Database.Utils
 		}
 	}	
 	
-		public static class _Extra_Int_ExtensionMethods
-	{
+	public static class _Extra_Long_ExtensionMethods
+	{		
+		public static long toLong(this double _double)
+		{
+			return (long)_double;
+		}
+		
+		public static long add(this long _long, long value)
+		{
+			return _long + value;
+		}				
+	}
+	
+	public static class _Extra_Int_ExtensionMethods
+	{		
+		public static int toInt(this double _double)
+		{
+			return (int)_double;
+		}
+		
 		public static int mod( this int num1, int num2)
 		{
 			return num1 % num2;
@@ -370,6 +388,25 @@ namespace O2.XRules.Database.Utils
 			}
 		}
 	}
+	
+	public static class _Extra_DateTime_ExtensionMethods
+	{
+		public static long unixTime(this DateTime dateTime)
+		{
+			return (dateTime - new DateTime(1970, 1, 1)).TotalSeconds.toLong();
+		}
+		
+		public static long unixTime_Now(this int secondsToAdd)
+		{
+			return DateTime.UtcNow.unixTime().add(secondsToAdd);
+		}
+		
+		public static long unixTimeStamp_InSeconds(this int secondsToAdd)
+		{
+			return secondsToAdd.unixTime_Now();
+		}
+	}
+	
 	
 	public static class _Extra_XML_ExtensionMethods
 	{		
