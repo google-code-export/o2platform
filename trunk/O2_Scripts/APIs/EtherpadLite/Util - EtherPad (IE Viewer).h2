@@ -7,7 +7,7 @@ var etherPad = new API_EtherpadLite();
  
 var actionsPanel = topPanel.insert_Above(40,"");
 
-var ie = topPanel.add_IE();
+var ie = topPanel.add_IE().silent(false);
 
 
 Action open = 

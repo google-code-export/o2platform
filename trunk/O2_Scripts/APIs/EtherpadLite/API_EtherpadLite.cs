@@ -86,7 +86,10 @@ namespace O2.XRules.Database.APIs
 				etherPad.create_Pad(padName);
 			else
 				if (result.Code == EtherpadReturnCodeEnum.Ok)
+				{
 					etherPad.CurrentPad = padName;
+					etherPad.PadExists = true;
+				}
 				else
 					"[API_EtherpadLite][ensure_Pad_Exists] unsupported response code: {0}".error(result.Code);
 			return etherPad;
