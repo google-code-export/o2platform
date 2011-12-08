@@ -51,7 +51,10 @@ using mshtml;
 namespace O2.XRules.Database.APIs
 {
     public static class WatiN_IE_ExtensionMethods
-    {    
+    {        	
+    	//global conts
+    	public static int WAITFORJSVARIABLE_MAXSLEEPTIMES = 10;
+    	
     	//WatIN ExtensionMethods
  
     	public static WatiN_IE ie(this string url)
@@ -2085,7 +2088,7 @@ namespace O2.XRules.Database.APIs
 		
 		public static object waitForJsVariable(this WatiN_IE watinIe, string jsCommand)
 		{
-			return watinIe.waitForJsVariable(jsCommand,  500, 20);
+			return watinIe.waitForJsVariable(jsCommand,  500, WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES);
 		}
 		
 		public static object waitForJsVariable(this WatiN_IE watinIe, string jsCommand, int sleepMiliseconds, int maxSleepTimes)
@@ -2097,7 +2100,7 @@ namespace O2.XRules.Database.APIs
 				if (watinIe.doesJsObjectExists(jsCommand))
 				{
 					var jsObject = watinIe.getJsObject(jsCommand);
-					"[watinIe][waitForJsVariable] got value: {0} (n tries)".info(jsObject, i);
+					"[watinIe][waitForJsVariable] got value: {0} ({1} tries)".info(jsObject, i);
 					return jsObject;
 				}					
 				watinIe.sleep(500, false);
@@ -2105,6 +2108,14 @@ namespace O2.XRules.Database.APIs
 			"[WatiN_IE][waitForJsVariable] didn't find jsObject called '{0}' after {1} sleeps of {2} ms".error(jsCommand, maxSleepTimes, sleepMiliseconds);
 			return null;
 		}
+		
+		public static WatiN_IE deleteJsVariable(this WatiN_IE watinIe, string jsVariable)
+		{
+			var evalString = "try { delete " + jsVariable + " } catch(exception) { }";
+			watinIe.eval(evalString);
+			return watinIe;
+		}
+		
     	    	
     }
     public static class WatiN_IE_ExtensionMethods_JavaScript_Helpers

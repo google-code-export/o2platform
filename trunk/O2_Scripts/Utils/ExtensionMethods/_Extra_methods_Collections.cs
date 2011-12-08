@@ -155,30 +155,8 @@ namespace O2.XRules.Database.Utils
 		{
 			list.Insert(position, value);
 			return list;
-		}
-		
-		
-		//these helps with COM Objects received from IE	
-		public static List<string> extractList_String(this object _object)
-		{
-			return _object.extractList<string>();
-		}
-		
-		public static List<T> extractList<T>(this object _object)
-		{
-			var results = new List<T>();
-			if (_object is IEnumerable)
-			{
-				foreach(var item in (IEnumerable)_object)
-					if (item is T)
-						results.Add((T)item);
-					else
-						"[extractList] inside the IEnumerable, this item was not of type '{0}: {1}".error(item.type(), item);
-			}
-			else
-				"[extractList] the provided object was not IEnumerable: {0}".error(_object);
-			return results;
-		}
+		}		
+				
 	}
 	
 	public static class Dictionary_ExtensionMethods

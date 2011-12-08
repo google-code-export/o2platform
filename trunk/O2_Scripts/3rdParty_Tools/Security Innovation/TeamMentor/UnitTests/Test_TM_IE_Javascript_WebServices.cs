@@ -19,7 +19,7 @@ namespace O2.SecurityInnovation.TeamMentor
 	[TestFixture] 
     public class Test_TM_IE_Javascript_WebServices : Test_TM_IE
     {    	
-    	public string startPage = "Javascript/_Javascript_Loaders/jQuery_tmWebServices.html"; 
+    	public string startPage = "Html_Pages/_UnitTest_Helpers/_Javascript_Loaders/jQuery_tmWebServices.html"; 
     	
 		public Test_TM_IE_Javascript_WebServices()
 		{
@@ -88,7 +88,8 @@ namespace O2.SecurityInnovation.TeamMentor
 						o2Timer.stop().str().jQuery_Append_Body(ie);
 					};
 			
-			5.loop(getGuiObjects);
+			//5.loop(getGuiObjects);
+			getGuiObjects();
 			
 			var uniqueStrings = ie.getJsVariable("TM.WebServices.Data.GuiObjects.UniqueStrings");
 			var guidanceItemsMappings =  ie.getJsVariable("TM.WebServices.Data.GuiObjects.GuidanceItemsMappings");
@@ -141,7 +142,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			
 			
 			//test multiple table creations:
-			for(int i = 0 ; i < 3 ; i++)  
+			//for(int i = 0 ; i < 3 ; i++)  
 				createTable();
 				
 			return "ok from_GuiObjects_Create_Raw_Table";
@@ -188,7 +189,7 @@ namespace O2.SecurityInnovation.TeamMentor
 				};			
 			
 			//test multiple table creations:
-			for(int i = 0 ; i < 3 ; i++)  
+			//for(int i = 0 ; i < 3 ; i++)  
 				createTable();
 						
 			return "ok from_GuiObjects_ExtractMappings_And_Create_Raw_Table".jQuery_Append_Body(ie);;
@@ -275,23 +276,24 @@ namespace O2.SecurityInnovation.TeamMentor
 									
 									$('body').append(treeStructure);									
 								");
-						this.sleep(1000);		
+						ie.eval("$('#treeStructure').remove();");
+/*						this.sleep(1000);		
 						ie.eval(@"$('#treeStructure').fadeOut(2000,
 														function () {
 																		$('#treeStructure').remove() 
 																	})");						
-						this.sleep(2000);
+						this.sleep(2000); */
 				};						
 			showLibraryTreeStructure(false);			
 			showLibraryTreeStructure(true);		
 			return "ok show_FolderStructure_Libraries".jQuery_Append_Body(ie);
     	}  
-		
+    	    	
     	[Test]
     	public string close_IE()
     	{    		    		
     		base.close_IE_Object();			 		    		
-    		return "ok: close_IE (in {0} seconds)".format(Test_TM.CLOSE_BROWSER_IN_SECONDS)
+    		return "Test_TM_IE_Javascript_WebServices: ok : close_IE (in {0} seconds)".format(Test_TM.CLOSE_BROWSER_IN_SECONDS)
     			.jQuery_Append_Body(ie);
     	}
     	
