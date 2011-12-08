@@ -724,6 +724,34 @@ namespace O2.XRules.Database.Utils
                 }
             return forms;				    
 		}
+		
+		public static T minimized<T>(this T control)
+			where T : Control
+		{
+			return control.windowState(FormWindowState.Minimized);	
+		}
+		
+		public static T maximized<T>(this T control)
+			where T : Control
+		{
+			return control.windowState(FormWindowState.Maximized);	
+		}
+		
+		public static T normal<T>(this T control)
+			where T : Control
+		{
+			return control.windowState(FormWindowState.Normal);	
+		}
+		
+		public static T windowState<T>(this T control, FormWindowState state)
+			where T : Control
+		{
+			return (T)control.invokeOnThread(
+				()=>{
+						control.parentForm().WindowState = System.Windows.Forms.FormWindowState.Minimized; 
+						return control;
+					});
+		}
 	}
 
 }    	

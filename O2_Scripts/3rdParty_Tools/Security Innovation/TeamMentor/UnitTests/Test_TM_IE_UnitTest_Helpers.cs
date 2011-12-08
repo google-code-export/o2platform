@@ -29,7 +29,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	[Test]
     	public string GuiObjects_CreateMappingsTable()  
     	{								
-			base.open("html_pages/_UnitTest_Helpers/GuiObjects_CreateMappingsTable.html?time=" + DateTime.Now.Ticks); 						
+			base.open("html_pages/_UnitTest_Helpers/GuiObjects/GuiObjects_CreateMappingsTable.html?time=" + DateTime.Now.Ticks); 						
 			var value = ie.waitForJsVariable("UnitTest_Helper_Loaded");			
 			Assert.That(value.str()=="True","value was not True");
     		return "ok: open_IE_and_get_HomePage";    		
@@ -38,7 +38,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	[Test]
     	public string GuiObjects_ViewFolderStructure()  
     	{								
-			base.open("html_pages/_UnitTest_Helpers/GuiObjects_ViewFolderStructure.html?time=" + DateTime.Now.Ticks); 						
+			base.open("html_pages/_UnitTest_Helpers/GuiObjects/GuiObjects_ViewFolderStructure.html?time=" + DateTime.Now.Ticks); 						
 			var value = ie.waitForJsVariable("UnitTest_Helper_Loaded").str();			
 			Assert.That(value.str()=="True","value was not True");
     		return "ok: open_IE_and_get_HomePage";    		
@@ -47,7 +47,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	[Test]
     	public string GuiObjects_ViewFolderStructure_with_GuidandeItemsGuids()  
     	{								
-			base.open("html_pages/_UnitTest_Helpers/GuiObjects_ViewFolderStructure_with_GuidandeItemsGuids.html?time=" + DateTime.Now.Ticks); 						
+			base.open("html_pages/_UnitTest_Helpers/GuiObjects/GuiObjects_ViewFolderStructure_with_GuidandeItemsGuids.html?time=" + DateTime.Now.Ticks); 						
 			var value = ie.waitForJsVariable("UnitTest_Helper_Loaded").str();			
 			Assert.That(value.str()=="True","value was not True");
     		return "ok: open_IE_and_get_HomePage";    		
@@ -57,7 +57,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	public string LibrariesFoldersViews_And_GuidanceItems_Guids()  
     	{					
     		var guidanceItemsDiv_DEFAULT_VALUE = "GuidanceItems will go here";
-			base.open("html_pages/_UnitTest_Helpers/LibrariesFoldersViews_And_GuidanceItems_Guids.html?time=" + DateTime.Now.Ticks); 						
+			base.open("html_pages/_UnitTest_Helpers/GuiObjects/LibrariesFoldersViews_And_GuidanceItems_Guids.html?time=" + DateTime.Now.Ticks); 						
 			var value = ie.waitForJsVariable("UnitTest_Helper_Loaded").str();			
 			Assert.That(value.str()=="True","value was not True");
 			ie.eval("var guidanceItemsDiv = $('#guidanceItems').html()");
@@ -74,7 +74,7 @@ namespace O2.SecurityInnovation.TeamMentor
 		[Test]
 		public string LibrariesFoldersViews_And_GuidanceItems_Guids_Mode_B()  
     	{					    		
-			base.open("html_pages/_UnitTest_Helpers/LibrariesFoldersViews_And_GuidanceItems_Guids_Mode_B.html?time=" + DateTime.Now.Ticks); 						
+			base.open("html_pages/_UnitTest_Helpers/GuiObjects/LibrariesFoldersViews_And_GuidanceItems_Guids_Mode_B.html?time=" + DateTime.Now.Ticks); 						
 			var value = ie.waitForJsVariable("UnitTest_Helper_Loaded").str();			
 			Assert.That(value.str()=="True","value was not True");
 			ie.eval("var guidanceItemsDiv = $('#guidanceItems').html()");
@@ -153,21 +153,31 @@ namespace O2.SecurityInnovation.TeamMentor
 			return "ok: DataTable_View_GuidanceItemsMappings";
 		}
 
+		[Test]
+		public string DataTable_View_GuidanceItemsMappings_using_TM_API()  
+    	{					    		
+			base.open("html_pages/_UnitTest_Helpers/DataGrids/DataTable_View_GuidanceItemsMappings_using_TM_API.html?time=" + DateTime.Now.Ticks); 						
+			var value = ie.waitForJsVariable("UnitTest_Helper_DataTable").str();			
+			Assert.That(value.str()=="True","value was not True");
+			return "ok: DataTable_View_GuidanceItemsMappings";
+		}
+
+
+
+
 
 		[Test]
 		public string AppliedFilters_View_All_GuidanceItems()  
     	{					    		
-			base.open("html_pages/_UnitTest_Helpers/AppliedFilters_View_All_GuidanceItems.html?time=" + DateTime.Now.Ticks); 						
+			base.open("html_pages/_UnitTest_Helpers/AppliedFilters/AppliedFilters_View_All_GuidanceItems.html?time=" + DateTime.Now.Ticks); 						
 			var value = ie.waitForJsVariable("UnitTest_Helper_AppliedFilters").str();			
 			Assert.That(value.str()=="True","UnitTest_Helper_AppliedFilters value was not True");
 			ie.eval("showFiltersWithCurrentData()");
 			Assert.IsNotNull	(ie.getJsVariable("$('#pivotPanel_Technology input')"), 		"#pivotPanel_Technology input");
 			Assert.That			(ie.getJsVariable("$('#pivotPanel_Technology input').length").str().toInt() > 0 ,  "pivotPanel_Technology input').length < 1");
 			//$("#pivotPanel_Technology input").length
-			return "ok: DataTable_View_GuidanceItemsMappings";
+			return "ok: AppliedFilters_View_All_GuidanceItems";
 		}
-
-
 
     	
     	

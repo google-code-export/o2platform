@@ -23,7 +23,7 @@ namespace O2.SecurityInnovation.TeamMentor
 		{			
 			base.set_IE_Object("Develop_for_Test_TM_IE_Javascript_WebServices");	
 			if (ie.url().isNull())
-				base.open("Javascript/_Javascript_Loaders/jQuery_tmWebServices.html?time="+ DateTime.Now.Ticks);
+				base.open("Html_Pages/_UnitTest_Helpers/_Javascript_Loaders/jQuery_tmWebServices.html?time="+ DateTime.Now.Ticks);
 			//ie.open(Test_TM.tmEmptyPage);
 			//this.load_Javascript_jQuery()
 			//	.load_Javascript_TM_WebServices();		 						
