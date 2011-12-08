@@ -38,7 +38,10 @@ var otherTools_Mapping = new Items().add("Process Explorer", "ProcessExplorer.cs
 									.add("Amazon EC2 Browser", "Tool - Amazon EC2 Browser.h2")
 									.add("Amazon S3 Browser", "Amazon S3 Browser.h2")
 									.add("OpenPGP Tool", "Tool - Using OpenPgp to Encrypt or Decrypt.h2")																		
-									.add("AppScan Standard + O2","Util - Launch AppScan Standard (O2 version).h2");
+									.add("AppScan Standard + O2","Util - Launch AppScan Standard (O2 version).h2")
+									.add("EtherPad (IE Viewer)","Util - EtherPad (IE Viewer).h2")
+									.add("EtherPad (Text Viewer)","Util - EtherPad (Text Viewer).h2");
+									
 
 var o2Guis_Mappings = 	 new Items().add("Security Consultants", "Security Consultants (Custom O2 version).h2")
 									.add("OWASP Projects &amp; Wiki", "OWASP Projects and Website (Custom O2).h2")

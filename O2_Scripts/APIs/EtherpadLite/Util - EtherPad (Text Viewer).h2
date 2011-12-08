@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Util - EtherPad (Text Viewer)",700,400); 
+//var topPanel = panel.clear().add_Panel();
+
+var etherPad = new API_EtherpadLite();
+ 
+var actionsPanel = topPanel.insert_Above(40,"");
+
+var padText = topPanel.add_GroupBox("Text view")
+				      .add_TextArea()
+					  .onTextChange( (text)=&gt; O2Thread.mtaThread(()=&gt; etherPad.set_Text(text)));;		    
+
+
+
+Action open = 
+	()=&gt;{
+			padText.set_Text(etherPad.contents().fixCRLF());			
+		};
+
+etherPad.open_Pad("O2_Test_Pad");
+actionsPanel.add_Label("Current Pad").top(2)
+		    .append_TextBox(etherPad.CurrentPad).onTextChange((text)=&gt; etherPad.CurrentPad = text)
+		    .append_Link("open or refresh", ()=&gt; open());
+
+open();
+
+return "ok";
+
+//using using Etherpad;
+//O2File:API_EtherpadLite.cs 
+//O2Ref:WatiN.Core.1x.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>
