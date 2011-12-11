@@ -3,7 +3,7 @@
 
 // see O2_Web_Proxy.cs API for a way to consume this Proxy from O2
  
-//O2File:ProxyCache.cs
+//O2File:ProxyCache.cs 
 
 //O2Ref:System.Configuration.dll 
 using System;
@@ -21,6 +21,7 @@ using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 
 using O2.Kernel.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.XRules.Database.APIs;
 using O2.XRules.Database.Utils;
@@ -48,12 +49,13 @@ namespace HTTPProxyServer
         
         public bool CaptureRequests { get; set; }
         public bool ProxyStarted { get; set; }
+        public bool ProxyDisabled { get; set; }
         
         
         public static ProxyCache proxyCache;
 
 		//Original
-        private static readonly ProxyServer _server = new ProxyServer();
+        private static ProxyServer _server = new ProxyServer();
 
         private static readonly int BUFFER_SIZE = 8192;
         private static readonly char[] semiSplit = new char[] { ';' };
@@ -80,9 +82,9 @@ namespace HTTPProxyServer
         }
 		
 		
-        public Boolean DumpHeaders { get; set; }
-        public Boolean DumpPostData { get; set; }
-        public Boolean DumpResponseData { get; set; }
+//        public Boolean DumpHeaders { get; set; }
+//        public Boolean DumpPostData { get; set; }
+//        public Boolean DumpResponseData { get; set; }
 
         public static ProxyServer Server
         {
@@ -144,7 +146,7 @@ namespace HTTPProxyServer
             _listenerThread.Join();
         }
 
-        private static void Listen(Object obj)
+        private void Listen(Object obj)
         {
             TcpListener listener = (TcpListener)obj;
             try
@@ -152,7 +154,7 @@ namespace HTTPProxyServer
                 while (true)
                 {
                     TcpClient client = listener.AcceptTcpClient();
-                    while (!ThreadPool.QueueUserWorkItem(new WaitCallback(ProxyServer.ProcessClient), client)) ;
+                    while (!ThreadPool.QueueUserWorkItem(new WaitCallback(ProcessClient), client)) ;
                 }
             }
             catch (ThreadAbortException) { }
@@ -160,27 +162,36 @@ namespace HTTPProxyServer
         }
 
 
-        private static void ProcessClient(Object obj)
+        private void ProcessClient(Object obj)
         {
-            TcpClient client = (TcpClient)obj;
-            try
-            {
-                DoHttpProcessing(client);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                "[ProcessClient]".error(ex.Message);
-            }
-            finally
-            {
-                client.Close();
-            }
-        }		
+        	O2Thread.mtaThread(
+        		()=>{
+			            TcpClient client = (TcpClient)obj;
+			            try
+			            {
+			                DoHttpProcessing(client);
+			            }
+			            catch (Exception ex)
+			            {
+			                Console.WriteLine(ex.Message);
+			                "[ProcessClient]".error(ex.Message);
+			            }
+			            finally
+			            {
+			                client.Close();
+			            }
+					});
+        }			
 
-
-        private static void DoHttpProcessing(TcpClient client)
-        {                    	
+        private void DoHttpProcessing(TcpClient client)
+        {      
+        	var threadId = Thread.CurrentThread.ManagedThreadId;
+        	if (ProxyDisabled)
+        	{
+        		"[DoHttpProcessing]: ProxyDisabled is set, aborting request".error();
+        		return;
+        	}
+        	
             Stream clientStream = client.GetStream();
             Stream outStream = clientStream; //use this stream for writing out - may change if we use ssl
             SslStream sslStream = null;
@@ -213,66 +224,99 @@ namespace HTTPProxyServer
                 String remoteUri = splitBuffer[1];
                 Version version = new Version(1, 0);
 
-                
+                ExtraLogging.ifDebug("[{2}][DoHttpProcessing]: Got request for: {0} {1} [{2}]", method, remoteUri, threadId);
                 
                 Action handleSLL_CONNECT_withCaller = 
                 	()=>{
                 			if (skipRemaingSteps)
 								return;
-							ExtraLogging.ifInfo("handleSLL_CONNECT_withCaller");
-							
+																						
 			                if (splitBuffer[0].ToUpper() == "CONNECT")
 			                {
+			                	ExtraLogging.ifInfo("[{1}][DoHttpProcessing][handleSLL_CONNECT_withCaller] {0} [{1}]", remoteUri, threadId);
 			                    //Browser wants to create a secure tunnel
 			                    //instead = we are going to perform a man in the middle "attack"
 			                    //the user's browser should warn them of the certification errors however.
 			                    //Please note: THIS IS ONLY FOR TESTING PURPOSES - you are responsible for the use of this code
 			                    remoteUri = "https://" + splitBuffer[1];
+			                    
+			                    ExtraLogging.ifInfo("[{1}][DoHttpProcessing][handleSLL_CONNECT_withCaller] updated remoteUri {0}, [{1}]", remoteUri, threadId);
+			                    
 			                    while (!String.IsNullOrEmpty(clientStreamReader.ReadLine())) ;
+			                    
+			                    ExtraLogging.ifInfo("[{0}][DoHttpProcessing][handleSLL_CONNECT_withCaller] after clientStreamReader.ReadLine [{0}]", threadId);
+			                    
 			                    StreamWriter connectStreamWriter = new StreamWriter(clientStream);
 			                    connectStreamWriter.WriteLine("HTTP/1.0 200 Connection established");
 			                    connectStreamWriter.WriteLine(String.Format("Timestamp: {0}", DateTime.Now.ToString()));
-			                    connectStreamWriter.WriteLine("Proxy-agent: matt-dot-net");
+			                    connectStreamWriter.WriteLine("Proxy-agent: O2 Platform Web Proxy");
 			                    connectStreamWriter.WriteLine();
+			                    			                    
 			                    connectStreamWriter.Flush();
-			                    
-			                    connectStreamWriter.Close();   //see if it has side effects with ssl sites
-			                }
+			        //            ExtraLogging.ifDebug("[{0}][DoHttpProcessing][handleSLL_CONNECT_withCaller] afterFlush [{0}]", threadId);
+			                    //connectStreamWriter.Close();   //see if it has side effects with ssl sites
+			                    //ExtraLogging.ifDebug("[DoHttpProcessing][handleSLL_CONNECT_withCaller] afterClose");
+/*			                }
 						};
 
 				Action handleSLL_CONNECT_withRemote = 
                 	()=>{
+                	
                 			if (skipRemaingSteps)
-								return;
-							ExtraLogging.ifInfo("handleSLL_CONNECT_withRemote");
-							
-			                if (splitBuffer[0].ToUpper() == "CONNECT")
-			                {			                			
-			                    sslStream = new SslStream(clientStream, false);
+								return;							
+*/							
+//			                if (splitBuffer[0].ToUpper() == "CONNECT")
+//			                {			                			
+			                	//ExtraLogging.ifInfo("[DoHttpProcessing][handleSLL_CONNECT_withRemote] {0}", remoteUri);								
+			                    
 			                    try
 			                    {
-			                        //sslStream.AuthenticateAsServer(_certificate, false, SslProtocols.Tls | SslProtocols.Ssl3 | SslProtocols.Ssl2, true);
-			                        sslStream.AuthenticateAsServer(_certificate, false, SslProtocols.Tls | SslProtocols.Ssl3 | SslProtocols.Ssl2, false);
+			                    	var keepStreamOpen = true;
+			                    	var checkCertificateRevocation = true;
+			                    	ExtraLogging.ifInfo("[{1}][DoHttpProcessing][handleSLL_CONNECT_withCaller] creating sslStream and AuthenticateAsServer {0} [{1}]", remoteUri, threadId);
+			                    	//sslStream = new SslStream(clientStream, false);		//original
+			                    	sslStream = new SslStream(clientStream, keepStreamOpen);
+			                        //sslStream.AuthenticateAsServer(_certificate, false, SslProtocols.Tls | SslProtocols.Ssl3 | SslProtocols.Ssl2, true);   //original
+			                        //sslStream.AuthenticateAsServer(_certificate, false, SslProtocols.Tls | SslProtocols.Ssl3 | SslProtocols.Ssl2, false);			                        
+			                        sslStream.AuthenticateAsServer(_certificate, false, SslProtocols.Tls | SslProtocols.Ssl3 | SslProtocols.Ssl2, checkCertificateRevocation);			                        			                        
 			                    }
 			                    catch (Exception ex)
 			                    {
-			                    	"[Proxy Server] in sslStream.AuthenticateAsServer: {0}".error(ex.Message);
-			                    	"NOTE: this error is usually caused by running with UAC, start the script in non UAC".lineBefore().lineBeforeAndAfter().info();
-			                    	//ex.log();
-			                        //Console.WriteLine(ex.Message);
-			                        sslStream.Close();
-			                        clientStreamReader.Close();
-			                        //connectStreamWriter.Close();
-			                        clientStream.Close();
-			                        return;
-			                    }
+			                    	skipRemaingSteps = true;			                        
+			                    	"[{1}][Proxy Server][handleSLL_CONNECT] in sslStream.AuthenticateAsServer: {0} [{1}]".error(ex.Message, threadId);			                    		
+			                    	if (ex.Message == "Authentication failed because the remote party has closed the transport stream.")
+			                    		"[Proxy Server][handleSLL_CONNECT] NOTE: this error is usually callsed by the browser not accepting the temp certificate".info();
+			                    	else
+			                    		"[Proxy Server][handleSLL_CONNECT] NOTE: this error is usually caused by running with UAC, start the script in non UAC".info();  //.lineBefore().lineBeforeAndAfter()
+			                        try
+			                        {
+			                        	sslStream.Close();
+			                        	clientStreamReader.Close();
+			                        	connectStreamWriter.Close(); // check for side effect
+			                        	clientStream.Close();			                    	
+			                        }
+			                        catch(Exception ex2)
+			                        {
+			                        	"[{1}][Proxy Server][handleSLL_CONNECT] in CATCH of sslStream.AuthenticateAsServer: {0} [{1}]".error(ex2.Message, threadId);
+			                        }
+			                    }			                    
+			                    if (skipRemaingSteps)
+			                    	return;
 			
 			                    //HTTPS server created - we can now decrypt the client's traffic
 			                    clientStream = sslStream;
 			                    clientStreamReader = new StreamReader(sslStream);
 			                    outStream = sslStream;
 			                    //read the new http command.
-			                    httpCmd = clientStreamReader.ReadLine();
+			                    try
+			                    {
+			                    	httpCmd = clientStreamReader.ReadLine();
+			                    }
+			                    catch(Exception ex)
+			                    {
+			                    	"[{1}][Proxy Server] in clientStreamReader.ReadLine() {0} [{1}]".error(ex.Message, threadId);
+			                    	httpCmd = null;
+			                    }
 			                    if (String.IsNullOrEmpty(httpCmd))
 			                    {
 			                        clientStreamReader.Close();
@@ -290,7 +334,7 @@ namespace HTTPProxyServer
 					()=>{	
 							if (skipRemaingSteps)
 								return;
-							ExtraLogging.ifInfo("createWebRequest");
+							ExtraLogging.ifInfo("[{1}][DoHttpProcessing][createWebRequest] {0} [{1}]", remoteUri, threadId);
 							//construct the web request that we are going to issue on behalf of the client.
 							remoteUri = remoteUri.uri().str();	// fixes some issues where the uri is missing the initial protocol
 			                webReq = (HttpWebRequest)HttpWebRequest.Create(remoteUri);
@@ -309,11 +353,10 @@ namespace HTTPProxyServer
 				Action capturePostData = 
 					()=>{
 							if (skipRemaingSteps)
-								return;
-							ExtraLogging.ifInfo("capturePostData");
-
+								return;							
 			                if (method.ToUpper() == "POST")
 			                {			        			                	
+			                	ExtraLogging.ifInfo("[{1}][DoHttpProcessing][capturePostData] {0} [{1}]", remoteUri, threadId);
 			                	var bytesToRead = contentLen;
 			                	var maxReadBlock = 2048;		// try 100 to see better what is going on			                	
 			                				                    
@@ -351,10 +394,10 @@ namespace HTTPProxyServer
 				Action writePostDataToRequestStream =
 					()=>{
 							if (skipRemaingSteps)
-								return;
-							ExtraLogging.ifInfo("handleResponse_viaCache");
+								return;							
 							if (method.ToUpper() == "POST")
 			                {
+			                	ExtraLogging.ifInfo("[{1}][DoHttpProcessing][writePostDataToRequestStream] {0} [{1}]", remoteUri, threadId);
 			                	 var requestPostChars = Encoding.UTF8.GetChars(requestPostBytes);
 								StreamWriter sw = new StreamWriter(webReq.GetRequestStream());
 								sw.Write(requestPostChars.ToArray(), 0, requestPostChars.Length);
@@ -368,7 +411,7 @@ namespace HTTPProxyServer
 					()=>{
 							if (skipRemaingSteps)
 								return;
-							ExtraLogging.ifInfo("getResponse");
+							ExtraLogging.ifInfo("[{1}][DoHttpProcessing][getResponse] {0} [{1}]", remoteUri, threadId);
 							
 							webReq.Timeout = 15000;
 		                    try
@@ -378,8 +421,9 @@ namespace HTTPProxyServer
 		                    catch (WebException webEx)
 		                    {
 		                        response = webEx.Response as HttpWebResponse;
-		                        webEx.log();
-		                    }
+		                        "[{1}][DoHttpProcessing][getResponse] {0} [{1}]: {2}".error( remoteUri, threadId, webEx.Message);		                        
+		                        //webEx.log();
+		                    }		                    
 						};
 				
 				 
@@ -387,10 +431,10 @@ namespace HTTPProxyServer
 					()=>{
 							if (skipRemaingSteps)
 								return;
-							ExtraLogging.ifInfo("handleResponse_viaCache");
+							ExtraLogging.ifInfo("[{1}][DoHttpProcessing][handleResponse_viaCache] {0} [{1}]", remoteUri, threadId);
 							if (proxyCache.enabled())
 	                        {	
-	                        	ExtraLogging.ifInfo("Replying using Cache");
+	                        	ExtraLogging.ifInfo("[{1}][DoHttpProcessing][handleResponse_viaCache] Replying using Cache: {0} [{1}]", remoteUri, threadId);
 	                        	//Stream responseStream = response.GetResponseStream();
 	                        	var cacheObject = proxyCache.getMapping(webReq, requestPostBytes);
 		                        if (cacheObject.notNull())
@@ -417,20 +461,61 @@ namespace HTTPProxyServer
 					()=>{	
 							if (skipRemaingSteps)
 								return;
-							ExtraLogging.ifInfo("handleResponse_viaRealTarget");
+								
+							ExtraLogging.ifInfo("[{1}][DoHttpProcessing][handleResponse_viaRealTarget]: {0} [{1}]", remoteUri, threadId);
 							if (response == null)		                				                	
-		                		"[ProxyServer][handleResponse_viaRealTarget] Response was null".error();
-		                		
-	                        StreamWriter myResponseWriter = new StreamWriter(outStream);
-	                        Stream responseStream = response.GetResponseStream();	                        	                        	                        
-		                   	
-							var responseHeaders = ProcessResponse(response, rawResponseHeaders);
+		                		"[{1}][ProxyServer][DoHttpProcessing][handleResponse_viaRealTarget] Response was null {0} [{1}]".error(remoteUri, threadId);
+		                	
+		                	StreamWriter myResponseWriter;
+		                	Stream responseStream;
+		                	List<Tuple<String,String>> responseHeaders = null;
+		                	var memoryStream = new MemoryStream();
+							var binaryWriter = new  BinaryWriter(memoryStream);
+		                	
+		                	Action addResponseToCache =
+		                		()=>{
+				                		var responseString = response.isNull()
+				                								? ""
+				                								:	(response.ContentEncoding == "gzip")
+				                            							? memoryStream.ToArray().gzip_Decompress()
+				                            							: memoryStream.ToArray().ascii();                            							                            	
+		                            	                            	
+		                            	var requestResponseData = proxyCache.add(webReq, response, requestPostBytes,  memoryStream.ToArray(), responseString);
+		                            	
+		                            	requestResponseData.Request_Headers_Raw = rawRequestHeaders.str();                            	
+		                            	requestResponseData.Response_Headers_Raw = rawResponseHeaders.str();                            	
+		                            	requestResponseData.Response_Headers = responseHeaders;                            	                            	
+		                            	
+			                            if (OnResponseReceived.notNull()) 	                            
+			                            	OnResponseReceived(requestResponseData);//webReq, response,memoryStream.ToArray().ascii());//UTF8Encoding.UTF8.GetString(memoryStream.ToArray(), 0, (int)memoryStream.Length));
+				                	};
+		                	
+		                	try
+		                	{
+		                		if (response.isNull() || response.StatusCode.str() == "BadRequest")
+		                		{
+		                			ExtraLogging.ifInfo("[{0}][ProxyServer][handleResponse] skipping due to response being null or response.StatusCode == BadRequest ", threadId);
+		                			"[{0}][ProxyServer][handleResponse] skipping due to response being null or response.StatusCode == BadRequest ".error(threadId);
+		                			addResponseToCache();
+							    	return; 
+		                		}
+	                        	myResponseWriter = new StreamWriter(outStream);
+	                        	responseStream = response.GetResponseStream();	                        	                        	                        		                   	
+								responseHeaders = ProcessResponse(response, rawResponseHeaders);								
+							}
+							catch(Exception ex)
+							{
+							    "[{2}][ProxyServer][handleResponse] before processing response body:  {0}  {1} [{2}]".error(ex.Message,  remoteUri, threadId);
+							    addResponseToCache();
+							    return; 
+							}
+							
 	                        try
 	                        {	                        	
 	                            //send the response status and response headers
 	                            WriteResponseStatus(response.StatusCode,response.StatusDescription, myResponseWriter);
-	                            WriteResponseHeaders(myResponseWriter, responseHeaders);
-	
+	                            WriteResponseHeaders(myResponseWriter, responseHeaders);	                            								
+								
 	                            Byte[] buffer;
 	                            if (response.ContentLength > 0)
 	                                buffer = new Byte[response.ContentLength];
@@ -439,8 +524,7 @@ namespace HTTPProxyServer
 	
 	                            int bytesRead;
 	                            
-								var memoryStream = new MemoryStream();
-								var binaryWriter = new  BinaryWriter(memoryStream);
+								
 																
 	                            while ((bytesRead = responseStream.Read(buffer, 0, buffer.Length)) > 0)	                            
 	                            	binaryWriter.Write(buffer, 0, bytesRead);
@@ -449,29 +533,24 @@ namespace HTTPProxyServer
 	                            
 	                            if (memoryStream.Length >  Int32.MaxValue)
 	                            	"[ProxyServer][handleResponse]: memoryStream.Length >  Int32.MaxValue".error();
-	                            	
-	                            outStream.Write(memoryStream.ToArray(), 0, (int)memoryStream.Length);
 	                            
-	                            	                            
-                            	var responseString = (response.ContentEncoding == "gzip")
-                            							? memoryStream.ToArray().gzip_Decompress()
-                            							: memoryStream.ToArray().ascii();                            							                            	
-                            	                            	
-                            	var requestResponseData = proxyCache.add(webReq, response, requestPostBytes,  memoryStream.ToArray(), responseString);
-                            	
-                            	requestResponseData.Request_Headers_Raw = rawRequestHeaders.str();                            	
-                            	requestResponseData.Response_Headers_Raw = rawResponseHeaders.str();                            	
-                            	requestResponseData.Response_Headers = responseHeaders;                            	                            	
-                            	
-	                            if (OnResponseReceived.notNull()) 	                            
-	                            	OnResponseReceived(requestResponseData);//webReq, response,memoryStream.ToArray().ascii());//UTF8Encoding.UTF8.GetString(memoryStream.ToArray(), 0, (int)memoryStream.Length));	                            
+	                            try
+	                            {
+	                            	outStream.Write(memoryStream.ToArray(), 0, (int)memoryStream.Length);
+	                            }
+	                            catch(Exception ex)
+	                            {
+	                            	"[{2}][ProxyServer][handleResponse] in outStream.Write: {0}  {1}".error(ex.Message,  remoteUri, threadId);	                            
+	                            }
+	                            
+	                            addResponseToCache();
 	                            		
 	                            responseStream.Close();	                            	                            
 	                            outStream.Flush();
 	                        }
 	                        catch (Exception ex)
 	                        {	                            
-	                            "[ProxyServer][handleResponse]: {0}".error(ex.logStackTrace().Message);	                            
+	                            "[{2}][ProxyServer][handleResponse]  while processing response body: {0}  {1} [{2}]".error(ex.logStackTrace().Message,  remoteUri, threadId);	                            
 	                        }
 	                        finally
 	                        {
@@ -481,21 +560,23 @@ namespace HTTPProxyServer
 	                        }		                    
 						};																
 				
+				
+				handleSLL_CONNECT_withCaller();
+				//handleSLL_CONNECT_withRemote();								
 				// O2 callback				
                 if (InterceptRemoteUrl.notNull())						                                	
                     remoteUri = InterceptRemoteUrl(remoteUri);				
-				
+												
 				createWebRequest();	
 				capturePostData();
 				
 				//put capturePostDatainterceptor callback here				
-				handleResponse_viaCache();
-				
-				handleSLL_CONNECT_withCaller();				
-				handleSLL_CONNECT_withRemote();													
+				handleResponse_viaCache();												
 				
 				if (HandleWebRequestProxyCommands.notNull() && HandleWebRequestProxyCommands(webReq,remoteUri) == false )			// O2 callback
 					skipRemaingSteps = true;				     
+
+//				handleSLL_CONNECT_withRemote();
 
                 if (InterceptWebRequest.notNull())
                     InterceptWebRequest(webReq);                                 
@@ -505,6 +586,12 @@ namespace HTTPProxyServer
 				getResponse();
 							
 				handleResponse_viaRealTarget();		                
+				
+				if (skipRemaingSteps)
+					ExtraLogging.ifError("[{1}][DoHttpProcessing] skipRemaingSteps was set for: {0} [{1}]", remoteUri, threadId);
+					
+				ExtraLogging.ifDebug("[{1}][DoHttpProcessing] ended for: {0} [{1}]", remoteUri, threadId);
+				
                 
             }
             catch (Exception ex)
@@ -513,11 +600,11 @@ namespace HTTPProxyServer
             }
             finally
             {
-                if (Server.DumpHeaders || Server.DumpPostData || Server.DumpResponseData)
+                /*if (Server.DumpHeaders || Server.DumpPostData || Server.DumpResponseData)
                 {
                     //release the lock
                     Monitor.Exit(_outputLockObj);
-                }
+                }*/
 
                 clientStreamReader.Close();
                 clientStream.Close();
@@ -526,11 +613,10 @@ namespace HTTPProxyServer
                 outStream.Close();
                 if (cacheStream != null)
                     cacheStream.Close();
-            }
-
+            }            
         }
 
-        private static List<Tuple<String,String>> ProcessResponse(HttpWebResponse response, StringBuilder rawResponseHeaders)
+        private List<Tuple<String,String>> ProcessResponse(HttpWebResponse response, StringBuilder rawResponseHeaders)
         {        	
             String value=null;
             String header=null;
@@ -562,7 +648,7 @@ namespace HTTPProxyServer
             return returnHeaders;
         }
 
-        private static void WriteResponseStatus(HttpStatusCode code, String description, StreamWriter myResponseWriter)
+        private void WriteResponseStatus(HttpStatusCode code, String description, StreamWriter myResponseWriter)
         {
         	try
         	{
@@ -575,7 +661,7 @@ namespace HTTPProxyServer
 			}
         }
 
-        private static void WriteResponseHeaders(StreamWriter myResponseWriter, List<Tuple<String,String>> headers)
+        private void WriteResponseHeaders(StreamWriter myResponseWriter, List<Tuple<String,String>> headers)
         {
         	try
         	{
@@ -589,19 +675,27 @@ namespace HTTPProxyServer
 			}
 			catch(Exception ex)
 			{
-				"[ProxyCache][WriteResponseHeaders]: {0}".error(ex.Message);
+				"[{1}][ProxyCache][WriteResponseHeaders]: {0}".error(ex.Message, Thread.CurrentThread.ManagedThreadId);
 			}
         }
         
 
-        private static int ReadRequestHeaders(StreamReader sr, HttpWebRequest webReq, StringBuilder rawRequestHeaders)
-        {       
+        private int ReadRequestHeaders(StreamReader sr, HttpWebRequest webReq, StringBuilder rawRequestHeaders)
+        {               	
         	String httpCmd;
 	        int contentLen = 0;
+	        try
+        	{
+        		sr.Peek();
+        	}
+        	catch(Exception ex)		// means the stream is closed (probably due to an response with "(400) Bad Request" 
+        	{
+        		return contentLen;
+        	}
         	try
         	{	            
 	            do
-	            {
+	            {	            	
 	            	httpCmd = sr.ReadLine();
 	                if (String.IsNullOrEmpty(httpCmd))
 	                    return contentLen;
@@ -653,14 +747,14 @@ namespace HTTPProxyServer
 	                }					
                     catch (Exception ex)
                     {
-                        "[ProxyCache][ReadRequestHeaders][do loop]: Could not add header {0} = {1}.  Exception message:{2}".error(header[0], header[1], ex.Message);	                            
+                        "[{3}][ProxyCache][ReadRequestHeaders][do loop]: Could not add header {0} = {1}.  Exception message:{2}".error(header[0], header[1], ex.Message,Thread.CurrentThread.ManagedThreadId);
                     }
 
 	            } while (!String.IsNullOrEmpty(httpCmd)); //(!String.IsNullOrWhiteSpace(httpCmd));	        
 	        }
 			catch(Exception ex)
 			{
-				"[ProxyCache][ReadRequestHeaders]: {0}".error(ex.Message);
+				"[{1}][ProxyCache][ReadRequestHeaders]: {0}".error(ex.logStackTrace().Message, Thread.CurrentThread.ManagedThreadId);
 			}
             return contentLen;
         }

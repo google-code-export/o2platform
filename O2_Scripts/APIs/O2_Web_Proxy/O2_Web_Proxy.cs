@@ -64,6 +64,17 @@ namespace O2.XRules.Database.APIs
 		{
 			return "http://{0}:{1}".format(o2WebProxy.IP, o2WebProxy.Port);
 		}
+		
+		public static O2_Web_Proxy extraLogging(this O2_Web_Proxy o2WebProxy)
+		{
+			return o2WebProxy.extraLogging(true);
+		}
+		
+		public static O2_Web_Proxy extraLogging(this O2_Web_Proxy o2WebProxy, bool value)
+		{
+			ProxyServer.ExtraLogging = value;
+			return o2WebProxy;
+		}
 	}
 	
 	public static class O2_Web_Proxy_ExtensionMethods_Utils

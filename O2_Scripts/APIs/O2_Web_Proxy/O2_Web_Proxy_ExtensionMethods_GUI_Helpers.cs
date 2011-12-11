@@ -65,16 +65,18 @@ namespace O2.XRules.Database.APIs
 		public static O2_Web_Proxy createGui_Proxy_SimpleView(this O2_Web_Proxy o2WebProxy,  Control panel)		
 		{	
 			var topPanel = panel.clear().add_Panel(); 
+			//topPanel.insert_LogViewer();
 			o2WebProxy.stopOnFormClose(topPanel);		  
 			var actions_Panel = topPanel.insert_Above(40,"");
 			var requests = topPanel.add_GroupBox("Requests").add_TableList().title("O2 Web Proxy");
 			var properties = requests.insert_Below(100,"Request & Response Object").add_PropertyGrid()
 																				   .helpVisible(false)
 																				   .toolBarVisible(false);
+			//actions_Panel.insert_Right(40).add_Proxy_ToolsPanel();																				   
 			var showLiveRequests = false;
 			
 			var requestId = 0;
-			requests.add_Columns("#","Method","Size", "Url");
+			requests.add_Columns("#","Method","Status","Size", "Url");
 			
 			Action setColumnsWidth = ()=> requests.set_ColumnsWidth(30, 60,60);			 
 			setColumnsWidth();
@@ -99,7 +101,8 @@ namespace O2.XRules.Database.APIs
 								()=>{
 										var rowData = new List<string>()
 											{	(++requestId).str(),
-												rrData.WebRequest.Method.str(),									
+												rrData.WebRequest.Method.str(),
+												rrData.WebResponse.StatusCode.str(),
 												rrData.Response_String.size().str(),												
 												rrData.WebRequest.RequestUri.str()
 											 };
@@ -127,7 +130,7 @@ namespace O2.XRules.Database.APIs
 						if (selected.notNull())													
 							selected.Request_Uri.str().clipboardText_Set();
 					};
-			ProxyServer.OnResponseReceived = 
+			ProxyServer.OnResponseReceived =  
 				(requestResponseData)=> add_Row(requestResponseData);
 										      
 			requests.add_ContextMenu().add_MenuItem("Copy Utl to clipboard", true,()=> copySelectedUtlToClipboard() )
@@ -139,12 +142,16 @@ namespace O2.XRules.Database.APIs
 			actions_Panel.add_Label("Actions:")
 						 .append_Link("Proxy Start",()=> o2WebProxy.startWebProxy())
 						 .append_Link("Proxy Stop",()=> o2WebProxy.stopWebProxy())			 
-						 .append_CheckBox("Real-Time View", (value)=> showLiveRequests = value).@check();
+						 .append_CheckBox("Real-Time View", (value)=> showLiveRequests = value).@check()
+						 .append_CheckBox("Extra logging", (value)=> ProxyServer.ExtraLogging = value);
+						 
 			
 			actions_Panel.add_Label("Test sites:",20,0)		 
 						 .append_Link("BBC", ()=> "http://news.bbc.co.uk".get_Html())
 						 .append_Link("OWASP",  ()=> "http://www.owasp.org".get_Html())
-						 .append_Link("google",  ()=> "http://www.google.com".get_Html());//.click();
+						 .append_Link("google",  ()=> "http://www.google.com".get_Html())
+						 .append_Label("O2 Utils")
+						 .append_Link("O2 Log Viewer",  ()=> "O2 Log Viewer".popupWindow().add_LogViewer());
 			return o2WebProxy;						 
 		}
 		

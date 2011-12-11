@@ -27,10 +27,11 @@ namespace O2.XRules.Database.APIs
     	public string Version {get; set;}    	
     	public string VersionWebDownload {get;set;} 
     	public string Install_File {get;set;}
-    	public Uri Install_Uri {get;set;}
+    	public Uri 	  Install_Uri {get;set;}
     	public string Install_Dir {get;set;}     	    
     	public string DownloadedInstallerFile {get; set;}
     	public string Executable { get;set;}
+    	public string Executable_Name { get; set; }
     	
     	public string  toolsDir = PublicDI.config.O2TempDir.pathCombine("..\\_ToolsOrAPIs").createDir();
     	public string  localDownloadsDir = PublicDI.config.O2TempDir.pathCombine("..\\_O2Downloads").createDir();
@@ -48,13 +49,23 @@ namespace O2.XRules.Database.APIs
     		VersionWebDownload = "";    		
     	}    	    	    	    	
     	 
+    	public void config()
+    	{
+    		if (!Install_Dir.valid())
+    			Install_Dir = toolsDir.pathCombine(ToolName);
+    		if (!Executable.valid() && Executable_Name.valid())
+    			Executable = Install_Dir.pathCombine(Executable_Name);    		
+    		if (!Install_File.valid() && Install_Uri.notNull() && this.Install_Uri.Segments.size()>0)
+				Install_File = Install_Uri.Segments.Last();	
+    	}
+    	
     	public void config(string toolName, string version, string installFile)
     	{
     		ToolName = toolName;
     		Version = version;
     		Install_File = installFile;
     		Install_Dir = toolsDir.pathCombine(toolName);    		
-    	}
+    	}    	    	
     	
     	public void config(string toolName, string version, string instalDir, string installFile, Uri installUri)
     	{
@@ -75,7 +86,7 @@ namespace O2.XRules.Database.APIs
     	{
     		if (Install_Dir.dirExists())
     		{
-    			"{0} tool is installed because installation dir was found: {0}".debug(ToolName, Install_Dir);
+    			"{0} tool is installed because installation dir was found: {1}".debug(ToolName, Install_Dir);
     			return true;
     		}
     		if (showLogMessage)
@@ -184,7 +195,7 @@ namespace O2.XRules.Database.APIs
             "There was a problem installing the {0}".error(Version);
             return false;
     	}
-    	
+    	    	
     	public string download(string file)
     	{
     		"downloading file: {0}".info(file);    	    		
@@ -205,7 +216,7 @@ namespace O2.XRules.Database.APIs
     		}    		
     		return download(Install_Uri);
     	}
-    		
+    		    	
     	public string download(Uri uri)
     	{
     		"Downloading from Uri: {0}".info(uri);
@@ -223,7 +234,7 @@ namespace O2.XRules.Database.APIs
               var downloadedFile = VersionWebDownload.download();
                 if (downloadedFile.fileExists())
                 {
-                	var targetFile = localDownloadsDir.pathCombine(Install_File);
+                	var targetFile = tempLocationOf_Install_File();//localDownloadsDir.pathCombine(Install_File);
                 	"Copying file: {0}".info(targetFile);
                 	Files.Copy(downloadedFile, targetFile);
                 	"Deleting file: {0}".info(targetFile);
@@ -245,5 +256,40 @@ namespace O2.XRules.Database.APIs
     		}
     		return false;
     	}
+    	
+    	public string executableFullPath()
+    	{
+    		return Install_Dir.pathCombine(Executable_Name);
+    	}
+    	
+    	public string tempLocationOf_Install_File()
+    	{
+    		return localDownloadsDir.pathCombine(Install_File);;
+    	}    	    	
+		
+		public void delete_Install_Dir()
+		{
+			if(Install_Dir.valid())
+				if(Install_Dir.contains(PublicDI.config.O2TempDir.directoryName()))
+				{
+					"[delete_Install_Dir] deleting folder: {0}".info(Install_Dir);
+					Files.deleteFolder(Install_Dir,true);
+				}
+				else
+				{
+					"[delete_Install_Dir] deleting is only supported for folders inside the O2 Temp dir: {0}".error(Install_Dir);
+				}
+			else
+				"[delete_Install_Dir] Install_Dir value was not set".error();					
+		}
+		
+		//use this if the intallation failed and we need to delete the temp download file and/or the Install directory
+		public void cleanInstallTargets()		
+		{
+			var tempLocalDownload = tempLocationOf_Install_File().info();
+			if (tempLocalDownload.fileExists())
+				Files.deleteFile(tempLocalDownload);
+			delete_Install_Dir();
+		}
     }
 }

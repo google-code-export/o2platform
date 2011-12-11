@@ -1238,4 +1238,84 @@ namespace O2.XRules.Database.APIs
 		    public int bottom;		    
 		}    	
 	}
+	
+	
+	public static class API_GuiAutomation_ExtensionMethods_UseCases
+	{	
+		public static bool click_Button_in_Window(this API_GuiAutomation guiAutomation, string windowTitle, string buttonText)
+		{
+			return guiAutomation.click_Button_in_Window(windowTitle, buttonText, false);
+		}
+		public static bool click_Button_in_Window(this API_GuiAutomation guiAutomation, string windowTitle, string buttonText, bool animateMouse)
+		{
+			return guiAutomation.click_Button_in_Window(windowTitle,buttonText, animateMouse,  5);
+		}
+		
+		public static bool click_Button_in_Window(this API_GuiAutomation guiAutomation, string windowTitle, string buttonText, bool animateMouse, int timesToTry)
+		{			
+			Func<bool> check = 
+				()=>{
+						var o2Timer = new O2Timer("click_Button_in_Window").start();
+						
+						var scriptErrorWindow = guiAutomation.window(windowTitle);
+						if (scriptErrorWindow.isNull()) {}
+							 //"didn't find window with title: {0}".error(windowTitle);
+						else
+						{
+							var button = scriptErrorWindow.button(buttonText);
+							if (button.isNull()) {}
+								// "didn't find button with text: {0}".error(buttonText);	
+							else
+							{
+								"Found it: Clicking on button '{0}' in window '{1}' after {2} tries".debug(windowTitle, buttonText, timesToTry);
+								if (animateMouse)
+									button.mouse();
+								try
+								{
+									button.click();	
+								}
+								catch(Exception ex)
+								{
+									"[API_GuiAutomation][click_Button_in_Window] on or after clicking on button".error(ex.Message);
+								}
+								o2Timer.stop();
+								return true;
+							}
+						}						
+						return false;
+					};
+					
+			"Trying to find  button '{0}' in window '{1}' for {2} tries".info(windowTitle, buttonText, timesToTry);		
+					
+			for(int i = 0 ; i < timesToTry ; i++)
+			{
+				var result = check();
+				if (result)
+					return true;				
+			}			
+			"Didn't find  button '{0}' in window '{1}' after {2} tries".error(windowTitle, buttonText, timesToTry);
+			return false;
+		}
+		
+		public static bool click_Button_in_Window(this string buttonText, string windowTitle)
+		{
+			return buttonText.click_Button_in_Window(windowTitle,false,5);
+		}
+		
+		public static bool click_Button_in_Window(this string buttonText, string windowTitle, int timesToTry)
+		{
+			return buttonText.click_Button_in_Window(windowTitle,false, timesToTry);
+		}
+		
+		public static bool click_Button_in_Window(this string buttonText, string windowTitle, bool animateMouse)
+		{
+			return buttonText.click_Button_in_Window(windowTitle,animateMouse, 5);
+		}
+		
+		public static bool click_Button_in_Window(this string buttonText, string windowTitle, bool animateMouse, int timesToTry)
+		{
+			return API_GuiAutomation.currentProcess()
+									.click_Button_in_Window(windowTitle,buttonText, animateMouse, timesToTry);			
+		}		
+	}
 }

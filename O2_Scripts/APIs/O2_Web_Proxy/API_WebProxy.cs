@@ -12,8 +12,10 @@ using HTTPProxyServer;
 
 namespace O2.XRules.Database.APIs
 {
-	public class API_WebProxy
+	public class API_WebProxy : O2_Web_Proxy
 	{
+		public List<RequestResponseData> Requests { get { return this.requests(); } }
+		public ProxyCache ProxyCache { get { return this.proxyCache(); }  } 
 	}
 	
 	public static class API_WebProxy_ExtensionMethods_Misc
@@ -89,6 +91,12 @@ namespace O2.XRules.Database.APIs
 		public static List<RequestResponseData> requests(this O2_Web_Proxy o2WebProxy)
 		{
 			return o2WebProxy.Proxy.requests();
+		}
+		
+		public static O2_Web_Proxy clearRequests(this O2_Web_Proxy o2WebProxy)
+		{
+			o2WebProxy.requests().Clear();
+			return o2WebProxy;
 		}
 	}
 	

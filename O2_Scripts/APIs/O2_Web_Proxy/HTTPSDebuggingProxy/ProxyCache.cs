@@ -27,7 +27,7 @@ namespace HTTPProxyServer
 		public static Dictionary<string, RequestResponseData> 	RequestCache 	{ get; set; }
 		
 		public ProxyCache_Brain_DefaultMode		 		ProxyCache_Brain 	{ get; set; }
-		public bool 									ProxyEnabled 	 	{ get; set; }			
+		public bool 									CacheEnabled 	 	{ get; set; }			
 		
 		public Action<string, RequestResponseData>		ProxyCacheLogEntry	{ get; set; }				
 		public Func<string, RequestResponseData,bool>	ShowItemInLog		{ get; set; }				
@@ -41,7 +41,7 @@ namespace HTTPProxyServer
 		public ProxyCache()
 		{
 			ProxyCache_Brain = new ProxyCache_Brain_DefaultMode(this);
-			ProxyEnabled = false;
+			CacheEnabled = false;
 			ProxyCacheLogEntry = (line, requestResponseData) => "[ProxyCache] {0}".info();
 			ShowItemInLog =  (line, requestResponseData) => true;
 		}
@@ -94,12 +94,12 @@ namespace HTTPProxyServer
 	{
 		public static bool enabled(this ProxyCache proxyCache)
 		{
-			return proxyCache.ProxyEnabled;
+			return proxyCache.CacheEnabled;
 		}
 		
 		public static ProxyCache enabled(this ProxyCache proxyCache, bool value)
 		{
-			proxyCache.ProxyEnabled = value;
+			proxyCache.CacheEnabled = value;
 			return proxyCache;
 		}
 		

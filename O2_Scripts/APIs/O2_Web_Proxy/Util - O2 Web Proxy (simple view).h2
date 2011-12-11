@@ -1,14 +1,22 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>
+  <SourceCode>Web.Https.ignoreServerSslErrors();                 
+   	                  
 var topPanel = O2Gui.open&lt;Panel&gt;("Util - O2 Web Proxy (Simple View)",300,400); 
-//var topPanel = panel.clear().add_Panel(); 
-var o2WebProxy = new O2_Web_Proxy();   
-o2WebProxy.startWebProxy();   
+//var topPanel = panel.clear().add_Panel();  
+var o2WebProxy = new O2_Web_Proxy();                    
+o2WebProxy.Proxy.ProxyDisabled = false;       
+o2WebProxy.extraLogging(false);        
+o2WebProxy.startWebProxy();        
 //o2WebProxy.createGui_Proxy_LargeView(topPanel);  
-o2WebProxy.createGui_Proxy_SimpleView(topPanel); 
+o2WebProxy.createGui_Proxy_SimpleView(topPanel);  
+   
+//; 
+////"https://www.google.com".get_Html(); 
+"https://urs.microsoft.com".get_Html("asd");
+"https://o2platform.wordpress.com/favicon.ico___".get_Html();
+//"https://o2platform.wordpress.com/".get_Html();
 
-"http://www.google.com".get_Html();
 return "done";    
  
 //using HTTPProxyServer

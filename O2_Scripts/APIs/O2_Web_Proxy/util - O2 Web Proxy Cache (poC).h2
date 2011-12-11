@@ -11,7 +11,7 @@
 var show = true; 
 //var show = false; 
 if (show)  
-{ 
+{  
 	var topPanel = panel.clear().add_Panel();    
 	var o2webProxy = panel.add_WebProxy_with_Browser("http://127.0.0.1.:12345");
 	o2webProxy.proxyCache().requestMappings().Clear();
@@ -43,7 +43,7 @@ requestMappings.Clear();
 var request = "/javascript/jQuery.simplymodal/simplemodal.css";
  
 return proxyCache.requestMappings(); 
-return proxyCache.response_Bytes("/javascript/jQueryUI/images/ui-bg_gloss-wave_75_2191c0_500x100.png"); 
+//return proxyCache.response_Bytes("/javascript/jQueryUI/images/ui-bg_gloss-wave_75_2191c0_500x100.png"); 
 
 
 //O2File:ProxyCache.cs

@@ -102,6 +102,26 @@ namespace O2.XRules.Database.Utils
 			return files;
 		}
 		
+		public static Dictionary<string,string> files_Indexed_by_FileName(this string path)
+		{
+			return	 path.files().files_Indexed_by_FileName();
+		}
+		
+		public static Dictionary<string,string> add_Files_Indexed_by_FileName(this Dictionary<string,string> mappedFiles, string path)
+		{
+			foreach(var item in path.files_Indexed_by_FileName())
+				mappedFiles.add(item.Key, item.Value);
+			return mappedFiles;
+		}
+		
+		public static Dictionary<string,string> files_Indexed_by_FileName(this List<string> files)
+		{
+			var files_Indexed_by_FileName = new Dictionary<string,string>();
+			foreach(var file in files)			
+				files_Indexed_by_FileName.add(file.fileName(), file);
+			return files_Indexed_by_FileName;
+		}
+		
 		public static bool deleteIfExists(this string file)
 		{
 			try

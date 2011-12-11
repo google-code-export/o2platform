@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <H2>
   <SourceCode>
-var topPanel = "Tool - Cache from O2 Web Proxy".popupWindow(640,400);
+var topPanel = "Tool - Cache from O2 Web Proxy".popupWindow(640,400); 
 //var topPanel = panel.clear().add_Panel();         
-  
+    
 var o2webProxy = "o2Proxy".o2CacheViaTypeConfusion&lt;O2_Web_Proxy&gt;(()=&gt; new O2_Web_Proxy()); 
 o2webProxy.startWebProxy();
-
+o2webProxy.extraLogging();  
 var proxyCache = o2webProxy.proxyCache()
 						   .enabled(true);    
 var extensionsToIgnore = ".js .css .png .jpg .ico .gif".split(" ").removeEmpty();
