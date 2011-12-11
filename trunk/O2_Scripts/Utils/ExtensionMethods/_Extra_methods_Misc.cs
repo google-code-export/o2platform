@@ -317,6 +317,19 @@ namespace O2.XRules.Database.Utils
 			}
 		}
 		
+		public static long hexToLong(this string hexNumber)
+		{
+			try
+			{
+				return long.Parse(hexNumber,System.Globalization.NumberStyles.HexNumber);
+			}
+			catch(Exception ex)
+			{
+				"[hexToLong]	Failed to convert {0} : {1}".error(hexNumber, ex.Message);
+				return -1;
+			}
+		}
+		
 		public static string hexToAscii(this string hexNumber)
 		{
 			var value = hexNumber.hexToInt();

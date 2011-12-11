@@ -450,5 +450,49 @@ namespace O2.XRules.Database.Utils
 			return results;
 		}
 	}
+	
+	
+	public static class _Extra_Reflection_ExtensionMethods_DynamicallyLoadingAssemblies
+	{
+		public static Assembly resolveAssembly(this string nameOrPath)
+		{
+			return nameOrPath.resolveAssembly((nameToResolve)=> nameToResolve);
+		}
+		
+		public static Assembly resolveAssembly(this string name, string resolvedPath)
+		{
+			return name.resolveAssembly((nameToResolve)=> resolvedPath);
+		}
+		
+		public static Assembly resolveAssembly(this string nameOrPath, Func<string,string> resolveName)
+		{
+			System.ResolveEventHandler assemblyResolve =  
+				(sender, args)=>{						
+									var name = args.prop("Name").str();
+									"[AssemblyResolve] for name: {0}".debug(name);
+									var location = resolveName(name);						
+									if (location.valid())
+									{ 								
+										"[AssemblyResolve] found location: {0}".info(location);
+										var assembly = Assembly.Load(location.fileContents_AsByteArray());
+										if (assembly.notNull())
+										{										
+											"[AssemblyResolve] loaded Assembly: {0}".info(assembly.FullName);
+											return assembly;
+										}
+									}
+									return null;
+								};
+			 
+			Func<string,Assembly> loadAssembly = 
+				(assemblyToLoad)=>{
+										AppDomain.CurrentDomain.AssemblyResolve += assemblyResolve;
+										var assembly = assemblyToLoad.assembly();
+										AppDomain.CurrentDomain.AssemblyResolve -= assemblyResolve;
+										return assembly;
+								  };
+			return loadAssembly(nameOrPath);
+		}
+	}
 }
     	

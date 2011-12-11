@@ -38,7 +38,6 @@ using mshtml;
 
 //O2File:_Extra_methods_WinForms_Controls.cs
 
-
 //O2Ref:O2_External_IE.dll
 //O2Ref:WatiN.Core.1x.dll
 //O2Ref:Interop.SHDocVw.dll
@@ -271,14 +270,21 @@ namespace O2.XRules.Database.APIs
     	
     	public static Uri uri(this WatiN_IE watinIe)
     	{
-    		return watinIe.IE.Uri;
+    		try
+    		{    			
+    			return watinIe.IE.Uri;
+    		}
+    		catch
+    		{
+    			return null;
+    		}
     	}
  
  
     	public static string url(this WatiN_IE watinIe)
     	{	
     		try
-    		{
+    		{    			
     			return watinIe.uri().str();
     		}
     		catch
@@ -513,16 +519,26 @@ namespace O2.XRules.Database.APIs
  			return watinIe.IE.DialogWatcher;
  		}
  		
+ 		public static WatiN_IE clear_DialogWatchers(this WatiN_IE watinIe)
+ 		{
+ 			watinIe.IE.DialogWatcher.clear();
+ 			return watinIe;
+ 		}
  		public static DialogWatcher clear(this DialogWatcher dialogWatcher)
  		{
- 			dialogWatcher.Clear();
+ 			if (dialogWatcher.notNull())
+ 				dialogWatcher.Clear();
  			return dialogWatcher;
  		}
  		
- 		public static ArrayList dialogHandlers(this WatiN_IE watinIe)
+ 		public static List<BaseDialogHandler> dialogHandlers(this WatiN_IE watinIe)
  		{
- 			watinIe.setDialogWatcher();			// make sure this is set
- 			return (ArrayList)watinIe.IE.DialogWatcher.field("handlers");
+ 			watinIe.setDialogWatcher();			// make sure this is set 			
+ 			var dialogHandlers = new List<BaseDialogHandler>();
+ 			foreach(BaseDialogHandler handler in (ArrayList)watinIe.IE.DialogWatcher.field("handlers"))
+ 				dialogHandlers.Add(handler);
+ 			return dialogHandlers;
+ 			//return (ArrayList)watinIe.IE.DialogWatcher.field("handlers");
  		}
  		
  		public static T dialogHandler<T>(this WatiN_IE watinIe)
@@ -1697,6 +1713,17 @@ namespace O2.XRules.Database.APIs
 			return watinIe;
     	}
  
+ 		public static WatiN_IE minimized(this WatiN_IE watinIe)
+ 		{
+ 			watinIe.HostControl.minimized();
+ 			return watinIe;
+ 		}
+ 		
+ 		public static WatiN_IE maximized(this WatiN_IE watinIe)
+ 		{
+ 			watinIe.HostControl.maximized();
+ 			return watinIe;
+ 		}
      }
      
     public static class WatiN_IE_ExtensionMethods_Highlight
@@ -1979,6 +2006,12 @@ namespace O2.XRules.Database.APIs
 			return ie;
 		}
     
+    	public static WatiN_IE eval_ASync(this WatiN_IE ie, string script)
+    	{
+    		O2Thread.mtaThread(()=> ie.eval(script));
+    		return ie;
+    	}
+    	
     	public static WatiN_IE eval(this WatiN_IE ie, string script)
     	{
     		return ie.eval(script, true);
@@ -2377,5 +2410,17 @@ namespace O2.XRules.Database.APIs
 				"[Injecting jQuery] could find local jQuery file: {0}".error(jQueryFile);
 			return ie;
 		}
+			
+    	public static string jQuery_Append_Body(this string htmlToAppend, WatiN_IE ie)
+    	{    		
+    		ie.jQuery_Append_Body(htmlToAppend);
+    		return htmlToAppend;
+    	}
+    	
+    	public static WatiN_IE jQuery_Append_Body(this WatiN_IE ie, string htmlToAppend)
+    	{
+    		ie.eval("$('body').append('<div>{0}<div>')".format(htmlToAppend));
+    		return ie;
+    	}    
 	}
 }
