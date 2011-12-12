@@ -26,15 +26,15 @@ using System.Web.Script.Serialization ;
 namespace O2.XRules.Database.Utils
 {	
 	public static class _Extra_Web_ExtensionMethods_Uri
-	{
+	{				
 		public static string pathNoQuery(this Uri uri)
 		{			
 			return uri.Query.valid() 
 						? uri.AbsoluteUri.remove(uri.Query)
 						: uri.AbsoluteUri;
 		}
-	}
-	
+	}	
+
 	public static class _Extra_Web_ExtensionMethods_Http
 	{
 		//GET requests

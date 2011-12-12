@@ -280,7 +280,19 @@ namespace O2.XRules.Database.APIs
     		}
     	}
  
- 
+ 		public static WatiN_IE if_NoPageLoaded(this WatiN_IE watinIe, Action callback)
+ 		{
+ 			if (watinIe.noPageLoaded())
+ 				callback();
+ 			return watinIe;
+ 		}
+ 		
+ 		public static bool noPageLoaded(this WatiN_IE watinIe)
+ 		{
+ 			return watinIe.url().isUri().isFalse() || 
+ 				   watinIe.url() == "about:blank";
+ 		}
+ 			
     	public static string url(this WatiN_IE watinIe)
     	{	
     		try
@@ -629,7 +641,7 @@ namespace O2.XRules.Database.APIs
 			return (from image in images
 					select image.Uri).toList();
     	}
-    	
+    	    	
     	public static List<string> urls(this List<WatiN.Core.Image> images)
     	{
 			return (from image in images
@@ -698,6 +710,11 @@ namespace O2.XRules.Database.APIs
     		return (from link in links 
     				select link.url()).toList();
     	} 
+    	
+    	public static List<Uri> uris(this List<Link> links)
+    	{
+    		return links.urls().uris();
+    	}
     	
     	public static List<string> ids(this List<Link> links)
 		{

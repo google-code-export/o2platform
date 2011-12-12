@@ -33,8 +33,7 @@ namespace O2.XRules.Database.APIs
 			this.Version = "2.5.10";
 			this.Install_Uri = "http://launchpad.net/nunitv2/2.5/2.5.10/+download/NUnit-2.5.10.11092.zip".uri();			
 			this.Executable_Name = @"NUnit-2.5.10.11092\bin\net-2.0\nunit.exe";			
-			config();			
-			show.info(this);
+			config();						
     		if (installNow)    		    			
     			install();    		    		
 		}

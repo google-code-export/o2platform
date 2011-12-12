@@ -34,8 +34,8 @@ namespace O2.SecurityInnovation.TeamMentor
     	public static int CLOSE_WINDOW_IN_SECONDS = 0;
     	public static int CLOSE_BROWSER_IN_SECONDS = 0;
     	
-    	[Test]	
-    	public string check_Config_Settings()
+    	//[Test]	
+    	public void check_Config_Settings()
     	{
     		Assert.That(tmServer.isUri(), 			"tmServer not Uri");    		
     		Assert.That(tmEmptyPage.isUri(), 		"tmEmptyPage not Uri");
@@ -47,8 +47,7 @@ namespace O2.SecurityInnovation.TeamMentor
     		Assert.That(tmEmptyPage.html().valid(), 	"tmEmptyPage html not valid");
     		Assert.That(invalidPage.html().inValid(), 	"invalidPage html valid");
     		Assert.That(tmWebServices.html().valid(), 	"tmWebServices html not valid");
-    		Assert.That(currentHomePage.html().valid(), "currentHomePage html not valid");
-    		return "ok check_Config_Settings";
+    		Assert.That(currentHomePage.html().valid(), "currentHomePage html not valid");    		
     	}
    	}
 }

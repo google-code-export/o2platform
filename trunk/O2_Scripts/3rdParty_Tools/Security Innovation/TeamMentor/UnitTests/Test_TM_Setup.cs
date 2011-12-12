@@ -12,10 +12,15 @@ namespace O2.SecurityInnovation.TeamMentor
 {			
 	[TestFixture]
     public class Test_TM_Setup
-    {	    	
+    {	    
+    	[SetUp]
+    	public void startServers()
+    	{
+    		startServer(Test_TM.Port, Test_TM.tmWebSiteFolder);	
+    	}
     	 
     	[Test]	
-    	public string check_Config_Settings()
+    	public void check_Config_Settings()
     	{
     		Assert.That(Test_TM.tmServer.isUri(), 				"tmServer not Uri");    		
     		Assert.That(Test_TM.tmEmptyPage.isUri(), 			"tmEmptyPage not Uri");
@@ -24,45 +29,47 @@ namespace O2.SecurityInnovation.TeamMentor
     		Assert.That(Test_TM.currentHomePage.isUri(), 		"currentHomePage not Uri");
     		Assert.That(Test_TM.tmFolder.dirExists(),			"Test.TM.tmFolder not found");
     		Assert.That(Test_TM.tmWebSiteFolder.dirExists(),	"Test.TM.tmWebSiteFolder not found");
-    		Assert.That(Test_TM.cassiniWebServer.fileExists(),	"Test.TM.cassiniWebServer not found"); 
-    		return "check_Config_Settings";
+    		Assert.That(Test_TM.cassiniWebServer.fileExists(),	"Test.TM.cassiniWebServer not found");     		
+    	}
+    	
+    	public void startServer(int port, string folder)
+    	{
+    		var parameters = "/port:{0} /portMode:Specific /path:\"{1}\"".format(port,folder);
+			Test_TM.cassiniWebServer.startProcess(parameters);		    		
     	}
     	
     	[Test]	
-    	public string startLocalWebServer()
+    	public void startLocalWebServer()
     	{
     		var webServerProcessName= "CassiniDev";    		
     		 
     		Action<int,string> stopAndStartServer =  
     			(port, folder)=>{    			
-    								var currentServer = Processes.getProcessCalled(webServerProcessName);
-    								if (currentServer.notNull())
+    								var currentServers = Processes.getProcessesCalled(webServerProcessName);
+    								foreach(var currentServer in currentServers)
     								{
-    									Processes.getProcessesCalled(webServerProcessName).stop();						    			
+    									currentServer.stop();
+//    									Processes.getProcessesCalled(webServerProcessName).stop();						    			
 						    			currentServer.WaitForExit();
 						    		}
 						    		Assert.That(Processes.getProcessCalled(webServerProcessName).isNull(), "There should be no {0} processes at this stage".format(webServerProcessName));    		
-						    		var parameters = "/port:{0} /portMode:Specific /path:\"{1}\"".format(port,folder);
-						    		Test_TM.cassiniWebServer.startProcess(parameters);		    		
+						    		startServer(port, folder);
 						    		Assert.That(Processes.getProcessesCalled(webServerProcessName).size()==1, "There should be 1 {0} processes at this stage".format(webServerProcessName));
 						    		Assert.That("http://127.0.0.1:{0}/".format(port).html().valid(), "could not get html from website");
 								};	
 			
 			stopAndStartServer(Test_TM.Port+1000, Test_TM.tmWebSiteFolder);			
-			stopAndStartServer(Test_TM.Port, Test_TM.tmWebSiteFolder);			
-						
-    		return "ok startLocalWebServer";
+			stopAndStartServer(Test_TM.Port, Test_TM.tmWebSiteFolder);									    		
     	}
     	
     	[Test]
-    	public string check_TM_Urls()
+    	public void check_TM_Urls()
     	{
     		Assert.That(Test_TM.tmServer.html().valid(), 		"tmServer html not valid");
     		Assert.That(Test_TM.tmEmptyPage.html().valid(), 	"tmEmptyPage html not valid");
     		Assert.That(Test_TM.invalidPage.html().inValid(), 	"invalidPage html valid");
     		Assert.That(Test_TM.tmWebServices.html().valid(), 	"tmWebServices html not valid");
-    		Assert.That(Test_TM.currentHomePage.html().valid(), "currentHomePage html not valid");
-    		return "ok check_TM_Urls";
+    		Assert.That(Test_TM.currentHomePage.html().valid(), "currentHomePage html not valid");    		
     	}
    	}
 }

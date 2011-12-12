@@ -71,6 +71,8 @@ using Ionic.Zip;
 //O2File:_Extra_methods_ObjectDetails.cs
 //O2File:_Extra_methods_TypeConfusion.cs
 //O2File:_Extra_methods_SourceCodeEditor.cs
+//O2File:_Extra_methods_AppDomain.cs
+//O2File:_Extra_methods_Compilation.cs
 
 namespace O2.XRules.Database.Utils
 {		
@@ -213,68 +215,7 @@ namespace O2.XRules.Database.Utils
 	}
 	
 	
-	public static class _Extra_AppDomain_ExtensionMethods
-	{
-		public static string executeScriptInSeparateAppDomain(this string scriptToExecute)
-		{
-			return scriptToExecute.executeScriptInSeparateAppDomain(true, false);
-		}
 		
-		public static string executeScriptInSeparateAppDomain(this string scriptToExecute, bool showLogViewer, bool openScriptGui)
-		{
-			var appDomainName = 12.randomLetters();
-			var o2AppDomain =  new O2AppDomainFactory(appDomainName);
-			o2AppDomain.load("O2_XRules_Database"); 	
-			o2AppDomain.load("O2_Kernel");
-			o2AppDomain.load("O2_DotNetWrappers");
-			
-			var o2Proxy =  (O2Proxy)o2AppDomain.getProxyObject("O2Proxy");
-			if (o2Proxy.isNull())
-			{
-				"in executeScriptInSeparateAppDomain, could not create O2Proxy object".error();
-				return null;
-			}
-			o2Proxy.InvokeInStaThread = true;
-			if (showLogViewer)
-				o2Proxy.executeScript( "O2Gui.open<Panel>(\"Util - LogViewer\", 400,140).add_LogViewer();");
-			if (openScriptGui)
-				o2Proxy.executeScript("O2Gui.open<Panel>(\"Script editor\", 700, 300)".line() + 
- 	  								  "		.add_Script(false)".line() + 
-									  " 	.onCompileExecuteOnce()".line() + 
-									  " 	.Code = \"hello\";".line() + 
-									  "//O2File:Scripts_ExtensionMethods.cs");
-			o2Proxy.executeScript(scriptToExecute);
-			PublicDI.log.showMessageBox("Click OK to close the '{0}' AppDomain (and close all open windows)".format(appDomainName));										
-			o2AppDomain.unLoadAppDomain();
-			return scriptToExecute;
-		}
-		
-		public static O2Proxy executeScript(this O2Proxy o2Proxy, string scriptToExecute)
-		{
-			o2Proxy.staticInvocation("O2_External_SharpDevelop","FastCompiler_ExtensionMethods","executeSourceCode",new object[]{ scriptToExecute });						
-			return o2Proxy;
-		}
-		
-		public static string execute_InScriptEditor_InSeparateAppDomain(this string scriptToExecute)
-		{
-			var script_Base64Encoded = scriptToExecute.base64Encode();
-			var scriptLauncher = "O2Gui.open<Panel>(\"Script editor\", 700, 300)".line() + 
- 	  								  "		.add_Script(false)".line() + 
-									  " 	.onCompileExecuteOnce()".line() + 
-									  " 	.Code = \"{0}\".base64Decode();".line().format(script_Base64Encoded) + 
-									  "//O2File:Scripts_ExtensionMethods.cs";
-			scriptLauncher.executeScriptInSeparateAppDomain(false,false);
-			return scriptLauncher;									  
-		}
-		
-		public static string localExeFolder(this string fileName)
-		{
-			var mappedFile = PublicDI.config.CurrentExecutableDirectory.pathCombine(fileName);
-			return (mappedFile.fileExists())
-						? mappedFile
-						: null;					
-		}
-	}			
 			
 	public static class _Extra_H2_ExtensionMethods
 	{
@@ -331,38 +272,6 @@ namespace O2.XRules.Database.Utils
             zpZipFile.Save();
             zpZipFile.Dispose();
             return targetZipFile;        
-		}
-	}
-	
-	public static class _Extra_Compile_ExtensionMethods
-	{
-		public static string compileIntoDll_inFolder(this string fileToCompile, string targetFolder)
-		{
-			"Compiling file: {0} ".debug(fileToCompile);
-			//var fileToCompile = currentFolder.pathCombine(file + ".cs");
-			var filenameWithoutExtension = fileToCompile.fileName_WithoutExtension();
-			var compiledDll = targetFolder.pathCombine(filenameWithoutExtension + ".dll");
-			var mainClass = "";
-			if (fileToCompile.fileExists().isFalse()) 
-				"could not find file to compile: {0}".error(fileToCompile);  
-			else
-			{ 
-				var assembly = new CompileEngine().compileSourceFiles(new List<string> {fileToCompile}, 
-																	  mainClass, 
-																	  filenameWithoutExtension);
-				if (assembly.isNull()) 
-					"no compiled assembly object created for: {0}".error(fileToCompile);
-				else
-				{ 
-					Files.Copy(assembly.Location, compiledDll);
-					"Copied: {0} to {1}".info(assembly.Location, compiledDll);
-					if (compiledDll.fileExists().isFalse())
-						"compiled file not created in: {0}".error(compiledDll);
-					else
-						return compiledDll;
-				}
-			}  
-			return null;
 		}
 	}	
 }
