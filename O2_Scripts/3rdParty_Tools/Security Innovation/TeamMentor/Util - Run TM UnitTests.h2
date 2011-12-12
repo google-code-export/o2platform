@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Util - Run TM UnitTests",300,500);
+topPanel.parentForm().top(0).left(0);
+//var topPanel = panel.clear().add_Panel();
+topPanel.insert_LogViewer();
+
+var tmConsolidatedTestsFolder = "All TM Unit Tests.cs".local().parentFolder();
+ 
+var actionsPanel = topPanel.insert_Above(40,"Actions");
+var availableTests = topPanel.add_TreeView();  
+availableTests.onDrag&lt;string,string&gt;((tag)=&gt; { return tag.str();});
+
+
+//Dictionary&lt;string,object&gt; ncunitLaunher = null;
+
+Action refreshTree = 
+	()=&gt;{
+			availableTests.clear();
+			availableTests.add_Files(tmConsolidatedTestsFolder);
+			availableTests.add_Node("_All Tests").add_Nodes(tmConsolidatedTestsFolder.parentFolder().files(), (file)=&gt;file.fileName());  
+			availableTests.selectFirst();
+		};
+
+Action runTest = 
+	()=&gt;{
+			var api_NUnit_Gui = "var api_NUnit_Gui".o2Cache&lt;API_NUnit_Gui&gt;(()=&gt; new API_NUnit_Gui(false));
+			var unitTestToOpen = (string)availableTests.selected().tag&lt;string&gt;(); 
+			api_NUnit_Gui.compileOpenAndRun(unitTestToOpen);
+		};		
+
+Action openInEditor = 
+	()=&gt;{
+			var scriptToExecute ="Util - Execute O2ified tests on NUnitGui.h2".local();
+			var nunitLauncher = (Dictionary&lt;string,object&gt;)scriptToExecute.executeH2Script();
+			
+			var unitTestToOpen = (string)availableTests.selected().tag&lt;string&gt;(); 
+			"[scriptToExecute] {0}".info(unitTestToOpen);			
+			var loadFile = nunitLauncher.value&lt;Action&lt;string&gt;&gt;("loadFile");
+			loadFile(unitTestToOpen); 	
+		};	
+
+actionsPanel.add_Label("")
+			.append_Link("Run test", ()=&gt; runTest())
+			.append_Link("Open test in editor", ()=&gt; openInEditor())
+			.append_Link("Refresh tests list", ()=&gt; refreshTree());
+
+
+availableTests.onDoubleClick(()=&gt;runTest()); 
+
+refreshTree();
+
+return "ok";
+
+//O2File:API_NUnit_Gui.cs
+//O2Ref:nunit-gui-runner.dll
+//O2Ref:nunit.util.dll</SourceCode>
+  <ReferencedAssemblies />
+</H2>

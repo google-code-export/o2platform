@@ -1,8 +1,9 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
-using System.Linq;
-using System.Reflection;
 using System.Xml;
+using System.Linq;
+using System.Threading;
+using System.Reflection;
 using System.Xml.Serialization;
 using System.Windows.Forms;
 using System.Collections;  
@@ -11,10 +12,12 @@ using System.ComponentModel;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.DotNet;
 using O2.Views.ASCX.classes.MainGUI;
 using O2.Views.ASCX.ExtensionMethods;
 
 //O2File:_Extra_methods_Items.cs
+//O2File:_Extra_methods_Files.cs
 
 namespace O2.XRules.Database.Utils
 {	
@@ -33,6 +36,13 @@ namespace O2.XRules.Database.Utils
 			"**** type:{0}".error(type.typeName());
 			var fieldInfo =  (FieldInfo)type.field(fieldName);
 			return PublicDI.reflection.getFieldValue(fieldInfo, type);
+		}
+		
+		public static Type fieldValue(this Type type, string fieldName, object value)
+		{
+			var fieldInfo = (FieldInfo)type.field(fieldName);			
+			PublicDI.reflection.setField(fieldInfo, fieldInfo.ReflectedType, value);
+			return type;
 		}
 		
 		public static List<ConstructorInfo> ctors(this Type type)
@@ -94,6 +104,31 @@ namespace O2.XRules.Database.Utils
 			}
 			return null;
 		}
+		
+		
+		public static Thread invokeStatic_StaThread(this MethodInfo methodInfo)
+		{
+			return methodInfo.invokeStatic_StaThread(null);
+		}
+		
+		public static Thread invokeStatic_StaThread(this MethodInfo methodInfo, params object[] invocationParameters)
+		{
+			return O2Thread.staThread(()=>methodInfo.invokeStatic(invocationParameters));
+		}
+		
+		public static object invokeStatic(this MethodInfo methodInfo)
+		{
+			return methodInfo.invokeStatic(null);
+		}
+		
+		public static object invokeStatic(this MethodInfo methodInfo, params object[] invocationParameters)
+		{	
+			if (invocationParameters.notNull())
+				return PublicDI.reflection.invokeMethod_Static(methodInfo, new object[] { invocationParameters});
+			
+			return PublicDI.reflection.invokeMethod_Static(methodInfo);
+		}
+		
 		
 		public static List<System.Attribute> attributes(this List<MethodInfo> methods)
 		{
@@ -160,6 +195,37 @@ namespace O2.XRules.Database.Utils
 			return assembly.GetReferencedAssemblies().toList();
 		}
 		
+		public static bool isAssemblyName(this string _string)
+		{
+			return _string.assemblyName().notNull();
+		}
+		
+		public static AssemblyName assemblyName(this string _string)
+		{
+			try
+			{
+				return new System.Reflection.AssemblyName(_string);
+			}
+			catch(Exception ex)
+			{
+				"[assemblyName] {0}".error(ex.Message);
+				return null;
+			}
+		}
+		
+		public static List<string> names(this List<AssemblyName> assemblyNames)
+		{
+			return (from assemblyName in assemblyNames
+					select assemblyName.name()).toList();
+		}
+		
+		public static string name(this AssemblyName assemblyName)
+		{
+			if(assemblyName.notNull())
+				return assemblyName.Name;
+			return null;
+		}
+					
 		public static Assembly assembly(this AssemblyName assemblyName)
 		{
 			return assemblyName.str().assembly();
@@ -172,6 +238,17 @@ namespace O2.XRules.Database.Utils
 					select method).toList();					
 		}
 		
+		public static string assembly_Location(this string assemblyName)
+		{
+			return assemblyName.assembly().location();
+		}
+		
+		public static string location(this Assembly assembly)
+		{
+			if(assembly.notNull())
+				return assembly.Location;
+			return null;
+		}
 		
 		public static List<T> attributes<T>(this MethodInfo methods)
 			where T : Attribute
@@ -469,18 +546,22 @@ namespace O2.XRules.Database.Utils
 			System.ResolveEventHandler assemblyResolve =  
 				(sender, args)=>{						
 									var name = args.prop("Name").str();
-									"[AssemblyResolve] for name: {0}".debug(name);
+									//"[AssemblyResolve] for name: {0}".debug(name);
 									var location = resolveName(name);						
 									if (location.valid())
 									{ 								
-										"[AssemblyResolve] found location: {0}".info(location);
+										//"[AssemblyResolve] found location: {0}".info(location);
 										var assembly = Assembly.Load(location.fileContents_AsByteArray());
 										if (assembly.notNull())
 										{										
-											"[AssemblyResolve] loaded Assembly: {0}".info(assembly.FullName);
+											//"[AssemblyResolve] loaded Assembly: {0}".info(assembly.FullName);
 											return assembly;
 										}
+										else
+											"[AssemblyResolve] failed to load Assembly from location: {0}".error(location);
 									}
+									else
+										"[AssemblyResolve] could not find a location for assembly with name: {0}".error(name);
 									return null;
 								};
 			 
@@ -493,6 +574,81 @@ namespace O2.XRules.Database.Utils
 								  };
 			return loadAssembly(nameOrPath);
 		}
+		
+		
+		public static Assembly loadAssemblyAndAllItsDependencies(this string pathToAssemblyToLoad) 	
+		{
+			var referencesFolder = pathToAssemblyToLoad.directoryName();
+			var referencesFiles = referencesFolder.files(true,"*.dll", "*.exe");
+			
+			Func<string,string> resolveAssemblyName = 
+				(name)=>{   			
+							if (name.starts("System"))
+								return name; 
+							if(name.isAssemblyName())		 		
+								name = name.assemblyName().name();  										
+							
+							var resolvedPath = referencesFiles.find_File_in_List(name, name+ ".dll", name+ ".exe");					
+							
+							if(resolvedPath.fileExists())
+							{
+								//"**** Found match:{0}".info(resolvedPath);	 
+								return resolvedPath;
+							}				 
+							
+							//"**** Couldn't match:{0}".error(resolvedPath);	
+							return null;  
+						};
+			
+			
+			var loadedAssemblies = new Dictionary<string, Assembly>();
+
+			Action<Assembly> loadReferencedAssemblies = null;
+			Func<string, Assembly> loadAssembly = null;
+			loadAssembly = 
+				(assemblyPathOrName) => {
+											if (loadedAssemblies.hasKey(assemblyPathOrName))
+												return loadedAssemblies[assemblyPathOrName];
+											var assembly = assemblyPathOrName.resolveAssembly(resolveAssemblyName);											
+											if(assembly.notNull())
+											{
+												loadedAssemblies.add(assemblyPathOrName, assembly);
+												loadReferencedAssemblies(assembly); 												
+												
+												if (assembly.Location.valid().isFalse())
+												{
+													loadAssembly(assembly.FullName.assemblyName().name()); 
+													if (assembly.ManifestModule.Name != "<Unknown>")
+														loadAssembly(assembly.ManifestModule.Name);
+													else
+														loadAssembly(assembly.ManifestModule.ScopeName);
+												}
+												 //loadAssembly(assembly.ManifestModule.Name);
+												 
+											} 
+											return assembly;
+										};
+										
+			loadReferencedAssemblies = 
+				(assembly)=>{
+								var referencedAssemblies =  assembly.referencedAssemblies();								
+								foreach(var referencedAssembly in referencedAssemblies)
+								{									
+									var assemblyName = referencedAssembly.str();																																				
+										if (loadAssembly(assemblyName).isNull())
+											"COULD NOT LOAD Referenced Assembly: {0}".error(assemblyName);
+								}
+							};										
+			
+			var mainAssembly = loadAssembly(pathToAssemblyToLoad);
+		
+			"[loadAssemblyAndAllItsDependencies] there were {0} references loaded/mapped from '{1}'".info(loadedAssemblies.size(), pathToAssemblyToLoad);
+			//show.info(loadedAssemblies);			
+			
+			return mainAssembly;
+		}
+		
+
 	}
 }
     	

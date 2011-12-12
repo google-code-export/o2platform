@@ -13,66 +13,43 @@ if (targetFolder.dirExists().isFalse())
 	PublicDI.log.showMessageBox("IBM AppScan is not installed on this machine, stoping script execution");
 	return "AppScan not installed";
 }
-var compiledDllsFolder = targetFolder;
+//var compiledDllsFolder = targetFolder;
 var o2Lancher = currentFolder.pathCombine(o2LauncherName + ".cs");
 
 
 //return currentFolder;
 //currentFolder = @"C:\O2\O2Scripts_Database\O2_Core_APIs";
 
-Action&lt;string,string, string&gt; compileToExtension =
-    (file, extension,mainClass) =&gt;{
-                "Compiling file: {0} ".debug(file);
-                var fileToCompile = currentFolder.pathCombine(file + ".cs");
-                var compiledDll = compiledDllsFolder.pathCombine(file + extension);
-                if (fileToCompile.fileExists().isFalse())
-                    "could not find file to compile: {0}".error(fileToCompile); 
-                else
-                {
-                    var assembly = (mainClass.valid())
-                                        ? new CompileEngine().compileSourceFiles(new List&lt;string&gt; {fileToCompile}, mainClass)
-                                        : new CompileEngine().compileSourceFiles(new List&lt;string&gt; {fileToCompile}, mainClass, System.IO.Path.GetFileNameWithoutExtension(compiledDll));
-                    if (assembly.isNull())
-                        "no compiled assembly object created for: {0}".error(fileToCompile);
-                    else
-                    {
-                        Files.Copy(assembly.Location, compiledDll);
-                        "Copied: {0} to {1}".info(assembly.Location, compiledDll);
-                        if (compiledDll.fileExists().isFalse())
-                            "compiled file not created in: {0}".error(compiledDll);
-                       
-                    }
-                } 
-            };
+
  
 Action&lt;string&gt; compile =
-    (file)=&gt; compileToExtension(file,".dll", ""); 
+    (file)=&gt; file.compileToExtension(".dll", "", currentFolder, targetFolder); 
  
  
 Action runCompilationProcess =
     ()=&gt;{
-            Files.Copy("O2_Kernel.dll".assembly().Location, compiledDllsFolder);
-            Files.Copy("O2_Interfaces.dll".assembly().Location, compiledDllsFolder);
-            Files.Copy("O2_DotNetWrappers.dll".assembly().Location, compiledDllsFolder);
-            Files.Copy("O2_Views_ASCX.dll".assembly().Location, compiledDllsFolder);
+            Files.Copy("O2_Kernel.dll".assembly().Location, targetFolder);
+            Files.Copy("O2_Interfaces.dll".assembly().Location, targetFolder);
+            Files.Copy("O2_DotNetWrappers.dll".assembly().Location, targetFolder);
+            Files.Copy("O2_Views_ASCX.dll".assembly().Location, targetFolder);
             //required for script execution            
-            Files.Copy("O2_External_WinformsUI.dll".assembly().Location, compiledDllsFolder);
-            Files.Copy("O2_External_SharpDevelop.dll".assembly().Location, compiledDllsFolder);
-            Files.Copy("O2SharpDevelop.dll".assembly().Location, compiledDllsFolder);
-            Files.Copy("O2_API_AST.dll".assembly().Location, compiledDllsFolder);
-            Files.Copy("log4net.dll".assembly().Location, compiledDllsFolder);                       
-            Files.Copy("White.Core.dll".assembly().Location, compiledDllsFolder);            //Files.Copy(".dll".assembly().Location, compiledDllsFolder);
-            Files.Copy("O2_XRules_Database.exe".assembly().Location, compiledDllsFolder); 
+            Files.Copy("O2_External_WinformsUI.dll".assembly().Location, targetFolder);
+            Files.Copy("O2_External_SharpDevelop.dll".assembly().Location, targetFolder);
+            Files.Copy("O2SharpDevelop.dll".assembly().Location, targetFolder);
+            Files.Copy("O2_API_AST.dll".assembly().Location, targetFolder);
+            Files.Copy("log4net.dll".assembly().Location, targetFolder);                       
+            Files.Copy("White.Core.dll".assembly().Location, targetFolder);            //Files.Copy(".dll".assembly().Location, compiledDllsFolder);
+            Files.Copy("O2_XRules_Database.exe".assembly().Location, targetFolder); 
            
-            compileToExtension(o2LauncherName, ".exe", "O2.Platform.Launcher"); 
+            o2LauncherName.compileToExtension(".exe", "O2.Platform.Launcher", currentFolder, targetFolder); 
            	
-            Files.Copy(currentFolder.pathCombine(firstScriptName), compiledDllsFolder);
+            Files.Copy(currentFolder.pathCombine(firstScriptName), targetFolder);
             "copied {0} to target folder".info(firstScriptName);
         };
  
 Action executeO2Laucher = 
 	()=&gt;{
-			var exeFile = compiledDllsFolder.pathCombine(o2LauncherName + ".exe"); 
+			var exeFile = targetFolder.pathCombine(o2LauncherName + ".exe"); 
 			exeFile.startProcess();
 			//Processes.startProcessAsConsoleApplication(exeFile,"");//,"",compiledDllsFolder);  
 		};
@@ -87,7 +64,7 @@ if (showGui)
 	topPanel.insert_LogViewer();
 
 
-	var compiledDllsFolder_TextBox = actionsPanel.add_TextBox(20,"Target Folder","").onTextChange((text)=&gt; compiledDllsFolder= text);
+	var compiledDllsFolder_TextBox = actionsPanel.add_TextBox(20,"Target Folder","").onTextChange((text)=&gt; targetFolder= text);
 
 	compiledDllsFolder_TextBox.set_Text(targetFolder); 
 	
@@ -109,7 +86,6 @@ else
 //runCompilationProcess();
 return "done";
 
-//O2Ref:White.Core.dll
-</SourceCode>
+//O2Ref:White.Core.dll</SourceCode>
   <ReferencedAssemblies />
 </H2>

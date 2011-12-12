@@ -105,6 +105,16 @@ namespace O2.XRules.Database.Utils
 					});
 		}
 		
+		public static TreeNode insert_Node(this TreeView treeView, string text)
+		{
+			return treeView.insert_Node(text,0);
+		}
+		
+		public static TreeNode insert_Node(this TreeView treeView, string text, int position)
+		{
+			return treeView.insert_TreeNode(text,text,position);
+		}
+		
 		public static TreeNode insert_TreeNode(this TreeView treeView, string text, object tag, int position)
 		{
 			return treeView.rootNode().insert_TreeNode(text,tag, position);
@@ -234,6 +244,33 @@ namespace O2.XRules.Database.Utils
 				Ascx_ExtensionMethods.add_Node(treeNode,getNodeName(item), getTagValue(item), addDummyNode(item));
 			return treeNode;
 		}
+		
+		
+		//Events
+		
+		public static TreeView onDoubleClick(this TreeView treeView, Action  callback)
+		{
+			return treeView.onDoubleClick<object>((tag)=>callback());
+		}
+		public static TreeView onDoubleClick(this TreeView treeView, Action<object> callback)
+		{
+			return treeView.onDoubleClick<object>((tag)=>callback(tag));
+		}
+		
+		public static TreeView onDoubleClick<T>(this TreeView treeView, Action<T> callback)
+		{
+			treeView.invokeOnThread(
+				()=>{
+						treeView.DoubleClick+= 
+							(sender,e)=>{											
+											object tag = treeView.selected().get_Tag();
+											if (tag is T)
+												O2Thread.mtaThread(()=> callback((T)tag));
+										 };
+					});
+			return treeView;		
+		}
+	
 		
 		//add Files to TreeView
 		public static TreeView add_Files(this TreeView treeView, String folder)

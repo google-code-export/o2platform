@@ -27,25 +27,23 @@ namespace O2.SecurityInnovation.TeamMentor
     {        	        	
     	    	
     	[Test] 
-    	public string Connect_To_Server()
+    	public void Connect_To_Server()
     	{
     		var webServicesHtml = Test_TM.tmWebServices.html();
-    		Assert.That(webServicesHtml.contains("GetGUIObjects"), "Could not find GetGUIObjects");
-    		return "OK: Connect_To_Server";
+    		Assert.That(webServicesHtml.contains("GetGUIObjects"), "Could not find GetGUIObjects");    		
     	}    	    	
     	
     	[Test]
-    	public string Get_TMGuiObjects_Raw()
+    	public void Get_TMGuiObjects_Raw()
     	{
     		var rawGuiObjects = Test_TM.tmWebServices.invokeWebServiceAndGetJSON("GetGUIObjects","{}");
     		Assert.That(rawGuiObjects.valid(), "rawGuiObjects was empty");
     		Assert.That(rawGuiObjects.contains(TM_Gui_Objects_ExtensionMethods.JsonFix), "couldn't find JsonFix string");
-    		Assert.That(rawGuiObjects.size() > 10000, "rawGuiObjects.size() < 10000"); 
-    		return "ok TMGuiObjects_Raw";    	
+    		Assert.That(rawGuiObjects.size() > 10000, "rawGuiObjects.size() < 10000");     		
     	}
     	
     	[Test]
-    	public string Create_TMGuiObjects()
+    	public void Create_TMGuiObjects()
     	{
     		var rawGuiObjects = Test_TM.tmWebServices.invokeWebServiceAndGetJSON("GetGUIObjects","{}");
     		var fixedJson = rawGuiObjects.fixJsonSerialization();
@@ -53,12 +51,11 @@ namespace O2.SecurityInnovation.TeamMentor
     		var tmGuiObjects = fixedJson.javascript_Deserialize<TM_GUI_Objects>();    
     		Assert.That(tmGuiObjects.notNull(), "tmGuiObjects was null");
     		Assert.That(tmGuiObjects.UniqueStrings.size() > 10, "UniqueStrings < 10");
-    		Assert.That(tmGuiObjects.GuidanceItemsMappings.size() > 10, "GuidanceItemsMappings < 10");
-    		return "ok: Create_TMGuiObjects";  
+    		Assert.That(tmGuiObjects.GuidanceItemsMappings.size() > 10, "GuidanceItemsMappings < 10");    		
     	}
     	
     	[Test]
-    	public string Map_TMGuiObjects_To_Table()
+    	public void Map_TMGuiObjects_To_Table()
     	{
     		var topPanel = "view TM Gui Objects in Table".popupWindow();    		
     		var tmGuiObjects = Test_TM.tmWebServices.tmGuiObjects();
@@ -83,8 +80,7 @@ namespace O2.SecurityInnovation.TeamMentor
 				tableList.add_Row(resolveItem(mapping));	
 			tableList.visible(true);
     		    		
-    		topPanel.closeForm_InNSeconds(Test_TM.CLOSE_WINDOW_IN_SECONDS);
-    		return "ok: Map_TMGuiObjects_To_Table";
+    		topPanel.closeForm_InNSeconds(Test_TM.CLOSE_WINDOW_IN_SECONDS);    		
     	}
     	    	
     }

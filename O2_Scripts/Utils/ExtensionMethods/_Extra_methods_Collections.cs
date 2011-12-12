@@ -43,6 +43,11 @@ namespace O2.XRules.Database.Utils
 			return "";
 		}
 		
+		public static T item<T>(this List<T> list, int index)
+		{
+			return list.value(index);
+		}
+		
 		public static T value<T>(this List<T> list, int index)
 		{
 			if (list.size() > index)
@@ -60,6 +65,13 @@ namespace O2.XRules.Database.Utils
 			var results = list.Where<T>(query).toList();
 			if (results.size()>0)
 				return results.First();
+			return default(T);
+		}
+		
+		public static T second<T>(this List<T> list)
+		{			
+			if (list.notNull() && list.size()>1)
+				return list[1];		
 			return default(T);
 		}
 		
@@ -119,7 +131,7 @@ namespace O2.XRules.Database.Utils
 					"[IEnumerable.first] {0}".error(ex.Message);
 			}
 			return default(T);
-		}
+		}						
 		
 		public static T last<T>(this IEnumerable<T> list)
 		{
@@ -198,6 +210,14 @@ namespace O2.XRules.Database.Utils
 				dictionary.Remove(itemToRemove.Key);    
 			return dictionary;
 		}
+		
+		public static T value<T>(this Dictionary<string,object> dictionary, string name)
+		{
+			var value = dictionary.value(name);
+			if (value.notNull() && value is T)
+				return (T)value;
+			return default(T);
+		}
 	}
 	
 	public static class Loop_ExtensionMethods
@@ -253,6 +273,77 @@ namespace O2.XRules.Database.Utils
 				results.Add(action(i));
 			return results;
 		}		
+	}
+	
+	public static class _Extra_Collections_ExtensionMethods_Uri
+	{
+		public static List<Uri> uris(this List<string> urls)
+		{
+			return (from url in urls
+					where url.isUri()
+					select url.uri()).toList();
+		}	
+		
+		public static List<string> queryParameters_Names(this List<Uri> uris)
+		{			
+			return (from uri in uris
+					from name in uri.queryParameters_Indexed_ByName().Keys					
+					select name).Distinct().toList();
+					
+/*			var names = new List<string>();
+			foreach(var uri in uris)
+			{
+				var mappedQueryParameters = uri.queryParameters_Indexed_ByName();
+				foreach(var mappedItems in mappedQueryParameters)
+					if (!mappedItems.hasKey
+					names.add_If_Not_There(mappedItems.Key);
+					return names;
+			}*/
+			
+		}
+		
+		public static List<string> queryParameters_Values(this List<Uri> uris, string parameterName)
+		{
+			return (from uri in uris
+					let parameters = uri.queryParameters_Indexed_ByName()										
+					where parameters.hasKey(parameterName)					
+					select parameters[parameterName]).toList();					
+		}
+		
+		public static List<string> queryParameters_Values(this List<Uri> uris)
+		{
+			var values = new List<string>();
+			foreach(var uri in uris)
+				values.AddRange(uri.queryParameters_Indexed_ByName().Values);								
+			return values;				
+		}
+		
+		public static Dictionary<string,string> queryParameters_Indexed_ByName(this Uri uri)
+		{		
+			var queryParameters = new Dictionary<string,string>();
+			if (uri.notNull())
+			{
+				var query = uri.Query;
+				if (query.starts("?"))
+					query = query.removeFirstChar();
+				foreach(var parameter in query.split("&"))				
+					if (parameter.valid())
+					{
+						var splitParameter = parameter.split("=");
+						if (splitParameter.size()==2)
+							if (queryParameters.hasKey(splitParameter[0]))
+							{	
+								"duplicate parameter key in property '{0}', adding extra parameter in a new line".info(splitParameter[0]);
+								queryParameters.add(splitParameter[0], queryParameters[splitParameter[0]].line() + splitParameter[1]);
+							}
+							else
+								queryParameters.add(splitParameter[0], splitParameter[1]);
+						else						
+							"Something's wrong with the parameter value, there should only be one = in there: '{0}' ".info(parameter);
+					}					
+			} 
+		return queryParameters;
+		}
 	}
 		
 }

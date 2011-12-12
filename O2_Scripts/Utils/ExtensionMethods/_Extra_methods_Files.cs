@@ -138,6 +138,26 @@ namespace O2.XRules.Database.Utils
 			
 		}
 		
+		public static string find_File_in_List(this List<string> files, params string[] fileNames)
+		{
+			foreach(var file in files)
+				foreach(var fileName in fileNames)		
+					if (file.fileName() == fileName)
+						return file;
+			return null;
+		}
+		
+		public static string findFilesInFolder(this string folder, params string[] fileNames)
+		{
+			foreach(var fileName in fileNames)
+			{
+				var resolvedPath = folder.pathCombine(fileName);
+				if (resolvedPath.fileExists())
+					return resolvedPath;
+			}
+			return null;
+		}
+		
 		public static string findParentFolderCalled(this string fullPath, string folderToFind)
 		{
 			var parentFolder = fullPath.directoryName();
@@ -164,6 +184,17 @@ namespace O2.XRules.Database.Utils
             return folder.pathCombine(path);;
 		}
 
+		public static string file_CopyToFolder(this string fileToCopy, string targetFolderOrFile)
+		{
+			if (fileToCopy.fileExists().isFalse())
+				"[file_CopyFileToFolder] fileToCopy doesn't exist: {0}".error(fileToCopy);
+			else
+				if (targetFolderOrFile.dirExists() ||  targetFolderOrFile.parentFolder().dirExists())
+					return Files.Copy(fileToCopy,targetFolderOrFile);
+				else
+					"[file_CopyFileToFolder]..targetFolder or its parent doesn't exist: {0}".error(targetFolderOrFile);					
+			return null;			
+		}
 	}
 	
 }

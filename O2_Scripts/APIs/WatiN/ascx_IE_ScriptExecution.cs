@@ -32,7 +32,7 @@ namespace O2.XRules.Database.Utils
 		
 		public static ascx_IE_ScriptExecution launchGui()
 		{
-			return O2Gui.open<ascx_IE_ScriptExecution>("IE Script Execution", 600,400)
+			return O2Gui.open<ascx_IE_ScriptExecution>("IE Script Execution", 700,600)
 						.buildGui();
 		}
 		
@@ -42,7 +42,7 @@ namespace O2.XRules.Database.Utils
 			return (ascx_IE_ScriptExecution)host.invokeOnThread(
 				()=>{
 						var ieExecution = new ascx_IE_ScriptExecution(false).fill();						
-						ieExecution.buildGui("");
+						ieExecution.buildGui();
 						host.add_Control(ieExecution);
 						return ieExecution;
 					});
@@ -60,31 +60,24 @@ namespace O2.XRules.Database.Utils
     		this.Height = 400;
     		EnableCodeComplete = enableCodeComplete;
     	}
+    	    	
     	
-    	public ascx_IE_ScriptExecution buildGui()
-    	{
-    		return buildGui("ie.open(\"http://www.google.com\");");
-    	}
-		public ascx_IE_ScriptExecution buildGui(string customScript)
+		public ascx_IE_ScriptExecution buildGui() 
 		{
 			topPanel = this.add_Panel();			
 
 			script = topPanel.insert_Below<Panel>().add_Script(EnableCodeComplete);
 			script.InvocationParameters.Add("panel",topPanel); 
-			script.onCompileExecuteOnce();
-			if (customScript.valid())
-				script.set_Command(getScript(customScript));
+			script.onCompileExecuteOnce();			
+			script.set_Command(getDefaultScript());
 			return this;
 		}
 		
-		public string getScript(string customScript)
-		{						
-			return getScriptWrapper().format(customScript);
-		}
-		
-		public string getScriptWrapper()
+		public string getDefaultScript()
 		{
-			var scriptWrapper = 
+/*****************************/		
+/*		
+			var scriptWrapper = 	
 @"var topPanel = panel.clear().add_Panel();
 var ie = topPanel.add_IE().silent(true);
 
@@ -95,7 +88,47 @@ ie.open(""http://www.google.com"");
 //O2Ref:WatiN.Core.1x.dll
 
 //O2Tag_DontAddExtraO2Files;";
-			return scriptWrapper;								
+*/
+
+/*****************************/
+//this version percists the IE object
+/*
+var scriptWrapper = 
+@"var ie = ""ie_{0}"".o2Cache<WatiN_IE>(()=> panel.clear().add_IE()).silent(true);
+
+ie.open(""http://www.google.com"");  
+
+return ie.links();
+
+//O2File:WatiN_IE_ExtensionMethods.cs 
+//O2Ref:WatiN.Core.1x.dll
+//O2Tag_DontAddExtraO2Files;
+";*/
+
+/*****************************/
+//this one shows a number of the IE Scripting object capabilities
+var scriptWrapper = 
+@"var ie = ""ie_" + 5.randomLetters() + @""".o2Cache<WatiN_IE>(()=> panel.clear().add_IE()).silent(true);  // ie ramdon value for o2cache makes this object to unique amongst multiple instances of this control
+
+//ie.open(""about:blank"");
+ie.if_NoPageLoaded(
+		()=>{ 
+				ie.open(""http://www.google.com"");   
+				ie.link(""Images"").click();  
+				ie.field(""Search Images"").value(""O2 Platform""); 
+				ie.button(""Search Images"").click(); 
+			});
+			
+""Page is open, so returning all image's links"".info();			
+return ie.links()	      
+	     .uris()
+	     .queryParameters_Values(""imgurl"");
+	     	 
+//O2File:WatiN_IE_ExtensionMethods.cs 
+//O2Ref:WatiN.Core.1x.dll
+//O2Tag_DontAddExtraO2Files;			
+";
+			return scriptWrapper;
 		}
 		
 		public ascx_IE_ScriptExecution setScript(string scriptCode)
