@@ -13,7 +13,6 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
 
 //O2File:Test_TM_IE.cs
-//O2File:Test_TM_IE_Website.cs
 namespace O2.SecurityInnovation.TeamMentor
 {	
 	[TestFixture]
@@ -177,25 +176,7 @@ namespace O2.SecurityInnovation.TeamMentor
 				var value = ie.waitForJsVariable("UnitTest_Helper_DataTable").str();			
 				Assert.That(value.str()=="True","value was not True");			
 			}
-		}
-
-
-		[Test]
-		[Ignore]
-		public void AppliedFilters_View_All_GuidanceItems()  
-    	{		
-    		lock(ie)
-    		{
-				base.open("html_pages/_UnitTest_Helpers/AppliedFilters/AppliedFilters_View_All_GuidanceItems.html?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_AppliedFilters").str();			
-				Assert.That(value.str()=="True","UnitTest_Helper_AppliedFilters value was not True");
-				ie.eval("showFiltersWithCurrentData()");
-				Assert.IsNotNull	(ie.getJsVariable("$('#pivotPanel_Technology input')"), 		"#pivotPanel_Technology input");
-				Assert.That			(ie.getJsVariable("$('#pivotPanel_Technology input').length").str().toInt() > 0 ,  "pivotPanel_Technology input').length < 1");						
-			}
-		}
-
-    	
+		}    	
     	    	
     	[TestFixtureTearDown]
     	public void close_IE()
