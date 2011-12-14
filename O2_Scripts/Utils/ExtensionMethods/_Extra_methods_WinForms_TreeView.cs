@@ -257,7 +257,8 @@ namespace O2.XRules.Database.Utils
 			return treeView.onDoubleClick<object>((tag)=>callback(tag));
 		}
 		
-		public static TreeView onDoubleClick<T>(this TreeView treeView, Action<T> callback)
+		//so that it doesn't conflict with the version from O2.DotNetWrappers.ExtensionMethods.Ascx_ExtensionMethods
+		public static TreeView onDoubleClk<T>(this TreeView treeView, Action<T> callback)
 		{
 			treeView.invokeOnThread(
 				()=>{
