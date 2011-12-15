@@ -115,7 +115,7 @@ namespace O2.SecurityInnovation.TeamMentor
 				var dataTable = ie.getJsVariable("dataTable");
 	    		var libraryId = ie.getJsVariable("dataTable.aaData[0][7]");
 	    		
-	    		ie.eval("$.data['4738d445-bc9b-456c-8b35-a35057596c16']= ['{0}','{1}']".format("".newGuid(),"".newGuid()));
+	    		ie.eval("$.data['{0}']= ['{1}','{2}']".format(libraryId, "".newGuid(),"".newGuid()));
 	    		
 	    		ie.eval("var guidsInLibrary = $.data['{0}']".format(libraryId));
 	    		var guidsInLibrary = ie.getJsVariable("guidsInLibrary").extractList<string>();	    		
@@ -142,7 +142,7 @@ namespace O2.SecurityInnovation.TeamMentor
 				var bPaginate 	 = dataTable.get_Value<bool>("bPaginate");
 				var bInfo 		 = dataTable.get_Value<bool>("bInfo");	 						
 				var bSort  	 	 = dataTable.get_Value<bool>("bSort");
-				
+					
 				Assert.IsTrue (bDeferRender , "bDeferRender");
 				Assert.IsTrue (bProcessing	,  "bProcessing");
 				Assert.IsFalse(bPaginate	, 	 "bPaginate");
@@ -155,8 +155,7 @@ namespace O2.SecurityInnovation.TeamMentor
 				Assert.AreEqual("Phase"		, ie.getJsVariable("dataTable.aoColumns[3].sTitle.toString()"), "4th Column");
 				Assert.AreEqual("Type"		, ie.getJsVariable("dataTable.aoColumns[4].sTitle.toString()"), "5th Column");
 				Assert.AreEqual("Category"	, ie.getJsVariable("dataTable.aoColumns[5].sTitle.toString()"), "6th Column");
-				Assert.AreEqual("Guid"		, ie.getJsVariable("dataTable.aoColumns[6].sTitle.toString()"), "7th Column");
-				Assert.AreEqual("LibraryId"	, ie.getJsVariable("dataTable.aoColumns[7].sTitle.toString()"), "8th Column");
+				Assert.AreEqual("Guid"		, ie.getJsVariable("dataTable.aoColumns[6].sTitle.toString()"), "7th Column");				
 				
 				Assert.That(ie.getJsVariable("dataTable.aaData").extractList().size() > 0 , "no items in aaData");
 				
@@ -168,8 +167,7 @@ namespace O2.SecurityInnovation.TeamMentor
 				var phase 		= firstGuidanceItem[3];
 				var type 		= firstGuidanceItem[4];
 				var category 	= firstGuidanceItem[5];
-				var guid	 	= firstGuidanceItem[6].str();
-				var libraryId 	= firstGuidanceItem[7].str();
+				var guid	 	= firstGuidanceItem[6].str();				
 				
 				Assert.That(index 		is int								, "index");
 				Assert.That(title 		is string && title.str().valid()	, "title");
@@ -177,8 +175,7 @@ namespace O2.SecurityInnovation.TeamMentor
 				Assert.That(phase 		is string && title.str().valid()	, "phase");
 				Assert.That(type 		is string && title.str().valid()	, "type");
 				Assert.That(category 	is string && title.str().valid()	, "category");
-				Assert.That(guid 	   .isGuid()							, "guid");
-				Assert.That(libraryId  .isGuid()							, "libraryId");			
+				Assert.That(guid 	   .isGuid()							, "guid");								
 				
 				"ok: getGuidanceItemsInGuid_For_DataTable".jQuery_Append_Body(ie);	
 			}

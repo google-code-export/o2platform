@@ -5,20 +5,20 @@ using System.Linq;
 using System.Collections.Generic; 
 using System.Diagnostics;
 using System.Text;
-
-using O2.Kernel;
+using NUnit.Framework;
+using O2.Kernel; 
 using O2.XRules.Database.APIs;
 using O2.XRules.Database.Utils;
 using O2.DotNetWrappers.Network;
 using O2.Kernel.ExtensionMethods;
-
-using NUnit.Framework;
-//O2Ref:nunit.framework.dll
  
 //O2File:Test_TM_Config.cs
- 
+//O2File:Test_TM_Setup.cs
 //O2File:TM_WebServices.cs
+//O2File:_Extra_methods_Web.cs
+//O2File:_Extra_methods_Collections.cs
 
+//O2Ref:nunit.framework.dll
 
 namespace O2.SecurityInnovation.TeamMentor
 {	
@@ -33,7 +33,12 @@ namespace O2.SecurityInnovation.TeamMentor
 			tmWebServices.Url = Test_TM.tmWebServices;
     	}
     	    	
-    	    	
+    	[Test]
+    	public void check_If_Site_Is_Working()
+    	{
+    		new Test_TM_Setup().check_if_TM_WebServer_is_Running();
+    	}
+    	
     	[Test]
     	public void create_TM_WebServices()
     	{			
