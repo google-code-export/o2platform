@@ -7,12 +7,20 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.XRules.Database.Utils;
 
 //O2File:Test_TM_Config.cs
+//O2Ref:nunit.framework.dll
 
+//O2File:_Extra_methods_Collections.cs
+//O2File:_Extra_methods_Misc.cs
+//O2File:_Extra_methods_WinForms_Controls.cs
+//O2File:_Extra_methods_Web.cs
+    	
 namespace O2.SecurityInnovation.TeamMentor
 {			
 	[TestFixture]
     public class Test_TM_Setup
     {	    
+    	public static bool IsWebServerUp = false;  // make this static so that we only try to get the html from the server once
+    	
     	[SetUp]
     	public void startServers()
     	{
@@ -30,7 +38,7 @@ namespace O2.SecurityInnovation.TeamMentor
     		Assert.That(Test_TM.tmFolder.dirExists(),			"Test.TM.tmFolder not found");
     		Assert.That(Test_TM.tmWebSiteFolder.dirExists(),	"Test.TM.tmWebSiteFolder not found");
     		Assert.That(Test_TM.cassiniWebServer.fileExists(),	"Test.TM.cassiniWebServer not found");     		
-    	}
+    	}    
     	
     	public void startServer(int port, string folder)
     	{
@@ -38,7 +46,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			Test_TM.cassiniWebServer.startProcess(parameters);		    		
     	}
     	
-    	[Test]	
+    	//[Test]	
     	public void startLocalWebServer()
     	{
     		var webServerProcessName= "CassiniDev";    		
@@ -62,6 +70,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			stopAndStartServer(Test_TM.Port, Test_TM.tmWebSiteFolder);									    		
     	}
     	
+
     	[Test]
     	public void check_TM_Urls()
     	{
@@ -70,6 +79,28 @@ namespace O2.SecurityInnovation.TeamMentor
     		Assert.That(Test_TM.invalidPage.html().inValid(), 	"invalidPage html valid");
     		Assert.That(Test_TM.tmWebServices.html().valid(), 	"tmWebServices html not valid");
     		Assert.That(Test_TM.currentHomePage.html().valid(), "currentHomePage html not valid");    		
+    	}
+		
+		
+		public void check_if_TM_WebServer_is_Running()
+    	{
+    		if(IsWebServerUp)	
+				return;
+			"[check_if_TM_WebServer_is_Running] IsWebServerUp variable false, so checking if server is up (this should only happen once per main execution".info();
+			
+			var homePageHtml = Test_TM.tmServer.get_Html();
+			if (homePageHtml.valid().isFalse())
+			{
+				"It looks like the server is down, lets start it".info();
+				var port = Test_TM.Port;
+				var folder = Test_TM.tmWebSiteFolder;
+				var parameters = "/port:{0} /portMode:Specific /path:\"{1}\"".format(port,folder);
+				Test_TM.cassiniWebServer.startProcess(parameters);
+			}
+			homePageHtml = Test_TM.tmServer.get_Html();
+			Assert.That(homePageHtml.valid(),"The server is not up");									
+			IsWebServerUp = true;
+			
     	}
    	}
 }

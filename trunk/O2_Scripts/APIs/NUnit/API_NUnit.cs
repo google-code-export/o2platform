@@ -2,6 +2,7 @@
 using System;
 using System.Drawing;
 using System.Threading;
+using System.Diagnostics;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace O2.XRules.Database.APIs
     public class API_NUnit
     {        			
     	public Installer_NUnit installer;
+    	public Process NUnitProcess;
     	
     	public API_NUnit()
     	{
@@ -28,8 +30,63 @@ namespace O2.XRules.Database.APIs
     	}
     }
     
-    public static class API_NUnit_ExtensionMethods
+    public static class API_NUnit_ExtensionMethods_NUnitGui
     {
+    
+    	public static API_NUnit openProject(this API_NUnit nUnitApi)
+    	{    	
+    		return nUnitApi.openProject(null);
+    	}
+    	
+    	public static API_NUnit openProject(this API_NUnit nUnitApi, string projectOrAssembly)
+    	{
+    		return nUnitApi.openNUnitGui(projectOrAssembly);
+    	}    	
+    	
+    	public static API_NUnit runProject(this API_NUnit nUnitApi, string projectOrAssembly)
+    	{
+    		return nUnitApi.openNUnitGui(projectOrAssembly, "/run");
+    	}    	
+    	
+    	public static API_NUnit start(this API_NUnit nUnitApi)
+    	{
+    		return nUnitApi.openNUnitGui();
+    	}
+    	
+    	public static API_NUnit openNUnitGui(this API_NUnit nUnitApi)
+    	{
+    		return nUnitApi.openNUnitGui(null);
+    	}
+    	
+    	public static API_NUnit openNUnitGui(this API_NUnit nUnitApi, string projectOrAssembly)
+    	{
+    		return nUnitApi.openNUnitGui(projectOrAssembly, null);
+    	}
+    	
+    	public static API_NUnit openNUnitGui(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions)
+    	{
+    		var startUpOpptions = "\"{0}\" {1}".format(projectOrAssembly ?? "" , extraStartupOptions ?? "");
+    		nUnitApi.NUnitProcess = new API_NUnit().installer.Executable.startProcess(startUpOpptions);
+    		return nUnitApi;
+    	}
+    	
+    	public static bool compileAndRun(this API_NUnit nUnitApi, string fileToCompile)
+    	{
+    		return nUnitApi.compileAndOpen(fileToCompile, "/run");
+    	}
+    	
+    	public static bool compileAndOpen(this API_NUnit nUnitApi, string fileToCompile, string extraStartupOptions)
+    	{
+    		var assembly = new CompileEngine().compileSourceFile(fileToCompile);
+			if (assembly.notNull())
+			{
+				var location = assembly.Location; 			
+				nUnitApi.openNUnitGui(location, extraStartupOptions);			
+				return true;
+			}
+			return false;
+    	}
+    	
     	//original GUI tests 
     	/*public static API_NUnit openNUnitGui(this API_NUnit nUnitApi)
     	{    		
@@ -50,4 +107,24 @@ namespace O2.XRules.Database.APIs
 			return nUnitApi;
 		}*/				
     }
+    
+    public static class API_NUnit_ExtensionMethods_NUnitConsole
+    {
+    	public static Process executeNUnitConsole(this API_NUnit nUnitApi)
+    	{
+    		return nUnitApi.executeNUnitConsole("", (logLine)=> logLine.info());
+    	}
+    	
+    	public static Process executeNUnitConsole(this API_NUnit nUnitApi, string parameters)
+    	{
+    		return nUnitApi.executeNUnitConsole(parameters, (logLine)=> logLine.info());
+    	}
+    		
+    	public static Process executeNUnitConsole(this API_NUnit nUnitApi, string parameters, Action<string> logOut)
+    	{
+    		var nUnitConsole = nUnitApi.installer.Executable.directoryName().pathCombine("nunit-console.exe");    	
+    		return nUnitConsole.startProcess(parameters,logOut);
+    	}
+    }
+    
 }

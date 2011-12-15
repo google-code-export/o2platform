@@ -12,11 +12,12 @@ using O2.DotNetWrappers.ExtensionMethods;
 using O2.Kernel.ExtensionMethods;
 
 //O2File:Test_TM_Config.cs
-
 //O2File:WatiN_IE_ExtensionMethods.cs
+//O2File:_Extra_methods_Web.cs
+
 //O2Ref:WatiN.Core.1x.dll
 //O2Ref:nunit.framework.dll
-
+  
 namespace O2.SecurityInnovation.TeamMentor
 {			
     public class Test_TM_IE
@@ -31,28 +32,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	{
     		this.ie = _ie;
     		return _ie;
-    	}
-    	
-    	public void check_if_TM_WebServer_is_Running()
-    	{
-    		if(IsWebServerUp)	
-				return;
-			"[check_if_TM_WebServer_is_Running] IsWebServerUp variable false, so checking if server is up (this should only happen once per main execution".info();
-			
-			var homePageHtml = Test_TM.tmServer.get_Html();
-			if (homePageHtml.valid().isFalse())
-			{
-				"It looks like the server is down, lets start it".info();
-				var port = Test_TM.Port;
-				var folder = Test_TM.tmWebSiteFolder;
-				var parameters = "/port:{0} /portMode:Specific /path:\"{1}\"".format(port,folder);
-				Test_TM.cassiniWebServer.startProcess(parameters);
-			}
-			homePageHtml = Test_TM.tmServer.get_Html();
-			Assert.That(homePageHtml.valid(),"The server is not up");									
-			IsWebServerUp = true;
-			
-    	}
+    	}    	    
     	
     	public WatiN_IE set_IE_Object(string key)
     	{
@@ -68,7 +48,7 @@ namespace O2.SecurityInnovation.TeamMentor
 										return ie;
 									 });
 			Assert.That(ie.notNull(), "set_IE_Object ie was null");
-			check_if_TM_WebServer_is_Running();
+//			check_if_TM_WebServer_is_Running();
 			return ie;
     	}
     	
@@ -106,11 +86,19 @@ namespace O2.SecurityInnovation.TeamMentor
     
     public class Test_TM_IE_Tests : Test_TM_IE
     {    	
-    	//[Test]
+    	/*    	
+    	[Test]
+    	//O2File:Test_TM_Setup.cs
+    	public void check_If_Site_Is_Working()
+    	{
+    		new Test_TM_Setup().check_if_TM_WebServer_is_Running();
+    	}
+*/   
+/*    	//[Test]
 		public void test_check_if_TM_WebServer_is_Running()
 		{			
 			base.check_if_TM_WebServer_is_Running();
-		}
+		}*/
     }
     
     public static class WatiN_JQuery_ExtensionMethods
