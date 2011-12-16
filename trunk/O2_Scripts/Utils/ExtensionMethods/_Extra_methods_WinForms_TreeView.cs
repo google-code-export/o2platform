@@ -263,8 +263,8 @@ namespace O2.XRules.Database.Utils
 			treeView.invokeOnThread(
 				()=>{
 						treeView.DoubleClick+= 
-							(sender,e)=>{											
-											object tag = treeView.selected().get_Tag();
+							(sender,e)=>{															
+											object tag = Ascx_ExtensionMethods.get_Tag(treeView.selected());
 											if (tag is T)
 												O2Thread.mtaThread(()=> callback((T)tag));
 										 };

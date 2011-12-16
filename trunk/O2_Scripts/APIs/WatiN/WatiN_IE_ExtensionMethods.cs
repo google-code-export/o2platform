@@ -2258,6 +2258,14 @@ namespace O2.XRules.Database.APIs
 			var result = ie.getJsObject().str().fixCRLF();					
 //			"formated Javascript has size: {0}".info(result.size()); 			
 			return result;
+		}						
+		
+		public static WatiN_IE show_Formated_Javascript(this string codeToFormat)
+		{
+			var ie = "Formated Javascript".popupWindow()
+										 .add_IE()
+										 .show_Formated_Javascript(codeToFormat);
+			return ie;
 		}
 		
 		public static WatiN_IE show_Formated_Javascript(this WatiN_IE ie,string codeToFormat)

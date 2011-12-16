@@ -45,6 +45,20 @@ namespace O2.XRules.Database.Utils
 			return tableList;
 		}
 		
+		public static ascx_TableList onDoubleClick_get_Row(this ascx_TableList tableList,  Action<ListViewItem> callback)
+		{
+			tableList.invokeOnThread(
+				()=>{
+						tableList.listView().DoubleClick+= (sender,e)
+							=>{
+									var selectedRow =tableList.selected();
+									if (selectedRow.notNull())
+										callback(selectedRow);
+							  };	
+					});
+			return tableList;					
+		}
+		
 		public static ascx_TableList onDoubleClick<T>(this ascx_TableList tableList,  Action<T> callback)
 		{
 			tableList.invokeOnThread(
@@ -217,6 +231,10 @@ namespace O2.XRules.Database.Utils
 						return tableList;
 					});
 		}
+		public static ascx_TableList column_Width(this ascx_TableList tableList, int columnNumber, int width)
+		{
+			return tableList.set_ColumnWidth(columnNumber, width);
+		}
 		
 		public static ascx_TableList set_ColumnWidth(this ascx_TableList tableList, int columnNumber, int width)
 		{
@@ -229,6 +247,12 @@ namespace O2.XRules.Database.Utils
 					});
 		}
 		
+		public static ascx_TableList columns_Width(this ascx_TableList tableList, params int[] widths)
+		{
+			return tableList.set_ColumnsWidth(widths)
+							.set_ColumnsWidth(widths);    // BUG: there some extra event that gets fired on the fist column which reverts it to the original size
+													  	// the current solution is to invoke set_ColumnWidth twice 	
+		}
 		public static ascx_TableList set_ColumnsWidth(this ascx_TableList tableList, params int[] widths)
 		{
 			return tableList.set_ColumnsWidth(true, widths);

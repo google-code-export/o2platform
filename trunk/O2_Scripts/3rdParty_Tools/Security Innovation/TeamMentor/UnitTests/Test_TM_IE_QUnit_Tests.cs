@@ -65,7 +65,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	[Test]
     	public void TM_AppliedFilters()  
     	{
-    		executeQUnitTestFile(baseFolder + "html/TM_AppliedFilters.html");
+    		executeQUnitTestFile(baseFolder + "htmlAppliedFilters/TM_AppliedFilters.html");
     	}    
     	
     	[Test]

@@ -19,8 +19,11 @@ form.visible(true)
 */
 Func&lt;bool&gt; saveCompileAndOpen = 
 	()=&gt;{
-			codeEditor.saveSourceCode();						
-			return api_NUnit_Gui.compileAndOpen(codeEditor.sPathToFileLoaded);			
+			codeEditor.saveSourceCode();												
+			//there is a number of threading issues and WatiN object loosing refrences with doing this 'in process' (below)
+				//return api_NUnit_Gui.compileAndOpen(codeEditor.sPathToFileLoaded);			
+			//so for now lets run this in a separate process
+			return new API_NUnit().compileAndRun(codeEditor.sPathToFileLoaded); 
 		};
 		
 Action saveCompileOpenAndRunAllTests = 

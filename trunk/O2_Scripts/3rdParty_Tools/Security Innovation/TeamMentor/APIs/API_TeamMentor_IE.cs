@@ -37,6 +37,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	
 		public void config()
     	{
+    		WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES = 20;
     		this.TargetServer = Test_TM.tmServer.removeLastChar();
     	}    
     }
@@ -67,7 +68,9 @@ namespace O2.SecurityInnovation.TeamMentor
     	[ShowInGui(Folder = "Gui Actions")]
     	public static API_IE_ExecutionGUI homePage(this API_TeamMentor_IE teamMentor)
     	{
-    		return teamMentor.open("");    		
+    		teamMentor.open("");    		
+    		teamMentor.ie.waitForJsVariable("TM.HomePageLoaded"); 
+    		return teamMentor;
     	}
     	
     	[ShowInGui(Folder = "Gui Actions")]
