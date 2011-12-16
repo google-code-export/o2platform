@@ -17,8 +17,7 @@ using O2.External.SharpDevelop.Ascx;
 
 using O2.XRules.Database.Utils;
 
-//O2File:_Extra_methods_To_Add_to_Main_CodeBase.cs
-
+//O2File:_Extra_methods_WinForms_TreeView.cs
 
 namespace O2.XRules.Database.Utils
 {

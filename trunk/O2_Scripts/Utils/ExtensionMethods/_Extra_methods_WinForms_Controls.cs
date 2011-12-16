@@ -467,16 +467,23 @@ namespace O2.XRules.Database.Utils
 										{
 											if(itemToExecute.fileExists().isFalse() && itemToExecute.local().fileExists().isFalse())																							
 												CompileEngine.clearLocalScriptFileMappings();											
-											if (Control.ModifierKeys == Keys.Shift)
-											{
-												"Shift Key was pressed, so launching in new process: {0}".info(itemToExecute);
-												itemToExecute.executeH2_or_O2_in_new_Process();
-											}
-											else
-											{
-												"Shift Key was not pressed, so running script in current process".debug(itemToExecute);
-												O2Thread.mtaThread(()=>itemToExecute.executeFirstMethod());
-											}
+											"itemToExecute: {0}".debug(itemToExecute);	
+											"itemToExecuteextension: {0}".debug(itemToExecute.extension(".o2"));
+											if (itemToExecute.extension(".h2") || itemToExecute.extension(".o2"))											
+												if (Control.ModifierKeys != Keys.Shift)
+												{
+													"Shift Key was not pressed, so launching in new process: {0}".info(itemToExecute);
+													itemToExecute.executeH2_or_O2_in_new_Process();
+													return;
+												}
+												
+/*												else
+												{
+													"Shift Key was pressed, so running script in current process".debug(itemToExecute);													
+													O2Thread.mtaThread(()=>itemToExecute.executeFirstMethod());
+												}
+											else*/
+											O2Thread.mtaThread(()=>itemToExecute.executeFirstMethod());
 										}
 											
 									}
