@@ -13,7 +13,7 @@ availableTests.onDrag&lt;string,string&gt;((tag)=&gt; { return tag.str();});
  
 
 //make sure these are there
-"".tempDir().copyAssembliesToFolder("O2_Kernel.dll", "O2_Interfaces.dll", "O2_DotNetWrappers.dll", "O2_Views_ASCX.dll");
+"".tempDir().copyAssembliesToFolder("O2_Kernel.dll", "O2_Interfaces.dll", "O2_DotNetWrappers.dll", "O2_Views_ASCX.dll", "O2_External_Sharpdevelop.dll");
  
 //Dictionary&lt;string,object&gt; ncunitLaunher = null;
 
@@ -31,12 +31,13 @@ Action&lt;string&gt; runOnNunitGui =
 							"Running on NUnit Gui:{0}".info(assemblyOrProject);
 							new API_NUnit().runProject(assemblyOrProject);
 						 };
-		
+
+Func&lt;string&gt; selectedTest = ()=&gt; (string)availableTests.selected().tag&lt;string&gt;(); 	
 
 Action compileAndRun = 
 	()=&gt;{			
 //			var api_NUnit_Gui = "var api_NUnit_Gui".o2Cache&lt;API_NUnit_Gui&gt;(()=&gt; new API_NUnit_Gui(false));
-			var unitTestToOpen = (string)availableTests.selected().tag&lt;string&gt;(); 
+			var unitTestToOpen = selectedTest();
 //			api_NUnit_Gui.compileOpenAndRun(unitTestToOpen); 
 			if (unitTestToOpen.extension(".cs"))
 				new API_NUnit().compileAndRun(unitTestToOpen); 
@@ -64,6 +65,13 @@ actionsPanel.add_Label("")
 availableTests.onDoubleClick(()=&gt;compileAndRun()); 
 
 availableTests.onDrop((file)=&gt; runOnNunitGui(file));
+
+availableTests.add_ContextMenu()
+			  .add_MenuItem("run" , true, ()=&gt; compileAndRun())
+			  .add_MenuItem("edit", true, ()=&gt; openInEditor())
+			  .add_MenuItem("refresh tree", true, ()=&gt; refreshTree())
+			  .add_MenuItem("copy path to clipboard", ()=&gt; selectedTest().toClipboard());
+
 refreshTree();
 
 return "ok";

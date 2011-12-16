@@ -161,6 +161,11 @@ namespace O2.XRules.Database.Utils
 	
 	public static class _Extra_Web_ExtensionMethods_Json
 	{
+		public static string json<T>(this T _object)
+		{
+			return _object.json_Serialize();
+		}
+		
 		public static string json_Serialize<T>(this T _object)
 	    {
 	        var serializer = new DataContractJsonSerializer(_object.type());
@@ -192,5 +197,23 @@ namespace O2.XRules.Database.Utils
 	        //T obj = Activator.CreateInstance<T>();
 	        return new JavaScriptSerializer().Deserialize<T>(json);	        
 	    }
+	}
+	
+	public static class _Extra_Web_ExtensionMethods_Encoding
+	{
+		public static List<List<string>> encode(this List<List<string>> data, Func<string,string> encodeCallback)
+		{
+			foreach(var list in data)
+				list.encode(encodeCallback);
+			return data;	
+		}
+		
+		
+		public static List<string> encode(this List<string> list, Func<string,string> encodeCallback)
+		{
+			for(int i=0; i < list.size();  i++)
+				list[i]= encodeCallback(list[i]);
+			return list;
+		}		
 	}
 }    	
