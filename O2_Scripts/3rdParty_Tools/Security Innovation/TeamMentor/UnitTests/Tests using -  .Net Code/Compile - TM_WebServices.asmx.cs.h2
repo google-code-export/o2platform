@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<H2>
+  <SourceCode>var fileToCompile = Test_TM.tmWebSiteFolder + @"\App_Code\WebServices\TM_WebServices.asmx.cs";
+var targetFolder = PublicDI.CurrentScript.parentFolder();
+return fileToCompile.compileIntoDll_inFolder(targetFolder);
+
+//O2File:Test_TM_Config.cs
+//using O2.SecurityInnovation.TeamMentor</SourceCode>
+  <ReferencedAssemblies />
+</H2>

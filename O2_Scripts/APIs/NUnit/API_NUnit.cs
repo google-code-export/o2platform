@@ -15,6 +15,8 @@ using O2.DotNetWrappers.DotNet;
 using O2.XRules.Database.Utils;
 
 //O2File:Installer_NUnit.cs
+//O2File:_Extra_methods_WinForms_Controls.cs
+
 
 namespace O2.XRules.Database.APIs
 {
@@ -75,6 +77,11 @@ namespace O2.XRules.Database.APIs
     		return nUnitApi.compileAndOpen(fileToCompile, "/run");
     	}
     	
+    	public static bool compileAndOpen(this API_NUnit nUnitApi, string fileToCompile)
+    	{
+    		return nUnitApi.compileAndOpen(fileToCompile, "");
+    	}
+    	
     	public static bool compileAndOpen(this API_NUnit nUnitApi, string fileToCompile, string extraStartupOptions)
     	{
     		var assembly = new CompileEngine().compileSourceFile(fileToCompile);
@@ -112,19 +119,126 @@ namespace O2.XRules.Database.APIs
     {
     	public static Process executeNUnitConsole(this API_NUnit nUnitApi)
     	{
-    		return nUnitApi.executeNUnitConsole("", (logLine)=> logLine.info());
+    		return nUnitApi.executeNUnitConsole("", (line)=> line.info());
     	}
     	
     	public static Process executeNUnitConsole(this API_NUnit nUnitApi, string parameters)
     	{
-    		return nUnitApi.executeNUnitConsole(parameters, (logLine)=> logLine.info());
+    		return nUnitApi.executeNUnitConsole(parameters, (line)=> line.info());
     	}
     		
-    	public static Process executeNUnitConsole(this API_NUnit nUnitApi, string parameters, Action<string> logOut)
+    	public static Process executeNUnitConsole(this API_NUnit nUnitApi, string parameters, Action<string> consoleOut)
     	{
     		var nUnitConsole = nUnitApi.installer.Executable.directoryName().pathCombine("nunit-console.exe");    	
-    		return nUnitConsole.startProcess(parameters,logOut);
+    		return nUnitConsole.startProcess(parameters,consoleOut);
     	}
+    	
+    	public static Process console_Run(this API_NUnit nUnitApi, string projectOrAssembly)
+    	{
+    		return nUnitApi.console_Run(projectOrAssembly, null);
+    	}
+    	public static Process console_Run(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions)
+    	{
+    		return nUnitApi.console_Run(projectOrAssembly, extraStartupOptions, (line)=> line.info());
+    	
+    	}
+    	public static Process console_Run(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions, Action<string> consoleOut)
+    	{
+    		var startUpOptions = "\"{0}\" {1}".format(projectOrAssembly ?? "" , extraStartupOptions ?? "");
+    		return nUnitApi.executeNUnitConsole(startUpOptions , consoleOut);
+    	}	
+    	
+    	public static Process console_Run_on_PopupWindow(this API_NUnit nUnitApi, string projectOrAssembly)
+    	{
+    		return 	nUnitApi.console_Run_on_PopupWindow(projectOrAssembly, null);
+    	}
+    	public static Process console_Run_on_PopupWindow(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions)
+    	{
+    		return nUnitApi.console_Run_on_PopupWindow(projectOrAssembly, extraStartupOptions, true);
+    	}
+    	public static Process console_Run_on_PopupWindow(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions, bool autoCloseOnSuccess)
+    	{
+    		var nunitPopup = "NUnit Execution of: {0}".format(projectOrAssembly).popupWindow();
+    		var richTextBox = nunitPopup.add_RichTextBox(); 
+    		richTextBox.backColor(Color.Azure);
+    		var success = false;
+    		Action<string> logLine = 
+    			(line)=>{
+    						try
+    						{
+    							if (line.valid() && line.contains("Errors:"))
+    								if (line.contains("Errors: 0, Failures: 0"))
+    								{
+    									richTextBox.backColor(Color.LightGreen);
+    									success = true;
+    								}
+    								else
+    									richTextBox.backColor(Color.LightSalmon);
+    						}
+    						catch(Exception ex)
+    						{
+    							ex.log();
+    						}    							
+    						richTextBox.append_Line(line);		
+    					};
+    					
+			var process = nUnitApi.console_Run(projectOrAssembly, "", logLine);    					
+			
+			if(autoCloseOnSuccess)    					
+				O2Thread.mtaThread(
+					()=> {							
+							process.WaitForExit();
+							if (success)
+								nunitPopup.closeForm_InNSeconds(5);							
+						 });    		
+    		
+    		return process;
+    	}
+    	
+    	public static string console_Run_GetConsoleOut(this API_NUnit nUnitApi, string projectOrAssembly)
+    	{
+    		return 	nUnitApi.console_Run_GetConsoleOut(projectOrAssembly, null);
+    	}
+    	
+    	public static string console_Run_GetConsoleOut(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions)
+    	{
+    		var consoleOut = new StringBuilder();
+    		nUnitApi.console_Run(projectOrAssembly, extraStartupOptions, (line) => consoleOut.AppendLine(line.info()))  
+    				.WaitForExit();
+    		return consoleOut.str();    	
+    	}
+    	
+    	public static string console_Run_GetXmlFile(this API_NUnit nUnitApi, string projectOrAssembly)
+    	{
+    		var tempFile = projectOrAssembly.fileName().tempFile() + ".xml";
+    		nUnitApi.console_Run_GetConsoleOut(projectOrAssembly, "/xml:\"" + tempFile + "\"");
+    		return tempFile;
+    	}
+    	
+    	public static string console_Run_GetXml(this API_NUnit nUnitApi, string projectOrAssembly)
+    	{
+    		return nUnitApi.console_Run_GetXml(projectOrAssembly).fileContents();
+    	}
+    	
+    	public static string nUnit_Run_GetXmlFile(this string projectOrAssembly)
+    	{
+    		var nunit = new API_NUnit();  			
+			return nunit.console_Run_GetXmlFile(projectOrAssembly);
+    	}
+    	
+    	public static string nUnit_Run(this string projectOrAssembly)
+    	{
+    		var nunit = new API_NUnit();  			
+    		return nunit.console_Run_GetConsoleOut(projectOrAssembly);
+    	}
+    	
+    	public static Process nUnit_Run_Show_Console_on_PopupWindow(this string projectOrAssembly)
+    	{
+    		var nunit = new API_NUnit();  		
+    		return nunit.console_Run_on_PopupWindow(projectOrAssembly);
+    	}    	
+    	
+
     }
     
 }

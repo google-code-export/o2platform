@@ -2,7 +2,8 @@
 using System;
 using O2.Kernel.ExtensionMethods;
 using O2.DotNetWrappers.ExtensionMethods;
-using O2.XRules.Database.Utils;
+
+//O2Ref:nunit.framework.dll     
 
 namespace O2.SecurityInnovation.TeamMentor
 {				
@@ -17,9 +18,9 @@ namespace O2.SecurityInnovation.TeamMentor
     	public static string currentHomePage = "{0}{1}".format(tmServer, "Aspx_Pages/TM_3_0_with_Panels.aspx");
     	public static string invalidPage 	 = "{0}{1}".format(tmServer, "asdasdasd.aspx");
     	
-    	public static string tmFolder 	 	  = @"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\"; 
-    	public static string tmWebSiteFolder  =  tmFolder.pathCombine(@"Web Applications\TM_Website");
-    	public static string cassiniWebServer =  tmFolder.pathCombine(@"WebServer\CassiniDev.exe");    	    	
+    	public static string tmSourceCode	  = @"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\"; 
+    	public static string tmWebSiteFolder  =  tmSourceCode.pathCombine(@"Web Applications\TM_Website");
+    	public static string cassiniWebServer =  tmSourceCode.pathCombine(@"WebServer\CassiniDev.exe");    	    	
     	
     	public static int CLOSE_WINDOW_IN_SECONDS = 0;
     	public static int CLOSE_BROWSER_IN_SECONDS = 0;

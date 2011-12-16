@@ -17,10 +17,9 @@ namespace O2.XRules.Database.UnitTests
     public class SimpleUnitTest
     {        	    
     	[Test]
-    	public string Test1()
+    	public void Test1()
     	{
-    		Assert.That(1 == 1,"If this fails you have bigger problems :)");    	
-    		return "ok";
+    		Assert.That(1 == 1,"If this fails you have bigger problems :)");    	    		
     	}
     	
     }

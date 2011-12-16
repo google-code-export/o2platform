@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Util - Run TM UnitTests",300,500);
+  <SourceCode>var topPanel = O2Gui.open&lt;Panel&gt;("Util - Run TM UnitTests",400,500);
 topPanel.parentForm().top(0).left(0);
 //var topPanel = panel.clear().add_Panel();
 topPanel.insert_LogViewer(); 
- 
+
+var currentFolder = PublicDI.CurrentScript.parentFolder();
+var unitTestsFolder = currentFolder.pathCombine("UnitTests");
 var tmConsolidatedTestsFolder = "All TM Unit Tests.cs".local().parentFolder();
  
 var actionsPanel = topPanel.insert_Above(40,"Actions");
@@ -19,10 +21,19 @@ availableTests.onDrag&lt;string,string&gt;((tag)=&gt; { return tag.str();});
 
 Action refreshTree =  
 	()=&gt;{ 
-			availableTests.clear(); 
+			availableTests.clear();  
+			
+			foreach(var file in unitTestsFolder.files("*.cs",true))
+				if(file.fileContents().contains("[TestFixture]"))
+					availableTests.add_Node(file.str()
+												.remove(unitTestsFolder)
+												.removeFirstChar()
+												.replace("\\", "    -&gt;    ")
+											,file);
+			
 			//availableTests.add_Files(tmConsolidatedTestsFolder, "*.cs");
-			availableTests.add_Node("_Web_Based  Tests").add_Nodes(tmConsolidatedTestsFolder.parentFolder().files(), (file)=&gt;file.fileName());  
-			availableTests.add_Node("_BackEdnd  Tests").add_Nodes(@"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\O2 Scripts\UnitTests_Compiled".files("security*.dll"), (file)=&gt;file.fileName());  
+			//availableTests.add_Node("_Web_Based  Tests").add_Nodes(tmConsolidatedTestsFolder.parentFolder().files(), (file)=&gt;file.fileName());  
+			//availableTests.add_Node("_BackEdnd  Tests").add_Nodes(@"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\O2 Scripts\UnitTests_Compiled".files("security*.dll"), (file)=&gt;file.fileName());  
 			
 			availableTests.selectFirst();
 		};
