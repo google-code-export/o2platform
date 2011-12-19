@@ -42,7 +42,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			Assert.AreNotEqual(debugValue.lower() ,"true", "system.web / compilation / debug attribute value should not be true");		
 		}
 		
-		[Test]  
+/*		[Test]  
     	public void system_web_compilation_customErrors_IS_NOT_Off()
     	{   
     		var customErrors = WebConfigFile.xRoot().element("system.web").element("customErrors");
@@ -51,6 +51,17 @@ namespace O2.SecurityInnovation.TeamMentor
     		Assert.IsNotNull(modeAttribute, "mode attribute");			
 			var value = modeAttribute.value();
 			Assert.AreNotEqual(value.lower() ,"off", "system.web / customErrors / mode value should not be Off");		
+		}					
+*/		
+		[Test]  
+    	public void system_web_compilation_customErrors_IS_Off()
+    	{   
+    		var customErrors = WebConfigFile.xRoot().element("system.web").element("customErrors");
+    		Assert.IsNotNull(customErrors, "customErrors element");
+    		var modeAttribute = customErrors.attribute("mode");
+    		Assert.IsNotNull(modeAttribute, "mode attribute");			
+			var value = modeAttribute.value();
+			Assert.AreEqual(value.lower() ,"off", "system.web / customErrors / mode value should be Off");		
 		}					
 	}       
 }

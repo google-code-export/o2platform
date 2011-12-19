@@ -6,7 +6,7 @@ topPanel.parentForm().top(0).left(0);
 topPanel.insert_LogViewer(); 
 
 var currentFolder = PublicDI.CurrentScript.parentFolder();
-var unitTestsFolder = currentFolder.pathCombine("UnitTests");
+var unitTestsFolder = currentFolder;//.pathCombine("UnitTests");
 var tmConsolidatedTestsFolder = "All TM Unit Tests.cs".local().parentFolder();
  
 var actionsPanel = topPanel.insert_Above(40,"Actions");

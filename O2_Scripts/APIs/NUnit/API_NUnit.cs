@@ -133,18 +133,29 @@ namespace O2.XRules.Database.APIs
     		return nUnitConsole.startProcess(parameters,consoleOut);
     	}
     	
-    	public static Process console_Run(this API_NUnit nUnitApi, string projectOrAssembly)
+    	public static Process console_Run(this API_NUnit nUnitApi, string target)
     	{
-    		return nUnitApi.console_Run(projectOrAssembly, null);
+    		return nUnitApi.console_Run(target, null);
     	}
-    	public static Process console_Run(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions)
+    	public static Process console_Run(this API_NUnit nUnitApi, string target, string extraStartupOptions)
     	{
-    		return nUnitApi.console_Run(projectOrAssembly, extraStartupOptions, (line)=> line.info());
+    		return nUnitApi.console_Run(target, extraStartupOptions, (line)=> line.info());
+    	
     	
     	}
-    	public static Process console_Run(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions, Action<string> consoleOut)
-    	{
-    		var startUpOptions = "\"{0}\" {1}".format(projectOrAssembly ?? "" , extraStartupOptions ?? "");
+    	public static Process console_Run(this API_NUnit nUnitApi, string target, string extraStartupOptions, Action<string> consoleOut)
+    	{    		
+    		if (target.extension(".cs"))
+    		{
+    			var assembly = new CompileEngine().compileSourceFile(target);
+				if (assembly.isNull())
+				{
+					"[API_NUnit][console_Run] failed to compile C# file: {0}".error(target);
+					return null;
+				}
+				target = assembly.Location;
+    		}
+    		var startUpOptions = "\"{0}\" {1}".format(target ?? "" , extraStartupOptions ?? "");
     		return nUnitApi.executeNUnitConsole(startUpOptions , consoleOut);
     	}	
     	
@@ -182,9 +193,8 @@ namespace O2.XRules.Database.APIs
     						richTextBox.append_Line(line);		
     					};
     					
-			var process = nUnitApi.console_Run(projectOrAssembly, "", logLine);    					
-			
-			if(autoCloseOnSuccess)    					
+			var process = nUnitApi.console_Run(projectOrAssembly, "", logLine);    								
+			if(process.notNull() && autoCloseOnSuccess)    					
 				O2Thread.mtaThread(
 					()=> {							
 							process.WaitForExit();

@@ -59,7 +59,7 @@ actionsPanel.add_Link("Run in NUnit Console", ()=&gt;saveCompileAndRunOnPopup())
 			
 			//.append_Link("API_Nunit_Gui details", ()=&gt; nUnitGui.details());
 
-actionsPanel.parent().insert_Right(200).add_Button("RUN in NUnit".line().append("(save, compile, open and run)")).fill().onClick(()=&gt;saveCompileOpenAndRunAllTests());
+actionsPanel.parent().insert_Right(200).add_Button("RUN in NUnit GUI".line().append("(save, compile, open and run)")).fill().onClick(()=&gt;saveCompileOpenAndRunAllTests());
 
 
 

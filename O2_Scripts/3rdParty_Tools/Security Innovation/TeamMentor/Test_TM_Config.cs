@@ -20,6 +20,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	
     	public static string tmSourceCode	  = @"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\"; 
     	public static string tmWebSiteFolder  =  tmSourceCode.pathCombine(@"Web Applications\TM_Website");
+    	public static string tmConfigFile  =  tmWebSiteFolder.pathCombine(@"TmConfig.config");
     	public static string cassiniWebServer =  tmSourceCode.pathCombine(@"WebServer\CassiniDev.exe");    	    	
     	
     	public static int CLOSE_WINDOW_IN_SECONDS = 0;

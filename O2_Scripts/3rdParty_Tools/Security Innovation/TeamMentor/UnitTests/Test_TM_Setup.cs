@@ -21,8 +21,8 @@ namespace O2.SecurityInnovation.TeamMentor
     {	    
     	public static bool IsWebServerUp = false;  // make this static so that we only try to get the html from the server once
     	
-    	[SetUp]
-    	public void startServers()
+    	//[SetUp]
+    	public void startServer()
     	{
     		startServer(Test_TM.Port, Test_TM.tmWebSiteFolder);	
     	}
@@ -35,7 +35,7 @@ namespace O2.SecurityInnovation.TeamMentor
     		Assert.That(Test_TM.invalidPage.isUri(), 			"invalidPage not Uri");
     		Assert.That(Test_TM.tmWebServices.isUri(), 			"tmWebServices not Uri");
     		Assert.That(Test_TM.currentHomePage.isUri(), 		"currentHomePage not Uri");
-    		Assert.That(Test_TM.tmFolder.dirExists(),			"Test.TM.tmFolder not found");
+    		Assert.That(Test_TM.tmSourceCode.dirExists(),		"Test.TM.tmSourceCode not found");
     		Assert.That(Test_TM.tmWebSiteFolder.dirExists(),	"Test.TM.tmWebSiteFolder not found");
     		Assert.That(Test_TM.cassiniWebServer.fileExists(),	"Test.TM.cassiniWebServer not found");     		
     	}    

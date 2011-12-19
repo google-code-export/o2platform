@@ -75,7 +75,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	{    		    		
     		lock(ie)
     		{
-	    		ie.eval("TM.WebServices.WS_Utils.getTime(function(data) { TM.getTimeValue = data.d });");
+	    		ie.eval("TM.WebServices.WS_Utils.getTime(function(data) { TM.getTimeValue = data });");
 	    		var getTimeValue = ie.waitForJsVariable("TM.getTimeValue");
 	    		Assert.That(getTimeValue.notNull(), "getTimeValue was null");
 	    		var nowValue = DateTime.Now.ToShortDateString();
