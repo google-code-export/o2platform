@@ -28,7 +28,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES = 20;
 		}
 		
-    	[Ignore][Test]
+    	[Test]
     	public void GuiObjects_CreateMappingsTable()  
     	{
     		lock(ie)
@@ -39,7 +39,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			}
     	} 
     	    	
-    	[Ignore][Test]
+    	[Test]
     	public void GuiObjects_ViewFolderStructure()  
     	{		
     		lock(ie)
@@ -50,7 +50,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			}
     	} 
     	
-    	[Ignore][Test]
+    	[Test]
     	public void GuiObjects_ViewFolderStructure_with_GuidandeItemsGuids()  
     	{		
     		lock(ie)
@@ -61,7 +61,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			}
     	} 
     	
-    	[Ignore][Test]
+    	[Test]
     	public void LibrariesFoldersViews_And_GuidanceItems_Guids()  
     	{		
     		lock(ie)
@@ -81,7 +81,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			}
     	} 
 
-		[Ignore][Test]
+		[Test]
 		public void LibrariesFoldersViews_And_GuidanceItems_Guids_Mode_B()  
     	{		
     		lock(ie)
@@ -95,7 +95,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			}
 		}
 		
-		[Ignore][Test]
+		[Test]
 		public void SlickGrid_ViewUniqueStrings()  
     	{		
     		lock(ie)
@@ -112,7 +112,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			}
 		}		
 		
-		[Ignore][Test]
+		[Test]
 		public void SlickGrid_View_GuidandeItemsMappings()  
     	{		
     		lock(ie)
@@ -157,7 +157,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			}
 		}	
 		
-		[Ignore][Test]
+		[Test]
 		public void DataTable_View_GuidanceItemsMappings()  
     	{		
     		lock(ie)
@@ -168,7 +168,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			}
 		}
 
-		[Ignore][Test]
+		[Test]
 		public void DataTable_View_GuidanceItemsMappings_using_TM_API()  
     	{		
     		lock(ie)
@@ -184,7 +184,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	{
     		lock(ie)
     		{
-				base.open("html_Pages/_UnitTest_Helpers/GuiObjects/Panel_LibrariesView.html?time=" + DateTime.Now.Ticks); 
+				base.open("Html_Pages/_UnitTest_Helpers/GuiObjects/TM.GUI.LibraryTree.html?time=" + DateTime.Now.Ticks); 
 				var value = ie.waitForJsVariable("TM.Debug.UnitTest_Message").str();			
 				Assert.AreEqual(value.str(), "Test Complete","UnitTest_Message");			
 			}

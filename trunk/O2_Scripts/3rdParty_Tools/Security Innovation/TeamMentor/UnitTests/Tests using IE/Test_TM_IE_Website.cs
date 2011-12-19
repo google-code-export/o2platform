@@ -23,7 +23,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			var ieKey = "Test_TM_IE_WebSite";
 			base.set_IE_Object(ieKey);	
 			Test_TM.CLOSE_BROWSER_IN_SECONDS = 4;
-			WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES = 20;
+			WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES = 40;
 		}
 		
     	[Test]
@@ -49,8 +49,8 @@ namespace O2.SecurityInnovation.TeamMentor
 				
 				//check links
 				var linksTexts = ie.links().texts();			
-				Assert.That(linksTexts.contains("Login"),"Missed Link: Login");
-				Assert.That(linksTexts.contains("Sign Up"),"Missed Link: Sign Up");			
+				Assert.That(linksTexts.contains("Login") || linksTexts.contains("Logout") ,"Missed Link: Login or Logout");
+				//Assert.That(linksTexts.contains("Sign Up"),"Missed Link: Sign Up");			
 			}    		
     	} 
     	    	

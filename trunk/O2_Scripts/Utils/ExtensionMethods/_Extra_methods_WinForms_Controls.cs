@@ -533,8 +533,13 @@ namespace O2.XRules.Database.Utils
 		}
 	}
 	
-		public static class _Extra_WinFormControls_ExtensionMethods
+	public static class _Extra_WinFormControls_ExtensionMethods
 	{
+		public static GroupBox title(this Control control, string title)
+		{
+			return control.add_GroupBox(title);
+		}
+		
 		public static List<Control> add_1x1(this Control control, Action<Control> buildPanel1,  Action<Control> buildPanel2)
 		{
 			var controls = control.add_1x1();
@@ -691,10 +696,26 @@ namespace O2.XRules.Database.Utils
 			return (int)control.invokeOnThread(()=>  control.Height);
 		}
 		
+		public static T align_Right<T>(this T control)
+			where T : Control
+		{
+			return control.align_Right(control.parent());
+		}
+		
 		//add links
 		public static LinkLabel add_Link(this Control control, string label, Action onClickCallback)
 		{
 			return control.add_Link(label, 0,0, ()=> onClickCallback());
+		}
+		
+		public static LinkLabel append_Link_Below(this Control control, string label,int left, Action onClickCallback)
+		{
+			return control.append_Link_Below(label,onClickCallback).left(left);
+		}
+		
+		public static LinkLabel append_Link_Below(this Control control, string label, Action onClickCallback)
+		{
+			return control.append_Below_Link(label,onClickCallback);
 		}
 		
 		public static LinkLabel append_Below_Link(this Control control, string label, Action onClickCallback)
@@ -705,7 +726,25 @@ namespace O2.XRules.Database.Utils
 		public static Label append_Below_Label(this Control control, string label)
 		{
 			return control.parent().add_Label(label, control.top() + 22 , control.left());
+		}				
+		
+		//add links (which execute o2 scripts
+		
+		public static LinkLabel add_Link(this Control control, string label, string script)
+		{
+			return control.add_Link(label, ()=> script.executeH2Script());
 		}
+		
+		public static LinkLabel append_Link(this Control control, string label, string script)
+		{
+			return control.append_Link(label, ()=> script.executeH2Script());
+		}
+		
+		public static LinkLabel append_Below_Link(this Control control, string label, string script)
+		{
+			return control.append_Below_Link(label, ()=> script.executeH2Script());
+		}				
+		
 	}
 	
 	public static class _extra_Form_ExtensionMethod
@@ -755,7 +794,7 @@ namespace O2.XRules.Database.Utils
 		{
 			return (T)control.invokeOnThread(
 				()=>{
-						control.parentForm().WindowState = System.Windows.Forms.FormWindowState.Minimized; 
+						control.parentForm().WindowState = state;
 						return control;
 					});
 		}

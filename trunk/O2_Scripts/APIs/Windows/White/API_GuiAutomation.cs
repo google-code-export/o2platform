@@ -605,13 +605,14 @@ namespace O2.XRules.Database.APIs
     	
     	public static Menu menu(this Window window, string name)
     	{
+    		if (window.isNull())
+    			return null;
     		// first use the menus() list
     		foreach(var menu in window.menus())
     			if (menu.name()== name)
     				return menu;
     		// then do a search for it		
-    		return window.find<Menu>(name);
-    		//return null;
+    		return window.find<Menu>(name);    		
     	}
     	
     	public static Menu menu(this Menu menu, string name)

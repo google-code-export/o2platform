@@ -59,20 +59,47 @@ namespace O2.SecurityInnovation.TeamMentor
     	[Test]
     	public void TM_GuiObjects()  
     	{
-    		executeQUnitTestFile(baseFolder + "html/TM_GuiObjects.html");
+    		executeQUnitTestFile(baseFolder + "html/QUnit - TM_GuiObjects.html");
     	}     	    	    	
-    	
-    	[Test]
+
+//this one needs to be run from inside a page with the applied filters loaded    	
+/*    	[Test]
     	public void TM_AppliedFilters()  
     	{
-    		executeQUnitTestFile(baseFolder + "htmlAppliedFilters/TM_AppliedFilters.html");
+    		executeQUnitTestFile(baseFolder + "html/AppliedFilters/TM_AppliedFilters.html");
+    	}    
+*/
+    	
+    	[Test]
+    	public void TM_GUI_ShowProgressBar()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit - TM_GUI_ShowProgressBar.html");
     	}    
     	
     	[Test]
-    	public void TM_GUI_JQueryUIl()  
+    	public void TM_GUI_LibraryTree()  
     	{
-    		executeQUnitTestFile(baseFolder + "html/TM_GUI_JQueryUI.html");
-    	}    
+    		executeQUnitTestFile(baseFolder + "html/QUnit - TM_GUI_LibraryTree.html");
+    	}   
+    	
+    	[Test]
+    	public void TM_Gui_Dialog()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit - TM_Gui_Dialog.html");
+    	}
+    	
+    	[Test]
+    	public void TM_XmlDatabase()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit - TM_XmlDatabase.html");
+    	}
+
+		[Test]
+    	public void TM_WebService_User()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit - TM_WebService_User.html");
+    	}     	    	
+    	
     	
     	[TestFixtureTearDown]
     	public void close_IE()
@@ -80,7 +107,10 @@ namespace O2.SecurityInnovation.TeamMentor
     		lock(ie)
     		{
     			"ok: close_IE (in {0} seconds)".format(Test_TM.CLOSE_BROWSER_IN_SECONDS).jQuery_Append_Body(ie);
-    		//	base.close_IE_Object();    		
+    			if (System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Shift)
+    				"[TestFixtureTearDown] [close_IE] Shift key was pressed to not closing IE window".info();
+    			else
+    				base.close_IE_Object();    		
     		}
     	}
 	}

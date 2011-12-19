@@ -36,9 +36,6 @@ using O2.Views.ASCX.ExtensionMethods;
 using O2.External.SharpDevelop.AST;
 using O2.External.SharpDevelop.ExtensionMethods;
 using O2.External.SharpDevelop.Ascx;
-using O2.API.AST.CSharp;
-using O2.API.AST.ExtensionMethods;
-using O2.API.AST.ExtensionMethods.CSharp;
 
 using ICSharpCode.TextEditor;
 using ICSharpCode.NRefactory;
@@ -54,7 +51,7 @@ using System.Security.Cryptography;
 using Ionic.Zip;
 
 //O2Ref:Ionic.Zip.dll
-//O2Ref:O2_API_AST.dll
+
 
 //O2File:_Extra_methods_Collections.cs
 //O2File:_Extra_methods_Web.cs
@@ -73,81 +70,12 @@ using Ionic.Zip;
 //O2File:_Extra_methods_SourceCodeEditor.cs
 //O2File:_Extra_methods_AppDomain.cs
 //O2File:_Extra_methods_Compilation.cs
+//O2File:_Extra_methods_XmlLinq.cs
 
 namespace O2.XRules.Database.Utils
 {		
 	
-	// Other extension method classes
-	
-	
-	public static class _Extra_XElement_LinqXML_extensionMethods
-	{
-		public static XElement parent(this XElement element)
-		{
-			return element.Parent;
-		}
-		
-		public static XElement element(this XElement elementToSearch, string name, bool createIfNotExistant)
-		{
-			var foundElement = elementToSearch.element(name);
-			if (foundElement.notNull())
-				return foundElement;
-			return createIfNotExistant 
-					? elementToSearch.add_Element(name)
-					: null;
-		}
-		
-		public static XElement add_Element(this XElement rootElement, string text)
-		{
-			var newElement = new XElement(text);
-			rootElement.Add(newElement);
-			return newElement;
-		}
-		
-		public static XAttribute add_Attribute(this XElement rootElement, string text, object value)
-		{
-			var newAttribute = new XAttribute(text.xName(), value);
-			rootElement.Add(newAttribute);
-			return newAttribute;
-		}
-		
-		public static XAttribute attribute(this XElement elementToSearch, string name, bool createIfNotExistant)
-		{
-			return elementToSearch.attribute(name, 	createIfNotExistant, null);
-		}
-		
-		public static XAttribute attribute(this XElement elementToSearch, string name, bool createIfNotExistant, object value)
-		{
-			var foundAttribute = elementToSearch.attribute(name);
-			if (foundAttribute.notNull())
-				return foundAttribute;
-			return createIfNotExistant 
-					? elementToSearch.add_Attribute(name, value ?? "")
-					: null;
-		}
-
-		public static string add_xmlns(this string name, XElement xElement)				
-		{
-			return name.prepend_AttributeValue(xElement, "xmlns");
-		}
-		
-		public static string prepend_AttributeValue(this string name, XElement xElement, string attributeName)
-		{
-			var xmlns =  xElement.attribute(attributeName).value();
-			return "{" + xmlns + "}" + name; 
-		}
-		
-		public static XElement innerXml(this XElement xElement, string value)
-		{
-			return xElement.value(value);			
-		}
-		
-		public static XElement value(this XElement xElement, string value)
-		{
-			xElement.Value = value;
-			return xElement;
-		}		
-	}
+	// Other extension method classes	
 	
 	public static class _Extra_ConfigFiles_extensionMethods
 	{
@@ -157,20 +85,7 @@ namespace O2.XRules.Database.Utils
             var panel = O2Gui.open<Panel>("Editing local config file: {0}".format(file), 700, 300);
             return file.editLocalConfigFile(panel);
         }
-	}
-		
-	 
-
-	
-	public static class _Extra_XmlLinq_ExtensiomMethods
-	{
-		public static XAttribute value(this XAttribute xAttribute, string value)
-		{	
-			if (xAttribute.notNull())
-				xAttribute.SetValue(value);
-			return xAttribute;
-		}		
-	}
+	}	
 	
 	public static class _Extra_Xml_XSD_ExtensionMethods
 	{

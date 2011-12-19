@@ -19,7 +19,7 @@ using SecurityInnovation.TeamMentor.Authentication.WebServices.AuthorizationRule
 using SecurityInnovation.TeamMentor.Authentication.ExtensionMethods;
 
 //O2File:Test_TM_Config.cs  
-//O2File:TM_Test_XmlDatabase.cs 
+//O2File:TM_Test_XmlDatabase.cs
 
 //O2Ref:nunit.framework.dll     
 
@@ -143,10 +143,11 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
  
  		[Test]     	 
     	public void IJavascriptProxy_XmlDb_GetGuidanceItemHtml() 
-    	{   
+    	{    
     		var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID); 
     		var folders = tmWebServices.javascriptProxy.GetFolders(siLibrary.id.guid());
     		var guidanceItems = tmWebServices.javascriptProxy.GetGuidanceItemsInView(folders[0].views.guids()[0]);    		
+    		//show.info(guidanceItems);
     		var guidanceItem = guidanceItems[0];
     		var html = tmWebServices.javascriptProxy.GetGuidanceItemHtml(guidanceItem.Id);    		
     		Assert.That(html != null , "GuidanceItemHtml was null");

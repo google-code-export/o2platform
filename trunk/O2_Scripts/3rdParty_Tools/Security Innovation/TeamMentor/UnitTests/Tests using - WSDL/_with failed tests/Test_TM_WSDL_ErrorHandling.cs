@@ -54,7 +54,7 @@ namespace O2.SecurityInnovation.TeamMentor
     		var badGuid = "AAAAA";
     		var errorMessage = getRequestError(
     								()=>  tmWebServices.GetGuidanceItemById("badGuid"));
-			Assert.IsFalse(errorMessage.contains("System.FormatException: Guid should contain 32 digits with 4 dashes"), "Error message contained: System.FormatException: Guid should contain 32 digits with 4 dashes");			    			
+			Assert.IsFalse(errorMessage.contains("Guid should contain 32 digits with 4 dashes"), "Error message contained: 'Guid should contain 32 digits with 4 dashes'");			    			
     	}        	
     }
 }
