@@ -81,11 +81,23 @@ namespace O2.XRules.Database.Utils
 			return fileToDownload.uri().download();
 		}
 		
+		
 		public static string download(this Uri uri)
 		{
-			return uri.downloadFile();
+			return uri.download(true);
 		}
+		
+		public static string download(this Uri uri, bool deleteIfTargetAlreadyExists)
+		{
+			return uri.downloadFile(deleteIfTargetAlreadyExists);
+		}				
+		
 		public static string downloadFile(this Uri uri)
+		{
+			return uri.downloadFile(true);
+		}
+		
+		public static string downloadFile(this Uri uri, bool deleteIfTargetAlreadyExists)
 		{
 			if (uri.isNull())
 				return null;
@@ -93,7 +105,8 @@ namespace O2.XRules.Database.Utils
 			if (fileName.valid())
 			{
 				var targetFile = "".tempDir().pathCombine(fileName);
-				Files.deleteFile(targetFile);
+				if (deleteIfTargetAlreadyExists)
+					Files.deleteFile(targetFile);
 				return downloadFile(uri, targetFile);
 			}
 			else

@@ -7,10 +7,11 @@ var topPanel = O2Gui.open&lt;Panel&gt;("TM Config Central",700,250);
 topPanel.insert_LogViewer(); 
 
 topPanel.add_Label("",20,20)
-		.append_Link("Edit Test_TM_Config.cs", ()=&gt; Test_TM.tmConfigFile.showInCodeEditor())
+		.append_Link("Edit Test_TM_Config.cs", ()=&gt; "Test_TM_Config.cs".local().showInCodeEditor())
 		.append_Below_Link("Edit TmConfig.config file", ()=&gt; Test_TM.tmConfigFile.showInCodeEditor())
 		.append_Below_Link("Start Website" , ()=&gt; { new Test_TM_Setup().startServer(); } )
-			.append_Link("Open Homepage in Browser", ()=&gt; Test_TM.tmServer.startProcess() );
+			.append_Link("Open Homepage in Browser", ()=&gt; Test_TM.tmServer.startProcess() )
+		.append_Below_Link("Util - TeamMentor Library Browser", "Util - TeamMentor Library Browser (direct API access).h2".local()).left(25);
 
 
 

@@ -1,29 +1,22 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var defaultWebsiteRoot = @"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\Web Applications\TM_Website";
- 
-//var websiteRoot = @"C:\_WorkDir\SI\TM Beta versions\OWASP Library - TeamMentor Beta (Wednesday, December 14, 2011)\Web Applications\TM_Website"; 
-
+  <SourceCode>var topPanel = "Util - TeamMentor Library Browser (direct API access)".popupWindow(1000,500); 
+//var topPanel = panel.clear().add_Panel(); 
+topPanel.insert_LogViewer();
+TMConfig.BaseFolder = Test_TM.tmWebSiteFolder;
+var defaultWebsiteRoot =  Test_TM.tmWebSiteFolder; //@"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\Web Applications\TM_Website";
 
 TM_Test_XmlDatabase teamMentor = null;
 TM_WebServices webServices = null;
-
-//TM_Test_XmlDatabase.tmXmlDatabase.reloadData();
-//return TM_Xml_Database.Cached_GuidanceItems;
-
-
+TM_Xml_Database tmXmlDatabase = null; 
  
-var topPanel = "Util - TeamMentor Library Browser (direct API access)".popupWindow(1000,500); 
-//var topPanel = panel.clear().add_Panel(); 
-
-topPanel.insert_LogViewer();
-
 var actionsPanel = topPanel.insert_Above(40,"Helper objects");
  
-var treeView = topPanel.add_TreeView_with_PropertyGrid(false); 
-var codeViewer = topPanel.control&lt;PropertyGrid&gt;().insert_Below().add_SourceCodeViewer(); 
+var treeView = topPanel.title("Current Libraries").add_TreeView_with_PropertyGrid(false);  
+var codeViewer = topPanel.control&lt;PropertyGrid&gt;().insert_Below().add_SourceCodeViewer();
 var splitContainer = codeViewer.splitContainer();
 var browser = codeViewer.insert_Right().add_WebBrowser_Control();
+
 //splitContainer.panel2Collapsed(true);
 
 splitContainer.fixedPanel1();
@@ -31,8 +24,15 @@ treeView.splitContainer().fixedPanel1();
 
 Action setReaderPriviledges = 
 	()=&gt;{
+			"setReaderPriviledges".info();
 			UserGroup.Reader.setThreadPrincipalWithRoles();				
 		};
+
+Action setAdminPriviledges = 
+	()=&gt;{
+			"setAdminPriviledges".info();
+			UserGroup.Admin.setThreadPrincipalWithRoles();				
+		};		
 	
 treeView.afterSelect&lt;TM_GuidanceItem&gt;(
 	(guidanceItem)=&gt;{
@@ -99,49 +99,131 @@ treeView.beforeExpand&lt;View_V3&gt;(
 			var guidanceItems = webServices.GetGuidanceItemsInView(view.viewId);
 			treeNode.add_Nodes(guidanceItems, (guidanceItem)=&gt; guidanceItem.Title);						
 		});													
+
+
 	
 var currentWebsiteRoot =  actionsPanel.add_Link("teamMentor object details", ()=&gt; teamMentor.details())
-									  .append_Label("Current WebSite root: ")
+									  .append_Link("open current library path", ()=&gt; { setAdminPriviledges(); webServices.XmlDatabase_GetLibraryPath().startProcess(); })
+									  .append_Link("set admin priviledges", ()=&gt; setAdminPriviledges())
+									  .append_Label("Current WebSite root: ").autoSize() 
 									  .append_Label("...").autoSize();
 
 		  
 Action&lt;string&gt; loadLibrariesFromWebsiteRoot = 
 	(websiteRoot) =&gt;{
- 						currentWebsiteRoot.set_Text(websiteRoot);
-						teamMentor = new TM_Test_XmlDatabase(websiteRoot);   
-						
-						TM_Test_XmlDatabase.tmXmlDatabase.reloadData();
-						
+						if(currentWebsiteRoot.get_Text() != websiteRoot)
+						{
+ 							currentWebsiteRoot.set_Text(websiteRoot);
+							teamMentor = new TM_Test_XmlDatabase(websiteRoot);   
+							
+							TM_Test_XmlDatabase.tmXmlDatabase.reloadData();
+						}
 						
 						webServices = teamMentor.webServices(); 
-						
+						tmXmlDatabase = teamMentor.xmlDatabase();
 						var libraries = webServices.GetLibraries();  
 						
 						treeView.clear();
-						treeView.add_Nodes(libraries,(library)=&gt;library.Caption, true)
-								.selectFirst()
-								.selected()
-								.expand();
+						treeView.add_Nodes(libraries,(library)=&gt;library.Caption, true);
+						if(treeView.nodes().size() &gt;0)
+							treeView.selectFirst()
+									.selected()
+									.expand();
 					};
 
-treeView.onDrop(( 
-	folder)=&gt;{
-				loadLibrariesFromWebsiteRoot(folder);
+Action refreshLibraries = 
+	()=&gt;{
+			loadLibrariesFromWebsiteRoot(defaultWebsiteRoot);
+		};
+		
+Action deleteSelecedLibrary = 
+	()=&gt;{
+			 setAdminPriviledges();
+			 var library = (TM_Library)treeView.selected().tag&lt;TM_Library&gt;(); 
+			 if (library.notNull())
+			 {
+			 	treeView.pink();
+ 				O2Thread.mtaThread(
+					()=&gt;{
+						 	"deleting library with id: {0}".info(library.Id);
+						 	webServices.DeleteLibrary(library.Id);
+						 	refreshLibraries();
+						 	treeView.white();
+						 });
+			 }
+			 else
+			 	"The node selected must be a library".error();
+		};
+
+Action saveSelectedLibrary = 
+	()=&gt;{
+			 var library = (TM_Library)treeView.selected().tag&lt;TM_Library&gt;(); 
+			 if (library.notNull())
+			 {
+			 	treeView.pink();
+ 				O2Thread.mtaThread(
+					()=&gt;{ 
+						 	"saving library with id: {0}".info(library.Caption);
+						 	library.xmlDB_Save_GuidanceExplorer(tmXmlDatabase);
+						 	refreshLibraries();
+						 	treeView.white();
+						 });
+			 }
+			 else
+			 	"The node selected must be a library".error();
+		};
+			
+Action&lt;string&gt; importLibraryFromZipFile = 
+	(pathToXmlFile)=&gt;{
+							treeView.pink();
+							O2Thread.mtaThread(
+								()=&gt;{
+										"importing Zip file: {0}".info(pathToXmlFile);
+										webServices.XmlDatabase_ImportLibrary_fromZipFile(pathToXmlFile);
+										refreshLibraries();
+										treeView.white();
+									});
+					 };
+treeView.onDrop(
+	(folderOrFile)=&gt;{						
+						if (folderOrFile.extension(".zip"))
+							importLibraryFromZipFile(folderOrFile);
+						else
+							loadLibrariesFromWebsiteRoot(folderOrFile);
 				//TM_Test_XmlDatabase.tmXmlDatabase.reloadData();
 				
 			 });
 
-loadLibrariesFromWebsiteRoot(defaultWebsiteRoot);
+
+treeView.add_ContextMenu()
+		.add_MenuItem("refresh libraries", true, ()=&gt; refreshLibraries() )
+		.add_MenuItem("save selected library",false, ()=&gt; saveSelectedLibrary() )		
+		.add_MenuItem("delete selected library", ()=&gt; deleteSelecedLibrary() );		
+
+refreshLibraries();
+
+//test libraries
+var testLibraries = treeView.insert_Below(100,"Test libraries").add_TreeView(); 
+testLibraries.add_Files(@"C:\_WorkDir\SI\v3.0 - TM Libraries","*.zip",false);
+testLibraries.onDrag&lt;string,string&gt;((path)=&gt; { return path.info();});
+//loadLibrariesFromWebsiteRoot(defaultWebsiteRoot);
 		 
 return "done";
 
 //using SecurityInnovation.TeamMentor.WebClient			
+//using O2.SecurityInnovation.TeamMentor
 //using O2.SecurityInnovation.TeamMentor.WebClient  
 //using SecurityInnovation.TeamMentor.WebClient.WebServices;
 //using SecurityInnovation.TeamMentor.Authentication.WebServices.AuthorizationRules;
 //using SecurityInnovation.TeamMentor.Authentication.ExtensionMethods;
-//O2File:C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\O2 Scripts\UnitTests\TM_Test_XmlDatabase.cs
+
+//O2File:TM_Test_XmlDatabase.cs
+//O2File:_Extra_methods_Web.cs
+//O2File:_Extra_methods_ObjectDetails.cs
 //O2Ref:System.Web.Services.dll
+//O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
+
+//O2Tag_DontAddExtraO2Files
 </SourceCode>
   <ReferencedAssemblies />
 </H2>

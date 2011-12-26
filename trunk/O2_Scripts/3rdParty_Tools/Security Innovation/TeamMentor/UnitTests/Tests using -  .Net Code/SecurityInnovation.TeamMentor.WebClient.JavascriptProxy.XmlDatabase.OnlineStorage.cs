@@ -6,6 +6,7 @@ using System.Diagnostics;
 using O2.Kernel;   
 using O2.Kernel.ExtensionMethods; 
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.Zip;
 using O2.XRules.Database.Utils;
 using NUnit.Framework;  
 using SecurityInnovation.TeamMentor.WebClient;
@@ -13,7 +14,9 @@ using SecurityInnovation.TeamMentor.WebClient.WebServices;
 //O2Ref:nunit.framework.dll     
 
 //O2File:Test_TM_Config.cs  
-//O2File:TM_Test_XmlDatabase.cs 
+//O2File:TM_Test_XmlDatabase.cs
+
+//O2File:_Extra_methods_Zip.cs
 
 
 namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
@@ -40,7 +43,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     		Assert.That(libraries.size() > 0 , "libraries was empty");    		
     		foreach(var library in libraries)
     		{ 
-    			var libraryWithId = tmWebServices.GetLibraryById(library);
+    			var libraryWithId = tmWebServices.GetLibraryById(library.guid());
     			Assert.That(libraryWithId.notNull(), "libraryWithId was null for library with Id: {0}".format(library));
     		}       		    
     	}  
@@ -53,11 +56,11 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     			 						caption = "temp_lib_{0}".format(6.randomLetters())
     								  };										  
     		tmWebServices.CreateLibrary(newLibrary);    		     		
-    		var createdLibrary = tmWebServices.GetLibraryById(newLibrary.id.str());    		
+    		var createdLibrary = tmWebServices.GetLibraryById(newLibrary.id.guid());    		
     		Assert.That(createdLibrary.notNull(), "could not fetch new Library with Id: {0}".format(newLibrary.id));    	
     		createdLibrary.caption += "_toDelete";    		  
     		tmWebServices.UpdateLibrary(createdLibrary);    		    		    		
-    		var updatedLibrary = tmWebServices.GetLibraryById(createdLibrary.id.remove("library:"));
+    		var updatedLibrary = tmWebServices.GetLibraryById(createdLibrary.id.remove("library:").guid());
     		 
     		Assert.That(updatedLibrary.id == createdLibrary.id, "in updated, id didn't match created library");
     		Assert.That(updatedLibrary.caption == createdLibrary.caption, "in updated, caption didn't match");
@@ -67,7 +70,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     		
     		updatedLibrary.delete = true;    		     		
     		tmWebServices.UpdateLibrary(updatedLibrary);    		    		    		
-    		var deletedLibrary = tmWebServices.GetLibraryById(updatedLibrary.id.remove("library:"));
+    		var deletedLibrary = tmWebServices.GetLibraryById(updatedLibrary.id.remove("library:").guid());
     		Assert.IsNull(deletedLibrary, "deletedLibrary");    		    		
     	}    	    	    	    	 
     	  
@@ -317,6 +320,34 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     		
     		 var libraries_Now = tmWebServices.GetLibraries();
     		"After delete there are {0} Libraries ({1} were deleted)".debug(libraries_Now.size() , libraries.size() - libraries_Now.size());    			    		
-    	}  	    	    	
+    	} 
+    	
+    	[Test]
+    	public void create_Libraries_Backup()
+    	{
+    		var libraryName = "temp_lib_createAndBackup"; 
+    		var newLibrary = tmWebServices.CreateLibrary(new Library() { caption = libraryName });
+			Assert.That(newLibrary.notNull());
+			var newGuidanceItem = new GuidanceItem_V3() { libraryId = newLibrary.libraryId };								
+			tmWebServices.CreateGuidanceItem(newGuidanceItem);
+			var backupFile = tmXmlDatabase.xmlDB_Libraries_BackupLibrary(newLibrary.libraryId);
+			Assert.IsTrue(backupFile.fileExists());
+			var backedUpfiles = new zipUtils().getListOfFilesInZip(backupFile);
+			Assert.AreEqual(backedUpfiles.size(), 2, "there should be two files backup-ed files");
+			tmWebServices.DeleteLibrary(newLibrary.libraryId);	
+    	}
+    	
+    	[Test]
+    	public void check_If_Backup_is_Created_on_Library_Delete()
+    	{    	
+    		var libraryName = "temp_lib_createAndBackup";     
+    		//Create Library          
+			var newLibrary = tmWebServices.CreateLibrary(new Library() { caption = libraryName }); 
+			//Delete Library 
+			var deleteResult = tmXmlDatabase.xmlDB_DeleteGuidanceExplorer(newLibrary.libraryId);   
+			Assert.IsTrue(deleteResult.fileExists(), "backupFile existed");
+			
+			Assert.IsNull(tmWebServices.GetLibraryById(newLibrary.libraryId), "newLibrary.libraryId shouldn't exist by now");
+		}    	
 	}       
 }
