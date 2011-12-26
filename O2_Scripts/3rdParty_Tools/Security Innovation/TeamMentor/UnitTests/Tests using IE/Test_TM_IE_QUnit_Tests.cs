@@ -1,6 +1,6 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
-using System.IO;
+using System.IO; 
 using System.Linq; 
 using System.Collections;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace O2.SecurityInnovation.TeamMentor
 			base.set_IE_Object(ieKey);	
 			Assert.That(ie.notNull(), "ie object was null");	
 			Test_TM.CLOSE_BROWSER_IN_SECONDS = 4;    
-			WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES = 20;
+			WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES = 60;
 			
 		}
 		
@@ -99,8 +99,8 @@ namespace O2.SecurityInnovation.TeamMentor
     	{
     		executeQUnitTestFile(baseFolder + "html/QUnit - TM_WebService_User.html");
     	}     	    	
-    	
-    	
+    	    	    			   	
+    	    	
     	[TestFixtureTearDown]
     	public void close_IE()
     	{  	

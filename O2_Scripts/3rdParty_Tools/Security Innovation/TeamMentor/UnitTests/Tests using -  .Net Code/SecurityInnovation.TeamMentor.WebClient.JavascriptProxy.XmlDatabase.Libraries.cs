@@ -10,6 +10,7 @@ using System.Text;
 using O2.Kernel;
 using O2.Kernel.ExtensionMethods;  
 using O2.DotNetWrappers.ExtensionMethods;
+using O2.DotNetWrappers.Windows;
 using O2.XRules.Database.Utils;
 using O2.XRules.Database.APIs;   
 using NUnit.Framework; 
@@ -33,7 +34,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     	//static TM_Xml_Database tmXmlDatabase { get; set;}
     	//TM_WebServices tmWebServices { get; set; }
     	    	    	    	
-    	public string SI_LIBRARY_GUID = "ea854894-8e16-46c8-9c61-737ef46d7e82";
+    	public Guid SI_LIBRARY_GUID = "ea854894-8e16-46c8-9c61-737ef46d7e82".guid();
     	
      	static Test_Libraries()
      	{
@@ -81,7 +82,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     		//specific tests for the data current serialized to WebClient\3_0_WebSite\WebServices\MoqDatabase
     		Assert.That(libraries.size() > 1 , "there should be at least  one library");    		
     		var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID);
-    		Assert.That(siLibrary.id.str() == SI_LIBRARY_GUID , "the library 'id' value didn't match");
+    		Assert.That(siLibrary.id.guid() == SI_LIBRARY_GUID , "the library 'id' value didn't match");
     		Assert.That(siLibrary.caption == "SI" , "the library 'caption' value didn't match");    		
     	}    	    	
     	    	 
@@ -167,12 +168,94 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     	public void IJavascriptProxy_XmlDb_GetGuidanceItemsInLibrary() 
     	{   
     		var libraries = tmWebServices.javascriptProxy.GetLibraries();    		    	
-    		var guidanceItemsInLibrary = tmWebServices.javascriptProxy.GetGuidanceItemsInLibrary(libraries[0].Id);     		    		
+    		var guidanceItemsInLibrary = tmWebServices.javascriptProxy.GetGuidanceItemsInLibrary(SI_LIBRARY_GUID);
     		Assert.That(guidanceItemsInLibrary != null , "guidanceItemsInLibrary was null");
     		Assert.That(guidanceItemsInLibrary.size()> 0 , "no guidanceItemsInLibrary returned");    		
     		"There where  {0} items returned".info(guidanceItemsInLibrary.size());    		
     	}
     	
+    	[Test] 
+    	public void Create_Rename_Delete_Libraries()
+    	{
+    		var originalName = "createAndDelete";  
+			var newName 	 = originalName + "_new";
+			var libraryPath_originalName  = tmXmlDatabase.xmlDB_LibraryPath(originalName);
+			var libraryPath_newName  	  = tmXmlDatabase.xmlDB_LibraryPath(newName);			 			
+			
+			Assert.IsFalse(libraryPath_originalName.fileExists() , "libraryPath_originalName should not exists");
+			Assert.IsFalse(libraryPath_newName	  .fileExists()	, "libraryPath_newName should not exists");
+			
+			//Create Library
+			var newLibrary = tmWebServices.CreateLibrary(new Library() { caption = originalName });
+			Assert.IsNotNull(newLibrary, "newLibrary Created OK");
+			Assert.IsTrue(libraryPath_originalName.fileExists() , "libraryPath_originalName should exist after creation");
+			
+			//Rename Library
+			var renameResult = tmWebServices.RenameLibrary(newLibrary.libraryId, newName);  
+			Assert.IsTrue(renameResult, "renameResult");
+			
+			Assert.IsFalse(libraryPath_originalName.fileExists() , "libraryPath_originalName should not exist after rename");
+			Assert.IsTrue (libraryPath_newName	   .fileExists() , "libraryPath_newName should exist after rename");
+			
+			var library_by_Id 				= tmWebServices.GetLibraryById(newLibrary.libraryId);    
+			var library_by_originalName 	= tmWebServices.GetLibraryByName(originalName);
+			var library_by_newName    		= tmWebServices.GetLibraryByName(newName); 
+			var library_by_caption    		= tmWebServices.GetLibraryByName(library_by_Id.caption);
+			
+			Assert.IsNotNull(library_by_Id			 , "library_by_Id");
+			Assert.IsNull   (library_by_originalName , "library_by_originalName");
+			Assert.IsNotNull(library_by_newName		 , "library_by_newName");
+			Assert.IsNotNull(library_by_caption		 , "library_by_caption");
+			
+			Assert.IsTrue(tmWebServices.GetLibraries().names().contains(newName), "new name was not on tmWebServices.GetLibraries()") ;
+			//Delete Library
+			var deleteResult = tmWebServices.DeleteLibrary(newLibrary.libraryId);  
+			Assert.IsTrue(deleteResult, "deleteResult");
+			
+			Assert.IsFalse(libraryPath_newName	   .fileExists() , "libraryPath_newName should not exist after delete");
+			Assert.IsFalse(libraryPath_originalName.fileExists() , "libraryPath_originalName should not exist at the end");
+
+    	}
+    	
+    	
+    	[Test] 
+    	public void Create_Delete_Libraries_with_a_GuidanceItem()
+    	{
+    	
+    		var originalName = "temp_lib_createLibraryWithGuidanceItemAndDelete";    
+
+			var libraryPath_originalName  = tmXmlDatabase.xmlDB_LibraryPath(originalName);    
+			var libraryPath_GuidanceItemsFolder = tmXmlDatabase.xmlDB_LibraryPath_GuidanceItems(originalName); 
+			//Files.deleteFile(libraryPath_originalName);  //temp while developing  
+			//Files.deleteFolder(libraryPath_GuidanceItemsFolder,true);
+			 
+			Assert.IsFalse(libraryPath_originalName.fileExists() 		, "libraryPath_originalName should not exists");
+			Assert.IsFalse(libraryPath_GuidanceItemsFolder.dirExists()  , "libraryPath_GuidanceItemsFolder should not exists");
+			 
+			//Create Library 
+			var newLibrary = tmWebServices.CreateLibrary(new Library() { caption = originalName });
+			Assert.IsTrue(libraryPath_originalName.fileExists() 		, "libraryPath_originalName should exist after creation");
+			Assert.IsFalse(libraryPath_GuidanceItemsFolder.dirExists()  , "libraryPath_GuidanceItemsFolder should not exists after library creation");
+		
+			
+			//Create GuidanceItem
+			var newGuidanceItem = new GuidanceItem_V3() 
+											{
+												libraryId = newLibrary.libraryId
+											};								
+			var guidanceItem = tmWebServices.CreateGuidanceItem(newGuidanceItem);
+			
+			Assert.AreNotEqual(guidanceItem, Guid.Empty, "guidance Item was not created");
+			Assert.IsTrue(libraryPath_GuidanceItemsFolder.dirExists()  , "libraryPath_GuidanceItemsFolder should exist after library creation");
+			
+		
+			//Delete Library
+			var deleteResult = tmWebServices.DeleteLibrary(newLibrary.libraryId);  
+			Assert.IsTrue(deleteResult, "deleteResult");
+			Assert.IsFalse(libraryPath_originalName.fileExists() , "libraryPath_originalName should not exist at the end");
+			
+			Assert.IsFalse(libraryPath_GuidanceItemsFolder.dirExists()  , "libraryPath_GuidanceItemsFolder should not exist after delete");
+    	}
     } 
 }    
 	

@@ -15,12 +15,14 @@ using SecurityInnovation.TeamMentor.Authentication.WebServices.AuthorizationRule
 using SecurityInnovation.TeamMentor.Authentication.ExtensionMethods;
 
 //O2File:Test_TM_Config.cs
-
+ 
 //O2Ref:nunit.framework.dll
 //O2Ref:System.Web.Services.dll 
 //O2Ref:Microsoft.Practices.Unity.dll      
 //O2Ref:O2_Misc_Microsoft_MPL_Libs.dll
-//O2Ref:TM_WebServices.asmx.dll 
+
+//O2File:C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\Web Applications\TM_Website\App_Code\WebServices\TM_WebServices.asmx.cs
+//_O2Ref:TM_WebServices.asmx.dll 
 
 namespace O2.SecurityInnovation.TeamMentor.WebClient
 {		 
