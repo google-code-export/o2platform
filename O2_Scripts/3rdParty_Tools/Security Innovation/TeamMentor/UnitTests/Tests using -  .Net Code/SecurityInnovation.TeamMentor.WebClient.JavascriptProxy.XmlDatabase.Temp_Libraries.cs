@@ -16,9 +16,6 @@ using O2.XRules.Database.APIs;
 using NUnit.Framework; 
 using SecurityInnovation.TeamMentor.WebClient.WebServices; 
 using SecurityInnovation.TeamMentor.WebClient;
-/*using SecurityInnovation.TeamMentor.Authentication.WebServices.AuthorizationRules;
-using SecurityInnovation.TeamMentor.Authentication.ExtensionMethods;
-*/
 
 //O2File:TM_Test_XmlDatabase.cs
 
@@ -48,35 +45,36 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 			Assert.True(this.tempUnitTestsDir.dirExists(), "_TM_UnitTests didn't exist: {0}".format(tempUnitTestsDir));
 			var currentLibraryPath = tmWebServices.XmlDatabase_GetLibraryPath(); 
 			if (currentLibraryPath != this.tempUnitTestsDir)
-				tmWebServices.XmlDatabase_SetLibraryPath(tempUnitTestsDir);						
+				tmWebServices.XmlDatabase_SetLibraryPath(tempUnitTestsDir);			
+			currentLibraryPath = tmWebServices.XmlDatabase_GetLibraryPath(); 	
     		Assert.AreEqual(tempUnitTestsDir, currentLibraryPath, "XmlDatabase_GetLibraryPath != tempUnitTestsDir");    		
     		Assert.IsTrue(owaspLibraryFile.fileExists(), "owaspLibraryFile file doesn't Exists: {0}".format(owaspLibraryFile));    		
     	}    	    	      	
     	
     	public void importLibrary(string libraryName , string fileOrUrl, bool importShouldWork)
     	{
-	    	var owaspLibrary = tmWebServices.GetLibraryByName(libraryName);
-			if (owaspLibrary.notNull())
+	    	var library = tmWebServices.GetLibraryByName(libraryName);
+			if (library.notNull())
 			{
-				var deleteResult = tmWebServices.DeleteLibrary(owaspLibrary.id.guid());  
+				var deleteResult = tmWebServices.DeleteLibrary(library.id.guid());
 				Assert.IsTrue(deleteResult, "first library delete failed");
 			}
 			
-			owaspLibrary = tmWebServices.GetLibraryByName("OWASP");
-			Assert.IsNull(owaspLibrary, "after deleted owaspLibrary should be null");
+			library = tmWebServices.GetLibraryByName(libraryName); 
+			Assert.IsNull(library, "after deleted owaspLibrary should be null");
 				 				
 			var importResult = tmWebServices.XmlDatabase_ImportLibrary_fromZipFile(fileOrUrl); 
 			if(importShouldWork)
 			{
 				Assert.IsTrue(importResult, "import library failed");			
-				owaspLibrary = tmWebServices.GetLibraryByName("OWASP");
-				Assert.IsNotNull(owaspLibrary, "after import owaspLibrary should not be null");
+				library = tmWebServices.GetLibraryByName(libraryName);
+				Assert.IsNotNull(library, "after import owaspLibrary should not be null");
 			}
 			else
 			{
 				Assert.IsFalse(importResult, "import library worked when it should failed");			
-				owaspLibrary = tmWebServices.GetLibraryByName("OWASP");
-				Assert.IsNull(owaspLibrary, "after import owaspLibrary should be null");
+				library = tmWebServices.GetLibraryByName("OWASP");
+				Assert.IsNull(library, "after import owaspLibrary should be null");
 			}
     	}
     	

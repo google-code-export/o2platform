@@ -16,9 +16,8 @@ var treeView = topPanel.title("Current Libraries").add_TreeView_with_PropertyGri
 var codeViewer = topPanel.control&lt;PropertyGrid&gt;().insert_Below().add_SourceCodeViewer();
 var splitContainer = codeViewer.splitContainer();
 var browser = codeViewer.insert_Right().add_WebBrowser_Control();
-
-//splitContainer.panel2Collapsed(true);
-
+var currentWebsiteRoot = "";
+var forceReload = false;
 splitContainer.fixedPanel1();
 treeView.splitContainer().fixedPanel1();
 
@@ -100,20 +99,13 @@ treeView.beforeExpand&lt;View_V3&gt;(
 			treeNode.add_Nodes(guidanceItems, (guidanceItem)=&gt; guidanceItem.Title);						
 		});													
 
-
-	
-var currentWebsiteRoot =  actionsPanel.add_Link("teamMentor object details", ()=&gt; teamMentor.details())
-									  .append_Link("open current library path", ()=&gt; { setAdminPriviledges(); webServices.XmlDatabase_GetLibraryPath().startProcess(); })
-									  .append_Link("set admin priviledges", ()=&gt; setAdminPriviledges())
-									  .append_Label("Current WebSite root: ").autoSize() 
-									  .append_Label("...").autoSize();
-
-		  
+		    
 Action&lt;string&gt; loadLibrariesFromWebsiteRoot = 
 	(websiteRoot) =&gt;{
-						if(currentWebsiteRoot.get_Text() != websiteRoot)
+						if(forceReload || currentWebsiteRoot != websiteRoot)
 						{
- 							currentWebsiteRoot.set_Text(websiteRoot);
+							actionsPanel.control&lt;TextBox&gt;().set_Text(websiteRoot);
+ 							//currentWebsiteRoot = websiteRoot;
 							teamMentor = new TM_Test_XmlDatabase(websiteRoot);   
 							
 							TM_Test_XmlDatabase.tmXmlDatabase.reloadData();
@@ -122,7 +114,7 @@ Action&lt;string&gt; loadLibrariesFromWebsiteRoot =
 						webServices = teamMentor.webServices(); 
 						tmXmlDatabase = teamMentor.xmlDatabase();
 						var libraries = webServices.GetLibraries();  
-						
+					 
 						treeView.clear();
 						treeView.add_Nodes(libraries,(library)=&gt;library.Caption, true);
 						if(treeView.nodes().size() &gt;0)
@@ -163,6 +155,7 @@ Action saveSelectedLibrary =
 			 	treeView.pink();
  				O2Thread.mtaThread(
 					()=&gt;{ 
+							setAdminPriviledges();
 						 	"saving library with id: {0}".info(library.Caption);
 						 	library.xmlDB_Save_GuidanceExplorer(tmXmlDatabase);
 						 	refreshLibraries();
@@ -178,6 +171,7 @@ Action&lt;string&gt; importLibraryFromZipFile =
 							treeView.pink();
 							O2Thread.mtaThread(
 								()=&gt;{
+										setAdminPriviledges();
 										"importing Zip file: {0}".info(pathToXmlFile);
 										webServices.XmlDatabase_ImportLibrary_fromZipFile(pathToXmlFile);
 										refreshLibraries();
@@ -195,9 +189,17 @@ treeView.onDrop(
 			 });
 
 
+actionsPanel.add_Link("teamMentor object details", ()=&gt; teamMentor.details())
+		    .append_Link("open current library path", ()=&gt; { setAdminPriviledges(); webServices.XmlDatabase_GetLibraryPath().startProcess(); })
+		    .append_Link("set admin priviledges", ()=&gt; setAdminPriviledges())
+		    .append_CheckBox("Force Reload", (value)=&gt;forceReload = value)
+		    .append_Label("Current WebSite root: ").autoSize() 
+		    .append_TextBox("...").onTextChange((text)=&gt; currentWebsiteRoot = text);
+
+ 
 treeView.add_ContextMenu()
 		.add_MenuItem("refresh libraries", true, ()=&gt; refreshLibraries() )
-		.add_MenuItem("save selected library",false, ()=&gt; saveSelectedLibrary() )		
+		.add_MenuItem("save selected library",true, ()=&gt; saveSelectedLibrary() )		
 		.add_MenuItem("delete selected library", ()=&gt; deleteSelecedLibrary() );		
 
 refreshLibraries();

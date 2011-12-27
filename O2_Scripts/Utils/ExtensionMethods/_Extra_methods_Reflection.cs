@@ -500,6 +500,11 @@ namespace O2.XRules.Database.Utils
 		
 		public static List<T> extractList<T>(this object _object)
 		{
+			return _object.extractList<T>(true);
+		}
+		
+		public static List<T> extractList<T>(this object _object, bool logCastErrors)
+		{
 			var results = new List<T>();
 			if (_object is IEnumerable)
 			{
@@ -507,7 +512,8 @@ namespace O2.XRules.Database.Utils
 					if (item is T)
 						results.Add((T)item);
 					else
-						"[extractList] inside the IEnumerable, this item was not of type '{0}: {1}".error(item.type(), item);
+						if(logCastErrors)
+							"[extractList] inside the IEnumerable, this item was not of type '{0}' it was of type: '{1}'".error(typeof(T), item.comTypeName());
 			}
 			else
 				"[extractList] the provided object was not IEnumerable: {0}".error(_object);

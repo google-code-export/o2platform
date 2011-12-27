@@ -93,26 +93,25 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     		var folders = tmWebServices.javascriptProxy.GetFolders(siLibrary.id.guid());    		
     		Assert.That(folders != null , "folders was null");
     		Assert.That(folders.size() > 0 , "no folders returned");
-    		 
-    		var folderId = "d78b6ba3-c3a3-4125-8f05-0a5fb10ab207";
-    		var expectedName = "PCI DSS Code Review";    		 		
-    		    		
-    		var tmFolder = tmXmlDatabase.tmFolder(siLibrary.id.guid(),folderId.guid());
+    		     		
+    		var folderName = "PCI DSS Code Review";    		 		    		    		
+    		var tmFolder = tmXmlDatabase.tmFolder(siLibrary.id.guid(),folderName);
     		
-    		Assert.That(tmFolder.notNull(),"could not find folder with Id: {0}".format(folderId));    		
-    		Assert.AreEqual(expectedName, tmFolder.name,"expected Name didn't match");    		
+    		Assert.That(tmFolder.notNull(),"could not find folder with name: {0}".format(folderName));    		
+    		Assert.AreEqual(folderName, tmFolder.name,"expected Name didn't match");    		
     	}
  
 		[Test]     	
     	public void IJavascriptProxy_XmlDb_GetGuidanceItemsInView() 
     	{
     		var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID); 
-    		var folders = tmWebServices.javascriptProxy.GetFolders(siLibrary.id.guid());
-			var expectedFolderId = "d78b6ba3-c3a3-4125-8f05-0a5fb10ab207".guid();    		
+    		var folders = tmWebServices.javascriptProxy.GetFolders(siLibrary.id.guid());			
+			var folderName = "PCI DSS Code Review";    		 		    		    		    		    		
     		var expectedFolder =  (from folder in folders
-								   where folder.folderId ==expectedFolderId
+								   where folder.name == folderName
 								   select folder).first();
-			Assert.That(expectedFolder.notNull(), "couldn't find expected folder: {0}".format(expectedFolderId));    		    										   
+								   
+			Assert.That(expectedFolder.notNull(), "couldn't find expected folder: {0}".format(folderName));    		    										   
 			
 			var expectedViewId = "48057cf0-ac88-482b-948c-03f37a1c94fc";			
 			Assert.That(expectedFolder.views.guids().contains(expectedViewId.guid()), "Folders didn't contain expected view id");														

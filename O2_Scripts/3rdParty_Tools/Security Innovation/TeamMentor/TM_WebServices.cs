@@ -27,164 +27,16 @@ using System.Xml.Serialization;
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Web.Services.WebServiceBindingAttribute(Name="TM_WebServicesSoap", Namespace="http://tempuri.org/")]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(Identifiable))]
 [System.Xml.Serialization.XmlIncludeAttribute(typeof(NameValuePairOfStringString))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(Identifiable))]
 [System.Xml.Serialization.XmlIncludeAttribute(typeof(object[][]))]
 public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClientProtocol {
     
-    private System.Threading.SendOrPostCallback RemoveGuidanceTypeColumnsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback UpdateGuidanceTypeOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback DeleteGuidanceTypeOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback DeleteDeletedGuidanceTypesOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetSchemaByIdOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetGuidanceItemKeywordsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback SetGuidanceItemKeywordsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetTimeOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback PingOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback UseEnvironment_MoqOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback UseEnvironment_XmlDatabaseOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback CurrentProxyTypeOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetPasswordHashOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback XmlDatabase_GetDatabasePathOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback XmlDatabase_GetLibraryPathOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback XmlDatabase_ReloadDataOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback XmlDatabase_SetLibraryPathOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback XmlDatabase_GuidanceItem_Search_HtmlOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback XmlDatabase_GuidanceItem_Search_TitleOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback XmlDatabase_GetGuidanceItemXmlOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback RBAC_CurrentIdentity_NameOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback RBAC_CurrentIdentity_IsAuthenticatedOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback RBAC_CurrentPrincipal_RolesOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback RBAC_HasRoleOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback RBAC_SessionCookieOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback SyncWithGitHubOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback TMConfigFileLocationOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback TMConfigFileOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback CreateWebEditorSecretOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetPostDataOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetRequestDataOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetPastRequestsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetLastRequestOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback JsDataTableWithPastRequestsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetPagesHistoryOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetFolderStructure_LibrariesOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetFolderStructure_LibraryOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetGUIObjectsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetStringIndexesOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetGuidanceItemsMappingsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback JsTreeWithFoldersOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback JsTreeWithFoldersAndGuidanceItemsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback JsDataTableWithAllGuidanceItemsInViewsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback JsDataTableWithGuidanceItemsInViewsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback JsDataTableWithGuidanceItemsIn_LibraryOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback JsDataTableWithGuidanceItemsIn_FolderOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback JsDataTableWithGuidanceItemsIn_ViewOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback UpdateGuidanceItemHtmlOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback getPagesHistory_by_PageIdOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback currentUserHasActivityInGuidanceItemOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback userHasActivityInGuidanceItemOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback logPageUserCommentOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback logPageUserActivityOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetUser_byIDOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetUser_byNameOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetUsersOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback CreateUserOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback CreateUser_RandomOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback CreateUsersOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback BatchUserCreationOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback DeleteUserOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback DeleteUsersOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback UpdateUserOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback SetUserPasswordHashOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetUserGroupIdOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetUserGroupNameOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback SetUserGroupIdOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetUserRolesOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback LoginToWindowsOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback LoginOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback Login_PwdInClearTextOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback LogoutOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback Current_SessionIDOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback Current_UserOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetCurrentUserRolesOperationCompleted;
-    
-    private System.Threading.SendOrPostCallback GetLibrariesOperationCompleted;
+    private System.Threading.SendOrPostCallback GetAllViewsOperationCompleted;
     
     private System.Threading.SendOrPostCallback GetFoldersOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetGuidanceItemsInFolderOperationCompleted;
     
     private System.Threading.SendOrPostCallback GetGuidanceItemsInViewOperationCompleted;
     
@@ -196,6 +48,8 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     
     private System.Threading.SendOrPostCallback GetGuidanceItemsInLibraryOperationCompleted;
     
+    private System.Threading.SendOrPostCallback GetViewsInLibraryRootOperationCompleted;
+    
     private System.Threading.SendOrPostCallback GetViewByIdOperationCompleted;
     
     private System.Threading.SendOrPostCallback LogUserGUIDOperationCompleted;
@@ -203,6 +57,8 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     private System.Threading.SendOrPostCallback GetAllLibraryIdsOperationCompleted;
     
     private System.Threading.SendOrPostCallback GetLibraryByIdOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetLibraryByNameOperationCompleted;
     
     private System.Threading.SendOrPostCallback GetGuidanceItemByIdOperationCompleted;
     
@@ -248,6 +104,8 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     
     private System.Threading.SendOrPostCallback DeleteLibraryOperationCompleted;
     
+    private System.Threading.SendOrPostCallback RenameLibraryOperationCompleted;
+    
     private System.Threading.SendOrPostCallback DeleteTempLibrariesOperationCompleted;
     
     private System.Threading.SendOrPostCallback RenameGuidanceItemTitleOperationCompleted;
@@ -262,241 +120,181 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     
     private System.Threading.SendOrPostCallback GetGuidanceTypeColumnsOperationCompleted;
     
+    private System.Threading.SendOrPostCallback RemoveGuidanceTypeColumnsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback UpdateGuidanceTypeOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback DeleteGuidanceTypeOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback DeleteDeletedGuidanceTypesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetSchemaByIdOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetGuidanceItemKeywordsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback SetGuidanceItemKeywordsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetPostDataOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetRequestDataOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetPastRequestsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetLastRequestOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback JsDataTableWithPastRequestsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetPagesHistoryOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetTimeOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback PingOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback UseEnvironment_MoqOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback UseEnvironment_XmlDatabaseOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback CurrentProxyTypeOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetPasswordHashOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback XmlDatabase_GetDatabasePathOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback XmlDatabase_GetLibraryPathOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback XmlDatabase_ReloadDataOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback XmlDatabase_ImportLibrary_fromZipFileOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback XmlDatabase_SetLibraryPathOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback XmlDatabase_GuidanceItem_Search_HtmlOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback XmlDatabase_GuidanceItem_Search_TitleOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback XmlDatabase_GetGuidanceItemXmlOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback RBAC_CurrentIdentity_NameOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback RBAC_CurrentIdentity_IsAuthenticatedOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback RBAC_CurrentPrincipal_RolesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback RBAC_HasRoleOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback RBAC_SessionCookieOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback SyncWithGitHubOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback CreateWebEditorSecretOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback TMConfigFileLocationOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback TMConfigFileOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetDisabledLibrariesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback SetDisabledLibrariesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback JsTreeWithFoldersOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback JsTreeWithFoldersAndGuidanceItemsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback JsDataTableWithAllGuidanceItemsInViewsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback JsDataTableWithGuidanceItemsInViewsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback JsDataTableWithGuidanceItemsIn_LibraryOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback JsDataTableWithGuidanceItemsIn_FolderOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback JsDataTableWithGuidanceItemsIn_ViewOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback UpdateGuidanceItemHtmlOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback getPagesHistory_by_PageIdOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback currentUserHasActivityInGuidanceItemOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback userHasActivityInGuidanceItemOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback logPageUserCommentOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback logPageUserActivityOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetFolderStructure_LibrariesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetFolderStructure_LibraryOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback ClearGUIObjectsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetGUIObjectsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetStringIndexesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetGuidanceItemsMappingsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback CreateUserOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback CreateUser_RandomOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetUser_byIDOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetUser_byNameOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetUsersOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback CreateUsersOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback BatchUserCreationOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback DeleteUserOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback DeleteUsersOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback UpdateUserOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback SetUserPasswordHashOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetUserGroupIdOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetUserGroupNameOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback SetUserGroupIdOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetUserRolesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback LoginToWindowsOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback LoginOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback Login_PwdInClearTextOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback LogoutOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback Current_SessionIDOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback Current_UserOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetCurrentUserRolesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetLibrariesOperationCompleted;
+    
+    private System.Threading.SendOrPostCallback GetAllFoldersOperationCompleted;
+    
     /// <remarks/>
     public TM_WebServices() {
-        this.Url = "http://localhost:12355/Aspx_Pages/TM_WebServices.asmx";
+        this.Url = "http://localhost.:12355/Aspx_Pages/TM_WebServices.asmx";
     }
     
     /// <remarks/>
-    public event RemoveGuidanceTypeColumnsCompletedEventHandler RemoveGuidanceTypeColumnsCompleted;
-    
-    /// <remarks/>
-    public event UpdateGuidanceTypeCompletedEventHandler UpdateGuidanceTypeCompleted;
-    
-    /// <remarks/>
-    public event DeleteGuidanceTypeCompletedEventHandler DeleteGuidanceTypeCompleted;
-    
-    /// <remarks/>
-    public event DeleteDeletedGuidanceTypesCompletedEventHandler DeleteDeletedGuidanceTypesCompleted;
-    
-    /// <remarks/>
-    public event GetSchemaByIdCompletedEventHandler GetSchemaByIdCompleted;
-    
-    /// <remarks/>
-    public event GetGuidanceItemKeywordsCompletedEventHandler GetGuidanceItemKeywordsCompleted;
-    
-    /// <remarks/>
-    public event SetGuidanceItemKeywordsCompletedEventHandler SetGuidanceItemKeywordsCompleted;
-    
-    /// <remarks/>
-    public event GetTimeCompletedEventHandler GetTimeCompleted;
-    
-    /// <remarks/>
-    public event PingCompletedEventHandler PingCompleted;
-    
-    /// <remarks/>
-    public event UseEnvironment_MoqCompletedEventHandler UseEnvironment_MoqCompleted;
-    
-    /// <remarks/>
-    public event UseEnvironment_XmlDatabaseCompletedEventHandler UseEnvironment_XmlDatabaseCompleted;
-    
-    /// <remarks/>
-    public event CurrentProxyTypeCompletedEventHandler CurrentProxyTypeCompleted;
-    
-    /// <remarks/>
-    public event GetPasswordHashCompletedEventHandler GetPasswordHashCompleted;
-    
-    /// <remarks/>
-    public event XmlDatabase_GetDatabasePathCompletedEventHandler XmlDatabase_GetDatabasePathCompleted;
-    
-    /// <remarks/>
-    public event XmlDatabase_GetLibraryPathCompletedEventHandler XmlDatabase_GetLibraryPathCompleted;
-    
-    /// <remarks/>
-    public event XmlDatabase_ReloadDataCompletedEventHandler XmlDatabase_ReloadDataCompleted;
-    
-    /// <remarks/>
-    public event XmlDatabase_SetLibraryPathCompletedEventHandler XmlDatabase_SetLibraryPathCompleted;
-    
-    /// <remarks/>
-    public event XmlDatabase_GuidanceItem_Search_HtmlCompletedEventHandler XmlDatabase_GuidanceItem_Search_HtmlCompleted;
-    
-    /// <remarks/>
-    public event XmlDatabase_GuidanceItem_Search_TitleCompletedEventHandler XmlDatabase_GuidanceItem_Search_TitleCompleted;
-    
-    /// <remarks/>
-    public event XmlDatabase_GetGuidanceItemXmlCompletedEventHandler XmlDatabase_GetGuidanceItemXmlCompleted;
-    
-    /// <remarks/>
-    public event RBAC_CurrentIdentity_NameCompletedEventHandler RBAC_CurrentIdentity_NameCompleted;
-    
-    /// <remarks/>
-    public event RBAC_CurrentIdentity_IsAuthenticatedCompletedEventHandler RBAC_CurrentIdentity_IsAuthenticatedCompleted;
-    
-    /// <remarks/>
-    public event RBAC_CurrentPrincipal_RolesCompletedEventHandler RBAC_CurrentPrincipal_RolesCompleted;
-    
-    /// <remarks/>
-    public event RBAC_HasRoleCompletedEventHandler RBAC_HasRoleCompleted;
-    
-    /// <remarks/>
-    public event RBAC_SessionCookieCompletedEventHandler RBAC_SessionCookieCompleted;
-    
-    /// <remarks/>
-    public event SyncWithGitHubCompletedEventHandler SyncWithGitHubCompleted;
-    
-    /// <remarks/>
-    public event TMConfigFileLocationCompletedEventHandler TMConfigFileLocationCompleted;
-    
-    /// <remarks/>
-    public event TMConfigFileCompletedEventHandler TMConfigFileCompleted;
-    
-    /// <remarks/>
-    public event CreateWebEditorSecretCompletedEventHandler CreateWebEditorSecretCompleted;
-    
-    /// <remarks/>
-    public event GetPostDataCompletedEventHandler GetPostDataCompleted;
-    
-    /// <remarks/>
-    public event GetRequestDataCompletedEventHandler GetRequestDataCompleted;
-    
-    /// <remarks/>
-    public event GetPastRequestsCompletedEventHandler GetPastRequestsCompleted;
-    
-    /// <remarks/>
-    public event GetLastRequestCompletedEventHandler GetLastRequestCompleted;
-    
-    /// <remarks/>
-    public event JsDataTableWithPastRequestsCompletedEventHandler JsDataTableWithPastRequestsCompleted;
-    
-    /// <remarks/>
-    public event GetPagesHistoryCompletedEventHandler GetPagesHistoryCompleted;
-    
-    /// <remarks/>
-    public event GetFolderStructure_LibrariesCompletedEventHandler GetFolderStructure_LibrariesCompleted;
-    
-    /// <remarks/>
-    public event GetFolderStructure_LibraryCompletedEventHandler GetFolderStructure_LibraryCompleted;
-    
-    /// <remarks/>
-    public event GetGUIObjectsCompletedEventHandler GetGUIObjectsCompleted;
-    
-    /// <remarks/>
-    public event GetStringIndexesCompletedEventHandler GetStringIndexesCompleted;
-    
-    /// <remarks/>
-    public event GetGuidanceItemsMappingsCompletedEventHandler GetGuidanceItemsMappingsCompleted;
-    
-    /// <remarks/>
-    public event JsTreeWithFoldersCompletedEventHandler JsTreeWithFoldersCompleted;
-    
-    /// <remarks/>
-    public event JsTreeWithFoldersAndGuidanceItemsCompletedEventHandler JsTreeWithFoldersAndGuidanceItemsCompleted;
-    
-    /// <remarks/>
-    public event JsDataTableWithAllGuidanceItemsInViewsCompletedEventHandler JsDataTableWithAllGuidanceItemsInViewsCompleted;
-    
-    /// <remarks/>
-    public event JsDataTableWithGuidanceItemsInViewsCompletedEventHandler JsDataTableWithGuidanceItemsInViewsCompleted;
-    
-    /// <remarks/>
-    public event JsDataTableWithGuidanceItemsIn_LibraryCompletedEventHandler JsDataTableWithGuidanceItemsIn_LibraryCompleted;
-    
-    /// <remarks/>
-    public event JsDataTableWithGuidanceItemsIn_FolderCompletedEventHandler JsDataTableWithGuidanceItemsIn_FolderCompleted;
-    
-    /// <remarks/>
-    public event JsDataTableWithGuidanceItemsIn_ViewCompletedEventHandler JsDataTableWithGuidanceItemsIn_ViewCompleted;
-    
-    /// <remarks/>
-    public event UpdateGuidanceItemHtmlCompletedEventHandler UpdateGuidanceItemHtmlCompleted;
-    
-    /// <remarks/>
-    public event getPagesHistory_by_PageIdCompletedEventHandler getPagesHistory_by_PageIdCompleted;
-    
-    /// <remarks/>
-    public event currentUserHasActivityInGuidanceItemCompletedEventHandler currentUserHasActivityInGuidanceItemCompleted;
-    
-    /// <remarks/>
-    public event userHasActivityInGuidanceItemCompletedEventHandler userHasActivityInGuidanceItemCompleted;
-    
-    /// <remarks/>
-    public event logPageUserCommentCompletedEventHandler logPageUserCommentCompleted;
-    
-    /// <remarks/>
-    public event logPageUserActivityCompletedEventHandler logPageUserActivityCompleted;
-    
-    /// <remarks/>
-    public event GetUser_byIDCompletedEventHandler GetUser_byIDCompleted;
-    
-    /// <remarks/>
-    public event GetUser_byNameCompletedEventHandler GetUser_byNameCompleted;
-    
-    /// <remarks/>
-    public event GetUsersCompletedEventHandler GetUsersCompleted;
-    
-    /// <remarks/>
-    public event CreateUserCompletedEventHandler CreateUserCompleted;
-    
-    /// <remarks/>
-    public event CreateUser_RandomCompletedEventHandler CreateUser_RandomCompleted;
-    
-    /// <remarks/>
-    public event CreateUsersCompletedEventHandler CreateUsersCompleted;
-    
-    /// <remarks/>
-    public event BatchUserCreationCompletedEventHandler BatchUserCreationCompleted;
-    
-    /// <remarks/>
-    public event DeleteUserCompletedEventHandler DeleteUserCompleted;
-    
-    /// <remarks/>
-    public event DeleteUsersCompletedEventHandler DeleteUsersCompleted;
-    
-    /// <remarks/>
-    public event UpdateUserCompletedEventHandler UpdateUserCompleted;
-    
-    /// <remarks/>
-    public event SetUserPasswordHashCompletedEventHandler SetUserPasswordHashCompleted;
-    
-    /// <remarks/>
-    public event GetUserGroupIdCompletedEventHandler GetUserGroupIdCompleted;
-    
-    /// <remarks/>
-    public event GetUserGroupNameCompletedEventHandler GetUserGroupNameCompleted;
-    
-    /// <remarks/>
-    public event SetUserGroupIdCompletedEventHandler SetUserGroupIdCompleted;
-    
-    /// <remarks/>
-    public event GetUserRolesCompletedEventHandler GetUserRolesCompleted;
-    
-    /// <remarks/>
-    public event LoginToWindowsCompletedEventHandler LoginToWindowsCompleted;
-    
-    /// <remarks/>
-    public event LoginCompletedEventHandler LoginCompleted;
-    
-    /// <remarks/>
-    public event Login_PwdInClearTextCompletedEventHandler Login_PwdInClearTextCompleted;
-    
-    /// <remarks/>
-    public event LogoutCompletedEventHandler LogoutCompleted;
-    
-    /// <remarks/>
-    public event Current_SessionIDCompletedEventHandler Current_SessionIDCompleted;
-    
-    /// <remarks/>
-    public event Current_UserCompletedEventHandler Current_UserCompleted;
-    
-    /// <remarks/>
-    public event GetCurrentUserRolesCompletedEventHandler GetCurrentUserRolesCompleted;
-    
-    /// <remarks/>
-    public event GetLibrariesCompletedEventHandler GetLibrariesCompleted;
+    public event GetAllViewsCompletedEventHandler GetAllViewsCompleted;
     
     /// <remarks/>
     public event GetFoldersCompletedEventHandler GetFoldersCompleted;
+    
+    /// <remarks/>
+    public event GetGuidanceItemsInFolderCompletedEventHandler GetGuidanceItemsInFolderCompleted;
     
     /// <remarks/>
     public event GetGuidanceItemsInViewCompletedEventHandler GetGuidanceItemsInViewCompleted;
@@ -514,6 +312,9 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     public event GetGuidanceItemsInLibraryCompletedEventHandler GetGuidanceItemsInLibraryCompleted;
     
     /// <remarks/>
+    public event GetViewsInLibraryRootCompletedEventHandler GetViewsInLibraryRootCompleted;
+    
+    /// <remarks/>
     public event GetViewByIdCompletedEventHandler GetViewByIdCompleted;
     
     /// <remarks/>
@@ -524,6 +325,9 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     
     /// <remarks/>
     public event GetLibraryByIdCompletedEventHandler GetLibraryByIdCompleted;
+    
+    /// <remarks/>
+    public event GetLibraryByNameCompletedEventHandler GetLibraryByNameCompleted;
     
     /// <remarks/>
     public event GetGuidanceItemByIdCompletedEventHandler GetGuidanceItemByIdCompleted;
@@ -592,6 +396,9 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     public event DeleteLibraryCompletedEventHandler DeleteLibraryCompleted;
     
     /// <remarks/>
+    public event RenameLibraryCompletedEventHandler RenameLibraryCompleted;
+    
+    /// <remarks/>
     public event DeleteTempLibrariesCompletedEventHandler DeleteTempLibrariesCompleted;
     
     /// <remarks/>
@@ -611,6 +418,2063 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     
     /// <remarks/>
     public event GetGuidanceTypeColumnsCompletedEventHandler GetGuidanceTypeColumnsCompleted;
+    
+    /// <remarks/>
+    public event RemoveGuidanceTypeColumnsCompletedEventHandler RemoveGuidanceTypeColumnsCompleted;
+    
+    /// <remarks/>
+    public event UpdateGuidanceTypeCompletedEventHandler UpdateGuidanceTypeCompleted;
+    
+    /// <remarks/>
+    public event DeleteGuidanceTypeCompletedEventHandler DeleteGuidanceTypeCompleted;
+    
+    /// <remarks/>
+    public event DeleteDeletedGuidanceTypesCompletedEventHandler DeleteDeletedGuidanceTypesCompleted;
+    
+    /// <remarks/>
+    public event GetSchemaByIdCompletedEventHandler GetSchemaByIdCompleted;
+    
+    /// <remarks/>
+    public event GetGuidanceItemKeywordsCompletedEventHandler GetGuidanceItemKeywordsCompleted;
+    
+    /// <remarks/>
+    public event SetGuidanceItemKeywordsCompletedEventHandler SetGuidanceItemKeywordsCompleted;
+    
+    /// <remarks/>
+    public event GetPostDataCompletedEventHandler GetPostDataCompleted;
+    
+    /// <remarks/>
+    public event GetRequestDataCompletedEventHandler GetRequestDataCompleted;
+    
+    /// <remarks/>
+    public event GetPastRequestsCompletedEventHandler GetPastRequestsCompleted;
+    
+    /// <remarks/>
+    public event GetLastRequestCompletedEventHandler GetLastRequestCompleted;
+    
+    /// <remarks/>
+    public event JsDataTableWithPastRequestsCompletedEventHandler JsDataTableWithPastRequestsCompleted;
+    
+    /// <remarks/>
+    public event GetPagesHistoryCompletedEventHandler GetPagesHistoryCompleted;
+    
+    /// <remarks/>
+    public event GetTimeCompletedEventHandler GetTimeCompleted;
+    
+    /// <remarks/>
+    public event PingCompletedEventHandler PingCompleted;
+    
+    /// <remarks/>
+    public event UseEnvironment_MoqCompletedEventHandler UseEnvironment_MoqCompleted;
+    
+    /// <remarks/>
+    public event UseEnvironment_XmlDatabaseCompletedEventHandler UseEnvironment_XmlDatabaseCompleted;
+    
+    /// <remarks/>
+    public event CurrentProxyTypeCompletedEventHandler CurrentProxyTypeCompleted;
+    
+    /// <remarks/>
+    public event GetPasswordHashCompletedEventHandler GetPasswordHashCompleted;
+    
+    /// <remarks/>
+    public event XmlDatabase_GetDatabasePathCompletedEventHandler XmlDatabase_GetDatabasePathCompleted;
+    
+    /// <remarks/>
+    public event XmlDatabase_GetLibraryPathCompletedEventHandler XmlDatabase_GetLibraryPathCompleted;
+    
+    /// <remarks/>
+    public event XmlDatabase_ReloadDataCompletedEventHandler XmlDatabase_ReloadDataCompleted;
+    
+    /// <remarks/>
+    public event XmlDatabase_ImportLibrary_fromZipFileCompletedEventHandler XmlDatabase_ImportLibrary_fromZipFileCompleted;
+    
+    /// <remarks/>
+    public event XmlDatabase_SetLibraryPathCompletedEventHandler XmlDatabase_SetLibraryPathCompleted;
+    
+    /// <remarks/>
+    public event XmlDatabase_GuidanceItem_Search_HtmlCompletedEventHandler XmlDatabase_GuidanceItem_Search_HtmlCompleted;
+    
+    /// <remarks/>
+    public event XmlDatabase_GuidanceItem_Search_TitleCompletedEventHandler XmlDatabase_GuidanceItem_Search_TitleCompleted;
+    
+    /// <remarks/>
+    public event XmlDatabase_GetGuidanceItemXmlCompletedEventHandler XmlDatabase_GetGuidanceItemXmlCompleted;
+    
+    /// <remarks/>
+    public event RBAC_CurrentIdentity_NameCompletedEventHandler RBAC_CurrentIdentity_NameCompleted;
+    
+    /// <remarks/>
+    public event RBAC_CurrentIdentity_IsAuthenticatedCompletedEventHandler RBAC_CurrentIdentity_IsAuthenticatedCompleted;
+    
+    /// <remarks/>
+    public event RBAC_CurrentPrincipal_RolesCompletedEventHandler RBAC_CurrentPrincipal_RolesCompleted;
+    
+    /// <remarks/>
+    public event RBAC_HasRoleCompletedEventHandler RBAC_HasRoleCompleted;
+    
+    /// <remarks/>
+    public event RBAC_SessionCookieCompletedEventHandler RBAC_SessionCookieCompleted;
+    
+    /// <remarks/>
+    public event SyncWithGitHubCompletedEventHandler SyncWithGitHubCompleted;
+    
+    /// <remarks/>
+    public event CreateWebEditorSecretCompletedEventHandler CreateWebEditorSecretCompleted;
+    
+    /// <remarks/>
+    public event TMConfigFileLocationCompletedEventHandler TMConfigFileLocationCompleted;
+    
+    /// <remarks/>
+    public event TMConfigFileCompletedEventHandler TMConfigFileCompleted;
+    
+    /// <remarks/>
+    public event GetDisabledLibrariesCompletedEventHandler GetDisabledLibrariesCompleted;
+    
+    /// <remarks/>
+    public event SetDisabledLibrariesCompletedEventHandler SetDisabledLibrariesCompleted;
+    
+    /// <remarks/>
+    public event JsTreeWithFoldersCompletedEventHandler JsTreeWithFoldersCompleted;
+    
+    /// <remarks/>
+    public event JsTreeWithFoldersAndGuidanceItemsCompletedEventHandler JsTreeWithFoldersAndGuidanceItemsCompleted;
+    
+    /// <remarks/>
+    public event JsDataTableWithAllGuidanceItemsInViewsCompletedEventHandler JsDataTableWithAllGuidanceItemsInViewsCompleted;
+    
+    /// <remarks/>
+    public event JsDataTableWithGuidanceItemsInViewsCompletedEventHandler JsDataTableWithGuidanceItemsInViewsCompleted;
+    
+    /// <remarks/>
+    public event JsDataTableWithGuidanceItemsIn_LibraryCompletedEventHandler JsDataTableWithGuidanceItemsIn_LibraryCompleted;
+    
+    /// <remarks/>
+    public event JsDataTableWithGuidanceItemsIn_FolderCompletedEventHandler JsDataTableWithGuidanceItemsIn_FolderCompleted;
+    
+    /// <remarks/>
+    public event JsDataTableWithGuidanceItemsIn_ViewCompletedEventHandler JsDataTableWithGuidanceItemsIn_ViewCompleted;
+    
+    /// <remarks/>
+    public event UpdateGuidanceItemHtmlCompletedEventHandler UpdateGuidanceItemHtmlCompleted;
+    
+    /// <remarks/>
+    public event getPagesHistory_by_PageIdCompletedEventHandler getPagesHistory_by_PageIdCompleted;
+    
+    /// <remarks/>
+    public event currentUserHasActivityInGuidanceItemCompletedEventHandler currentUserHasActivityInGuidanceItemCompleted;
+    
+    /// <remarks/>
+    public event userHasActivityInGuidanceItemCompletedEventHandler userHasActivityInGuidanceItemCompleted;
+    
+    /// <remarks/>
+    public event logPageUserCommentCompletedEventHandler logPageUserCommentCompleted;
+    
+    /// <remarks/>
+    public event logPageUserActivityCompletedEventHandler logPageUserActivityCompleted;
+    
+    /// <remarks/>
+    public event GetFolderStructure_LibrariesCompletedEventHandler GetFolderStructure_LibrariesCompleted;
+    
+    /// <remarks/>
+    public event GetFolderStructure_LibraryCompletedEventHandler GetFolderStructure_LibraryCompleted;
+    
+    /// <remarks/>
+    public event ClearGUIObjectsCompletedEventHandler ClearGUIObjectsCompleted;
+    
+    /// <remarks/>
+    public event GetGUIObjectsCompletedEventHandler GetGUIObjectsCompleted;
+    
+    /// <remarks/>
+    public event GetStringIndexesCompletedEventHandler GetStringIndexesCompleted;
+    
+    /// <remarks/>
+    public event GetGuidanceItemsMappingsCompletedEventHandler GetGuidanceItemsMappingsCompleted;
+    
+    /// <remarks/>
+    public event CreateUserCompletedEventHandler CreateUserCompleted;
+    
+    /// <remarks/>
+    public event CreateUser_RandomCompletedEventHandler CreateUser_RandomCompleted;
+    
+    /// <remarks/>
+    public event GetUser_byIDCompletedEventHandler GetUser_byIDCompleted;
+    
+    /// <remarks/>
+    public event GetUser_byNameCompletedEventHandler GetUser_byNameCompleted;
+    
+    /// <remarks/>
+    public event GetUsersCompletedEventHandler GetUsersCompleted;
+    
+    /// <remarks/>
+    public event CreateUsersCompletedEventHandler CreateUsersCompleted;
+    
+    /// <remarks/>
+    public event BatchUserCreationCompletedEventHandler BatchUserCreationCompleted;
+    
+    /// <remarks/>
+    public event DeleteUserCompletedEventHandler DeleteUserCompleted;
+    
+    /// <remarks/>
+    public event DeleteUsersCompletedEventHandler DeleteUsersCompleted;
+    
+    /// <remarks/>
+    public event UpdateUserCompletedEventHandler UpdateUserCompleted;
+    
+    /// <remarks/>
+    public event SetUserPasswordHashCompletedEventHandler SetUserPasswordHashCompleted;
+    
+    /// <remarks/>
+    public event GetUserGroupIdCompletedEventHandler GetUserGroupIdCompleted;
+    
+    /// <remarks/>
+    public event GetUserGroupNameCompletedEventHandler GetUserGroupNameCompleted;
+    
+    /// <remarks/>
+    public event SetUserGroupIdCompletedEventHandler SetUserGroupIdCompleted;
+    
+    /// <remarks/>
+    public event GetUserRolesCompletedEventHandler GetUserRolesCompleted;
+    
+    /// <remarks/>
+    public event LoginToWindowsCompletedEventHandler LoginToWindowsCompleted;
+    
+    /// <remarks/>
+    public event LoginCompletedEventHandler LoginCompleted;
+    
+    /// <remarks/>
+    public event Login_PwdInClearTextCompletedEventHandler Login_PwdInClearTextCompleted;
+    
+    /// <remarks/>
+    public event LogoutCompletedEventHandler LogoutCompleted;
+    
+    /// <remarks/>
+    public event Current_SessionIDCompletedEventHandler Current_SessionIDCompleted;
+    
+    /// <remarks/>
+    public event Current_UserCompletedEventHandler Current_UserCompleted;
+    
+    /// <remarks/>
+    public event GetCurrentUserRolesCompletedEventHandler GetCurrentUserRolesCompleted;
+    
+    /// <remarks/>
+    public event GetLibrariesCompletedEventHandler GetLibrariesCompleted;
+    
+    /// <remarks/>
+    public event GetAllFoldersCompletedEventHandler GetAllFoldersCompleted;
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetAllViews", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public View_V3[] GetAllViews() {
+        object[] results = this.Invoke("GetAllViews", new object[0]);
+        return ((View_V3[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetAllViews(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetAllViews", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public View_V3[] EndGetAllViews(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((View_V3[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetAllViewsAsync() {
+        this.GetAllViewsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetAllViewsAsync(object userState) {
+        if ((this.GetAllViewsOperationCompleted == null)) {
+            this.GetAllViewsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAllViewsOperationCompleted);
+        }
+        this.InvokeAsync("GetAllViews", new object[0], this.GetAllViewsOperationCompleted, userState);
+    }
+    
+    private void OnGetAllViewsOperationCompleted(object arg) {
+        if ((this.GetAllViewsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetAllViewsCompleted(this, new GetAllViewsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetFolders", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public Folder_V3[] GetFolders(System.Guid libraryId) {
+        object[] results = this.Invoke("GetFolders", new object[] {
+                    libraryId});
+        return ((Folder_V3[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetFolders(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetFolders", new object[] {
+                    libraryId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public Folder_V3[] EndGetFolders(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((Folder_V3[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetFoldersAsync(System.Guid libraryId) {
+        this.GetFoldersAsync(libraryId, null);
+    }
+    
+    /// <remarks/>
+    public void GetFoldersAsync(System.Guid libraryId, object userState) {
+        if ((this.GetFoldersOperationCompleted == null)) {
+            this.GetFoldersOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetFoldersOperationCompleted);
+        }
+        this.InvokeAsync("GetFolders", new object[] {
+                    libraryId}, this.GetFoldersOperationCompleted, userState);
+    }
+    
+    private void OnGetFoldersOperationCompleted(object arg) {
+        if ((this.GetFoldersCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetFoldersCompleted(this, new GetFoldersCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsInFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TM_GuidanceItem[] GetGuidanceItemsInFolder(System.Guid folderId) {
+        object[] results = this.Invoke("GetGuidanceItemsInFolder", new object[] {
+                    folderId});
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceItemsInFolder(System.Guid folderId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceItemsInFolder", new object[] {
+                    folderId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] EndGetGuidanceItemsInFolder(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsInFolderAsync(System.Guid folderId) {
+        this.GetGuidanceItemsInFolderAsync(folderId, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsInFolderAsync(System.Guid folderId, object userState) {
+        if ((this.GetGuidanceItemsInFolderOperationCompleted == null)) {
+            this.GetGuidanceItemsInFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsInFolderOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceItemsInFolder", new object[] {
+                    folderId}, this.GetGuidanceItemsInFolderOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceItemsInFolderOperationCompleted(object arg) {
+        if ((this.GetGuidanceItemsInFolderCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceItemsInFolderCompleted(this, new GetGuidanceItemsInFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsInView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TM_GuidanceItem[] GetGuidanceItemsInView(System.Guid viewId) {
+        object[] results = this.Invoke("GetGuidanceItemsInView", new object[] {
+                    viewId});
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceItemsInView(System.Guid viewId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceItemsInView", new object[] {
+                    viewId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] EndGetGuidanceItemsInView(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsInViewAsync(System.Guid viewId) {
+        this.GetGuidanceItemsInViewAsync(viewId, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsInViewAsync(System.Guid viewId, object userState) {
+        if ((this.GetGuidanceItemsInViewOperationCompleted == null)) {
+            this.GetGuidanceItemsInViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsInViewOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceItemsInView", new object[] {
+                    viewId}, this.GetGuidanceItemsInViewOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceItemsInViewOperationCompleted(object arg) {
+        if ((this.GetGuidanceItemsInViewCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceItemsInViewCompleted(this, new GetGuidanceItemsInViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsInViews", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TM_GuidanceItem[] GetGuidanceItemsInViews(System.Guid[] viewIds) {
+        object[] results = this.Invoke("GetGuidanceItemsInViews", new object[] {
+                    viewIds});
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceItemsInViews(System.Guid[] viewIds, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceItemsInViews", new object[] {
+                    viewIds}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] EndGetGuidanceItemsInViews(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsInViewsAsync(System.Guid[] viewIds) {
+        this.GetGuidanceItemsInViewsAsync(viewIds, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsInViewsAsync(System.Guid[] viewIds, object userState) {
+        if ((this.GetGuidanceItemsInViewsOperationCompleted == null)) {
+            this.GetGuidanceItemsInViewsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsInViewsOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceItemsInViews", new object[] {
+                    viewIds}, this.GetGuidanceItemsInViewsOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceItemsInViewsOperationCompleted(object arg) {
+        if ((this.GetGuidanceItemsInViewsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceItemsInViewsCompleted(this, new GetGuidanceItemsInViewsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemHtml", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string GetGuidanceItemHtml(System.Guid GuidanceItemId) {
+        object[] results = this.Invoke("GetGuidanceItemHtml", new object[] {
+                    GuidanceItemId});
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceItemHtml(System.Guid GuidanceItemId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceItemHtml", new object[] {
+                    GuidanceItemId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string EndGetGuidanceItemHtml(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemHtmlAsync(System.Guid GuidanceItemId) {
+        this.GetGuidanceItemHtmlAsync(GuidanceItemId, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemHtmlAsync(System.Guid GuidanceItemId, object userState) {
+        if ((this.GetGuidanceItemHtmlOperationCompleted == null)) {
+            this.GetGuidanceItemHtmlOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemHtmlOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceItemHtml", new object[] {
+                    GuidanceItemId}, this.GetGuidanceItemHtmlOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceItemHtmlOperationCompleted(object arg) {
+        if ((this.GetGuidanceItemHtmlCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceItemHtmlCompleted(this, new GetGuidanceItemHtmlCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetAllGuidanceItems", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TM_GuidanceItem[] GetAllGuidanceItems() {
+        object[] results = this.Invoke("GetAllGuidanceItems", new object[0]);
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetAllGuidanceItems(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetAllGuidanceItems", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] EndGetAllGuidanceItems(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetAllGuidanceItemsAsync() {
+        this.GetAllGuidanceItemsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetAllGuidanceItemsAsync(object userState) {
+        if ((this.GetAllGuidanceItemsOperationCompleted == null)) {
+            this.GetAllGuidanceItemsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAllGuidanceItemsOperationCompleted);
+        }
+        this.InvokeAsync("GetAllGuidanceItems", new object[0], this.GetAllGuidanceItemsOperationCompleted, userState);
+    }
+    
+    private void OnGetAllGuidanceItemsOperationCompleted(object arg) {
+        if ((this.GetAllGuidanceItemsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetAllGuidanceItemsCompleted(this, new GetAllGuidanceItemsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsInLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TM_GuidanceItem[] GetGuidanceItemsInLibrary(System.Guid libraryId) {
+        object[] results = this.Invoke("GetGuidanceItemsInLibrary", new object[] {
+                    libraryId});
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceItemsInLibrary(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceItemsInLibrary", new object[] {
+                    libraryId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] EndGetGuidanceItemsInLibrary(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TM_GuidanceItem[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsInLibraryAsync(System.Guid libraryId) {
+        this.GetGuidanceItemsInLibraryAsync(libraryId, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsInLibraryAsync(System.Guid libraryId, object userState) {
+        if ((this.GetGuidanceItemsInLibraryOperationCompleted == null)) {
+            this.GetGuidanceItemsInLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsInLibraryOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceItemsInLibrary", new object[] {
+                    libraryId}, this.GetGuidanceItemsInLibraryOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceItemsInLibraryOperationCompleted(object arg) {
+        if ((this.GetGuidanceItemsInLibraryCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceItemsInLibraryCompleted(this, new GetGuidanceItemsInLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetViewsInLibraryRoot", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public View_V3[] GetViewsInLibraryRoot(string libraryID) {
+        object[] results = this.Invoke("GetViewsInLibraryRoot", new object[] {
+                    libraryID});
+        return ((View_V3[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetViewsInLibraryRoot(string libraryID, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetViewsInLibraryRoot", new object[] {
+                    libraryID}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public View_V3[] EndGetViewsInLibraryRoot(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((View_V3[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetViewsInLibraryRootAsync(string libraryID) {
+        this.GetViewsInLibraryRootAsync(libraryID, null);
+    }
+    
+    /// <remarks/>
+    public void GetViewsInLibraryRootAsync(string libraryID, object userState) {
+        if ((this.GetViewsInLibraryRootOperationCompleted == null)) {
+            this.GetViewsInLibraryRootOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetViewsInLibraryRootOperationCompleted);
+        }
+        this.InvokeAsync("GetViewsInLibraryRoot", new object[] {
+                    libraryID}, this.GetViewsInLibraryRootOperationCompleted, userState);
+    }
+    
+    private void OnGetViewsInLibraryRootOperationCompleted(object arg) {
+        if ((this.GetViewsInLibraryRootCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetViewsInLibraryRootCompleted(this, new GetViewsInLibraryRootCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetViewById", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public View_V3 GetViewById(string viewId) {
+        object[] results = this.Invoke("GetViewById", new object[] {
+                    viewId});
+        return ((View_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetViewById(string viewId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetViewById", new object[] {
+                    viewId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public View_V3 EndGetViewById(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((View_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetViewByIdAsync(string viewId) {
+        this.GetViewByIdAsync(viewId, null);
+    }
+    
+    /// <remarks/>
+    public void GetViewByIdAsync(string viewId, object userState) {
+        if ((this.GetViewByIdOperationCompleted == null)) {
+            this.GetViewByIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetViewByIdOperationCompleted);
+        }
+        this.InvokeAsync("GetViewById", new object[] {
+                    viewId}, this.GetViewByIdOperationCompleted, userState);
+    }
+    
+    private void OnGetViewByIdOperationCompleted(object arg) {
+        if ((this.GetViewByIdCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetViewByIdCompleted(this, new GetViewByIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/LogUserGUID", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public void LogUserGUID(string Guid) {
+        this.Invoke("LogUserGUID", new object[] {
+                    Guid});
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginLogUserGUID(string Guid, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("LogUserGUID", new object[] {
+                    Guid}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public void EndLogUserGUID(System.IAsyncResult asyncResult) {
+        this.EndInvoke(asyncResult);
+    }
+    
+    /// <remarks/>
+    public void LogUserGUIDAsync(string Guid) {
+        this.LogUserGUIDAsync(Guid, null);
+    }
+    
+    /// <remarks/>
+    public void LogUserGUIDAsync(string Guid, object userState) {
+        if ((this.LogUserGUIDOperationCompleted == null)) {
+            this.LogUserGUIDOperationCompleted = new System.Threading.SendOrPostCallback(this.OnLogUserGUIDOperationCompleted);
+        }
+        this.InvokeAsync("LogUserGUID", new object[] {
+                    Guid}, this.LogUserGUIDOperationCompleted, userState);
+    }
+    
+    private void OnLogUserGUIDOperationCompleted(object arg) {
+        if ((this.LogUserGUIDCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.LogUserGUIDCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetAllLibraryIds", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string[] GetAllLibraryIds() {
+        object[] results = this.Invoke("GetAllLibraryIds", new object[0]);
+        return ((string[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetAllLibraryIds(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetAllLibraryIds", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string[] EndGetAllLibraryIds(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetAllLibraryIdsAsync() {
+        this.GetAllLibraryIdsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetAllLibraryIdsAsync(object userState) {
+        if ((this.GetAllLibraryIdsOperationCompleted == null)) {
+            this.GetAllLibraryIdsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAllLibraryIdsOperationCompleted);
+        }
+        this.InvokeAsync("GetAllLibraryIds", new object[0], this.GetAllLibraryIdsOperationCompleted, userState);
+    }
+    
+    private void OnGetAllLibraryIdsOperationCompleted(object arg) {
+        if ((this.GetAllLibraryIdsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetAllLibraryIdsCompleted(this, new GetAllLibraryIdsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetLibraryById", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public Library GetLibraryById(System.Guid libraryId) {
+        object[] results = this.Invoke("GetLibraryById", new object[] {
+                    libraryId});
+        return ((Library)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetLibraryById(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetLibraryById", new object[] {
+                    libraryId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public Library EndGetLibraryById(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((Library)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetLibraryByIdAsync(System.Guid libraryId) {
+        this.GetLibraryByIdAsync(libraryId, null);
+    }
+    
+    /// <remarks/>
+    public void GetLibraryByIdAsync(System.Guid libraryId, object userState) {
+        if ((this.GetLibraryByIdOperationCompleted == null)) {
+            this.GetLibraryByIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetLibraryByIdOperationCompleted);
+        }
+        this.InvokeAsync("GetLibraryById", new object[] {
+                    libraryId}, this.GetLibraryByIdOperationCompleted, userState);
+    }
+    
+    private void OnGetLibraryByIdOperationCompleted(object arg) {
+        if ((this.GetLibraryByIdCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetLibraryByIdCompleted(this, new GetLibraryByIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetLibraryByName", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public Library GetLibraryByName(string libraryName) {
+        object[] results = this.Invoke("GetLibraryByName", new object[] {
+                    libraryName});
+        return ((Library)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetLibraryByName(string libraryName, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetLibraryByName", new object[] {
+                    libraryName}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public Library EndGetLibraryByName(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((Library)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetLibraryByNameAsync(string libraryName) {
+        this.GetLibraryByNameAsync(libraryName, null);
+    }
+    
+    /// <remarks/>
+    public void GetLibraryByNameAsync(string libraryName, object userState) {
+        if ((this.GetLibraryByNameOperationCompleted == null)) {
+            this.GetLibraryByNameOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetLibraryByNameOperationCompleted);
+        }
+        this.InvokeAsync("GetLibraryByName", new object[] {
+                    libraryName}, this.GetLibraryByNameOperationCompleted, userState);
+    }
+    
+    private void OnGetLibraryByNameOperationCompleted(object arg) {
+        if ((this.GetLibraryByNameCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetLibraryByNameCompleted(this, new GetLibraryByNameCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemById", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public GuidanceItem_V3 GetGuidanceItemById(string guidanceItemId) {
+        object[] results = this.Invoke("GetGuidanceItemById", new object[] {
+                    guidanceItemId});
+        return ((GuidanceItem_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceItemById(string guidanceItemId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceItemById", new object[] {
+                    guidanceItemId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public GuidanceItem_V3 EndGetGuidanceItemById(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((GuidanceItem_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemByIdAsync(string guidanceItemId) {
+        this.GetGuidanceItemByIdAsync(guidanceItemId, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemByIdAsync(string guidanceItemId, object userState) {
+        if ((this.GetGuidanceItemByIdOperationCompleted == null)) {
+            this.GetGuidanceItemByIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemByIdOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceItemById", new object[] {
+                    guidanceItemId}, this.GetGuidanceItemByIdOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceItemByIdOperationCompleted(object arg) {
+        if ((this.GetGuidanceItemByIdCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceItemByIdCompleted(this, new GetGuidanceItemByIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetAllUserLogs", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string GetAllUserLogs() {
+        object[] results = this.Invoke("GetAllUserLogs", new object[0]);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetAllUserLogs(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetAllUserLogs", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string EndGetAllUserLogs(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetAllUserLogsAsync() {
+        this.GetAllUserLogsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetAllUserLogsAsync(object userState) {
+        if ((this.GetAllUserLogsOperationCompleted == null)) {
+            this.GetAllUserLogsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAllUserLogsOperationCompleted);
+        }
+        this.InvokeAsync("GetAllUserLogs", new object[0], this.GetAllUserLogsOperationCompleted, userState);
+    }
+    
+    private void OnGetAllUserLogsOperationCompleted(object arg) {
+        if ((this.GetAllUserLogsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetAllUserLogsCompleted(this, new GetAllUserLogsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetActiveSessions", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public System.Guid[] GetActiveSessions() {
+        object[] results = this.Invoke("GetActiveSessions", new object[0]);
+        return ((System.Guid[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetActiveSessions(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetActiveSessions", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public System.Guid[] EndGetActiveSessions(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((System.Guid[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetActiveSessionsAsync() {
+        this.GetActiveSessionsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetActiveSessionsAsync(object userState) {
+        if ((this.GetActiveSessionsOperationCompleted == null)) {
+            this.GetActiveSessionsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetActiveSessionsOperationCompleted);
+        }
+        this.InvokeAsync("GetActiveSessions", new object[0], this.GetActiveSessionsOperationCompleted, userState);
+    }
+    
+    private void OnGetActiveSessionsOperationCompleted(object arg) {
+        if ((this.GetActiveSessionsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetActiveSessionsCompleted(this, new GetActiveSessionsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetActiveSession", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TMUser GetActiveSession(System.Guid sessionID) {
+        object[] results = this.Invoke("GetActiveSession", new object[] {
+                    sessionID});
+        return ((TMUser)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetActiveSession(System.Guid sessionID, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetActiveSession", new object[] {
+                    sessionID}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TMUser EndGetActiveSession(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TMUser)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetActiveSessionAsync(System.Guid sessionID) {
+        this.GetActiveSessionAsync(sessionID, null);
+    }
+    
+    /// <remarks/>
+    public void GetActiveSessionAsync(System.Guid sessionID, object userState) {
+        if ((this.GetActiveSessionOperationCompleted == null)) {
+            this.GetActiveSessionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetActiveSessionOperationCompleted);
+        }
+        this.InvokeAsync("GetActiveSession", new object[] {
+                    sessionID}, this.GetActiveSessionOperationCompleted, userState);
+    }
+    
+    private void OnGetActiveSessionOperationCompleted(object arg) {
+        if ((this.GetActiveSessionCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetActiveSessionCompleted(this, new GetActiveSessionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public Library_V3 CreateLibrary(Library library) {
+        object[] results = this.Invoke("CreateLibrary", new object[] {
+                    library});
+        return ((Library_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginCreateLibrary(Library library, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("CreateLibrary", new object[] {
+                    library}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public Library_V3 EndCreateLibrary(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((Library_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void CreateLibraryAsync(Library library) {
+        this.CreateLibraryAsync(library, null);
+    }
+    
+    /// <remarks/>
+    public void CreateLibraryAsync(Library library, object userState) {
+        if ((this.CreateLibraryOperationCompleted == null)) {
+            this.CreateLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateLibraryOperationCompleted);
+        }
+        this.InvokeAsync("CreateLibrary", new object[] {
+                    library}, this.CreateLibraryOperationCompleted, userState);
+    }
+    
+    private void OnCreateLibraryOperationCompleted(object arg) {
+        if ((this.CreateLibraryCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.CreateLibraryCompleted(this, new CreateLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/UpdateLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool UpdateLibrary(Library library) {
+        object[] results = this.Invoke("UpdateLibrary", new object[] {
+                    library});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginUpdateLibrary(Library library, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("UpdateLibrary", new object[] {
+                    library}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndUpdateLibrary(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void UpdateLibraryAsync(Library library) {
+        this.UpdateLibraryAsync(library, null);
+    }
+    
+    /// <remarks/>
+    public void UpdateLibraryAsync(Library library, object userState) {
+        if ((this.UpdateLibraryOperationCompleted == null)) {
+            this.UpdateLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdateLibraryOperationCompleted);
+        }
+        this.InvokeAsync("UpdateLibrary", new object[] {
+                    library}, this.UpdateLibraryOperationCompleted, userState);
+    }
+    
+    private void OnUpdateLibraryOperationCompleted(object arg) {
+        if ((this.UpdateLibraryCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.UpdateLibraryCompleted(this, new UpdateLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/UnDeleteLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool UnDeleteLibrary(System.Guid libraryId) {
+        object[] results = this.Invoke("UnDeleteLibrary", new object[] {
+                    libraryId});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginUnDeleteLibrary(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("UnDeleteLibrary", new object[] {
+                    libraryId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndUnDeleteLibrary(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void UnDeleteLibraryAsync(System.Guid libraryId) {
+        this.UnDeleteLibraryAsync(libraryId, null);
+    }
+    
+    /// <remarks/>
+    public void UnDeleteLibraryAsync(System.Guid libraryId, object userState) {
+        if ((this.UnDeleteLibraryOperationCompleted == null)) {
+            this.UnDeleteLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUnDeleteLibraryOperationCompleted);
+        }
+        this.InvokeAsync("UnDeleteLibrary", new object[] {
+                    libraryId}, this.UnDeleteLibraryOperationCompleted, userState);
+    }
+    
+    private void OnUnDeleteLibraryOperationCompleted(object arg) {
+        if ((this.UnDeleteLibraryCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.UnDeleteLibraryCompleted(this, new UnDeleteLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetDeletedLibraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TM_Library[] GetDeletedLibraries() {
+        object[] results = this.Invoke("GetDeletedLibraries", new object[0]);
+        return ((TM_Library[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetDeletedLibraries(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetDeletedLibraries", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TM_Library[] EndGetDeletedLibraries(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TM_Library[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetDeletedLibrariesAsync() {
+        this.GetDeletedLibrariesAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetDeletedLibrariesAsync(object userState) {
+        if ((this.GetDeletedLibrariesOperationCompleted == null)) {
+            this.GetDeletedLibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetDeletedLibrariesOperationCompleted);
+        }
+        this.InvokeAsync("GetDeletedLibraries", new object[0], this.GetDeletedLibrariesOperationCompleted, userState);
+    }
+    
+    private void OnGetDeletedLibrariesOperationCompleted(object arg) {
+        if ((this.GetDeletedLibrariesCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetDeletedLibrariesCompleted(this, new GetDeletedLibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteDeletedLibraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool DeleteDeletedLibraries() {
+        object[] results = this.Invoke("DeleteDeletedLibraries", new object[0]);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginDeleteDeletedLibraries(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("DeleteDeletedLibraries", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndDeleteDeletedLibraries(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void DeleteDeletedLibrariesAsync() {
+        this.DeleteDeletedLibrariesAsync(null);
+    }
+    
+    /// <remarks/>
+    public void DeleteDeletedLibrariesAsync(object userState) {
+        if ((this.DeleteDeletedLibrariesOperationCompleted == null)) {
+            this.DeleteDeletedLibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteDeletedLibrariesOperationCompleted);
+        }
+        this.InvokeAsync("DeleteDeletedLibraries", new object[0], this.DeleteDeletedLibrariesOperationCompleted, userState);
+    }
+    
+    private void OnDeleteDeletedLibrariesOperationCompleted(object arg) {
+        if ((this.DeleteDeletedLibrariesCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.DeleteDeletedLibrariesCompleted(this, new DeleteDeletedLibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public View_V3 CreateView(System.Guid folderId, View view) {
+        object[] results = this.Invoke("CreateView", new object[] {
+                    folderId,
+                    view});
+        return ((View_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginCreateView(System.Guid folderId, View view, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("CreateView", new object[] {
+                    folderId,
+                    view}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public View_V3 EndCreateView(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((View_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void CreateViewAsync(System.Guid folderId, View view) {
+        this.CreateViewAsync(folderId, view, null);
+    }
+    
+    /// <remarks/>
+    public void CreateViewAsync(System.Guid folderId, View view, object userState) {
+        if ((this.CreateViewOperationCompleted == null)) {
+            this.CreateViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateViewOperationCompleted);
+        }
+        this.InvokeAsync("CreateView", new object[] {
+                    folderId,
+                    view}, this.CreateViewOperationCompleted, userState);
+    }
+    
+    private void OnCreateViewOperationCompleted(object arg) {
+        if ((this.CreateViewCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.CreateViewCompleted(this, new CreateViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/UpdateView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool UpdateView(View view) {
+        object[] results = this.Invoke("UpdateView", new object[] {
+                    view});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginUpdateView(View view, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("UpdateView", new object[] {
+                    view}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndUpdateView(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void UpdateViewAsync(View view) {
+        this.UpdateViewAsync(view, null);
+    }
+    
+    /// <remarks/>
+    public void UpdateViewAsync(View view, object userState) {
+        if ((this.UpdateViewOperationCompleted == null)) {
+            this.UpdateViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdateViewOperationCompleted);
+        }
+        this.InvokeAsync("UpdateView", new object[] {
+                    view}, this.UpdateViewOperationCompleted, userState);
+    }
+    
+    private void OnUpdateViewOperationCompleted(object arg) {
+        if ((this.UpdateViewCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.UpdateViewCompleted(this, new UpdateViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/AddGuidanceItemsToView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool AddGuidanceItemsToView(System.Guid viewId, System.Guid[] guidanceItemIds) {
+        object[] results = this.Invoke("AddGuidanceItemsToView", new object[] {
+                    viewId,
+                    guidanceItemIds});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginAddGuidanceItemsToView(System.Guid viewId, System.Guid[] guidanceItemIds, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("AddGuidanceItemsToView", new object[] {
+                    viewId,
+                    guidanceItemIds}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndAddGuidanceItemsToView(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void AddGuidanceItemsToViewAsync(System.Guid viewId, System.Guid[] guidanceItemIds) {
+        this.AddGuidanceItemsToViewAsync(viewId, guidanceItemIds, null);
+    }
+    
+    /// <remarks/>
+    public void AddGuidanceItemsToViewAsync(System.Guid viewId, System.Guid[] guidanceItemIds, object userState) {
+        if ((this.AddGuidanceItemsToViewOperationCompleted == null)) {
+            this.AddGuidanceItemsToViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnAddGuidanceItemsToViewOperationCompleted);
+        }
+        this.InvokeAsync("AddGuidanceItemsToView", new object[] {
+                    viewId,
+                    guidanceItemIds}, this.AddGuidanceItemsToViewOperationCompleted, userState);
+    }
+    
+    private void OnAddGuidanceItemsToViewOperationCompleted(object arg) {
+        if ((this.AddGuidanceItemsToViewCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.AddGuidanceItemsToViewCompleted(this, new AddGuidanceItemsToViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RemoveGuidanceItemsFromView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool RemoveGuidanceItemsFromView(System.Guid viewId, System.Guid[] guidanceItemIds) {
+        object[] results = this.Invoke("RemoveGuidanceItemsFromView", new object[] {
+                    viewId,
+                    guidanceItemIds});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginRemoveGuidanceItemsFromView(System.Guid viewId, System.Guid[] guidanceItemIds, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("RemoveGuidanceItemsFromView", new object[] {
+                    viewId,
+                    guidanceItemIds}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndRemoveGuidanceItemsFromView(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void RemoveGuidanceItemsFromViewAsync(System.Guid viewId, System.Guid[] guidanceItemIds) {
+        this.RemoveGuidanceItemsFromViewAsync(viewId, guidanceItemIds, null);
+    }
+    
+    /// <remarks/>
+    public void RemoveGuidanceItemsFromViewAsync(System.Guid viewId, System.Guid[] guidanceItemIds, object userState) {
+        if ((this.RemoveGuidanceItemsFromViewOperationCompleted == null)) {
+            this.RemoveGuidanceItemsFromViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRemoveGuidanceItemsFromViewOperationCompleted);
+        }
+        this.InvokeAsync("RemoveGuidanceItemsFromView", new object[] {
+                    viewId,
+                    guidanceItemIds}, this.RemoveGuidanceItemsFromViewOperationCompleted, userState);
+    }
+    
+    private void OnRemoveGuidanceItemsFromViewOperationCompleted(object arg) {
+        if ((this.RemoveGuidanceItemsFromViewCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.RemoveGuidanceItemsFromViewCompleted(this, new RemoveGuidanceItemsFromViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RemoveViewFromFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool RemoveViewFromFolder(System.Guid libraryId, System.Guid viewId) {
+        object[] results = this.Invoke("RemoveViewFromFolder", new object[] {
+                    libraryId,
+                    viewId});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginRemoveViewFromFolder(System.Guid libraryId, System.Guid viewId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("RemoveViewFromFolder", new object[] {
+                    libraryId,
+                    viewId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndRemoveViewFromFolder(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void RemoveViewFromFolderAsync(System.Guid libraryId, System.Guid viewId) {
+        this.RemoveViewFromFolderAsync(libraryId, viewId, null);
+    }
+    
+    /// <remarks/>
+    public void RemoveViewFromFolderAsync(System.Guid libraryId, System.Guid viewId, object userState) {
+        if ((this.RemoveViewFromFolderOperationCompleted == null)) {
+            this.RemoveViewFromFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRemoveViewFromFolderOperationCompleted);
+        }
+        this.InvokeAsync("RemoveViewFromFolder", new object[] {
+                    libraryId,
+                    viewId}, this.RemoveViewFromFolderOperationCompleted, userState);
+    }
+    
+    private void OnRemoveViewFromFolderOperationCompleted(object arg) {
+        if ((this.RemoveViewFromFolderCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.RemoveViewFromFolderCompleted(this, new RemoveViewFromFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/MoveViewToFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool MoveViewToFolder(System.Guid viewId, System.Guid folderId) {
+        object[] results = this.Invoke("MoveViewToFolder", new object[] {
+                    viewId,
+                    folderId});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginMoveViewToFolder(System.Guid viewId, System.Guid folderId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("MoveViewToFolder", new object[] {
+                    viewId,
+                    folderId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndMoveViewToFolder(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void MoveViewToFolderAsync(System.Guid viewId, System.Guid folderId) {
+        this.MoveViewToFolderAsync(viewId, folderId, null);
+    }
+    
+    /// <remarks/>
+    public void MoveViewToFolderAsync(System.Guid viewId, System.Guid folderId, object userState) {
+        if ((this.MoveViewToFolderOperationCompleted == null)) {
+            this.MoveViewToFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnMoveViewToFolderOperationCompleted);
+        }
+        this.InvokeAsync("MoveViewToFolder", new object[] {
+                    viewId,
+                    folderId}, this.MoveViewToFolderOperationCompleted, userState);
+    }
+    
+    private void OnMoveViewToFolderOperationCompleted(object arg) {
+        if ((this.MoveViewToFolderCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.MoveViewToFolderCompleted(this, new MoveViewToFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateGuidanceItem", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public System.Guid CreateGuidanceItem(GuidanceItem_V3 guidanceItem) {
+        object[] results = this.Invoke("CreateGuidanceItem", new object[] {
+                    guidanceItem});
+        return ((System.Guid)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginCreateGuidanceItem(GuidanceItem_V3 guidanceItem, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("CreateGuidanceItem", new object[] {
+                    guidanceItem}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public System.Guid EndCreateGuidanceItem(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((System.Guid)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void CreateGuidanceItemAsync(GuidanceItem_V3 guidanceItem) {
+        this.CreateGuidanceItemAsync(guidanceItem, null);
+    }
+    
+    /// <remarks/>
+    public void CreateGuidanceItemAsync(GuidanceItem_V3 guidanceItem, object userState) {
+        if ((this.CreateGuidanceItemOperationCompleted == null)) {
+            this.CreateGuidanceItemOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateGuidanceItemOperationCompleted);
+        }
+        this.InvokeAsync("CreateGuidanceItem", new object[] {
+                    guidanceItem}, this.CreateGuidanceItemOperationCompleted, userState);
+    }
+    
+    private void OnCreateGuidanceItemOperationCompleted(object arg) {
+        if ((this.CreateGuidanceItemCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.CreateGuidanceItemCompleted(this, new CreateGuidanceItemCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/UpdateGuidanceItem", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool UpdateGuidanceItem(GuidanceItem_V3 guidanceItem) {
+        object[] results = this.Invoke("UpdateGuidanceItem", new object[] {
+                    guidanceItem});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginUpdateGuidanceItem(GuidanceItem_V3 guidanceItem, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("UpdateGuidanceItem", new object[] {
+                    guidanceItem}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndUpdateGuidanceItem(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void UpdateGuidanceItemAsync(GuidanceItem_V3 guidanceItem) {
+        this.UpdateGuidanceItemAsync(guidanceItem, null);
+    }
+    
+    /// <remarks/>
+    public void UpdateGuidanceItemAsync(GuidanceItem_V3 guidanceItem, object userState) {
+        if ((this.UpdateGuidanceItemOperationCompleted == null)) {
+            this.UpdateGuidanceItemOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdateGuidanceItemOperationCompleted);
+        }
+        this.InvokeAsync("UpdateGuidanceItem", new object[] {
+                    guidanceItem}, this.UpdateGuidanceItemOperationCompleted, userState);
+    }
+    
+    private void OnUpdateGuidanceItemOperationCompleted(object arg) {
+        if ((this.UpdateGuidanceItemCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.UpdateGuidanceItemCompleted(this, new UpdateGuidanceItemCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteGuidanceItem", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool DeleteGuidanceItem(System.Guid guidanceItemId) {
+        object[] results = this.Invoke("DeleteGuidanceItem", new object[] {
+                    guidanceItemId});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginDeleteGuidanceItem(System.Guid guidanceItemId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("DeleteGuidanceItem", new object[] {
+                    guidanceItemId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndDeleteGuidanceItem(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void DeleteGuidanceItemAsync(System.Guid guidanceItemId) {
+        this.DeleteGuidanceItemAsync(guidanceItemId, null);
+    }
+    
+    /// <remarks/>
+    public void DeleteGuidanceItemAsync(System.Guid guidanceItemId, object userState) {
+        if ((this.DeleteGuidanceItemOperationCompleted == null)) {
+            this.DeleteGuidanceItemOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteGuidanceItemOperationCompleted);
+        }
+        this.InvokeAsync("DeleteGuidanceItem", new object[] {
+                    guidanceItemId}, this.DeleteGuidanceItemOperationCompleted, userState);
+    }
+    
+    private void OnDeleteGuidanceItemOperationCompleted(object arg) {
+        if ((this.DeleteGuidanceItemCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.DeleteGuidanceItemCompleted(this, new DeleteGuidanceItemCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RenameFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool RenameFolder(System.Guid libraryId, System.Guid folderId, string newFolderName) {
+        object[] results = this.Invoke("RenameFolder", new object[] {
+                    libraryId,
+                    folderId,
+                    newFolderName});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginRenameFolder(System.Guid libraryId, System.Guid folderId, string newFolderName, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("RenameFolder", new object[] {
+                    libraryId,
+                    folderId,
+                    newFolderName}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndRenameFolder(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void RenameFolderAsync(System.Guid libraryId, System.Guid folderId, string newFolderName) {
+        this.RenameFolderAsync(libraryId, folderId, newFolderName, null);
+    }
+    
+    /// <remarks/>
+    public void RenameFolderAsync(System.Guid libraryId, System.Guid folderId, string newFolderName, object userState) {
+        if ((this.RenameFolderOperationCompleted == null)) {
+            this.RenameFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRenameFolderOperationCompleted);
+        }
+        this.InvokeAsync("RenameFolder", new object[] {
+                    libraryId,
+                    folderId,
+                    newFolderName}, this.RenameFolderOperationCompleted, userState);
+    }
+    
+    private void OnRenameFolderOperationCompleted(object arg) {
+        if ((this.RenameFolderCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.RenameFolderCompleted(this, new RenameFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public Folder_V3 CreateFolder(System.Guid libraryId, System.Guid parentFolderId, string newFolderName) {
+        object[] results = this.Invoke("CreateFolder", new object[] {
+                    libraryId,
+                    parentFolderId,
+                    newFolderName});
+        return ((Folder_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginCreateFolder(System.Guid libraryId, System.Guid parentFolderId, string newFolderName, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("CreateFolder", new object[] {
+                    libraryId,
+                    parentFolderId,
+                    newFolderName}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public Folder_V3 EndCreateFolder(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((Folder_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void CreateFolderAsync(System.Guid libraryId, System.Guid parentFolderId, string newFolderName) {
+        this.CreateFolderAsync(libraryId, parentFolderId, newFolderName, null);
+    }
+    
+    /// <remarks/>
+    public void CreateFolderAsync(System.Guid libraryId, System.Guid parentFolderId, string newFolderName, object userState) {
+        if ((this.CreateFolderOperationCompleted == null)) {
+            this.CreateFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateFolderOperationCompleted);
+        }
+        this.InvokeAsync("CreateFolder", new object[] {
+                    libraryId,
+                    parentFolderId,
+                    newFolderName}, this.CreateFolderOperationCompleted, userState);
+    }
+    
+    private void OnCreateFolderOperationCompleted(object arg) {
+        if ((this.CreateFolderCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.CreateFolderCompleted(this, new CreateFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool DeleteFolder(System.Guid libraryId, System.Guid folderId) {
+        object[] results = this.Invoke("DeleteFolder", new object[] {
+                    libraryId,
+                    folderId});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginDeleteFolder(System.Guid libraryId, System.Guid folderId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("DeleteFolder", new object[] {
+                    libraryId,
+                    folderId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndDeleteFolder(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void DeleteFolderAsync(System.Guid libraryId, System.Guid folderId) {
+        this.DeleteFolderAsync(libraryId, folderId, null);
+    }
+    
+    /// <remarks/>
+    public void DeleteFolderAsync(System.Guid libraryId, System.Guid folderId, object userState) {
+        if ((this.DeleteFolderOperationCompleted == null)) {
+            this.DeleteFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteFolderOperationCompleted);
+        }
+        this.InvokeAsync("DeleteFolder", new object[] {
+                    libraryId,
+                    folderId}, this.DeleteFolderOperationCompleted, userState);
+    }
+    
+    private void OnDeleteFolderOperationCompleted(object arg) {
+        if ((this.DeleteFolderCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.DeleteFolderCompleted(this, new DeleteFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool DeleteLibrary(System.Guid libraryId) {
+        object[] results = this.Invoke("DeleteLibrary", new object[] {
+                    libraryId});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginDeleteLibrary(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("DeleteLibrary", new object[] {
+                    libraryId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndDeleteLibrary(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void DeleteLibraryAsync(System.Guid libraryId) {
+        this.DeleteLibraryAsync(libraryId, null);
+    }
+    
+    /// <remarks/>
+    public void DeleteLibraryAsync(System.Guid libraryId, object userState) {
+        if ((this.DeleteLibraryOperationCompleted == null)) {
+            this.DeleteLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteLibraryOperationCompleted);
+        }
+        this.InvokeAsync("DeleteLibrary", new object[] {
+                    libraryId}, this.DeleteLibraryOperationCompleted, userState);
+    }
+    
+    private void OnDeleteLibraryOperationCompleted(object arg) {
+        if ((this.DeleteLibraryCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.DeleteLibraryCompleted(this, new DeleteLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RenameLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool RenameLibrary(System.Guid libraryId, string newName) {
+        object[] results = this.Invoke("RenameLibrary", new object[] {
+                    libraryId,
+                    newName});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginRenameLibrary(System.Guid libraryId, string newName, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("RenameLibrary", new object[] {
+                    libraryId,
+                    newName}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndRenameLibrary(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void RenameLibraryAsync(System.Guid libraryId, string newName) {
+        this.RenameLibraryAsync(libraryId, newName, null);
+    }
+    
+    /// <remarks/>
+    public void RenameLibraryAsync(System.Guid libraryId, string newName, object userState) {
+        if ((this.RenameLibraryOperationCompleted == null)) {
+            this.RenameLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRenameLibraryOperationCompleted);
+        }
+        this.InvokeAsync("RenameLibrary", new object[] {
+                    libraryId,
+                    newName}, this.RenameLibraryOperationCompleted, userState);
+    }
+    
+    private void OnRenameLibraryOperationCompleted(object arg) {
+        if ((this.RenameLibraryCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.RenameLibraryCompleted(this, new RenameLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteTempLibraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public System.Guid[] DeleteTempLibraries() {
+        object[] results = this.Invoke("DeleteTempLibraries", new object[0]);
+        return ((System.Guid[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginDeleteTempLibraries(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("DeleteTempLibraries", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public System.Guid[] EndDeleteTempLibraries(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((System.Guid[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void DeleteTempLibrariesAsync() {
+        this.DeleteTempLibrariesAsync(null);
+    }
+    
+    /// <remarks/>
+    public void DeleteTempLibrariesAsync(object userState) {
+        if ((this.DeleteTempLibrariesOperationCompleted == null)) {
+            this.DeleteTempLibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteTempLibrariesOperationCompleted);
+        }
+        this.InvokeAsync("DeleteTempLibraries", new object[0], this.DeleteTempLibrariesOperationCompleted, userState);
+    }
+    
+    private void OnDeleteTempLibrariesOperationCompleted(object arg) {
+        if ((this.DeleteTempLibrariesCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.DeleteTempLibrariesCompleted(this, new DeleteTempLibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RenameGuidanceItemTitle", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool RenameGuidanceItemTitle(System.Guid guidanceItemId, string title) {
+        object[] results = this.Invoke("RenameGuidanceItemTitle", new object[] {
+                    guidanceItemId,
+                    title});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginRenameGuidanceItemTitle(System.Guid guidanceItemId, string title, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("RenameGuidanceItemTitle", new object[] {
+                    guidanceItemId,
+                    title}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndRenameGuidanceItemTitle(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void RenameGuidanceItemTitleAsync(System.Guid guidanceItemId, string title) {
+        this.RenameGuidanceItemTitleAsync(guidanceItemId, title, null);
+    }
+    
+    /// <remarks/>
+    public void RenameGuidanceItemTitleAsync(System.Guid guidanceItemId, string title, object userState) {
+        if ((this.RenameGuidanceItemTitleOperationCompleted == null)) {
+            this.RenameGuidanceItemTitleOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRenameGuidanceItemTitleOperationCompleted);
+        }
+        this.InvokeAsync("RenameGuidanceItemTitle", new object[] {
+                    guidanceItemId,
+                    title}, this.RenameGuidanceItemTitleOperationCompleted, userState);
+    }
+    
+    private void OnRenameGuidanceItemTitleOperationCompleted(object arg) {
+        if ((this.RenameGuidanceItemTitleCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.RenameGuidanceItemTitleCompleted(this, new RenameGuidanceItemTitleCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceTypes", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public GuidanceType[] GetGuidanceTypes() {
+        object[] results = this.Invoke("GetGuidanceTypes", new object[0]);
+        return ((GuidanceType[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceTypes(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceTypes", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public GuidanceType[] EndGetGuidanceTypes(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((GuidanceType[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceTypesAsync() {
+        this.GetGuidanceTypesAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceTypesAsync(object userState) {
+        if ((this.GetGuidanceTypesOperationCompleted == null)) {
+            this.GetGuidanceTypesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceTypesOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceTypes", new object[0], this.GetGuidanceTypesOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceTypesOperationCompleted(object arg) {
+        if ((this.GetGuidanceTypesCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceTypesCompleted(this, new GetGuidanceTypesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateGuidanceType", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public GuidanceType CreateGuidanceType(GuidanceType guidanceType, string[] columns) {
+        object[] results = this.Invoke("CreateGuidanceType", new object[] {
+                    guidanceType,
+                    columns});
+        return ((GuidanceType)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginCreateGuidanceType(GuidanceType guidanceType, string[] columns, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("CreateGuidanceType", new object[] {
+                    guidanceType,
+                    columns}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public GuidanceType EndCreateGuidanceType(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((GuidanceType)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void CreateGuidanceTypeAsync(GuidanceType guidanceType, string[] columns) {
+        this.CreateGuidanceTypeAsync(guidanceType, columns, null);
+    }
+    
+    /// <remarks/>
+    public void CreateGuidanceTypeAsync(GuidanceType guidanceType, string[] columns, object userState) {
+        if ((this.CreateGuidanceTypeOperationCompleted == null)) {
+            this.CreateGuidanceTypeOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateGuidanceTypeOperationCompleted);
+        }
+        this.InvokeAsync("CreateGuidanceType", new object[] {
+                    guidanceType,
+                    columns}, this.CreateGuidanceTypeOperationCompleted, userState);
+    }
+    
+    private void OnCreateGuidanceTypeOperationCompleted(object arg) {
+        if ((this.CreateGuidanceTypeCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.CreateGuidanceTypeCompleted(this, new CreateGuidanceTypeCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceTypeById", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public GuidanceType GetGuidanceTypeById(string guidanceTypeId) {
+        object[] results = this.Invoke("GetGuidanceTypeById", new object[] {
+                    guidanceTypeId});
+        return ((GuidanceType)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceTypeById(string guidanceTypeId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceTypeById", new object[] {
+                    guidanceTypeId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public GuidanceType EndGetGuidanceTypeById(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((GuidanceType)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceTypeByIdAsync(string guidanceTypeId) {
+        this.GetGuidanceTypeByIdAsync(guidanceTypeId, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceTypeByIdAsync(string guidanceTypeId, object userState) {
+        if ((this.GetGuidanceTypeByIdOperationCompleted == null)) {
+            this.GetGuidanceTypeByIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceTypeByIdOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceTypeById", new object[] {
+                    guidanceTypeId}, this.GetGuidanceTypeByIdOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceTypeByIdOperationCompleted(object arg) {
+        if ((this.GetGuidanceTypeByIdCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceTypeByIdCompleted(this, new GetGuidanceTypeByIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceTypeByName", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public GuidanceType GetGuidanceTypeByName(string guidanceTypeName) {
+        object[] results = this.Invoke("GetGuidanceTypeByName", new object[] {
+                    guidanceTypeName});
+        return ((GuidanceType)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceTypeByName(string guidanceTypeName, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceTypeByName", new object[] {
+                    guidanceTypeName}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public GuidanceType EndGetGuidanceTypeByName(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((GuidanceType)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceTypeByNameAsync(string guidanceTypeName) {
+        this.GetGuidanceTypeByNameAsync(guidanceTypeName, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceTypeByNameAsync(string guidanceTypeName, object userState) {
+        if ((this.GetGuidanceTypeByNameOperationCompleted == null)) {
+            this.GetGuidanceTypeByNameOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceTypeByNameOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceTypeByName", new object[] {
+                    guidanceTypeName}, this.GetGuidanceTypeByNameOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceTypeByNameOperationCompleted(object arg) {
+        if ((this.GetGuidanceTypeByNameCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceTypeByNameCompleted(this, new GetGuidanceTypeByNameCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceTypeColumns", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public ColumnDefinition[] GetGuidanceTypeColumns(System.Guid guidanceTypeId) {
+        object[] results = this.Invoke("GetGuidanceTypeColumns", new object[] {
+                    guidanceTypeId});
+        return ((ColumnDefinition[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceTypeColumns(System.Guid guidanceTypeId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceTypeColumns", new object[] {
+                    guidanceTypeId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public ColumnDefinition[] EndGetGuidanceTypeColumns(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((ColumnDefinition[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceTypeColumnsAsync(System.Guid guidanceTypeId) {
+        this.GetGuidanceTypeColumnsAsync(guidanceTypeId, null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceTypeColumnsAsync(System.Guid guidanceTypeId, object userState) {
+        if ((this.GetGuidanceTypeColumnsOperationCompleted == null)) {
+            this.GetGuidanceTypeColumnsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceTypeColumnsOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceTypeColumns", new object[] {
+                    guidanceTypeId}, this.GetGuidanceTypeColumnsOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceTypeColumnsOperationCompleted(object arg) {
+        if ((this.GetGuidanceTypeColumnsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceTypeColumnsCompleted(this, new GetGuidanceTypeColumnsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
     
     /// <remarks/>
     [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RemoveGuidanceTypeColumns", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
@@ -893,6 +2757,234 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
         if ((this.SetGuidanceItemKeywordsCompleted != null)) {
             System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
             this.SetGuidanceItemKeywordsCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPostData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string GetPostData() {
+        object[] results = this.Invoke("GetPostData", new object[0]);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetPostData(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetPostData", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string EndGetPostData(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetPostDataAsync() {
+        this.GetPostDataAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetPostDataAsync(object userState) {
+        if ((this.GetPostDataOperationCompleted == null)) {
+            this.GetPostDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPostDataOperationCompleted);
+        }
+        this.InvokeAsync("GetPostData", new object[0], this.GetPostDataOperationCompleted, userState);
+    }
+    
+    private void OnGetPostDataOperationCompleted(object arg) {
+        if ((this.GetPostDataCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetPostDataCompleted(this, new GetPostDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetRequestData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public RequestData GetRequestData() {
+        object[] results = this.Invoke("GetRequestData", new object[0]);
+        return ((RequestData)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetRequestData(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetRequestData", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public RequestData EndGetRequestData(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((RequestData)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetRequestDataAsync() {
+        this.GetRequestDataAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetRequestDataAsync(object userState) {
+        if ((this.GetRequestDataOperationCompleted == null)) {
+            this.GetRequestDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetRequestDataOperationCompleted);
+        }
+        this.InvokeAsync("GetRequestData", new object[0], this.GetRequestDataOperationCompleted, userState);
+    }
+    
+    private void OnGetRequestDataOperationCompleted(object arg) {
+        if ((this.GetRequestDataCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetRequestDataCompleted(this, new GetRequestDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPastRequests", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public RequestData[] GetPastRequests() {
+        object[] results = this.Invoke("GetPastRequests", new object[0]);
+        return ((RequestData[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetPastRequests(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetPastRequests", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public RequestData[] EndGetPastRequests(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((RequestData[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetPastRequestsAsync() {
+        this.GetPastRequestsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetPastRequestsAsync(object userState) {
+        if ((this.GetPastRequestsOperationCompleted == null)) {
+            this.GetPastRequestsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPastRequestsOperationCompleted);
+        }
+        this.InvokeAsync("GetPastRequests", new object[0], this.GetPastRequestsOperationCompleted, userState);
+    }
+    
+    private void OnGetPastRequestsOperationCompleted(object arg) {
+        if ((this.GetPastRequestsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetPastRequestsCompleted(this, new GetPastRequestsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetLastRequest", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public RequestData GetLastRequest() {
+        object[] results = this.Invoke("GetLastRequest", new object[0]);
+        return ((RequestData)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetLastRequest(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetLastRequest", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public RequestData EndGetLastRequest(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((RequestData)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetLastRequestAsync() {
+        this.GetLastRequestAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetLastRequestAsync(object userState) {
+        if ((this.GetLastRequestOperationCompleted == null)) {
+            this.GetLastRequestOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetLastRequestOperationCompleted);
+        }
+        this.InvokeAsync("GetLastRequest", new object[0], this.GetLastRequestOperationCompleted, userState);
+    }
+    
+    private void OnGetLastRequestOperationCompleted(object arg) {
+        if ((this.GetLastRequestCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetLastRequestCompleted(this, new GetLastRequestCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/JsDataTableWithPastRequests", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public JsDataTable JsDataTableWithPastRequests() {
+        object[] results = this.Invoke("JsDataTableWithPastRequests", new object[0]);
+        return ((JsDataTable)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginJsDataTableWithPastRequests(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("JsDataTableWithPastRequests", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public JsDataTable EndJsDataTableWithPastRequests(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((JsDataTable)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void JsDataTableWithPastRequestsAsync() {
+        this.JsDataTableWithPastRequestsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void JsDataTableWithPastRequestsAsync(object userState) {
+        if ((this.JsDataTableWithPastRequestsOperationCompleted == null)) {
+            this.JsDataTableWithPastRequestsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnJsDataTableWithPastRequestsOperationCompleted);
+        }
+        this.InvokeAsync("JsDataTableWithPastRequests", new object[0], this.JsDataTableWithPastRequestsOperationCompleted, userState);
+    }
+    
+    private void OnJsDataTableWithPastRequestsOperationCompleted(object arg) {
+        if ((this.JsDataTableWithPastRequestsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.JsDataTableWithPastRequestsCompleted(this, new JsDataTableWithPastRequestsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPagesHistory", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public ChangedPage[] GetPagesHistory() {
+        object[] results = this.Invoke("GetPagesHistory", new object[0]);
+        return ((ChangedPage[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetPagesHistory(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetPagesHistory", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public ChangedPage[] EndGetPagesHistory(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((ChangedPage[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetPagesHistoryAsync() {
+        this.GetPagesHistoryAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetPagesHistoryAsync(object userState) {
+        if ((this.GetPagesHistoryOperationCompleted == null)) {
+            this.GetPagesHistoryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPagesHistoryOperationCompleted);
+        }
+        this.InvokeAsync("GetPagesHistory", new object[0], this.GetPagesHistoryOperationCompleted, userState);
+    }
+    
+    private void OnGetPagesHistoryOperationCompleted(object arg) {
+        if ((this.GetPagesHistoryCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetPagesHistoryCompleted(this, new GetPagesHistoryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
         }
     }
     
@@ -1244,6 +3336,47 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
         if ((this.XmlDatabase_ReloadDataCompleted != null)) {
             System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
             this.XmlDatabase_ReloadDataCompleted(this, new XmlDatabase_ReloadDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/XmlDatabase_ImportLibrary_fromZipFile", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool XmlDatabase_ImportLibrary_fromZipFile(string pathToZipFile) {
+        object[] results = this.Invoke("XmlDatabase_ImportLibrary_fromZipFile", new object[] {
+                    pathToZipFile});
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginXmlDatabase_ImportLibrary_fromZipFile(string pathToZipFile, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("XmlDatabase_ImportLibrary_fromZipFile", new object[] {
+                    pathToZipFile}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndXmlDatabase_ImportLibrary_fromZipFile(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void XmlDatabase_ImportLibrary_fromZipFileAsync(string pathToZipFile) {
+        this.XmlDatabase_ImportLibrary_fromZipFileAsync(pathToZipFile, null);
+    }
+    
+    /// <remarks/>
+    public void XmlDatabase_ImportLibrary_fromZipFileAsync(string pathToZipFile, object userState) {
+        if ((this.XmlDatabase_ImportLibrary_fromZipFileOperationCompleted == null)) {
+            this.XmlDatabase_ImportLibrary_fromZipFileOperationCompleted = new System.Threading.SendOrPostCallback(this.OnXmlDatabase_ImportLibrary_fromZipFileOperationCompleted);
+        }
+        this.InvokeAsync("XmlDatabase_ImportLibrary_fromZipFile", new object[] {
+                    pathToZipFile}, this.XmlDatabase_ImportLibrary_fromZipFileOperationCompleted, userState);
+    }
+    
+    private void OnXmlDatabase_ImportLibrary_fromZipFileOperationCompleted(object arg) {
+        if ((this.XmlDatabase_ImportLibrary_fromZipFileCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.XmlDatabase_ImportLibrary_fromZipFileCompleted(this, new XmlDatabase_ImportLibrary_fromZipFileCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
         }
     }
     
@@ -1649,6 +3782,44 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     }
     
     /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateWebEditorSecret", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string CreateWebEditorSecret() {
+        object[] results = this.Invoke("CreateWebEditorSecret", new object[0]);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginCreateWebEditorSecret(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("CreateWebEditorSecret", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string EndCreateWebEditorSecret(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void CreateWebEditorSecretAsync() {
+        this.CreateWebEditorSecretAsync(null);
+    }
+    
+    /// <remarks/>
+    public void CreateWebEditorSecretAsync(object userState) {
+        if ((this.CreateWebEditorSecretOperationCompleted == null)) {
+            this.CreateWebEditorSecretOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateWebEditorSecretOperationCompleted);
+        }
+        this.InvokeAsync("CreateWebEditorSecret", new object[0], this.CreateWebEditorSecretOperationCompleted, userState);
+    }
+    
+    private void OnCreateWebEditorSecretOperationCompleted(object arg) {
+        if ((this.CreateWebEditorSecretCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.CreateWebEditorSecretCompleted(this, new CreateWebEditorSecretCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
     [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/TMConfigFileLocation", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
     public string TMConfigFileLocation() {
         object[] results = this.Invoke("TMConfigFileLocation", new object[0]);
@@ -1725,461 +3896,81 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     }
     
     /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateWebEditorSecret", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public string CreateWebEditorSecret() {
-        object[] results = this.Invoke("CreateWebEditorSecret", new object[0]);
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginCreateWebEditorSecret(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("CreateWebEditorSecret", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public string EndCreateWebEditorSecret(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void CreateWebEditorSecretAsync() {
-        this.CreateWebEditorSecretAsync(null);
-    }
-    
-    /// <remarks/>
-    public void CreateWebEditorSecretAsync(object userState) {
-        if ((this.CreateWebEditorSecretOperationCompleted == null)) {
-            this.CreateWebEditorSecretOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateWebEditorSecretOperationCompleted);
-        }
-        this.InvokeAsync("CreateWebEditorSecret", new object[0], this.CreateWebEditorSecretOperationCompleted, userState);
-    }
-    
-    private void OnCreateWebEditorSecretOperationCompleted(object arg) {
-        if ((this.CreateWebEditorSecretCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.CreateWebEditorSecretCompleted(this, new CreateWebEditorSecretCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPostData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public string GetPostData() {
-        object[] results = this.Invoke("GetPostData", new object[0]);
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetPostData(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetPostData", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public string EndGetPostData(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetPostDataAsync() {
-        this.GetPostDataAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetPostDataAsync(object userState) {
-        if ((this.GetPostDataOperationCompleted == null)) {
-            this.GetPostDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPostDataOperationCompleted);
-        }
-        this.InvokeAsync("GetPostData", new object[0], this.GetPostDataOperationCompleted, userState);
-    }
-    
-    private void OnGetPostDataOperationCompleted(object arg) {
-        if ((this.GetPostDataCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetPostDataCompleted(this, new GetPostDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetRequestData", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public RequestData GetRequestData() {
-        object[] results = this.Invoke("GetRequestData", new object[0]);
-        return ((RequestData)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetRequestData(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetRequestData", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public RequestData EndGetRequestData(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((RequestData)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetRequestDataAsync() {
-        this.GetRequestDataAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetRequestDataAsync(object userState) {
-        if ((this.GetRequestDataOperationCompleted == null)) {
-            this.GetRequestDataOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetRequestDataOperationCompleted);
-        }
-        this.InvokeAsync("GetRequestData", new object[0], this.GetRequestDataOperationCompleted, userState);
-    }
-    
-    private void OnGetRequestDataOperationCompleted(object arg) {
-        if ((this.GetRequestDataCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetRequestDataCompleted(this, new GetRequestDataCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPastRequests", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public RequestData[] GetPastRequests() {
-        object[] results = this.Invoke("GetPastRequests", new object[0]);
-        return ((RequestData[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetPastRequests(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetPastRequests", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public RequestData[] EndGetPastRequests(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((RequestData[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetPastRequestsAsync() {
-        this.GetPastRequestsAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetPastRequestsAsync(object userState) {
-        if ((this.GetPastRequestsOperationCompleted == null)) {
-            this.GetPastRequestsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPastRequestsOperationCompleted);
-        }
-        this.InvokeAsync("GetPastRequests", new object[0], this.GetPastRequestsOperationCompleted, userState);
-    }
-    
-    private void OnGetPastRequestsOperationCompleted(object arg) {
-        if ((this.GetPastRequestsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetPastRequestsCompleted(this, new GetPastRequestsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetLastRequest", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public RequestData GetLastRequest() {
-        object[] results = this.Invoke("GetLastRequest", new object[0]);
-        return ((RequestData)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetLastRequest(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetLastRequest", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public RequestData EndGetLastRequest(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((RequestData)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetLastRequestAsync() {
-        this.GetLastRequestAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetLastRequestAsync(object userState) {
-        if ((this.GetLastRequestOperationCompleted == null)) {
-            this.GetLastRequestOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetLastRequestOperationCompleted);
-        }
-        this.InvokeAsync("GetLastRequest", new object[0], this.GetLastRequestOperationCompleted, userState);
-    }
-    
-    private void OnGetLastRequestOperationCompleted(object arg) {
-        if ((this.GetLastRequestCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetLastRequestCompleted(this, new GetLastRequestCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/JsDataTableWithPastRequests", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public JsDataTable JsDataTableWithPastRequests() {
-        object[] results = this.Invoke("JsDataTableWithPastRequests", new object[0]);
-        return ((JsDataTable)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginJsDataTableWithPastRequests(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("JsDataTableWithPastRequests", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public JsDataTable EndJsDataTableWithPastRequests(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((JsDataTable)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void JsDataTableWithPastRequestsAsync() {
-        this.JsDataTableWithPastRequestsAsync(null);
-    }
-    
-    /// <remarks/>
-    public void JsDataTableWithPastRequestsAsync(object userState) {
-        if ((this.JsDataTableWithPastRequestsOperationCompleted == null)) {
-            this.JsDataTableWithPastRequestsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnJsDataTableWithPastRequestsOperationCompleted);
-        }
-        this.InvokeAsync("JsDataTableWithPastRequests", new object[0], this.JsDataTableWithPastRequestsOperationCompleted, userState);
-    }
-    
-    private void OnJsDataTableWithPastRequestsOperationCompleted(object arg) {
-        if ((this.JsDataTableWithPastRequestsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.JsDataTableWithPastRequestsCompleted(this, new JsDataTableWithPastRequestsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetPagesHistory", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public ChangedPage[] GetPagesHistory() {
-        object[] results = this.Invoke("GetPagesHistory", new object[0]);
-        return ((ChangedPage[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetPagesHistory(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetPagesHistory", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public ChangedPage[] EndGetPagesHistory(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((ChangedPage[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetPagesHistoryAsync() {
-        this.GetPagesHistoryAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetPagesHistoryAsync(object userState) {
-        if ((this.GetPagesHistoryOperationCompleted == null)) {
-            this.GetPagesHistoryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetPagesHistoryOperationCompleted);
-        }
-        this.InvokeAsync("GetPagesHistory", new object[0], this.GetPagesHistoryOperationCompleted, userState);
-    }
-    
-    private void OnGetPagesHistoryOperationCompleted(object arg) {
-        if ((this.GetPagesHistoryCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetPagesHistoryCompleted(this, new GetPagesHistoryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetFolderStructure_Libraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public Library_V3[] GetFolderStructure_Libraries() {
-        object[] results = this.Invoke("GetFolderStructure_Libraries", new object[0]);
-        return ((Library_V3[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetFolderStructure_Libraries(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetFolderStructure_Libraries", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public Library_V3[] EndGetFolderStructure_Libraries(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((Library_V3[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetFolderStructure_LibrariesAsync() {
-        this.GetFolderStructure_LibrariesAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetFolderStructure_LibrariesAsync(object userState) {
-        if ((this.GetFolderStructure_LibrariesOperationCompleted == null)) {
-            this.GetFolderStructure_LibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetFolderStructure_LibrariesOperationCompleted);
-        }
-        this.InvokeAsync("GetFolderStructure_Libraries", new object[0], this.GetFolderStructure_LibrariesOperationCompleted, userState);
-    }
-    
-    private void OnGetFolderStructure_LibrariesOperationCompleted(object arg) {
-        if ((this.GetFolderStructure_LibrariesCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetFolderStructure_LibrariesCompleted(this, new GetFolderStructure_LibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetFolderStructure_Library", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public Library_V3 GetFolderStructure_Library(System.Guid libraryId) {
-        object[] results = this.Invoke("GetFolderStructure_Library", new object[] {
-                    libraryId});
-        return ((Library_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetFolderStructure_Library(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetFolderStructure_Library", new object[] {
-                    libraryId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public Library_V3 EndGetFolderStructure_Library(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((Library_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetFolderStructure_LibraryAsync(System.Guid libraryId) {
-        this.GetFolderStructure_LibraryAsync(libraryId, null);
-    }
-    
-    /// <remarks/>
-    public void GetFolderStructure_LibraryAsync(System.Guid libraryId, object userState) {
-        if ((this.GetFolderStructure_LibraryOperationCompleted == null)) {
-            this.GetFolderStructure_LibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetFolderStructure_LibraryOperationCompleted);
-        }
-        this.InvokeAsync("GetFolderStructure_Library", new object[] {
-                    libraryId}, this.GetFolderStructure_LibraryOperationCompleted, userState);
-    }
-    
-    private void OnGetFolderStructure_LibraryOperationCompleted(object arg) {
-        if ((this.GetFolderStructure_LibraryCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetFolderStructure_LibraryCompleted(this, new GetFolderStructure_LibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGUIObjects", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public TM_GUI_Objects GetGUIObjects() {
-        object[] results = this.Invoke("GetGUIObjects", new object[0]);
-        return ((TM_GUI_Objects)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGUIObjects(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGUIObjects", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public TM_GUI_Objects EndGetGUIObjects(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((TM_GUI_Objects)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGUIObjectsAsync() {
-        this.GetGUIObjectsAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetGUIObjectsAsync(object userState) {
-        if ((this.GetGUIObjectsOperationCompleted == null)) {
-            this.GetGUIObjectsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGUIObjectsOperationCompleted);
-        }
-        this.InvokeAsync("GetGUIObjects", new object[0], this.GetGUIObjectsOperationCompleted, userState);
-    }
-    
-    private void OnGetGUIObjectsOperationCompleted(object arg) {
-        if ((this.GetGUIObjectsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGUIObjectsCompleted(this, new GetGUIObjectsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetStringIndexes", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public string[] GetStringIndexes() {
-        object[] results = this.Invoke("GetStringIndexes", new object[0]);
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetDisabledLibraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string[] GetDisabledLibraries() {
+        object[] results = this.Invoke("GetDisabledLibraries", new object[0]);
         return ((string[])(results[0]));
     }
     
     /// <remarks/>
-    public System.IAsyncResult BeginGetStringIndexes(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetStringIndexes", new object[0], callback, asyncState);
+    public System.IAsyncResult BeginGetDisabledLibraries(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetDisabledLibraries", new object[0], callback, asyncState);
     }
     
     /// <remarks/>
-    public string[] EndGetStringIndexes(System.IAsyncResult asyncResult) {
+    public string[] EndGetDisabledLibraries(System.IAsyncResult asyncResult) {
         object[] results = this.EndInvoke(asyncResult);
         return ((string[])(results[0]));
     }
     
     /// <remarks/>
-    public void GetStringIndexesAsync() {
-        this.GetStringIndexesAsync(null);
+    public void GetDisabledLibrariesAsync() {
+        this.GetDisabledLibrariesAsync(null);
     }
     
     /// <remarks/>
-    public void GetStringIndexesAsync(object userState) {
-        if ((this.GetStringIndexesOperationCompleted == null)) {
-            this.GetStringIndexesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetStringIndexesOperationCompleted);
+    public void GetDisabledLibrariesAsync(object userState) {
+        if ((this.GetDisabledLibrariesOperationCompleted == null)) {
+            this.GetDisabledLibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetDisabledLibrariesOperationCompleted);
         }
-        this.InvokeAsync("GetStringIndexes", new object[0], this.GetStringIndexesOperationCompleted, userState);
+        this.InvokeAsync("GetDisabledLibraries", new object[0], this.GetDisabledLibrariesOperationCompleted, userState);
     }
     
-    private void OnGetStringIndexesOperationCompleted(object arg) {
-        if ((this.GetStringIndexesCompleted != null)) {
+    private void OnGetDisabledLibrariesOperationCompleted(object arg) {
+        if ((this.GetDisabledLibrariesCompleted != null)) {
             System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetStringIndexesCompleted(this, new GetStringIndexesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            this.GetDisabledLibrariesCompleted(this, new GetDisabledLibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
         }
     }
     
     /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsMappings", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public string[] GetGuidanceItemsMappings() {
-        object[] results = this.Invoke("GetGuidanceItemsMappings", new object[0]);
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/SetDisabledLibraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string[] SetDisabledLibraries(string[] disabledLibraries) {
+        object[] results = this.Invoke("SetDisabledLibraries", new object[] {
+                    disabledLibraries});
         return ((string[])(results[0]));
     }
     
     /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceItemsMappings(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceItemsMappings", new object[0], callback, asyncState);
+    public System.IAsyncResult BeginSetDisabledLibraries(string[] disabledLibraries, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("SetDisabledLibraries", new object[] {
+                    disabledLibraries}, callback, asyncState);
     }
     
     /// <remarks/>
-    public string[] EndGetGuidanceItemsMappings(System.IAsyncResult asyncResult) {
+    public string[] EndSetDisabledLibraries(System.IAsyncResult asyncResult) {
         object[] results = this.EndInvoke(asyncResult);
         return ((string[])(results[0]));
     }
     
     /// <remarks/>
-    public void GetGuidanceItemsMappingsAsync() {
-        this.GetGuidanceItemsMappingsAsync(null);
+    public void SetDisabledLibrariesAsync(string[] disabledLibraries) {
+        this.SetDisabledLibrariesAsync(disabledLibraries, null);
     }
     
     /// <remarks/>
-    public void GetGuidanceItemsMappingsAsync(object userState) {
-        if ((this.GetGuidanceItemsMappingsOperationCompleted == null)) {
-            this.GetGuidanceItemsMappingsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsMappingsOperationCompleted);
+    public void SetDisabledLibrariesAsync(string[] disabledLibraries, object userState) {
+        if ((this.SetDisabledLibrariesOperationCompleted == null)) {
+            this.SetDisabledLibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnSetDisabledLibrariesOperationCompleted);
         }
-        this.InvokeAsync("GetGuidanceItemsMappings", new object[0], this.GetGuidanceItemsMappingsOperationCompleted, userState);
+        this.InvokeAsync("SetDisabledLibraries", new object[] {
+                    disabledLibraries}, this.SetDisabledLibrariesOperationCompleted, userState);
     }
     
-    private void OnGetGuidanceItemsMappingsOperationCompleted(object arg) {
-        if ((this.GetGuidanceItemsMappingsCompleted != null)) {
+    private void OnSetDisabledLibrariesOperationCompleted(object arg) {
+        if ((this.SetDisabledLibrariesCompleted != null)) {
             System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceItemsMappingsCompleted(this, new GetGuidanceItemsMappingsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            this.SetDisabledLibrariesCompleted(this, new SetDisabledLibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
         }
     }
     
@@ -2726,6 +4517,316 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     }
     
     /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetFolderStructure_Libraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public Library_V3[] GetFolderStructure_Libraries() {
+        object[] results = this.Invoke("GetFolderStructure_Libraries", new object[0]);
+        return ((Library_V3[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetFolderStructure_Libraries(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetFolderStructure_Libraries", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public Library_V3[] EndGetFolderStructure_Libraries(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((Library_V3[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetFolderStructure_LibrariesAsync() {
+        this.GetFolderStructure_LibrariesAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetFolderStructure_LibrariesAsync(object userState) {
+        if ((this.GetFolderStructure_LibrariesOperationCompleted == null)) {
+            this.GetFolderStructure_LibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetFolderStructure_LibrariesOperationCompleted);
+        }
+        this.InvokeAsync("GetFolderStructure_Libraries", new object[0], this.GetFolderStructure_LibrariesOperationCompleted, userState);
+    }
+    
+    private void OnGetFolderStructure_LibrariesOperationCompleted(object arg) {
+        if ((this.GetFolderStructure_LibrariesCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetFolderStructure_LibrariesCompleted(this, new GetFolderStructure_LibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetFolderStructure_Library", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public Library_V3 GetFolderStructure_Library(System.Guid libraryId) {
+        object[] results = this.Invoke("GetFolderStructure_Library", new object[] {
+                    libraryId});
+        return ((Library_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetFolderStructure_Library(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetFolderStructure_Library", new object[] {
+                    libraryId}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public Library_V3 EndGetFolderStructure_Library(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((Library_V3)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetFolderStructure_LibraryAsync(System.Guid libraryId) {
+        this.GetFolderStructure_LibraryAsync(libraryId, null);
+    }
+    
+    /// <remarks/>
+    public void GetFolderStructure_LibraryAsync(System.Guid libraryId, object userState) {
+        if ((this.GetFolderStructure_LibraryOperationCompleted == null)) {
+            this.GetFolderStructure_LibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetFolderStructure_LibraryOperationCompleted);
+        }
+        this.InvokeAsync("GetFolderStructure_Library", new object[] {
+                    libraryId}, this.GetFolderStructure_LibraryOperationCompleted, userState);
+    }
+    
+    private void OnGetFolderStructure_LibraryOperationCompleted(object arg) {
+        if ((this.GetFolderStructure_LibraryCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetFolderStructure_LibraryCompleted(this, new GetFolderStructure_LibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/ClearGUIObjects", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public bool ClearGUIObjects() {
+        object[] results = this.Invoke("ClearGUIObjects", new object[0]);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginClearGUIObjects(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("ClearGUIObjects", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public bool EndClearGUIObjects(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((bool)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void ClearGUIObjectsAsync() {
+        this.ClearGUIObjectsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void ClearGUIObjectsAsync(object userState) {
+        if ((this.ClearGUIObjectsOperationCompleted == null)) {
+            this.ClearGUIObjectsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnClearGUIObjectsOperationCompleted);
+        }
+        this.InvokeAsync("ClearGUIObjects", new object[0], this.ClearGUIObjectsOperationCompleted, userState);
+    }
+    
+    private void OnClearGUIObjectsOperationCompleted(object arg) {
+        if ((this.ClearGUIObjectsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.ClearGUIObjectsCompleted(this, new ClearGUIObjectsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGUIObjects", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TM_GUI_Objects GetGUIObjects() {
+        object[] results = this.Invoke("GetGUIObjects", new object[0]);
+        return ((TM_GUI_Objects)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGUIObjects(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGUIObjects", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TM_GUI_Objects EndGetGUIObjects(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TM_GUI_Objects)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGUIObjectsAsync() {
+        this.GetGUIObjectsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetGUIObjectsAsync(object userState) {
+        if ((this.GetGUIObjectsOperationCompleted == null)) {
+            this.GetGUIObjectsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGUIObjectsOperationCompleted);
+        }
+        this.InvokeAsync("GetGUIObjects", new object[0], this.GetGUIObjectsOperationCompleted, userState);
+    }
+    
+    private void OnGetGUIObjectsOperationCompleted(object arg) {
+        if ((this.GetGUIObjectsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGUIObjectsCompleted(this, new GetGUIObjectsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetStringIndexes", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string[] GetStringIndexes() {
+        object[] results = this.Invoke("GetStringIndexes", new object[0]);
+        return ((string[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetStringIndexes(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetStringIndexes", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string[] EndGetStringIndexes(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetStringIndexesAsync() {
+        this.GetStringIndexesAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetStringIndexesAsync(object userState) {
+        if ((this.GetStringIndexesOperationCompleted == null)) {
+            this.GetStringIndexesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetStringIndexesOperationCompleted);
+        }
+        this.InvokeAsync("GetStringIndexes", new object[0], this.GetStringIndexesOperationCompleted, userState);
+    }
+    
+    private void OnGetStringIndexesOperationCompleted(object arg) {
+        if ((this.GetStringIndexesCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetStringIndexesCompleted(this, new GetStringIndexesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsMappings", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public string[] GetGuidanceItemsMappings() {
+        object[] results = this.Invoke("GetGuidanceItemsMappings", new object[0]);
+        return ((string[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginGetGuidanceItemsMappings(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetGuidanceItemsMappings", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public string[] EndGetGuidanceItemsMappings(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((string[])(results[0]));
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsMappingsAsync() {
+        this.GetGuidanceItemsMappingsAsync(null);
+    }
+    
+    /// <remarks/>
+    public void GetGuidanceItemsMappingsAsync(object userState) {
+        if ((this.GetGuidanceItemsMappingsOperationCompleted == null)) {
+            this.GetGuidanceItemsMappingsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsMappingsOperationCompleted);
+        }
+        this.InvokeAsync("GetGuidanceItemsMappings", new object[0], this.GetGuidanceItemsMappingsOperationCompleted, userState);
+    }
+    
+    private void OnGetGuidanceItemsMappingsOperationCompleted(object arg) {
+        if ((this.GetGuidanceItemsMappingsCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.GetGuidanceItemsMappingsCompleted(this, new GetGuidanceItemsMappingsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateUser", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public int CreateUser(NewUser newUser) {
+        object[] results = this.Invoke("CreateUser", new object[] {
+                    newUser});
+        return ((int)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginCreateUser(NewUser newUser, System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("CreateUser", new object[] {
+                    newUser}, callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public int EndCreateUser(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((int)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void CreateUserAsync(NewUser newUser) {
+        this.CreateUserAsync(newUser, null);
+    }
+    
+    /// <remarks/>
+    public void CreateUserAsync(NewUser newUser, object userState) {
+        if ((this.CreateUserOperationCompleted == null)) {
+            this.CreateUserOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateUserOperationCompleted);
+        }
+        this.InvokeAsync("CreateUser", new object[] {
+                    newUser}, this.CreateUserOperationCompleted, userState);
+    }
+    
+    private void OnCreateUserOperationCompleted(object arg) {
+        if ((this.CreateUserCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.CreateUserCompleted(this, new CreateUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateUser_Random", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public TMUser CreateUser_Random() {
+        object[] results = this.Invoke("CreateUser_Random", new object[0]);
+        return ((TMUser)(results[0]));
+    }
+    
+    /// <remarks/>
+    public System.IAsyncResult BeginCreateUser_Random(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("CreateUser_Random", new object[0], callback, asyncState);
+    }
+    
+    /// <remarks/>
+    public TMUser EndCreateUser_Random(System.IAsyncResult asyncResult) {
+        object[] results = this.EndInvoke(asyncResult);
+        return ((TMUser)(results[0]));
+    }
+    
+    /// <remarks/>
+    public void CreateUser_RandomAsync() {
+        this.CreateUser_RandomAsync(null);
+    }
+    
+    /// <remarks/>
+    public void CreateUser_RandomAsync(object userState) {
+        if ((this.CreateUser_RandomOperationCompleted == null)) {
+            this.CreateUser_RandomOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateUser_RandomOperationCompleted);
+        }
+        this.InvokeAsync("CreateUser_Random", new object[0], this.CreateUser_RandomOperationCompleted, userState);
+    }
+    
+    private void OnCreateUser_RandomOperationCompleted(object arg) {
+        if ((this.CreateUser_RandomCompleted != null)) {
+            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
+            this.CreateUser_RandomCompleted(this, new CreateUser_RandomCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+        }
+    }
+    
+    /// <remarks/>
     [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetUser_byID", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
     public TMUser GetUser_byID(int id) {
         object[] results = this.Invoke("GetUser_byID", new object[] {
@@ -2842,85 +4943,6 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
         if ((this.GetUsersCompleted != null)) {
             System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
             this.GetUsersCompleted(this, new GetUsersCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateUser", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public int CreateUser(NewUser newUser) {
-        object[] results = this.Invoke("CreateUser", new object[] {
-                    newUser});
-        return ((int)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginCreateUser(NewUser newUser, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("CreateUser", new object[] {
-                    newUser}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public int EndCreateUser(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((int)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void CreateUserAsync(NewUser newUser) {
-        this.CreateUserAsync(newUser, null);
-    }
-    
-    /// <remarks/>
-    public void CreateUserAsync(NewUser newUser, object userState) {
-        if ((this.CreateUserOperationCompleted == null)) {
-            this.CreateUserOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateUserOperationCompleted);
-        }
-        this.InvokeAsync("CreateUser", new object[] {
-                    newUser}, this.CreateUserOperationCompleted, userState);
-    }
-    
-    private void OnCreateUserOperationCompleted(object arg) {
-        if ((this.CreateUserCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.CreateUserCompleted(this, new CreateUserCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateUser_Random", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public TMUser CreateUser_Random() {
-        object[] results = this.Invoke("CreateUser_Random", new object[0]);
-        return ((TMUser)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginCreateUser_Random(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("CreateUser_Random", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public TMUser EndCreateUser_Random(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((TMUser)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void CreateUser_RandomAsync() {
-        this.CreateUser_RandomAsync(null);
-    }
-    
-    /// <remarks/>
-    public void CreateUser_RandomAsync(object userState) {
-        if ((this.CreateUser_RandomOperationCompleted == null)) {
-            this.CreateUser_RandomOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateUser_RandomOperationCompleted);
-        }
-        this.InvokeAsync("CreateUser_Random", new object[0], this.CreateUser_RandomOperationCompleted, userState);
-    }
-    
-    private void OnCreateUser_RandomOperationCompleted(object arg) {
-        if ((this.CreateUser_RandomCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.CreateUser_RandomCompleted(this, new CreateUser_RandomCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
         }
     }
     
@@ -3684,1611 +5706,40 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
     }
     
     /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetFolders", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public Folder_V3[] GetFolders(System.Guid libraryId) {
-        object[] results = this.Invoke("GetFolders", new object[] {
-                    libraryId});
+    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetAllFolders", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
+    public Folder_V3[] GetAllFolders() {
+        object[] results = this.Invoke("GetAllFolders", new object[0]);
         return ((Folder_V3[])(results[0]));
     }
     
     /// <remarks/>
-    public System.IAsyncResult BeginGetFolders(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetFolders", new object[] {
-                    libraryId}, callback, asyncState);
+    public System.IAsyncResult BeginGetAllFolders(System.AsyncCallback callback, object asyncState) {
+        return this.BeginInvoke("GetAllFolders", new object[0], callback, asyncState);
     }
     
     /// <remarks/>
-    public Folder_V3[] EndGetFolders(System.IAsyncResult asyncResult) {
+    public Folder_V3[] EndGetAllFolders(System.IAsyncResult asyncResult) {
         object[] results = this.EndInvoke(asyncResult);
         return ((Folder_V3[])(results[0]));
     }
     
     /// <remarks/>
-    public void GetFoldersAsync(System.Guid libraryId) {
-        this.GetFoldersAsync(libraryId, null);
+    public void GetAllFoldersAsync() {
+        this.GetAllFoldersAsync(null);
     }
     
     /// <remarks/>
-    public void GetFoldersAsync(System.Guid libraryId, object userState) {
-        if ((this.GetFoldersOperationCompleted == null)) {
-            this.GetFoldersOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetFoldersOperationCompleted);
+    public void GetAllFoldersAsync(object userState) {
+        if ((this.GetAllFoldersOperationCompleted == null)) {
+            this.GetAllFoldersOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAllFoldersOperationCompleted);
         }
-        this.InvokeAsync("GetFolders", new object[] {
-                    libraryId}, this.GetFoldersOperationCompleted, userState);
+        this.InvokeAsync("GetAllFolders", new object[0], this.GetAllFoldersOperationCompleted, userState);
     }
     
-    private void OnGetFoldersOperationCompleted(object arg) {
-        if ((this.GetFoldersCompleted != null)) {
+    private void OnGetAllFoldersOperationCompleted(object arg) {
+        if ((this.GetAllFoldersCompleted != null)) {
             System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetFoldersCompleted(this, new GetFoldersCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsInView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public TM_GuidanceItem[] GetGuidanceItemsInView(System.Guid viewId) {
-        object[] results = this.Invoke("GetGuidanceItemsInView", new object[] {
-                    viewId});
-        return ((TM_GuidanceItem[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceItemsInView(System.Guid viewId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceItemsInView", new object[] {
-                    viewId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public TM_GuidanceItem[] EndGetGuidanceItemsInView(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((TM_GuidanceItem[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemsInViewAsync(System.Guid viewId) {
-        this.GetGuidanceItemsInViewAsync(viewId, null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemsInViewAsync(System.Guid viewId, object userState) {
-        if ((this.GetGuidanceItemsInViewOperationCompleted == null)) {
-            this.GetGuidanceItemsInViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsInViewOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceItemsInView", new object[] {
-                    viewId}, this.GetGuidanceItemsInViewOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceItemsInViewOperationCompleted(object arg) {
-        if ((this.GetGuidanceItemsInViewCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceItemsInViewCompleted(this, new GetGuidanceItemsInViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsInViews", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public TM_GuidanceItem[] GetGuidanceItemsInViews(System.Guid[] viewIds) {
-        object[] results = this.Invoke("GetGuidanceItemsInViews", new object[] {
-                    viewIds});
-        return ((TM_GuidanceItem[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceItemsInViews(System.Guid[] viewIds, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceItemsInViews", new object[] {
-                    viewIds}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public TM_GuidanceItem[] EndGetGuidanceItemsInViews(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((TM_GuidanceItem[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemsInViewsAsync(System.Guid[] viewIds) {
-        this.GetGuidanceItemsInViewsAsync(viewIds, null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemsInViewsAsync(System.Guid[] viewIds, object userState) {
-        if ((this.GetGuidanceItemsInViewsOperationCompleted == null)) {
-            this.GetGuidanceItemsInViewsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsInViewsOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceItemsInViews", new object[] {
-                    viewIds}, this.GetGuidanceItemsInViewsOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceItemsInViewsOperationCompleted(object arg) {
-        if ((this.GetGuidanceItemsInViewsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceItemsInViewsCompleted(this, new GetGuidanceItemsInViewsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemHtml", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public string GetGuidanceItemHtml(System.Guid GuidanceItemId) {
-        object[] results = this.Invoke("GetGuidanceItemHtml", new object[] {
-                    GuidanceItemId});
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceItemHtml(System.Guid GuidanceItemId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceItemHtml", new object[] {
-                    GuidanceItemId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public string EndGetGuidanceItemHtml(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemHtmlAsync(System.Guid GuidanceItemId) {
-        this.GetGuidanceItemHtmlAsync(GuidanceItemId, null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemHtmlAsync(System.Guid GuidanceItemId, object userState) {
-        if ((this.GetGuidanceItemHtmlOperationCompleted == null)) {
-            this.GetGuidanceItemHtmlOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemHtmlOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceItemHtml", new object[] {
-                    GuidanceItemId}, this.GetGuidanceItemHtmlOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceItemHtmlOperationCompleted(object arg) {
-        if ((this.GetGuidanceItemHtmlCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceItemHtmlCompleted(this, new GetGuidanceItemHtmlCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetAllGuidanceItems", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public TM_GuidanceItem[] GetAllGuidanceItems() {
-        object[] results = this.Invoke("GetAllGuidanceItems", new object[0]);
-        return ((TM_GuidanceItem[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetAllGuidanceItems(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetAllGuidanceItems", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public TM_GuidanceItem[] EndGetAllGuidanceItems(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((TM_GuidanceItem[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetAllGuidanceItemsAsync() {
-        this.GetAllGuidanceItemsAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetAllGuidanceItemsAsync(object userState) {
-        if ((this.GetAllGuidanceItemsOperationCompleted == null)) {
-            this.GetAllGuidanceItemsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAllGuidanceItemsOperationCompleted);
-        }
-        this.InvokeAsync("GetAllGuidanceItems", new object[0], this.GetAllGuidanceItemsOperationCompleted, userState);
-    }
-    
-    private void OnGetAllGuidanceItemsOperationCompleted(object arg) {
-        if ((this.GetAllGuidanceItemsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetAllGuidanceItemsCompleted(this, new GetAllGuidanceItemsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemsInLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public TM_GuidanceItem[] GetGuidanceItemsInLibrary(System.Guid libraryId) {
-        object[] results = this.Invoke("GetGuidanceItemsInLibrary", new object[] {
-                    libraryId});
-        return ((TM_GuidanceItem[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceItemsInLibrary(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceItemsInLibrary", new object[] {
-                    libraryId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public TM_GuidanceItem[] EndGetGuidanceItemsInLibrary(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((TM_GuidanceItem[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemsInLibraryAsync(System.Guid libraryId) {
-        this.GetGuidanceItemsInLibraryAsync(libraryId, null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemsInLibraryAsync(System.Guid libraryId, object userState) {
-        if ((this.GetGuidanceItemsInLibraryOperationCompleted == null)) {
-            this.GetGuidanceItemsInLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemsInLibraryOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceItemsInLibrary", new object[] {
-                    libraryId}, this.GetGuidanceItemsInLibraryOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceItemsInLibraryOperationCompleted(object arg) {
-        if ((this.GetGuidanceItemsInLibraryCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceItemsInLibraryCompleted(this, new GetGuidanceItemsInLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetViewById", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public View_V3 GetViewById(string viewId) {
-        object[] results = this.Invoke("GetViewById", new object[] {
-                    viewId});
-        return ((View_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetViewById(string viewId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetViewById", new object[] {
-                    viewId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public View_V3 EndGetViewById(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((View_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetViewByIdAsync(string viewId) {
-        this.GetViewByIdAsync(viewId, null);
-    }
-    
-    /// <remarks/>
-    public void GetViewByIdAsync(string viewId, object userState) {
-        if ((this.GetViewByIdOperationCompleted == null)) {
-            this.GetViewByIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetViewByIdOperationCompleted);
-        }
-        this.InvokeAsync("GetViewById", new object[] {
-                    viewId}, this.GetViewByIdOperationCompleted, userState);
-    }
-    
-    private void OnGetViewByIdOperationCompleted(object arg) {
-        if ((this.GetViewByIdCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetViewByIdCompleted(this, new GetViewByIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/LogUserGUID", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public void LogUserGUID(string Guid) {
-        this.Invoke("LogUserGUID", new object[] {
-                    Guid});
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginLogUserGUID(string Guid, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("LogUserGUID", new object[] {
-                    Guid}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public void EndLogUserGUID(System.IAsyncResult asyncResult) {
-        this.EndInvoke(asyncResult);
-    }
-    
-    /// <remarks/>
-    public void LogUserGUIDAsync(string Guid) {
-        this.LogUserGUIDAsync(Guid, null);
-    }
-    
-    /// <remarks/>
-    public void LogUserGUIDAsync(string Guid, object userState) {
-        if ((this.LogUserGUIDOperationCompleted == null)) {
-            this.LogUserGUIDOperationCompleted = new System.Threading.SendOrPostCallback(this.OnLogUserGUIDOperationCompleted);
-        }
-        this.InvokeAsync("LogUserGUID", new object[] {
-                    Guid}, this.LogUserGUIDOperationCompleted, userState);
-    }
-    
-    private void OnLogUserGUIDOperationCompleted(object arg) {
-        if ((this.LogUserGUIDCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.LogUserGUIDCompleted(this, new System.ComponentModel.AsyncCompletedEventArgs(invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetAllLibraryIds", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public string[] GetAllLibraryIds() {
-        object[] results = this.Invoke("GetAllLibraryIds", new object[0]);
-        return ((string[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetAllLibraryIds(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetAllLibraryIds", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public string[] EndGetAllLibraryIds(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((string[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetAllLibraryIdsAsync() {
-        this.GetAllLibraryIdsAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetAllLibraryIdsAsync(object userState) {
-        if ((this.GetAllLibraryIdsOperationCompleted == null)) {
-            this.GetAllLibraryIdsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAllLibraryIdsOperationCompleted);
-        }
-        this.InvokeAsync("GetAllLibraryIds", new object[0], this.GetAllLibraryIdsOperationCompleted, userState);
-    }
-    
-    private void OnGetAllLibraryIdsOperationCompleted(object arg) {
-        if ((this.GetAllLibraryIdsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetAllLibraryIdsCompleted(this, new GetAllLibraryIdsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetLibraryById", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public Library GetLibraryById(string libraryId) {
-        object[] results = this.Invoke("GetLibraryById", new object[] {
-                    libraryId});
-        return ((Library)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetLibraryById(string libraryId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetLibraryById", new object[] {
-                    libraryId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public Library EndGetLibraryById(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((Library)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetLibraryByIdAsync(string libraryId) {
-        this.GetLibraryByIdAsync(libraryId, null);
-    }
-    
-    /// <remarks/>
-    public void GetLibraryByIdAsync(string libraryId, object userState) {
-        if ((this.GetLibraryByIdOperationCompleted == null)) {
-            this.GetLibraryByIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetLibraryByIdOperationCompleted);
-        }
-        this.InvokeAsync("GetLibraryById", new object[] {
-                    libraryId}, this.GetLibraryByIdOperationCompleted, userState);
-    }
-    
-    private void OnGetLibraryByIdOperationCompleted(object arg) {
-        if ((this.GetLibraryByIdCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetLibraryByIdCompleted(this, new GetLibraryByIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceItemById", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public GuidanceItem_V3 GetGuidanceItemById(string guidanceItemId) {
-        object[] results = this.Invoke("GetGuidanceItemById", new object[] {
-                    guidanceItemId});
-        return ((GuidanceItem_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceItemById(string guidanceItemId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceItemById", new object[] {
-                    guidanceItemId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public GuidanceItem_V3 EndGetGuidanceItemById(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((GuidanceItem_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemByIdAsync(string guidanceItemId) {
-        this.GetGuidanceItemByIdAsync(guidanceItemId, null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceItemByIdAsync(string guidanceItemId, object userState) {
-        if ((this.GetGuidanceItemByIdOperationCompleted == null)) {
-            this.GetGuidanceItemByIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceItemByIdOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceItemById", new object[] {
-                    guidanceItemId}, this.GetGuidanceItemByIdOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceItemByIdOperationCompleted(object arg) {
-        if ((this.GetGuidanceItemByIdCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceItemByIdCompleted(this, new GetGuidanceItemByIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetAllUserLogs", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public string GetAllUserLogs() {
-        object[] results = this.Invoke("GetAllUserLogs", new object[0]);
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetAllUserLogs(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetAllUserLogs", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public string EndGetAllUserLogs(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((string)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetAllUserLogsAsync() {
-        this.GetAllUserLogsAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetAllUserLogsAsync(object userState) {
-        if ((this.GetAllUserLogsOperationCompleted == null)) {
-            this.GetAllUserLogsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetAllUserLogsOperationCompleted);
-        }
-        this.InvokeAsync("GetAllUserLogs", new object[0], this.GetAllUserLogsOperationCompleted, userState);
-    }
-    
-    private void OnGetAllUserLogsOperationCompleted(object arg) {
-        if ((this.GetAllUserLogsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetAllUserLogsCompleted(this, new GetAllUserLogsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetActiveSessions", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public System.Guid[] GetActiveSessions() {
-        object[] results = this.Invoke("GetActiveSessions", new object[0]);
-        return ((System.Guid[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetActiveSessions(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetActiveSessions", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public System.Guid[] EndGetActiveSessions(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((System.Guid[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetActiveSessionsAsync() {
-        this.GetActiveSessionsAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetActiveSessionsAsync(object userState) {
-        if ((this.GetActiveSessionsOperationCompleted == null)) {
-            this.GetActiveSessionsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetActiveSessionsOperationCompleted);
-        }
-        this.InvokeAsync("GetActiveSessions", new object[0], this.GetActiveSessionsOperationCompleted, userState);
-    }
-    
-    private void OnGetActiveSessionsOperationCompleted(object arg) {
-        if ((this.GetActiveSessionsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetActiveSessionsCompleted(this, new GetActiveSessionsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetActiveSession", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public TMUser GetActiveSession(System.Guid sessionID) {
-        object[] results = this.Invoke("GetActiveSession", new object[] {
-                    sessionID});
-        return ((TMUser)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetActiveSession(System.Guid sessionID, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetActiveSession", new object[] {
-                    sessionID}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public TMUser EndGetActiveSession(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((TMUser)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetActiveSessionAsync(System.Guid sessionID) {
-        this.GetActiveSessionAsync(sessionID, null);
-    }
-    
-    /// <remarks/>
-    public void GetActiveSessionAsync(System.Guid sessionID, object userState) {
-        if ((this.GetActiveSessionOperationCompleted == null)) {
-            this.GetActiveSessionOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetActiveSessionOperationCompleted);
-        }
-        this.InvokeAsync("GetActiveSession", new object[] {
-                    sessionID}, this.GetActiveSessionOperationCompleted, userState);
-    }
-    
-    private void OnGetActiveSessionOperationCompleted(object arg) {
-        if ((this.GetActiveSessionCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetActiveSessionCompleted(this, new GetActiveSessionCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool CreateLibrary(Library library) {
-        object[] results = this.Invoke("CreateLibrary", new object[] {
-                    library});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginCreateLibrary(Library library, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("CreateLibrary", new object[] {
-                    library}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndCreateLibrary(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void CreateLibraryAsync(Library library) {
-        this.CreateLibraryAsync(library, null);
-    }
-    
-    /// <remarks/>
-    public void CreateLibraryAsync(Library library, object userState) {
-        if ((this.CreateLibraryOperationCompleted == null)) {
-            this.CreateLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateLibraryOperationCompleted);
-        }
-        this.InvokeAsync("CreateLibrary", new object[] {
-                    library}, this.CreateLibraryOperationCompleted, userState);
-    }
-    
-    private void OnCreateLibraryOperationCompleted(object arg) {
-        if ((this.CreateLibraryCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.CreateLibraryCompleted(this, new CreateLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/UpdateLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool UpdateLibrary(Library library) {
-        object[] results = this.Invoke("UpdateLibrary", new object[] {
-                    library});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginUpdateLibrary(Library library, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("UpdateLibrary", new object[] {
-                    library}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndUpdateLibrary(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void UpdateLibraryAsync(Library library) {
-        this.UpdateLibraryAsync(library, null);
-    }
-    
-    /// <remarks/>
-    public void UpdateLibraryAsync(Library library, object userState) {
-        if ((this.UpdateLibraryOperationCompleted == null)) {
-            this.UpdateLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdateLibraryOperationCompleted);
-        }
-        this.InvokeAsync("UpdateLibrary", new object[] {
-                    library}, this.UpdateLibraryOperationCompleted, userState);
-    }
-    
-    private void OnUpdateLibraryOperationCompleted(object arg) {
-        if ((this.UpdateLibraryCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.UpdateLibraryCompleted(this, new UpdateLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/UnDeleteLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool UnDeleteLibrary(System.Guid libraryId) {
-        object[] results = this.Invoke("UnDeleteLibrary", new object[] {
-                    libraryId});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginUnDeleteLibrary(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("UnDeleteLibrary", new object[] {
-                    libraryId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndUnDeleteLibrary(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void UnDeleteLibraryAsync(System.Guid libraryId) {
-        this.UnDeleteLibraryAsync(libraryId, null);
-    }
-    
-    /// <remarks/>
-    public void UnDeleteLibraryAsync(System.Guid libraryId, object userState) {
-        if ((this.UnDeleteLibraryOperationCompleted == null)) {
-            this.UnDeleteLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUnDeleteLibraryOperationCompleted);
-        }
-        this.InvokeAsync("UnDeleteLibrary", new object[] {
-                    libraryId}, this.UnDeleteLibraryOperationCompleted, userState);
-    }
-    
-    private void OnUnDeleteLibraryOperationCompleted(object arg) {
-        if ((this.UnDeleteLibraryCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.UnDeleteLibraryCompleted(this, new UnDeleteLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetDeletedLibraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public TM_Library[] GetDeletedLibraries() {
-        object[] results = this.Invoke("GetDeletedLibraries", new object[0]);
-        return ((TM_Library[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetDeletedLibraries(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetDeletedLibraries", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public TM_Library[] EndGetDeletedLibraries(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((TM_Library[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetDeletedLibrariesAsync() {
-        this.GetDeletedLibrariesAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetDeletedLibrariesAsync(object userState) {
-        if ((this.GetDeletedLibrariesOperationCompleted == null)) {
-            this.GetDeletedLibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetDeletedLibrariesOperationCompleted);
-        }
-        this.InvokeAsync("GetDeletedLibraries", new object[0], this.GetDeletedLibrariesOperationCompleted, userState);
-    }
-    
-    private void OnGetDeletedLibrariesOperationCompleted(object arg) {
-        if ((this.GetDeletedLibrariesCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetDeletedLibrariesCompleted(this, new GetDeletedLibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteDeletedLibraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool DeleteDeletedLibraries() {
-        object[] results = this.Invoke("DeleteDeletedLibraries", new object[0]);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginDeleteDeletedLibraries(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("DeleteDeletedLibraries", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndDeleteDeletedLibraries(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void DeleteDeletedLibrariesAsync() {
-        this.DeleteDeletedLibrariesAsync(null);
-    }
-    
-    /// <remarks/>
-    public void DeleteDeletedLibrariesAsync(object userState) {
-        if ((this.DeleteDeletedLibrariesOperationCompleted == null)) {
-            this.DeleteDeletedLibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteDeletedLibrariesOperationCompleted);
-        }
-        this.InvokeAsync("DeleteDeletedLibraries", new object[0], this.DeleteDeletedLibrariesOperationCompleted, userState);
-    }
-    
-    private void OnDeleteDeletedLibrariesOperationCompleted(object arg) {
-        if ((this.DeleteDeletedLibrariesCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.DeleteDeletedLibrariesCompleted(this, new DeleteDeletedLibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public View_V3 CreateView(System.Guid folderId, View view) {
-        object[] results = this.Invoke("CreateView", new object[] {
-                    folderId,
-                    view});
-        return ((View_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginCreateView(System.Guid folderId, View view, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("CreateView", new object[] {
-                    folderId,
-                    view}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public View_V3 EndCreateView(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((View_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void CreateViewAsync(System.Guid folderId, View view) {
-        this.CreateViewAsync(folderId, view, null);
-    }
-    
-    /// <remarks/>
-    public void CreateViewAsync(System.Guid folderId, View view, object userState) {
-        if ((this.CreateViewOperationCompleted == null)) {
-            this.CreateViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateViewOperationCompleted);
-        }
-        this.InvokeAsync("CreateView", new object[] {
-                    folderId,
-                    view}, this.CreateViewOperationCompleted, userState);
-    }
-    
-    private void OnCreateViewOperationCompleted(object arg) {
-        if ((this.CreateViewCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.CreateViewCompleted(this, new CreateViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/UpdateView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool UpdateView(View view) {
-        object[] results = this.Invoke("UpdateView", new object[] {
-                    view});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginUpdateView(View view, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("UpdateView", new object[] {
-                    view}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndUpdateView(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void UpdateViewAsync(View view) {
-        this.UpdateViewAsync(view, null);
-    }
-    
-    /// <remarks/>
-    public void UpdateViewAsync(View view, object userState) {
-        if ((this.UpdateViewOperationCompleted == null)) {
-            this.UpdateViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdateViewOperationCompleted);
-        }
-        this.InvokeAsync("UpdateView", new object[] {
-                    view}, this.UpdateViewOperationCompleted, userState);
-    }
-    
-    private void OnUpdateViewOperationCompleted(object arg) {
-        if ((this.UpdateViewCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.UpdateViewCompleted(this, new UpdateViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/AddGuidanceItemsToView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool AddGuidanceItemsToView(System.Guid viewId, System.Guid[] guidanceItemIds) {
-        object[] results = this.Invoke("AddGuidanceItemsToView", new object[] {
-                    viewId,
-                    guidanceItemIds});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginAddGuidanceItemsToView(System.Guid viewId, System.Guid[] guidanceItemIds, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("AddGuidanceItemsToView", new object[] {
-                    viewId,
-                    guidanceItemIds}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndAddGuidanceItemsToView(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void AddGuidanceItemsToViewAsync(System.Guid viewId, System.Guid[] guidanceItemIds) {
-        this.AddGuidanceItemsToViewAsync(viewId, guidanceItemIds, null);
-    }
-    
-    /// <remarks/>
-    public void AddGuidanceItemsToViewAsync(System.Guid viewId, System.Guid[] guidanceItemIds, object userState) {
-        if ((this.AddGuidanceItemsToViewOperationCompleted == null)) {
-            this.AddGuidanceItemsToViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnAddGuidanceItemsToViewOperationCompleted);
-        }
-        this.InvokeAsync("AddGuidanceItemsToView", new object[] {
-                    viewId,
-                    guidanceItemIds}, this.AddGuidanceItemsToViewOperationCompleted, userState);
-    }
-    
-    private void OnAddGuidanceItemsToViewOperationCompleted(object arg) {
-        if ((this.AddGuidanceItemsToViewCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.AddGuidanceItemsToViewCompleted(this, new AddGuidanceItemsToViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RemoveGuidanceItemsFromView", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool RemoveGuidanceItemsFromView(System.Guid viewId, System.Guid[] guidanceItemIds) {
-        object[] results = this.Invoke("RemoveGuidanceItemsFromView", new object[] {
-                    viewId,
-                    guidanceItemIds});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginRemoveGuidanceItemsFromView(System.Guid viewId, System.Guid[] guidanceItemIds, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("RemoveGuidanceItemsFromView", new object[] {
-                    viewId,
-                    guidanceItemIds}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndRemoveGuidanceItemsFromView(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void RemoveGuidanceItemsFromViewAsync(System.Guid viewId, System.Guid[] guidanceItemIds) {
-        this.RemoveGuidanceItemsFromViewAsync(viewId, guidanceItemIds, null);
-    }
-    
-    /// <remarks/>
-    public void RemoveGuidanceItemsFromViewAsync(System.Guid viewId, System.Guid[] guidanceItemIds, object userState) {
-        if ((this.RemoveGuidanceItemsFromViewOperationCompleted == null)) {
-            this.RemoveGuidanceItemsFromViewOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRemoveGuidanceItemsFromViewOperationCompleted);
-        }
-        this.InvokeAsync("RemoveGuidanceItemsFromView", new object[] {
-                    viewId,
-                    guidanceItemIds}, this.RemoveGuidanceItemsFromViewOperationCompleted, userState);
-    }
-    
-    private void OnRemoveGuidanceItemsFromViewOperationCompleted(object arg) {
-        if ((this.RemoveGuidanceItemsFromViewCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.RemoveGuidanceItemsFromViewCompleted(this, new RemoveGuidanceItemsFromViewCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RemoveViewFromFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool RemoveViewFromFolder(System.Guid libraryId, System.Guid viewId) {
-        object[] results = this.Invoke("RemoveViewFromFolder", new object[] {
-                    libraryId,
-                    viewId});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginRemoveViewFromFolder(System.Guid libraryId, System.Guid viewId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("RemoveViewFromFolder", new object[] {
-                    libraryId,
-                    viewId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndRemoveViewFromFolder(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void RemoveViewFromFolderAsync(System.Guid libraryId, System.Guid viewId) {
-        this.RemoveViewFromFolderAsync(libraryId, viewId, null);
-    }
-    
-    /// <remarks/>
-    public void RemoveViewFromFolderAsync(System.Guid libraryId, System.Guid viewId, object userState) {
-        if ((this.RemoveViewFromFolderOperationCompleted == null)) {
-            this.RemoveViewFromFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRemoveViewFromFolderOperationCompleted);
-        }
-        this.InvokeAsync("RemoveViewFromFolder", new object[] {
-                    libraryId,
-                    viewId}, this.RemoveViewFromFolderOperationCompleted, userState);
-    }
-    
-    private void OnRemoveViewFromFolderOperationCompleted(object arg) {
-        if ((this.RemoveViewFromFolderCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.RemoveViewFromFolderCompleted(this, new RemoveViewFromFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/MoveViewToFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool MoveViewToFolder(System.Guid viewId, System.Guid folderId) {
-        object[] results = this.Invoke("MoveViewToFolder", new object[] {
-                    viewId,
-                    folderId});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginMoveViewToFolder(System.Guid viewId, System.Guid folderId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("MoveViewToFolder", new object[] {
-                    viewId,
-                    folderId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndMoveViewToFolder(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void MoveViewToFolderAsync(System.Guid viewId, System.Guid folderId) {
-        this.MoveViewToFolderAsync(viewId, folderId, null);
-    }
-    
-    /// <remarks/>
-    public void MoveViewToFolderAsync(System.Guid viewId, System.Guid folderId, object userState) {
-        if ((this.MoveViewToFolderOperationCompleted == null)) {
-            this.MoveViewToFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnMoveViewToFolderOperationCompleted);
-        }
-        this.InvokeAsync("MoveViewToFolder", new object[] {
-                    viewId,
-                    folderId}, this.MoveViewToFolderOperationCompleted, userState);
-    }
-    
-    private void OnMoveViewToFolderOperationCompleted(object arg) {
-        if ((this.MoveViewToFolderCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.MoveViewToFolderCompleted(this, new MoveViewToFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateGuidanceItem", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public System.Guid CreateGuidanceItem(GuidanceItem_V3 guidanceItem) {
-        object[] results = this.Invoke("CreateGuidanceItem", new object[] {
-                    guidanceItem});
-        return ((System.Guid)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginCreateGuidanceItem(GuidanceItem_V3 guidanceItem, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("CreateGuidanceItem", new object[] {
-                    guidanceItem}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public System.Guid EndCreateGuidanceItem(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((System.Guid)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void CreateGuidanceItemAsync(GuidanceItem_V3 guidanceItem) {
-        this.CreateGuidanceItemAsync(guidanceItem, null);
-    }
-    
-    /// <remarks/>
-    public void CreateGuidanceItemAsync(GuidanceItem_V3 guidanceItem, object userState) {
-        if ((this.CreateGuidanceItemOperationCompleted == null)) {
-            this.CreateGuidanceItemOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateGuidanceItemOperationCompleted);
-        }
-        this.InvokeAsync("CreateGuidanceItem", new object[] {
-                    guidanceItem}, this.CreateGuidanceItemOperationCompleted, userState);
-    }
-    
-    private void OnCreateGuidanceItemOperationCompleted(object arg) {
-        if ((this.CreateGuidanceItemCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.CreateGuidanceItemCompleted(this, new CreateGuidanceItemCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/UpdateGuidanceItem", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool UpdateGuidanceItem(GuidanceItem_V3 guidanceItem) {
-        object[] results = this.Invoke("UpdateGuidanceItem", new object[] {
-                    guidanceItem});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginUpdateGuidanceItem(GuidanceItem_V3 guidanceItem, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("UpdateGuidanceItem", new object[] {
-                    guidanceItem}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndUpdateGuidanceItem(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void UpdateGuidanceItemAsync(GuidanceItem_V3 guidanceItem) {
-        this.UpdateGuidanceItemAsync(guidanceItem, null);
-    }
-    
-    /// <remarks/>
-    public void UpdateGuidanceItemAsync(GuidanceItem_V3 guidanceItem, object userState) {
-        if ((this.UpdateGuidanceItemOperationCompleted == null)) {
-            this.UpdateGuidanceItemOperationCompleted = new System.Threading.SendOrPostCallback(this.OnUpdateGuidanceItemOperationCompleted);
-        }
-        this.InvokeAsync("UpdateGuidanceItem", new object[] {
-                    guidanceItem}, this.UpdateGuidanceItemOperationCompleted, userState);
-    }
-    
-    private void OnUpdateGuidanceItemOperationCompleted(object arg) {
-        if ((this.UpdateGuidanceItemCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.UpdateGuidanceItemCompleted(this, new UpdateGuidanceItemCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteGuidanceItem", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool DeleteGuidanceItem(System.Guid guidanceItemId) {
-        object[] results = this.Invoke("DeleteGuidanceItem", new object[] {
-                    guidanceItemId});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginDeleteGuidanceItem(System.Guid guidanceItemId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("DeleteGuidanceItem", new object[] {
-                    guidanceItemId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndDeleteGuidanceItem(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void DeleteGuidanceItemAsync(System.Guid guidanceItemId) {
-        this.DeleteGuidanceItemAsync(guidanceItemId, null);
-    }
-    
-    /// <remarks/>
-    public void DeleteGuidanceItemAsync(System.Guid guidanceItemId, object userState) {
-        if ((this.DeleteGuidanceItemOperationCompleted == null)) {
-            this.DeleteGuidanceItemOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteGuidanceItemOperationCompleted);
-        }
-        this.InvokeAsync("DeleteGuidanceItem", new object[] {
-                    guidanceItemId}, this.DeleteGuidanceItemOperationCompleted, userState);
-    }
-    
-    private void OnDeleteGuidanceItemOperationCompleted(object arg) {
-        if ((this.DeleteGuidanceItemCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.DeleteGuidanceItemCompleted(this, new DeleteGuidanceItemCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RenameFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool RenameFolder(System.Guid libraryId, System.Guid folderId, string newFolderName) {
-        object[] results = this.Invoke("RenameFolder", new object[] {
-                    libraryId,
-                    folderId,
-                    newFolderName});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginRenameFolder(System.Guid libraryId, System.Guid folderId, string newFolderName, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("RenameFolder", new object[] {
-                    libraryId,
-                    folderId,
-                    newFolderName}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndRenameFolder(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void RenameFolderAsync(System.Guid libraryId, System.Guid folderId, string newFolderName) {
-        this.RenameFolderAsync(libraryId, folderId, newFolderName, null);
-    }
-    
-    /// <remarks/>
-    public void RenameFolderAsync(System.Guid libraryId, System.Guid folderId, string newFolderName, object userState) {
-        if ((this.RenameFolderOperationCompleted == null)) {
-            this.RenameFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRenameFolderOperationCompleted);
-        }
-        this.InvokeAsync("RenameFolder", new object[] {
-                    libraryId,
-                    folderId,
-                    newFolderName}, this.RenameFolderOperationCompleted, userState);
-    }
-    
-    private void OnRenameFolderOperationCompleted(object arg) {
-        if ((this.RenameFolderCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.RenameFolderCompleted(this, new RenameFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public Folder_V3 CreateFolder(System.Guid libraryId, System.Guid parentFolderId, string newFolderName) {
-        object[] results = this.Invoke("CreateFolder", new object[] {
-                    libraryId,
-                    parentFolderId,
-                    newFolderName});
-        return ((Folder_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginCreateFolder(System.Guid libraryId, System.Guid parentFolderId, string newFolderName, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("CreateFolder", new object[] {
-                    libraryId,
-                    parentFolderId,
-                    newFolderName}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public Folder_V3 EndCreateFolder(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((Folder_V3)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void CreateFolderAsync(System.Guid libraryId, System.Guid parentFolderId, string newFolderName) {
-        this.CreateFolderAsync(libraryId, parentFolderId, newFolderName, null);
-    }
-    
-    /// <remarks/>
-    public void CreateFolderAsync(System.Guid libraryId, System.Guid parentFolderId, string newFolderName, object userState) {
-        if ((this.CreateFolderOperationCompleted == null)) {
-            this.CreateFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateFolderOperationCompleted);
-        }
-        this.InvokeAsync("CreateFolder", new object[] {
-                    libraryId,
-                    parentFolderId,
-                    newFolderName}, this.CreateFolderOperationCompleted, userState);
-    }
-    
-    private void OnCreateFolderOperationCompleted(object arg) {
-        if ((this.CreateFolderCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.CreateFolderCompleted(this, new CreateFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteFolder", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool DeleteFolder(System.Guid libraryId, System.Guid folderId) {
-        object[] results = this.Invoke("DeleteFolder", new object[] {
-                    libraryId,
-                    folderId});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginDeleteFolder(System.Guid libraryId, System.Guid folderId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("DeleteFolder", new object[] {
-                    libraryId,
-                    folderId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndDeleteFolder(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void DeleteFolderAsync(System.Guid libraryId, System.Guid folderId) {
-        this.DeleteFolderAsync(libraryId, folderId, null);
-    }
-    
-    /// <remarks/>
-    public void DeleteFolderAsync(System.Guid libraryId, System.Guid folderId, object userState) {
-        if ((this.DeleteFolderOperationCompleted == null)) {
-            this.DeleteFolderOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteFolderOperationCompleted);
-        }
-        this.InvokeAsync("DeleteFolder", new object[] {
-                    libraryId,
-                    folderId}, this.DeleteFolderOperationCompleted, userState);
-    }
-    
-    private void OnDeleteFolderOperationCompleted(object arg) {
-        if ((this.DeleteFolderCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.DeleteFolderCompleted(this, new DeleteFolderCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteLibrary", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool DeleteLibrary(System.Guid libraryId) {
-        object[] results = this.Invoke("DeleteLibrary", new object[] {
-                    libraryId});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginDeleteLibrary(System.Guid libraryId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("DeleteLibrary", new object[] {
-                    libraryId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndDeleteLibrary(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void DeleteLibraryAsync(System.Guid libraryId) {
-        this.DeleteLibraryAsync(libraryId, null);
-    }
-    
-    /// <remarks/>
-    public void DeleteLibraryAsync(System.Guid libraryId, object userState) {
-        if ((this.DeleteLibraryOperationCompleted == null)) {
-            this.DeleteLibraryOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteLibraryOperationCompleted);
-        }
-        this.InvokeAsync("DeleteLibrary", new object[] {
-                    libraryId}, this.DeleteLibraryOperationCompleted, userState);
-    }
-    
-    private void OnDeleteLibraryOperationCompleted(object arg) {
-        if ((this.DeleteLibraryCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.DeleteLibraryCompleted(this, new DeleteLibraryCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/DeleteTempLibraries", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public System.Guid[] DeleteTempLibraries() {
-        object[] results = this.Invoke("DeleteTempLibraries", new object[0]);
-        return ((System.Guid[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginDeleteTempLibraries(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("DeleteTempLibraries", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public System.Guid[] EndDeleteTempLibraries(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((System.Guid[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void DeleteTempLibrariesAsync() {
-        this.DeleteTempLibrariesAsync(null);
-    }
-    
-    /// <remarks/>
-    public void DeleteTempLibrariesAsync(object userState) {
-        if ((this.DeleteTempLibrariesOperationCompleted == null)) {
-            this.DeleteTempLibrariesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnDeleteTempLibrariesOperationCompleted);
-        }
-        this.InvokeAsync("DeleteTempLibraries", new object[0], this.DeleteTempLibrariesOperationCompleted, userState);
-    }
-    
-    private void OnDeleteTempLibrariesOperationCompleted(object arg) {
-        if ((this.DeleteTempLibrariesCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.DeleteTempLibrariesCompleted(this, new DeleteTempLibrariesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/RenameGuidanceItemTitle", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public bool RenameGuidanceItemTitle(System.Guid guidanceItemId, string title) {
-        object[] results = this.Invoke("RenameGuidanceItemTitle", new object[] {
-                    guidanceItemId,
-                    title});
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginRenameGuidanceItemTitle(System.Guid guidanceItemId, string title, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("RenameGuidanceItemTitle", new object[] {
-                    guidanceItemId,
-                    title}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public bool EndRenameGuidanceItemTitle(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((bool)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void RenameGuidanceItemTitleAsync(System.Guid guidanceItemId, string title) {
-        this.RenameGuidanceItemTitleAsync(guidanceItemId, title, null);
-    }
-    
-    /// <remarks/>
-    public void RenameGuidanceItemTitleAsync(System.Guid guidanceItemId, string title, object userState) {
-        if ((this.RenameGuidanceItemTitleOperationCompleted == null)) {
-            this.RenameGuidanceItemTitleOperationCompleted = new System.Threading.SendOrPostCallback(this.OnRenameGuidanceItemTitleOperationCompleted);
-        }
-        this.InvokeAsync("RenameGuidanceItemTitle", new object[] {
-                    guidanceItemId,
-                    title}, this.RenameGuidanceItemTitleOperationCompleted, userState);
-    }
-    
-    private void OnRenameGuidanceItemTitleOperationCompleted(object arg) {
-        if ((this.RenameGuidanceItemTitleCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.RenameGuidanceItemTitleCompleted(this, new RenameGuidanceItemTitleCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceTypes", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public GuidanceType[] GetGuidanceTypes() {
-        object[] results = this.Invoke("GetGuidanceTypes", new object[0]);
-        return ((GuidanceType[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceTypes(System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceTypes", new object[0], callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public GuidanceType[] EndGetGuidanceTypes(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((GuidanceType[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceTypesAsync() {
-        this.GetGuidanceTypesAsync(null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceTypesAsync(object userState) {
-        if ((this.GetGuidanceTypesOperationCompleted == null)) {
-            this.GetGuidanceTypesOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceTypesOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceTypes", new object[0], this.GetGuidanceTypesOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceTypesOperationCompleted(object arg) {
-        if ((this.GetGuidanceTypesCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceTypesCompleted(this, new GetGuidanceTypesCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/CreateGuidanceType", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public GuidanceType CreateGuidanceType(GuidanceType guidanceType, string[] columns) {
-        object[] results = this.Invoke("CreateGuidanceType", new object[] {
-                    guidanceType,
-                    columns});
-        return ((GuidanceType)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginCreateGuidanceType(GuidanceType guidanceType, string[] columns, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("CreateGuidanceType", new object[] {
-                    guidanceType,
-                    columns}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public GuidanceType EndCreateGuidanceType(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((GuidanceType)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void CreateGuidanceTypeAsync(GuidanceType guidanceType, string[] columns) {
-        this.CreateGuidanceTypeAsync(guidanceType, columns, null);
-    }
-    
-    /// <remarks/>
-    public void CreateGuidanceTypeAsync(GuidanceType guidanceType, string[] columns, object userState) {
-        if ((this.CreateGuidanceTypeOperationCompleted == null)) {
-            this.CreateGuidanceTypeOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateGuidanceTypeOperationCompleted);
-        }
-        this.InvokeAsync("CreateGuidanceType", new object[] {
-                    guidanceType,
-                    columns}, this.CreateGuidanceTypeOperationCompleted, userState);
-    }
-    
-    private void OnCreateGuidanceTypeOperationCompleted(object arg) {
-        if ((this.CreateGuidanceTypeCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.CreateGuidanceTypeCompleted(this, new CreateGuidanceTypeCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceTypeById", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public GuidanceType GetGuidanceTypeById(string guidanceTypeId) {
-        object[] results = this.Invoke("GetGuidanceTypeById", new object[] {
-                    guidanceTypeId});
-        return ((GuidanceType)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceTypeById(string guidanceTypeId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceTypeById", new object[] {
-                    guidanceTypeId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public GuidanceType EndGetGuidanceTypeById(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((GuidanceType)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceTypeByIdAsync(string guidanceTypeId) {
-        this.GetGuidanceTypeByIdAsync(guidanceTypeId, null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceTypeByIdAsync(string guidanceTypeId, object userState) {
-        if ((this.GetGuidanceTypeByIdOperationCompleted == null)) {
-            this.GetGuidanceTypeByIdOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceTypeByIdOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceTypeById", new object[] {
-                    guidanceTypeId}, this.GetGuidanceTypeByIdOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceTypeByIdOperationCompleted(object arg) {
-        if ((this.GetGuidanceTypeByIdCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceTypeByIdCompleted(this, new GetGuidanceTypeByIdCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceTypeByName", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public GuidanceType GetGuidanceTypeByName(string guidanceTypeName) {
-        object[] results = this.Invoke("GetGuidanceTypeByName", new object[] {
-                    guidanceTypeName});
-        return ((GuidanceType)(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceTypeByName(string guidanceTypeName, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceTypeByName", new object[] {
-                    guidanceTypeName}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public GuidanceType EndGetGuidanceTypeByName(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((GuidanceType)(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceTypeByNameAsync(string guidanceTypeName) {
-        this.GetGuidanceTypeByNameAsync(guidanceTypeName, null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceTypeByNameAsync(string guidanceTypeName, object userState) {
-        if ((this.GetGuidanceTypeByNameOperationCompleted == null)) {
-            this.GetGuidanceTypeByNameOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceTypeByNameOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceTypeByName", new object[] {
-                    guidanceTypeName}, this.GetGuidanceTypeByNameOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceTypeByNameOperationCompleted(object arg) {
-        if ((this.GetGuidanceTypeByNameCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceTypeByNameCompleted(this, new GetGuidanceTypeByNameCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
-        }
-    }
-    
-    /// <remarks/>
-    [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/GetGuidanceTypeColumns", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-    public ColumnDefinition[] GetGuidanceTypeColumns(System.Guid guidanceTypeId) {
-        object[] results = this.Invoke("GetGuidanceTypeColumns", new object[] {
-                    guidanceTypeId});
-        return ((ColumnDefinition[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public System.IAsyncResult BeginGetGuidanceTypeColumns(System.Guid guidanceTypeId, System.AsyncCallback callback, object asyncState) {
-        return this.BeginInvoke("GetGuidanceTypeColumns", new object[] {
-                    guidanceTypeId}, callback, asyncState);
-    }
-    
-    /// <remarks/>
-    public ColumnDefinition[] EndGetGuidanceTypeColumns(System.IAsyncResult asyncResult) {
-        object[] results = this.EndInvoke(asyncResult);
-        return ((ColumnDefinition[])(results[0]));
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceTypeColumnsAsync(System.Guid guidanceTypeId) {
-        this.GetGuidanceTypeColumnsAsync(guidanceTypeId, null);
-    }
-    
-    /// <remarks/>
-    public void GetGuidanceTypeColumnsAsync(System.Guid guidanceTypeId, object userState) {
-        if ((this.GetGuidanceTypeColumnsOperationCompleted == null)) {
-            this.GetGuidanceTypeColumnsOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetGuidanceTypeColumnsOperationCompleted);
-        }
-        this.InvokeAsync("GetGuidanceTypeColumns", new object[] {
-                    guidanceTypeId}, this.GetGuidanceTypeColumnsOperationCompleted, userState);
-    }
-    
-    private void OnGetGuidanceTypeColumnsOperationCompleted(object arg) {
-        if ((this.GetGuidanceTypeColumnsCompleted != null)) {
-            System.Web.Services.Protocols.InvokeCompletedEventArgs invokeArgs = ((System.Web.Services.Protocols.InvokeCompletedEventArgs)(arg));
-            this.GetGuidanceTypeColumnsCompleted(this, new GetGuidanceTypeColumnsCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
+            this.GetAllFoldersCompleted(this, new GetAllFoldersCompletedEventArgs(invokeArgs.Results, invokeArgs.Error, invokeArgs.Cancelled, invokeArgs.UserState));
         }
     }
     
@@ -5303,732 +5754,65 @@ public partial class TM_WebServices : System.Web.Services.Protocols.SoapHttpClie
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class GuidanceType {
-    
-    private string idField;
-    
-    private string nameField;
-    
-    private string captionField;
-    
-    private string listCaptionField;
-    
-    private string newCaptionField;
-    
-    private string schemaIdField;
-    
-    private string exampleContentField;
-    
-    private string templateSchemaContentField;
-    
-    private string templateContentField;
-    
-    private System.DateTime lastUpdateField;
-    
-    private bool lastUpdateFieldSpecified;
-    
-    private bool deleteField;
-    
-    private bool deleteFieldSpecified;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string id {
-        get {
-            return this.idField;
-        }
-        set {
-            this.idField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string name {
-        get {
-            return this.nameField;
-        }
-        set {
-            this.nameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string caption {
-        get {
-            return this.captionField;
-        }
-        set {
-            this.captionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string listCaption {
-        get {
-            return this.listCaptionField;
-        }
-        set {
-            this.listCaptionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string newCaption {
-        get {
-            return this.newCaptionField;
-        }
-        set {
-            this.newCaptionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string schemaId {
-        get {
-            return this.schemaIdField;
-        }
-        set {
-            this.schemaIdField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string exampleContent {
-        get {
-            return this.exampleContentField;
-        }
-        set {
-            this.exampleContentField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string templateSchemaContent {
-        get {
-            return this.templateSchemaContentField;
-        }
-        set {
-            this.templateSchemaContentField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string templateContent {
-        get {
-            return this.templateContentField;
-        }
-        set {
-            this.templateContentField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public System.DateTime lastUpdate {
-        get {
-            return this.lastUpdateField;
-        }
-        set {
-            this.lastUpdateField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    public bool lastUpdateSpecified {
-        get {
-            return this.lastUpdateFieldSpecified;
-        }
-        set {
-            this.lastUpdateFieldSpecified = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public bool delete {
-        get {
-            return this.deleteField;
-        }
-        set {
-            this.deleteField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    public bool deleteSpecified {
-        get {
-            return this.deleteFieldSpecified;
-        }
-        set {
-            this.deleteFieldSpecified = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(Libraries))]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(NavigationTree))]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(View))]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(FolderStructure))]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(UserViews))]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(Library))]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(Folder))]
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class Identifiable {
-    
-    private string idField;
-    
-    private bool deleteField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string id {
-        get {
-            return this.idField;
-        }
-        set {
-            this.idField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public bool delete {
-        get {
-            return this.deleteField;
-        }
-        set {
-            this.deleteField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class Libraries : Identifiable {
-    
-    private Library[] libraryField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("Library")]
-    public Library[] Library {
-        get {
-            return this.libraryField;
-        }
-        set {
-            this.libraryField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class Library : FolderStructure {
-    
-    private bool readProtectionField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public bool readProtection {
-        get {
-            return this.readProtectionField;
-        }
-        set {
-            this.readProtectionField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(UserViews))]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(Library))]
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(Folder))]
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class FolderStructure : Identifiable {
-    
-    private View[] viewsField;
-    
-    private Folder[] foldersField;
-    
-    private string captionField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
-    public View[] Views {
-        get {
-            return this.viewsField;
-        }
-        set {
-            this.viewsField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
-    public Folder[] Folders {
-        get {
-            return this.foldersField;
-        }
-        set {
-            this.foldersField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string caption {
-        get {
-            return this.captionField;
-        }
-        set {
-            this.captionField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class View : Identifiable {
-    
-    private string captionField;
-    
-    private string creatorField;
-    
-    private string parentFolderField;
-    
-    private string libraryField;
-    
-    private string creatorCaptionField;
-    
-    private string criteriaField;
-    
-    private System.DateTime lastUpdateField;
-    
-    private bool lastUpdateFieldSpecified;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string caption {
-        get {
-            return this.captionField;
-        }
-        set {
-            this.captionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string creator {
-        get {
-            return this.creatorField;
-        }
-        set {
-            this.creatorField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string parentFolder {
-        get {
-            return this.parentFolderField;
-        }
-        set {
-            this.parentFolderField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string library {
-        get {
-            return this.libraryField;
-        }
-        set {
-            this.libraryField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string creatorCaption {
-        get {
-            return this.creatorCaptionField;
-        }
-        set {
-            this.creatorCaptionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string criteria {
-        get {
-            return this.criteriaField;
-        }
-        set {
-            this.criteriaField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public System.DateTime lastUpdate {
-        get {
-            return this.lastUpdateField;
-        }
-        set {
-            this.lastUpdateField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    public bool lastUpdateSpecified {
-        get {
-            return this.lastUpdateFieldSpecified;
-        }
-        set {
-            this.lastUpdateFieldSpecified = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class Folder : FolderStructure {
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class UserViews : FolderStructure {
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class NavigationTree : Identifiable {
-    
-    private UserViews userViewsField;
-    
-    private Libraries librariesField;
-    
-    /// <remarks/>
-    public UserViews UserViews {
-        get {
-            return this.userViewsField;
-        }
-        set {
-            this.userViewsField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public Libraries Libraries {
-        get {
-            return this.librariesField;
-        }
-        set {
-            this.librariesField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class ColumnDefinition {
-    
-    private string captionField;
-    
-    private bool sortEnabledField;
-    
-    private bool autoFilterEnabledField;
-    
-    private int schemaFieldIdField;
-    
-    private int widthField;
-    
-    private SortOrder sortOrderField;
-    
-    private bool sortOrderFieldSpecified;
-    
-    private string autoFilterField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string caption {
-        get {
-            return this.captionField;
-        }
-        set {
-            this.captionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public bool sortEnabled {
-        get {
-            return this.sortEnabledField;
-        }
-        set {
-            this.sortEnabledField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public bool autoFilterEnabled {
-        get {
-            return this.autoFilterEnabledField;
-        }
-        set {
-            this.autoFilterEnabledField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public int schemaFieldId {
-        get {
-            return this.schemaFieldIdField;
-        }
-        set {
-            this.schemaFieldIdField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public int width {
-        get {
-            return this.widthField;
-        }
-        set {
-            this.widthField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public SortOrder sortOrder {
-        get {
-            return this.sortOrderField;
-        }
-        set {
-            this.sortOrderField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlIgnoreAttribute()]
-    public bool sortOrderSpecified {
-        get {
-            return this.sortOrderFieldSpecified;
-        }
-        set {
-            this.sortOrderFieldSpecified = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string autoFilter {
-        get {
-            return this.autoFilterField;
-        }
-        set {
-            this.autoFilterField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public enum SortOrder {
-    
-    /// <remarks/>
-    None,
-    
-    /// <remarks/>
-    Ascending,
-    
-    /// <remarks/>
-    Descending,
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class TM_GuidanceItem {
+public partial class View_V3 {
     
-    private System.Guid idField;
+    private System.Guid libraryIdField;
     
-    private string titleField;
+    private System.Guid folderIdField;
     
-    private string topicField;
+    private System.Guid viewIdField;
     
-    private string technologyField;
-    
-    private string categoryField;
-    
-    private string ruleTypeField;
-    
-    private string priorityField;
-    
-    private string statusField;
+    private string captionField;
     
     private string authorField;
     
-    private System.DateTime lastUpdateField;
+    private string guidanceItems_IndexesField;
     
-    private string guidanceTypeField;
-    
-    private System.Guid libraryField;
+    private System.Guid[] guidanceItemsField;
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public System.Guid Id {
+    public System.Guid libraryId {
         get {
-            return this.idField;
+            return this.libraryIdField;
         }
         set {
-            this.idField = value;
+            this.libraryIdField = value;
         }
     }
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Title {
+    public System.Guid folderId {
         get {
-            return this.titleField;
+            return this.folderIdField;
         }
         set {
-            this.titleField = value;
+            this.folderIdField = value;
         }
     }
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Topic {
+    public System.Guid viewId {
         get {
-            return this.topicField;
+            return this.viewIdField;
         }
         set {
-            this.topicField = value;
+            this.viewIdField = value;
         }
     }
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Technology {
+    public string caption {
         get {
-            return this.technologyField;
+            return this.captionField;
         }
         set {
-            this.technologyField = value;
+            this.captionField = value;
         }
     }
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Category {
-        get {
-            return this.categoryField;
-        }
-        set {
-            this.categoryField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string RuleType {
-        get {
-            return this.ruleTypeField;
-        }
-        set {
-            this.ruleTypeField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Priority {
-        get {
-            return this.priorityField;
-        }
-        set {
-            this.priorityField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Status {
-        get {
-            return this.statusField;
-        }
-        set {
-            this.statusField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Author {
+    public string author {
         get {
             return this.authorField;
         }
@@ -6038,70 +5822,22 @@ public partial class TM_GuidanceItem {
     }
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public System.DateTime LastUpdate {
+    public string guidanceItems_Indexes {
         get {
-            return this.lastUpdateField;
+            return this.guidanceItems_IndexesField;
         }
         set {
-            this.lastUpdateField = value;
+            this.guidanceItems_IndexesField = value;
         }
     }
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string GuidanceType {
+    public System.Guid[] guidanceItems {
         get {
-            return this.guidanceTypeField;
+            return this.guidanceItemsField;
         }
         set {
-            this.guidanceTypeField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public System.Guid Library {
-        get {
-            return this.libraryField;
-        }
-        set {
-            this.libraryField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class TM_Library {
-    
-    private System.Guid idField;
-    
-    private string captionField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public System.Guid Id {
-        get {
-            return this.idField;
-        }
-        set {
-            this.idField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Caption {
-        get {
-            return this.captionField;
-        }
-        set {
-            this.captionField = value;
+            this.guidanceItemsField = value;
         }
     }
 }
@@ -6192,127 +5928,30 @@ public partial class NewUser {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="https://TeamMentor.securityinnovation.com:13415/")]
-public partial class TMUser {
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+public partial class TM_GUI_Objects {
     
-    private int userIDField;
+    private string[] guidanceItemsMappingsField;
     
-    private string userNameField;
-    
-    private string firstNameField;
-    
-    private string lastNameField;
-    
-    private string titleField;
-    
-    private string companyField;
-    
-    private string eMailField;
-    
-    private int groupIDField;
-    
-    private bool isActiveField;
-    
-    private System.Nullable<System.DateTime> expirationDateField;
+    private string[] uniqueStringsField;
     
     /// <remarks/>
-    public int UserID {
+    public string[] GuidanceItemsMappings {
         get {
-            return this.userIDField;
+            return this.guidanceItemsMappingsField;
         }
         set {
-            this.userIDField = value;
+            this.guidanceItemsMappingsField = value;
         }
     }
     
     /// <remarks/>
-    public string UserName {
+    public string[] UniqueStrings {
         get {
-            return this.userNameField;
+            return this.uniqueStringsField;
         }
         set {
-            this.userNameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string FirstName {
-        get {
-            return this.firstNameField;
-        }
-        set {
-            this.firstNameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string LastName {
-        get {
-            return this.lastNameField;
-        }
-        set {
-            this.lastNameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Title {
-        get {
-            return this.titleField;
-        }
-        set {
-            this.titleField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string Company {
-        get {
-            return this.companyField;
-        }
-        set {
-            this.companyField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string EMail {
-        get {
-            return this.eMailField;
-        }
-        set {
-            this.eMailField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public int GroupID {
-        get {
-            return this.groupIDField;
-        }
-        set {
-            this.groupIDField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public bool IsActive {
-        get {
-            return this.isActiveField;
-        }
-        set {
-            this.isActiveField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-    public System.Nullable<System.DateTime> ExpirationDate {
-        get {
-            return this.expirationDateField;
-        }
-        set {
-            this.expirationDateField = value;
+            this.uniqueStringsField = value;
         }
     }
 }
@@ -6479,29 +6118,101 @@ public partial class JsTree {
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class TM_GUI_Objects {
+public partial class TMConfig {
     
-    private string[] guidanceItemsMappingsField;
+    private string versionField;
     
-    private string[] uniqueStringsField;
+    private string webSite_PortField;
+    
+    private string webSite_IPField;
+    
+    private string xmlLibrariesPathField;
+    
+    private string[] libraries_DisabledField;
     
     /// <remarks/>
-    public string[] GuidanceItemsMappings {
+    public string Version {
         get {
-            return this.guidanceItemsMappingsField;
+            return this.versionField;
         }
         set {
-            this.guidanceItemsMappingsField = value;
+            this.versionField = value;
         }
     }
     
     /// <remarks/>
-    public string[] UniqueStrings {
+    public string WebSite_Port {
         get {
-            return this.uniqueStringsField;
+            return this.webSite_PortField;
         }
         set {
-            this.uniqueStringsField = value;
+            this.webSite_PortField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string WebSite_IP {
+        get {
+            return this.webSite_IPField;
+        }
+        set {
+            this.webSite_IPField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string XmlLibrariesPath {
+        get {
+            return this.xmlLibrariesPathField;
+        }
+        set {
+            this.xmlLibrariesPathField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string[] Libraries_Disabled {
+        get {
+            return this.libraries_DisabledField;
+        }
+        set {
+            this.libraries_DisabledField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(Item))]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+public partial class NameValuePairOfStringString {
+    
+    private string keyField;
+    
+    private string valueField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Key {
+        get {
+            return this.keyField;
+        }
+        set {
+            this.keyField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Value {
+        get {
+            return this.valueField;
+        }
+        set {
+            this.valueField = value;
         }
     }
 }
@@ -6512,217 +6223,7 @@ public partial class TM_GUI_Objects {
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class View_V3 {
-    
-    private System.Guid libraryIdField;
-    
-    private System.Guid folderIdField;
-    
-    private System.Guid viewIdField;
-    
-    private string captionField;
-    
-    private string authorField;
-    
-    private string guidanceItems_IndexesField;
-    
-    private System.Guid[] guidanceItemsField;
-    
-    /// <remarks/>
-    public System.Guid libraryId {
-        get {
-            return this.libraryIdField;
-        }
-        set {
-            this.libraryIdField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public System.Guid folderId {
-        get {
-            return this.folderIdField;
-        }
-        set {
-            this.folderIdField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public System.Guid viewId {
-        get {
-            return this.viewIdField;
-        }
-        set {
-            this.viewIdField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string caption {
-        get {
-            return this.captionField;
-        }
-        set {
-            this.captionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string author {
-        get {
-            return this.authorField;
-        }
-        set {
-            this.authorField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string guidanceItems_Indexes {
-        get {
-            return this.guidanceItems_IndexesField;
-        }
-        set {
-            this.guidanceItems_IndexesField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public System.Guid[] guidanceItems {
-        get {
-            return this.guidanceItemsField;
-        }
-        set {
-            this.guidanceItemsField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class Folder_V3 {
-    
-    private System.Guid libraryIdField;
-    
-    private System.Guid folderIdField;
-    
-    private string nameField;
-    
-    private View_V3[] viewsField;
-    
-    private Folder_V3[] subFoldersField;
-    
-    /// <remarks/>
-    public System.Guid libraryId {
-        get {
-            return this.libraryIdField;
-        }
-        set {
-            this.libraryIdField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public System.Guid folderId {
-        get {
-            return this.folderIdField;
-        }
-        set {
-            this.folderIdField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string name {
-        get {
-            return this.nameField;
-        }
-        set {
-            this.nameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public View_V3[] views {
-        get {
-            return this.viewsField;
-        }
-        set {
-            this.viewsField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public Folder_V3[] subFolders {
-        get {
-            return this.subFoldersField;
-        }
-        set {
-            this.subFoldersField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class Library_V3 {
-    
-    private System.Guid libraryIdField;
-    
-    private string nameField;
-    
-    private Folder_V3[] subFoldersField;
-    
-    private View_V3[] viewsField;
-    
-    /// <remarks/>
-    public System.Guid libraryId {
-        get {
-            return this.libraryIdField;
-        }
-        set {
-            this.libraryIdField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string name {
-        get {
-            return this.nameField;
-        }
-        set {
-            this.nameField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public Folder_V3[] subFolders {
-        get {
-            return this.subFoldersField;
-        }
-        set {
-            this.subFoldersField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public View_V3[] views {
-        get {
-            return this.viewsField;
-        }
-        set {
-            this.viewsField = value;
-        }
-    }
+public partial class Item : NameValuePairOfStringString {
 }
 
 /// <remarks/>
@@ -6965,90 +6466,58 @@ public partial class RequestData {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class TMConfig {
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class Field {
     
-    private string versionField;
+    private string idField;
     
-    private string webSite_PortField;
+    private string nameField;
     
-    private string webSite_IPField;
+    private FieldType typeField;
     
-    private string xmlLibrariesPathField;
-    
-    /// <remarks/>
-    public string Version {
-        get {
-            return this.versionField;
-        }
-        set {
-            this.versionField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string WebSite_Port {
-        get {
-            return this.webSite_PortField;
-        }
-        set {
-            this.webSite_PortField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string WebSite_IP {
-        get {
-            return this.webSite_IPField;
-        }
-        set {
-            this.webSite_IPField = value;
-        }
-    }
-    
-    /// <remarks/>
-    public string XmlLibrariesPath {
-        get {
-            return this.xmlLibrariesPathField;
-        }
-        set {
-            this.xmlLibrariesPathField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.Xml.Serialization.XmlIncludeAttribute(typeof(Item))]
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class NameValuePairOfStringString {
-    
-    private string keyField;
-    
-    private string valueField;
+    private bool distinctField;
     
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Key {
+    public string id {
         get {
-            return this.keyField;
+            return this.idField;
         }
         set {
-            this.keyField = value;
+            this.idField = value;
         }
     }
     
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string Value {
+    public string name {
         get {
-            return this.valueField;
+            return this.nameField;
         }
         set {
-            this.valueField = value;
+            this.nameField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public FieldType type {
+        get {
+            return this.typeField;
+        }
+        set {
+            this.typeField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public bool distinct {
+        get {
+            return this.distinctField;
+        }
+        set {
+            this.distinctField = value;
         }
     }
 }
@@ -7056,10 +6525,647 @@ public partial class NameValuePairOfStringString {
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
 [System.SerializableAttribute()]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public enum FieldType {
+    
+    /// <remarks/>
+    Text,
+    
+    /// <remarks/>
+    Combo,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class Schema {
+    
+    private Field[] fieldsField;
+    
+    private string idField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
+    public Field[] Fields {
+        get {
+            return this.fieldsField;
+        }
+        set {
+            this.fieldsField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string id {
+        get {
+            return this.idField;
+        }
+        set {
+            this.idField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class ColumnDefinition {
+    
+    private string captionField;
+    
+    private bool sortEnabledField;
+    
+    private bool autoFilterEnabledField;
+    
+    private int schemaFieldIdField;
+    
+    private int widthField;
+    
+    private SortOrder sortOrderField;
+    
+    private bool sortOrderFieldSpecified;
+    
+    private string autoFilterField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string caption {
+        get {
+            return this.captionField;
+        }
+        set {
+            this.captionField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public bool sortEnabled {
+        get {
+            return this.sortEnabledField;
+        }
+        set {
+            this.sortEnabledField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public bool autoFilterEnabled {
+        get {
+            return this.autoFilterEnabledField;
+        }
+        set {
+            this.autoFilterEnabledField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public int schemaFieldId {
+        get {
+            return this.schemaFieldIdField;
+        }
+        set {
+            this.schemaFieldIdField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public int width {
+        get {
+            return this.widthField;
+        }
+        set {
+            this.widthField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public SortOrder sortOrder {
+        get {
+            return this.sortOrderField;
+        }
+        set {
+            this.sortOrderField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool sortOrderSpecified {
+        get {
+            return this.sortOrderFieldSpecified;
+        }
+        set {
+            this.sortOrderFieldSpecified = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string autoFilter {
+        get {
+            return this.autoFilterField;
+        }
+        set {
+            this.autoFilterField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public enum SortOrder {
+    
+    /// <remarks/>
+    None,
+    
+    /// <remarks/>
+    Ascending,
+    
+    /// <remarks/>
+    Descending,
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class GuidanceType {
+    
+    private string idField;
+    
+    private string nameField;
+    
+    private string captionField;
+    
+    private string listCaptionField;
+    
+    private string newCaptionField;
+    
+    private string schemaIdField;
+    
+    private string exampleContentField;
+    
+    private string templateSchemaContentField;
+    
+    private string templateContentField;
+    
+    private System.DateTime lastUpdateField;
+    
+    private bool lastUpdateFieldSpecified;
+    
+    private bool deleteField;
+    
+    private bool deleteFieldSpecified;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string id {
+        get {
+            return this.idField;
+        }
+        set {
+            this.idField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string name {
+        get {
+            return this.nameField;
+        }
+        set {
+            this.nameField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string caption {
+        get {
+            return this.captionField;
+        }
+        set {
+            this.captionField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string listCaption {
+        get {
+            return this.listCaptionField;
+        }
+        set {
+            this.listCaptionField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string newCaption {
+        get {
+            return this.newCaptionField;
+        }
+        set {
+            this.newCaptionField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string schemaId {
+        get {
+            return this.schemaIdField;
+        }
+        set {
+            this.schemaIdField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string exampleContent {
+        get {
+            return this.exampleContentField;
+        }
+        set {
+            this.exampleContentField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string templateSchemaContent {
+        get {
+            return this.templateSchemaContentField;
+        }
+        set {
+            this.templateSchemaContentField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string templateContent {
+        get {
+            return this.templateContentField;
+        }
+        set {
+            this.templateContentField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public System.DateTime lastUpdate {
+        get {
+            return this.lastUpdateField;
+        }
+        set {
+            this.lastUpdateField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool lastUpdateSpecified {
+        get {
+            return this.lastUpdateFieldSpecified;
+        }
+        set {
+            this.lastUpdateFieldSpecified = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public bool delete {
+        get {
+            return this.deleteField;
+        }
+        set {
+            this.deleteField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool deleteSpecified {
+        get {
+            return this.deleteFieldSpecified;
+        }
+        set {
+            this.deleteFieldSpecified = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-public partial class Item : NameValuePairOfStringString {
+public partial class TM_Library {
+    
+    private System.Guid idField;
+    
+    private string captionField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public System.Guid Id {
+        get {
+            return this.idField;
+        }
+        set {
+            this.idField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Caption {
+        get {
+            return this.captionField;
+        }
+        set {
+            this.captionField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+public partial class Library_V3 {
+    
+    private System.Guid libraryIdField;
+    
+    private string nameField;
+    
+    private Folder_V3[] subFoldersField;
+    
+    private View_V3[] viewsField;
+    
+    /// <remarks/>
+    public System.Guid libraryId {
+        get {
+            return this.libraryIdField;
+        }
+        set {
+            this.libraryIdField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string name {
+        get {
+            return this.nameField;
+        }
+        set {
+            this.nameField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public Folder_V3[] subFolders {
+        get {
+            return this.subFoldersField;
+        }
+        set {
+            this.subFoldersField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public View_V3[] views {
+        get {
+            return this.viewsField;
+        }
+        set {
+            this.viewsField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+public partial class Folder_V3 {
+    
+    private System.Guid libraryIdField;
+    
+    private System.Guid folderIdField;
+    
+    private string nameField;
+    
+    private View_V3[] viewsField;
+    
+    private Folder_V3[] subFoldersField;
+    
+    /// <remarks/>
+    public System.Guid libraryId {
+        get {
+            return this.libraryIdField;
+        }
+        set {
+            this.libraryIdField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public System.Guid folderId {
+        get {
+            return this.folderIdField;
+        }
+        set {
+            this.folderIdField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string name {
+        get {
+            return this.nameField;
+        }
+        set {
+            this.nameField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public View_V3[] views {
+        get {
+            return this.viewsField;
+        }
+        set {
+            this.viewsField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public Folder_V3[] subFolders {
+        get {
+            return this.subFoldersField;
+        }
+        set {
+            this.subFoldersField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="https://TeamMentor.securityinnovation.com:13415/")]
+public partial class TMUser {
+    
+    private int userIDField;
+    
+    private string userNameField;
+    
+    private string firstNameField;
+    
+    private string lastNameField;
+    
+    private string titleField;
+    
+    private string companyField;
+    
+    private string eMailField;
+    
+    private int groupIDField;
+    
+    private bool isActiveField;
+    
+    private System.Nullable<System.DateTime> expirationDateField;
+    
+    /// <remarks/>
+    public int UserID {
+        get {
+            return this.userIDField;
+        }
+        set {
+            this.userIDField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string UserName {
+        get {
+            return this.userNameField;
+        }
+        set {
+            this.userNameField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string FirstName {
+        get {
+            return this.firstNameField;
+        }
+        set {
+            this.firstNameField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string LastName {
+        get {
+            return this.lastNameField;
+        }
+        set {
+            this.lastNameField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string Title {
+        get {
+            return this.titleField;
+        }
+        set {
+            this.titleField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string Company {
+        get {
+            return this.companyField;
+        }
+        set {
+            this.companyField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public string EMail {
+        get {
+            return this.eMailField;
+        }
+        set {
+            this.eMailField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public int GroupID {
+        get {
+            return this.groupIDField;
+        }
+        set {
+            this.groupIDField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public bool IsActive {
+        get {
+            return this.isActiveField;
+        }
+        set {
+            this.isActiveField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+    public System.Nullable<System.DateTime> ExpirationDate {
+        get {
+            return this.expirationDateField;
+        }
+        set {
+            this.expirationDateField = value;
+        }
+    }
 }
 
 /// <remarks/>
@@ -7276,20 +7382,23 @@ public partial class GuidanceItem_V3 {
 }
 
 /// <remarks/>
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(NavigationTree))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(Libraries))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(View))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(FolderStructure))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(UserViews))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(Library))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(Folder))]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class Field {
+public partial class Identifiable {
     
     private string idField;
     
-    private string nameField;
-    
-    private FieldType typeField;
-    
-    private bool distinctField;
+    private bool deleteField;
     
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -7304,49 +7413,14 @@ public partial class Field {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string name {
+    public bool delete {
         get {
-            return this.nameField;
+            return this.deleteField;
         }
         set {
-            this.nameField = value;
+            this.deleteField = value;
         }
     }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public FieldType type {
-        get {
-            return this.typeField;
-        }
-        set {
-            this.typeField = value;
-        }
-    }
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public bool distinct {
-        get {
-            return this.distinctField;
-        }
-        set {
-            this.distinctField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.SerializableAttribute()]
-[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public enum FieldType {
-    
-    /// <remarks/>
-    Text,
-    
-    /// <remarks/>
-    Combo,
 }
 
 /// <remarks/>
@@ -7355,31 +7429,1542 @@ public enum FieldType {
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
-public partial class Schema {
+public partial class NavigationTree : Identifiable {
     
-    private Field[] fieldsField;
+    private UserViews userViewsField;
     
-    private string idField;
+    private Libraries librariesField;
+    
+    /// <remarks/>
+    public UserViews UserViews {
+        get {
+            return this.userViewsField;
+        }
+        set {
+            this.userViewsField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public Libraries Libraries {
+        get {
+            return this.librariesField;
+        }
+        set {
+            this.librariesField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class UserViews : FolderStructure {
+}
+
+/// <remarks/>
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(UserViews))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(Library))]
+[System.Xml.Serialization.XmlIncludeAttribute(typeof(Folder))]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class FolderStructure : Identifiable {
+    
+    private View[] viewsField;
+    
+    private Folder[] foldersField;
+    
+    private string captionField;
     
     /// <remarks/>
     [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
-    public Field[] Fields {
+    public View[] Views {
         get {
-            return this.fieldsField;
+            return this.viewsField;
         }
         set {
-            this.fieldsField = value;
+            this.viewsField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlArrayItemAttribute(IsNullable=false)]
+    public Folder[] Folders {
+        get {
+            return this.foldersField;
+        }
+        set {
+            this.foldersField = value;
         }
     }
     
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string id {
+    public string caption {
+        get {
+            return this.captionField;
+        }
+        set {
+            this.captionField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class View : Identifiable {
+    
+    private string captionField;
+    
+    private string creatorField;
+    
+    private string parentFolderField;
+    
+    private string libraryField;
+    
+    private string creatorCaptionField;
+    
+    private string criteriaField;
+    
+    private System.DateTime lastUpdateField;
+    
+    private bool lastUpdateFieldSpecified;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string caption {
+        get {
+            return this.captionField;
+        }
+        set {
+            this.captionField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string creator {
+        get {
+            return this.creatorField;
+        }
+        set {
+            this.creatorField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string parentFolder {
+        get {
+            return this.parentFolderField;
+        }
+        set {
+            this.parentFolderField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string library {
+        get {
+            return this.libraryField;
+        }
+        set {
+            this.libraryField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string creatorCaption {
+        get {
+            return this.creatorCaptionField;
+        }
+        set {
+            this.creatorCaptionField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string criteria {
+        get {
+            return this.criteriaField;
+        }
+        set {
+            this.criteriaField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public System.DateTime lastUpdate {
+        get {
+            return this.lastUpdateField;
+        }
+        set {
+            this.lastUpdateField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlIgnoreAttribute()]
+    public bool lastUpdateSpecified {
+        get {
+            return this.lastUpdateFieldSpecified;
+        }
+        set {
+            this.lastUpdateFieldSpecified = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class Folder : FolderStructure {
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class Library : FolderStructure {
+    
+    private bool readProtectionField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public bool readProtection {
+        get {
+            return this.readProtectionField;
+        }
+        set {
+            this.readProtectionField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.microsoft.com/pag/guidanceonlinestorage")]
+public partial class Libraries : Identifiable {
+    
+    private Library[] libraryField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("Library")]
+    public Library[] Library {
+        get {
+            return this.libraryField;
+        }
+        set {
+            this.libraryField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
+public partial class TM_GuidanceItem {
+    
+    private System.Guid idField;
+    
+    private string titleField;
+    
+    private string topicField;
+    
+    private string technologyField;
+    
+    private string categoryField;
+    
+    private string ruleTypeField;
+    
+    private string priorityField;
+    
+    private string statusField;
+    
+    private string authorField;
+    
+    private System.DateTime lastUpdateField;
+    
+    private string guidanceTypeField;
+    
+    private System.Guid libraryField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public System.Guid Id {
         get {
             return this.idField;
         }
         set {
             this.idField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Title {
+        get {
+            return this.titleField;
+        }
+        set {
+            this.titleField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Topic {
+        get {
+            return this.topicField;
+        }
+        set {
+            this.topicField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Technology {
+        get {
+            return this.technologyField;
+        }
+        set {
+            this.technologyField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Category {
+        get {
+            return this.categoryField;
+        }
+        set {
+            this.categoryField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string RuleType {
+        get {
+            return this.ruleTypeField;
+        }
+        set {
+            this.ruleTypeField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Priority {
+        get {
+            return this.priorityField;
+        }
+        set {
+            this.priorityField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Status {
+        get {
+            return this.statusField;
+        }
+        set {
+            this.statusField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Author {
+        get {
+            return this.authorField;
+        }
+        set {
+            this.authorField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public System.DateTime LastUpdate {
+        get {
+            return this.lastUpdateField;
+        }
+        set {
+            this.lastUpdateField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string GuidanceType {
+        get {
+            return this.guidanceTypeField;
+        }
+        set {
+            this.guidanceTypeField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public System.Guid Library {
+        get {
+            return this.libraryField;
+        }
+        set {
+            this.libraryField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetAllViewsCompletedEventHandler(object sender, GetAllViewsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetAllViewsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetAllViewsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public View_V3[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((View_V3[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetFoldersCompletedEventHandler(object sender, GetFoldersCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetFoldersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetFoldersCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public Folder_V3[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((Folder_V3[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceItemsInFolderCompletedEventHandler(object sender, GetGuidanceItemsInFolderCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceItemsInFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceItemsInFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TM_GuidanceItem[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceItemsInViewCompletedEventHandler(object sender, GetGuidanceItemsInViewCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceItemsInViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceItemsInViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TM_GuidanceItem[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceItemsInViewsCompletedEventHandler(object sender, GetGuidanceItemsInViewsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceItemsInViewsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceItemsInViewsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TM_GuidanceItem[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceItemHtmlCompletedEventHandler(object sender, GetGuidanceItemHtmlCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceItemHtmlCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceItemHtmlCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetAllGuidanceItemsCompletedEventHandler(object sender, GetAllGuidanceItemsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetAllGuidanceItemsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetAllGuidanceItemsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TM_GuidanceItem[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceItemsInLibraryCompletedEventHandler(object sender, GetGuidanceItemsInLibraryCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceItemsInLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceItemsInLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TM_GuidanceItem[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TM_GuidanceItem[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetViewsInLibraryRootCompletedEventHandler(object sender, GetViewsInLibraryRootCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetViewsInLibraryRootCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetViewsInLibraryRootCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public View_V3[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((View_V3[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetViewByIdCompletedEventHandler(object sender, GetViewByIdCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetViewByIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetViewByIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public View_V3 Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((View_V3)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void LogUserGUIDCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetAllLibraryIdsCompletedEventHandler(object sender, GetAllLibraryIdsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetAllLibraryIdsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetAllLibraryIdsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetLibraryByIdCompletedEventHandler(object sender, GetLibraryByIdCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetLibraryByIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetLibraryByIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public Library Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((Library)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetLibraryByNameCompletedEventHandler(object sender, GetLibraryByNameCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetLibraryByNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetLibraryByNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public Library Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((Library)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceItemByIdCompletedEventHandler(object sender, GetGuidanceItemByIdCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceItemByIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceItemByIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public GuidanceItem_V3 Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((GuidanceItem_V3)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetAllUserLogsCompletedEventHandler(object sender, GetAllUserLogsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetAllUserLogsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetAllUserLogsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetActiveSessionsCompletedEventHandler(object sender, GetActiveSessionsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetActiveSessionsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetActiveSessionsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public System.Guid[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((System.Guid[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetActiveSessionCompletedEventHandler(object sender, GetActiveSessionCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetActiveSessionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetActiveSessionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TMUser Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TMUser)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void CreateLibraryCompletedEventHandler(object sender, CreateLibraryCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class CreateLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal CreateLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public Library_V3 Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((Library_V3)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void UpdateLibraryCompletedEventHandler(object sender, UpdateLibraryCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class UpdateLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal UpdateLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void UnDeleteLibraryCompletedEventHandler(object sender, UnDeleteLibraryCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class UnDeleteLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal UnDeleteLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetDeletedLibrariesCompletedEventHandler(object sender, GetDeletedLibrariesCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetDeletedLibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetDeletedLibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TM_Library[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TM_Library[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void DeleteDeletedLibrariesCompletedEventHandler(object sender, DeleteDeletedLibrariesCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class DeleteDeletedLibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal DeleteDeletedLibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void CreateViewCompletedEventHandler(object sender, CreateViewCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class CreateViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal CreateViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public View_V3 Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((View_V3)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void UpdateViewCompletedEventHandler(object sender, UpdateViewCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class UpdateViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal UpdateViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void AddGuidanceItemsToViewCompletedEventHandler(object sender, AddGuidanceItemsToViewCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class AddGuidanceItemsToViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal AddGuidanceItemsToViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void RemoveGuidanceItemsFromViewCompletedEventHandler(object sender, RemoveGuidanceItemsFromViewCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class RemoveGuidanceItemsFromViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal RemoveGuidanceItemsFromViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void RemoveViewFromFolderCompletedEventHandler(object sender, RemoveViewFromFolderCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class RemoveViewFromFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal RemoveViewFromFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void MoveViewToFolderCompletedEventHandler(object sender, MoveViewToFolderCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class MoveViewToFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal MoveViewToFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void CreateGuidanceItemCompletedEventHandler(object sender, CreateGuidanceItemCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class CreateGuidanceItemCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal CreateGuidanceItemCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public System.Guid Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((System.Guid)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void UpdateGuidanceItemCompletedEventHandler(object sender, UpdateGuidanceItemCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class UpdateGuidanceItemCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal UpdateGuidanceItemCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void DeleteGuidanceItemCompletedEventHandler(object sender, DeleteGuidanceItemCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class DeleteGuidanceItemCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal DeleteGuidanceItemCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void RenameFolderCompletedEventHandler(object sender, RenameFolderCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class RenameFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal RenameFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void CreateFolderCompletedEventHandler(object sender, CreateFolderCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class CreateFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal CreateFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public Folder_V3 Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((Folder_V3)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void DeleteFolderCompletedEventHandler(object sender, DeleteFolderCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class DeleteFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal DeleteFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void DeleteLibraryCompletedEventHandler(object sender, DeleteLibraryCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class DeleteLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal DeleteLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void RenameLibraryCompletedEventHandler(object sender, RenameLibraryCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class RenameLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal RenameLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void DeleteTempLibrariesCompletedEventHandler(object sender, DeleteTempLibrariesCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class DeleteTempLibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal DeleteTempLibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public System.Guid[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((System.Guid[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void RenameGuidanceItemTitleCompletedEventHandler(object sender, RenameGuidanceItemTitleCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class RenameGuidanceItemTitleCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal RenameGuidanceItemTitleCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceTypesCompletedEventHandler(object sender, GetGuidanceTypesCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceTypesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceTypesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public GuidanceType[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((GuidanceType[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void CreateGuidanceTypeCompletedEventHandler(object sender, CreateGuidanceTypeCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class CreateGuidanceTypeCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal CreateGuidanceTypeCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public GuidanceType Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((GuidanceType)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceTypeByIdCompletedEventHandler(object sender, GetGuidanceTypeByIdCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceTypeByIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceTypeByIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public GuidanceType Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((GuidanceType)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceTypeByNameCompletedEventHandler(object sender, GetGuidanceTypeByNameCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceTypeByNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceTypeByNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public GuidanceType Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((GuidanceType)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceTypeColumnsCompletedEventHandler(object sender, GetGuidanceTypeColumnsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceTypeColumnsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceTypeColumnsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public ColumnDefinition[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((ColumnDefinition[])(this.results[0]));
         }
     }
 }
@@ -7499,6 +9084,162 @@ public partial class GetGuidanceItemKeywordsCompletedEventArgs : System.Componen
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
 public delegate void SetGuidanceItemKeywordsCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetPostDataCompletedEventHandler(object sender, GetPostDataCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetPostDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetPostDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetRequestDataCompletedEventHandler(object sender, GetRequestDataCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetRequestDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetRequestDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public RequestData Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((RequestData)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetPastRequestsCompletedEventHandler(object sender, GetPastRequestsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetPastRequestsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetPastRequestsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public RequestData[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((RequestData[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetLastRequestCompletedEventHandler(object sender, GetLastRequestCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetLastRequestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetLastRequestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public RequestData Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((RequestData)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void JsDataTableWithPastRequestsCompletedEventHandler(object sender, JsDataTableWithPastRequestsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class JsDataTableWithPastRequestsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal JsDataTableWithPastRequestsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public JsDataTable Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((JsDataTable)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetPagesHistoryCompletedEventHandler(object sender, GetPagesHistoryCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetPagesHistoryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetPagesHistoryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public ChangedPage[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((ChangedPage[])(this.results[0]));
+        }
+    }
+}
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
@@ -7730,6 +9471,32 @@ public partial class XmlDatabase_ReloadDataCompletedEventArgs : System.Component
         get {
             this.RaiseExceptionIfNecessary();
             return ((string)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void XmlDatabase_ImportLibrary_fromZipFileCompletedEventHandler(object sender, XmlDatabase_ImportLibrary_fromZipFileCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class XmlDatabase_ImportLibrary_fromZipFileCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal XmlDatabase_ImportLibrary_fromZipFileCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
         }
     }
 }
@@ -7996,6 +9763,32 @@ public partial class SyncWithGitHubCompletedEventArgs : System.ComponentModel.As
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void CreateWebEditorSecretCompletedEventHandler(object sender, CreateWebEditorSecretCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class CreateWebEditorSecretCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal CreateWebEditorSecretCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
 public delegate void TMConfigFileLocationCompletedEventHandler(object sender, TMConfigFileLocationCompletedEventArgs e);
 
 /// <remarks/>
@@ -8048,277 +9841,17 @@ public partial class TMConfigFileCompletedEventArgs : System.ComponentModel.Asyn
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void CreateWebEditorSecretCompletedEventHandler(object sender, CreateWebEditorSecretCompletedEventArgs e);
+public delegate void GetDisabledLibrariesCompletedEventHandler(object sender, GetDisabledLibrariesCompletedEventArgs e);
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class CreateWebEditorSecretCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+public partial class GetDisabledLibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
     
     private object[] results;
     
-    internal CreateWebEditorSecretCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public string Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((string)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetPostDataCompletedEventHandler(object sender, GetPostDataCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetPostDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetPostDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public string Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((string)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetRequestDataCompletedEventHandler(object sender, GetRequestDataCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetRequestDataCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetRequestDataCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public RequestData Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((RequestData)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetPastRequestsCompletedEventHandler(object sender, GetPastRequestsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetPastRequestsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetPastRequestsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public RequestData[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((RequestData[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetLastRequestCompletedEventHandler(object sender, GetLastRequestCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetLastRequestCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetLastRequestCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public RequestData Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((RequestData)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void JsDataTableWithPastRequestsCompletedEventHandler(object sender, JsDataTableWithPastRequestsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class JsDataTableWithPastRequestsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal JsDataTableWithPastRequestsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public JsDataTable Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((JsDataTable)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetPagesHistoryCompletedEventHandler(object sender, GetPagesHistoryCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetPagesHistoryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetPagesHistoryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public ChangedPage[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((ChangedPage[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetFolderStructure_LibrariesCompletedEventHandler(object sender, GetFolderStructure_LibrariesCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetFolderStructure_LibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetFolderStructure_LibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public Library_V3[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((Library_V3[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetFolderStructure_LibraryCompletedEventHandler(object sender, GetFolderStructure_LibraryCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetFolderStructure_LibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetFolderStructure_LibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public Library_V3 Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((Library_V3)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGUIObjectsCompletedEventHandler(object sender, GetGUIObjectsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGUIObjectsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGUIObjectsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public TM_GUI_Objects Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((TM_GUI_Objects)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetStringIndexesCompletedEventHandler(object sender, GetStringIndexesCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetStringIndexesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetStringIndexesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+    internal GetDisabledLibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
             base(exception, cancelled, userState) {
         this.results = results;
     }
@@ -8334,17 +9867,17 @@ public partial class GetStringIndexesCompletedEventArgs : System.ComponentModel.
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceItemsMappingsCompletedEventHandler(object sender, GetGuidanceItemsMappingsCompletedEventArgs e);
+public delegate void SetDisabledLibrariesCompletedEventHandler(object sender, SetDisabledLibrariesCompletedEventArgs e);
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceItemsMappingsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+public partial class SetDisabledLibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
     
     private object[] results;
     
-    internal GetGuidanceItemsMappingsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+    internal SetDisabledLibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
             base(exception, cancelled, userState) {
         this.results = results;
     }
@@ -8698,6 +10231,214 @@ public partial class logPageUserActivityCompletedEventArgs : System.ComponentMod
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetFolderStructure_LibrariesCompletedEventHandler(object sender, GetFolderStructure_LibrariesCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetFolderStructure_LibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetFolderStructure_LibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public Library_V3[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((Library_V3[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetFolderStructure_LibraryCompletedEventHandler(object sender, GetFolderStructure_LibraryCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetFolderStructure_LibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetFolderStructure_LibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public Library_V3 Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((Library_V3)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void ClearGUIObjectsCompletedEventHandler(object sender, ClearGUIObjectsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class ClearGUIObjectsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal ClearGUIObjectsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public bool Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((bool)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGUIObjectsCompletedEventHandler(object sender, GetGUIObjectsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGUIObjectsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGUIObjectsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TM_GUI_Objects Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TM_GUI_Objects)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetStringIndexesCompletedEventHandler(object sender, GetStringIndexesCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetStringIndexesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetStringIndexesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void GetGuidanceItemsMappingsCompletedEventHandler(object sender, GetGuidanceItemsMappingsCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class GetGuidanceItemsMappingsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal GetGuidanceItemsMappingsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public string[] Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((string[])(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void CreateUserCompletedEventHandler(object sender, CreateUserCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class CreateUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal CreateUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public int Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((int)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+public delegate void CreateUser_RandomCompletedEventHandler(object sender, CreateUser_RandomCompletedEventArgs e);
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class CreateUser_RandomCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+    
+    private object[] results;
+    
+    internal CreateUser_RandomCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+            base(exception, cancelled, userState) {
+        this.results = results;
+    }
+    
+    /// <remarks/>
+    public TMUser Result {
+        get {
+            this.RaiseExceptionIfNecessary();
+            return ((TMUser)(this.results[0]));
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
 public delegate void GetUser_byIDCompletedEventHandler(object sender, GetUser_byIDCompletedEventArgs e);
 
 /// <remarks/>
@@ -8770,58 +10511,6 @@ public partial class GetUsersCompletedEventArgs : System.ComponentModel.AsyncCom
         get {
             this.RaiseExceptionIfNecessary();
             return ((TMUser[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void CreateUserCompletedEventHandler(object sender, CreateUserCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class CreateUserCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal CreateUserCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public int Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((int)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void CreateUser_RandomCompletedEventHandler(object sender, CreateUser_RandomCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class CreateUser_RandomCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal CreateUser_RandomCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public TMUser Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((TMUser)(this.results[0]));
         }
     }
 }
@@ -9296,17 +10985,17 @@ public partial class GetLibrariesCompletedEventArgs : System.ComponentModel.Asyn
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetFoldersCompletedEventHandler(object sender, GetFoldersCompletedEventArgs e);
+public delegate void GetAllFoldersCompletedEventHandler(object sender, GetAllFoldersCompletedEventArgs e);
 
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetFoldersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
+public partial class GetAllFoldersCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
     
     private object[] results;
     
-    internal GetFoldersCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
+    internal GetAllFoldersCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
             base(exception, cancelled, userState) {
         this.results = results;
     }
@@ -9316,972 +11005,6 @@ public partial class GetFoldersCompletedEventArgs : System.ComponentModel.AsyncC
         get {
             this.RaiseExceptionIfNecessary();
             return ((Folder_V3[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceItemsInViewCompletedEventHandler(object sender, GetGuidanceItemsInViewCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceItemsInViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceItemsInViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public TM_GuidanceItem[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((TM_GuidanceItem[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceItemsInViewsCompletedEventHandler(object sender, GetGuidanceItemsInViewsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceItemsInViewsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceItemsInViewsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public TM_GuidanceItem[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((TM_GuidanceItem[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceItemHtmlCompletedEventHandler(object sender, GetGuidanceItemHtmlCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceItemHtmlCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceItemHtmlCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public string Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((string)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetAllGuidanceItemsCompletedEventHandler(object sender, GetAllGuidanceItemsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetAllGuidanceItemsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetAllGuidanceItemsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public TM_GuidanceItem[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((TM_GuidanceItem[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceItemsInLibraryCompletedEventHandler(object sender, GetGuidanceItemsInLibraryCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceItemsInLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceItemsInLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public TM_GuidanceItem[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((TM_GuidanceItem[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetViewByIdCompletedEventHandler(object sender, GetViewByIdCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetViewByIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetViewByIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public View_V3 Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((View_V3)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void LogUserGUIDCompletedEventHandler(object sender, System.ComponentModel.AsyncCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetAllLibraryIdsCompletedEventHandler(object sender, GetAllLibraryIdsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetAllLibraryIdsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetAllLibraryIdsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public string[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((string[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetLibraryByIdCompletedEventHandler(object sender, GetLibraryByIdCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetLibraryByIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetLibraryByIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public Library Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((Library)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceItemByIdCompletedEventHandler(object sender, GetGuidanceItemByIdCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceItemByIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceItemByIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public GuidanceItem_V3 Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((GuidanceItem_V3)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetAllUserLogsCompletedEventHandler(object sender, GetAllUserLogsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetAllUserLogsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetAllUserLogsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public string Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((string)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetActiveSessionsCompletedEventHandler(object sender, GetActiveSessionsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetActiveSessionsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetActiveSessionsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public System.Guid[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((System.Guid[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetActiveSessionCompletedEventHandler(object sender, GetActiveSessionCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetActiveSessionCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetActiveSessionCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public TMUser Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((TMUser)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void CreateLibraryCompletedEventHandler(object sender, CreateLibraryCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class CreateLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal CreateLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void UpdateLibraryCompletedEventHandler(object sender, UpdateLibraryCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class UpdateLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal UpdateLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void UnDeleteLibraryCompletedEventHandler(object sender, UnDeleteLibraryCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class UnDeleteLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal UnDeleteLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetDeletedLibrariesCompletedEventHandler(object sender, GetDeletedLibrariesCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetDeletedLibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetDeletedLibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public TM_Library[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((TM_Library[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void DeleteDeletedLibrariesCompletedEventHandler(object sender, DeleteDeletedLibrariesCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class DeleteDeletedLibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal DeleteDeletedLibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void CreateViewCompletedEventHandler(object sender, CreateViewCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class CreateViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal CreateViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public View_V3 Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((View_V3)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void UpdateViewCompletedEventHandler(object sender, UpdateViewCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class UpdateViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal UpdateViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void AddGuidanceItemsToViewCompletedEventHandler(object sender, AddGuidanceItemsToViewCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class AddGuidanceItemsToViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal AddGuidanceItemsToViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void RemoveGuidanceItemsFromViewCompletedEventHandler(object sender, RemoveGuidanceItemsFromViewCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class RemoveGuidanceItemsFromViewCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal RemoveGuidanceItemsFromViewCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void RemoveViewFromFolderCompletedEventHandler(object sender, RemoveViewFromFolderCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class RemoveViewFromFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal RemoveViewFromFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void MoveViewToFolderCompletedEventHandler(object sender, MoveViewToFolderCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class MoveViewToFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal MoveViewToFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void CreateGuidanceItemCompletedEventHandler(object sender, CreateGuidanceItemCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class CreateGuidanceItemCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal CreateGuidanceItemCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public System.Guid Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((System.Guid)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void UpdateGuidanceItemCompletedEventHandler(object sender, UpdateGuidanceItemCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class UpdateGuidanceItemCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal UpdateGuidanceItemCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void DeleteGuidanceItemCompletedEventHandler(object sender, DeleteGuidanceItemCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class DeleteGuidanceItemCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal DeleteGuidanceItemCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void RenameFolderCompletedEventHandler(object sender, RenameFolderCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class RenameFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal RenameFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void CreateFolderCompletedEventHandler(object sender, CreateFolderCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class CreateFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal CreateFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public Folder_V3 Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((Folder_V3)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void DeleteFolderCompletedEventHandler(object sender, DeleteFolderCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class DeleteFolderCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal DeleteFolderCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void DeleteLibraryCompletedEventHandler(object sender, DeleteLibraryCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class DeleteLibraryCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal DeleteLibraryCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void DeleteTempLibrariesCompletedEventHandler(object sender, DeleteTempLibrariesCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class DeleteTempLibrariesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal DeleteTempLibrariesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public System.Guid[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((System.Guid[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void RenameGuidanceItemTitleCompletedEventHandler(object sender, RenameGuidanceItemTitleCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class RenameGuidanceItemTitleCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal RenameGuidanceItemTitleCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public bool Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((bool)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceTypesCompletedEventHandler(object sender, GetGuidanceTypesCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceTypesCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceTypesCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public GuidanceType[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((GuidanceType[])(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void CreateGuidanceTypeCompletedEventHandler(object sender, CreateGuidanceTypeCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class CreateGuidanceTypeCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal CreateGuidanceTypeCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public GuidanceType Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((GuidanceType)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceTypeByIdCompletedEventHandler(object sender, GetGuidanceTypeByIdCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceTypeByIdCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceTypeByIdCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public GuidanceType Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((GuidanceType)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceTypeByNameCompletedEventHandler(object sender, GetGuidanceTypeByNameCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceTypeByNameCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceTypeByNameCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public GuidanceType Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((GuidanceType)(this.results[0]));
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-public delegate void GetGuidanceTypeColumnsCompletedEventHandler(object sender, GetGuidanceTypeColumnsCompletedEventArgs e);
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("wsdl", "2.0.50727.1432")]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class GetGuidanceTypeColumnsCompletedEventArgs : System.ComponentModel.AsyncCompletedEventArgs {
-    
-    private object[] results;
-    
-    internal GetGuidanceTypeColumnsCompletedEventArgs(object[] results, System.Exception exception, bool cancelled, object userState) : 
-            base(exception, cancelled, userState) {
-        this.results = results;
-    }
-    
-    /// <remarks/>
-    public ColumnDefinition[] Result {
-        get {
-            this.RaiseExceptionIfNecessary();
-            return ((ColumnDefinition[])(this.results[0]));
         }
     }
 }
