@@ -31,13 +31,19 @@ namespace O2.SecurityInnovation.TeamMentor
 			WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES = 60;
 			
 		}
-		
 		public void executeQUnitTestFile(string QUnitFile)
+		{
+			executeQUnitTestFile(QUnitFile, false);
+		}
+		
+		public void executeQUnitTestFile(string QUnitFile, bool extraWait)
 		{
 			lock(ie)
     		{
 				base.open(QUnitFile +"?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_QUnitExecutionCompleted");			
+				var value = ie.waitForJsVariable("UnitTest_Helper_QUnitExecutionCompleted");	
+				if (extraWait)
+					value = ie.waitForJsVariable("UnitTest_Helper_QUnitExecutionCompleted");	
 				Assert.That(value.str()=="True","value was not True");    	
 				var lastResult = ie.getJsVariable("TM.QUnit.lastExecution");
 				Assert.IsNotNull(lastResult, "TM.QUnit.lastExecution");
@@ -79,7 +85,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	[Test]
     	public void TM_GUI_LibraryTree()  
     	{
-    		executeQUnitTestFile(baseFolder + "html/QUnit - TM_GUI_LibraryTree.html");
+    		executeQUnitTestFile(baseFolder + "html/QUnit - TM_GUI_LibraryTree.html", true);
     	}   
     	
     	[Test]

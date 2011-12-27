@@ -189,6 +189,17 @@ namespace O2.SecurityInnovation.TeamMentor
 				Assert.AreEqual(value.str(), "Test Complete","UnitTest_Message");			
 			}
     	}
+		
+		[Test]
+    	public void onFolderStructureLoaded_STATS()
+    	{
+    		lock(ie)
+    		{
+				base.open("Html_Pages/_UnitTest_Helpers/GuiObjects/onFolderStructureLoaded.html?time=" + DateTime.Now.Ticks); 
+				var value = ie.waitForJsVariable("TM.Debug.UnitTest_Message").str();			
+				Assert.AreEqual(value.str(), "Test Complete","UnitTest_Message");			
+			}
+    	}
     	
     	[TestFixtureTearDown]
     	public void close_IE()
