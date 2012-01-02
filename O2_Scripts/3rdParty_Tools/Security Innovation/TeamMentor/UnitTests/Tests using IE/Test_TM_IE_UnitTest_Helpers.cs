@@ -26,50 +26,55 @@ namespace O2.SecurityInnovation.TeamMentor
 			Assert.That(ie.notNull(), "ie object was null");	
 			Test_TM.CLOSE_BROWSER_IN_SECONDS = 4;    
 			WatiN_IE_ExtensionMethods.WAITFORJSVARIABLE_MAXSLEEPTIMES = 20;
+		}				
+		
+		public void loadPage_andWaitFor_QUnitHelperVariable(string page)
+		{
+			loadPage_andWaitFor_JSVariable(page, "UnitTest_Helper_Loaded");
+		}
+		
+		public void loadPage_andWaitFor_JSVariable(string page, string jsVariable)
+		{
+			loadPage_andWaitFor_JSVariable(page, jsVariable, "True");
+		}
+		
+    	public void loadPage_andWaitFor_JSVariable(string page, string jsVariable, string expectedValue)
+		{
+			lock(ie)
+    		{
+    			var virtualPath = "html_pages/_UnitTest_Helpers/{0}?time={1}".format(page, DateTime.Now.Ticks);
+				base.open(virtualPath); 						
+				var value = ie.waitForJsVariable(jsVariable);		
+				Assert.AreEqual(expectedValue,value.str(), "variable value was not the expected one");
+			}
 		}
 		
     	[Test]
     	public void GuiObjects_CreateMappingsTable()  
     	{
-    		lock(ie)
-    		{
-				base.open("html_pages/_UnitTest_Helpers/GuiObjects/GuiObjects_CreateMappingsTable.html?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_Loaded");			
-				Assert.That(value.str()=="True","value was not True");    	
-			}
+    		loadPage_andWaitFor_QUnitHelperVariable("GuiObjects/GuiObjects_CreateMappingsTable.html");
     	} 
     	    	
     	[Test]
     	public void GuiObjects_ViewFolderStructure()  
     	{		
-    		lock(ie)
-    		{
-				base.open("html_pages/_UnitTest_Helpers/GuiObjects/GuiObjects_ViewFolderStructure.html?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_Loaded").str();			
-				Assert.That(value.str()=="True","value was not True");    		
-			}
+    		loadPage_andWaitFor_QUnitHelperVariable("GuiObjects/GuiObjects_ViewFolderStructure.html");
     	} 
     	
     	[Test]
     	public void GuiObjects_ViewFolderStructure_with_GuidandeItemsGuids()  
     	{		
-    		lock(ie)
-    		{
-				base.open("html_pages/_UnitTest_Helpers/GuiObjects/GuiObjects_ViewFolderStructure_with_GuidandeItemsGuids.html?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_Loaded").str();			
-				Assert.That(value.str()=="True","value was not True");    		
-			}
+    		loadPage_andWaitFor_QUnitHelperVariable("GuiObjects/GuiObjects_ViewFolderStructure_with_GuidandeItemsGuids.html");     		
     	} 
     	
     	[Test]
     	public void LibrariesFoldersViews_And_GuidanceItems_Guids()  
     	{		
+    		loadPage_andWaitFor_QUnitHelperVariable("GuiObjects/LibrariesFoldersViews_And_GuidanceItems_Guids.html");
+    		
     		lock(ie)
-    		{
-	    		var guidanceItemsDiv_DEFAULT_VALUE = "GuidanceItems will go here";
-				base.open("html_pages/_UnitTest_Helpers/GuiObjects/LibrariesFoldersViews_And_GuidanceItems_Guids.html?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_Loaded").str();			
-				Assert.That(value.str()=="True","value was not True");
+    		{				
+				var guidanceItemsDiv_DEFAULT_VALUE = "GuidanceItems will go here";
 				ie.eval("var guidanceItemsDiv = $('#guidanceItems').html()");
 				var guidanceItemsDiv = ie.getJsVariable("guidanceItemsDiv").str();
 				Assert.That(guidanceItemsDiv.notNull(), "guidanceItemsDiv was null");
@@ -84,11 +89,9 @@ namespace O2.SecurityInnovation.TeamMentor
 		[Test]
 		public void LibrariesFoldersViews_And_GuidanceItems_Guids_Mode_B()  
     	{		
+    		loadPage_andWaitFor_QUnitHelperVariable("GuiObjects/LibrariesFoldersViews_And_GuidanceItems_Guids_Mode_B.html");
     		lock(ie)
     		{
-				base.open("html_pages/_UnitTest_Helpers/GuiObjects/LibrariesFoldersViews_And_GuidanceItems_Guids_Mode_B.html?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_Loaded").str();			
-				Assert.That(value.str()=="True","value was not True");
 				ie.eval("var guidanceItemsDiv = $('#guidanceItems').html()");
 				var guidanceItemsDiv = ie.getJsVariable("guidanceItemsDiv").str();
 				Assert.That(guidanceItemsDiv.contains("Showing") && guidanceItemsDiv.contains("GuidanceItems"), "guidanceItemsDiv didn't contain expected two words");
@@ -160,45 +163,25 @@ namespace O2.SecurityInnovation.TeamMentor
 		[Test]
 		public void DataTable_View_GuidanceItemsMappings()  
     	{		
-    		lock(ie)
-    		{
-				base.open("html_pages/_UnitTest_Helpers/DataGrids/DataTable_View_GuidanceItemsMappings.html?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_DataTable").str();			
-				Assert.That(value.str()=="True","value was not True");			
-			}
+    		loadPage_andWaitFor_JSVariable("DataGrids/DataTable_View_GuidanceItemsMappings.html", "UnitTest_Helper_DataTable");
 		}
 
 		[Test]
 		public void DataTable_View_GuidanceItemsMappings_using_TM_API()  
     	{		
-    		lock(ie)
-    		{
-				base.open("html_pages/_UnitTest_Helpers/DataGrids/DataTable_View_GuidanceItemsMappings_using_TM_API.html?time=" + DateTime.Now.Ticks); 						
-				var value = ie.waitForJsVariable("UnitTest_Helper_DataTable").str();			
-				Assert.That(value.str()=="True","value was not True");			
-			}
+    		loadPage_andWaitFor_JSVariable("DataGrids/DataTable_View_GuidanceItemsMappings_using_TM_API.html","UnitTest_Helper_DataTable");    		
 		} 
 		
     	[Test]
     	public void Panel_LibrariesView()
     	{
-    		lock(ie)
-    		{
-				base.open("Html_Pages/_UnitTest_Helpers/GuiObjects/TM.GUI.LibraryTree.html?time=" + DateTime.Now.Ticks); 
-				var value = ie.waitForJsVariable("TM.Debug.UnitTest_Message").str();			
-				Assert.AreEqual(value.str(), "Test Complete","UnitTest_Message");			
-			}
+    		loadPage_andWaitFor_JSVariable("GuiObjects/TM.GUI.LibraryTree.html","TM.Debug.UnitTest_Message","Test Complete");
     	}
 		
 		[Test]
     	public void onFolderStructureLoaded_STATS()
     	{
-    		lock(ie)
-    		{
-				base.open("Html_Pages/_UnitTest_Helpers/GuiObjects/onFolderStructureLoaded.html?time=" + DateTime.Now.Ticks); 
-				var value = ie.waitForJsVariable("TM.Debug.UnitTest_Message").str();			
-				Assert.AreEqual(value.str(), "Test Complete","UnitTest_Message");			
-			}
+    		loadPage_andWaitFor_JSVariable("GuiObjects/onFolderStructureLoaded.html","TM.Debug.UnitTest_Message", "Test Complete");
     	}
     	
     	[TestFixtureTearDown]

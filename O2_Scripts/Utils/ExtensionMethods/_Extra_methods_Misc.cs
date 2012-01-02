@@ -376,6 +376,10 @@ namespace O2.XRules.Database.Utils
 			return num1.mod(num2) ==0;
 		}
 		
+		public static string intToBinaryString(this int number)
+		{
+			return Convert.ToString(number,2);
+		}			
 	}	
 	
 	public static class _Extra_UInt_ExtensionMethods
@@ -417,6 +421,19 @@ namespace O2.XRules.Database.Utils
 		public static long unixTimeStamp_InSeconds(this int secondsToAdd)
 		{
 			return secondsToAdd.unixTime_Now();
+		}
+		
+		public static bool isDate(this string date)
+		{
+			try
+			{
+				DateTime.Parse(date);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 	}
 	

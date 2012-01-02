@@ -4,12 +4,11 @@
 var tmXmlDatabase = new TM_Test_XmlDatabase(TMConfig.BaseFolder); 
 var tmWebServices = tmXmlDatabase.webServices();   
 var xmlDatabase = tmXmlDatabase.xmlDatabase(); 
-return xmlDatabase.xmlDB_GuidanceExplorers();
 
-return tmWebServices.GetLibraries();
-var SI_LIBRARY_GUID = "ea854894-8e16-46c8-9c61-737ef46d7e82".guid();
-var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID); 
-return siLibrary;
+var OWASP_LIBRARY_GUID = "4738d445-bc9b-456c-8b35-a35057596c16".guid();
+
+var owaspLibrary = tmWebServices.GetLibraryById(OWASP_LIBRARY_GUID); 
+return owaspLibrary;
  
 
 return "ok";

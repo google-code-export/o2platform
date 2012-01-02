@@ -143,6 +143,17 @@ namespace O2.XRules.Database.Utils
 		}*/
 		
 		//IEnumerable<T> collection, bool addDummyNode
+		
+		public static TreeView add_Nodes(this TreeView treeView, Dictionary<string, List<string>> dictionary)
+		{
+			foreach(var item in dictionary)
+			{
+				var nodeText = "{0}    ({1} items)".format(item.Key, item.Value.size());
+				treeView.add_Node(nodeText, item.Value).add_Nodes(item.Value);
+			}
+			return treeView;
+		}
+		
 		public static TreeView add_Nodes<T>(this TreeView treeView, IEnumerable<T> collection, bool addDummyNode)
 		{
 				

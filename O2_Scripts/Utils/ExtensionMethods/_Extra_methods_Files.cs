@@ -26,6 +26,13 @@ namespace O2.XRules.Database.Utils
 			return (T)Serialize.getDeSerializedObjectFromString(_string, typeof(T));  
 		}
 		
+		public static string folderName(this string folder)
+		{
+			if (folder.isFolder())
+				return folder.fileName();
+			return null;
+		}
+		
 		public static string parentFolder(this string path)
 		{
 			return path.directoryName();
@@ -119,6 +126,14 @@ namespace O2.XRules.Database.Utils
 			var files_Indexed_by_FileName = new Dictionary<string,string>();
 			foreach(var file in files)			
 				files_Indexed_by_FileName.add(file.fileName(), file);
+			return files_Indexed_by_FileName;
+		}
+		
+		public static Dictionary<string,List<string>> files_Mapped_by_Extension(this List<string> files)
+		{
+			var files_Indexed_by_FileName = new Dictionary<string,List<string>>();
+			foreach(var file in files)			
+				files_Indexed_by_FileName.add(file.extension(), file);
 			return files_Indexed_by_FileName;
 		}
 		
