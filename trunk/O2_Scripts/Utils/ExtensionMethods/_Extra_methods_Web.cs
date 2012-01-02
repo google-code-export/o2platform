@@ -38,6 +38,17 @@ namespace O2.XRules.Database.Utils
 	public static class _Extra_Web_ExtensionMethods_Http
 	{
 		//GET requests
+		
+		public static string GET(this Uri uri)
+		{
+			return uri.get_Html();
+		}
+		
+		public static string GET(this string url)
+		{
+			return url.get_Html();
+		}
+		
 		public static string html(this string url) 
 		{
 			return url.get_Html();
@@ -56,6 +67,16 @@ namespace O2.XRules.Database.Utils
 		}
 		
 		//POST requests
+		public static string POST(this Uri uri, string postData)
+		{
+			return uri.get_Html(postData);
+		}
+		
+		public static string POST(this string url, string postData)
+		{
+			return url.html(postData);
+		}
+		
 		public static string html(this string url, string postData)
 		{
 			return url.get_Html(postData);

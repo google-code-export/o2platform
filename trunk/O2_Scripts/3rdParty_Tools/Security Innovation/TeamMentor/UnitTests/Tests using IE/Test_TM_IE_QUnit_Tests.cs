@@ -104,8 +104,13 @@ namespace O2.SecurityInnovation.TeamMentor
     	public void TM_WebService_User()  
     	{
     		executeQUnitTestFile(baseFolder + "html/QUnit - TM_WebService_User.html");
-    	}     	    	
-    	    	    			   	
+    	}  
+    	
+    	[Test]
+    	public void TM_Main_Gui_for_User_Anonymous()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_Main_Gui_for_User_Anonymous.html");
+    	}    	 
     	    	
     	[TestFixtureTearDown]
     	public void close_IE()

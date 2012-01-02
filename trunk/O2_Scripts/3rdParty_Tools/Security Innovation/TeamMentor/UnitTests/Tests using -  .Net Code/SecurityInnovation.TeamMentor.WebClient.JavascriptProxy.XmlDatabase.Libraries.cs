@@ -23,7 +23,6 @@ using SecurityInnovation.TeamMentor.Authentication.ExtensionMethods;
 //O2File:TM_Test_XmlDatabase.cs
 
 //O2Ref:nunit.framework.dll     
-
  
 namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 {		 
@@ -34,7 +33,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     	//static TM_Xml_Database tmXmlDatabase { get; set;}
     	//TM_WebServices tmWebServices { get; set; }
     	    	    	    	
-    	public Guid SI_LIBRARY_GUID = "ea854894-8e16-46c8-9c61-737ef46d7e82".guid();
+    	public Guid OWASP_LIBRARY_GUID = "4738d445-bc9b-456c-8b35-a35057596c16".guid();
     	
      	static Test_Libraries()
      	{
@@ -81,21 +80,21 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     		Assert.That(libraries.size()> 0 , "no libraries returned");    		    		
     		//specific tests for the data current serialized to WebClient\3_0_WebSite\WebServices\MoqDatabase
     		Assert.That(libraries.size() > 1 , "there should be at least  one library");    		
-    		var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID);
-    		Assert.That(siLibrary.id.guid() == SI_LIBRARY_GUID , "the library 'id' value didn't match");
-    		Assert.That(siLibrary.caption == "SI" , "the library 'caption' value didn't match");    		
+    		var owaspLibrary = tmWebServices.GetLibraryById(OWASP_LIBRARY_GUID);
+    		Assert.That(owaspLibrary.id.guid() == OWASP_LIBRARY_GUID , "the library 'id' value didn't match");
+    		Assert.That(owaspLibrary.caption == "OWASP" , "the library 'caption' value didn't match");    		
     	}    	    	
     	    	 
     	[Test]     	
     	public void IJavascriptProxy_XmlDb_GetFolders() 
     	{     		
-    		var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID);
-    		var folders = tmWebServices.javascriptProxy.GetFolders(siLibrary.id.guid());    		
+    		var owaspLibrary = tmWebServices.GetLibraryById(OWASP_LIBRARY_GUID);
+    		var folders = tmWebServices.javascriptProxy.GetFolders(owaspLibrary.id.guid());    		
     		Assert.That(folders != null , "folders was null");
     		Assert.That(folders.size() > 0 , "no folders returned");
     		     		
-    		var folderName = "PCI DSS Code Review";    		 		    		    		
-    		var tmFolder = tmXmlDatabase.tmFolder(siLibrary.id.guid(),folderName);
+    		var folderName = "OWASP Top 10 -  2010"; // "OWASP Top 10 - 2010";  // there is an extra space in the current version of the owasp db
+    		var tmFolder = tmXmlDatabase.tmFolder(owaspLibrary.id.guid(),folderName);
     		
     		Assert.That(tmFolder.notNull(),"could not find folder with name: {0}".format(folderName));    		
     		Assert.AreEqual(folderName, tmFolder.name,"expected Name didn't match");    		
@@ -104,23 +103,23 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 		[Test]     	
     	public void IJavascriptProxy_XmlDb_GetGuidanceItemsInView() 
     	{
-    		var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID); 
-    		var folders = tmWebServices.javascriptProxy.GetFolders(siLibrary.id.guid());			
-			var folderName = "PCI DSS Code Review";    		 		    		    		    		    		
+    		var owaspLibrary = tmWebServices.GetLibraryById(OWASP_LIBRARY_GUID); 
+    		var folders = tmWebServices.javascriptProxy.GetFolders(owaspLibrary.id.guid());			
+			var folderName = "OWASP Top 10 -  2010"; // "OWASP Top 10 - 2010";  // there is an extra space in the current version of the owasp db			
     		var expectedFolder =  (from folder in folders
 								   where folder.name == folderName
 								   select folder).first();
 								   
 			Assert.That(expectedFolder.notNull(), "couldn't find expected folder: {0}".format(folderName));    		    										   
 			
-			var expectedViewId = "48057cf0-ac88-482b-948c-03f37a1c94fc";			
-			Assert.That(expectedFolder.views.guids().contains(expectedViewId.guid()), "Folders didn't contain expected view id");														
+			var expectedViewId = "52d2d5f4-170a-4b25-bc92-0e53fd8c11a1";			
+			Assert.That(expectedFolder.views.guids().contains(expectedViewId.guid()), "Folder didn't contain expected view id");														
 			
     		var guidanceItems = tmWebServices.javascriptProxy.GetGuidanceItemsInView(expectedViewId.guid());     		
     		Assert.That(guidanceItems != null , "guidanceItems was null");
     		Assert.That(folders.size() > 0 , "no guidanceItems returned");    	 	
-    		var expectedId = "b3a939b6-732f-49d0-b204-0422dbfbdbaa";
-    		var expectedTitle = "Input is Validated for Length, Range, Format, and Type";
+    		var expectedId = "56b0552d-2ceb-4714-a8f1-20a6a8609874";
+    		var expectedTitle = "All Database Input is Validated";
     		var expectedTopic = "Security";
     		var guidanceItem = guidanceItems.tmGuidanceItem(expectedId.guid()); 
     		
@@ -133,8 +132,8 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 		[Test]     	
     	public void IJavascriptProxy_XmlDb_GetGuidanceItemsInViews() 
     	{ 
-    		var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID); 
-    		var folders = tmWebServices.javascriptProxy.GetFolders(siLibrary.id.guid());
+    		var owaspLibrary = tmWebServices.GetLibraryById(OWASP_LIBRARY_GUID); 
+    		var folders = tmWebServices.javascriptProxy.GetFolders(owaspLibrary.id.guid());
     		var viewIds = folders[0].views;
     		var guidanceItems = tmWebServices.javascriptProxy.GetGuidanceItemsInViews(viewIds.guids());    		    		
     		Assert.That(guidanceItems != null , "guidanceItems was null");
@@ -144,8 +143,8 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
  		[Test]     	 
     	public void IJavascriptProxy_XmlDb_GetGuidanceItemHtml() 
     	{    
-    		var siLibrary = tmWebServices.GetLibraryById(SI_LIBRARY_GUID); 
-    		var folders = tmWebServices.javascriptProxy.GetFolders(siLibrary.id.guid());
+    		var owaspLibrary = tmWebServices.GetLibraryById(OWASP_LIBRARY_GUID); 
+    		var folders = tmWebServices.javascriptProxy.GetFolders(owaspLibrary.id.guid());
     		var guidanceItems = tmWebServices.javascriptProxy.GetGuidanceItemsInView(folders[0].views.guids()[0]);    		
     		//show.info(guidanceItems);
     		var guidanceItem = guidanceItems[0];
@@ -167,7 +166,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     	public void IJavascriptProxy_XmlDb_GetGuidanceItemsInLibrary() 
     	{   
     		var libraries = tmWebServices.javascriptProxy.GetLibraries();    		    	
-    		var guidanceItemsInLibrary = tmWebServices.javascriptProxy.GetGuidanceItemsInLibrary(SI_LIBRARY_GUID);
+    		var guidanceItemsInLibrary = tmWebServices.javascriptProxy.GetGuidanceItemsInLibrary(OWASP_LIBRARY_GUID);
     		Assert.That(guidanceItemsInLibrary != null , "guidanceItemsInLibrary was null");
     		Assert.That(guidanceItemsInLibrary.size()> 0 , "no guidanceItemsInLibrary returned");    		
     		"There where  {0} items returned".info(guidanceItemsInLibrary.size());    		
