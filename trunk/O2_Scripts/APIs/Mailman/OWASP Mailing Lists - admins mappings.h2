@@ -2,6 +2,7 @@
 <H2>
   <SourceCode>var hideTableDuringLoad = true;
 var topPanel = "OWASP Mailing Lists - List admin mappings/emails".popupWindow(1200,500);
+topPanel.insert_LogViewer();
 //var topPanel = panel.clear().add_Panel(); 
 var tableList = topPanel.add_GroupBox("OWASP Mailing list mappings").add_TableList();  
 var browser = topPanel.insert_Right("List Admin WebPage").add_WebBrowser_Control();
@@ -11,54 +12,87 @@ tableList.afterSelect_get_Cell(3,
 				browser.open(href);
 			});
 
-tableList.add_Columns("#", "email", "list", "href" );
+tableList.add_Columns("email", "list name", "list #", "href" );
 var tempDir = "_owasp-leaders_mainmanMappings".tempDir(false);
 
-var baseUrl = "https://lists.owasp.org/mailman/admin";
-Func&lt;string, string&gt; getHtml_UsingCache =
-	(urlToGet)=&gt; {
-					"processing: {0}".info(urlToGet);
-					var cacheFilePath = tempDir.pathCombine(urlToGet.safeFileName() + ".html");					
-					return (cacheFilePath.fileExists())
-								? cacheFilePath.fileContents()
-								: urlToGet.uri()
-										  .getHtml()
-										  .saveAs(cacheFilePath)
-										  .fileContents();							
-				};
+var stop = false;
 
-Func&lt;string,string, List&lt;HtmlNode&gt;&gt; getNodesFromHtmlPage = 	
-	(urlToGet, filter)=&gt; { 							
-							var htmlDocument = getHtml_UsingCache(urlToGet).htmlDocument();
-							return htmlDocument.select(filter);
-						 };
-//return getNodesFromHtmlPage(baseUrl, "//a");
-						 						  
-var linksToFollow = (from link in getNodesFromHtmlPage(baseUrl, "//a")
-				     where link.attribute("href").value().contains("mailman/admin")
-				     select link).toList();					 					  
+var savedMappings = tempDir.pathCombine("Owasp-leaders-mailingList-mappings.xml");
 
-tableList.visible(false);
-var listNumber = 1;
-foreach(var linkToFollow in linksToFollow)
-{
-	var href = linkToFollow.attribute("href").value();
-	var links = getNodesFromHtmlPage(href, "//a"); 
-	foreach(var link in links)
-		if (link.InnerText.contains(" at ")) 
-			foreach(var email in link.InnerText.split(",")) 
-				tableList.add_Row(														
-							email.replace(" at ", "@").trim().ToLower(),							
-							linkToFollow.InnerText, 
-							listNumber++.str() ,
-							href);
-	
-}  
+Action loadData = 
+	()=&gt;{
+			var mappings = new List&lt;string&gt;();
+			stop = false;
+			var baseUrl = "https://lists.owasp.org/mailman/";
+			
+			Func&lt;string, string&gt; getHtml_UsingCache =
+				(virtualPath)=&gt; {	
+									var urlToGet = baseUrl + virtualPath;
+									var cacheFilePath = tempDir.pathCombine(urlToGet.safeFileName() + ".html");													
+									"processing: {0} using cache file: {1}".info(urlToGet,cacheFilePath);
+									return (cacheFilePath.fileExists())
+												? cacheFilePath.fileContents()
+												: urlToGet.uri()
+														  .getHtml()
+														  .saveAs(cacheFilePath)
+														  .fileContents();							
+								};
+			
+			Func&lt;string,string, List&lt;HtmlNode&gt;&gt; getNodesFromHtmlPage = 	
+				(urlToGet, filter)=&gt; { 							
+										var htmlDocument = getHtml_UsingCache(urlToGet).htmlDocument();
+										return htmlDocument.select(filter);
+									 };
+			
+			var linksInMainPage = getNodesFromHtmlPage("admin", "//a");
+			"linksInMainPage: {0}".info(linksInMainPage.size());
+			
+			var linksToFollow = (from link in linksInMainPage
+							     where link.attribute("href").value().contains("admin/")
+							     select link).toList();					 					  			
+							     
+			"linksToFollow: {0}".info(linksToFollow.size());			
+			tableList.visible(false);
+			var listNumber = 0;
+			
+			foreach(var linkToFollow in linksToFollow)
+			{				
+				var href = linkToFollow.attribute("href").value();
+				var links = getNodesFromHtmlPage(href, "//a"); 
+				foreach(var link in links)
+					if (link.InnerText.contains(" at ")) 
+					{
+						listNumber++;
+						foreach(var rawEmail in link.InnerText.split(",")) 
+						{
+							var email = rawEmail.replace(" at ", "@").trim().ToLower();
+							var listName = linkToFollow.InnerText;
+							var url = baseUrl + href;
+							mappings.add("{0} , {1} , {2}".format(email,listName, url));
+							tableList.add_Row(														
+										email,							
+										listName, 
+										listNumber.str() ,
+										url);							
+							if (stop)
+							{
+								"Stop request received, stopped execution".error();						
+								return;
+							}
+						}				
+					}
+			}  
+			mappings.saveAs(savedMappings);
+			tableList.setWidthToContent(); 			
+			tableList.visible(true); 
+			tableList.selectFirst();
+	};
 
-tableList.setWidthToContent(); 			
-tableList.visible(true); 
-tableList.selectFirst();
-
+topPanel.insert_Above(40,"actions")
+		.add_Link("load data", loadData) 
+		.append_Link("stop", ()=&gt;stop = false)
+		.append_Link("view saved mappings", ()=&gt; savedMappings.showInCodeEditor());
+loadData();		
 return "done";
 //using HtmlAgilityPack
 //O2File:HtmlAgilityPack_ExtensionMethods.cs
