@@ -111,6 +111,30 @@ namespace O2.SecurityInnovation.TeamMentor
     	{
     		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_Main_Gui_for_User_Anonymous.html");
     	}    	 
+    	
+    	[Test]
+    	public void TM_Main_Gui_for_User_Editor()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_Main_Gui_for_User_Editor.html");
+    	}    	 
+    	
+    	[Test]
+    	public void TM_Main_Gui_for_User_Admin()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_Main_Gui_for_User_Admin.html");
+    	}  
+    	
+    	[Test]
+    	public void TM_Open_Main_GUI_LIVE_ONE()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_Main_GUI_LIVE_ONE.html");
+    	}    	     	    
+    	
+    	[Test]
+    	public void TM_ControlPanel_LIVE_ONE()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_ControlPanel_LIVE_ONE.html");
+    	}    	   
     	    	
     	[TestFixtureTearDown]
     	public void close_IE()
