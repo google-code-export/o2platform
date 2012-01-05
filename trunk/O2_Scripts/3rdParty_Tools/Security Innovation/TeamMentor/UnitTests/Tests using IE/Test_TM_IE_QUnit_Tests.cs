@@ -113,6 +113,12 @@ namespace O2.SecurityInnovation.TeamMentor
     	}    	 
     	
     	[Test]
+    	public void TM_Main_Gui_for_User_Viewer()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_Main_Gui_for_User_Viewer.html");
+    	}    	 
+    	
+    	[Test]
     	public void TM_Main_Gui_for_User_Editor()  
     	{
     		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_Main_Gui_for_User_Editor.html");
@@ -135,6 +141,14 @@ namespace O2.SecurityInnovation.TeamMentor
     	{
     		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_ControlPanel_LIVE_ONE.html");
     	}    	   
+    	
+    	[Test]
+    	public void TM_GuidanceItemViewer()  
+    	{
+    		executeQUnitTestFile(baseFolder + "html/QUnit_-_TM_GuidanceItemViewer.html");
+    	}    	       	
+    	
+    	//QUnit_-_TM_GuidanceItemEditor_Elrte.html  // not currently implemented (since Elete doesn't work in IE
     	    	
     	[TestFixtureTearDown]
     	public void close_IE()
