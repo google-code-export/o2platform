@@ -160,7 +160,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     		Assert.That(allGuidanceItems != null , "allGuidanceItems was null");
     		Assert.That(allGuidanceItems.size()> 0 , "no allGuidanceItems returned");    		
     		"There where  {0} items returned".info(allGuidanceItems.size());    		
-    	}
+    	}    	    	
     	
     	[Test]     	 
     	public void IJavascriptProxy_XmlDb_GetGuidanceItemsInLibrary() 
@@ -170,6 +170,21 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     		Assert.That(guidanceItemsInLibrary != null , "guidanceItemsInLibrary was null");
     		Assert.That(guidanceItemsInLibrary.size()> 0 , "no guidanceItemsInLibrary returned");    		
     		"There where  {0} items returned".info(guidanceItemsInLibrary.size());    		
+    	}
+    	
+    	[Test]     	 
+    	public void xmlDb_GetGuidanceItemsByIds() 
+    	{       		
+			var viewId = "fc1c5b9c-becb-44a2-9812-40090d9bd135"; //A02: Cross-Site Scripting (XSS)
+			
+			var view = tmWebServices.GetViewById(viewId); 
+			var guidanceItemsIds = view.guidanceItems;   
+			var guidanceItems = tmXmlDatabase.xmlDB_GuidanceItems(guidanceItemsIds);
+			 
+			Assert.AreEqual(guidanceItems.size(),guidanceItemsIds.size(), "guidanceItemsIds size");
+			foreach(var guidanceItem in guidanceItems)
+				Assert.That(guidanceItemsIds.contains(guidanceItem.guidanceItemId), "couldn't find guidanceItem by id");
+
     	}
     	
     	[Test] 
@@ -254,6 +269,39 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 			
 			Assert.IsFalse(libraryPath_GuidanceItemsFolder.dirExists()  , "libraryPath_GuidanceItemsFolder should not exist after delete");
     	}
+    	
+    	[Test]
+    	public void Search_TitleAndHtml()
+    	{
+    		    		
+    		var viewId = "fc1c5b9c-becb-44a2-9812-40090d9bd135"; //A02: Cross-Site Scripting (XSS)
+			var searchFor = "XSS";	
+			var guidanceItemsIds = new List<Guid>();
+			
+			Func<string, List<Guid>> searchTitleAndHtml =
+				(searchText) => tmWebServices.XmlDatabase_GuidanceItems_SearchTitleAndHtml(guidanceItemsIds, searchText);
+			
+			
+			//test searching on all content			
+			var matchedIds = searchTitleAndHtml(searchFor);
+			Assert.That(matchedIds.size() > 0, "no results when searching all GIs"); 
+			
+			//test search on view's guidanceItems
+			var view = tmWebServices.GetViewById(viewId);  
+			guidanceItemsIds = view.guidanceItems;   
+			var guidanceItems = tmXmlDatabase.xmlDB_GuidanceItems(guidanceItemsIds);			 				
+			
+			matchedIds = searchTitleAndHtml(searchFor);
+			Assert.That(matchedIds.size() > 0, "no results");
+			var resultGuidanceItems = tmXmlDatabase.xmlDB_GuidanceItems(matchedIds);
+			
+			foreach(var resultGuidanceItem  in resultGuidanceItems)
+				Assert.That(resultGuidanceItem.title.contains(searchFor) || resultGuidanceItem.htmlContent.contains(searchFor), "couldn't find search term in GI");
+				
+			
+
+    	}
+    	
     } 
 }    
 	
