@@ -69,11 +69,13 @@ namespace SecurityInnovation.TeamMentor.WebClient
 		public String name		 			{ get; set; }
 		public List<Folder_V3> subFolders 	{ get; set; }
 		public List<View_V3> views 			{ get; set; }
+		public List<Guid> guidanceItems		{ get; set; }
 		
 		public Library_V3()
 		{
 			subFolders = new List<Folder_V3> ();
 			views = new List<View_V3>();
+			guidanceItems = new List<Guid>();
 		}
 		
 		public override string ToString()
@@ -89,11 +91,13 @@ namespace SecurityInnovation.TeamMentor.WebClient
 		public string name { get; set; }
 		public List<View_V3> views { get; set; }
 		public List<Folder_V3> subFolders { get; set; }
+		public List<Guid> guidanceItems		{ get; set; }
 		
 		public Folder_V3()
 		{
 			views = new List<View_V3>();
 			subFolders = new List<Folder_V3>();
+			guidanceItems = new List<Guid>();
 		}
 		
 		public override string ToString()
@@ -131,6 +135,7 @@ namespace SecurityInnovation.TeamMentor.WebClient
     	public string firstname { get; set; }
     	public string lastname { get; set; }
     	public string note { get; set; }
+    	public int groupId { get; set; }
     }
 	
 	public class TreeNodeItem
