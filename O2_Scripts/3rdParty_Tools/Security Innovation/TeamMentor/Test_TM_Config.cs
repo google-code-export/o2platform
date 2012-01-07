@@ -15,7 +15,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	
     	public static string tmEmptyPage 	 = "{0}{1}?time={2}".format(tmServer, "html_pages/emptyPage.html" , DateTime.Now.Ticks);
     	public static string tmWebServices 	 = "{0}{1}".format(tmServer,"Aspx_Pages/TM_WebServices.asmx");
-    	public static string currentHomePage = "{0}{1}".format(tmServer, "Aspx_Pages/TM_3_0_with_Panels.aspx");
+    	public static string currentHomePage = "{0}{1}".format(tmServer, "html_pages/Gui/TeamMentor.html");
     	public static string invalidPage 	 = "{0}{1}".format(tmServer, "asdasdasd.aspx");
     	
     	public static string tmSourceCode	  = @"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\"; 

@@ -1,17 +1,15 @@
 // This file is part of the OWASP O2 Platform (http://www.owasp.org/index.php/OWASP_O2_Platform) and is released under the Apache 2.0 License (http://www.apache.org/licenses/LICENSE-2.0)
 using System;
-using System.IO;
-using System.Data;
-using System.Data.SqlClient; 
+using System.Security;
 using System.Collections.Generic;    
-using System.Diagnostics;   
-using System.Text;
+using System.Security.Permissions;	
+using NUnit.Framework; 
 using O2.Kernel; 
 using O2.Kernel.ExtensionMethods;   
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.XRules.Database.Utils;
-using O2.XRules.Database.APIs;  
-using NUnit.Framework; 
+using O2.XRules.Database.APIs;
+
 using SecurityInnovation.TeamMentor.WebClient.WebServices; 
 using SecurityInnovation.TeamMentor.Authentication.ExtensionMethods;
 using SecurityInnovation.TeamMentor.Authentication.WebServices.AuthorizationRules;
@@ -36,18 +34,16 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     	{     		    		    	 	    	     		
 			var httpContextApi = new API_Moq_HttpContext();   
 			HttpContextFactory.Context = httpContextApi.HttpContextBase;
-			//HttpContextFactory.Current.SetCurrentUserRoles(UserGroup.Admin);
 			
-			//UserGroup.Admin.setThreadPrincipalWithRoles(); // set current user as Admin
-			
-			//liveWS_tmWebServices.javascriptProxy.adminSessionID = TMLoginHelper.login_As_Admin(); //set this here					
+			//HttpContextFactory.Current.SetCurrentUserRoles(UserGroup.Admin);			
+			//UserGroup.Admin.setThreadPrincipalWithRoles(); // set current user as Admin						
     	}     	
     	
 
 		[Test]
 		public void tmWebServices_Login_PwdInClearText()
 		{
-			var sessionId = tmWebServices.Login_PwdInClearText("admin","changeme");
+			var sessionId = tmWebServices.Login_PwdInClearText("admin","!!tmbeta");
 			Assert.That(sessionId != Guid.Empty,"sessionID was empty");			
 		}
 		
@@ -55,7 +51,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 		public void checkLoginSessionValues()
 		{
 			var user = "admin";
-			var pwd = "changeme";
+			var pwd = "!!tmbeta";
 			var sessionId = tmWebServices.Login_PwdInClearText(user, pwd);
 			Assert.That(sessionId != Guid.Empty,"sessionID was empty");
 			Assert.AreEqual(tmWebServices.sessionID, sessionId, "tmXmlDatabase.sessionId");			
@@ -73,8 +69,10 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 			//test on tmXmlDatabase
 			var sessionId = tmXmlDatabase.login_PwdInClearText(user, pwd); 
 			Assert.That(sessionId != Guid.Empty, "sessionId was empty");
+			var userGroup = sessionId.session_UserGroup();			//new users currently default to Reader
+			Assert.AreEqual(userGroup, UserGroup.Reader, "user group was not reader");
 			var userRoles = sessionId.session_UserRoles(); 
-			Assert.AreEqual(userRoles.size(), 1, "userRoles size");
+			Assert.AreEqual(userRoles.size(), 2, "userRoles size");
 			Assert.AreEqual(UserRole.ReadArticlesTitles, userRoles[0], "first userRole");						
 			
 			//test on tmWebServices
@@ -82,7 +80,7 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 			Assert.AreEqual(sessionId, tmWebServices.Current_SessionID(), "tmWebServices.CurrentSessionID");
 			Assert.AreEqual(user, tmWebServices.Current_User().UserName, "tmWebServices.CurrentSessionID");
 			var roles = tmWebServices.GetCurrentUserRoles();			
-			Assert.AreEqual(roles.size(), 1, "userRoles size");
+			Assert.AreEqual(roles.size(), 2, "userRoles size");
 			Assert.AreEqual("ReadArticlesTitles", roles[0], "first userRole");						
 			 
 			"deleting user".info(); 
@@ -91,6 +89,147 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 			//delete user
 			Assert.That(tmWebServices.javascriptProxy.DeleteUser(newUser).isTrue() , "failed to test user");						
 			
+		}
+		
+		[Test] 
+		public void RBAC_test_Security_Demands()
+		{
+			//anonymous
+			UserGroup.Anonymous.setThreadPrincipalWithRoles();			
+			Assert.Throws<SecurityException>(()=> UserGroup.Reader.demand()  			, "Anonymous: UserGroup.Reader Demand");
+			Assert.Throws<SecurityException>(()=> UserGroup.Editor.demand()  			, "Anonymous: UserGroup.Editor Demand");
+			Assert.Throws<SecurityException>(()=> UserGroup.Admin.demand()  			, "Anonymous: UserGroup.Admin Demand");			
+			Assert.Throws<SecurityException>(()=> UserRole.Admin.demand()  				, "Anonymous: UserRole.Admin Demand");
+			Assert.Throws<SecurityException>(()=> UserRole.EditArticles.demand()  		, "Anonymous: UserRole.EditArticles Demand");
+			Assert.Throws<SecurityException>(()=> UserRole.ReadArticles.demand()  		, "Anonymous: UserRole.ReadArticles Demand");
+			Assert.Throws<SecurityException>(()=> UserRole.ManageUsers.demand()  		, "Anonymous: UserRole.ManageUsers Demand");
+			Assert.DoesNotThrow(			 ()=> UserRole.ReadArticlesTitles.demand()  , "Anonymous: UserRole.ReadArticlesTitles Demand");
+			
+			//Reader
+			UserGroup.Reader.setThreadPrincipalWithRoles();
+			Assert.DoesNotThrow 			(()=> UserGroup.Reader.demand()  			, "Reader: UserGroup.Reader Demand");
+			Assert.Throws<SecurityException>(()=> UserGroup.Editor.demand()  			, "Reader: UserGroup.Editor Demand");
+			Assert.Throws<SecurityException>(()=> UserGroup.Admin.demand()  			, "Reader: UserGroup.Admin Demand");			
+			Assert.Throws<SecurityException>(()=> UserRole.Admin.demand()  				, "Reader: UserRole.Admin Demand");
+			Assert.Throws<SecurityException>(()=> UserRole.EditArticles.demand()  		, "Reader: UserRole.EditArticles Demand");
+			Assert.DoesNotThrow 			(()=> UserRole.ReadArticles.demand()  		, "Reader: UserRole.ReadArticles Demand");
+			Assert.Throws<SecurityException>(()=> UserRole.ManageUsers.demand()  		, "Reader: UserRole.ManageUsers Demand");
+			Assert.DoesNotThrow			    (()=> UserRole.ReadArticlesTitles.demand()  , "Reader: UserRole.ReadArticlesTitles Demand");
+			
+			//Editor
+			UserGroup.Editor.setThreadPrincipalWithRoles();
+			Assert.DoesNotThrow 			(()=> UserGroup.Reader.demand()  			, "Editor: UserGroup.Reader Demand");
+			Assert.DoesNotThrow 			(()=> UserGroup.Editor.demand()  			, "Editor: UserGroup.Editor Demand");
+			Assert.Throws<SecurityException>(()=> UserGroup.Admin.demand()  			, "Editor: UserGroup.Admin Demand");			
+			Assert.Throws<SecurityException>(()=> UserRole.Admin.demand()  				, "Editor: UserRole.Admin Demand");
+			Assert.DoesNotThrow 			(()=> UserRole.EditArticles.demand()  		, "Editor: UserRole.EditArticles Demand");
+			Assert.DoesNotThrow 			(()=> UserRole.ReadArticles.demand()  		, "Editor: UserRole.ReadArticles Demand");
+			Assert.Throws<SecurityException>(()=> UserRole.ManageUsers.demand()  		, "Editor: UserRole.ManageUsers Demand");
+			Assert.DoesNotThrow			    (()=> UserRole.ReadArticlesTitles.demand()  , "Editor: UserRole.ReadArticlesTitles Demand");
+
+			//Admin
+			UserGroup.Admin.setThreadPrincipalWithRoles();
+			Assert.DoesNotThrow 			(()=> UserGroup.Reader.demand()  			, "Admin: UserGroup.Reader Demand");
+			Assert.DoesNotThrow 			(()=> UserGroup.Editor.demand()  			, "Admin: UserGroup.Editor Demand");
+			Assert.DoesNotThrow 			(()=> UserGroup.Admin.demand()  			, "Admin: UserGroup.Admin Demand");
+			Assert.DoesNotThrow 			(()=> UserRole.Admin.demand()  				, "Admin: UserRole.Admin Demand");
+			Assert.DoesNotThrow 			(()=> UserRole.EditArticles.demand()  		, "Admin: UserRole.EditArticles Demand");
+			Assert.DoesNotThrow 			(()=> UserRole.ReadArticles.demand()  		, "Admin: UserRole.ReadArticles Demand");
+			Assert.DoesNotThrow 			(()=> UserRole.ManageUsers.demand()  		, "Admin: UserRole.ManageUsers Demand");
+			Assert.DoesNotThrow			    (()=> UserRole.ReadArticlesTitles.demand()  , "Admin: UserRole.ReadArticlesTitles Demand");
+
+			
+			//check string based demands
+			Assert.DoesNotThrow			    (()=> "ReadArticles".demand()  				, "Reader: string Demand #1");
+			Assert.DoesNotThrow			    (()=> "readArticles".demand()  				, "Reader: string Demand #1");
+			Assert.DoesNotThrow			    (()=> "readarticles".demand()  				, "Reader: string Demand #1");
+			Assert.Throws<SecurityException>(()=> "_readarticles".demand()    			, "Reader: string Demand #1");
+			Assert.Throws<SecurityException>(()=> "Reader".demand()    					, "Reader: string Demand #1");
+		}		
+		
+		[Test]
+		public void RBAC_UserCreation()
+		{			
+			//Readers cannot get users
+			UserGroup.Reader.setThreadPrincipalWithRoles();
+			Assert.Throws<SecurityException>(()=> tmWebServices.GetUser_byID(111111111), "Reader: GetUser_byID");
+			
+			//Anonymous can create users
+			UserGroup.Anonymous.setThreadPrincipalWithRoles();
+			var newUser = new NewUser();
+			newUser.username = "test_user_".add_RandomLetters(4);
+			var userId = tmWebServices.CreateUser(newUser);
+			Assert.That(userId > 0 , "Anonymous: CreateUser");
+			
+			// confirm that new user role is 2 (Reader)
+			UserGroup.Admin.setThreadPrincipalWithRoles();
+			var user = tmWebServices.GetUser_byID(userId); 
+			Assert.AreEqual(user.GroupID, 2, "Anonymous created user: group id");
+			
+			//only admins can delete user
+			UserGroup.Anonymous	.setThreadPrincipalWithRoles(); Assert.Throws<SecurityException>(()=> tmWebServices.DeleteUser(userId), "Anonymous: DeleteUser");
+			UserGroup.Reader	.setThreadPrincipalWithRoles();	Assert.Throws<SecurityException>(()=> tmWebServices.DeleteUser(userId), "Reader	  : DeleteUser");
+			UserGroup.Editor	.setThreadPrincipalWithRoles();	Assert.Throws<SecurityException>(()=> tmWebServices.DeleteUser(userId), "Editor	  : DeleteUser");
+			UserGroup.Admin		.setThreadPrincipalWithRoles();	Assert.DoesNotThrow(			 ()=> tmWebServices.DeleteUser(userId), "Admin    : DeleteUser");
+			
+			//check that only admins can create users with GroupId specificed			
+			userId = 0;
+			newUser = new NewUser();
+			newUser.username = "test_user_".add_RandomLetters(4);
+			newUser.groupId = 10;
+			UserGroup.Anonymous .setThreadPrincipalWithRoles(); Assert.Throws<SecurityException>(()=> 		   tmWebServices.CreateUser(newUser), "Anonnymous: CreateUser with groupd ID");
+			UserGroup.Reader	.setThreadPrincipalWithRoles(); Assert.Throws<SecurityException>(()=>		   tmWebServices.CreateUser(newUser), "Reader	 : CreateUser with groupd ID");
+			UserGroup.Editor	.setThreadPrincipalWithRoles(); Assert.Throws<SecurityException>(()=> 		   tmWebServices.CreateUser(newUser), "Editor	 : CreateUser with groupd ID");
+			UserGroup.Admin 	.setThreadPrincipalWithRoles(); Assert.DoesNotThrow				(()=> userId = tmWebServices.CreateUser(newUser), "Admin	 : CreateUser with groupd ID");
+			Assert.That(userId > 0 , "Admin: CreateUser with groupID");
+			user = tmWebServices.GetUser_byID(userId); 
+			Assert.AreEqual(user.GroupID, 10, "Admin created user: group id");
+			tmWebServices.DeleteUser(userId);
+			
+			//check that only admins can call BatchUserCreation
+			var batchUserCreation ="";
+			UserGroup.Anonymous .setThreadPrincipalWithRoles();   Assert.Throws<SecurityException>(()=> tmWebServices.BatchUserCreation(batchUserCreation), "Anonymous: BatchUserCreation");
+			UserGroup.Reader 	.setThreadPrincipalWithRoles();   Assert.Throws<SecurityException>(()=> tmWebServices.BatchUserCreation(batchUserCreation), "Reader	  : BatchUserCreation");
+			UserGroup.Editor 	.setThreadPrincipalWithRoles();   Assert.Throws<SecurityException>(()=> tmWebServices.BatchUserCreation(batchUserCreation), "Editor   : BatchUserCreation");
+			UserGroup.Admin 	.setThreadPrincipalWithRoles();   Assert.DoesNotThrow			  (()=> tmWebServices.BatchUserCreation(batchUserCreation), "Admin	  : BatchUserCreation");
+		}
+		
+		[Test]
+		public void RBAC_batchUserCreation()
+		{	
+			//3 users to create
+			var userName1 = "test_user_".add_RandomLetters(4);
+			var userName2 = "test_user_".add_RandomLetters(4);
+			var userName3 = "test_user_".add_RandomLetters(4);
+			var batchUserCreation =  userName1 + ",pwd,firstname,lastname, 1".line() + 
+									 userName2 + ",pwd,firstname,lastname, 3".line() + 
+									 userName3.line() + 
+									 userName3;
+				
+
+			//create users			 
+			UserGroup.Admin.setThreadPrincipalWithRoles();  			  
+			var newUsers = tmWebServices.BatchUserCreation(batchUserCreation);
+			Assert.NotNull(newUsers[0], "user1 ok");
+			Assert.NotNull(newUsers[1], "user1 ok");
+			Assert.NotNull(newUsers[2], "user1 ok");
+			Assert.IsNull (newUsers[3], "duplicate user was created"); 
+			Assert.AreEqual(newUsers[0].UserName, userName1, "userName1");
+			Assert.AreEqual(newUsers[1].UserName, userName2, "userName1"); 
+			Assert.AreEqual(newUsers[2].UserName, userName3, "userName1"); 
+			
+			//check if users where created
+			var userIds = newUsers.userIds();
+			newUsers = tmWebServices.GetUsers_byID(userIds);
+			Assert.AreEqual(newUsers.size(), 3, "fetched new users");
+			
+			//delete users
+			var result = tmWebServices.DeleteUsers(userIds);
+			Assert.That(result[0] && result[1] && result[2], "users deleted ok");
+			
+			//check if users where deleted
+			var deletedUsers = tmWebServices.GetUsers_byID(userIds);
+			Assert.That(deletedUsers[0].isNull() && deletedUsers[1].isNull() && deletedUsers[2].isNull() , "users deleted where not there");			
 		}
 /*    	 
     	///**********************
