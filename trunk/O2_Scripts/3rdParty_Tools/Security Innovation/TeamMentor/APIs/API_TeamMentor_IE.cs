@@ -162,7 +162,7 @@ namespace O2.SecurityInnovation.TeamMentor
 		[ShowInGui(Folder = "Login")]
     	public static API_TeamMentor_IE loginAs_Admin(this API_TeamMentor_IE teamMentor)
     	{
-    		return teamMentor.login("admin", "changeme");
+    		return teamMentor.login("admin", "!!tmbeta");
     	}
     	
     	[ShowInGui(Folder = "Login")]

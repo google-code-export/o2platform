@@ -31,7 +31,7 @@ namespace O2.SecurityInnovation.TeamMentor
     	{	
     		lock(ie)
     		{
-				Assert.That(ie.notNull(), "ie object was null");			
+				Assert.That(ie.notNull(), "ie object was null");			 
 				ie.open(Test_TM.tmServer); 			
 				
 				//wait and check Javascript variable TM.HomePageLoaded			
