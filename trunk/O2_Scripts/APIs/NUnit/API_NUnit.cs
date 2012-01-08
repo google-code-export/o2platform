@@ -85,7 +85,7 @@ namespace O2.XRules.Database.APIs
     	public static bool compileAndOpen(this API_NUnit nUnitApi, string fileToCompile, string extraStartupOptions)
     	{
     		var assembly = new CompileEngine().compileSourceFile(fileToCompile);
-			if (assembly.notNull())
+			if (assembly.notNull()) 
 			{
 				var location = assembly.Location; 			
 				nUnitApi.openNUnitGui(location, extraStartupOptions);			
@@ -169,7 +169,7 @@ namespace O2.XRules.Database.APIs
     	}
     	public static Process console_Run_on_PopupWindow(this API_NUnit nUnitApi, string projectOrAssembly, string extraStartupOptions, bool autoCloseOnSuccess)
     	{
-    		var nunitPopup = "NUnit Execution of: {0}".format(projectOrAssembly).popupWindow();
+    		var nunitPopup = "NUnit Execution of: {0}".format(projectOrAssembly).popupWindow(400,400);
     		var richTextBox = nunitPopup.add_RichTextBox(); 
     		richTextBox.backColor(Color.Azure);
     		var success = false;
@@ -201,6 +201,10 @@ namespace O2.XRules.Database.APIs
 							if (success)
 								nunitPopup.closeForm_InNSeconds(5);							
 						 });    		
+    		
+    		nunitPopup.parentForm()
+    				  .alwaysOnTop()
+    				  .top(0).left(700);
     		
     		return process;
     	}

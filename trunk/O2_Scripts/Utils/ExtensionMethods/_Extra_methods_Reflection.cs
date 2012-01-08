@@ -2,6 +2,7 @@
 using System;
 using System.Xml;
 using System.Linq;
+using System.Drawing;
 using System.Threading;
 using System.Reflection;
 using System.Xml.Serialization;
@@ -652,9 +653,16 @@ namespace O2.XRules.Database.Utils
 			//show.info(loadedAssemblies);			
 			
 			return mainAssembly;
+		}		
+	}
+	
+	public static class _Extra_Misc_Reflection_ExtensionMethods_Which_Use_The_New_ExtensionMethods
+	{
+		public static Icon set_As_Default_Form_Icon(this Icon icon)			
+		{
+			typeof(Form).fieldValue("defaultIcon", icon); 
+			return icon;
 		}
-		
-
 	}
 }
     	
