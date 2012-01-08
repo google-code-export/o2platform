@@ -25,8 +25,7 @@ namespace O2.XRules.Database.Utils
 
 	public static class _Extra_Control_extensionMethods_PopupWindow
 	{		
-		//Control
-		
+		//Control		
 		public static Panel popupWindow(this string title)
 		{
 			return title.showAsForm();
@@ -61,7 +60,8 @@ namespace O2.XRules.Database.Utils
 		public static T showAsForm<T>(this string title, int width, int height)
 			where T : Control
 		{
-			return (T) O2Gui.open<T>(title, width,height);
+			return (T) O2Gui.open<T>(title, width,height)
+						  	.add_H2Icon();
 		}		
 	}			
 
@@ -122,7 +122,10 @@ namespace O2.XRules.Database.Utils
 			}
 			return clipboardImagePath;
 		}						
-				
+		
+		
+		
+		
 		//Label
 
 		public static Label autoSize(this Label label, bool value)
@@ -797,6 +800,47 @@ namespace O2.XRules.Database.Utils
 						control.parentForm().WindowState = state;
 						return control;
 					});
+		}
+	}
+	
+	public static class _extra_Form_Icons_ExtensionMethod
+	{	
+		public static Icon icon(this string iconFile)
+		{
+			return new Icon(iconFile);
+		}
+		
+		public static T set_Form_Icon<T>(this T control, string iconFile)
+			where T : Control
+		{
+			return control.set_Form_Icon(iconFile.icon());
+		}
+		
+		public static T set_Form_Icon<T>(this T control, Icon icon)
+			where T : Control
+		{
+			control.invokeOnThread(()=> control.parentForm().Icon = icon);
+			return control;
+		}						
+		
+		public static T add_H2Icon<T>(this T control)
+			where T : Control
+		{
+			return control.set_Form_Icon("H2Logo.ico".local());
+		}
+		
+		public static T parentForm_AlwaysOnTop<T>(this T control)
+			where T : Control
+		{
+			control.parentForm().alwaysOnTop();
+			return control;
+		}
+				
+		public static T alwaysOnTop<T>(this T form)
+			where T : Form
+		{
+			form.invokeOnThread(()=> form.TopMost= true);
+			return form;
 		}
 	}
 

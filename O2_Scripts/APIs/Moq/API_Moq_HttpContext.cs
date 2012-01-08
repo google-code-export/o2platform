@@ -2,9 +2,11 @@
 using System;
 using System.IO;
 using System.Web;
+using System.Web.Caching;
 using System.Security.Principal;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -30,12 +32,19 @@ namespace O2.XRules.Database.APIs
 		public Mock<HttpSessionStateBase> MockSession { get; set; }
 		public Mock<HttpServerUtilityBase> MockServer { get; set; }		
 		
-        public HttpContextBase HttpContextBase  { get; set; }
-        public HttpRequestBase HttpRequestBase  { get; set; }
-        public HttpResponseBase HttpResponseBase  { get; set; }        
+        public HttpContextBase HttpContextBase  	{ get; set; }
+        public HttpRequestBase HttpRequestBase  	{ get; set; }
+        public HttpResponseBase HttpResponseBase  	{ get; set; }  
+        
+        public String BaseDir						{ get;set; }
 	    
-		public API_Moq_HttpContext()
+		public API_Moq_HttpContext() : this(null)
+		{			
+		}
+		
+		public API_Moq_HttpContext(string baseDir)
 		{
+			BaseDir = baseDir;
 			createBaseMocks();
 			setupNormalRequestValues();
 		}
@@ -62,21 +71,32 @@ namespace O2.XRules.Database.APIs
 	     	return this;
 		}
 		
-		public API_Moq_HttpContext setupNormalRequestValues()
-		{
-			//Context.User
-			//var MockUser = new Mock<IPrincipal>();
-	        //var MockIdentity = new Mock<IIdentity>();		
-	        
+		public Func<string,string> context_Server_MapPath {get;set;} 
+		
+		public API_Moq_HttpContext setupNormalRequestValues()		
+		{							        
 	        var genericIdentity = new GenericIdentity("genericIdentity");
 	        var genericPrincipal = new GenericPrincipal(genericIdentity, new string[] {});
 			MockContext.Setup(context => context.User).Returns(genericPrincipal);	     	
-	     	
+	     	MockContext.Setup(context => context.Cache).Returns(HttpRuntime.Cache);
+			MockContext.Setup(context => context.Server.MapPath(It.IsAny<string>())).Returns((string path) =>  this.BaseDir.pathCombine(path));
+			
 	     	//Request
-	     	MockRequest.Setup(request =>request.InputStream).Returns(new MemoryStream()); 
+	     	MockRequest.Setup(request =>request.InputStream	).Returns(new MemoryStream()); 
+	     	MockRequest.Setup(request =>request.Headers		).Returns(new NameValueCollection()); 
+	     	MockRequest.Setup(request =>request.QueryString	).Returns(new NameValueCollection()); 
+	     	MockRequest.Setup(request =>request.Form		).Returns(new NameValueCollection()); 
 	     	
 	     	//Response
-	     	MockResponse.Setup(response =>response.OutputStream).Returns(new MemoryStream()); 
+	     	var outputStream = new MemoryStream();
+	     	MockResponse.Setup(response =>response.OutputStream).Returns(outputStream); 
+	     	
+	     	//var writer = new StringWriter();
+//			context.Expect(ctx => ctx.Response.Output).Returns(writer);
+	     	
+	     	MockResponse.Setup(response =>response.Write(It.IsAny<string>())).Callback((string code) => outputStream.Write(code.asciiBytes(), 0, code.size()));
+	     	var cache = new Mock<HttpCachePolicyBase>();
+            MockResponse.SetupGet(response => response.Cache).Returns(cache.Object);
 	     	return this;
 		}
 	}
@@ -100,7 +120,7 @@ namespace O2.XRules.Database.APIs
 			httpContextBase.stream_Write(httpContextBase.Request.InputStream, text);			
 			return httpContextBase;
 		}
-		
+				
 		public static string request_Read(this HttpContextBase httpContextBase)
 		{					
 			return httpContextBase.stream_Read(httpContextBase.Request.InputStream);
@@ -115,6 +135,13 @@ namespace O2.XRules.Database.APIs
 		public static string response_Read(this HttpContextBase httpContextBase)
 		{					
 			return httpContextBase.stream_Read(httpContextBase.Response.OutputStream);						
+		}
+		
+		public static string response_Read_All(this HttpContextBase httpContextBase)
+		{
+			httpContextBase.Response.OutputStream.Flush();
+			httpContextBase.Response.OutputStream.Position = 0;
+			return httpContextBase.response_Read();
 		}
 		
 		public static HttpContextBase stream_Write(this HttpContextBase httpContextBase, Stream inputStream, string text)
