@@ -191,9 +191,12 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
     	public void Create_Rename_Delete_Libraries()
     	{
     		var originalName = "createAndDelete";  
-			var newName 	 = originalName + "_new";
+			var newName 	 = "_" + originalName + "_new";
 			var libraryPath_originalName  = tmXmlDatabase.xmlDB_LibraryPath(originalName);
 			var libraryPath_newName  	  = tmXmlDatabase.xmlDB_LibraryPath(newName);			 			
+			var guidanceItemsPath_originalName  = tmXmlDatabase.xmlDB_LibraryPath_GuidanceItems(originalName);
+			var guidanceItemsPath_newName  = tmXmlDatabase.xmlDB_LibraryPath_GuidanceItems(newName);
+
 			
 			Assert.IsFalse(libraryPath_originalName.fileExists() , "libraryPath_originalName should not exists");
 			Assert.IsFalse(libraryPath_newName	  .fileExists()	, "libraryPath_newName should not exists");
@@ -202,6 +205,12 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 			var newLibrary = tmWebServices.CreateLibrary(new Library() { caption = originalName });
 			Assert.IsNotNull(newLibrary, "newLibrary Created OK");
 			Assert.IsTrue(libraryPath_originalName.fileExists() , "libraryPath_originalName should exist after creation");
+			
+			//add a GI to the Library
+			var guidanceItem = tmWebServices.CreateGuidanceItem(new GuidanceItem_V3() { libraryId = newLibrary.libraryId });
+			var guidanceItemXmlFile = tmXmlDatabase.getXmlFilePathForGuidanceId(guidanceItem);
+			Assert.That(guidanceItemXmlFile.directoryName().contains(guidanceItemsPath_originalName).isTrue(),  "before rename:  guidanceItemXmlFile not in guidanceItemsPath_originalName");
+			Assert.That(guidanceItemXmlFile.directoryName().contains(guidanceItemsPath_newName)		.isFalse(), "before rename:  guidanceItemXmlFile not in guidanceItemsPath_newName ");
 			
 			//Rename Library
 			var renameResult = tmWebServices.RenameLibrary(newLibrary.libraryId, newName);  
@@ -221,6 +230,16 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 			Assert.IsNotNull(library_by_caption		 , "library_by_caption");
 			
 			Assert.IsTrue(tmWebServices.GetLibraries().names().contains(newName), "new name was not on tmWebServices.GetLibraries()") ;
+			
+			//check that GI folder was changed
+			Assert.That(guidanceItemsPath_originalName.dirExists().isFalse() , "after rename: guidanceItemsPath_originalName shouldn't exist");			
+			Assert.That(guidanceItemsPath_newName.dirExists()	  .isTrue()  , "after rename guidanceItemsPath_originalName should exist");			
+			//check if GI exists in new folder	
+			guidanceItemXmlFile = tmXmlDatabase.getXmlFilePathForGuidanceId(guidanceItem);			
+			"*********guidanceItemXmlFile:{0}".error(guidanceItemXmlFile);
+			Assert.That(guidanceItemXmlFile.directoryName().contains(guidanceItemsPath_originalName).isFalse(), "after rename:guidanceItemXmlFile not in guidanceItemsPath_originalName");
+			Assert.That(guidanceItemXmlFile.directoryName().contains(guidanceItemsPath_newName)		.isTrue(),  "after rename:guidanceItemXmlFile not in guidanceItemsPath_newName ");
+			
 			//Delete Library
 			var deleteResult = tmWebServices.DeleteLibrary(newLibrary.libraryId);  
 			Assert.IsTrue(deleteResult, "deleteResult");
