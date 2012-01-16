@@ -67,7 +67,9 @@ namespace O2.XRules.Database.Utils
 														loadFolder(FolderView.rootNode(),fileOrfolder); 
 												});						
 			FolderView.add_ContextMenu()
-						.add_MenuItem("Refresh", ()=> refresh());
+						.add_MenuItem("Refresh",true, ()=> refresh())
+						.add_MenuItem("Open in Windows Explorer", 
+								()=> FolderView.selected().get_Tag().str().startProcess() );
 						
 			CodeViewer.set_Text("....select file on the left to view its contents here...");												
 		}		
