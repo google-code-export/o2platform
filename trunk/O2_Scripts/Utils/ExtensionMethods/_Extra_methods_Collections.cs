@@ -256,6 +256,20 @@ namespace O2.XRules.Database.Utils
 			return action;
 		}
 		
+		public static Func<int,bool> loop(this int count, Func<int,bool> action)
+		{
+			return count.loop(0, action);
+		}
+		
+		public static Func<int,bool> loop(this int count, int start , Func<int,bool> action)
+		{
+			for(var i=start ; i < count ; i++)			
+				if (action(i).isFalse())
+					break;
+			return action;
+		}
+		
+		
 		public static List<T> loopIntoList<T>(this int count , Func<int,T> action)
 		{
 			return count.loopIntoList(0, action);
@@ -273,6 +287,7 @@ namespace O2.XRules.Database.Utils
 				results.Add(action(i));
 			return results;
 		}		
+		
 	}
 	
 	public static class _Extra_Collections_ExtensionMethods_Uri

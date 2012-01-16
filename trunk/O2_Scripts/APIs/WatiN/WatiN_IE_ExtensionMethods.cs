@@ -491,27 +491,6 @@ namespace O2.XRules.Database.APIs
  	public static class WatiN_IE_ExtensionMethods_DialogHandlers
  	{
  	
- 	// this is kind of working by needs more test
- 	/*
- 		//using WatiN.Core.DialogHandlers
-
-			var promptDialogHandler  = ie.dialogHandler<PromptDialogHandler>();
-			if (promptDialogHandler.isNull())
-			{
-				promptDialogHandler = new PromptDialogHandler(false); 
-				ie.IE.AddDialogHandler(promptDialogHandler); 
-			}				
-			
-			var fileDownloadHandler = ie.dialogHandler<FileDownloadHandler>();
-			if (fileDownloadHandler.isNull())
-			{
-				//fileDownloadHandler = new FileDownloadHandler(@"{PATH}\temp.xml"); 
-				ie.IE.AddDialogHandler(fileDownloadHandler); 
-			}
-			//dialogWatcher.clear();  
-			//return WatiN.Core.Settings.WaitForCompleteTimeOut; 
-	*/
-	
  		public static WatiN_IE setDialogWatcher(this WatiN_IE watinIe)
  		{ 			
  			if (watinIe.IE.DialogWatcher == null)
@@ -595,6 +574,49 @@ namespace O2.XRules.Database.APIs
  			return "";
  		}
  		
+ 		public static string open_and_HandleFileDownload(this WatiN_IE watinIe , string url, string fileName)
+ 		{
+			var tmpFile = fileName.tempFile();
+			var waitUntilHandled = 20;
+			var waitUntilDownload = 300;
+			
+			var fileDownloadHandler = watinIe.dialogHandler<FileDownloadHandler>();
+
+			if (fileDownloadHandler.notNull())
+			{
+				watinIe.IE.RemoveDialogHandler(fileDownloadHandler); 
+			}
+			
+			fileDownloadHandler = new FileDownloadHandler(tmpFile); 
+			watinIe.IE.AddDialogHandler(fileDownloadHandler); 
+			
+			 
+			fileDownloadHandler.field("saveAsFilename",tmpFile);
+			fileDownloadHandler.field("hasHandledFileDownloadDialog",false);
+			
+			watinIe.open_ASync(url);
+			try
+			{
+				fileDownloadHandler.WaitUntilFileDownloadDialogIsHandled(waitUntilHandled);			
+				"after: {0}".info("WaitUntilFileDownloadDialogIsHandled");
+				fileDownloadHandler.WaitUntilDownloadCompleted(waitUntilDownload);
+				"after: {0}".info("WaitUntilDownloadCompleted");
+			}
+			catch(Exception ex)
+			{
+				"[WatiN_IE][open_and_HandleFileDownload] {0}".error(ex.Message);
+			}
+				
+			if (fileDownloadHandler.SaveAsFilename.fileExists())
+			{
+				"[WatiN_IE] downloaded ok '{0}' into '{1}'".info(url, fileDownloadHandler.SaveAsFilename);
+				watinIe.IE.RemoveDialogHandler(fileDownloadHandler); 
+				return fileDownloadHandler.SaveAsFilename;
+			}
+			"[WatiN_IE] failed to download '{0}' ".info(url);
+			return null;
+		}
+
  	}
  	
 	public static class WatiN_IE_ExtensionMethods_Image

@@ -32,10 +32,17 @@ namespace O2.XRules.Database.Utils
 		{
 			return processExe.startProcess_getConsoleOut("");
 		}
+		
 		public static string startProcess_getConsoleOut(this string processExe, string arguments)
 		{
 			return Processes.startProcessAsConsoleApplicationAndReturnConsoleOutput(processExe, arguments);
 		}
+		
+		public static string startProcess_getConsoleOut(this string processExe, string arguments, string workingDirectory)
+		{
+			return Processes.startAsCmdExe(processExe, arguments, workingDirectory);
+		}
+		
 		
 		public static Process startProcess(this string processExe, Action<string> onDataReceived)
 		{

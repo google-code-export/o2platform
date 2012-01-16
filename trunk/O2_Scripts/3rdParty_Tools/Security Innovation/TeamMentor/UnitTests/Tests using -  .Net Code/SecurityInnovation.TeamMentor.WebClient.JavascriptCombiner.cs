@@ -2,11 +2,11 @@
 using System;
 using System.Web;
 using System.Security;
-using System.Collections.Generic;     
+using System.Collections.Generic;      
 using System.Security.Permissions;	
 using NUnit.Framework; 
 using O2.Kernel; 
-using O2.Kernel.ExtensionMethods;   
+using O2.Kernel.ExtensionMethods;    
 using O2.DotNetWrappers.ExtensionMethods;
 using O2.XRules.Database.Utils;
 using O2.XRules.Database.APIs;
@@ -178,20 +178,22 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient
 			Assert.AreEqual(expectedResult,responseText, "responseText != expectedResult");
 		}
 		
+		public string getScript(string file)
+		{
+			var requestUrl = Test_TM.tmServer + "aspx_Pages/scriptCombiner.ashx?s=";
+			return (requestUrl + file).html();
+		}
+		
 		[Test]
 		public void web_defaultValues_and_EmptyRequest()		 
 		{
 			var tmServer = Test_TM.tmServer;
 			Assert.That		(tmServer .html().contains("meta http-equiv=\"Refresh\"")		 , "default page should be a redirect");
-			Assert.AreEqual((tmServer + "ScriptCombiner.axd?Hello=TM").html(), "Good Morning", "handShake value didn't match");
-			Assert.AreEqual((tmServer + "ScriptCombiner.axd").html(), EMPTY_RESPONSE	 , "empty request");
+			Assert.AreEqual((tmServer + "aspx_Pages/scriptCombiner.ashx?Hello=TM").html(), "Good Morning", "handShake value didn't match");
+			Assert.AreEqual((tmServer + "aspx_Pages/scriptCombiner.ashx").html(), EMPTY_RESPONSE	 , "empty request");
 		}
 		
-		public string getScript(string file)
-		{
-			var requestUrl = Test_TM.tmServer + "scriptCombiner.axd?s=";
-			return (requestUrl + file).html();
-		}
+		
 		
 		[Test]
 		public void web_getJavascriptCode()		
