@@ -134,7 +134,8 @@ namespace O2.SecurityInnovation.TeamMentor
     		{
 	    		call_onGuiObjectsLoaded();  
 	    		
-	    		ie.eval("var dataTable = TM.WebServices.Data.getGuidanceItemsInGuid_For_DataTable()");
+	    		//ie.eval("var dataTable = TM.WebServices.Data.getGuidanceItemsInGuid_For_DataTable()");
+	    		ie.eval("var dataTable = TM.WebServices.Data.getGuidanceItemsInGuid_For_DataTable(TM.WebServices.Data.library('owasp').id)");
 				var dataTable = ie.getJsVariable("dataTable");
 				
 				var bDeferRender = dataTable.get_Value<bool>("bDeferRender");
