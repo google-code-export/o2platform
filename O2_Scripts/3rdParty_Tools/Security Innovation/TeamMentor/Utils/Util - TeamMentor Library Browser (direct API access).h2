@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 <H2>
-  <SourceCode>var topPanel = "Util - TeamMentor Library Browser (direct API access)".popupWindow(1000,500); 
-//var topPanel = panel.clear().add_Panel(); 
-topPanel.insert_LogViewer();
+  <SourceCode> var topPanel = "Util - TeamMentor Library Browser (direct API access)".popupWindow(1000,500); 
+//var topPanel = panel.clear().add_Panel();   
+topPanel.insert_LogViewer();        
 TMConfig.BaseFolder = Test_TM.tmWebSiteFolder;
 var defaultWebsiteRoot =  Test_TM.tmWebSiteFolder; //@"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\Web Applications\TM_Website";
 
-TM_Test_XmlDatabase teamMentor = null;
-TM_WebServices webServices = null;
-TM_Xml_Database tmXmlDatabase = null; 
+TM_Test_XmlDatabase teamMentor = null;  
+TM_WebServices webServices = null;  
+TM_Xml_Database tmXmlDatabase = null;  
  
 var actionsPanel = topPanel.insert_Above(40,"Helper objects");
  
-var treeView = topPanel.title("Current Libraries").add_TreeView_with_PropertyGrid(false);  
+var treeView = topPanel.title("Current Libraries").add_TreeView_with_PropertyGrid(false).sort();  
 var codeViewer = topPanel.control&lt;PropertyGrid&gt;().insert_Below().add_SourceCodeViewer();
 var splitContainer = codeViewer.splitContainer();
 var browser = codeViewer.insert_Right().add_WebBrowser_Control();
@@ -202,7 +202,7 @@ treeView.add_ContextMenu()
 		.add_MenuItem("save selected library",true, ()=&gt; saveSelectedLibrary() )		
 		.add_MenuItem("delete selected library", ()=&gt; deleteSelecedLibrary() );		
 
-refreshLibraries();
+refreshLibraries(); 
 
 //test libraries
 var testLibraries = treeView.insert_Below(100,"Test libraries").add_TreeView(); 
