@@ -28,5 +28,13 @@ namespace O2.SecurityInnovation.TeamMentor
     	
 		public static bool IsWebServerUp = false;  // make this static so that we only try to get the html from the server once
 		
+		public static string password_Admin		= "!!tmbeta";
+		public static string password_Editor	= "!!tmbeta";
+		public static string password_Reader	= "!!tmbeta";
+		
+		public static string passwordHash_Admin  = "9eff3dbd350bc5ef54fe7143658565bd45b6476db7c511f35206a143287f741d";
+		public static string passwordHash_Editor = "acdc0a6478b0efa72af4813c45e6c0a488aa00c189baa3bd273c6dfc09a7c6b5";
+		public static string passwordHash_Reader = "4809d305b4f6eccf66b5bdb559cc3bd8a1bdd1e67b64a2b4f8a70eb8b0ed7f79";
+		
    	}
 }
