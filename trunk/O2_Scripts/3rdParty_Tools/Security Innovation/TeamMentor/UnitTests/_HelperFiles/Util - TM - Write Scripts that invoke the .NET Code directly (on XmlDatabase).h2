@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <H2>
   <SourceCode>TMConfig.BaseFolder = Test_TM.tmWebSiteFolder; 
-var tmXmlDatabase = new TM_Test_XmlDatabase(TMConfig.BaseFolder); 
-var tmWebServices = tmXmlDatabase.webServices();   
-var xmlDatabase = tmXmlDatabase.xmlDatabase(); 
+var testXmlDatabase = new TM_Test_XmlDatabase(TMConfig.BaseFolder); 
+var tmWebServices = testXmlDatabase.webServices();   
+var tmXmlDatabase = testXmlDatabase.xmlDatabase(); 
 
 var OWASP_LIBRARY_GUID = "4738d445-bc9b-456c-8b35-a35057596c16".guid();
 
