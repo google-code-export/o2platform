@@ -50,7 +50,9 @@ namespace O2.XRules.Database.Utils
 									  " 	.Code = \"hello\";".line() + 
 									  "//O2File:Scripts_ExtensionMethods.cs");
 			o2Proxy.executeScript(scriptToExecute);
-			PublicDI.log.showMessageBox("Click OK to close the '{0}' AppDomain (and close all open windows)".format(appDomainName));										
+			
+			//PublicDI.log.showMessageBox
+			MessageBox.Show("Click OK to close the '{0}' AppDomain (and close all open windows)".format(appDomainName));
 			o2AppDomain.unLoadAppDomain();
 			return scriptToExecute;
 		}

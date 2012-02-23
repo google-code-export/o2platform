@@ -153,8 +153,12 @@ namespace O2.XRules.Database.APIs
 				  .add_Link("Util: Raw WikiText", showRawWikiText)
 				  .add_Link("Util: Backup",showBackup)
 				  .add_Link("Util: Show O2 Log Viewer",showLogViewer);
-									
-			WpfGui.GuiSections[0].links().name("Login").click(); 
+			
+/*			if(WikiApi.loggedIn())
+				WpfGui.GuiSections[0].links().name("Edit Page").click(); 	
+			else
+				WpfGui.GuiSections[0].links().name("Login").click(); 
+*/				
 			//showLoginPanel();	// default page		
 			//WpfGui.show_O2Browser();
 			//WpfGui.show_O2Wiki(helpPageInO2PlatformWiki);

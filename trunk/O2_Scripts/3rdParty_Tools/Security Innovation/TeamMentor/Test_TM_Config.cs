@@ -8,7 +8,9 @@ using O2.DotNetWrappers.ExtensionMethods;
 namespace O2.SecurityInnovation.TeamMentor
 {				
     public class Test_TM
-    {	
+    {
+		public static string tmSourceCode = @"C:\_WorkDir\TeamMentor\TeamMentor-3.1-Release\"; 
+
     	public static string IPAddress		 = "127.0.0.1";
     	public static int 	 Port		 	 = 12355;
     	public static string tmServer 		 = "http://{0}.:{1}/".format(IPAddress,Port);     	
@@ -18,7 +20,6 @@ namespace O2.SecurityInnovation.TeamMentor
     	public static string currentHomePage = "{0}{1}".format(tmServer, "html_pages/Gui/TeamMentor.html");
     	public static string invalidPage 	 = "{0}{1}".format(tmServer, "asdasdasd.aspx");
     	
-    	public static string tmSourceCode	  = @"C:\_WorkDir\SI\_TeamMentor-v3.0_Latest\"; 
     	public static string tmWebSiteFolder  =  tmSourceCode.pathCombine(@"Web Applications\TM_Website");
     	public static string tmConfigFile  =  tmWebSiteFolder.pathCombine(@"TmConfig.config");
     	public static string cassiniWebServer =  tmSourceCode.pathCombine(@"WebServer\CassiniDev.exe");    	    	
