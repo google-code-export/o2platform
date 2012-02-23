@@ -24,16 +24,21 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 	[TestFixture] 
     public class Test_Authentication : TM_Test_XmlDatabase
     {
+    	public string adminUser { get; set;}
+    	public string adminPwd { get; set;}
     	
 	    static Test_Authentication()
      	{
-     		TMConfig.BaseFolder = Test_TM.tmWebSiteFolder;    		
+     		TMConfig.BaseFolder = Test_TM.tmWebSiteFolder;       		
      	} 
      	
     	public Test_Authentication() 
     	{     		    		    	 	    	     		
 			var httpContextApi = new API_Moq_HttpContext();   
 			HttpContextFactory.Context = httpContextApi.HttpContextBase;
+			
+			adminUser = TMConfig.Current.DefaultAdminUserName;
+			adminPwd  = TMConfig.Current.DefaultAdminPassword;
 			
 			//HttpContextFactory.Current.SetCurrentUserRoles(UserGroup.Admin);			
 			//UserGroup.Admin.setThreadPrincipalWithRoles(); // set current user as Admin						
@@ -43,19 +48,17 @@ namespace O2.SecurityInnovation.TeamMentor.WebClient.JavascriptProxy_XmlDatabase
 		[Test]
 		public void tmWebServices_Login_PwdInClearText()
 		{
-			var sessionId = tmWebServices.Login_PwdInClearText("admin","!!tmbeta");
+			var sessionId = tmWebServices.Login_PwdInClearText(adminUser, adminPwd);
 			Assert.That(sessionId != Guid.Empty,"sessionID was empty");			
 		}
 		
 		[Test]
 		public void checkLoginSessionValues()
-		{
-			var user = "admin";
-			var pwd = "!!tmbeta";
-			var sessionId = tmWebServices.Login_PwdInClearText(user, pwd);
+		{			
+			var sessionId = tmWebServices.Login_PwdInClearText(adminUser, adminPwd);
 			Assert.That(sessionId != Guid.Empty,"sessionID was empty");
-			Assert.AreEqual(tmWebServices.sessionID, sessionId, "tmXmlDatabase.sessionId");			
-			Assert.AreEqual(user, tmWebServices.currentUser.UserName, "tmXmlDatabase.currentUser");			
+			Assert.AreEqual(tmWebServices.tmAuthentication.sessionID, sessionId, "tmXmlDatabase.sessionId");			
+			Assert.AreEqual(adminUser, tmWebServices.tmAuthentication.currentUser.UserName, "tmXmlDatabase.currentUser");			
 		}
 		
 		[Test]

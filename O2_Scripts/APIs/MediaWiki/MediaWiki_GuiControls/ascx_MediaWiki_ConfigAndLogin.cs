@@ -222,18 +222,20 @@ namespace O2.XRules.Database.APIs
 		}
 		
 		public void login()
-		{
+		{					
 			LoggedInStatus_Label.set_Text("trying to login to: {0}".format(MediaWikiUrl_TextBox.get_Text()))
 								.textColor(Color.Black);
 			var username = UserName_TextBox.get_Text();
 			var password = Password_TextBox.get_Text();
-			WikiApi.login( username,password);
+						
+			WikiApi.login( username,password).isFalse();
+				
 			if (WikiApi.loggedIn())
 				LoggedInStatus_Label.set_Text("Logged in as user: {0}".format(username))
 								    .textColor(Color.Green);
 			else
 				LoggedInStatus_Label.set_Text("Login failed for user {0}".format(username))
-									.textColor(Color.Red);
+									.textColor(Color.Red);			
 			SetWikiApi(WikiApi);								
 		}
     }

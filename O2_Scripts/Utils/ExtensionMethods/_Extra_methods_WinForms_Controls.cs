@@ -807,7 +807,15 @@ namespace O2.XRules.Database.Utils
 	{	
 		public static Icon icon(this string iconFile)
 		{
-			return new Icon(iconFile);
+			try
+			{
+				return new Icon(iconFile);
+			}
+			catch(Exception ex)
+			{
+				"[icon] {0}".error(ex.Message);
+				return null;
+			}
 		}
 		
 		public static T set_Form_Icon<T>(this T control, string iconFile)
